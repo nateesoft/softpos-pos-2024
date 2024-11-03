@@ -1,8 +1,9 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-
 import { I18nextProvider } from "react-i18next"
 import i18next from "i18next"
+import { HelmetProvider } from "react-helmet-async"
+import { CssBaseline, ThemeProvider } from "@mui/material";
 
 import global_th from "./locales/th/global.json"
 import global_en from "./locales/en/global.json"
@@ -26,9 +27,14 @@ i18next.init({
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
-  <I18nextProvider i18n={i18next}>
-    <App />
-  </I18nextProvider>
+  <HelmetProvider>
+    <I18nextProvider i18n={i18next}>
+      <ThemeProvider theme={{}}>
+        <CssBaseline enableColorSchem />
+          <App />
+      </ThemeProvider>
+    </I18nextProvider>
+  </HelmetProvider>
 )
 
 reportWebVitals()
