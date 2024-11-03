@@ -1,7 +1,24 @@
-import React from "react";
+import React from "react"
+import styled from "styled-components"
 
-function LoginPage() {
-  return <h2>Login Page</h2>;
+const background = {
+  backgroundImage: `url(/)`,
+  backgroundPosition: "center",
+  backgroundSize: "cover",
+  backgroundRepeat: "no-repeat",
+  width: "100vw",
+  height: "100vh",
+  border: "1px solid",
+  padding: "10px"
 }
 
-export default LoginPage;
+function LoginPage() {
+  return (
+    <div style={background}>
+      <div style={{ float: "left" }}>Left</div>
+      <div>Right</div>
+    </div>
+  )
+}
+
+export default LoginPage
