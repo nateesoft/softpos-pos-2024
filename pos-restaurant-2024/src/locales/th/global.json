@@ -1,0 +1,8 @@
+{
+    "header": {
+     "chooseLanguage": "เลือกภาษา:"
+    },
+    "mainSection": {
+     "title": "รองรับเว็บไซต์หลายภาษาด้วย lib ของ react-i18next: แบบขั้นตอนเรียบง่าย"
+    }
+   }
