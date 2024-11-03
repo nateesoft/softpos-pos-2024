@@ -1,0 +1,1 @@
+init project for softpos 2024 (pos-restaurant)
