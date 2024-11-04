@@ -5,10 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Header from "./components/Header"
 import LoginPage from "./components/LoginPage"
 import FloorPlanPage from "./components/FloorPlanPage"
-import MainSalePage from "./components/MainSalePage"
-import OrderDetailPage from "./components/OrderDetailPage"
-import PaymentPage from "./components/PaymentPage"
-import ReceiptPage from "./components/ReceiptPage"
+import MainSalePage from "./components/mainSale/MainSalePage"
+import PaymentPage from "./components/payment/PaymentPage"
 import SaleReportPage from "./components/SaleReportPage"
 
 function App() {
@@ -22,9 +20,7 @@ function App() {
           <Route path="/" element={<LoginPage />} />
           <Route path="/floorplan" element={<FloorPlanPage />} />
           <Route path="/sale" element={<MainSalePage />} />
-          <Route path="/order-detail" element={<OrderDetailPage />} />
           <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/receipt" element={<ReceiptPage />} />
           <Route path="/sale-report" element={<SaleReportPage />} />
         </Routes>
         <h1>{t("mainSection.title")}</h1>

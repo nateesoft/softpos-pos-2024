@@ -14,8 +14,7 @@ export default function Header() {
       <div>
         <Link to="/">Login</Link> |<Link to="/floorplan"> Floor Plan</Link> |
         <Link to="/sale"> Main Sale</Link> |
-        <Link to="/order-detail"> Order Detail</Link> |
-        <Link to="/payment"> Payment</Link> |<Link to="/receipt"> Receipt</Link>{" "}
+        <Link to="/payment"> Payment</Link> |
         |<Link to="/sale-report"> Sale Report</Link>
       </div>
     </header>
