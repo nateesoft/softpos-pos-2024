@@ -35,9 +35,9 @@ const invoiceSubtotal = subtotal(rows);
 const invoiceTaxes = TAX_RATE * invoiceSubtotal;
 const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
-export default function SpanningTable() {
+const OrderItem = () => {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{padding: "10px"}}>
         <h3>Table: 101</h3>
       <Table sx={{ minWidth: 300 }} aria-label="spanning table">
         <TableBody>
@@ -68,3 +68,5 @@ export default function SpanningTable() {
     </TableContainer>
   );
 }
+
+export default  OrderItem

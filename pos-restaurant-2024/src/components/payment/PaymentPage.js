@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Grid from '@mui/material/Grid2'
+import { useNavigate } from "react-router-dom";
 
-import Order from './Order'
+import OrderItem from './OrderItem'
 import PaymentMethod from './PaymentMethod'
 import PaymentForm from './PaymentForm'
-import { Box, Modal, Paper } from "@mui/material";
+import { Box, Button, Modal, Paper } from "@mui/material";
 
 const modalStyle = {
   position: "absolute",
@@ -19,11 +20,17 @@ const modalStyle = {
 
 function PaymentPage() {
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate();
+  
+  const toFloorPlan = () => {
+    navigate("/floorplan");
+  }
+
   return (
-    <>
+    <div>
       <Grid container spacing={2}>
         <Grid size={6}>
-          <Order />
+          <OrderItem />
           <PaymentMethod />
         </Grid>
         <Grid size={6}>
@@ -102,9 +109,12 @@ function PaymentPage() {
               <span>แสกน qr code เพื่อชำระเงิน</span>
             </div>
           </Paper>
+          <Box sx={{padding: "10px"}} textAlign="center">
+            <Button variant="contained" onClick={()=>toFloorPlan()}>Close</Button>
+          </Box>
         </Box>
       </Modal>
-    </>
+    </div>
   );
 }
 

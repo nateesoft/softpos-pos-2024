@@ -1,12 +1,16 @@
 import React from "react";
+import { Box, Button } from "@mui/material";
+import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 
 const ProductCard = ({ name, url, openModal }) => {
     return (
-        <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px" }}>
-            <img src={url} alt="" style={{ borderRadius: "10px" }} /><br />
+        <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px", boxShadow: "2px 1px #eee" }}>
+            <Box textAlign="center">
+                <img src={url} alt="" width={180} style={{ borderRadius: "10px" }} /><br />
+            </Box>
             <table width="100%">
                 <tr>
-                    <td colSpan={2} align="left" style={{ fontWeight: "bold" }}>
+                    <td colSpan={2} align="center" style={{ fontWeight: "bold" }}>
                         {name}
                     </td>
                 </tr>
@@ -15,12 +19,11 @@ const ProductCard = ({ name, url, openModal }) => {
                     <td align="right">Detail</td>
                 </tr>
                 <tr>
-                    <td align="center" colSpan={2}>
-                        <button 
-                        style={{ backgroundColor: "#b4f0a5", 
-                            padding: "10px", color: "black", 
-                            borderRadius: "10px", border: "0px" }} 
-                        onClick={openModal}>Add to Dish</button>
+                    <td align="center">
+                        <Button variant="contained" color="success">Add Order</Button>
+                    </td>
+                    <td style={{cursor: "pointer"}}>
+                        <AddToPhotosIcon fontSize="large" onClick={openModal} />
                     </td>
                 </tr>
             </table>
@@ -31,63 +34,62 @@ const ProductCard = ({ name, url, openModal }) => {
 const groupMenu = {
     padding: "10px",
     backgroundColor: "snow",
-    height: "100px",
-    borderRadius: "20px",
-    width: "150px",
+    borderRadius: "10px",
+    width: "250px",
     textAlign: "center",
     marginRight: "20px",
     whiteSpace: "nowrap",
     fontWeight: "bold"
 }
 
-function ProductMenu({openModal}) {
+function ProductMenu({ openModal }) {
     return (
         <div>
-            <div style={{overflow: "auto", width: "550px"}}>
+            <div style={{ overflow: "auto", width: "500px" }}>
                 <table width="100%">
                     <tr>
-                        <td style={groupMenu}>All Menu</td>
-                        <td style={groupMenu}>Breakfast</td>
-                        <td style={groupMenu}>Scoups</td>
-                        <td style={groupMenu}>Pasta</td>
-                        <td style={groupMenu}>Main Course</td>
-                        <td style={groupMenu}>Burgers</td>
-                        <td style={groupMenu}>Other1</td>
+                        <td style={{ ...groupMenu, backgroundColor: "#eee" }}>เมนูทั้งหมด</td>
+                        <td style={groupMenu}>อาหารเช้า</td>
+                        <td style={groupMenu}>ของทานเล่น</td>
+                        <td style={groupMenu}>อาหารจีน</td>
+                        <td style={groupMenu}>อาหารอิตาเลียน</td>
+                        <td style={groupMenu}>เครื่องดื่ม</td>
+                        <td style={groupMenu}>ของหวาน</td>
                     </tr>
                 </table>
             </div>
-            <table>
+            <table width="100%">
                 <tr>
                     <td>
-                        <ProductCard name="Test Product 01" url="images/product/food01.png" openModal={openModal} />
+                        <ProductCard name="ไข่พะโล้หมูสามชั้น" url="images/product/food01.png" openModal={openModal} />
                     </td>
                     <td>
-                        <ProductCard name="Test Product 02" url="images/product/food02.png" />
+                        <ProductCard name="หมูปลาร้าปั้นก้อน" url="images/product/food02.png" />
                     </td>
                     <td>
-                        <ProductCard name="Test Product 03" url="images/product/food03.png" />
+                        <ProductCard name="แกงเห็ดเผาะ" url="images/product/food03.png" />
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <ProductCard name="Test Product 04" url="images/product/food04.png" />
+                        <ProductCard name="ไก่ย่างสามเกลอ แจ่วมะขามแซ่บ" url="images/product/food04.png" />
                     </td>
                     <td>
-                        <ProductCard name="Test Product 05" url="images/product/food05.png" />
+                        <ProductCard name="ตำเส้นพวงแคปหมูผักงูเขียว" url="images/product/food05.png" />
                     </td>
                     <td>
-                        <ProductCard name="Test Product 06" url="images/product/food01.png" />
+                        <ProductCard name="ปลาหมึกต้มมะนาว" url="images/product/food06.png" />
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <ProductCard name="Test Product 07" url="images/product/food02.png" />
+                        <ProductCard name="ตำชมพู่มะเหมี่ยวกะปิปลากรอบ" url="images/product/food07.png" />
                     </td>
                     <td>
-                        <ProductCard name="Test Product 08" url="images/product/food03.png" />
+                        <ProductCard name="หมูย่าง หมูปิ้ง" url="images/product/food08.png" />
                     </td>
                     <td>
-                        <ProductCard name="Test Product 09" url="images/product/food04.png" />
+                        <ProductCard name="เมี่ยงปลาทอด" url="images/product/food09.png" />
                     </td>
                 </tr>
             </table>

@@ -1,6 +1,7 @@
 import React from "react";
 import Grid from '@mui/material/Grid2'
 import { Box, Button, Paper, TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Item = ({ url, title }) => {
     return (
@@ -13,8 +14,12 @@ const Item = ({ url, title }) => {
 }
 
 function PaymentForm({open, close}) {
+    const navigate = useNavigate();
+    const handleBackPage = () => {
+        navigate("/sale");
+    }
     return (
-        <Grid container spacing={2} display="flex" direction="column">
+        <Grid container spacing={2} display="flex" direction="column" sx={{padding: "10px"}}>
             <Grid size={12}>
                 <Grid container spacing={2}>
                     <Grid size={4}>
@@ -103,8 +108,9 @@ function PaymentForm({open, close}) {
                     </Grid>
                 </Grid>
                 <Box sx={{marginTop: "30px"}} textAlign="center">
+                    <Button variant="contained" sx={{margin: "5px", bgcolor: "blue"}} onClick={handleBackPage}>BACK</Button>
                     <Button variant="contained" sx={{margin: "5px", bgcolor: "gray"}}>VOID ORDER</Button>
-                    <Button variant="contained" sx={{margin: "5px", bgcolor: "#13c2ff"}} onClick={open}>CONTINUE</Button>
+                    <Button variant="contained" sx={{margin: "5px", bgcolor: "#13c2ff"}} onClick={open}>CONFIRM</Button>
                 </Box>
             </Grid>
         </Grid>

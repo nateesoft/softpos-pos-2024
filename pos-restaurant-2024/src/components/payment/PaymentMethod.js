@@ -22,9 +22,9 @@ const rows = [
   createRow('Due', "", "$567.88"),
 ];
 
-export default function SpanningTable() {
+const PaymentMethod = () => {
   return (
-    <TableContainer component={Paper} sx={{marginTop: "10px"}}>
+    <TableContainer component={Paper} sx={{padding: "10px", marginTop: "10px"}}>
         <h3>Payment Method</h3>
       <Table sx={{ minWidth: 300 }} aria-label="spanning table">
         <TableBody>
@@ -40,3 +40,5 @@ export default function SpanningTable() {
     </TableContainer>
   );
 }
+
+export default PaymentMethod

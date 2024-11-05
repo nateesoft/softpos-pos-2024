@@ -1,14 +1,15 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { useNavigate } from "react-router-dom";
+import { Button, Typography } from '@mui/material';
 
 const ProductCard = ({ name, url }) => {
     return (
-        <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px", marginBottom: "10px" }}>
+        <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px", marginBottom: "10px", boxShadow: "2px 2px #eee" }}>
             <table width="100%">
                 <tr>
                     <td rowSpan={2}>
@@ -31,23 +32,8 @@ const TotalBill = () => {
         <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px", marginBottom: "10px" }}>
             <table width="100%">
                 <tr>
-                    <td align="left" style={{ color: "gray" }}>
-                        Sub Total
-                    </td>
-                    <td align="right" style={{ color: "gray" }}>
-                        600.00
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" style={{color: "gray"}}>Vat</td>
-                    <td align="right" style={{ color: "gray" }}>7%</td>
-                </tr>
-                <tr>
-                    <td colSpan={2}><hr /></td>
-                </tr>
-                <tr>
                     <td align="left" style={{fontWeight: "bold"}}>Total Amount</td>
-                    <td align="right" style={{color: "green", fontWeight: "bold"}}>642.00</td>
+                    <td align="right" style={{color: "green", fontWeight: "bold", fontSize: "48px"}}>642.00</td>
                 </tr>
             </table>
         </div>
@@ -66,6 +52,10 @@ const OrderItem = () => {
     navigate("/payment");
   }
 
+  const backFloorPlan = () => {
+    navigate("/floorplan");
+  }
+
   return (
     <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
@@ -76,18 +66,20 @@ const OrderItem = () => {
             <Tab label="Delivery" value="3" />
           </TabList>
         </Box>
+        <Box textAlign="center" sx={{marginTop: "10px"}}>
+            <Typography variant='h5'>รายการอาหารที่สั่ง</Typography>
+        </Box>
+        <Box textAlign="center">
+            <Typography variant='p'>โต๊ะ (R-3)</Typography>
+        </Box>
         <TabPanel value="1">
-            <ProductCard name="Test Product 01" url="images/product/food01.png" />
-            <ProductCard name="Test Product 07" url="images/product/food02.png" />
-            <ProductCard name="Test Product 05" url="images/product/food05.png" />
+            <ProductCard name="ไข่พะโล้หมูสามชั้น" url="images/product/food01.png" />
+            <ProductCard name="หมูปลาร้าปั้นก้อน" url="images/product/food02.png" />
+            <ProductCard name="ตำเส้นพวงแคปหมู" url="images/product/food05.png" />
             <TotalBill />
-            <div align="center">
-                <button style={{height: "45px", width: "75px", marginRight: "10px", backgroundColor: "snow", border: "1px solid #eee", borderRadius: "10px"}}>Cash</button>
-                <button style={{height: "45px", width: "125px", marginRight: "10px", backgroundColor: "snow", border: "1px solid #eee", borderRadius: "10px"}}>Credit/Debit Card</button>
-                <button style={{height: "45px", width: "75px", backgroundColor: "snow", border: "1px solid #eee", borderRadius: "10px"}}>QR Code</button>
-            </div>
             <div style={{marginTop: "30px"}} align="center">
-                <button style={{backgroundColor: "green", padding: "10px", width: "150px", borderRadius: "10px", color: "white", fontWeight: "bold"}} onClick={handleClick}>Process Order</button>
+                <Button variant='contained' color='primary' onClick={backFloorPlan} sx={{marginRight: "10px", width: "150px"}}>Back</Button>
+                <Button variant='contained' color='success' onClick={handleClick} sx={{width: "150px"}}>Check Bill</Button>
             </div>
         </TabPanel>
         <TabPanel value="2">Take Away</TabPanel>

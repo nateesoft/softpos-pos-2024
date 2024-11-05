@@ -1,29 +1,42 @@
 import React from "react";
+import Button from '@mui/material/Button'
 
 const myStyle = {
-    listStyleType: "none",
-    padding: 10,
-    margin: 10
+  listStyleType: "none",
+  padding: 10,
+  margin: 10
 }
 
 const detail = {
-    backgroundColor: "snow",
-    padding: "10px",
-    margin: "5px",
-    borderRadius: "25px",
-    textAlign: "left",
-    fontWeight: "bold"
+  margin: "10px",
+  fontWeight: "bold",
+  textAlign: "center",
+  borderRadius: "10px",
+  boxShadow: "1px 2px orange",
+  cursor: "pointer"
 }
 
 function LeftMenu() {
   return (
     <ul style={myStyle}>
-        <li style={detail}>Menu</li>
-        <li style={detail}>Table Services</li>
-        <li style={detail}>Reservation</li>
-        <li style={detail}>Delivery</li>
-        <li style={detail}>Accounting</li>
-        <li style={detail}>Settings</li>
+      <li style={detail}>
+        <Button variant="contained" color="warning" sx={{fontWeight: "bold"}} fullWidth>Menu</Button>
+      </li>
+      <li style={detail}>
+        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Table Services</Button>
+      </li>
+      <li style={detail}>
+        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Reservation</Button>
+      </li>
+      <li style={detail}>
+        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Delivery</Button>
+      </li>
+      <li style={detail}>
+        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Accounting</Button>
+      </li>
+      <li style={detail}>
+        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Settings</Button>
+      </li>
     </ul>
   );
 }
