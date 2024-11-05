@@ -5,6 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Box, Typography } from '@mui/material';
 
 const TAX_RATE = 0.07;
 
@@ -37,8 +38,12 @@ const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 const OrderItem = () => {
   return (
-    <TableContainer component={Paper} sx={{padding: "10px"}}>
-        <h3>Table: 101</h3>
+    <TableContainer component={Paper} sx={{ padding: "10px" }}>
+      <Box sx={{ backgroundColor: "#73c6b6", padding: "10px", borderRadius: "5px", boxShadow: "2px 3px #eee" }}>
+        <Typography variant='h5' color='white' sx={{ fontSize: "24px" }}>
+          Table: 101
+        </Typography>
+      </Box>
       <Table sx={{ minWidth: 300 }} aria-label="spanning table">
         <TableBody>
           {rows.map((row) => (
@@ -69,4 +74,4 @@ const OrderItem = () => {
   );
 }
 
-export default  OrderItem
+export default OrderItem

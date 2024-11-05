@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Button } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Tabs, Tab } from "@mui/material";
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 
 const ProductCard = ({ name, url, openModal }) => {
@@ -31,33 +31,28 @@ const ProductCard = ({ name, url, openModal }) => {
     )
 }
 
-const groupMenu = {
-    padding: "10px",
-    backgroundColor: "snow",
-    borderRadius: "10px",
-    width: "250px",
-    textAlign: "center",
-    marginRight: "20px",
-    whiteSpace: "nowrap",
-    fontWeight: "bold"
-}
-
 function ProductMenu({ openModal }) {
+    const [value, setValue] = useState(1)
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
     return (
         <div>
-            <div style={{ overflow: "auto", width: "500px" }}>
-                <table width="100%">
-                    <tr>
-                        <td style={{ ...groupMenu, backgroundColor: "#eee" }}>เมนูทั้งหมด</td>
-                        <td style={groupMenu}>อาหารเช้า</td>
-                        <td style={groupMenu}>ของทานเล่น</td>
-                        <td style={groupMenu}>อาหารจีน</td>
-                        <td style={groupMenu}>อาหารอิตาเลียน</td>
-                        <td style={groupMenu}>เครื่องดื่ม</td>
-                        <td style={groupMenu}>ของหวาน</td>
-                    </tr>
-                </table>
-            </div>
+            <Tabs
+                value={value}
+                onChange={handleChange}
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="scrollable auto tabs example"
+            >
+                <Tab label="เมนูทั้งหมด" />
+                <Tab label="อาหารเช้า" />
+                <Tab label="ของทานเล่น" />
+                <Tab label="อาหารจีน" />
+                <Tab label="อาหารอิตาเลียน" />
+                <Tab label="เครื่องดื่ม" />
+                <Tab label="ของหวาน" />
+            </Tabs>
             <table width="100%">
                 <tr>
                     <td>

@@ -13,6 +13,8 @@ const Item = ({ url, title }) => {
     )
 }
 
+const normalButton = { bgcolor: "#123456", color: "white", fontWeight: "bold", fontSize: "36px" }
+
 function PaymentForm({open, close}) {
     const navigate = useNavigate();
     const handleBackPage = () => {
@@ -66,51 +68,47 @@ function PaymentForm({open, close}) {
                         </Paper>
                     </Grid>
                     <Grid size={7}>
+                        <Box>
+                            <TextField fullWidth />
+                        </Box>
                         <table width="100%">
                             <tr>
-                                <td>
-                                    <TextField id="outlined-controlled" fullWidth />
-                                </td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>7</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>8</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>9</Button></td>
+                                <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "yellow", color: "black" }} fullWidth>+</Button></td>
                             </tr>
                         </table>
                         <table width="100%">
                             <tr>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>7</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>8</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>9</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "yellow", color: "black", fontWeight: "bold", fontSize: "14px" }}>+</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>4</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>5</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>6</Button></td>
+                                <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "red", color: "black" }} fullWidth>-</Button></td>
                             </tr>
                         </table>
                         <table width="100%">
                             <tr>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>4</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>5</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>6</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "red", color: "black", fontWeight: "bold", fontSize: "14px" }}>-</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>1</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>2</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>3</Button></td>
+                                <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "orange", color: "black"}} fullWidth>x</Button></td>
                             </tr>
                         </table>
                         <table width="100%">
                             <tr>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>1</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>2</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>3</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "orange", color: "black", fontWeight: "bold", fontSize: "14px" }}>x</Button></td>
-                            </tr>
-                        </table>
-                        <table width="100%">
-                            <tr>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>0</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>.</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "#bbb", color: "black", fontWeight: "bold", fontSize: "14px" }}>=</Button></td>
-                                <td><Button variant="contained" sx={{ bgcolor: "green", color: "black", fontWeight: "bold", fontSize: "14px" }}>%</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>0</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>.</Button></td>
+                                <td><Button variant="contained" sx={normalButton} fullWidth>=</Button></td>
+                                <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "green", color: "black"}} fullWidth>%</Button></td>
                             </tr>
                         </table>
                     </Grid>
                 </Grid>
                 <Box sx={{marginTop: "30px"}} textAlign="center">
-                    <Button variant="contained" sx={{margin: "5px", bgcolor: "blue"}} onClick={handleBackPage}>BACK</Button>
-                    <Button variant="contained" sx={{margin: "5px", bgcolor: "gray"}}>VOID ORDER</Button>
-                    <Button variant="contained" sx={{margin: "5px", bgcolor: "#13c2ff"}} onClick={open}>CONFIRM</Button>
+                    <Button variant="contained" sx={{margin: "5px"}} color="primary" onClick={handleBackPage}>BACK</Button>
+                    <Button variant="contained" sx={{margin: "5px"}} color="error">VOID ORDER</Button>
+                    <Button variant="contained" sx={{margin: "5px"}} color="success" onClick={open}>CONFIRM</Button>
                 </Box>
             </Grid>
         </Grid>
