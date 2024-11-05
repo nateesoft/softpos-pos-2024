@@ -1,20 +1,30 @@
 import React, { useState } from 'react'
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, TextField, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import CustomerDetail from './CustomerDetail';
 
 const min = 1;
 const max = 10;
 
-const CustomerCheckin = ({ openTable, tableNo, status }) => {
+const CustomerCheckin = ({ openTable, tableNo, status, closeModal }) => {
     const [custCount, setCustCount] = useState(1)
     const [manCount, setManCount] = useState(0)
     const [womanCount, setWomanCount] = useState(0)
     const [kidCount, setKidCount] = useState(0)
     const [oldCount, setOldCount] = useState(0)
+    const [showError, setShowError] = useState(false)
 
     const [memberCode, setMemberCode] = useState("")
     const [reserveNo, setReserveNo] = useState("")
+
+    const handleOpenTable = () => {
+        if(status==="Free Table"){
+            setShowError(false)
+            openTable()
+        }else {
+            setShowError(true)
+        }
+    }
 
     return (
         <Grid container spacing={2}>
@@ -84,8 +94,10 @@ const CustomerCheckin = ({ openTable, tableNo, status }) => {
                         fullWidth
                     />
                 </Grid>
+                {showError && <Alert severity="error" sx={{width: "100%"}}>สถานะโต๊ะไม่พร้อมใช้งาน</Alert>}
                 <Grid size={12} textAlign="center">
-                    <Button variant='contained' sx={{ width: "120px", fontSize: "16px" }} onClick={openTable}>เปิดโต๊ะ</Button>
+                    <Button variant='contained' sx={{ width: "120px", fontSize: "16px", marginRight: "10px" }} onClick={handleOpenTable}>เปิดโต๊ะ</Button>
+                    <Button variant='contained' sx={{ width: "120px", fontSize: "16px" }} color='error' onClick={closeModal}>Cancel</Button>
                 </Grid>
             </Grid>
         </Grid>

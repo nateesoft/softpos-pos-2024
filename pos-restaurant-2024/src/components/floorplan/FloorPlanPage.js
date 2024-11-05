@@ -180,7 +180,7 @@ function FloorPlanPage() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={{ ...modalStyle, width: 450, padding: "10px" }}>
-          <CustomerCheckin openTable={openTable} tableNo={tableNo} status={tableStatus} />
+          <CustomerCheckin openTable={openTable} closeModal={() => setOpen(false)} tableNo={tableNo} status={tableStatus} />
         </Box>
       </Modal>
     </div>

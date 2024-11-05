@@ -52,3 +52,22 @@ CREATE TABLE `order_details` (
   `update_by` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `product` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(150) DEFAULT NULL,
+  `url` varchar(100) DEFAULT NULL,
+  `qty` int(3) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULLม
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `product_order` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(150) DEFAULT NULL,
+  `url` varchar(100) DEFAULT NULL,
+  `qty` int(3) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `totalAmount` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

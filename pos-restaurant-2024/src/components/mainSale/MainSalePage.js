@@ -1,78 +1,37 @@
-import React, { useState } from "react";
-import { Box, Modal, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import axios from 'axios'
 
 import LeftMenu from './LeftMenu'
 import ProductMenu from './ProductMenu'
 import OrderItem from './OrderItem'
 
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  borderRadius: "16px",
-  border: "1px solid #eee",
-  boxShadow: 24
-}
-
-const ProductCard = ({ name, url, closeModal }) => {
-  return (
-    <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px" }}>
-      <div align="center" style={{padding: "10px"}}>
-        <table width="100%">
-          <tr>
-            <td colSpan={2} align="left" style={{ fontWeight: "bold" }}>
-              {name}
-            </td>
-          </tr>
-          <tr>
-            <td colSpan={2} align="center">
-              <img src={url} alt="" style={{ borderRadius: "10px", width: 250 }} /><br />
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div align="center" style={{padding: "10px"}}>
-        <table width="100%">
-          <tr>
-            <td align="left"><u>ราคา 100 บาท</u></td>
-            <td align="right" style={{color: "green", fontSize: "12px", fontWeight: "bold"}}>อาหารหลัก*</td>
-          </tr>
-        </table>
-      </div>
-      <div style={{ padding: "10px" }}>
-        <TextField
-          id="outlined-number"
-          label="จำนวนเอาหาร"
-          type="number"
-          slotProps={{
-            inputLabel: {
-              shrink: true,
-            },
-          }}
-        />
-      </div>
-      <div style={{ padding: "10px" }}>
-        <div>รายละเอียดเพิ่มเติม</div>
-        <div>
-          <TextField fullWidth label="เผ็ดน้อย, เผ็ดกลาง, ไม่เผ็ด..." id="fullWidth" multiline={true} rows={5} />
-        </div>
-      </div>
-      <div align="center">
-        <button
-          style={{
-            backgroundColor: "#b4f0a5",
-            padding: "10px", color: "black",
-            borderRadius: "10px", border: "0px"
-          }} onClick={closeModal}>Add to Dish</button>
-      </div>
-    </div>
-  )
-}
-
 function MainSalePage() {
-  const [open, setOpen] = useState(false)
+  const [productList, setProductList] = useState([])
+  const [orderList, setOrderList] = useState([])
+
+  const initLoadMenu = () => {
+    axios.get("/api/product")
+      .then((response) => {
+        console.log(response)
+        if (response.data.code === 200) {
+          setProductList(response.data.data)
+        }
+      })
+  }
+  const initLoadOrder = () => {
+    axios.get("/api/product_order")
+      .then((response) => {
+        console.log(response)
+        if (response.data.code === 200) {
+          setOrderList(response.data.data)
+        }
+      })
+  }
+
+  useEffect(() => {
+    initLoadMenu()
+    initLoadOrder()
+  }, [])
   return (
     <div>
       <table width="100%">
@@ -81,20 +40,13 @@ function MainSalePage() {
             <LeftMenu />
           </td>
           <td>
-            <ProductMenu openModal={() => setOpen(true)} />
+            <ProductMenu ProductList={productList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
           </td>
           <td valign="top">
-            <OrderItem />
+            <OrderItem OrderList={orderList} />
           </td>
         </tr>
       </table>
-      <Modal open={open} onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
-        <Box sx={{ ...modalStyle, width: 450 }}>
-          <ProductCard name="Test Product 01" url="images/product/food01.png" closeModal={()=>setOpen(false)} />
-        </Box>
-      </Modal>
     </div>
   )
 }
