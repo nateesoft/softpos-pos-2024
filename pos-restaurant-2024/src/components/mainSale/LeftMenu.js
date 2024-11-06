@@ -1,5 +1,10 @@
 import React from "react";
 import Button from '@mui/material/Button'
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next"
+import MenuIcon from '@mui/icons-material/MenuBook'
 
 const myStyle = {
   listStyleType: "none",
@@ -17,25 +22,48 @@ const detail = {
 }
 
 function LeftMenu() {
+  const { i18n } = useTranslation("global")
+  const [alignment, setAlignment] = React.useState('th');
+
+  const handleAlignment = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
   return (
     <ul style={myStyle}>
+      <Box display="flex" justifyContent="center">
+        <ToggleButtonGroup
+          value={alignment}
+          exclusive
+          onChange={handleAlignment}
+          aria-label="text alignment"
+          fullWidth
+        >
+          <ToggleButton value="th" aria-label="centered" onClick={() => i18n.changeLanguage("th")}>
+            <Typography variant="p" sx={{fontWeight: "bold"}}>TH</Typography>
+          </ToggleButton>
+          <ToggleButton value="en" aria-label="left aligned" onClick={() => i18n.changeLanguage("en")}>
+            <Typography variant="p" sx={{fontWeight: "bold"}}>EN</Typography>
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
       <li style={detail}>
-        <Button variant="contained" color="warning" sx={{fontWeight: "bold"}} fullWidth>Menu</Button>
+        <Button variant="contained" color="warning" sx={{ fontWeight: "bold" }} fullWidth startIcon={<MenuIcon />}>Menu</Button>
       </li>
       <li style={detail}>
-        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Table Services</Button>
+        <Button variant="contained" sx={{ backgroundColor: "#fae5d3", color: "black" }} fullWidth>Table Services</Button>
       </li>
       <li style={detail}>
-        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Reservation</Button>
+        <Button variant="contained" sx={{ backgroundColor: "#fae5d3", color: "black" }} fullWidth>Reservation</Button>
       </li>
       <li style={detail}>
-        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Delivery</Button>
+        <Button variant="contained" sx={{ backgroundColor: "#fae5d3", color: "black" }} fullWidth>Delivery</Button>
       </li>
       <li style={detail}>
-        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Accounting</Button>
+        <Button variant="contained" sx={{ backgroundColor: "#fae5d3", color: "black" }} fullWidth>Accounting</Button>
       </li>
       <li style={detail}>
-        <Button variant="contained" sx={{backgroundColor: "#fae5d3", color: "black"}} fullWidth>Settings</Button>
+        <Button variant="contained" sx={{ backgroundColor: "#fae5d3", color: "black" }} fullWidth>Settings</Button>
       </li>
     </ul>
   );

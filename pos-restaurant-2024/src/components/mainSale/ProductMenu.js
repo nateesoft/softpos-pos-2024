@@ -5,6 +5,7 @@ import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import axios from 'axios'
+import { useTranslation } from "react-i18next"
 
 const modalStyle = {
     position: "absolute",
@@ -25,7 +26,7 @@ const ProductCard = ({ product, openModal, initLoadMenu, initLoadOrder }) => {
                 if (response.data.code === 200) {
                     // add order
                     axios.post(`/api/product_order`,
-                        { name: product.name, url: product.url, qty: product.qty, price: product.price, totalAmount: product.qty * product.price })
+                        { name: product.name, url: product.url, qty: updateQty, price: product.price, totalAmount: updateQty * product.price })
                         .then((response2) => {
                             if (response2.data.code === 200) {
                                 initLoadMenu()
@@ -148,11 +149,11 @@ const ProductDetailCard = ({ product, closeModal, initLoadMenu }) => {
                 </div>
             </div>
             <div align="center">
-                <Button variant="contained" color="success" onClick={handleConfirm} sx={{ marginRight: "10px" }}>
-                    CONFIRM
-                </Button>
-                <Button variant="contained" color="error" onClick={closeModal}>
+                <Button variant="contained" color="error" onClick={closeModal} sx={{ marginRight: "10px" }}>
                     CANCEL
+                </Button>
+                <Button variant="contained" color="success" onClick={handleConfirm}>
+                    CONFIRM
                 </Button>
             </div>
         </div>
@@ -160,7 +161,8 @@ const ProductDetailCard = ({ product, closeModal, initLoadMenu }) => {
 }
 
 function ProductMenu({ ProductList, initLoadMenu, initLoadOrder }) {
-    const [value, setValue] = useState(1)
+    const { t } = useTranslation("global")
+    const [value, setValue] = useState(0)
     const [open, setOpen] = useState(false)
     const [productInfo, setProductInfo] = useState({})
 
@@ -182,13 +184,13 @@ function ProductMenu({ ProductList, initLoadMenu, initLoadOrder }) {
                 scrollButtons="auto"
                 aria-label="scrollable auto tabs example"
             >
-                <Tab label="เมนูทั้งหมด" />
-                <Tab label="อาหารเช้า" />
-                <Tab label="ของทานเล่น" />
-                <Tab label="อาหารจีน" />
-                <Tab label="อาหารอิตาเลียน" />
-                <Tab label="เครื่องดื่ม" />
-                <Tab label="ของหวาน" />
+                <Tab label={t("productMenu.allGroup")} />
+                <Tab label={t("productMenu.breakfast")} />
+                <Tab label={t("productMenu.appetizer")} />
+                <Tab label={t("productMenu.chineseFood")} />
+                <Tab label={t("productMenu.italianFood")} />
+                <Tab label={t("productMenu.drink")} />
+                <Tab label={t("productMenu.dessert")} />
             </Tabs>
             <Grid container spacing={2} padding={2}>
                 {ProductList && ProductList.map(product =>

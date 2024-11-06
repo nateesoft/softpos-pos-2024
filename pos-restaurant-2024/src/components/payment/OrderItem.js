@@ -2,10 +2,9 @@ import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 const TAX_RATE = 0.07;
 
@@ -38,11 +37,9 @@ const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
 const OrderItem = () => {
   return (
-    <TableContainer component={Paper} sx={{ padding: "10px" }}>
-      <Box sx={{ backgroundColor: "#73c6b6", padding: "10px", borderRadius: "5px", boxShadow: "2px 3px #eee" }}>
-        <Typography variant='h5' color='white' sx={{ fontSize: "24px" }}>
-          Table: 101
-        </Typography>
+    <Paper elevation={3} sx={{padding: "10px", margin: "10px"}}>
+      <Box sx={{ padding: "10px", borderRadius: "5px" }}>
+        <Button variant='text' sx={{fontWeight: "bold", fontSize: "18px"}}>Table No: R-3</Button>
       </Box>
       <Table sx={{ minWidth: 300 }} aria-label="spanning table">
         <TableBody>
@@ -70,7 +67,7 @@ const OrderItem = () => {
           </TableRow>
         </TableBody>
       </Table>
-    </TableContainer>
+    </Paper>
   );
 }
 

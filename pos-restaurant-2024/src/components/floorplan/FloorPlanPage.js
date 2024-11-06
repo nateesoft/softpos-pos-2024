@@ -1,7 +1,11 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
 import Modal from '@mui/material/Modal'
-import { Box } from "@mui/material";
+import { AppBar, Box, Button, IconButton, MenuItem, Toolbar, Typography } from "@mui/material";
+import Splitscreen from '@mui/icons-material/Splitscreen'
+import ManageAccounts from '@mui/icons-material/TableBar'
+import ExitToApp from '@mui/icons-material/ExitToApp'
+
 import CustomerCheckin from "./CustomerCheckin";
 
 const bgImage = {
@@ -13,18 +17,6 @@ const bgImage = {
   backgroundPosition: "center",
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover"
-}
-
-const button = {
-  height: "30px",
-  marginRight: "5px",
-  backgroundColor: "black",
-  color: "white",
-  width: "85px",
-  border: "1px solid snow",
-  fontWeight: "bold",
-  borderRadius: "5px",
-  cursor: "pointer"
 }
 
 const tableCust = {
@@ -80,26 +72,38 @@ function FloorPlanPage() {
   const backLogin = () => {
     navigate("/");
   }
+  const setupFloorPlan = () => {
+    navigate("/floorplan2");
+  }
 
   return (
-    <div style={{ backgroundColor: "black", padding: "10px" }}>
-
-      <div style={{ padding: "10px" }}>
-        <table width="100%">
-          <tr>
-            <td align="left">
-              <button style={{ backgroundColor: "gray", fontWeight: "bold", width: "200px", height: "30px", marginLeft: "15px", color: "snow" }}>Floor: VIP Floor</button>
-            </td>
-            <td align="right">
-              <div>
-                <button style={{...button, width: "150px"}}>แยกโต๊ะ/รวมโต๊ะ</button>
-                <button style={button}>จัดการโต๊ะ</button>
-                <button style={{ ...button, backgroundColor: "red", color: "snow" }} onClick={backLogin}>Logout</button>
-              </div>
-            </td>
-          </tr>
-        </table>
-      </div>
+    <div style={{ backgroundColor: "#123456", padding: "10px" }}>
+      <AppBar component="nav">
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            sx={{ mr: 2, display: { sm: 'none' } }}
+          >
+            <MenuItem />
+          </IconButton>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+          >
+            <Button variant="contained" sx={{bgcolor: "#123499"}}>
+              Floor: VIP Floor
+            </Button>
+          </Typography>
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />}>แยกโต๊ะ / รวมโต๊ะ</Button>
+            <Button variant="contained" onClick={setupFloorPlan} sx={{ marginRight: "10px" }} startIcon={<ManageAccounts />}>จัดการโต๊ะ</Button>
+            <Button variant="contained" color="error" onClick={backLogin} endIcon={<ExitToApp />}>Logout</Button>
+          </Box>
+        </Toolbar>
+      </AppBar>
       <div style={bgImage}></div>
       <div style={tableCust}>
         <table border="0">

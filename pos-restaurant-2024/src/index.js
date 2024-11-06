@@ -14,7 +14,7 @@ import reportWebVitals from "./reportWebVitals"
 i18next.init({
   interpolation: { escapeValue: false },
   lng: "auto",
-  fallbackLng: "en",
+  fallbackLng: "th",
   resources: {
     en: {
       global: global_en

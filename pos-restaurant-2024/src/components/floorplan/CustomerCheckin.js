@@ -96,8 +96,8 @@ const CustomerCheckin = ({ openTable, tableNo, status, closeModal }) => {
                 </Grid>
                 {showError && <Alert severity="error" sx={{width: "100%"}}>สถานะโต๊ะไม่พร้อมใช้งาน</Alert>}
                 <Grid size={12} textAlign="center">
-                    <Button variant='contained' sx={{ width: "120px", fontSize: "16px", marginRight: "10px" }} onClick={handleOpenTable}>เปิดโต๊ะ</Button>
-                    <Button variant='contained' sx={{ width: "120px", fontSize: "16px" }} color='error' onClick={closeModal}>Cancel</Button>
+                    <Button variant='contained' sx={{ width: "120px", fontSize: "16px", marginRight: "10px" }} color='error' onClick={closeModal}>Cancel</Button>
+                    <Button variant='contained' sx={{ width: "120px", fontSize: "16px" }} onClick={handleOpenTable}>เปิดโต๊ะ</Button>
                 </Grid>
             </Grid>
         </Grid>

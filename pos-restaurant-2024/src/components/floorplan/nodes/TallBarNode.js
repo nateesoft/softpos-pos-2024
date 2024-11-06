@@ -1,38 +1,14 @@
-import { useCallback } from "react"
-import { Handle, Position } from "@xyflow/react"
-import styled from 'styled-components'
+import { Box, Typography } from "@mui/material";
 
-const HandleStyle =  styled.div `
-  border: 1px solid #aaa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: grab;
-  height: 50px;
-  background-color: #2074f6;
-  color: white;
-  font-size: 12px;
-`;
-
-const TextStyle = styled.div`
-  text-align: center;
-`;
-
-function TallBarNode({ data }) {
-  const onChange = useCallback((evt) => {
-    console.log(evt.target.value)
-  }, [])
-
+function TallBarNode() {
   return (
-    <>
-      <HandleStyle onChange={onChange}>
-        <TextStyle>{data.label}</TextStyle>
-        <Handle type="target" id="1" position={Position.Left} style={{ backgroundColor: 'green' }} />
-        <Handle type="target" id="2" position={Position.Top} style={{ backgroundColor: 'green' }} />
-        <Handle type="source" id="3" position={Position.Right} style={{ backgroundColor: 'blue' }} />
-        <Handle type="source" id="4" position={Position.Bottom} style={{ backgroundColor: 'blue' }} />
-      </HandleStyle>
-    </>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      sx={{ border: "2px solid", height: '400px', width: '100px' }}>
+      <Typography variant="h5">แนวตั้ง</Typography>
+    </Box>
   )
 }
 

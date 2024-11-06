@@ -4,5 +4,14 @@
     },
     "mainSection": {
      "title": "Creating Multilingual React Apps with react-i18next: A Step-by-Step Guide"
+    },
+    "productMenu": {
+        "allGroup": "All Menu",
+        "breakfast": "Breakfast",
+        "appetizer": "Appetizer",
+        "chineseFood": "Chinese Food",
+        "italianFood": "Italian Food",
+        "drink": "Drink",
+        "dessert": "Dessert"
     }
    }

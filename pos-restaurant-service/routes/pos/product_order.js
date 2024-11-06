@@ -70,14 +70,27 @@ router.patch('/:id', function (req, res, next) {
   const { payload } = req.body
   const response = {}
 
-  res.json(payload);
+  response.status = true
+  response.code = 200
+  response.message = "Success"
+  response.data = payload
+
+  res.json(response);
 });
 
 router.delete('/:id', function (req, res, next) {
   const id = req.params.id
+  const response = {}
+
   pool.query(`delete from product_order where id=?`, [id], (err, results) => {
       if (err) throw err
-      res.status(201).json({ id })
+
+      response.status = true
+      response.code = 200
+      response.message = "Success"
+      response.data = id
+
+      res.status(201).json(response)
     }
   )
 });

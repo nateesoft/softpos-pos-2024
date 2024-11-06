@@ -5,13 +5,17 @@ import '@xyflow/react/dist/style.css';
 
 import OvalNode from "./nodes/OvalNode"
 import SquareNode from "./nodes/SquareNode"
+import LongNode from "./nodes/LongBarNode"
+import TallNode from "./nodes/TallBarNode"
 import LeftMenu from './LeftMenu';
 
 import "./index.css"
 
 const nodeTypes = {
     oval: OvalNode,
-    square: SquareNode
+    square: SquareNode,
+    long: LongNode,
+    tall: TallNode
 }
 
 const FutureFloorplan = () => {
@@ -54,18 +58,10 @@ const FutureFloorplan = () => {
                 y: event.clientY
             })
 
-            let label = ""
-            if (type === "start") {
-                label = "Start"
-            } else if (type === "payload") {
-                label = "Payload"
-            }
-
             const newNode = {
                 id: `node_${Math.random().toString(36).substring(2, 8)}`,
                 type,
                 position,
-                data: { label },
                 style: {
                     width: 80,
                     height: 50

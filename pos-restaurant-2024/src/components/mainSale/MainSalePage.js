@@ -43,7 +43,7 @@ function MainSalePage() {
             <ProductMenu ProductList={productList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
           </td>
           <td valign="top">
-            <OrderItem OrderList={orderList} />
+            <OrderItem OrderList={orderList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
           </td>
         </tr>
       </table>

@@ -2,10 +2,9 @@ import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 function priceRow(qty, unit) {
   return qty * unit;
@@ -25,11 +24,9 @@ const rows = [
 
 const PaymentMethod = () => {
   return (
-    <TableContainer component={Paper} sx={{ padding: "10px", marginTop: "10px" }}>
-      <Box sx={{ backgroundColor: "#aed6f1", padding: "10px", borderRadius: "5px", boxShadow: "2px 3px #eee" }}>
-        <Typography variant='h5' color='snow' sx={{ fontSize: "24px" }}>
-          Payment Method
-        </Typography>
+    <Paper elevation={3} sx={{padding: "10px", margin: "10px"}}>
+      <Box sx={{ padding: "10px", borderRadius: "5px" }}>
+        <Button variant='text' color='success' sx={{fontWeight: "bold", fontSize: "18px"}}>Payment Method - รายการรับชำระ</Button>
       </Box>
       <Table sx={{ minWidth: 300 }} aria-label="spanning table">
         <TableBody>
@@ -42,7 +39,7 @@ const PaymentMethod = () => {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </Paper>
   );
 }
 
