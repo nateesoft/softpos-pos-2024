@@ -1,9 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Grid from '@mui/material/Grid2'
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import ArrowBack from '@mui/icons-material/ArrowBack'
-import CancelIcon from '@mui/icons-material/Cancel'
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import PaidIcon from '@mui/icons-material/Paid';
 
@@ -128,7 +127,6 @@ function PaymentForm({open, close}) {
                 </Grid>
                 <Box sx={{marginTop: "30px"}} textAlign="center">
                     <Button variant="contained" sx={{margin: "5px"}} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}>ย้อนกลับ</Button>
-                    <Button variant="contained" sx={{margin: "5px"}} color="error" endIcon={<CancelIcon />}>VOID ORDER</Button>
                     <Button variant="contained" sx={{margin: "5px"}} color="success" onClick={open} endIcon={<ConfirmIcon />}>CONFIRM</Button>
                 </Box>
             </Grid>

@@ -45,7 +45,6 @@ const center = {
 
 export default function Register() {
   const [open, setOpen] = useState(false);
-  const [remember, setRemember] = useState(false);
   const vertical = "top";
   const horizontal = "right";
   const navigate = useNavigate();
@@ -53,7 +52,6 @@ export default function Register() {
   const handleSubmit = async (event) => {
     setOpen(true);
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
   };
 
   const handleClose = (event, reason) => {

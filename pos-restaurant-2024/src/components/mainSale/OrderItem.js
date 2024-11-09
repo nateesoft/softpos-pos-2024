@@ -6,22 +6,24 @@ import TabPanel from '@mui/lab/TabPanel';
 import { useNavigate } from "react-router-dom";
 import NoFoodIcon from '@mui/icons-material/NoFood';
 import { Alert, Box, Button, ButtonGroup, Modal, TextField, Typography, Paper, ToggleButtonGroup, ToggleButton } from "@mui/material";
+import Grid from '@mui/material/Grid2'
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import axios from 'axios'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import MoneyIcon from '@mui/icons-material/Money'
+import SplitBillIcon from '@mui/icons-material/VerticalSplit'
 import PrintIcon from '@mui/icons-material/Print'
+import PrintCheckboxIcon from '@mui/icons-material/CheckBox'
+import SplitBiPayment from './SplitBillPayment'
 
 const modalStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  borderRadius: "16px",
   border: "1px solid #eee",
-  boxShadow: 24
+  backgroundColor: "snow"
 }
 
 const ProductCard = ({ product, openModal }) => {
@@ -160,7 +162,7 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
         </ButtonGroup>
       </Box>
       <Box style={{ padding: "10px" }}>
-        <Box sx={{marginBottom: "10px"}}>
+        <Box sx={{ marginBottom: "10px" }}>
           <Typography variant='p'>รายละเอียดเพิ่มเติม</Typography>
         </Box>
         <div>
@@ -168,7 +170,7 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
         </div>
       </Box>
       <Box sx={{ padding: "10px" }}>
-        <Box sx={{marginBottom: "10px"}}>
+        <Box sx={{ marginBottom: "10px" }}>
           <Typography variant='p'>ประเภทอาหาร</Typography>
         </Box>
         <Box display="flex" justifyContent="center">
@@ -190,14 +192,17 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
           <Typography variant='span'>คุณต้องการลบรายการอาหารนี้หรือไม่ !!!</Typography>
         </Box>
       </Alert>}
-      <div align="center" style={{ marginTop: "20px" }}>
+      <Grid container justifyContent="center">
         <Button variant="contained" color="error" onClick={closeModal} sx={{ marginRight: "10px" }}>
           CANCEL
+        </Button>
+        <Button variant="contained" color="secondary" onClick={closeModal} sx={{ marginRight: "10px" }}>
+          ยกเลิกรายการ (VOID)
         </Button>
         <Button variant="contained" color="success" onClick={handleConfirm}>
           CONFIRM
         </Button>
-      </div>
+      </Grid>
     </div>
   )
 }
@@ -230,6 +235,7 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState('1');
   const [open, setOpen] = useState(false)
+  const [openSplitBill, setOpenSplitBill] = useState(false)
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
 
@@ -294,14 +300,16 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
           </Box>
         </TabPanel>
       </TabContext>
-      <Box display="flex" justifyContent="center" sx={{ margin: "5px" }}>
-        <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => setShowKicPrint(true)}>Print to Kic</Button>
-      </Box>
+      <Grid container spacing={2} margin={3} justifyContent="center" >
+        <Button variant="outlined" startIcon={<PrintCheckboxIcon />} onClick={() => setShowKicPrint(true)} sx={{ marginRight: "10px" }}>พิมพ์ตรวจสอบ</Button>
+        <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => setShowKicPrint(true)}>ส่งครัว/พักบิล</Button>
+      </Grid>
       <TotalBill orderList={OrderList} />
-      <div style={{ margin: "20px" }} align="right">
-        <Button variant='contained' color='primary' onClick={backFloorPlan} sx={{ marginRight: "10px", width: "150px" }} startIcon={<ArrowBack />}>ย้อนกลับ</Button>
-        <Button variant='contained' color='success' onClick={handleClick} sx={{ width: "150px" }} endIcon={<MoneyIcon />}>รับชำระ</Button>
-      </div>
+      <Grid container spacing={2} justifyContent="center">
+        <Button variant='contained' color='primary' onClick={backFloorPlan} startIcon={<ArrowBack />}>ย้อนกลับ</Button>
+        <Button variant='contained' color='secondary' onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />}>แยกชำระ</Button>
+        <Button variant='contained' color='success' onClick={handleClick} endIcon={<MoneyIcon />}>ชำระเงิน</Button>
+      </Grid>
 
       <Modal open={open} onClose={() => setOpen(false)}
         aria-labelledby="modal-modal-title"
@@ -341,6 +349,12 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
               <Button variant='outlined' startIcon={<PrintIcon />} onClick={handlePrint}>Print</Button>
             </Box>
           </Paper>
+        </Box>
+      </Modal>
+
+      <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
+        <Box sx={{ ...modalStyle, width: "80%" }}>
+          <SplitBiPayment onClose={() => setOpenSplitBill(false)} />
         </Box>
       </Modal>
     </Box>

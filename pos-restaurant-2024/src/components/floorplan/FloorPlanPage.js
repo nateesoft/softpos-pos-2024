@@ -7,9 +7,15 @@ import ManageAccounts from '@mui/icons-material/TableBar'
 import ExitToApp from '@mui/icons-material/ExitToApp'
 import { motion } from 'framer-motion'
 
-import CustomerCheckin from "./CustomerCheckin";
 import { useKeyPress } from '../../util/PageListener'
 import { ModalConfirm } from "../../util/AlertPopup";
+import NumberPadLock from '../utils/NumberPadLock'
+
+import PinLock from './PinLock'
+import ManageCustTable from './ManageCustTable'
+import RecieptCopyPrint from './RecieptCopyPrint'
+import ManageCashDrawer from "./ManageCashDrawer";
+import RefundBill from "./RefundBill";
 
 const bgImage = {
   backgroundImage: `url(/images/floorplan_bg.jpg)`,
@@ -36,15 +42,11 @@ const tableCust = {
   height: "75vh"
 }
 
-const modalStyle = {
+const modalPinStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  borderRadius: "16px",
-  border: "1px solid #eee",
-  boxShadow: 24
+  transform: "translate(-50%, -50%)"
 }
 
 const buttonPink = {
@@ -59,21 +61,25 @@ const reserveTable = "Reserve"
 
 function FloorPlanPage() {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false)
+
+  const [openPin, setOpenPin] = useState(false)
+  const [openMgrTable, setOpenMgrTable] = useState(false)
+  const [openPinMgrTable, setOpenPinMgrTable] = useState(false)
+  const [openCopyPrint, setOpenCopyPrint] = useState(false)
+  const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
+  const [openRefundBill, setOpenRefundBill] = useState(false)
+
   const [openLogout, setOpenLogout] = useState(false)
   const [tableNo, setTableNo] = useState("")
   const [tableStatus, setTableStatus] = useState("")
 
   const keyPressed = useKeyPress('Escape');
 
-  const openTable = () => {
-    navigate("/sale");
-  }
-
   const handleClick = (tableNumber, status) => {
     setTableNo(tableNumber)
     setTableStatus(status)
-    setOpen(true)
+
+    setOpenPin(true)
   }
 
   const confirmLogoutAlert = useCallback(() => {
@@ -122,7 +128,10 @@ function FloorPlanPage() {
             </Button>
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />}>แยกโต๊ะ / รวมโต๊ะ</Button>
+            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />} onClick={() => setOpenMgrCashDrawer(true)}>นำเงินเข้า/ออกลิ้นชัก</Button>
+            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />} onClick={() => setOpenRefundBill(true)}>ยกเลิกบิล (Refund Bill)</Button>
+            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />} onClick={() => setOpenCopyPrint(true)}>พิมพ์สำเนาบิล</Button>
+            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />} onClick={() => setOpenPinMgrTable(true)}>แยกโต๊ะ / รวมโต๊ะ</Button>
             <Button variant="contained" onClick={setupFloorPlan} sx={{ marginRight: "10px" }} startIcon={<ManageAccounts />}>จัดการโต๊ะ</Button>
             <Button variant="contained" color="error" onClick={confirmLogoutAlert} endIcon={<ExitToApp />}>Logout</Button>
           </Box>
@@ -204,14 +213,36 @@ function FloorPlanPage() {
           </tr>
         </table>
       </div>
-      <Modal open={open} onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
-        <Box sx={{ ...modalStyle, width: 450, padding: "10px" }}>
-          <CustomerCheckin
-            openTable={openTable}
-            closeModal={() => setOpen(false)}
-            tableNo={tableNo} status={tableStatus} />
+      <Modal open={openPin} onClose={() => setOpenPin(false)}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <PinLock setOpenPin={setOpenPin} tableNo={tableNo} tableStatus={tableStatus} />
+        </Box>
+      </Modal>
+
+      <Modal open={openMgrTable} onClose={() => setOpenMgrTable(false)}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <ManageCustTable setOpen={setOpenMgrTable} />
+        </Box>
+      </Modal>
+      <Modal open={openPinMgrTable} onClose={() => setOpenPinMgrTable(false)}>
+        <NumberPadLock
+          close={() => setOpenPinMgrTable(false)}
+          nextStep={() => setOpenMgrTable(true)} />
+      </Modal>
+
+      <Modal open={openCopyPrint} onClose={() => setOpenCopyPrint(false)}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <RecieptCopyPrint setOpen={setOpenCopyPrint} />
+        </Box>
+      </Modal>
+      <Modal open={openMgrCashDrawer} onClose={() => setOpenMgrCashDrawer(false)}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <ManageCashDrawer setOpen={setOpenMgrCashDrawer} />
+        </Box>
+      </Modal>
+      <Modal open={openRefundBill} onClose={() => setOpenRefundBill(false)}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <RefundBill setOpen={setOpenRefundBill} />
         </Box>
       </Modal>
       <ModalConfirm

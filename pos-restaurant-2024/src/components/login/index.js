@@ -138,7 +138,7 @@ export default function Login() {
                                                 <LockOutlinedIcon />
                                             </Avatar>
                                             <Typography component="h1" variant="h4">
-                                                Sign In
+                                                POS Restaurant
                                             </Typography>
                                         </Box>
                                         <Box
@@ -210,7 +210,7 @@ export default function Login() {
                                                             backgroundColor: "#FF9A01",
                                                         }}
                                                     >
-                                                        Sign in
+                                                        Login
                                                     </Button>
                                                 </Grid>
                                                 <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
