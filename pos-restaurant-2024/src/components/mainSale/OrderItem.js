@@ -5,11 +5,9 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { useNavigate } from "react-router-dom";
 import NoFoodIcon from '@mui/icons-material/NoFood';
-import { Alert, Box, Button, ButtonGroup, Modal, TextField, Typography, Paper } from "@mui/material";
+import { Alert, Box, Button, ButtonGroup, Modal, TextField, Typography, Paper, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import PercentIcon from '@mui/icons-material/Percent';
-import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import axios from 'axios'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import MoneyIcon from '@mui/icons-material/Money'
@@ -48,6 +46,11 @@ const ProductCard = ({ product, openModal }) => {
 }
 const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu }) => {
   const [count, setCount] = useState(product.qty)
+  const [orderType, setOrderType] = useState('dineIn');
+
+  const handleChange = (event, oType) => {
+    setOrderType(oType);
+  };
 
   const handleConfirm = () => {
     if (count === 0) {
@@ -156,19 +159,31 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
           </Button>
         </ButtonGroup>
       </Box>
-      <div style={{ padding: "10px" }}>
-        <div>รายละเอียดเพิ่มเติม</div>
+      <Box style={{ padding: "10px" }}>
+        <Box sx={{marginBottom: "10px"}}>
+          <Typography variant='p'>รายละเอียดเพิ่มเติม</Typography>
+        </Box>
         <div>
           <TextField fullWidth label="เผ็ดน้อย, เผ็ดกลาง, ไม่เผ็ด..." id="fullWidth" multiline={true} rows={2} />
         </div>
-      </div>
-      <Box sx={{ display: 'flex', alignItems: 'center', margin: "10px" }}>
-        <PercentIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-        <TextField id="input-with-sx" label="ให้ส่วนลด" type="number" fullWidth />
       </Box>
-      <Box sx={{ display: 'flex', alignItems: 'center', margin: "10px" }}>
-        <PriceChangeIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-        <TextField id="input-with-sx" label="โปรโมชั่น" type="number" fullWidth />
+      <Box sx={{ padding: "10px" }}>
+        <Box sx={{marginBottom: "10px"}}>
+          <Typography variant='p'>ประเภทอาหาร</Typography>
+        </Box>
+        <Box display="flex" justifyContent="center">
+          <ToggleButtonGroup
+            color="primary"
+            value={orderType}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
+          >
+            <ToggleButton value="dineIn">Dine In</ToggleButton>
+            <ToggleButton value="takeAway">Take Away</ToggleButton>
+            <ToggleButton value="delivery">Delivery</ToggleButton>
+          </ToggleButtonGroup>
+        </Box>
       </Box>
       {count === 0 && <Alert severity="error" sx={{ width: "100%" }}>
         <Box>
@@ -240,7 +255,7 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
   }
 
   return (
-    <Box sx={{ width: '400px', typography: 'body1' }}>
+    <Box sx={{ width: '400px', typography: 'body1', marginTop: "8vh" }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -255,7 +270,7 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
         <Box textAlign="center">
           <Typography variant='p'>โต๊ะ (R-3)</Typography>
         </Box>
-        <TabPanel value="1" sx={{ height: "500px", overflow: "auto" }}>
+        <TabPanel value="1" sx={{ height: "400px", overflow: "auto" }}>
           {
             OrderList && OrderList.map(product => {
               return <ProductCard product={product} openModal={() => handleOpenMenu(product)} />
@@ -266,13 +281,13 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
             <Typography variant='p'>ไม่พบรายการอาหารที่สั่ง Dine In</Typography>
           </Box>}
         </TabPanel>
-        <TabPanel value="2" sx={{ height: "500px", overflow: "auto" }}>
+        <TabPanel value="2" sx={{ height: "400px", overflow: "auto" }}>
           <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
             <Box><NoFoodIcon /></Box>
             <Typography variant='p'>ไม่พบรายการอาหาร take away</Typography>
           </Box>
         </TabPanel>
-        <TabPanel value="3" sx={{ height: "500px", overflow: "auto" }}>
+        <TabPanel value="3" sx={{ height: "400px", overflow: "auto" }}>
           <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
             <Box><NoFoodIcon /></Box>
             <Typography variant='p'>ไม่พบรายการอาหาร delevery</Typography>

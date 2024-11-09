@@ -51,7 +51,7 @@ const inputPin = {
   color: "white"
 }
 
-function LoginPage() {
+const PinLock = () => {
   const navigate = useNavigate();
 
   const [pin1, setPin1] = useState("")
@@ -184,4 +184,4 @@ function LoginPage() {
   )
 }
 
-export default LoginPage
+export default PinLock

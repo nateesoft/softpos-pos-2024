@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import Grid from '@mui/material/Grid2'
 import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
+import { motion } from 'framer-motion'
 
 import OrderItem from './OrderItem'
 import PaymentMethod from './PaymentMethod'
@@ -35,7 +36,9 @@ function PaymentPage() {
   }
 
   return (
-    <div>
+    <motion.div initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}>
       <Grid container spacing={2}>
         <Grid size={6}>
           <OrderItem />
@@ -56,7 +59,7 @@ function PaymentPage() {
           </Box>
         </Box>
       </Modal>
-    </div>
+    </motion.div>
   );
 }
 

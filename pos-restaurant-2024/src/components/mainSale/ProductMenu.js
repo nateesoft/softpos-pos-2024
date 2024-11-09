@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Tabs, Tab, Badge, Modal, Typography, TextField, ButtonGroup } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
+import MenuOptionIcon from '@mui/icons-material/FilterFrames';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import MenuBook from '@mui/icons-material/MenuBook';
 import axios from 'axios'
 import { useTranslation } from "react-i18next"
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import NoFoodIcon from '@mui/icons-material/NoFood';
 
 const modalStyle = {
     position: "absolute",
@@ -18,7 +20,20 @@ const modalStyle = {
     boxShadow: 24
 }
 
-const ProductCard = ({ product, openModal, initLoadMenu, initLoadOrder }) => {
+const NotfoundMenu = () => {
+    return (
+        <Box display="flex" justifyContent="center" sx={{ width: "500px", height: "500px", padding: "10px" }}>
+            <Box display="flex" alignItems="center" flexDirection="row">
+                <Box display="flex" alignContent="center">
+                    <NoFoodIcon sx={{ color: "#bbb", marginRight: "10px" }} />
+                    <Typography variant='h5' sx={{ color: "#bbb" }}>ยังไม่มีเมนูอาหาร</Typography>
+                </Box>
+            </Box>
+        </Box>
+    )
+}
+
+const ProductCard = ({ id, product, openModal, initLoadMenu, initLoadOrder }) => {
     const addOrder = (updateQty) => {
         product.qty = product.qty + updateQty
         axios.patch(`/api/product/${product.id}`, { ...product })
@@ -37,10 +52,10 @@ const ProductCard = ({ product, openModal, initLoadMenu, initLoadOrder }) => {
             })
     }
     return (
-        <Badge badgeContent={product.qty} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: 18, height: 25, minWidth: 35, top: 15, right: 18, borderRadius: 1, color: "snow", fontWeight: "bold" } }}>
-            <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px", boxShadow: "2px 1px #eee" }}>
+        <Badge id={id + product.id} badgeContent={product.qty} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: 18, height: 25, minWidth: 35, top: 15, right: 18, borderRadius: 1, color: "snow", fontWeight: "bold" } }}>
+            <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px", boxShadow: "2px 1px #eee", margin: "5px" }}>
                 <Box textAlign="center">
-                    <img src={product.url} alt="" width={160} style={{ borderRadius: "10px" }} onClick={() => addOrder(1)} /><br />
+                    <img src={product.url} alt="" width={160} style={{ borderRadius: "10px" }} onClick={openModal} /><br />
                 </Box>
                 <table width="100%">
                     <tr>
@@ -54,10 +69,10 @@ const ProductCard = ({ product, openModal, initLoadMenu, initLoadOrder }) => {
                     </tr>
                     <tr>
                         <td align="center">
-                            <Button variant="contained" color="success" onClick={() => addOrder(1)}>+ Order</Button>
+                            <Button variant="contained" color="success" onClick={() => addOrder(1)} startIcon={<AddIcon />}>Order</Button>
                         </td>
                         <td style={{ cursor: "pointer" }}>
-                            <AddToPhotosIcon fontSize="large" onClick={openModal} />
+                            <MenuOptionIcon color="primary" fontSize="large" onClick={openModal} />
                         </td>
                     </tr>
                 </table>
@@ -66,7 +81,7 @@ const ProductCard = ({ product, openModal, initLoadMenu, initLoadOrder }) => {
     )
 }
 
-const ProductDetailCard = ({ product, closeModal, initLoadMenu }) => {
+const ProductDetailCard = ({ product, closeModal, initLoadMenu, initLoadOrder }) => {
     const [count, setCount] = useState(product.qty)
 
     const handleConfirm = () => {
@@ -76,6 +91,7 @@ const ProductDetailCard = ({ product, closeModal, initLoadMenu }) => {
                 console.log(response)
                 if (response.data.code === 200) {
                     initLoadMenu()
+                    initLoadOrder()
                     closeModal()
                 }
             })
@@ -160,11 +176,38 @@ const ProductDetailCard = ({ product, closeModal, initLoadMenu }) => {
     )
 }
 
-function ProductMenu({ ProductList, initLoadMenu, initLoadOrder }) {
+const TabPanel = props => {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`vertical-tabpanel-${index}`}
+            aria-labelledby={`vertical-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ p: 3 }}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
+
+const ProductMenu = ({ ProductList, initLoadMenu, initLoadOrder }) => {
     const { t } = useTranslation("global")
     const [value, setValue] = useState(0)
     const [open, setOpen] = useState(false)
     const [productInfo, setProductInfo] = useState({})
+
+    const [ProductA, setProductA] = useState([])
+    const [ProductB, setProductB] = useState([])
+    const [ProductC, setProductC] = useState([])
+    const [ProductD, setProductD] = useState([])
+    const [ProductE, setProductE] = useState([])
+    const [ProductF, setProductF] = useState([])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -175,30 +218,109 @@ function ProductMenu({ ProductList, initLoadMenu, initLoadOrder }) {
         setOpen(true)
     }
 
+    useEffect(() => {
+        setProductA(ProductList.filter(product => product.group === "A"))
+        setProductB(ProductList.filter(product => product.group === "B"))
+        setProductC(ProductList.filter(product => product.group === "C"))
+        setProductD(ProductList.filter(product => product.group === "D"))
+        setProductE(ProductList.filter(product => product.group === "E"))
+        setProductF(ProductList.filter(product => product.group === "F"))
+    }, [ProductList])
+
     return (
-        <div>
+        <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', alignContent: "flex-start", marginTop: "8vh" }}>
             <Tabs
+                orientation="vertical"
+                variant="scrollable"
                 value={value}
                 onChange={handleChange}
-                variant="scrollable"
-                scrollButtons="auto"
-                aria-label="scrollable auto tabs example"
+                sx={{ borderRight: 1, borderColor: 'divider', minWidth: "150px" }}
             >
-                <Tab label={t("productMenu.allGroup")} />
-                <Tab label={t("productMenu.breakfast")} />
-                <Tab label={t("productMenu.appetizer")} />
-                <Tab label={t("productMenu.chineseFood")} />
-                <Tab label={t("productMenu.italianFood")} />
-                <Tab label={t("productMenu.drink")} />
-                <Tab label={t("productMenu.dessert")} />
+                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<MenuBook sx={{ color: "white" }} />} label={t("productMenu.allGroup")} />
+                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.breakfast")} />
+                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.appetizer")} />
+                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.chineseFood")} />
+                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.italianFood")} />
+                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.drink")} />
+                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.dessert")} />
             </Tabs>
-            <Grid container spacing={2} padding={2}>
+            <TabPanel value={value} index={0}>
                 {ProductList && ProductList.map(product =>
-                    <Grid size={3}>
-                        <ProductCard product={product} openModal={() => handleOpenMenu(product)} productList={ProductList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
-                    </Grid>
+                    <ProductCard
+                        id={"all" + product.id}
+                        product={product}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder} />
                 )}
-            </Grid>
+                {ProductList.length === 0 && <NotfoundMenu />}
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+                {ProductA && ProductA.map(product =>
+                    <ProductCard
+                        id={"a" + product.id}
+                        product={product}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder} />
+                )}
+                {ProductA.length === 0 && <NotfoundMenu />}
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+                {ProductB && ProductB.map(product =>
+                    <ProductCard
+                        id={"b" + product.id}
+                        product={product}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder} />
+                )}
+                {ProductB.length === 0 && <NotfoundMenu />}
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+                {ProductC && ProductC.map(product =>
+                    <ProductCard
+                        id={"c" + product.id}
+                        product={product}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder} />
+                )}
+                {ProductC.length === 0 && <NotfoundMenu />}
+            </TabPanel>
+            <TabPanel value={value} index={4}>
+                {ProductD && ProductD.map(product =>
+                    <ProductCard
+                        id={"d" + product.id}
+                        product={product}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder} />
+                )}
+                {ProductD.length === 0 && <NotfoundMenu />}
+            </TabPanel>
+            <TabPanel value={value} index={5}>
+                {ProductE && ProductE.map(product =>
+                    <ProductCard
+                        id={"e" + product.id}
+                        product={product}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder} />
+                )}
+                {ProductE.length === 0 && <NotfoundMenu />}
+            </TabPanel>
+            <TabPanel value={value} index={6}>
+                {ProductF && ProductF.map(product =>
+                    <ProductCard
+                        id={"f" + product.id}
+                        product={product}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder} />
+                )}
+                {ProductF.length === 0 && <NotfoundMenu />}
+            </TabPanel>
             <Modal open={open} onClose={() => setOpen(false)}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
@@ -206,7 +328,7 @@ function ProductMenu({ ProductList, initLoadMenu, initLoadOrder }) {
                     <ProductDetailCard product={productInfo} closeModal={() => setOpen(false)} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
                 </Box>
             </Modal>
-        </div>
+        </Box>
     )
 }
 

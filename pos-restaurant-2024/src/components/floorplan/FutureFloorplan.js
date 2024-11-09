@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { addEdge, Background, Controls, MarkerType, MiniMap, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState } from '@xyflow/react';
+import { motion } from 'framer-motion'
 
 import '@xyflow/react/dist/style.css';
 
@@ -82,7 +83,7 @@ const FutureFloorplan = () => {
     }
 
     return (
-        <div className="dndflow">
+        <motion.div className="dndflow" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <LeftMenu />
             <ReactFlowProvider>
                 <div
@@ -109,7 +110,7 @@ const FutureFloorplan = () => {
                     </ReactFlow>
                 </div>
             </ReactFlowProvider>
-        </div>
+        </motion.div>
 
     );
 }

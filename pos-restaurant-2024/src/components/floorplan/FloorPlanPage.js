@@ -1,12 +1,15 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { useNavigate } from "react-router-dom";
 import Modal from '@mui/material/Modal'
 import { AppBar, Box, Button, IconButton, MenuItem, Toolbar, Typography } from "@mui/material";
 import Splitscreen from '@mui/icons-material/Splitscreen'
 import ManageAccounts from '@mui/icons-material/TableBar'
 import ExitToApp from '@mui/icons-material/ExitToApp'
+import { motion } from 'framer-motion'
 
 import CustomerCheckin from "./CustomerCheckin";
+import { useKeyPress } from '../../util/PageListener'
+import { ModalConfirm } from "../../util/AlertPopup";
 
 const bgImage = {
   backgroundImage: `url(/images/floorplan_bg.jpg)`,
@@ -57,8 +60,11 @@ const reserveTable = "Reserve"
 function FloorPlanPage() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false)
+  const [openLogout, setOpenLogout] = useState(false)
   const [tableNo, setTableNo] = useState("")
   const [tableStatus, setTableStatus] = useState("")
+
+  const keyPressed = useKeyPress('Escape');
 
   const openTable = () => {
     navigate("/sale");
@@ -69,15 +75,33 @@ function FloorPlanPage() {
     setTableStatus(status)
     setOpen(true)
   }
-  const backLogin = () => {
+
+  const confirmLogoutAlert = useCallback(() => {
+    setOpenLogout(true)
+  }, [setOpenLogout])
+
+  const handleLogout = () => {
     navigate("/");
   }
+
   const setupFloorPlan = () => {
     navigate("/floorplan2");
   }
 
+  useEffect(() => {
+    console.log("Key event connected.")
+    if (keyPressed) {
+      confirmLogoutAlert()
+    }
+  }, [keyPressed, confirmLogoutAlert]);
+
   return (
-    <div style={{ backgroundColor: "#123456", padding: "10px" }}>
+    <motion.div
+      style={{ backgroundColor: "#123456", padding: "10px" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <AppBar component="nav">
         <Toolbar>
           <IconButton
@@ -93,14 +117,14 @@ function FloorPlanPage() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            <Button variant="contained" sx={{bgcolor: "#123499"}}>
+            <Button variant="contained" sx={{ bgcolor: "#123499" }}>
               Floor: VIP Floor
             </Button>
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />}>แยกโต๊ะ / รวมโต๊ะ</Button>
             <Button variant="contained" onClick={setupFloorPlan} sx={{ marginRight: "10px" }} startIcon={<ManageAccounts />}>จัดการโต๊ะ</Button>
-            <Button variant="contained" color="error" onClick={backLogin} endIcon={<ExitToApp />}>Logout</Button>
+            <Button variant="contained" color="error" onClick={confirmLogoutAlert} endIcon={<ExitToApp />}>Logout</Button>
           </Box>
         </Toolbar>
       </AppBar>
@@ -184,10 +208,19 @@ function FloorPlanPage() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={{ ...modalStyle, width: 450, padding: "10px" }}>
-          <CustomerCheckin openTable={openTable} closeModal={() => setOpen(false)} tableNo={tableNo} status={tableStatus} />
+          <CustomerCheckin
+            openTable={openTable}
+            closeModal={() => setOpen(false)}
+            tableNo={tableNo} status={tableStatus} />
         </Box>
       </Modal>
-    </div>
+      <ModalConfirm
+        open={openLogout}
+        setOpen={() => setOpenLogout(false)}
+        onSubmit={handleLogout}
+        header="Confirm"
+        content="ยืนยันการออกจากระบบ" />
+    </motion.div>
   )
 }
 

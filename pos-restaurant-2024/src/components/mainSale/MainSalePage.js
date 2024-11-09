@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import Grid from "@mui/material/Grid2";
 import axios from 'axios'
+import { motion } from 'framer-motion'
 
-import LeftMenu from './LeftMenu'
+import AppbarMenu from './AppbarMenu'
 import ProductMenu from './ProductMenu'
 import OrderItem from './OrderItem'
 
@@ -33,21 +35,19 @@ function MainSalePage() {
     initLoadOrder()
   }, [])
   return (
-    <div>
-      <table width="100%">
-        <tr>
-          <td valign="top">
-            <LeftMenu />
-          </td>
-          <td>
-            <ProductMenu ProductList={productList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
-          </td>
-          <td valign="top">
-            <OrderItem OrderList={orderList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
-          </td>
-        </tr>
-      </table>
-    </div>
+    <motion.div initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}>
+      <AppbarMenu />
+      <Grid container spacing={2}>
+        <Grid size={8}>
+          <ProductMenu ProductList={productList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
+        </Grid>
+        <Grid size={2}>
+          <OrderItem OrderList={orderList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
+        </Grid>
+      </Grid>
+    </motion.div>
   )
 }
 
