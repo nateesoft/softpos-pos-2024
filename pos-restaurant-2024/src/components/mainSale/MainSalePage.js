@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
 import axios from 'axios'
 import { motion } from 'framer-motion'
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import AppbarMenu from './AppbarMenu'
 import ProductMenu from './ProductMenu'
 import OrderItem from './OrderItem'
 
 function MainSalePage() {
+  const matches = useMediaQuery('(min-width:1024px)');
   const [productList, setProductList] = useState([])
   const [orderList, setOrderList] = useState([])
 
@@ -40,12 +42,12 @@ function MainSalePage() {
       exit={{ opacity: 0 }}>
       <AppbarMenu />
       <Grid container spacing={2}>
-        <Grid size={8}>
-          <ProductMenu ProductList={productList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
+        <Grid size={matches ? 8 : 12}>
+          <ProductMenu OrderList={orderList} ProductList={productList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
         </Grid>
-        <Grid size={2}>
-          <OrderItem OrderList={orderList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
-        </Grid>
+        {matches && <Grid size={2}>
+          <OrderItem OrderList={orderList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} typePopup={false} />
+        </Grid>}
       </Grid>
     </motion.div>
   )

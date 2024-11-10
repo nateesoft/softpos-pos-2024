@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, useLocation } from "react-router-dom"
+import { Routes, Route, useLocation, Navigate } from "react-router-dom"
 import { AnimatePresence } from 'framer-motion'
 
 import PinLock from "./PinLock"
@@ -11,6 +11,7 @@ import FutureFloorplan from "./floorplan/FutureFloorplan"
 import MainSalePage from "./mainSale/MainSalePage"
 import PaymentPage from "./payment/PaymentPage"
 import SaleReportPage from "./SaleReportPage"
+import PageNotFound from './PageNotFound'
 
 const AnimatedRoutes = () => {
     const location = useLocation()
@@ -27,6 +28,8 @@ const AnimatedRoutes = () => {
                 <Route path="/sale" element={<MainSalePage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/sale-report" element={<SaleReportPage />} />
+                <Route path="404" element={<PageNotFound />} />
+                <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>
         </AnimatePresence>
     )

@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid2'
 import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { motion } from 'framer-motion'
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import OrderItem from './OrderItem'
 import PaymentMethod from './PaymentMethod'
@@ -25,6 +26,8 @@ const modalStyle = {
 }
 
 function PaymentPage() {
+  const matches = useMediaQuery('(min-width:1024px)');
+
   const [open, setOpen] = useState(false)
   const navigate = useNavigate();
 
@@ -40,11 +43,11 @@ function PaymentPage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}>
       <Grid container spacing={2}>
-        <Grid size={6}>
+        {matches && <Grid size={6}>
           <OrderItem />
           <PaymentMethod />
-        </Grid>
-        <Grid size={6}>
+        </Grid>}
+        <Grid size={matches ? 6: 12}>
           <PaymentForm open={() => setOpen(true)} close={() => setOpen(false)} />
         </Grid>
       </Grid>

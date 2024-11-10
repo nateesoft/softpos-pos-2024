@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, Tabs, Tab, Badge, Modal, Typography, TextField, ButtonGroup } from "@mui/material";
+import React, { forwardRef, useEffect, useState } from "react";
+import { Box, Button, Tabs, Tab, Badge, Modal, Typography, TextField, ButtonGroup, Fab, Slide, Dialog } from "@mui/material";
 import MenuOptionIcon from '@mui/icons-material/FilterFrames';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
@@ -8,6 +8,9 @@ import axios from 'axios'
 import { useTranslation } from "react-i18next"
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import NoFoodIcon from '@mui/icons-material/NoFood';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+import OrderItem from './OrderItem'
 
 const modalStyle = {
     position: "absolute",
@@ -19,6 +22,12 @@ const modalStyle = {
     border: "1px solid #eee",
     boxShadow: 24
 }
+
+const fabStyle = {
+    position: 'absolute',
+    top: 70,
+    right: 16,
+};
 
 const NotfoundMenu = () => {
     return (
@@ -196,11 +205,18 @@ const TabPanel = props => {
     );
 }
 
-const ProductMenu = ({ ProductList, initLoadMenu, initLoadOrder }) => {
+const Transition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="left" ref={ref} {...props} />;
+});
+
+const ProductMenu = ({ ProductList, OrderList, initLoadMenu, initLoadOrder }) => {
     const { t } = useTranslation("global")
+    const matches = useMediaQuery('(min-width:1024px)');
+
     const [value, setValue] = useState(0)
     const [open, setOpen] = useState(false)
     const [productInfo, setProductInfo] = useState({})
+    const [showMenu, setShowMenu] = useState(false)
 
     const [ProductA, setProductA] = useState([])
     const [ProductB, setProductB] = useState([])
@@ -328,6 +344,23 @@ const ProductMenu = ({ ProductList, initLoadMenu, initLoadOrder }) => {
                     <ProductDetailCard product={productInfo} closeModal={() => setOpen(false)} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
                 </Box>
             </Modal>
+            {matches === false &&
+                <Fab sx={fabStyle} aria-label='Add' color='success' onClick={() => setShowMenu(true)}>
+                    <Badge badgeContent={1} color="warning">
+                        <MenuBook />
+                    </Badge>
+                </Fab>
+            }
+
+            <Dialog
+                open={showMenu}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => setShowMenu(false)}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <OrderItem OrderList={OrderList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} typePopup={true} />
+            </Dialog>
         </Box>
     )
 }

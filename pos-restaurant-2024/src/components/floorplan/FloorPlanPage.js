@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { useNavigate } from "react-router-dom";
 import Modal from '@mui/material/Modal'
-import { AppBar, Box, Button, IconButton, MenuItem, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, IconButton, MenuItem, Toolbar } from "@mui/material";
 import Splitscreen from '@mui/icons-material/Splitscreen'
 import ManageAccounts from '@mui/icons-material/TableBar'
 import ExitToApp from '@mui/icons-material/ExitToApp'
 import { motion } from 'framer-motion'
+import Grid from '@mui/material/Grid2'
 
 import { useKeyPress } from '../../util/PageListener'
 import { ModalConfirm } from "../../util/AlertPopup";
@@ -118,23 +119,24 @@ function FloorPlanPage() {
           >
             <MenuItem />
           </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-          >
-            <Button variant="contained" sx={{ bgcolor: "#123499" }}>
-              Floor: VIP Floor
-            </Button>
-          </Typography>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />} onClick={() => setOpenMgrCashDrawer(true)}>นำเงินเข้า/ออกลิ้นชัก</Button>
-            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />} onClick={() => setOpenRefundBill(true)}>ยกเลิกบิล (Refund Bill)</Button>
-            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />} onClick={() => setOpenCopyPrint(true)}>พิมพ์สำเนาบิล</Button>
-            <Button variant="contained" sx={{ marginRight: "10px" }} startIcon={<Splitscreen />} onClick={() => setOpenPinMgrTable(true)}>แยกโต๊ะ / รวมโต๊ะ</Button>
-            <Button variant="contained" onClick={setupFloorPlan} sx={{ marginRight: "10px" }} startIcon={<ManageAccounts />}>จัดการโต๊ะ</Button>
-            <Button variant="contained" color="error" onClick={confirmLogoutAlert} endIcon={<ExitToApp />}>Logout</Button>
-          </Box>
+
+          <Grid container spacing={2} sx={{width: "100%"}}>
+            <Grid>
+              <Button variant="contained" sx={{ bgcolor: "#123499" }}>
+                Floor: VIP Floor
+              </Button>
+            </Grid>
+            <Grid size={10} display="flex" justifyContent="flex-end">
+              <Grid container spacing={2}>
+                <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenMgrCashDrawer(true)}>นำเงินเข้า/ออกลิ้นชัก</Button>
+                <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenRefundBill(true)}>ยกเลิกบิล (Refund Bill)</Button>
+                <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenCopyPrint(true)}>พิมพ์สำเนาบิล</Button>
+                <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenPinMgrTable(true)}>แยกโต๊ะ / รวมโต๊ะ</Button>
+                <Button variant="contained" onClick={setupFloorPlan} startIcon={<ManageAccounts />}>จัดการโต๊ะ</Button>
+                <Button variant="contained" color="error" onClick={confirmLogoutAlert} endIcon={<ExitToApp />}>Logout</Button>
+              </Grid>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
       <div style={bgImage}></div>
@@ -249,8 +251,8 @@ function FloorPlanPage() {
         open={openLogout}
         setOpen={() => setOpenLogout(false)}
         onSubmit={handleLogout}
-        header="Confirm"
-        content="ยืนยันการออกจากระบบ" />
+        header="Confirm Logout"
+        content="ยืนยันการออกจากระบบ ?" />
     </motion.div>
   )
 }

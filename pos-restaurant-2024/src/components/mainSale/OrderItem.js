@@ -231,13 +231,16 @@ const TotalBill = ({ orderList }) => {
   )
 }
 
-const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
+const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder, typePopup = false }) => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState('1');
   const [open, setOpen] = useState(false)
   const [openSplitBill, setOpenSplitBill] = useState(false)
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
+
+  const styleMain = { width: '400px', typography: 'body1', marginTop: "8vh" }
+  const stylePopup = { width: '400px', height: "85vh", typography: 'body1' }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -261,7 +264,7 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
   }
 
   return (
-    <Box sx={{ width: '400px', typography: 'body1', marginTop: "8vh" }}>
+    <Box sx={typePopup ? stylePopup : styleMain}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -276,7 +279,7 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
         <Box textAlign="center">
           <Typography variant='p'>โต๊ะ (R-3)</Typography>
         </Box>
-        <TabPanel value="1" sx={{ height: "400px", overflow: "auto" }}>
+        <TabPanel value="1" sx={{ height: typePopup ? "350px" : "400px", overflow: "auto" }}>
           {
             OrderList && OrderList.map(product => {
               return <ProductCard product={product} openModal={() => handleOpenMenu(product)} />
@@ -306,7 +309,7 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder }) => {
       </Grid>
       <TotalBill orderList={OrderList} />
       <Grid container spacing={2} justifyContent="center">
-        <Button variant='contained' color='primary' onClick={backFloorPlan} startIcon={<ArrowBack />}>ย้อนกลับ</Button>
+        {typePopup === false && <Button variant='contained' color='primary' onClick={backFloorPlan} startIcon={<ArrowBack />}>ย้อนกลับ</Button>}
         <Button variant='contained' color='secondary' onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />}>แยกชำระ</Button>
         <Button variant='contained' color='success' onClick={handleClick} endIcon={<MoneyIcon />}>ชำระเงิน</Button>
       </Grid>
