@@ -9,7 +9,7 @@ const LeftMenu = memo(() => {
   }
 
   return (
-    <aside>
+    <aside style={{maxWidth: "200px", marginTop: "80px"}}>
       <div className="description" style={{ color: "#aaa" }}>TABLE LAYOUT</div>
       <Grid container spacing={1}>
         <Grid size={12}>
@@ -50,6 +50,16 @@ const LeftMenu = memo(() => {
             sx={{ border: "2px solid", height: '110px', width: '50px' }} onDragStart={(event) => onDragStart(event, "tall")}
             draggable>
             <Typography variant="h5">แนวตั้ง</Typography>
+          </Box>
+        </Grid>
+        <Grid size={12}>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ border: "2px solid", height: '110px' }} onDragStart={(event) => onDragStart(event, "resize")}
+            draggable>
+            <Typography variant="h5">Custom</Typography>
           </Box>
         </Grid>
       </Grid>

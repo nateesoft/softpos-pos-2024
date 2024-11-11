@@ -15,6 +15,7 @@ import MoneyIcon from '@mui/icons-material/Money'
 import SplitBillIcon from '@mui/icons-material/VerticalSplit'
 import PrintIcon from '@mui/icons-material/Print'
 import PrintCheckboxIcon from '@mui/icons-material/CheckBox'
+
 import SplitBiPayment from './SplitBillPayment'
 
 const modalStyle = {
@@ -187,7 +188,7 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
           </ToggleButtonGroup>
         </Box>
       </Box>
-      {count === 0 && <Alert severity="error" sx={{ width: "100%" }}>
+      {count === 0 && <Alert severity="error" sx={{ width: "100%", marginBottom: "5px" }}>
         <Box>
           <Typography variant='span'>คุณต้องการลบรายการอาหารนี้หรือไม่ !!!</Typography>
         </Box>
@@ -211,6 +212,7 @@ const TotalBill = ({ orderList }) => {
   for (let i = 0; i < orderList.length; i++) {
     totalBill = totalBill + parseInt(orderList[i].totalAmount)
   }
+  totalBill = totalBill.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
   return (
     <div style={{ padding: "5px", border: "2px solid #eee", borderRadius: "10px", marginBottom: "10px", margin: "20px" }}>
       <table width="100%">
@@ -222,7 +224,7 @@ const TotalBill = ({ orderList }) => {
           </td>
           <td align="right" style={{ color: "green", fontWeight: "bold", fontSize: "36px" }}>
             <Box sx={{ marginRight: "10px" }}>
-              {totalBill.toFixed(2)}
+              {totalBill}
             </Box>
           </td>
         </tr>
@@ -308,8 +310,8 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder, typePopup = false }
         <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => setShowKicPrint(true)}>ส่งครัว/พักบิล</Button>
       </Grid>
       <TotalBill orderList={OrderList} />
-      <Grid container spacing={2} justifyContent="center">
-        {typePopup === false && <Button variant='contained' color='primary' onClick={backFloorPlan} startIcon={<ArrowBack />}>ย้อนกลับ</Button>}
+      <Grid container spacing={1} justifyContent="center">
+        {typePopup === false && <Button variant='contained' color='primary' onClick={backFloorPlan} startIcon={<ArrowBack />}>Floor Plan</Button>}
         <Button variant='contained' color='secondary' onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />}>แยกชำระ</Button>
         <Button variant='contained' color='success' onClick={handleClick} endIcon={<MoneyIcon />}>ชำระเงิน</Button>
       </Grid>

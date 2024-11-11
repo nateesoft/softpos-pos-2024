@@ -29,6 +29,8 @@ const fabStyle = {
     right: 16,
 };
 
+const tabStyle = { border: "1px solid gray", borderRadius: "10px", margin: "2px", bgcolor: "#e59866", color: "white", fontSize: "16px" }
+
 const NotfoundMenu = () => {
     return (
         <Box display="flex" justifyContent="center" sx={{ width: "500px", height: "500px", padding: "10px" }}>
@@ -61,7 +63,7 @@ const ProductCard = ({ id, product, openModal, initLoadMenu, initLoadOrder }) =>
             })
     }
     return (
-        <Badge id={id + product.id} badgeContent={product.qty} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: 18, height: 25, minWidth: 35, top: 15, right: 18, borderRadius: 1, color: "snow", fontWeight: "bold" } }}>
+        <Badge id={id} badgeContent={product.qty} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: 18, height: 25, minWidth: 35, top: 15, right: 18, borderRadius: 1, color: "snow", fontWeight: "bold" } }}>
             <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px", boxShadow: "2px 1px #eee", margin: "5px" }}>
                 <Box textAlign="center">
                     <img src={product.url} alt="" width={160} style={{ borderRadius: "10px" }} onClick={openModal} /><br />
@@ -244,7 +246,7 @@ const ProductMenu = ({ ProductList, OrderList, initLoadMenu, initLoadOrder }) =>
     }, [ProductList])
 
     return (
-        <Box sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', alignContent: "flex-start", marginTop: "8vh" }}>
+        <Box sx={{ flexGrow: 1, display: 'flex', alignContent: "flex-start", marginTop: "8vh" }}>
             <Tabs
                 orientation="vertical"
                 variant="scrollable"
@@ -252,13 +254,13 @@ const ProductMenu = ({ ProductList, OrderList, initLoadMenu, initLoadOrder }) =>
                 onChange={handleChange}
                 sx={{ borderRight: 1, borderColor: 'divider', minWidth: "150px" }}
             >
-                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<MenuBook sx={{ color: "white" }} />} label={t("productMenu.allGroup")} />
-                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.breakfast")} />
-                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.appetizer")} />
-                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.chineseFood")} />
-                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.italianFood")} />
-                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.drink")} />
-                <Tab sx={{ border: "2px solid #e59866", borderRadius: "10px", margin: "5px", bgcolor: "orange", color: "white" }} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.dessert")} />
+                <Tab sx={tabStyle} icon={<MenuBook sx={{ color: "white" }} />} label={t("productMenu.allGroup")} />
+                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.breakfast")} />
+                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.appetizer")} />
+                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.chineseFood")} />
+                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.italianFood")} />
+                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.drink")} />
+                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.dessert")} />
             </Tabs>
             <TabPanel value={value} index={0}>
                 {ProductList && ProductList.map(product =>

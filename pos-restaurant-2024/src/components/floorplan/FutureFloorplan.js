@@ -1,6 +1,7 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { addEdge, Background, Controls, MarkerType, MiniMap, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState } from '@xyflow/react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
+import { addEdge, Background, Controls, MarkerType, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState } from '@xyflow/react';
 import { motion } from 'framer-motion'
+import { useNavigate } from "react-router-dom";
 
 import '@xyflow/react/dist/style.css';
 
@@ -11,15 +12,19 @@ import TallNode from "./nodes/TallBarNode"
 import LeftMenu from './LeftMenu';
 
 import "./index.css"
+import ResizeNode from './nodes/ResizeNode';
+import AppbarMenu from './AppbarMenu'
 
 const nodeTypes = {
     oval: OvalNode,
     square: SquareNode,
     long: LongNode,
-    tall: TallNode
+    tall: TallNode,
+    resize: ResizeNode
 }
-
+const floorPlanId = "floorPlanId"
 const FutureFloorplan = () => {
+    const navigate = useNavigate();
     const reactFlowWrapper = useRef(null)
     const [nodes, setNodes, onNodesChange] = useNodesState([])
     const [edges, setEdges, onEdgesChange] = useEdgesState([])
@@ -59,13 +64,31 @@ const FutureFloorplan = () => {
                 y: event.clientY
             })
 
-            const newNode = {
-                id: `node_${Math.random().toString(36).substring(2, 8)}`,
-                type,
-                position,
-                style: {
-                    width: 80,
-                    height: 50
+            let newNode = {}
+
+            let label = ""
+            if (type === "resize") {
+                label = ""
+                newNode = {
+                    id: `node_${Math.random().toString(36).substring(2, 8)}`,
+                    type,
+                    position,
+                    data: { label },
+                    style: {
+                        width: 80,
+                        height: 50
+                    }
+                }
+            } else {
+                newNode = {
+                    id: `node_${Math.random().toString(36).substring(2, 8)}`,
+                    type,
+                    position,
+                    data: { label },
+                    style: {
+                        width: 80,
+                        height: 50
+                    }
                 }
             }
 
@@ -82,14 +105,38 @@ const FutureFloorplan = () => {
         })
     }
 
+    const onSave = () => {
+        if (reactFlowInstance) {
+            const flow = reactFlowInstance.toObject()
+            localStorage.setItem(floorPlanId, JSON.stringify(flow))
+        }
+    }
+
+    const onExit = () => {
+        navigate('/floorplan')
+    }
+
+    const onRestore = useCallback(() => {
+        const flow = JSON.parse(localStorage.getItem(floorPlanId))
+          if (flow) {
+            setNodes(flow.nodes || [])
+            setEdges(flow.edges || [])
+          }
+      }, [setNodes, setEdges])
+
+    useEffect(() => {
+        onRestore()
+      }, [onRestore])
+
     return (
         <motion.div className="dndflow" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <AppbarMenu onSave={onSave} onExit={onExit} />
             <LeftMenu />
             <ReactFlowProvider>
                 <div
                     className="reactflow-wrapper"
                     ref={reactFlowWrapper}
-                    style={{ height: "80vh" }}
+                    style={{ height: "100vh" }}
                 >
                     <ReactFlow
                         nodes={nodes}
@@ -105,13 +152,11 @@ const FutureFloorplan = () => {
                         fitView
                     >
                         <Controls />
-                        <MiniMap zoomable pannable />
                         <Background />
                     </ReactFlow>
                 </div>
             </ReactFlowProvider>
         </motion.div>
-
     );
 }
 

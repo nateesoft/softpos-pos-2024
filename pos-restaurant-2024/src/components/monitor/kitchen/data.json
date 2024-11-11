@@ -1,0 +1,115 @@
+{
+  "lanes": [
+    {
+      "id": "task",
+      "title": "อาหารรอทำ",
+      "label": "20/70",
+      "style": {"width": 280},
+      "cards": [
+        {
+          "id": "1",
+          "title": "Food01",
+          "label": "15 mins",
+          "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
+          "description": "Food01-Details in restaurant"
+        },
+        {
+          "id": "2",
+          "title": "Food02",
+          "label": "10 mins",
+          "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
+          "description": "Food optional with special topping in birthday"
+        },
+        {
+          "id": "3",
+          "title": "Food03",
+          "label": "30 mins",
+          "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
+          "description": "Can AI make memes?"
+        }
+      ]
+    },
+    {
+      "id": "inProgress",
+      "title": "กำลังทำอาหาร",
+      "label": "10/20",
+      "style": {"width": 280, "backgroundColor": "orange"},
+      "cards": [
+        {
+          "id": "5",
+          "title": "Food05",
+          "label": "30 mins",
+          "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
+          "description": "Soap wash and polish floor. Polish windows and doors. Scrap all broken glasses"
+        }
+      ]
+    },
+    {
+      "id": "orderCancel",
+      "title": "รายการยกเลิก",
+      "label": "0/0",
+      "style": {"width": 280, "backgroundColor": "red", "color": "white" },
+      "cards": [
+        {
+          "id": "4",
+          "title": "Food04",
+          "label": "5 mins",
+          "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
+          "description": "Transfer to bank account"
+        }
+      ]
+    },
+    {
+      "id": "makeDone",
+      "title": "ทำอาหารเสร็จแล้ว",
+      "style": {"width": 280, "backgroundColor": "blue", "color": "white"},
+      "label": "1/1",
+      "cards": [
+        {
+          "id": "6",
+          "title": "Food06",
+          "label": "30 mins",
+          "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
+          "description": "Track using fitbit"
+        }
+      ]
+    },
+    {
+      "id": "waitServe",
+      "title": "รอพนักงานเสริฟ",
+      "style": {"width": 280, "backgroundColor": "purple", "color": "white"},
+      "label": "2/5",
+      "cards": [
+        {
+          "id": "7",
+          "title": "Food07",
+          "label": "15 mins",
+          "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
+          "description": "Use Headspace app"
+        },
+        {
+          "id": "8",
+          "title": "Food08",
+          "label": "15 mins",
+          "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
+          "description": "Soap wash and polish floor. Polish windows and doors. Scrap all broken glasses"
+        }
+      ]
+    },
+    {
+      "id": "complete",
+      "title": "เสริฟเรียบร้อย/ปิดงาน",
+      "style": {"width": 280, "backgroundColor": "green", "color": "white" },
+      "label": "2/5",
+      "cards": [
+        {
+          "id": "9",
+          "title": "Food09",
+          "label": "15 mins",
+          "cardStyle": { "width": 270, "maxWidth": 270, "margin": "auto", "marginBottom": 5 },
+          "description": "Use Headspace app"
+        }
+      ]
+    }
+  ]
+}

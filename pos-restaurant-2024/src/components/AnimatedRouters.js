@@ -13,6 +13,8 @@ import PaymentPage from "./payment/PaymentPage"
 import SaleReportPage from "./SaleReportPage"
 import PageNotFound from './PageNotFound'
 
+import TrelloBoard from '../components/monitor/kitchen'
+
 const AnimatedRoutes = () => {
     const location = useLocation()
 
@@ -25,6 +27,7 @@ const AnimatedRoutes = () => {
                 <Route path="/pinlock" element={<PinLock />} />
                 <Route path="/floorplan" element={<FloorPlanPage />} />
                 <Route path="/floorplan2" element={<FutureFloorplan />} />
+                <Route path="/kitchen-monitor" element={<TrelloBoard />} />
                 <Route path="/sale" element={<MainSalePage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/sale-report" element={<SaleReportPage />} />

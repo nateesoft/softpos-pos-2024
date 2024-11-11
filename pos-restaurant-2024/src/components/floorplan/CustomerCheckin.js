@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import { Alert, Box, Button, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 
 import CustomerDetail from './CustomerDetail';
@@ -18,16 +18,25 @@ const CustomerCheckin = (props) => {
     const [oldCount, setOldCount] = useState(0)
     const [showError, setShowError] = useState(false)
     const [showCustomerError, setShowCustomerError] = useState(false)
+    const [orderType, setOrderType] = useState('dineIn');
 
     const [memberCode, setMemberCode] = useState("")
     const [reserveNo, setReserveNo] = useState("")
+
+    const handleChange = (event, oType) => {
+        setOrderType(oType);
+    };
 
     const handleOpenTable = () => {
         if (status === "Free Table") {
             if (custCount >= 0) {
                 setShowError(false)
                 setShowCustomerError(false)
-                navigate('/sale')
+                navigate('/sale', {
+                    state: {
+                        startOrderType: orderType
+                    }
+                })
             } else {
                 setShowCustomerError(true)
             }
@@ -111,6 +120,27 @@ const CustomerCheckin = (props) => {
                             onChange={e => setReserveNo(e.target.value)}
                             fullWidth
                         />
+                    </Grid>
+
+                    <Grid container spacing={2} padding={1}>
+                        <Grid size={12}>
+                            <Typography variant='p'>ประเภทอาหาร</Typography>
+                        </Grid>
+                        <Grid size={12}>
+                            <Box display="flex" justifyContent="center">
+                                <ToggleButtonGroup
+                                    color="primary"
+                                    value={orderType}
+                                    exclusive
+                                    onChange={handleChange}
+                                    aria-label="Platform"
+                                >
+                                    <ToggleButton value="dineIn">Dine In</ToggleButton>
+                                    <ToggleButton value="takeAway">Take Away</ToggleButton>
+                                    <ToggleButton value="delivery">Delivery</ToggleButton>
+                                </ToggleButtonGroup>
+                            </Box>
+                        </Grid>
                     </Grid>
                     {showError && <Alert severity="error" sx={{ width: "100%" }}>สถานะโต๊ะไม่พร้อมใช้งาน</Alert>}
                     {showCustomerError && <Alert severity="error" sx={{ width: "100%" }}>ข้อมูลลูกค้าไม่ถูกต้อง</Alert>}
