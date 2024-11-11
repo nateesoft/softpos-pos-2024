@@ -93,11 +93,7 @@ function FloorPlanPage() {
               setOpenLogout(false)
             }
         })
-  }, [setOpenLogout])
-
-  const handleLogout = () => {
-    navigate("/");
-  }
+  }, [setOpenLogout, navigate])
 
   const setupFloorPlan = () => {
     navigate("/floorplan2");
