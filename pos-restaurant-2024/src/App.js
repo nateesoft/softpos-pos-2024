@@ -1,7 +1,7 @@
 import React from "react"
 import { BrowserRouter as Router } from "react-router-dom"
 
-import AnimatedRoutes from "./components/AnimatedRouters"
+import AnimatedRoutes from "./pages/AnimatedRouters"
 
 function App() {
   return (

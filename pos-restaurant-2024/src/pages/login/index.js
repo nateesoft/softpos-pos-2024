@@ -18,6 +18,7 @@ import Stack from "@mui/material/Stack";
 import MuiAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
 import { motion } from 'framer-motion'
+import axios from 'axios'
 
 import { handleEnter } from '../../util/EventLisener'
 import bg from "./bg/signin.svg";
@@ -64,12 +65,20 @@ export default function Login() {
     const handleSubmit = async (event) => {
         setOpen(true);
         event.preventDefault();
-        
-        if (user === '9999' && password === '9999') {
-            navigate("/floorplan");
-        } else {
-            setOpen(true)
-        }
+
+        axios.post("/api/posuser/login", {username: user, password, macno: "001"})
+        .then((response) => {
+            if (response.data.code === 200) {
+                if(response.data.data.length >0){
+                    localStorage.setItem('pos_login', user)
+                    navigate("/floorplan");
+                } else {
+                    setOpen(true)
+                }
+            } else {
+                setOpen(true)
+            }
+        })
     };
 
     const handleClose = (event, reason) => {

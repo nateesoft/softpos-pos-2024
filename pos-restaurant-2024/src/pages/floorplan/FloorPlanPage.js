@@ -7,11 +7,11 @@ import ManageAccounts from '@mui/icons-material/TableBar'
 import ExitToApp from '@mui/icons-material/ExitToApp'
 import { motion } from 'framer-motion'
 import Grid from '@mui/material/Grid2'
+import axios from 'axios'
 
 import { useKeyPress } from '../../util/PageListener'
 import { ModalConfirm } from "../../util/AlertPopup";
 import NumberPadLock from '../utils/NumberPadLock'
-
 import PinLock from './PinLock'
 import ManageCustTable from './ManageCustTable'
 import RecieptCopyPrint from './RecieptCopyPrint'
@@ -84,7 +84,15 @@ function FloorPlanPage() {
   }
 
   const confirmLogoutAlert = useCallback(() => {
-    setOpenLogout(true)
+    axios.patch("/api/posuser/logout", {username: "9999"})
+        .then((response) => {
+            if (response.data.code === 200) {
+              localStorage.removeItem('pos_login')
+              navigate("/");
+            } else {
+              setOpenLogout(false)
+            }
+        })
   }, [setOpenLogout])
 
   const handleLogout = () => {
@@ -133,7 +141,7 @@ function FloorPlanPage() {
                 <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenCopyPrint(true)}>พิมพ์สำเนาบิล</Button>
                 <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenPinMgrTable(true)}>แยกโต๊ะ / รวมโต๊ะ</Button>
                 <Button variant="contained" onClick={setupFloorPlan} startIcon={<ManageAccounts />}>จัดการโต๊ะ</Button>
-                <Button variant="contained" color="error" onClick={confirmLogoutAlert} endIcon={<ExitToApp />}>Logout</Button>
+                <Button variant="contained" color="error" onClick={() => setOpenLogout(true)} endIcon={<ExitToApp />}>Logout</Button>
               </Grid>
             </Grid>
           </Grid>
@@ -250,7 +258,7 @@ function FloorPlanPage() {
       <ModalConfirm
         open={openLogout}
         setOpen={() => setOpenLogout(false)}
-        onSubmit={handleLogout}
+        onSubmit={confirmLogoutAlert}
         header="Confirm Logout"
         content="ยืนยันการออกจากระบบ ?" />
     </motion.div>

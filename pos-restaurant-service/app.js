@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// for login
+var posuserRouter = require('./routes/login/posuser');
+
 // for POS apis
 var ordersRouter = require('./routes/pos/orders');
 var productRouter = require('./routes/pos/product');
@@ -20,6 +23,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/api/posuser', posuserRouter);
 
 app.use('/api/orders', ordersRouter);
 app.use('/api/product', productRouter);
