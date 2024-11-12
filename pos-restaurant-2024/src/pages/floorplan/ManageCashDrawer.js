@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { Button, Grid2, TextField } from '@mui/material';
+import { Button, Divider, TextField, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
+import MoneyIcon from '@mui/icons-material/MonetizationOn'
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -57,6 +59,13 @@ export default function ManageCashDrawer({ setOpen }) {
 
     return (
         <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
+            <Grid container spacing={2} sx={{marginBottom: "15px"}}>
+                <MoneyIcon fontSize='large' color='info' />
+                <Typography variant='h5' color='info'>
+                    รายการนำเงินเข้า | ออกลิ้นชัก
+                </Typography>
+            </Grid>
+            <Divider />
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="นำเงินเข้าลิ้นชัก" {...a11yProps(0)} />
@@ -65,20 +74,20 @@ export default function ManageCashDrawer({ setOpen }) {
             </Box>
             <CustomTabPanel value={value} index={0}>
                 <TextField label="เงินสำรองทอน เข้าลิ้นชัก" type="number" value={inCash} onChange={e=>setInCash(e.target.value)} fullWidth />
-                <Grid2 container spacing={2} margin={2} justifyContent="center">
+                <Grid container spacing={2} margin={2} justifyContent="center">
                     <Button variant='contained' color='error' onClick={()=>setOpen(false)}>Cancel</Button>
                     <Button variant='contained' color='info' onClick={handleConfirmIn}>Confirm</Button>
-                </Grid2>
+                </Grid>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <Grid2 container spacing={2}>
+                <Grid container spacing={2}>
                     <TextField multiline rows={3} label="สาเหตุการนำเงินออกจากลิ้นชัก" value={outReason} onChange={e=>setOutReason(e.target.value)} fullWidth />
                     <TextField label="เงินสำรองทอน ออกจากลิ้นชัก" type="number" value={outCash} onChange={e=>setOutCash(e.target.value)} fullWidth />
-                </Grid2>
-                <Grid2 container spacing={2} margin={2} justifyContent="center">
+                </Grid>
+                <Grid container spacing={2} margin={2} justifyContent="center">
                     <Button variant='contained' color='error' onClick={()=>setOpen(false)}>Cancel</Button>
                     <Button variant='contained' color='info' onClick={handleConfirmOut}>Confirm</Button>
-                </Grid2>
+                </Grid>
             </CustomTabPanel>
         </Box>
     );

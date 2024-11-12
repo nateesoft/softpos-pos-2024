@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
-function SquareNode({ data }) {
+function RoundNode({ data }) {
   return (
     <Box
       display="flex"
@@ -10,7 +10,8 @@ function SquareNode({ data }) {
       sx={{
         height: '256px',
         width: '256px',
-        backgroundImage: `url(${data.image ? data.image: 'images/floorplan/rectangle-table.png'})`,
+        backgroundColor: `${data.bgColor ? data.bgColor: 'none'}`,
+        backgroundImage: `url(${data.image ? data.image: 'images/floorplan/round-table.png'})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "contain"
       }}>
@@ -19,11 +20,11 @@ function SquareNode({ data }) {
           <Typography variant="h5">{data.label}</Typography>
         </Grid>
         {data.customerCount && <Grid size={12} display="flex" justifyContent="center">
-          <Typography variant="span">({data.customerCount})</Typography>
+          <Typography variant="h4">{data.customerCount}</Typography>
         </Grid>}
       </Grid>
     </Box>
   )
 }
 
-export default SquareNode
+export default RoundNode

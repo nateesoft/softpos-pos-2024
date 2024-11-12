@@ -17,7 +17,7 @@ const LeftMenu = memo(() => {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            sx={{ border: "2px solid", borderRadius: "50%", height: '110px' }} onDragStart={(event) => onDragStart(event, "oval")}
+            sx={{ border: "2px solid", borderRadius: "50%", height: '110px' }} onDragStart={(event) => onDragStart(event, "round")}
             draggable>
             <Typography variant="h5">โต๊ะกลม</Typography>
           </Box>

@@ -35,7 +35,7 @@ const AnimatedRoutes = () => {
                     <Route element={<Protected />}>
                         <Route path="/pinlock" element={<PinLock />} />
                         <Route path="/floorplan" element={<FloorPlanPage />} />
-                        <Route path="/floorplan2" element={<FutureFloorplan />} />
+                        <Route path="/future-floorplan" element={<FutureFloorplan />} />
                         <Route path="/kitchen-monitor" element={<TrelloBoard />} />
                         <Route path="/sale" element={<MainSalePage />} />
                         <Route path="/payment" element={<PaymentPage />} />

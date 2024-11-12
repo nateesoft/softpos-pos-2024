@@ -1,11 +1,12 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
-import { addEdge, Background, Controls, MarkerType, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState } from '@xyflow/react';
+import { Background, BackgroundVariant, Controls, ReactFlow, ReactFlowProvider, useNodesState } from '@xyflow/react';
 import { motion } from 'framer-motion'
 import { useNavigate } from "react-router-dom";
+import { Box, Modal } from '@mui/material';
 
 import '@xyflow/react/dist/style.css';
 
-import OvalNode from "./nodes/OvalNode"
+import RoundNode from "./nodes/RoundNode"
 import SquareNode from "./nodes/SquareNode"
 import LongNode from "./nodes/LongBarNode"
 import TallNode from "./nodes/TallBarNode"
@@ -14,36 +15,34 @@ import LeftMenu from './LeftMenu';
 import "./index.css"
 import ResizeNode from './nodes/ResizeNode';
 import AppbarMenu from './AppbarMenu'
+import TableSetup from './modal/TableSetup'
 
 const nodeTypes = {
-    oval: OvalNode,
+    round: RoundNode,
     square: SquareNode,
     long: LongNode,
     tall: TallNode,
     resize: ResizeNode
 }
 const floorPlanId = "floorPlanId"
+const modalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    borderRadius: "16px",
+    border: "1px solid #eee",
+    boxShadow: 24
+}
+
 const FutureFloorplan = () => {
     const navigate = useNavigate();
     const reactFlowWrapper = useRef(null)
+    const [tableInfo, setTableInfo] = useState({})
     const [nodes, setNodes, onNodesChange] = useNodesState([])
-    const [edges, setEdges, onEdgesChange] = useEdgesState([])
     const [reactFlowInstance, setReactFlowInstance] = useState(null)
-    const onConnect = useCallback(
-        (params) =>
-            setEdges((eds) =>
-                addEdge(
-                    {
-                        ...params,
-                        label: "",
-                        type: "smoothstep",
-                        markerEnd: { type: MarkerType.Arrow }
-                    },
-                    eds
-                )
-            ),
-        [setEdges]
-    )
+    const [openTableSetup, setOpenTableSetup] = useState(false)
 
     const onDragOver = useCallback((event) => {
         event.preventDefault()
@@ -97,12 +96,9 @@ const FutureFloorplan = () => {
         [reactFlowInstance, setNodes]
     )
 
-    const onNodeClick = () => {
-        nodes.forEach((node) => {
-            if (node.selected) {
-                console.log(node)
-            }
-        })
+    const onNodeClick = (event, node) => {
+        setTableInfo(node)
+        setOpenTableSetup(true)
     }
 
     const onSave = () => {
@@ -116,17 +112,32 @@ const FutureFloorplan = () => {
         navigate('/floorplan')
     }
 
+    const handleCloseModal = () => {
+        setOpenTableSetup(false)
+        setTableInfo({})
+    }
+
+    const onTableInfoChange = (props) => {
+        const updNode = {
+            ...tableInfo,
+            data: {
+                ...props
+            }
+        }
+        setNodes(nds => nds.concat(updNode))
+    }
+
     const onRestore = useCallback(() => {
         const flow = JSON.parse(localStorage.getItem(floorPlanId))
-          if (flow) {
+        if (flow) {
             setNodes(flow.nodes || [])
-            setEdges(flow.edges || [])
-          }
-      }, [setNodes, setEdges])
+        }
+    }, [setNodes])
 
     useEffect(() => {
+        console.log('FutureFLoorplan(init)')
         onRestore()
-      }, [onRestore])
+    }, [onRestore])
 
     return (
         <motion.div className="dndflow" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -136,14 +147,13 @@ const FutureFloorplan = () => {
                 <div
                     className="reactflow-wrapper"
                     ref={reactFlowWrapper}
-                    style={{ height: "100vh" }}
+                    style={{
+                        height: "100vh"
+                    }}
                 >
                     <ReactFlow
                         nodes={nodes}
-                        edges={edges}
                         onNodesChange={onNodesChange}
-                        onEdgesChange={onEdgesChange}
-                        onConnect={onConnect}
                         onInit={setReactFlowInstance}
                         onDrop={onDrop}
                         onDragOver={onDragOver}
@@ -152,10 +162,18 @@ const FutureFloorplan = () => {
                         fitView
                     >
                         <Controls />
-                        <Background />
+                        <Background variant={BackgroundVariant.Dots} />
                     </ReactFlow>
                 </div>
             </ReactFlowProvider>
+            <Modal open={openTableSetup} onClose={() => setOpenTableSetup(false)}>
+                <Box sx={{ ...modalStyle, width: 450, padding: "10px" }}>
+                    <TableSetup
+                        tableInfo={tableInfo}
+                        onChange={onTableInfoChange}
+                        closeModal={handleCloseModal} />
+                </Box>
+            </Modal>
         </motion.div>
     );
 }

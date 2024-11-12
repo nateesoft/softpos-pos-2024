@@ -1,13 +1,13 @@
 import { Box, Typography } from "@mui/material";
 
-function LongBarNode() {
+function LongBarNode({ data }) {
   return (
     <Box
       display="flex"
       justifyContent="center"
       alignItems="center"
       sx={{ border: "2px solid", height: '100px', width: "400px" }}>
-      <Typography variant="h5">แนวยาว</Typography>
+      <Typography variant="h5">{ data.label }</Typography>
     </Box>
   )
 }

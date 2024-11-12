@@ -5,6 +5,9 @@ import { AppBar, Box, Button, IconButton, MenuItem, Toolbar } from "@mui/materia
 import Splitscreen from '@mui/icons-material/Splitscreen'
 import ManageAccounts from '@mui/icons-material/TableBar'
 import ExitToApp from '@mui/icons-material/ExitToApp'
+import PrintIcon from '@mui/icons-material/Print'
+import RefundIcon from '@mui/icons-material/ReceiptLong';
+import MoneyIcon from '@mui/icons-material/MonetizationOn'
 import { motion } from 'framer-motion'
 import Grid from '@mui/material/Grid2'
 import axios from 'axios'
@@ -96,7 +99,7 @@ function FloorPlanPage() {
   }, [setOpenLogout, navigate])
 
   const setupFloorPlan = () => {
-    navigate("/floorplan2");
+    navigate("/future-floorplan");
   }
 
   useEffect(() => {
@@ -132,9 +135,9 @@ function FloorPlanPage() {
             </Grid>
             <Grid size={10} display="flex" justifyContent="flex-end">
               <Grid container spacing={2}>
-                <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenMgrCashDrawer(true)}>นำเงินเข้า/ออกลิ้นชัก</Button>
-                <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenRefundBill(true)}>ยกเลิกบิล (Refund Bill)</Button>
-                <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenCopyPrint(true)}>พิมพ์สำเนาบิล</Button>
+                <Button variant="contained" startIcon={<MoneyIcon />} onClick={() => setOpenMgrCashDrawer(true)}>นำเงินเข้า/ออกลิ้นชัก</Button>
+                <Button variant="contained" startIcon={<RefundIcon />} onClick={() => setOpenRefundBill(true)}>ยกเลิกบิล (Refund Bill)</Button>
+                <Button variant="contained" startIcon={<PrintIcon />} onClick={() => setOpenCopyPrint(true)}>พิมพ์สำเนาบิล</Button>
                 <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenPinMgrTable(true)}>แยกโต๊ะ / รวมโต๊ะ</Button>
                 <Button variant="contained" onClick={setupFloorPlan} startIcon={<ManageAccounts />}>จัดการโต๊ะ</Button>
                 <Button variant="contained" color="error" onClick={() => setOpenLogout(true)} endIcon={<ExitToApp />}>Logout</Button>

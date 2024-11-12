@@ -7,16 +7,17 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import SearchIcon from '@mui/icons-material/Search'
 import ClearIcon from '@mui/icons-material/Restore'
 import CloseIcon from '@mui/icons-material/Close'
+import RefundIcon from '@mui/icons-material/ReceiptLong';
 
 const columns = [
   { id: 'V', label: 'V', minWidth: 170 },
   { id: 'ETD', label: 'ETD', minWidth: 100 },
-  { id: 'PLUCode', label: 'PLU Code', minWidth: 170},
+  { id: 'PLUCode', label: 'PLU Code', minWidth: 170 },
   { id: 'Description', label: 'Description', minWidth: 170 },
   { id: 'Qty', label: 'Qty', minWidth: 170 },
   { id: 'Price', label: 'Price', minWidth: 170 },
@@ -56,7 +57,7 @@ const modalStyle = {
   boxShadow: 24
 }
 
-export default function RefundBill({setOpen}) {
+export default function RefundBill({ setOpen }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -73,7 +74,7 @@ export default function RefundBill({setOpen}) {
   }
 
   const handleSearch = () => {
-    
+
   }
 
   const handleClear = () => {
@@ -83,66 +84,76 @@ export default function RefundBill({setOpen}) {
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px" }}>
-      <Box display="flex" justifyContent="center" sx={{marginBottom: "20px"}}>
-        <Typography variant='h5'>
-          ยกเลิกรายการที่รับชำระเงินแล้ว Refund Bill
+      <Grid container spacing={2} sx={{marginBottom: "15px"}}>
+        <RefundIcon color="error" />
+        <Typography variant='h5' color='error'>
+          ยกเลิกรายการบิลที่รับชำระเงินแล้ว (Refund Bill)
         </Typography>
-      </Box>
-      <Grid container spacing={2}>
-        <TextField label="เลขที่ใบเสร็จรับเงิน" value={recieptNo} onChange={e=>setRecieptNo(e.target.value)} />
-        <TextField label="Mac No/Cahier" value={macNo} onChange={e=>setMacNo(e.target.value)} />
-        <Button variant='contained' endIcon={<SearchIcon />} onClick={handleSearch}>Search</Button>
-        <Button variant='contained' color="warning" endIcon={<ClearIcon />} onClick={handleClear}>Clear</Button>
-        <Button variant='contained' color="error" endIcon={<CloseIcon />} onClick={()=>setOpen(false)}>Close</Button>
       </Grid>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.id}
-                    align={column.align}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.label}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                      {columns.map((column) => {
-                        const value = row[column.id];
-                        return (
-                          <TableCell key={column.id} align={column.align}>
-                            {column.format && typeof value === 'number'
-                              ? column.format(value)
-                              : value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+      <Divider />
+      <Grid container spacing={2} sx={{marginBottom: "15px", marginTop: "5px"}}>
+        <Grid size={6}>
+            <TextField label="เลขที่ใบเสร็จรับเงิน" value={recieptNo} onChange={e => setRecieptNo(e.target.value)} sx={{marginRight: "15px"}} />
+            <TextField label="Mac No/Cahier" value={macNo} onChange={e => setMacNo(e.target.value)} />
+        </Grid>
+        <Grid size={6} spacing={2}>
+          <Box display="flex" justifyContent="flex-end">
+            <Button variant='contained' endIcon={<SearchIcon />} onClick={handleSearch} sx={{marginRight: "5px"}}>Search</Button>
+            <Button variant='contained' color="warning" endIcon={<ClearIcon />} onClick={handleClear} sx={{marginRight: "5px"}}>Clear</Button>
+            <Button variant='contained' color="error" endIcon={<CloseIcon />} onClick={() => setOpen(false)}>Close</Button>
+          </Box>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => {
+                    return (
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === 'number'
+                                ? column.format(value)
+                                : value}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 100]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+      </Grid>
     </Box>
 
   );
