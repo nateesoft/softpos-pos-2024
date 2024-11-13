@@ -134,7 +134,7 @@ export default function Login() {
                                     backgroundSize: "cover",
                                     height: "70vh",
                                     minHeight: "500px",
-                                    backgroundColor: "#3b33d5",
+                                    backgroundColor: "black",
                                 }}
                             >
                                 <ThemeProvider theme={darkTheme}>
@@ -142,7 +142,7 @@ export default function Login() {
                                         <Box height={35} />
                                         <Box sx={center}>
                                             <Avatar
-                                                sx={{ ml: "35px", mb: "4px", bgcolor: "#ffffff" }}
+                                                sx={{ ml: "35px", mb: "4px" }}
                                             >
                                                 <LockOutlinedIcon />
                                             </Avatar>

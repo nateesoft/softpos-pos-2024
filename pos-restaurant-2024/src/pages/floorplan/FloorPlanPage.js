@@ -80,22 +80,34 @@ function FloorPlanPage() {
   const keyPressed = useKeyPress('Escape');
 
   const handleClick = (tableNumber, status) => {
-    setTableNo(tableNumber)
-    setTableStatus(status)
-
-    setOpenPin(true)
+    axios.post("/api/tablefile/checkTableOpen", { tableNo: tableNumber })
+      .then((response) => {
+        if (response.data.code === 200) {
+          const {} = response.data.data
+          if (response.data.data.length === 0){
+            alert('มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!(1)')
+          } else {
+            setTableNo(tableNumber)
+            setTableStatus(status)
+            setOpenPin(true)
+          }
+        } else {
+          alert('มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!(2)')
+        }
+      })
   }
 
   const confirmLogoutAlert = useCallback(() => {
-    axios.patch("/api/posuser/logout", {username: "9999"})
-        .then((response) => {
-            if (response.data.code === 200) {
-              localStorage.removeItem('pos_login')
-              navigate("/");
-            } else {
-              setOpenLogout(false)
-            }
-        })
+    console.log('confirmLogoutAlert')
+    axios.patch("/api/posuser/logout", { username: "9999" })
+      .then((response) => {
+        if (response.data.code === 200) {
+          localStorage.removeItem('pos_login')
+          navigate("/");
+        } else {
+          setOpenLogout(false)
+        }
+      })
   }, [setOpenLogout, navigate])
 
   const setupFloorPlan = () => {
@@ -103,11 +115,10 @@ function FloorPlanPage() {
   }
 
   useEffect(() => {
-    console.log("Key event connected.")
     if (keyPressed) {
-      confirmLogoutAlert()
+      setOpenLogout(true)
     }
-  }, [keyPressed, confirmLogoutAlert]);
+  }, [keyPressed]);
 
   return (
     <motion.div
@@ -127,7 +138,7 @@ function FloorPlanPage() {
             <MenuItem />
           </IconButton>
 
-          <Grid container spacing={2} sx={{width: "100%"}}>
+          <Grid container spacing={2} sx={{ width: "100%" }}>
             <Grid>
               <Button variant="contained" sx={{ bgcolor: "#123499" }}>
                 Floor: VIP Floor
@@ -151,16 +162,16 @@ function FloorPlanPage() {
         <table border="0">
           <tr>
             <td>
-              <button style={{ ...buttonPink, border: "1px solid black", borderRadius: "2px", color: "black", marginRight: "15px" }} onClick={() => handleClick("T-1", fullTable)}>T-1</button>
+              <button style={{ ...buttonPink, border: "1px solid black", borderRadius: "2px", color: "black", marginRight: "15px" }} onClick={() => handleClick("T1", fullTable)}>T-1</button>
             </td>
             <td>
-              <button style={{ width: "100px", height: "50px", backgroundColor: "green", border: "1px solid black", borderRadius: "2px", color: "white" }} onClick={() => handleClick("T-4", emptyTable)}>T-4</button>
+              <button style={{ width: "100px", height: "50px", backgroundColor: "green", border: "1px solid black", borderRadius: "2px", color: "white" }} onClick={() => handleClick("T4", emptyTable)}>T-4</button>
             </td>
             <td>
-              <button style={{ ...buttonPink, border: "1px solid black", borderRadius: "2px", color: "black" }} onClick={() => handleClick("T-5", fullTable)}>T-5</button>
+              <button style={{ ...buttonPink, border: "1px solid black", borderRadius: "2px", color: "black" }} onClick={() => handleClick("T5", fullTable)}>T-5</button>
             </td>
             <td>
-              <button style={{ ...buttonPink, border: "1px solid black", borderRadius: "2px", color: "black" }} onClick={() => handleClick("T-6", fullTable)}>T-6</button>
+              <button style={{ ...buttonPink, border: "1px solid black", borderRadius: "2px", color: "black" }} onClick={() => handleClick("T6", fullTable)}>T-6</button>
             </td>
             <td>
               <button style={{ width: "100px", height: "100px", marginLeft: "100px", marginTop: "20px", backgroundColor: "white", border: "1px solid black", color: "black", borderRadius: "50%", fontSize: "24px" }} onClick={() => handleClick("R-1", reserveTable)}>R-1</button>
@@ -168,22 +179,22 @@ function FloorPlanPage() {
           </tr>
           <tr>
             <td>
-              <button style={{ width: "100px", height: "50px", backgroundColor: "blue", borderRadius: "2px", border: "1px solid black", color: "white" }} onClick={() => handleClick("T-8", notUseTable)}>T-8</button>
+              <button style={{ width: "100px", height: "50px", backgroundColor: "blue", borderRadius: "2px", border: "1px solid black", color: "white" }} onClick={() => handleClick("T8", notUseTable)}>T-8</button>
             </td>
             <td>
-              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T-9", fullTable)}>T-9</button>
+              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T9", fullTable)}>T-9</button>
             </td>
             <td>
-              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T-10", fullTable)}>T-10</button>
+              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T10", fullTable)}>T-10</button>
             </td>
             <td>
               <button style={{ width: "100px", height: "50px", backgroundColor: "red", borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T-11", instuctTable)}>T-11</button>
             </td>
             <td>
-              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T-12", fullTable)}>T-12</button>
+              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T12", fullTable)}>T-12</button>
             </td>
             <td>
-              <button style={{ width: "100px", height: "50px", backgroundColor: "orange", borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T-13", instuctTable)}>T-13</button>
+              <button style={{ width: "100px", height: "50px", backgroundColor: "orange", borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T13", instuctTable)}>T-13</button>
             </td>
             <td>
               <button style={{ width: "100px", height: "100px", marginLeft: "100px", marginTop: "20px", backgroundColor: "green", border: "1px solid black", color: "white", borderRadius: "50%", fontSize: "24px" }} onClick={() => handleClick("R-2", emptyTable)}>R-2</button>
@@ -194,10 +205,10 @@ function FloorPlanPage() {
               <button style={{ width: "350px", height: "50px", backgroundColor: "white", borderRadius: "2px", border: "1px solid black", color: "black", fontSize: "22px" }} onClick={() => handleClick("Bar-1", reserveTable)}>Bar-1</button>
             </td>
             <td>
-              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T-19", fullTable)}>T-19</button>
+              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T19", fullTable)}>T-19</button>
             </td>
             <td>
-              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T-20", fullTable)}>T-20</button>
+              <button style={{ ...buttonPink, borderRadius: "2px", border: "1px solid black", color: "black" }} onClick={() => handleClick("T20", fullTable)}>T-20</button>
             </td>
             <td>
               <button style={{ width: "100px", height: "100px", marginLeft: "100px", marginTop: "20px", backgroundColor: "white", border: "1px solid black", color: "black", borderRadius: "50%", fontSize: "24px" }} onClick={() => handleClick("R-3", reserveTable)}>R-3</button>

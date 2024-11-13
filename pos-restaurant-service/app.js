@@ -6,6 +6,8 @@ var logger = require('morgan');
 
 // for login
 var posuserRouter = require('./routes/login/posuser');
+var tableFileRouter = require('./routes/floorplan/tableFile');
+var employRouter = require('./routes/floorplan/employ');
 
 // for POS apis
 var ordersRouter = require('./routes/pos/orders');
@@ -25,6 +27,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/posuser', posuserRouter);
+app.use('/api/tablefile', tableFileRouter);
+app.use('/api/employ', employRouter);
 
 app.use('/api/orders', ordersRouter);
 app.use('/api/product', productRouter);

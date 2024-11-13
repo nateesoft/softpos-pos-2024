@@ -306,7 +306,7 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder, typePopup = false }
         </TabPanel>
       </TabContext>
       <Grid container spacing={2} margin={3} justifyContent="center" >
-        <Button variant="outlined" startIcon={<PrintCheckboxIcon />} onClick={() => setShowKicPrint(true)} sx={{ marginRight: "10px" }}>พิมพ์ตรวจสอบ</Button>
+        <Button variant="outlined" startIcon={<PrintCheckboxIcon />} onClick={() => setShowKicPrint(true)} sx={{ marginRight: "10px" }}>ตรวจสอบปริ้นเตอร์</Button>
         <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => setShowKicPrint(true)}>ส่งครัว/พักบิล</Button>
       </Grid>
       <TotalBill orderList={OrderList} />
