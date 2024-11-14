@@ -7,8 +7,6 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -21,9 +19,8 @@ import { motion } from 'framer-motion'
 import axios from 'axios'
 
 import { handleEnter } from '../../util/EventLisener'
-import bg from "./bg/signin.svg";
-import bgimg from "./bg/backimg.jpg";
-
+import bg from "./bg/welcome.jpg";
+import bgimg from "./bg/bgbg.jpg";
 
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -42,15 +39,9 @@ const boxstyle = {
     transform: "translate(-50%, -50%)",
     width: "75%",
     height: "70%",
-    bgcolor: "background.paper",
     boxShadow: 24,
 };
 
-const center = {
-    position: "relative",
-    top: "50%",
-    left: "37%",
-};
 
 export default function Login() {
     const [open, setOpen] = useState(false);
@@ -107,10 +98,11 @@ export default function Login() {
             </Snackbar>
             <div
                 style={{
-                    backgroundImage: `url(${bgimg})`,
+                    background: `url(${bgimg}) no-repeat center center fixed`,
                     backgroundSize: "cover",
                     height: "100vh",
-                    color: "#f5f5f5",
+                    width: "100vw",
+                    color: "#f5f5f5"
                 }}
             >
                 <Box sx={boxstyle}>
@@ -118,13 +110,12 @@ export default function Login() {
                         <Grid item xs={12} sm={12} lg={6}>
                             <Box
                                 style={{
-                                    backgroundImage: `url(${bg})`,
+                                    background: `url(${bg}) no-repeat center center fixed`,
                                     backgroundSize: "cover",
-                                    marginTop: "40px",
-                                    marginLeft: "15px",
-                                    marginRight: "15px",
-                                    height: "63vh",
+                                    height: "100%",
+                                    width: "100%",
                                     color: "#f5f5f5",
+                                    borderRadius: "10px 0px 0px 0px"
                                 }}
                             ></Box>
                         </Grid>
@@ -134,22 +125,20 @@ export default function Login() {
                                     backgroundSize: "cover",
                                     height: "70vh",
                                     minHeight: "500px",
-                                    backgroundColor: "black",
+                                    backgroundColor: "#3b33d5",
+                                    borderRadius: "0px 0px 10px 0px"
                                 }}
                             >
                                 <ThemeProvider theme={darkTheme}>
                                     <Container>
                                         <Box height={35} />
-                                        <Box sx={center}>
-                                            <Avatar
-                                                sx={{ ml: "35px", mb: "4px" }}
-                                            >
-                                                <LockOutlinedIcon />
-                                            </Avatar>
+                                        <Box display="flex" justifyContent="center">
+                                            <img src='favicon.ico' alt='' style={{marginRight: "5px"}} />
                                             <Typography component="h1" variant="h4">
-                                                POS Restaurant
+                                                Restaurant
                                             </Typography>
                                         </Box>
+                                        
                                         <Box
                                             component="form"
                                             noValidate

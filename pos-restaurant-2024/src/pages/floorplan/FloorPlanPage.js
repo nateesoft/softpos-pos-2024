@@ -83,8 +83,8 @@ function FloorPlanPage() {
     axios.post("/api/tablefile/checkTableOpen", { tableNo: tableNumber })
       .then((response) => {
         if (response.data.code === 200) {
-          const {} = response.data.data
-          if (response.data.data.length === 0){
+          const result = response.data.data
+          if (result.length === 0){
             alert('มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!(1)')
           } else {
             setTableNo(tableNumber)
