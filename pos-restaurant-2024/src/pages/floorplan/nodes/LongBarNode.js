@@ -6,7 +6,7 @@ function LongBarNode({ data }) {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{ border: "2px solid", height: '100px', width: "400px" }}>
+      sx={{ border: "2px solid", height: '100px', width: "400px", backgroundColor: "snow", boxShadow: "3px 2px chocolate" }}>
       <Typography variant="h5">{ data.label }</Typography>
     </Box>
   )

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -10,10 +10,13 @@ import Grid from '@mui/material/Grid2';
 import FloorPlanMgr from '@mui/icons-material/TableBar';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
+import FloorSelect from './FloorSelect';
 
-export default function AppbarMenu({onSave, onExit}) {
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+const mobileMenuId = 'primary-search-account-menu-mobile';
 
+const AppbarMenu = (props) => {
+  const {onSave, onExit, selectFloor, setSelectFloor} = props
+  console.log('AppbarMenu:', props)
   return (
       <AppBar position="fixed">
         <Toolbar>
@@ -28,6 +31,7 @@ export default function AppbarMenu({onSave, onExit}) {
           >
             จัดการ Floor Plan
           </Typography>
+          <FloorSelect selectFloor={selectFloor} setSelectFloor={setSelectFloor} />
           <Box sx={{ flexGrow: 1 }} />
           <Grid container spacing={1}>
             <Button variant='contained' color="info" startIcon={<SaveIcon />} onClick={onSave}>Save</Button>
@@ -48,3 +52,5 @@ export default function AppbarMenu({onSave, onExit}) {
       </AppBar>
   );
 }
+
+export default AppbarMenu

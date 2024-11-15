@@ -1,29 +1,15 @@
-import { Box, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+const style = { border: "1px solid #aaa", boxShadow: "2px 2px chocolate", borderRadius: "10px" }
 
 function RoundNode({ data }) {
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      sx={{
-        height: '256px',
-        width: '256px',
-        backgroundColor: `${data.bgColor ? data.bgColor: 'none'}`,
-        backgroundImage: `url(${data.image ? data.image: 'images/floorplan/round-table.png'})`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "contain"
-      }}>
-      <Grid container spacing={2}>
-        <Grid size={12} display="flex" justifyContent="center">
-          <Typography variant="h5">{data.label}</Typography>
-        </Grid>
-        {data.customerCount && <Grid size={12} display="flex" justifyContent="center">
-          <Typography variant="h4">{data.customerCount}</Typography>
-        </Grid>}
-      </Grid>
-    </Box>
+    <div align="center" style={{ width: "256px" }}>
+      <img src={data.image ?? "images/floorplan/oval-table.png"} width={200} alt="" />
+      {data.label &&
+        <div style={style}>
+          <span style={{ fontWeight: "bold", fontSize: "18px", color: "white" }}>{data.label}</span> &nbsp;
+          <span style={{color: "yellow"}}>({data.customerCount})</span>
+        </div>}
+    </div>
   )
 }
 

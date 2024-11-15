@@ -7,7 +7,7 @@ import LoginPage from './login'
 import RegisterPage from './login/Register'
 import ForgotPassPage from './login/ForgotPassword'
 import FloorPlanPage from "./floorplan/FloorPlanPage"
-import FutureFloorplan from "./floorplan/FutureFloorplan"
+import TableManagement from "./floorplan/TableManagement"
 import MainSalePage from "./mainSale/MainSalePage"
 import PaymentPage from "./payment/PaymentPage"
 import SaleReportPage from "./SaleReportPage"
@@ -35,7 +35,7 @@ const AnimatedRoutes = () => {
                     <Route element={<Protected />}>
                         <Route path="/pinlock" element={<PinLock />} />
                         <Route path="/floorplan" element={<FloorPlanPage />} />
-                        <Route path="/future-floorplan" element={<FutureFloorplan />} />
+                        <Route path="/table-setup" element={<TableManagement />} />
                         <Route path="/kitchen-monitor" element={<TrelloBoard />} />
                         <Route path="/sale" element={<MainSalePage />} />
                         <Route path="/payment" element={<PaymentPage />} />

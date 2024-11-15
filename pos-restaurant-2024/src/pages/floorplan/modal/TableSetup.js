@@ -75,7 +75,9 @@ const TableSetup = (props) => {
               label="Table Status"
               onChange={e => setTableImage(e.target.value)}
             >
-              <MenuItem value={"images/floorplan/round-table.png"}>Round</MenuItem>
+              <MenuItem value={"images/floorplan/pos-table.png"}>Round-1</MenuItem>
+              <MenuItem value={"images/floorplan/oval-table.png"}>Round-2</MenuItem>
+              <MenuItem value={"images/floorplan/round-table.png"}>Round-3</MenuItem>
               <MenuItem value={"images/floorplan/rectangle-table.png"}>Rectangle</MenuItem>
               <MenuItem value={"images/floorplan/dinner-table.png"}>Dinner</MenuItem>
               <MenuItem value={"images/floorplan/toilet.png"}>Rest Room</MenuItem>

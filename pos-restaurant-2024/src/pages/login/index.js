@@ -107,7 +107,7 @@ export default function Login() {
             >
                 <Box sx={boxstyle}>
                     <Grid container>
-                        <Grid item xs={12} sm={12} lg={6}>
+                        <Grid item xs={12} sm={6} lg={6}>
                             <Box
                                 style={{
                                     background: `url(${bg}) no-repeat center center fixed`,
@@ -119,13 +119,13 @@ export default function Login() {
                                 }}
                             ></Box>
                         </Grid>
-                        <Grid item xs={12} sm={12} lg={6}>
+                        <Grid item xs={12} sm={6} lg={6}>
                             <Box
                                 style={{
                                     backgroundSize: "cover",
                                     height: "70vh",
                                     minHeight: "500px",
-                                    backgroundColor: "#3b33d5",
+                                    backgroundColor: "#123456",
                                     borderRadius: "0px 0px 10px 0px"
                                 }}
                             >
@@ -133,9 +133,8 @@ export default function Login() {
                                     <Container>
                                         <Box height={35} />
                                         <Box display="flex" justifyContent="center">
-                                            <img src='favicon.ico' alt='' style={{marginRight: "5px"}} />
                                             <Typography component="h1" variant="h4">
-                                                Restaurant
+                                                POS Restaurant
                                             </Typography>
                                         </Box>
                                         
@@ -179,7 +178,7 @@ export default function Login() {
                                                             sx={{ width: "60%" }}
                                                             onClick={() => setRemember(!remember)}
                                                             control={<Checkbox checked={remember} />}
-                                                            label="Remember me"
+                                                            label="Remember"
                                                         />
                                                         <Typography
                                                             variant="body1"
@@ -189,7 +188,7 @@ export default function Login() {
                                                             }}
                                                             style={{ marginTop: "10px", cursor: "pointer" }}
                                                         >
-                                                            Forgot password?
+                                                            Forgot ?
                                                         </Typography>
                                                     </Stack>
                                                 </Grid>
@@ -213,21 +212,14 @@ export default function Login() {
                                                 </Grid>
                                                 <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
                                                     <Stack direction="row" spacing={2}>
-                                                        <Typography
-                                                            variant="body1"
-                                                            component="span"
-                                                            style={{ marginTop: "10px" }}
+                                                        <span
+                                                            style={{ color: "#beb4fb", cursor: "pointer" }}
+                                                            onClick={() => {
+                                                                navigate("/register");
+                                                            }}
                                                         >
-                                                            Not registered yet?{" "}
-                                                            <span
-                                                                style={{ color: "#beb4fb", cursor: "pointer" }}
-                                                                onClick={() => {
-                                                                    navigate("/register");
-                                                                }}
-                                                            >
-                                                                Create an Account
-                                                            </span>
-                                                        </Typography>
+                                                            Create an Account
+                                                        </span>
                                                     </Stack>
                                                 </Grid>
                                             </Grid>

@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Alert, Box, Button, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
+import CloseButton from '@mui/icons-material/Close'
+import OpenTableButton from '@mui/icons-material/MobileFriendly';
 
 import CustomerDetail from './CustomerDetail';
 
@@ -145,8 +147,8 @@ const CustomerCheckin = (props) => {
                     {showError && <Alert severity="error" sx={{ width: "100%" }}>สถานะโต๊ะไม่พร้อมใช้งาน</Alert>}
                     {showCustomerError && <Alert severity="error" sx={{ width: "100%" }}>ข้อมูลลูกค้าไม่ถูกต้อง</Alert>}
                     <Grid size={12} textAlign="center">
-                        <Button variant='contained' sx={{ width: "120px", fontSize: "16px", marginRight: "10px" }} color='error' onClick={handleCancel}>Cancel</Button>
-                        <Button variant='contained' sx={{ width: "120px", fontSize: "16px" }} onClick={handleOpenTable}>เปิดโต๊ะ</Button>
+                        <Button variant='contained' sx={{ width: "120px", fontSize: "16px", marginRight: "10px" }} color='error' onClick={handleCancel} startIcon={<CloseButton />}>Cancel</Button>
+                        <Button variant='contained' sx={{ width: "120px", fontSize: "16px" }} onClick={handleOpenTable} startIcon={<OpenTableButton />}>เปิดโต๊ะ</Button>
                     </Grid>
                 </Grid>
             </Grid>
