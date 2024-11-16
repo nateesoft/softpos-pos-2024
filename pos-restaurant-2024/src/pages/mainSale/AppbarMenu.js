@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -10,9 +10,20 @@ import Badge from '@mui/material/Badge';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
+import MenuOpenIcon from '@mui/icons-material/MenuBook';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import { Modal } from '@mui/material';
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  border: "1px solid #eee",
+  backgroundColor: "snow"
+}
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -56,10 +67,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function LeftMenu() {
   const menuId = 'primary-search-account-menu';
   const mobileMenuId = 'primary-search-account-menu-mobile';
+  const [open, setOpen] = useState(false)
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" sx={{ border: "1px solid gray", bgcolor: "#e59866", borderRadius: "10px" }}>
+      <AppBar position="fixed" sx={{ border: "1px solid gray", bgcolor: "#e59866", borderRadius: "5px" }}>
         <Toolbar>
           <MonetizationOnIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
@@ -83,6 +95,11 @@ export default function LeftMenu() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={() => setOpen(true)}>
+              <Badge badgeContent={36} color="error">
+                <MenuOpenIcon />
+              </Badge>
+            </IconButton>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
@@ -121,6 +138,13 @@ export default function LeftMenu() {
           </Box>
         </Toolbar>
       </AppBar>
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <Box sx={{ ...modalStyle, width: "80%", borderRadius: "10px" }}>
+          <div align="center" style={{backgroundColor: "yellow", padding: "20px", borderRadius: "10px", color: "gray", fontSize: "22px"}}>
+            Special Menu 2024 ... Comming soon...
+          </div>
+        </Box>
+      </Modal>
     </Box>
   );
 }

@@ -1,14 +1,18 @@
 import React, { forwardRef, useEffect, useState } from "react";
-import { Box, Button, Tabs, Tab, Badge, Modal, Typography, TextField, ButtonGroup, Fab, Slide, Dialog } from "@mui/material";
-import MenuOptionIcon from '@mui/icons-material/FilterFrames';
+import { Box, Button, Tabs, Tab, Badge, Modal, Typography, TextField, Fab, Slide, Dialog, IconButton } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import RemoveIcon from '@mui/icons-material/Remove';
-import MenuBook from '@mui/icons-material/MenuBook';
+import MenuBook from '@mui/icons-material/ShoppingCartOutlined';
 import axios from 'axios'
 import { useTranslation } from "react-i18next"
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import NoFoodIcon from '@mui/icons-material/NoFood';
+import CheckIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/CancelRounded';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Grid from '@mui/material/Grid2'
+
 
 import OrderItem from './OrderItem'
 
@@ -29,7 +33,7 @@ const fabStyle = {
     right: 16,
 };
 
-const tabStyle = { border: "1px solid gray", borderRadius: "10px", margin: "2px", bgcolor: "#e59866", color: "white", fontSize: "16px" }
+const tabStyle = { border: "1px solid black", borderRadius: "10px", margin: "2px", bgcolor: "chocolate", color: "white", fontSize: "16px" }
 
 const NotfoundMenu = () => {
     return (
@@ -64,29 +68,22 @@ const ProductCard = ({ id, product, openModal, initLoadMenu, initLoadOrder }) =>
     }
     return (
         <Badge id={id} badgeContent={product.qty} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: 18, height: 25, minWidth: 35, top: 15, right: 18, borderRadius: 1, color: "snow", fontWeight: "bold" } }}>
-            <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px", boxShadow: "2px 1px #eee", margin: "5px" }}>
+            <div style={{ border: "1px solid #eee", padding: "5px", borderRadius: "8px 8px 0px 0px", boxShadow: "2px 1px #eee", margin: "5px" }}>
                 <Box textAlign="center">
-                    <img src={product.url} alt="" width={160} style={{ borderRadius: "10px" }} onClick={openModal} /><br />
+                    <img src={product.url} alt="" width={160} style={{ borderRadius: "8px 8px 0px 0px" }} onClick={openModal} /><br />
                 </Box>
-                <table width="100%">
-                    <tr>
-                        <td colSpan={2} align="center" style={{ fontWeight: "bold" }}>
-                            {product.name}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="left">ราคา {product.price}</td>
-                        <td align="right">Detail</td>
-                    </tr>
-                    <tr>
-                        <td align="center">
-                            <Button variant="contained" color="success" onClick={() => addOrder(1)} startIcon={<AddIcon />}>Order</Button>
-                        </td>
-                        <td style={{ cursor: "pointer" }}>
-                            <MenuOptionIcon color="primary" fontSize="large" onClick={openModal} />
-                        </td>
-                    </tr>
-                </table>
+                <Grid container justifyContent="center" textAlign="center" sx={{ backgroundColor: "#eee", padding: "2px" }}>
+                    <Typography variant="p" sx={{ overflow: "auto", width: "130px", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>
+                        {product.name}
+                    </Typography>
+                </Grid>
+                <Grid container justifyContent="space-between">
+                    <Typography>ราคา {product.price}</Typography>
+                    <Typography>Detail</Typography>
+                </Grid>
+                <Grid container>
+                    <Button fullWidth variant="contained" sx={{ backgroundColor: "#123456", color: "snow", marginTop: "5px" }} onClick={() => addOrder(1)} startIcon={<AddCircleOutline />}>Order</Button>
+                </Grid>
             </div>
         </Badge>
     )
@@ -130,45 +127,21 @@ const ProductDetailCard = ({ product, closeModal, initLoadMenu, initLoadOrder })
                     </tr>
                 </table>
             </div>
-            <Box display="flex" justifyContent="space-between" sx={{ margin: "10px" }}>
-                <TextField
-                    id="outlined-number"
-                    label="จำนวนเอาหาร"
-                    type="number"
-                    value={count}
-                    onChange={evt => setCount(evt.target.value)}
-                    sx={{ marginRight: "10px" }}
-                    slotProps={{
-                        htmlInput: {
-                            textAlign: "right"
-                        },
-                        inputLabel: {
-                            shrink: true,
-                        }
-                    }}
-                />
-                <ButtonGroup variant="outlined">
-                    <Button
-                        variant="contained"
-                        color="error"
-                        aria-label="reduce"
-                        onClick={() => {
-                            setCount(Math.max(count - 1, 0));
-                        }}
-                    >
-                        <RemoveIcon fontSize="small" />
-                    </Button>
-                    <Button
-                        color="success"
-                        aria-label="increase"
-                        onClick={() => {
-                            setCount(count + 1);
-                        }}
-                    >
-                        <AddIcon fontSize="small" />
-                    </Button>
-                </ButtonGroup>
-            </Box>
+            <Grid container spacing={2} display="flex" justifyContent="space-evenly">
+                <IconButton size="large" sx={{ backgroundColor: "red", color: "white" }} onClick={() => {
+                    setCount(Math.max(count - 1, 0));
+                }}>
+                    <RemoveIcon fontSize="large" />
+                </IconButton>
+                <TextField variant="outlined" type="number" value={count}
+                    onChange={evt => setCount(evt.target.value)} 
+                    inputProps={{ min: 0, style: { textAlign: "center", fontSize: "20px", width: "100px" } }} />
+                <IconButton size="large" sx={{ backgroundColor: "green", color: "white" }} onClick={() => {
+                    setCount(count + 1);
+                }}>
+                    <AddIcon fontSize="large" />
+                </IconButton>
+            </Grid>
             <div style={{ padding: "10px" }}>
                 <div>รายละเอียดเพิ่มเติม</div>
                 <div>
@@ -176,10 +149,10 @@ const ProductDetailCard = ({ product, closeModal, initLoadMenu, initLoadOrder })
                 </div>
             </div>
             <div align="center">
-                <Button variant="contained" color="error" onClick={closeModal} sx={{ marginRight: "10px" }}>
+                <Button variant="contained" color="error" onClick={closeModal} startIcon={<CancelIcon />} sx={{ marginRight: "10px" }}>
                     CANCEL
                 </Button>
-                <Button variant="contained" color="success" onClick={handleConfirm}>
+                <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={handleConfirm}>
                     CONFIRM
                 </Button>
             </div>
@@ -247,12 +220,12 @@ const ProductMenu = ({ ProductList, OrderList, initLoadMenu, initLoadOrder }) =>
 
     return (
         <Box sx={{ flexGrow: 1, display: 'flex', alignContent: "flex-start", marginTop: "8vh" }}>
-            <Tabs
+            {matches && <Tabs
                 orientation="vertical"
                 variant="scrollable"
                 value={value}
                 onChange={handleChange}
-                sx={{ borderRight: 1, borderColor: 'divider', minWidth: "150px" }}
+                sx={{ borderColor: 'divider', minWidth: "150px", marginTop: "5px" }}
             >
                 <Tab sx={tabStyle} icon={<MenuBook sx={{ color: "white" }} />} label={t("productMenu.allGroup")} />
                 <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.breakfast")} />
@@ -261,17 +234,21 @@ const ProductMenu = ({ ProductList, OrderList, initLoadMenu, initLoadOrder }) =>
                 <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.italianFood")} />
                 <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.drink")} />
                 <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.dessert")} />
-            </Tabs>
+            </Tabs>}
             <TabPanel value={value} index={0}>
-                {ProductList && ProductList.map(product =>
-                    <ProductCard
-                        id={"all" + product.id}
-                        product={product}
-                        openModal={() => handleOpenMenu(product)}
-                        initLoadMenu={initLoadMenu}
-                        initLoadOrder={initLoadOrder} />
-                )}
-                {ProductList.length === 0 && <NotfoundMenu />}
+                <Grid container>
+                    {ProductList.length === 0 && <NotfoundMenu />}
+                    {ProductList && ProductList.map(product =>
+                        <Grid size={3}>
+                            <ProductCard
+                                id={"all" + product.id}
+                                product={product}
+                                openModal={() => handleOpenMenu(product)}
+                                initLoadMenu={initLoadMenu}
+                                initLoadOrder={initLoadOrder} />
+                        </Grid>
+                    )}
+                </Grid>
             </TabPanel>
             <TabPanel value={value} index={1}>
                 {ProductA && ProductA.map(product =>
@@ -347,7 +324,7 @@ const ProductMenu = ({ ProductList, OrderList, initLoadMenu, initLoadOrder }) =>
                 </Box>
             </Modal>
             {matches === false &&
-                <Fab sx={fabStyle} aria-label='Add' color='success' onClick={() => setShowMenu(true)}>
+                <Fab sx={fabStyle} aria-label='Add' color='primary' onClick={() => setShowMenu(true)}>
                     <Badge badgeContent={1} color="warning">
                         <MenuBook />
                     </Badge>

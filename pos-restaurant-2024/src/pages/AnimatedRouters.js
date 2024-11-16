@@ -16,6 +16,7 @@ import PageNotFound from './PageNotFound'
 import TrelloBoard from '../pages/monitor/kitchen'
 import Protected from "../routes/ProtectedRoute"
 import DashboardLayout from "../layouts"
+import RegisterMacNo from './RegisterMacno'
 
 const AnimatedRoutes = () => {
     const location = useLocation()
@@ -46,6 +47,7 @@ const AnimatedRoutes = () => {
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/reset-password" element={<ForgotPassPage />} />
                 <Route path="/" element={<LoginPage />} />
+                <Route path="/register-macno" element={<RegisterMacNo />} />
                 <Route path="404" element={<PageNotFound />} />
                 <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>

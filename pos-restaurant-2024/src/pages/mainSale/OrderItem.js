@@ -5,10 +5,13 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { useNavigate } from "react-router-dom";
 import NoFoodIcon from '@mui/icons-material/NoFood';
-import { Alert, Box, Button, ButtonGroup, Modal, TextField, Typography, Paper, ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { Alert, Box, Button, Modal, TextField, Typography, Paper, ToggleButtonGroup, ToggleButton, IconButton } from "@mui/material";
 import Grid from '@mui/material/Grid2'
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import CloseIcon from '@mui/icons-material/Cancel';
+import VoidIcon from '@mui/icons-material/NotInterested';
+import ConfirmIcon from '@mui/icons-material/Check';
 import axios from 'axios'
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import MoneyIcon from '@mui/icons-material/Money'
@@ -28,22 +31,35 @@ const modalStyle = {
 }
 
 const ProductCard = ({ product, openModal }) => {
+  const [count, setCount] = useState(product.qty || 1)
   return (
-    <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px", marginBottom: "10px", boxShadow: "2px 2px #eee" }} onClick={openModal}>
-      <table width="100%">
-        <tr>
-          <td rowSpan={2}>
-            <img src={product.url} alt="" style={{ borderRadius: "10px", width: "100px" }} /><br />
-          </td>
-          <td align="left" style={{ fontWeight: "bold" }}>
-            {product.name}
-          </td>
-        </tr>
-        <tr>
-          <td align="left" style={{ color: "green", fontWeight: "bold" }}>{product.price} x {product.qty}</td>
-          <td align="right" style={{ color: "green", fontWeight: "bold" }}>{product.totalAmount}</td>
-        </tr>
-      </table>
+    <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "5px", marginBottom: "10px", boxShadow: "2px 2px #eee" }}>
+      <Grid container spacing={2}>
+        <Grid size={5}>
+          <img src={product.url} alt="" style={{ borderRadius: "5px", width: "120px" }} onClick={openModal} />
+        </Grid>
+        <Grid size={7}>
+          <Grid container direction="column" justifyContent="flex-end">
+            <Grid>{product.name}</Grid>
+            <Grid display="flex" justifyContent="center">
+              <IconButton onClick={() => setCount(Math.max(count - 1, 0))}>
+                <RemoveIcon />
+              </IconButton>
+              <TextField inputProps={{ min: 0, style: { textAlign: "center" } }} variant='outlined' type="number" value={count} onChange={e => setCount(e.target.value)} />
+              <IconButton onClick={() => setCount(count + 1)}>
+                <AddIcon />
+              </IconButton>
+            </Grid>
+            <Grid>
+              <Grid container>
+                <Typography>{product.price} x {product.qty} </Typography>
+                <Typography>&nbsp;=</Typography>
+                <Typography>{product.totalAmount}</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     </div>
   )
 }
@@ -123,45 +139,23 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
           </tr>
         </table>
       </div>
-      <Box display="flex" justifyContent="space-between" sx={{ margin: "10px" }}>
-        <TextField
-          id="outlined-number"
-          label="จำนวนเอาหาร"
-          type="number"
-          value={count}
-          onChange={evt => setCount(evt.target.value)}
-          sx={{ marginRight: "10px" }}
-          slotProps={{
-            htmlInput: {
-              textAlign: "right"
-            },
-            inputLabel: {
-              shrink: true,
-            }
-          }}
-        />
-        <ButtonGroup variant="outlined">
-          <Button
-            variant="contained"
-            color="error"
-            aria-label="reduce"
-            onClick={() => {
-              setCount(Math.max(count - 1, 0));
-            }}
-          >
-            <RemoveIcon fontSize="small" />
-          </Button>
-          <Button
-            color="success"
-            aria-label="increase"
-            onClick={() => {
-              setCount(count + 1);
-            }}
-          >
-            <AddIcon fontSize="small" />
-          </Button>
-        </ButtonGroup>
-      </Box>
+      <Grid container spacing={2} display="flex" justifyContent="space-evenly">
+        <IconButton size="large" sx={{ backgroundColor: "red", color: "white" }} onClick={() => {
+          setCount(Math.max(count - 1, 0));
+        }}>
+          <RemoveIcon fontSize="large" />
+        </IconButton>
+        <TextField 
+          variant="outlined" 
+          type="number" value={count}
+          onChange={evt => setCount(evt.target.value)} 
+          inputProps={{ min: 0, style: { textAlign: "center", fontSize: "20px", width: "100px" } }} />
+        <IconButton size="large" sx={{ backgroundColor: "green", color: "white" }} onClick={() => {
+          setCount(count + 1);
+        }}>
+          <AddIcon fontSize="large" />
+        </IconButton>
+      </Grid>
       <Box style={{ padding: "10px" }}>
         <Box sx={{ marginBottom: "10px" }}>
           <Typography variant='p'>รายละเอียดเพิ่มเติม</Typography>
@@ -194,13 +188,13 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
         </Box>
       </Alert>}
       <Grid container justifyContent="center">
-        <Button variant="contained" color="error" onClick={closeModal} sx={{ marginRight: "10px" }}>
+        <Button variant="contained" color="error" onClick={closeModal} sx={{ marginRight: "10px" }} startIcon={<CloseIcon />}>
           CANCEL
         </Button>
-        <Button variant="contained" color="secondary" onClick={closeModal} sx={{ marginRight: "10px" }}>
-          ยกเลิกรายการ (VOID)
+        <Button variant="contained" color="secondary" onClick={closeModal} sx={{ marginRight: "10px" }} startIcon={<VoidIcon />}>
+          ยกเลิก (VOID)
         </Button>
-        <Button variant="contained" color="success" onClick={handleConfirm}>
+        <Button variant="contained" color="success" onClick={handleConfirm} startIcon={<ConfirmIcon />}>
           CONFIRM
         </Button>
       </Grid>
@@ -214,15 +208,15 @@ const TotalBill = ({ orderList }) => {
   }
   totalBill = totalBill.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
   return (
-    <div style={{ padding: "5px", border: "2px solid #eee", borderRadius: "10px", marginBottom: "10px", margin: "20px" }}>
+    <div style={{ padding: "5px", backgroundColor: "salmon", border: "2px solid #eee", borderRadius: "10px", marginBottom: "10px", margin: "20px" }}>
       <table width="100%">
         <tr>
           <td align="left" style={{ fontWeight: "bold" }}>
-            <Box sx={{ marginLeft: "10px", fontWeight: "bold", fontSize: "16px" }}>
+            <Box sx={{ marginLeft: "10px", fontWeight: "bold", fontSize: "16px", color: "#555" }}>
               Total Amount
             </Box>
           </td>
-          <td align="right" style={{ color: "green", fontWeight: "bold", fontSize: "36px" }}>
+          <td align="right" style={{ fontWeight: "bold", fontSize: "48px", color: "black", textShadow: "1px 3px snow" }}>
             <Box sx={{ marginRight: "10px" }}>
               {totalBill}
             </Box>
@@ -233,7 +227,7 @@ const TotalBill = ({ orderList }) => {
   )
 }
 
-const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder, typePopup = false }) => {
+const OrderItem = ({ tableNo, OrderList, initLoadMenu, initLoadOrder, typePopup = false }) => {
   const navigate = useNavigate();
   const [value, setValue] = React.useState('1');
   const [open, setOpen] = useState(false)
@@ -268,40 +262,43 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder, typePopup = false }
   return (
     <Box sx={typePopup ? stylePopup : styleMain}>
       <TabContext value={value}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label="lab API tabs example">
-            <Tab label="Dine In" value="1" />
-            <Tab label="Take Away" value="2" />
-            <Tab label="Delivery" value="3" />
-          </TabList>
-        </Box>
+        {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}> */}
+        <TabList onChange={handleChange} aria-label="lab API tabs example">
+          <Tab label="Dine In" value="1" sx={{ boxShadow: "2px 2px #eee" }} />
+          <Tab label="Take Away" value="2" sx={{ boxShadow: "2px 2px #eee" }} />
+          <Tab label="Delivery" value="3" sx={{ boxShadow: "2px 2px #eee" }} />
+        </TabList>
+        {/* </Box> */}
+        {/* <Grid container spacing={1} justifyContent='space-around' padding={1}>
+          <Button variant='contained' onClick={()=>setValue("1")} color='error'>DINE IN</Button>
+          <Button variant='contained' onClick={()=>setValue("2")} color='warning'>TAKE AWAY</Button>
+          <Button variant='contained' onClick={()=>setValue("3")} color='secondary'>DELIVERY</Button>
+        </Grid> */}
         <Box textAlign="center" sx={{ marginTop: "10px" }}>
           <Typography variant='h5'>รายการอาหารที่สั่ง</Typography>
         </Box>
-        <Box textAlign="center">
-          <Typography variant='p'>โต๊ะ (R-3)</Typography>
+        <Box textAlign="center" sx={{ marginTop: "10px" }}>
+          <Typography variant='p' sx={{ border: "2px solid salmon", fontWeight: "bold", color: "gray", borderRadius: "50%", padding: "12px" }}>โต๊ะ {tableNo}</Typography>
         </Box>
-        <TabPanel value="1" sx={{ height: typePopup ? "350px" : "400px", overflow: "auto" }}>
-          {
-            OrderList && OrderList.map(product => {
-              return <ProductCard product={product} openModal={() => handleOpenMenu(product)} />
-            })
-          }
+        <TabPanel value="1" sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}>
+          {OrderList && OrderList.map(product => {
+            return <ProductCard product={product} openModal={() => handleOpenMenu(product)} />
+          })}
           {OrderList.length === 0 && <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
             <Box><NoFoodIcon /></Box>
             <Typography variant='p'>ไม่พบรายการอาหารที่สั่ง Dine In</Typography>
           </Box>}
         </TabPanel>
-        <TabPanel value="2" sx={{ height: "400px", overflow: "auto" }}>
+        <TabPanel value="2" sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}>
           <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
             <Box><NoFoodIcon /></Box>
-            <Typography variant='p'>ไม่พบรายการอาหาร take away</Typography>
+            <Typography variant='p'>ไม่พบรายการอาหาร Take Away</Typography>
           </Box>
         </TabPanel>
-        <TabPanel value="3" sx={{ height: "400px", overflow: "auto" }}>
+        <TabPanel value="3" sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}>
           <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
             <Box><NoFoodIcon /></Box>
-            <Typography variant='p'>ไม่พบรายการอาหาร delevery</Typography>
+            <Typography variant='p'>ไม่พบรายการอาหาร Delevery</Typography>
           </Box>
         </TabPanel>
       </TabContext>
@@ -309,7 +306,7 @@ const OrderItem = ({ OrderList, initLoadMenu, initLoadOrder, typePopup = false }
         <Button variant="outlined" startIcon={<PrintCheckboxIcon />} onClick={() => setShowKicPrint(true)} sx={{ marginRight: "10px" }}>ตรวจสอบปริ้นเตอร์</Button>
         <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => setShowKicPrint(true)}>ส่งครัว/พักบิล</Button>
       </Grid>
-      <TotalBill orderList={OrderList} />
+      <TotalBill tableNo={tableNo} orderList={OrderList} />
       <Grid container spacing={1} justifyContent="center">
         {typePopup === false && <Button variant='contained' color='primary' onClick={backFloorPlan} startIcon={<ArrowBack />}>Floor Plan</Button>}
         <Button variant='contained' color='secondary' onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />}>แยกชำระ</Button>

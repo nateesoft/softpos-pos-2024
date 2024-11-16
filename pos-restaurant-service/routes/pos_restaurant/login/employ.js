@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const pool = require('../../config/database')
+const pool = require('../../../config/database')
 
 router.post('/getEmployeeByCode', function (req, res, next) {
   const { code } = req.body
@@ -19,6 +19,5 @@ router.post('/getEmployeeByCode', function (req, res, next) {
 
   res.status(200).json(response)
 });
-
 
 module.exports = router;

@@ -30,13 +30,15 @@ const CustomerCheckin = (props) => {
     };
 
     const handleOpenTable = () => {
-        if (status === "Free Table") {
+        if (status === "available") {
             if (custCount >= 0) {
                 setShowError(false)
                 setShowCustomerError(false)
                 navigate('/sale', {
                     state: {
-                        startOrderType: orderType
+                        tableNo,
+                        custCount,
+                        orderType
                     }
                 })
             } else {
@@ -98,6 +100,20 @@ const CustomerCheckin = (props) => {
                     <Grid size={12}>
                         <TextField
                             id="outlined-number"
+                            label="ชื่อลูกค้า"
+                            slotProps={{
+                                inputLabel: {
+                                    shrink: true,
+                                },
+                            }}
+                            value={memberCode}
+                            onChange={e => setMemberCode(e.target.value)}
+                            fullWidth
+                        />
+                    </Grid>
+                    <Grid size={6}>
+                        <TextField
+                            id="outlined-number"
                             label="เลขที่สมาชิก"
                             slotProps={{
                                 inputLabel: {
@@ -109,7 +125,7 @@ const CustomerCheckin = (props) => {
                             fullWidth
                         />
                     </Grid>
-                    <Grid size={12}>
+                    <Grid size={6}>
                         <TextField
                             id="outlined-number"
                             label="เลขที่จอง"

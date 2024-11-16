@@ -16,21 +16,26 @@ const modalStyle = {
 }
 
 const TableSetup = (props) => {
-  const { tableInfo, closeModal, onChange } = props
-  console.log('TableSetup:', props)
-  const [tableNo, setTableNo] = useState(tableInfo.data.label)
-  const [tableImage, setTableImage] = useState("images/floorplan/round-table.png")
-  const [zone, setZone] = useState("a")
-  const [customerCount, setCustomerCount] = useState("2")
-  const [tableStatus, setTableStatus] = useState("notActive")
+  const { tableInfo, setTableInfo, closeModal, onChange } = props
+  console.log('tableInfo:', tableInfo)
+  const [tableNo, setTableNo] = useState(tableInfo.data.label || "")
+  const [image, setImage] = useState(tableInfo.data.image || "")
+  const [zone, setZone] = useState(tableInfo.data.zone || "STAND_ROOM")
+  const [customerCount, setCustomerCount] = useState(tableInfo.data.customerCount || 0)
+  const [tableStatus, setTableStatus] = useState(tableInfo.data.tableStatus || "Y")
 
   const handleChange = (status) => {
     setTableStatus(status)
   }
 
   const handleSave = () => {
-    onChange({ label: tableNo, customerCount, tableStatus, zone, image: tableImage })
+    setTableInfo(tableInfo)
+    onChange({ label: tableNo, customerCount, tableStatus, zone, image })
     closeModal()
+  }
+
+  if(!tableInfo.id){
+    return <></>
   }
 
   return (
@@ -56,10 +61,11 @@ const TableSetup = (props) => {
               label="Table Status"
               onChange={e => setZone(e.target.value)}
             >
-              <MenuItem value={"a"}>Zone A</MenuItem>
-              <MenuItem value={"b"}>Zone B</MenuItem>
-              <MenuItem value={"c"}>Zone C</MenuItem>
-              <MenuItem value={"d"}>Zone D</MenuItem>
+              <MenuItem value="STAND_ROOM">STAND_ROOM</MenuItem>
+              <MenuItem value="VIP_ROOM">VIP_ROOM</MenuItem>
+              <MenuItem value="MEETING_ROOM">MEETING_ROOM</MenuItem>
+              <MenuItem value="DINNING_ROOM">DINNING_ROOM</MenuItem>
+              <MenuItem value="WARTER_BAR">WARTER_BAR</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -71,9 +77,9 @@ const TableSetup = (props) => {
             <InputLabel id="table-image-id">Table Image</InputLabel>
             <Select
               labelId="table-image-id"
-              value={tableImage}
+              value={image}
               label="Table Status"
-              onChange={e => setTableImage(e.target.value)}
+              onChange={e => setImage(e.target.value)}
             >
               <MenuItem value={"images/floorplan/pos-table.png"}>Round-1</MenuItem>
               <MenuItem value={"images/floorplan/oval-table.png"}>Round-2</MenuItem>
@@ -97,8 +103,8 @@ const TableSetup = (props) => {
               label="Table Status"
               onChange={e => handleChange(e.target.value)}
             >
-              <MenuItem value={"notActive"}>Not Active</MenuItem>
-              <MenuItem value={"active"}>Active</MenuItem>
+              <MenuItem value="Y">Active</MenuItem>
+              <MenuItem value="N">Not Active</MenuItem>
             </Select>
           </FormControl>
         </Grid>

@@ -94,37 +94,40 @@ function FloorPlanPage() {
   }
 
   const onNodeClick = (event, node) => {
-    // axios.post("/api/tablefile/checkTableOpen", { tableNo: tableNumber })
-    //   .then((response) => {
-    //     if (response.data.code === 200) {
-    //       const result = response.data.data
-    //       if (result.length === 0) {
-    //         alert('มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!(1)')
-    //       } else {
-            setTableNo("T-1")
-            setTableStatus(tableStatus)
+    console.log('onNodeClick:', node)
+    const tableNo = node.data.label
+    axios.post("/api/tablefile/checkTableOpen", { tableNo })
+      .then((response) => {
+        console.log(response)
+        if (response.status === 200) {
+          const result = response.data.status
+          if (result === "employInUse") {
+            alert('มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!')
+          } else {
+            setTableNo(tableNo)
+            setTableStatus(result)
             setOpenPin(true)
-      //     }
-      //   } else {
-      //     alert('มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!(2)')
-      //   }
-      // })
+          }
+        } else {
+          alert('พบปัญหาในการเปิดโต๊ะ')
+        }
+      })
   }
 
   const handleSelect = (floor) => {
     setSelectFloor(floor)
     initialLoadFloorPlan(floor)
-}
+  }
 
   const initialLoadFloorPlan = useCallback((floor) => {
     console.log('initialLoadFloorPlan:', floor)
     const flow = JSON.parse(localStorage.getItem(floor))
     if (flow) {
-        setNodes(flow.nodes || [])
+      setNodes(flow.nodes || [])
     } else {
-        setNodes([])
+      setNodes([])
     }
-}, [setNodes])
+  }, [setNodes])
 
   useEffect(() => {
     initialLoadFloorPlan(selectFloor)
@@ -156,7 +159,7 @@ function FloorPlanPage() {
           <Grid container spacing={2} sx={{ width: "100%" }}>
             <Grid size={12} display="flex" justifyContent="flex-end">
               <Grid container spacing={2}>
-                
+
                 <Button variant="contained" startIcon={<MoneyIcon />} onClick={() => setOpenMgrCashDrawer(true)}>นำเงินเข้า/ออกลิ้นชัก</Button>
                 <Button variant="contained" startIcon={<RefundIcon />} onClick={() => setOpenRefundBill(true)}>ยกเลิกบิล (Refund Bill)</Button>
                 <Button variant="contained" startIcon={<PrintIcon />} onClick={() => setOpenCopyPrint(true)}>พิมพ์สำเนาบิล</Button>

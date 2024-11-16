@@ -3,6 +3,7 @@ import { Background, BackgroundVariant, Controls, ReactFlow, ReactFlowProvider, 
 import { motion } from 'framer-motion'
 import { useNavigate } from "react-router-dom";
 import { Box, Modal } from '@mui/material';
+import axios from 'axios'
 
 import '@xyflow/react/dist/style.css';
 
@@ -43,6 +44,7 @@ const TableManagement = () => {
     const [reactFlowInstance, setReactFlowInstance] = useState(null)
     const [openTableSetup, setOpenTableSetup] = useState(false)
     const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
+    const [foundTable, setFoundTable] = useState(false)
 
     const onDragOver = useCallback((event) => {
         event.preventDefault()
@@ -97,8 +99,19 @@ const TableManagement = () => {
     )
 
     const onNodeClick = (event, node) => {
-        setTableInfo(node)
-        setOpenTableSetup(true)
+        console.log('onNodeClick:', node)
+        axios.get(`/api/floorplan/${node.id}`)
+            .then((response) => {
+                if (response.data.data.length > 0) {
+                    setTableInfo({ ...node })
+                    setFoundTable(true)
+                    setOpenTableSetup(true)
+                } else {
+                    setTableInfo({ ...node })
+                    setFoundTable(false)
+                    setOpenTableSetup(true)
+                }
+            })
     }
 
     const onSave = () => {
@@ -123,13 +136,44 @@ const TableManagement = () => {
     }
 
     const onTableInfoChange = (props) => {
-        const updNode = {
-            ...tableInfo,
-            data: {
-                ...props
-            }
+        console.log('onTableInfoChange:', props)
+        const payload = {
+            id: tableInfo.id,
+            table_no: props.label,
+            zone: props.zone,
+            customer_size: props.customerCount,
+            table_image: props.image,
+            table_status: props.tableStatus
         }
-        setNodes(nds => nds.concat(updNode))
+        if (foundTable) {
+            axios.put(`/api/floorplan/${tableInfo.id}`, payload)
+                .then((response) => {
+                    if (response.status === 200) {
+                        const updNode =
+                        {
+                            ...tableInfo,
+                            data: { ...props }
+                        }
+                        setNodes(nds => nds.concat(updNode))
+                    } else {
+                        alert("Error Update Floorplan Table Setup !!!")
+                    }
+                })
+        } else {
+            axios.post(`/api/floorplan`, payload)
+                .then((response) => {
+                    if (response.status === 200) {
+                        const updNode =
+                        {
+                            ...tableInfo,
+                            data: { ...props }
+                        }
+                        setNodes(nds => nds.concat(updNode))
+                    } else {
+                        alert("Error Save Floorplan Table Setup !!!")
+                    }
+                })
+        }
     }
 
     const initialLoadFloorPlan = useCallback((floor) => {
@@ -144,7 +188,7 @@ const TableManagement = () => {
 
     useEffect(() => {
         initialLoadFloorPlan(selectFloor)
-    }, [])
+    }, [initialLoadFloorPlan, selectFloor])
 
     return (
         <motion.div className="dndflow" animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -177,6 +221,7 @@ const TableManagement = () => {
                 <Box sx={{ ...modalStyle, width: 450, padding: "10px" }}>
                     <TableSetup
                         tableInfo={tableInfo}
+                        setTableInfo={setTableInfo}
                         onChange={onTableInfoChange}
                         closeModal={handleCloseModal} />
                 </Box>

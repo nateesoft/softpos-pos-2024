@@ -2,7 +2,7 @@ const uuid = require("uuid")
 const express = require('express');
 const router = express.Router();
 
-const pool = require('../../config/database')
+const pool = require('../../../config/database')
 
 router.post('/login', function (req, res, next) {
   const { username, password, macno } = req.body

@@ -48,6 +48,7 @@ export default function Login() {
     const [remember, setRemember] = useState(false);
     const vertical = "top";
     const horizontal = "right";
+    const macno = localStorage.getItem('macno')
 
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
@@ -137,7 +138,10 @@ export default function Login() {
                                                 POS Restaurant
                                             </Typography>
                                         </Box>
-                                        
+                                        <Box display="flex" justifyContent="center">
+                                            {macno && <Typography variant='p' sx={{color: "yellow"}}>- หมายเลขเครื่อง {macno} -</Typography>}
+                                            {!macno && <Typography variant='p' sx={{color: "red"}}>( ไม่พบหมายเลขเครื่อง !!! )</Typography>}
+                                        </Box>
                                         <Box
                                             component="form"
                                             noValidate

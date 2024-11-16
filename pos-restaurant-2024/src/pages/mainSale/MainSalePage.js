@@ -7,8 +7,12 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import AppbarMenu from './AppbarMenu'
 import ProductMenu from './ProductMenu'
 import OrderItem from './OrderItem'
+import { useLocation } from "react-router-dom";
 
 function MainSalePage() {
+  const { state } = useLocation()
+  const { tableNo } = state
+
   const matches = useMediaQuery('(min-width:1024px)');
   const [productList, setProductList] = useState([])
   const [orderList, setOrderList] = useState([])
@@ -40,13 +44,13 @@ function MainSalePage() {
     <motion.div initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}>
-      <AppbarMenu />
-      <Grid container spacing={2}>
+      <AppbarMenu tableNo={tableNo} />
+      <Grid container>
         <Grid size={matches ? 8 : 12}>
-          <ProductMenu OrderList={orderList} ProductList={productList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
+          <ProductMenu tableNo={tableNo} OrderList={orderList} ProductList={productList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} />
         </Grid>
-        {matches && <Grid size={2}>
-          <OrderItem OrderList={orderList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} typePopup={false} />
+        {matches && <Grid size={4} sx={{backgroundColor: "white", border: "2px solid #ddd"}}>
+          <OrderItem tableNo={tableNo} OrderList={orderList} initLoadMenu={initLoadMenu} initLoadOrder={initLoadOrder} typePopup={false} />
         </Grid>}
       </Grid>
     </motion.div>
