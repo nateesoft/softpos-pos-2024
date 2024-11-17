@@ -35,10 +35,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/posuser', posuserRouter);
 app.use('/api/floorplan', floorplanRouter);
+
+app.use('/api/posuser', posuserRouter);
 app.use('/api/tablefile', tableFileRouter);
 app.use('/api/employ', employRouter);
+
+app.use('/api/balance', balanceRouter);
+app.use('/api/tablefile', tableFileRouter);
+app.use('/api/billno', billNoRouter);
+app.use('/api/tsale', tSaleRouter);
 
 app.use('/api/orders', ordersRouter);
 app.use('/api/product', productRouter);

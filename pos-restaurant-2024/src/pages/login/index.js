@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -17,6 +17,7 @@ import MuiAlert from "@mui/material/Alert";
 import Slide from "@mui/material/Slide";
 import { motion } from 'framer-motion'
 import axios from 'axios'
+import { POSContext} from '../../AppContext'
 
 import { handleEnter } from '../../util/EventLisener'
 import bg from "./bg/welcome.jpg";
@@ -42,13 +43,15 @@ const boxstyle = {
     boxShadow: 24,
 };
 
-
 export default function Login() {
+    const { appData, setAppData } = useContext(POSContext)
+    const { macno } = appData
+
+    console.log("context:", appData)
     const [open, setOpen] = useState(false);
     const [remember, setRemember] = useState(false);
     const vertical = "top";
     const horizontal = "right";
-    const macno = localStorage.getItem('macno')
 
     const [user, setUser] = useState("")
     const [password, setPassword] = useState("")
@@ -58,11 +61,11 @@ export default function Login() {
         setOpen(true);
         event.preventDefault();
 
-        axios.post("/api/posuser/login", {username: user, password, macno: "001"})
+        axios.post("/api/posuser/login", { username: user, password, macno: macno })
         .then((response) => {
             if (response.data.code === 200) {
                 if(response.data.data.length >0){
-                    localStorage.setItem('pos_login', user)
+                    setAppData({...appData, userLogin: user})
                     navigate("/floorplan");
                 } else {
                     setOpen(true)
@@ -200,7 +203,7 @@ export default function Login() {
                                                     <Button
                                                         type="submit"
                                                         variant="contained"
-                                                        fullWidth="true"
+                                                        fullWidth
                                                         size="large"
                                                         sx={{
                                                             mt: "10px",

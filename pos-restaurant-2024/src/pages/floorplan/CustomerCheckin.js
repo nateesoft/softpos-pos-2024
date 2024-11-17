@@ -1,46 +1,56 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Alert, Box, Button, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import CloseButton from '@mui/icons-material/Close'
 import OpenTableButton from '@mui/icons-material/MobileFriendly';
+import Moment from 'react-moment';
 
 import CustomerDetail from './CustomerDetail';
+import { POSContext } from '../../AppContext';
 
 const min = 1;
 const max = 10;
 
 const CustomerCheckin = (props) => {
-    const { setOpenPin, tableNo, status } = props
+    const { appData, setAppData } = useContext(POSContext)
+    const { tableNo, tableStatus } = appData.tableInfo
+    console.log(appData)
+
+    const { setOpenPin } = props
     const navigate = useNavigate();
+
+    const [customerName, setCustomerName] = useState("")
     const [custCount, setCustCount] = useState(1)
+    const [orderType, setOrderType] = useState('E');
+
+    // additional other customer count
     const [manCount, setManCount] = useState(0)
     const [womanCount, setWomanCount] = useState(0)
     const [kidCount, setKidCount] = useState(0)
     const [oldCount, setOldCount] = useState(0)
+
     const [showError, setShowError] = useState(false)
     const [showCustomerError, setShowCustomerError] = useState(false)
-    const [orderType, setOrderType] = useState('dineIn');
 
     const [memberCode, setMemberCode] = useState("")
     const [reserveNo, setReserveNo] = useState("")
 
-    const handleChange = (event, oType) => {
+    const handleChangeOrderType = (event, oType) => {
         setOrderType(oType);
     };
 
     const handleOpenTable = () => {
-        if (status === "available") {
+        if (tableStatus === "available") {
             if (custCount >= 0) {
                 setShowError(false)
                 setShowCustomerError(false)
-                navigate('/sale', {
-                    state: {
-                        tableNo,
-                        custCount,
-                        orderType
-                    }
-                })
+                setAppData({...appData, tableInfo: {
+                    ...appData.tableInfo,
+                    customerCount: custCount,
+                    customerName: customerName
+                }})
+                navigate('/sale')
             } else {
                 setShowCustomerError(true)
             }
@@ -63,7 +73,7 @@ const CustomerCheckin = (props) => {
                     <Typography variant='h5' sx={{ fontWeight: "bold", color: "#0030bb", textShadow: "2px 2px #eee" }}>Table: {tableNo}</Typography>
                 </Grid>
                 <Grid size={12} textAlign="center">
-                    <Typography variant='p' sx={{ fontWeight: "bold", color: "green" }}>Status: ({status})</Typography>
+                    <Typography variant='p' sx={{ fontWeight: "bold", color: "green" }}>Status: ({tableStatus})</Typography>
                 </Grid>
                 <Box sx={{ '& > :not(style)': { m: 1 } }}>
                     <Grid container spacing={2}>
@@ -95,7 +105,7 @@ const CustomerCheckin = (props) => {
                 </Box>
                 <Grid container spacing={2}>
                     <Grid size={12} textAlign="center">
-                        <Typography variant='p'>เวลาเข้าใช้งาน: 04/11/2024</Typography>
+                        <Typography variant='p'>เวลาเข้าใช้งาน: <Moment format="DD/MM/YYYY HH:mm" date={new Date()} /></Typography>
                     </Grid>
                     <Grid size={12}>
                         <TextField
@@ -106,8 +116,8 @@ const CustomerCheckin = (props) => {
                                     shrink: true,
                                 },
                             }}
-                            value={memberCode}
-                            onChange={e => setMemberCode(e.target.value)}
+                            value={customerName}
+                            onChange={e => setCustomerName(e.target.value)}
                             fullWidth
                         />
                     </Grid>
@@ -150,12 +160,12 @@ const CustomerCheckin = (props) => {
                                     color="primary"
                                     value={orderType}
                                     exclusive
-                                    onChange={handleChange}
+                                    onChange={handleChangeOrderType}
                                     aria-label="Platform"
                                 >
-                                    <ToggleButton value="dineIn">Dine In</ToggleButton>
-                                    <ToggleButton value="takeAway">Take Away</ToggleButton>
-                                    <ToggleButton value="delivery">Delivery</ToggleButton>
+                                    <ToggleButton value="E">Dine In</ToggleButton>
+                                    <ToggleButton value="T">Take Away</ToggleButton>
+                                    <ToggleButton value="D">Delivery</ToggleButton>
                                 </ToggleButtonGroup>
                             </Box>
                         </Grid>

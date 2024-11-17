@@ -1,13 +1,15 @@
+import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { POSContext } from "../AppContext";
 
 const Protected = () => {
-  const macno = localStorage.getItem("macno");
-  if (!macno) {
+  const { appData } = useContext(POSContext)
+
+  if (!appData.macno) {
     alert('ไม่พบข้อมูลหมายเลขเครื่อง !!!')
     return <Navigate to="/" />
   } else {
-    const token = localStorage.getItem("pos_login");
-    return token ? <Outlet /> : <Navigate to="/login" />;
+    return appData.userLogin ? <Outlet /> : <Navigate to="/login" />;
   }
 };
 

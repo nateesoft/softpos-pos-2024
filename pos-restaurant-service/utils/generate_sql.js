@@ -1,8 +1,8 @@
 const mysql = require("mysql2")
 
-const MySQLType = require('./msyql_column_type')
+// const MySQLType = require('./msyql_column_type')
 
-const tableName = "posdb.floorplan_setup"
+const tableName = "MyRestaurantJefferSakon.t_sale"//MyRestaurantJefferSakon, posdb
 
 const pool = mysql.createPool({
     host: "localhost",

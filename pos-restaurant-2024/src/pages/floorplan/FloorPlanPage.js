@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback, useRef } from "react"
+import React, { useState, useEffect, useCallback, useRef, useContext } from "react"
 import { Background, BackgroundVariant, Controls, ReactFlow, ReactFlowProvider, useNodesState } from '@xyflow/react';
 import { useNavigate } from "react-router-dom";
 import Modal from '@mui/material/Modal'
-import { AppBar, Box, Button, IconButton, MenuItem, Toolbar } from "@mui/material";
+import { AppBar, Box, Button, IconButton, Toolbar } from "@mui/material";
 import Splitscreen from '@mui/icons-material/Splitscreen'
 import ManageAccounts from '@mui/icons-material/TableBar'
 import ExitToApp from '@mui/icons-material/ExitToApp'
@@ -30,6 +30,7 @@ import ManageCashDrawer from "./ManageCashDrawer";
 import RefundBill from "./RefundBill";
 import ResizeNode from "./nodes/ResizeNode";
 import FloorSelect from "./FloorSelect";
+import { POSContext } from "../../AppContext";
 
 const modalPinStyle = {
   position: "absolute",
@@ -46,20 +47,12 @@ const nodeTypes = {
   resize: ResizeNode
 }
 
-const emptyTable = "Free Table"
-const fullTable = "Full Table"
-const instuctTable = "Instruct"
-const notUseTable = "Not Use"
-const reserveTable = "Reserve"
-
 function FloorPlanPage() {
   const navigate = useNavigate();
+  const { appData, setAppData } = useContext(POSContext)
 
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes, onNodesChange] = useNodesState([])
-  const [reactFlowInstance, setReactFlowInstance] = useState(null)
-  const [tableInfo, setTableInfo] = useState({})
-  const [openTableSetup, setOpenTableSetup] = useState(false)
 
   const [openPin, setOpenPin] = useState(false)
   const [openMgrTable, setOpenMgrTable] = useState(false)
@@ -67,10 +60,7 @@ function FloorPlanPage() {
   const [openCopyPrint, setOpenCopyPrint] = useState(false)
   const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
   const [openRefundBill, setOpenRefundBill] = useState(false)
-
   const [openLogout, setOpenLogout] = useState(false)
-  const [tableNo, setTableNo] = useState("")
-  const [tableStatus, setTableStatus] = useState(emptyTable)
 
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
 
@@ -78,16 +68,16 @@ function FloorPlanPage() {
 
   const confirmLogoutAlert = useCallback(() => {
     console.log('confirmLogoutAlert')
-    axios.patch("/api/posuser/logout", { username: "9999" })
+    axios.patch("/api/posuser/logout", { username: appData.userLogin })
       .then((response) => {
         if (response.data.code === 200) {
-          localStorage.removeItem('pos_login')
+          setAppData({...appData, userLogin: ""})
           navigate("/");
         } else {
           setOpenLogout(false)
         }
       })
-  }, [setOpenLogout, navigate])
+  }, [setOpenLogout, navigate, appData, setAppData])
 
   const setupFloorPlan = () => {
     navigate("/table-setup");
@@ -100,12 +90,17 @@ function FloorPlanPage() {
       .then((response) => {
         console.log(response)
         if (response.status === 200) {
-          const result = response.data.status
-          if (result === "employInUse") {
+          const tableStatus = response.data.tableStatus
+          if (tableStatus === "employInUse") {
             alert('มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!')
           } else {
-            setTableNo(tableNo)
-            setTableStatus(result)
+            setAppData({
+              ...appData, 
+              tableInfo: {
+                tableNo: tableNo,
+                tableStatus: tableStatus
+              }
+            })
             setOpenPin(true)
           }
         } else {
@@ -131,7 +126,7 @@ function FloorPlanPage() {
 
   useEffect(() => {
     initialLoadFloorPlan(selectFloor)
-  }, [])
+  }, [initialLoadFloorPlan, selectFloor])
 
   useEffect(() => {
     if (keyPressed) {
@@ -182,7 +177,6 @@ function FloorPlanPage() {
           <ReactFlow
             nodes={nodes}
             onNodesChange={onNodesChange}
-            onInit={setReactFlowInstance}
             onNodeClick={onNodeClick}
             nodeTypes={nodeTypes}
             fitView
@@ -194,7 +188,7 @@ function FloorPlanPage() {
       </ReactFlowProvider>
       <Modal open={openPin} onClose={() => setOpenPin(false)}>
         <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
-          <PinLock setOpenPin={setOpenPin} tableNo={tableNo} tableStatus={tableStatus} />
+          <PinLock setOpenPin={setOpenPin} />
         </Box>
       </Modal>
 

@@ -1,14 +1,33 @@
-import React from "react"
+import React, { useState } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
+import { POSContext } from './AppContext'
 
 import AnimatedRoutes from "./pages/AnimatedRouters"
 
+const initContext = {
+  macno: localStorage.getItem('macno'),
+  userLogin: "",
+  empCode: "",
+  tableInfo: {
+    tableNo: "",
+    tableStatus: "",
+    customerName: "",
+    customerCount: 0,
+    orderInfo: {
+      orderType: "E"
+    },
+    orderDetails: []
+  },
+  productList: []
+}
+
 function App() {
+  const [appData, setAppData] = useState(initContext)
   return (
     <Router>
-      <main>
+      <POSContext.Provider value={{ appData, setAppData }}>
         <AnimatedRoutes />
-      </main>
+      </POSContext.Provider>
     </Router>
   )
 }

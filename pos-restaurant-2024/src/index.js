@@ -26,6 +26,7 @@ i18next.init({
 })
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
+
 root.render(
   <HelmetProvider>
     <I18nextProvider i18n={i18next}>

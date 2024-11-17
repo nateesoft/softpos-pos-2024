@@ -13,7 +13,6 @@ import CancelIcon from '@mui/icons-material/CancelRounded';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Grid from '@mui/material/Grid2'
 
-
 import OrderItem from './OrderItem'
 
 const modalStyle = {
@@ -66,6 +65,25 @@ const ProductCard = ({ id, product, openModal, initLoadMenu, initLoadOrder }) =>
                 }
             })
     }
+    // const addOrder = (updateQty) => {
+    //     const payload = {
+    //         tableNo: "",
+    //         productCode: "",
+    //         qty: product.qty + updateQty,
+    //         r_etd: "",
+    //         empCode: "",
+    //         price: 0,
+    //         macno: ""
+    //     }
+
+    //     axios.post(`/api/balance`, payload)
+    //         .then((response) => {
+    //             if (response.data.code === 200) {
+    //                 initLoadMenu()
+    //                 initLoadOrder()
+    //             }
+    //         })
+    // }
     return (
         <Badge id={id} badgeContent={product.qty} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: 18, height: 25, minWidth: 35, top: 15, right: 18, borderRadius: 1, color: "snow", fontWeight: "bold" } }}>
             <div style={{ border: "1px solid #eee", padding: "5px", borderRadius: "8px 8px 0px 0px", boxShadow: "2px 1px #eee", margin: "5px" }}>
@@ -134,7 +152,7 @@ const ProductDetailCard = ({ product, closeModal, initLoadMenu, initLoadOrder })
                     <RemoveIcon fontSize="large" />
                 </IconButton>
                 <TextField variant="outlined" type="number" value={count}
-                    onChange={evt => setCount(evt.target.value)} 
+                    onChange={evt => setCount(evt.target.value)}
                     inputProps={{ min: 0, style: { textAlign: "center", fontSize: "20px", width: "100px" } }} />
                 <IconButton size="large" sx={{ backgroundColor: "green", color: "white" }} onClick={() => {
                     setCount(count + 1);

@@ -1,7 +1,9 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Alert, Box, Button, Modal, Typography } from "@mui/material"
+import axios from 'axios'
 
 import CustomerCheckin from "./CustomerCheckin";
+import { POSContext } from "../../AppContext";
 
 const bgText = {
   backgroundColor: "rgba(0, 0, 0, 0.8)",
@@ -37,7 +39,8 @@ const inputPin = {
   color: "white"
 }
 
-const PinLock = ({setOpenPin, tableNo, tableStatus}) => {
+const PinLock = ({ setOpenPin }) => {
+  const { appData, setAppData } = useContext(POSContext)
   const [openCustCheckIn, setOpenCustCheckIn] = useState(false)
 
   const [pin1, setPin1] = useState("")
@@ -47,14 +50,21 @@ const PinLock = ({setOpenPin, tableNo, tableStatus}) => {
 
   const [showError, setShowError] = useState(false)
 
-  const handleClick = () => {
-    if (pin1 && pin2 && pin3 && pin4) {
-      if (pin1 + pin2 + pin3 + pin4 === "0000") {
-        setShowError(false)
-        setOpenCustCheckIn(true)
-      } else {
-        setShowError(true)
-      }
+  const handleSubmitPin = () => {
+    if (pin1 || pin2 || pin3 || pin4) {
+
+      const passPin = pin1 + pin2 + pin3 + pin4
+      axios.post("/api/employ/getEmployeeByCode", { code: passPin })
+        .then((response) => {
+          const { pinValid } = response.data.data
+          if (pinValid === true) {
+            setAppData({...appData, empCode: passPin})
+            setShowError(false)
+            setOpenCustCheckIn(true)
+          } else {
+            setShowError(true)
+          }
+        })
     }
   }
 
@@ -97,7 +107,7 @@ const PinLock = ({setOpenPin, tableNo, tableStatus}) => {
       <h2 style={{ color: "gold", textShadow: "2px 3px black" }}>PIN LOGIN</h2>
       {showError && <Alert severity="error" sx={{ width: "100%", margin: "5px", background: "none" }}>
         <Box display="flex" textAlign="center">
-          <Typography variant='span' sx={{color: "white"}}>รหัสอนุมัติไม่ถูกต้อง</Typography>
+          <Typography variant='span' sx={{ color: "white" }}>รหัสอนุมัติไม่ถูกต้อง</Typography>
         </Box>
       </Alert>}
       <table>
@@ -168,17 +178,13 @@ const PinLock = ({setOpenPin, tableNo, tableStatus}) => {
             <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("_")}>_</Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "14px", border: "1px solid gray" }} onClick={handleClick}>OK</Button>
+            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "14px", border: "1px solid gray" }} onClick={handleSubmitPin}>OK</Button>
           </td>
         </tr>
       </table>
-      <Modal open={openCustCheckIn} onClose={()=>setOpenPin(false)}>
+      <Modal open={openCustCheckIn} onClose={() => setOpenPin(false)}>
         <Box sx={{ ...modalStyle, width: 450, padding: "10px" }}>
-          <CustomerCheckin
-            setOpenPin={setOpenPin}
-            openTable={openCustCheckIn}
-            tableNo={tableNo} 
-            status={tableStatus} />
+          <CustomerCheckin setOpenPin={setOpenPin} openTable={openCustCheckIn} />
         </Box>
       </Modal>
     </div>

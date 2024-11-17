@@ -14,10 +14,18 @@ router.post('/getEmployeeByCode', function (req, res, next) {
     response.status = true
     response.code = 200
     response.message = "Success"
-    response.data = results
-  })
+    if (results.length > 0) {
+      response.data = {
+        pinValid: true
+      }
+    } else {
+      response.data = {
+        pinValid: false
+      }
+    }
 
-  res.status(200).json(response)
+    res.status(200).json(response)
+  })
 });
 
 module.exports = router;
