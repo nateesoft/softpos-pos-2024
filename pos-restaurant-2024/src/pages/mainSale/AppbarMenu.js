@@ -9,12 +9,13 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
+import PrintIcon from '@mui/icons-material/Print';
 import MenuOpenIcon from '@mui/icons-material/MenuBook';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import SettingIcon from '@mui/icons-material/Settings';
 import { Modal } from '@mui/material';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 
 const modalStyle = {
   position: "absolute",
@@ -73,7 +74,7 @@ export default function LeftMenu() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed" sx={{ border: "1px solid gray", bgcolor: "#e59866", borderRadius: "5px" }}>
         <Toolbar>
-          <MonetizationOnIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <PointOfSaleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -95,14 +96,14 @@ export default function LeftMenu() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={() => setOpen(true)}>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={36} color="error">
                 <MenuOpenIcon />
               </Badge>
             </IconButton>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
-                <MailIcon />
+                <PrintIcon />
               </Badge>
             </IconButton>
             <IconButton
@@ -125,7 +126,7 @@ export default function LeftMenu() {
               <AccountCircle />
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ display: { xs: 'flex' } }}>
             <IconButton
               size="large"
               aria-label="show more"
@@ -134,6 +135,15 @@ export default function LeftMenu() {
               color="inherit"
             >
               <MoreIcon />
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <SettingIcon />
             </IconButton>
           </Box>
         </Toolbar>
