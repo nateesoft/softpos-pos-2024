@@ -18,6 +18,7 @@ var tSaleRouter = require('./routes/pos_restaurant/order/TSale');
 
 // for New POS apis
 var floorplanRouter = require('./routes/floorplan/floorplan');
+var menuSetupRouter = require('./routes/pos/menu_setup');
 var ordersRouter = require('./routes/pos/orders');
 var productRouter = require('./routes/pos/product');
 var productOrderRouter = require('./routes/pos/product_order');
@@ -49,6 +50,7 @@ app.use('/api/tsale', tSaleRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/product', productRouter);
 app.use('/api/product_order', productOrderRouter);
+app.use('/api/menu_setup', menuSetupRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

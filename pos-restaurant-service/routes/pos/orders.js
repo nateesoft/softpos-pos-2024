@@ -7,7 +7,7 @@ const pool = require('../../config/database')
 /* GET orders listing. */
 router.get('/', function (req, res, next) {
   const response = {}
-  pool.query(`SELECT * FROM posdb.orders`, (err, results) => {
+  pool.query(`SELECT * FROM orders`, (err, results) => {
     if (err) throw err
 
     response.status = true
@@ -24,7 +24,7 @@ router.get('/:id', function (req, res, next) {
 
   const response = {}
   pool.query(
-    `SELECT * FROM posdb.orders WHERE id = ?`, [id], (err, results) => {
+    `SELECT * FROM orders WHERE id = ?`, [id], (err, results) => {
       if (err) throw err
 
       if (results.length == 0) {
@@ -73,7 +73,7 @@ router.post('/', function (req, res, next) {
     bill_status = "A"
   } = req.body
   pool.query(
-    `INSERT INTO posdb.orders (
+    `INSERT INTO orders (
       order_no, table_no, customer_count, member_code, member_name,
       discount_amount_dinein, discount_amount_takeaway, discount_amount_delivery, discount_amount,
       total_amount_dinein, total_amount_takeaway, total_amount_delivery,

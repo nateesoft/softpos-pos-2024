@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const pool = require('../../../config/database')
+const pool = require('../../../config/database/MySqlConnect')
 
 router.get('/', function (req, res) {
   const sql = `select * from balance`

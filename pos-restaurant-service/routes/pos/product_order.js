@@ -7,7 +7,7 @@ const pool = require('../../config/database')
 /* GET product listing. */
 router.get('/', function (req, res, next) {
   const response = {}
-  pool.query(`SELECT * FROM posdb.product_order`, (err, results) => {
+  pool.query(`SELECT * FROM product_order`, (err, results) => {
     if (err) throw err
 
     response.status = true
@@ -24,7 +24,7 @@ router.get('/:id', function (req, res, next) {
 
   const response = {}
   pool.query(
-    `SELECT * FROM posdb.product_order WHERE id = ?`, [id], (err, results) => {
+    `SELECT * FROM product_order WHERE id = ?`, [id], (err, results) => {
       if (err) throw err
 
       if (results.length == 0) {
@@ -48,7 +48,7 @@ router.post('/', function (req, res, next) {
   const newId = uuid.v4()
   const { name, url, qty, price, totalAmount } = req.body
   pool.query(
-    `INSERT INTO posdb.product_order (name, url, qty, price, totalAmount, id)
+    `INSERT INTO product_order (name, url, qty, price, totalAmount, id)
     VALUES (?, ?, ?, ?, ?, ?)`, [name, url, qty, price, totalAmount, newId],
     (err, results) => {
       if (err) throw err
@@ -82,7 +82,7 @@ router.delete('/:id', function (req, res, next) {
   const id = req.params.id
   const response = {}
 
-  pool.query(`delete from posdb.product_order where id=?`, [id], (err, results) => {
+  pool.query(`delete from product_order where id=?`, [id], (err, results) => {
       if (err) throw err
 
       response.status = true

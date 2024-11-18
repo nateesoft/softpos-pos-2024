@@ -106,7 +106,7 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
                 <Grid container>
                     {ProductList.length === 0 && <NotfoundMenu />}
                     {ProductList && ProductList.map(product =>
-                        <Grid size={3}>
+                        <Grid>
                             <ProductCard
                                 id={"all" + product.id}
                                 product={product}

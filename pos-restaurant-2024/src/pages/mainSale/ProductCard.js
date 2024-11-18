@@ -48,7 +48,7 @@ const ProductCard = memo(({ id, product, openModal, initLoadMenu, initLoadOrder 
     // }
     return (
         <Badge id={id} badgeContent={product.qty} color="primary" sx={{ "& .MuiBadge-badge": { fontSize: 18, height: 25, minWidth: 35, top: 15, right: 18, borderRadius: 1, color: "snow", fontWeight: "bold" } }}>
-            <div style={{ border: "1px solid #eee", padding: "5px", borderRadius: "8px 8px 0px 0px", boxShadow: "2px 1px #eee", margin: "5px" }}>
+            <div style={{ border: "1px solid #eee", padding: "5px", borderRadius: "8px 8px 0px 0px", boxShadow: "2px 1px #eee" }}>
                 <Box textAlign="center">
                     <img src={product.url} alt="" width={160} style={{ borderRadius: "8px 8px 0px 0px" }} onClick={openModal} /><br />
                 </Box>

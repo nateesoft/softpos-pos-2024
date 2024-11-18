@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const pool = require('../../../config/database')
+const pool = require('../../../config/database/MySqlConnect')
 
 router.post('/getEmployeeByCode', function (req, res, next) {
   const { code } = req.body

@@ -6,7 +6,7 @@ const pool = require('../../config/database')
 router.get('/:id', function (req, res) {
   const id = req.params.id
   const response = {}
-  const sql = `select * from posdb.floorplan_setup where id='${id}'`
+  const sql = `select * from floorplan_setup where id='${id}'`
   console.log(sql)
   pool.query(sql, (err, results) => {
     if (err) throw err
@@ -24,7 +24,7 @@ router.post('/', function (req, res) {
   const { id, table_no, zone, customer_size, table_image, table_status } = req.body
   console.log(req.body)
   pool.query(
-    `INSERT INTO posdb.floorplan_setup 
+    `INSERT INTO floorplan_setup 
       (id,table_no,zone,customer_size,table_image,table_status) 
       VALUES (?,?,?,?,?,?)`, [id, table_no, zone, customer_size, table_image, table_status],
     (err, results) => {
@@ -39,7 +39,7 @@ router.put('/:id', function (req, res, next) {
   const { table_no,zone,customer_size,table_image,table_status } = req.body
 
   pool.query(
-      `UPDATE posdb.floorplan_setup 
+      `UPDATE floorplan_setup 
       SET table_no = ?,zone = ?,customer_size = ?,table_image = ?,table_status = ? 
       WHERE id = ?`, 
       [ table_no,zone,customer_size,table_image,table_status, id ],

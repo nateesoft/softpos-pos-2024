@@ -13,7 +13,7 @@ import CloseIcon from '@mui/icons-material/Cancel';
 import VoidIcon from '@mui/icons-material/NotInterested';
 import ConfirmIcon from '@mui/icons-material/Check';
 import axios from 'axios'
-import ArrowBack from '@mui/icons-material/ArrowBack'
+import ArrowBack from '@mui/icons-material/TableBar'
 import MoneyIcon from '@mui/icons-material/Money'
 import SplitBillIcon from '@mui/icons-material/VerticalSplit'
 import PrintIcon from '@mui/icons-material/Print'
@@ -298,7 +298,7 @@ const OrderItem = ({ tableNo, OrderList, initLoadMenu, initLoadOrder, typePopup 
       </TabContext>
       <Grid container spacing={2} margin={3} justifyContent="center" >
         <Button variant="outlined" startIcon={<PrintCheckboxIcon />} onClick={() => setShowKicPrint(true)} sx={{ marginRight: "10px" }}>ตรวจสอบปริ้นเตอร์</Button>
-        <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => setShowKicPrint(true)}>ส่งครัว/พักบิล</Button>
+        <Button variant="outlined" startIcon={<PrintIcon />} onClick={() => setShowKicPrint(true)}>ส่งครัว/ พักโต๊ะ</Button>
       </Grid>
       <TotalBill tableNo={tableNo} orderList={OrderList} />
       <Grid container spacing={1} justifyContent="center">
