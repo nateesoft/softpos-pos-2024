@@ -66,6 +66,7 @@ export default function Login() {
             if (response.data.code === 200) {
                 if(response.data.data.length >0){
                     setAppData({...appData, userLogin: user})
+                    localStorage.setItem('userLogin', user)
                     navigate("/floorplan");
                 } else {
                     setOpen(true)

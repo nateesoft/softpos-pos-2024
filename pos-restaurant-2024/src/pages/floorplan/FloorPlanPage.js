@@ -72,6 +72,7 @@ function FloorPlanPage() {
       .then((response) => {
         if (response.data.code === 200) {
           setAppData({...appData, userLogin: ""})
+          localStorage.setItem('userLogin', '')
           navigate("/");
         } else {
           setOpenLogout(false)

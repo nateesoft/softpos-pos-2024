@@ -5,8 +5,8 @@ import { POSContext } from './AppContext'
 import AnimatedRoutes from "./pages/AnimatedRouters"
 
 const initContext = {
-  macno: localStorage.getItem('macno'),
-  userLogin: "",
+  macno: localStorage.getItem('macno') || "",
+  userLogin: localStorage.getItem('userLogin') || "",
   empCode: "",
   tableInfo: {
     tableNo: "",
