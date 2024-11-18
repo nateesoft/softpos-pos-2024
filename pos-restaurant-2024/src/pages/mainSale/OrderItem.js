@@ -20,6 +20,7 @@ import PrintIcon from '@mui/icons-material/Print'
 import PrintCheckboxIcon from '@mui/icons-material/CheckBox'
 
 import SplitBiPayment from './SplitBillPayment'
+import OptionMenuSelect from './OptionMenuSelect';
 
 const modalStyle = {
   position: "absolute",
@@ -156,19 +157,12 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
           <AddIcon fontSize="large" />
         </IconButton>
       </Grid>
-      <Box style={{ padding: "10px" }}>
-        <Box sx={{ marginBottom: "10px" }}>
-          <Typography variant='p'>รายละเอียดเพิ่มเติม</Typography>
-        </Box>
-        <div>
-          <TextField fullWidth label="เผ็ดน้อย, เผ็ดกลาง, ไม่เผ็ด..." id="fullWidth" multiline={true} rows={2} />
-        </div>
-      </Box>
+      <OptionMenuSelect />
       <Box sx={{ padding: "10px" }}>
-        <Box sx={{ marginBottom: "10px" }}>
+        <Box>
           <Typography variant='p'>ประเภทอาหาร</Typography>
         </Box>
-        <Box display="flex" justifyContent="center">
+        <Box display="flex" justifyContent="center" sx={{ margin: "10px" }}>
           <ToggleButtonGroup
             color="primary"
             value={orderType}
