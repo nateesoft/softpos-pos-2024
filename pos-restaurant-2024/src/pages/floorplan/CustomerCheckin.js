@@ -50,7 +50,7 @@ const CustomerCheckin = (props) => {
                     customerCount: custCount,
                     customerName: customerName
                 }})
-                navigate('/sale')
+                navigate(`/sale/${tableNo}`)
             } else {
                 setShowCustomerError(true)
             }

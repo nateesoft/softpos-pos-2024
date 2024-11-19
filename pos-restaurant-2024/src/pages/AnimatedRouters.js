@@ -38,8 +38,8 @@ const AnimatedRoutes = () => {
                         <Route path="/floorplan" element={<FloorPlanPage />} />
                         <Route path="/table-setup" element={<TableManagement />} />
                         <Route path="/kitchen-monitor" element={<TrelloBoard />} />
-                        <Route path="/sale" element={<MainSalePage />} />
-                        <Route path="/payment" element={<PaymentPage />} />
+                        <Route path="/sale/:tableNo" element={<MainSalePage />} />
+                        <Route path="/payment/:tableNo" element={<PaymentPage />} />
                         <Route path="/sale-report" element={<SaleReportPage />} />
                     </Route>
                 </Route>

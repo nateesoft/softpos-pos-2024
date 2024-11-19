@@ -81,16 +81,16 @@ const TableSetup = (props) => {
               label="Table Status"
               onChange={e => setImage(e.target.value)}
             >
-              <MenuItem value={"images/floorplan/pos-table.png"}>Round-1</MenuItem>
-              <MenuItem value={"images/floorplan/oval-table.png"}>Round-2</MenuItem>
-              <MenuItem value={"images/floorplan/round-table.png"}>Round-3</MenuItem>
-              <MenuItem value={"images/floorplan/rectangle-table.png"}>Rectangle</MenuItem>
-              <MenuItem value={"images/floorplan/dinner-table.png"}>Dinner</MenuItem>
-              <MenuItem value={"images/floorplan/toilet.png"}>Rest Room</MenuItem>
-              <MenuItem value={"images/floorplan/chef.png"}>Chef</MenuItem>
-              <MenuItem value={"images/floorplan/cash-counter.png"}>Cashier Counter</MenuItem>
-              <MenuItem value={"images/floorplan/open-door.png"}>Open Door</MenuItem>
-              <MenuItem value={"images/floorplan/exit-door.png"}>Exit Door</MenuItem>
+              <MenuItem value={"/images/floorplan/pos-table.png"}>Round-1</MenuItem>
+              <MenuItem value={"/images/floorplan/oval-table.png"}>Round-2</MenuItem>
+              <MenuItem value={"/images/floorplan/round-table.png"}>Round-3</MenuItem>
+              <MenuItem value={"/images/floorplan/rectangle-table.png"}>Rectangle</MenuItem>
+              <MenuItem value={"/images/floorplan/dinner-table.png"}>Dinner</MenuItem>
+              <MenuItem value={"/images/floorplan/toilet.png"}>Rest Room</MenuItem>
+              <MenuItem value={"/images/floorplan/chef.png"}>Chef</MenuItem>
+              <MenuItem value={"/images/floorplan/cash-counter.png"}>Cashier Counter</MenuItem>
+              <MenuItem value={"/images/floorplan/open-door.png"}>Open Door</MenuItem>
+              <MenuItem value={"/images/floorplan/exit-door.png"}>Exit Door</MenuItem>
             </Select>
           </FormControl>
         </Grid>

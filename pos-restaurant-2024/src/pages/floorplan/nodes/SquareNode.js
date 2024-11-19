@@ -3,7 +3,7 @@ const style = { border: "1px solid #aaa", boxShadow: "2px 2px chocolate", border
 function SquareNode({ data }) {
   return (
     <div align="center" style={{ width: "128px" }}>
-      <img src={data.image ?? "images/floorplan/rectangle-table.png"} width={128} alt="" />
+      <img src={data.image ?? "/images/floorplan/rectangle-table.png"} width={128} alt="" />
       {data.label &&
         <div style={style}>
           <span style={{ fontWeight: "bold", fontSize: "18px", color: "white" }}>{data.label}</span> &nbsp;

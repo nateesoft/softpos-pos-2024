@@ -10,7 +10,7 @@ const MemberInfo = () => {
         <Paper elevation={20} sx={{ padding: "10px", margin: "10px", background: "#555" }}>
             <Grid container spacing={2}>
                 <Grid size={4} display="flex" justifyContent="center">
-                    <img src="images/profile_crm.png" alt="" />
+                    <img src="/images/profile_crm.png" alt="" />
                 </Grid>
                 <Grid size={4} padding={1}>
                     <Typography variant='p' sx={{ color: "white", background: "purple", padding: "10px" }}>

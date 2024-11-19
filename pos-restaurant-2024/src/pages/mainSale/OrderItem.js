@@ -373,7 +373,7 @@ const OrderItem = ({
   }
 
   const handleClick = () => {
-    navigate("/payment")
+    navigate(`/payment/${tableNo}`)
   }
 
   const backFloorPlan = () => {

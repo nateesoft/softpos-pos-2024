@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Paper } from '@mui/material'
+import QrCodeGenerator from './QRCodePayment'
 
 export default class ReceiptToPrint extends Component {
   render() {
@@ -8,10 +9,10 @@ export default class ReceiptToPrint extends Component {
         <div align="center" style={{ fontSize: "22px", fontWeight: "bold", padding: "10px" }}>*** ใบเสร็จรับเงิน ***</div>
         <div align="center">Table: 101</div>
         <div align="center">
-          <img src="images/payment/bill_logo.png" alt="" />
+          <img src="/images/payment/bill_logo.png" alt="" />
         </div>
         <div align="center">
-          <b>Softpos Restuarant</b>
+          <b>POS Restuarant</b>
         </div>
         <br />
         <div>Receipt No: #00000001</div>
@@ -66,7 +67,7 @@ export default class ReceiptToPrint extends Component {
         </table>
         <hr />
         <div align="center">
-          <img src="images/payment/qrcode.png" width={100} alt="" />
+          <QrCodeGenerator mobileNumber="1100700536032" amount={1} />
         </div>
         <div align="center">
           <span>แสกน qr code เพื่อชำระเงิน</span>

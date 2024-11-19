@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Grid from '@mui/material/Grid2'
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { motion } from 'framer-motion'
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -13,7 +13,6 @@ import PrintIcon from '@mui/icons-material/Print'
 import CloseIcon from '@mui/icons-material/Close'
 
 import ReceiptToPrint from './ReceiptToPrint'
-import { POSContext } from "../../AppContext";
 import MemberInfo from "./MemberInfo";
 
 const modalStyle = {
@@ -49,8 +48,7 @@ const backgroundSpecial = {
 // }
 
 function PaymentPage() {
-  const { appData } = useContext(POSContext)
-  const { tableNo } = appData.tableInfo
+  const { tableNo } = useParams();
   console.log('PaymentPage:', tableNo)
 
   const matches = useMediaQuery('(min-width:1024px)');

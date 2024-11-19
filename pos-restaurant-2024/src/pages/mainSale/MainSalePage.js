@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import Grid from "@mui/material/Grid2"
 import axios from "axios"
 import { motion } from "framer-motion"
@@ -7,19 +7,18 @@ import useMediaQuery from "@mui/material/useMediaQuery"
 import AppbarMenu from "./AppbarMenu"
 import ProductMenu from "./ProductMenu"
 import OrderItem from "./OrderItem"
-import { POSContext } from "../../AppContext"
+import { useParams } from "react-router-dom"
 
-const backgroundSpecial = {
-  background: "white",
-  backgroundImage: "radial-gradient(#eee 1px, transparent 0)",
-  backgroundSize: "50px 60px",
-  backgroundPosition: "-19px -19px"
-}
+// const backgroundSpecial = {
+//   background: "white",
+//   backgroundImage: "radial-gradient(#eee 1px, transparent 0)",
+//   backgroundSize: "50px 60px",
+//   backgroundPosition: "-19px -19px"
+// }
 
 function MainSalePage() {
-  console.log("MainSalePage")
-  const { appData } = useContext(POSContext)
-  const { tableNo } = appData.tableInfo
+  const { tableNo } = useParams();
+  console.log("MainSalePage:", tableNo)
 
   const matches = useMediaQuery("(min-width:1024px)")
   const [ProductList, setProductList] = useState([])

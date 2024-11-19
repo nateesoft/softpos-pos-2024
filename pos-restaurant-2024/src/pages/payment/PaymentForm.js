@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Checkbox, IconButton, Modal, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Modal, Paper, TextField, Typography } from "@mui/material";
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import Grid from '@mui/material/Grid2'
@@ -30,7 +30,7 @@ const modalStyle = {
     boxShadow: 24
 }
 
-function PaymentForm({ open, close, orderList }) {
+function PaymentForm({ open, close, orderList, tableNo }) {
     const invoiceSubtotal = subtotal(orderList);
     const invoiceTaxes = TAX_RATE * invoiceSubtotal;
     const invoiceTotal = invoiceTaxes + invoiceSubtotal;
@@ -58,7 +58,7 @@ function PaymentForm({ open, close, orderList }) {
 
     const navigate = useNavigate();
     const handleBackPage = () => {
-        navigate("/sale");
+        navigate(`/sale/${tableNo}`);
     }
 
     const handleCashEnabled = () => {
@@ -89,6 +89,7 @@ function PaymentForm({ open, close, orderList }) {
     const handleAdd = (addMoney) => {
         if (!cashEnable) {
             setCashAmount(cash => cash + addMoney)
+            totalAmount()
         }
     }
     const handleConcat = (addMoney) => {
@@ -97,7 +98,7 @@ function PaymentForm({ open, close, orderList }) {
         }
     }
 
-    const totalAmount = () => {
+    const totalAmount = useCallback(() => {
         const cc = cashAmount ? parseFloat(cashAmount) : 0
         const cd = creditAmount ? parseFloat(creditAmount) : 0
         const ta = transferAmount ? parseFloat(transferAmount) : 0
@@ -114,7 +115,17 @@ function PaymentForm({ open, close, orderList }) {
             setTonAmount(balanceAmt)
             setBalanceAmount(0)
         }
+    }, [cashAmount, creditAmount, invoiceTotal, transferAmount])
+
+    const handleClear = () => {
+        setCashAmount(0)
+        totalAmount()
     }
+    
+    useEffect(()=> {
+        console.log('useEffect PaymentForm')
+        totalAmount()
+    }, [totalAmount])
 
     return (
         <Grid container spacing={2} display="flex" direction="column" sx={{ padding: "10px" }}>
@@ -129,7 +140,7 @@ function PaymentForm({ open, close, orderList }) {
                     <Grid size={6}>
                         <Paper elevation={3} sx={{ padding: "10px" }}>
                             <Box display="flex" justifyContent="space-between" margin={2}>
-                                <img width={60} src={"images/payment/cash.png"} alt="" style={{ marginRight: "20px" }} />
+                                <img width={60} src={"/images/payment/cash.png"} alt="" style={{ marginRight: "20px" }} />
                                 <TextField
                                     type="number"
                                     value={cashAmount}
@@ -142,7 +153,7 @@ function PaymentForm({ open, close, orderList }) {
                                 <Checkbox onChange={handleCashEnabled} icon={<AddPaymentMethodIcon fontSize="large" />} />
                             </Box>
                             <Box display="flex" justifyContent="space-between" margin={2}>
-                                <img width={60} src={"images/payment/credit-card.png"} alt="" style={{ marginRight: "20px" }} />
+                                <img width={60} src={"/images/payment/credit-card.png"} alt="" style={{ marginRight: "20px" }} />
                                 <TextField
                                     type="number"
                                     value={creditAmount}
@@ -155,7 +166,7 @@ function PaymentForm({ open, close, orderList }) {
                                 <Checkbox onChange={handleCreditEnabled} icon={<AddPaymentMethodIcon fontSize="large" />} />
                             </Box>
                             <Box display="flex" justifyContent="space-between" margin={2}>
-                                <img width={55} src={"images/payment/banking_money.png"} alt="" style={{ marginRight: "20px" }} />
+                                <img width={55} src={"/images/payment/banking_money.png"} alt="" style={{ marginRight: "20px" }} />
                                 <TextField
                                     type="number"
                                     value={transferAmount}
@@ -241,17 +252,17 @@ function PaymentForm({ open, close, orderList }) {
                                 <table width="100%">
                                     <tr>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(0)}>0</Button></td>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth>00</Button></td>
-                                        <td colSpan={2}><Button variant="contained" sx={{ ...normalButton, bgcolor: "green", color: "white" }} fullWidth onClick={()=>setCashAmount(0)}>clear</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat('00')}>00</Button></td>
+                                        <td colSpan={2}><Button variant="contained" sx={{ ...normalButton, bgcolor: "green", color: "white" }} fullWidth onClick={handleClear}>clear</Button></td>
                                     </tr>
                                 </table>
                             </Grid>
                             <Grid size={12}>
                                 <Grid container spacing={2}>
-                                    <img src="images/payment/m1000.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(1000)} alt="" />
-                                    <img src="images/payment/m500.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(500)} alt="" />
-                                    <img src="images/payment/m100.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(100)} alt="" />
-                                    <img src="images/payment/m50.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(50)} alt="" />
+                                    <img src="/images/payment/m1000.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(1000)} alt="" />
+                                    <img src="/images/payment/m500.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(500)} alt="" />
+                                    <img src="/images/payment/m100.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(100)} alt="" />
+                                    <img src="/images/payment/m50.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(50)} alt="" />
                                 </Grid>
                             </Grid>
                             <Grid size={12}>
@@ -271,7 +282,7 @@ function PaymentForm({ open, close, orderList }) {
                     <Grid container spacing={2} padding={2} justifyContent="center" direction="column">
                         <TextField variant="outlined" label="เลขที่บัตรเครดิต" value={creditNumber} onChange={e => setCreditNumber(e.target.value)} />
                         <TextField variant="outlined" label="Reference" value={creditRef} onChange={e => setCreditRef(e.target.value)} />
-                        <TextField variant="outlined" label="จำนวนเงิน" onKeyUp={totalAmount} value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
+                        <TextField variant="outlined" label="จำนวนเงิน" value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
                     </Grid>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
                         <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={() => setOpenCreditInfo(false)}>ยกเลิก</Button>
@@ -286,7 +297,7 @@ function PaymentForm({ open, close, orderList }) {
                     <Grid container spacing={2} padding={2} justifyContent="center" direction="column">
                         <TextField variant="outlined" label="เลขที่บัญชีที่โอน" value={transferAccountNo} onChange={e => setTransferAccountNo(e.target.value)} />
                         <TextField variant="outlined" label="ชื่อบัญชีที่โอน" value={transferAccount} onChange={e => setTransferAccount(e.target.value)} />
-                        <TextField variant="outlined" label="จำนวนเงิน" onKeyUp={totalAmount} value={transferAmount} onChange={e => setTransferAmount(e.target.value)} />
+                        <TextField variant="outlined" label="จำนวนเงิน" value={transferAmount} onChange={e => setTransferAmount(e.target.value)} />
                     </Grid>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
                         <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={() => setOpenTransferInfo(false)}>ยกเลิก</Button>
