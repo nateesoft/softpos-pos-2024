@@ -7,7 +7,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import axios from "axios"
 
 import OrderItem from './OrderItem'
-import PaymentMethod from './PaymentMethod'
 import PaymentForm from './PaymentForm'
 import { Box, Button, Modal } from "@mui/material";
 import PrintIcon from '@mui/icons-material/Print'
@@ -15,6 +14,7 @@ import CloseIcon from '@mui/icons-material/Close'
 
 import ReceiptToPrint from './ReceiptToPrint'
 import { POSContext } from "../../AppContext";
+import MemberInfo from "./MemberInfo";
 
 const modalStyle = {
   position: "absolute",
@@ -26,6 +26,27 @@ const modalStyle = {
   border: "1px solid #eee",
   boxShadow: 24
 }
+
+const backgroundSpecial = {
+  background: "snow",
+  backgroundImage: "radial-gradient(#eee 2px, transparent 0)",
+  backgroundSize: "80px 80px",
+  backgroundPosition: "-19px -19px"
+}
+// const backgroundSpecial2 = {
+//   background: "rgb(2,0,36)",
+//   background: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%)"
+// }
+// const backgroundSpecial = {
+//   backgroundColor: "black",
+//   backgroundImage:
+//     `radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+//   radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+//   radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+//   radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px)`,
+//   backgroundSize: "550px 550px, 350px 350px, 250px 250px, 150px 150px",
+//   backgroundPosition: "0 0, 40px 60px, 130px 270px, 70px 100px"
+// }
 
 function PaymentPage() {
   const { appData } = useContext(POSContext)
@@ -59,7 +80,7 @@ function PaymentPage() {
       })
   }, [tableNo])
 
-  useEffect(()=> {
+  useEffect(() => {
     initLoadOrder()
   }, [initLoadOrder])
 
@@ -67,13 +88,13 @@ function PaymentPage() {
     <motion.div initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} sx={backgroundSpecial}>
         {matches && <Grid size={6}>
           <OrderItem tableNo={tableNo} orderList={orderList} />
-          <PaymentMethod />
+          <MemberInfo />
         </Grid>}
-        <Grid size={matches ? 6: 12}>
-          <PaymentForm open={() => setOpen(true)} close={() => setOpen(false)} />
+        <Grid size={matches ? 6 : 12}>
+          <PaymentForm open={() => setOpen(true)} close={() => setOpen(false)} tableNo={tableNo} orderList={orderList} />
         </Grid>
       </Grid>
       <Modal open={open} onClose={() => setOpen(false)}

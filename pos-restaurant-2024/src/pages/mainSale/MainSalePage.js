@@ -9,6 +9,13 @@ import ProductMenu from "./ProductMenu"
 import OrderItem from "./OrderItem"
 import { POSContext } from "../../AppContext"
 
+const backgroundSpecial = {
+  background: "white",
+  backgroundImage: "radial-gradient(#eee 1px, transparent 0)",
+  backgroundSize: "50px 60px",
+  backgroundPosition: "-19px -19px"
+}
+
 function MainSalePage() {
   console.log("MainSalePage")
   const { appData } = useContext(POSContext)

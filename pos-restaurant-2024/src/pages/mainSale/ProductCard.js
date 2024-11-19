@@ -136,17 +136,17 @@ const ProductCard = memo(
               {product.menu_name}
             </Typography>
           </Grid>
-          <Grid container justifyContent="space-between">
+          <Grid container justifyContent="space-between" padding={1} sx={{border: "1px solid #bbb", borderRadius: "5px"}}>
             <Typography
               sx={{
-                marginLeft: "2px",
+                backgroundColor: "white",
                 fontWeight: product.show_list_menu === "Y" ? "bold" : "none",
                 color: product.show_list_menu === "Y" ? "green" : "black"
               }}
             >
               ราคา {product.menu_price}
             </Typography>
-            <Typography sx={{ marginRight: "2px" }}>
+            <Typography>
               {product.tab_group}
             </Typography>
           </Grid>
