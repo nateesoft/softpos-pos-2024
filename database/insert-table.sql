@@ -67,3 +67,31 @@ VALUES('f3100041-91ed-4db8-bb57-6ac6b4265e8a', 'วุ้นใบเตยก�
 INSERT INTO posdb.product
 (id, name, url, qty, price, `group`)
 VALUES('f3100041-91ed-4db8-bb57-6ac6b4265e8c', 'ชามะนาว', 'images/product/drink-04.png', 0, 180.00, 'E');
+
+INSERT INTO ngl.appl_party_authorized_signatory
+(id, application_id, appl_party_id, seq, "position", percentage_of_share, quantity_of_share, create_date_time, created_by, update_date_time, updated_by, authorized_signatory_party_id, authorized_signatory_appl_party_id, party_type)
+VALUES('1e2f3b98-8c61-11ef-b72d-ab1fb8cba612'::uuid, 'appIdQcWorklist', 'edfa5cb8-69d9-11ef-819d-46564be27671'::uuid, NULL, 'ผู้จัดการใหญ่999', 10.0, 1900000.0, '2024-10-17 15:23:41.752', 'system', '2024-10-17 15:23:41.752', 'natheep', NULL, '1e2ab5fa-8c61-11ef-b726-af1b609716d6'::uuid, NULL);
+INSERT INTO ngl.appl_party_authorized_signatory
+(id, application_id, appl_party_id, seq, "position", percentage_of_share, quantity_of_share, create_date_time, created_by, update_date_time, updated_by, authorized_signatory_party_id, authorized_signatory_appl_party_id, party_type)
+VALUES('a8967a20-6048-11ef-93f2-46564be27671'::uuid, 'REG20240807000000002', 'c1f8870c-603d-11ef-a39b-46564be27671'::uuid, NULL, 'ผู้จัดการใหญ่', 25.0, 2500000.0, '2024-08-22 12:37:45.364', 'system', '2024-08-22 12:37:45.364', 'natheep', NULL, 'a8925d64-6048-11ef-93ec-46564be27671'::uuid, NULL);
+INSERT INTO ngl.appl_party_authorized_signatory
+(id, application_id, appl_party_id, seq, "position", percentage_of_share, quantity_of_share, create_date_time, created_by, update_date_time, updated_by, authorized_signatory_party_id, authorized_signatory_appl_party_id, party_type)
+VALUES('c7232f8c-6053-11ef-b248-46564be27671'::uuid, 'REG20240807000000002', '32712768-604e-11ef-a033-46564be27671'::uuid, NULL, 'ผู้จัดการใหญ่', 10.0, 10000.0, '2024-08-22 13:57:21.105', 'system', '2024-08-22 13:57:21.105', 'natheep', NULL, 'c7206f5e-6053-11ef-b242-46564be27671'::uuid, NULL);
+INSERT INTO ngl.appl_party_authorized_signatory
+(id, application_id, appl_party_id, seq, "position", percentage_of_share, quantity_of_share, create_date_time, created_by, update_date_time, updated_by, authorized_signatory_party_id, authorized_signatory_appl_party_id, party_type)
+VALUES('3f2e387e-65b2-11ef-a8ec-46564be27671'::uuid, 'REG20240807000000002', 'eef4b0ea-650c-11ef-af07-46564be27671'::uuid, NULL, 'ผู้จัดการใหญ่', 25.0, 2500000.0, '2024-08-29 09:56:11.006', 'system', '2024-08-29 09:56:11.006', 'natheep', NULL, '3f2b35e8-65b2-11ef-a8e5-46564be27671'::uuid, NULL);
+INSERT INTO ngl.appl_party_authorized_signatory
+(id, application_id, appl_party_id, seq, "position", percentage_of_share, quantity_of_share, create_date_time, created_by, update_date_time, updated_by, authorized_signatory_party_id, authorized_signatory_appl_party_id, party_type)
+VALUES('f3e3f4cc-69de-11ef-ba11-46564be27671'::uuid, 'appIdQcWorklist', 'edfa5cb8-69d9-11ef-819d-46564be27671'::uuid, NULL, 'ผู้จัดการใหญ่', 10.0, 2500000.0, '2024-09-03 17:26:16.669', 'system', '2024-09-03 17:26:16.669', 'natheep', NULL, 'f3dd2aca-69de-11ef-ba0a-46564be27671'::uuid, NULL);
+INSERT INTO ngl.appl_party_authorized_signatory
+(id, application_id, appl_party_id, seq, "position", percentage_of_share, quantity_of_share, create_date_time, created_by, update_date_time, updated_by, authorized_signatory_party_id, authorized_signatory_appl_party_id, party_type)
+VALUES('d161148e-8c6b-11ef-b326-a352b1baaadb'::uuid, 'appIdQcWorklist', 'edfa5cb8-69d9-11ef-819d-46564be27671'::uuid, NULL, 'ผู้จัดการใหญ่', 25.0, 1900000.0, '2024-10-17 16:40:17.380', 'system', '2024-10-17 16:40:17.380', 'natheep', NULL, 'd15f5da6-8c6b-11ef-b31f-7f14f38f69cd'::uuid, NULL);
+INSERT INTO ngl.appl_party_authorized_signatory
+(id, application_id, appl_party_id, seq, "position", percentage_of_share, quantity_of_share, create_date_time, created_by, update_date_time, updated_by, authorized_signatory_party_id, authorized_signatory_appl_party_id, party_type)
+VALUES('cbaab3ca-a1a5-11ef-a50b-9bbfbf34a1c5'::uuid, 'appIdQcWorklist', 'edfa5cb8-69d9-11ef-819d-46564be27671'::uuid, NULL, 'ผู้จัดการใหญ่', 10.0, 2500000.0, '2024-11-13 16:58:12.993', 'system', '2024-11-13 16:58:12.993', 'natheep', NULL, 'cba60f00-a1a5-11ef-a504-a7e24371289b'::uuid, NULL);
+INSERT INTO ngl.appl_party_authorized_signatory
+(id, application_id, appl_party_id, seq, "position", percentage_of_share, quantity_of_share, create_date_time, created_by, update_date_time, updated_by, authorized_signatory_party_id, authorized_signatory_appl_party_id, party_type)
+VALUES('5268ef34-a1a7-11ef-b84f-0b92814117b4'::uuid, 'appIdQcWorklist', 'edfa5cb8-69d9-11ef-819d-46564be27671'::uuid, NULL, 'ผู้จัดการใหญ่', 10.0, 2500000.0, '2024-11-13 17:09:08.575', 'system', '2024-11-13 17:09:08.575', 'natheep', NULL, '526663e0-a1a7-11ef-b848-2b7fa9077480'::uuid, NULL);
+INSERT INTO ngl.appl_party_authorized_signatory
+(id, application_id, appl_party_id, seq, "position", percentage_of_share, quantity_of_share, create_date_time, created_by, update_date_time, updated_by, authorized_signatory_party_id, authorized_signatory_appl_party_id, party_type)
+VALUES('60456f4e-a1aa-11ef-93a2-63b39c26ce88'::uuid, 'APP202411041539385H', '0c85ad52-a19a-11ef-af35-2bb8dcc93d04'::uuid, NULL, 'ผู้จัดการใหญ่', 10.0, 2500000.0, '2024-11-13 17:31:00.327', 'system', '2024-11-13 17:31:00.327', 'natheep', NULL, '604392dc-a1aa-11ef-939b-5f5c47286b0e'::uuid, '08');

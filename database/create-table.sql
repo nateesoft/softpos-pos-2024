@@ -103,3 +103,27 @@ CREATE TABLE `product_order` (
   `totalAmount` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- posdb.menu_setup definition
+
+CREATE TABLE `menu_setup` (
+  `id` varchar(255) NOT NULL,
+  `menu_code` varchar(20) DEFAULT NULL,
+  `menu_name` varchar(250) DEFAULT NULL,
+  `menu_number` varchar(5) DEFAULT NULL,
+  `menu_type` varchar(50) DEFAULT NULL,
+  `menu_status` varchar(50) DEFAULT NULL,
+  `show_list_menu` char(1) DEFAULT NULL,
+  `ref_menu` varchar(20) DEFAULT NULL,
+  `auto_select` char(1) DEFAULT NULL,
+  `can_change` char(1) DEFAULT NULL,
+  `min_count_set` int DEFAULT NULL,
+  `max_count_set` int DEFAULT NULL,
+  `free` char(1) DEFAULT NULL,
+  `percent_discount` double(4,2) DEFAULT NULL,
+  `manual_discount` double(5,2) DEFAULT NULL,
+  `image_url` varchar(250) DEFAULT NULL,
+  `tab_group` varchar(10) DEFAULT NULL,
+  `menu_price` double(7,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
