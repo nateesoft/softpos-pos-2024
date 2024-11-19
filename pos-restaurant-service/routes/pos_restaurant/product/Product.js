@@ -8,7 +8,22 @@ router.get('/', function (req, res) {
   pool.query(sql, (err, results) => {
     if (err) throw err
 
-    const response = {}
+    const response = {
+      data: results
+    }
+    res.status(200).json(response)
+  })
+});
+
+router.get('/:productCode', function (req, res) {
+  const productCode = req.params.productCode
+  const sql = `select * from product where PCode='${productCode}'`
+  pool.query(sql, (err, results) => {
+    if (err) throw err
+
+    const response = {
+      data: results[0]
+    }
     res.status(200).json(response)
   })
 });

@@ -83,7 +83,7 @@ const genRequestBody = (fields) => {
     fields.forEach(field => {
         const fieldName = field.Field
         const fieldType = field.Type
-        if (field.Null === 'NO') {
+        // if (field.Null === 'NO') {
             if (fieldType.indexOf('char') !=-1) {
                 myField.push(JSON.stringify(fieldName) + ":" + "\"\"")
             } else if (fieldType.includes("int") 
@@ -96,7 +96,7 @@ const genRequestBody = (fields) => {
             } else {
                 myField.push(JSON.stringify(fieldName) + ":" + "\"\"")
             }
-        }
+        // }
     })
     return myField
 }

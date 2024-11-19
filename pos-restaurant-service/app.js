@@ -14,6 +14,7 @@ var tableFileRouter = require('./routes/pos_restaurant/order/TableFile');
 var balanceRouter = require('./routes/pos_restaurant/order/Balance');
 var billNoRouter = require('./routes/pos_restaurant/order/BillNo');
 var tSaleRouter = require('./routes/pos_restaurant/order/TSale');
+var posProductRouter = require('./routes/pos_restaurant/product/Product');
 
 
 // for New POS apis
@@ -42,6 +43,7 @@ app.use('/api/posuser', posuserRouter);
 app.use('/api/tablefile', tableFileRouter);
 app.use('/api/employ', employRouter);
 
+app.use('/api/pos-product', posProductRouter);
 app.use('/api/balance', balanceRouter);
 app.use('/api/tablefile', tableFileRouter);
 app.use('/api/billno', billNoRouter);

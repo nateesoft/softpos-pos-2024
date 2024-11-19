@@ -32,16 +32,17 @@ const modalStyle = {
 }
 
 const ProductCard = ({ product, openModal }) => {
+  console.log('OrderItem(ProductCard):', product)
   const [count, setCount] = useState(product.qty || 1)
   return (
     <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "5px", marginBottom: "10px", boxShadow: "2px 2px #eee" }}>
       <Grid container spacing={2}>
         <Grid size={5}>
-          <img src={product.url} alt="" style={{ borderRadius: "5px", width: "120px" }} onClick={openModal} />
+          <img src={product.image_url} alt="" style={{ borderRadius: "5px", width: "120px" }} onClick={openModal} />
         </Grid>
         <Grid size={7}>
           <Grid container direction="column" justifyContent="flex-end">
-            <Grid>{product.name}</Grid>
+            <Grid>{product.R_PName}</Grid>
             <Grid display="flex" justifyContent="center">
               <IconButton onClick={() => setCount(Math.max(count - 1, 0))}>
                 <RemoveIcon />
@@ -53,9 +54,9 @@ const ProductCard = ({ product, openModal }) => {
             </Grid>
             <Grid>
               <Grid container>
-                <Typography>{product.price} x {product.qty} </Typography>
+                <Typography>{product.R_Price} x {product.R_Quan} </Typography>
                 <Typography>&nbsp;=</Typography>
-                <Typography>{product.totalAmount}</Typography>
+                <Typography>{product.R_Price*product.R_Quan}</Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -65,8 +66,8 @@ const ProductCard = ({ product, openModal }) => {
   )
 }
 const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu }) => {
-  const [count, setCount] = useState(product.qty)
-  const [orderType, setOrderType] = useState('dineIn');
+  const [count, setCount] = useState(product.qty||0)
+  const [orderType, setOrderType] = useState('E');
 
   const handleChange = (event, oType) => {
     setOrderType(oType);
@@ -114,12 +115,12 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
     <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px" }}>
       <div align="center" style={{ padding: "10px" }}>
         <Box sx={{ padding: "10px" }}>
-          <Typography variant="h5">{product.name}</Typography>
+          <Typography variant="h5">{product.menu_name}</Typography>
         </Box>
         <table width="100%">
           <tr>
             <td colSpan={2} align="center">
-              <img src={product.url} width={150} alt="" style={{ borderRadius: "10px", boxShadow: "2px 3px #ccc" }} /><br />
+              <img src={product.image_url} width={150} alt="" style={{ borderRadius: "10px", boxShadow: "2px 3px #ccc" }} /><br />
             </td>
           </tr>
         </table>
@@ -135,7 +136,7 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
       <div align="center" style={{ padding: "10px" }}>
         <table width="100%">
           <tr>
-            <td align="left"><u>ราคา {product.price} บาท</u></td>
+            <td align="left"><u>ราคา {product.menu_price} บาท</u></td>
             <td align="right" style={{ color: "green", fontSize: "12px", fontWeight: "bold" }}>อาหารหลัก*</td>
           </tr>
         </table>
@@ -170,9 +171,9 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
             onChange={handleChange}
             aria-label="Platform"
           >
-            <ToggleButton value="dineIn">Dine In</ToggleButton>
-            <ToggleButton value="takeAway">Take Away</ToggleButton>
-            <ToggleButton value="delivery">Delivery</ToggleButton>
+            <ToggleButton value="E">Dine In</ToggleButton>
+            <ToggleButton value="T">Take Away</ToggleButton>
+            <ToggleButton value="D">Delivery</ToggleButton>
           </ToggleButtonGroup>
         </Box>
       </Box>
@@ -198,7 +199,7 @@ const ProductDetailCard = ({ product, closeModal, initLoadOrder, initLoadMenu })
 const TotalBill = ({ orderList }) => {
   let totalBill = 0
   for (let i = 0; i < orderList.length; i++) {
-    totalBill = totalBill + parseInt(orderList[i].totalAmount)
+    totalBill = totalBill + parseInt(orderList[i].R_Total)
   }
   totalBill = totalBill.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
   return (
@@ -256,18 +257,11 @@ const OrderItem = ({ tableNo, OrderList, initLoadMenu, initLoadOrder, typePopup 
   return (
     <Box sx={typePopup ? stylePopup : styleMain}>
       <TabContext value={value}>
-        {/* <Box sx={{ borderBottom: 1, borderColor: 'divider' }}> */}
         <TabList onChange={handleChange} aria-label="lab API tabs example">
           <Tab label="Dine In" value="1" sx={{ boxShadow: "2px 2px #eee" }} />
           <Tab label="Take Away" value="2" sx={{ boxShadow: "2px 2px #eee" }} />
           <Tab label="Delivery" value="3" sx={{ boxShadow: "2px 2px #eee" }} />
         </TabList>
-        {/* </Box> */}
-        {/* <Grid container spacing={1} justifyContent='space-around' padding={1}>
-          <Button variant='contained' onClick={()=>setValue("1")} color='error'>DINE IN</Button>
-          <Button variant='contained' onClick={()=>setValue("2")} color='warning'>TAKE AWAY</Button>
-          <Button variant='contained' onClick={()=>setValue("3")} color='secondary'>DELIVERY</Button>
-        </Grid> */}
         <Box textAlign="center" sx={{ marginTop: "10px" }}>
           <Typography variant='h5'>รายการอาหารที่สั่ง</Typography>
         </Box>
@@ -332,9 +326,9 @@ const OrderItem = ({ tableNo, OrderList, initLoadMenu, initLoadOrder, typePopup 
                 OrderList && OrderList.map(product => {
                   return (
                     <tr>
-                      <td>{product.name}</td>
+                      <td>{product.menu_name}</td>
                       <td>x</td>
-                      <td>{product.qty}</td>
+                      <td>{product.qty||0}</td>
                     </tr>
                   )
                 })

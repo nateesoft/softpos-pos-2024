@@ -26,29 +26,40 @@ function MainSalePage() {
   const [orderList, setOrderList] = useState([])
 
   const initLoadMenu = useCallback(() => {
-    axios.get("/api/product")
+    axios.get("/api/menu_setup")
       .then((response) => {
         console.log('initLoadMenu:', response)
         if (response.data.code === 200) {
           const productList = response.data.data
-          setProductList(productList.filter(product => product.group !== "A"))
+          setProductList(productList.filter(product => product.tab_group !== ""))
 
-          setProductA(productList.filter(product => product.group === "A"))
-          setProductB(productList.filter(product => product.group === "B"))
-          setProductC(productList.filter(product => product.group === "C"))
-          setProductD(productList.filter(product => product.group === "D"))
-          setProductE(productList.filter(product => product.group === "E"))
-          setProductF(productList.filter(product => product.group === "F"))
+          setProductA(productList.filter(product => product.tab_group === "A"))
+          setProductB(productList.filter(product => product.tab_group === "B"))
+          setProductC(productList.filter(product => product.tab_group === "C"))
+          setProductD(productList.filter(product => product.tab_group === "D"))
+          setProductE(productList.filter(product => product.tab_group === "E"))
+          setProductF(productList.filter(product => product.tab_group === "F"))
         }
       })
   },[])
 
-  const initLoadOrder = useCallback(() => {
-    axios.get("/api/product_order")
+  const initLoadOrder = useCallback(async () => {
+    const responseMenuSetup = await axios.get(`/api/menu_setup/all`)
+    const listMenuSetup = responseMenuSetup.data.data
+    console.log(listMenuSetup)
+    axios.get(`/api/balance/table/${tableNo}`)
       .then((response) => {
         console.log('initLoadOrder:', response)
-        if (response.data.code === 200) {
-          setOrderList(response.data.data)
+        if (response.status === 200) {
+          const dataList = response.data.data
+          console.log('dataList:', dataList)
+          setOrderList(dataList.map((item) =>  {
+            const menu = listMenuSetup.find(a=>a.menu_code==item.R_PluCode)
+            return {
+              ...item,
+              image_url: menu.image_url
+            }
+          }))
         }
       })
   }, [])

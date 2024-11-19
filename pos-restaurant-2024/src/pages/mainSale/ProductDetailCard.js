@@ -10,7 +10,7 @@ import OptionMenuSelect from "./OptionMenuSelect";
 
 const ProductDetailCard = memo(({ product, closeModal, initLoadMenu, initLoadOrder }) => {
     console.log('ProductDetailCard')
-    const [count, setCount] = useState(product.qty)
+    const [count, setCount] = useState(product.qty||0)
 
     const handleConfirm = () => {
         product.qty = count
@@ -30,12 +30,12 @@ const ProductDetailCard = memo(({ product, closeModal, initLoadMenu, initLoadOrd
         <div style={{ padding: "15px", border: "2px solid #eee", borderRadius: "10px" }}>
             <div align="center" style={{ padding: "10px" }}>
                 <Box sx={{ padding: "5px" }}>
-                    <Typography variant="h5">{product.name}</Typography>
+                    <Typography variant="h5">{product.menu_name}</Typography>
                 </Box>
                 <table width="100%">
                     <tr>
                         <td colSpan={2} align="center">
-                            <img src={product.url} width={300} alt="" style={{ borderRadius: "5px", boxShadow: "2px 3px #ccc" }} /><br />
+                            <img src={product.image_url} width={300} alt="" style={{ borderRadius: "5px", boxShadow: "2px 3px #ccc" }} /><br />
                         </td>
                     </tr>
                 </table>
@@ -43,7 +43,7 @@ const ProductDetailCard = memo(({ product, closeModal, initLoadMenu, initLoadOrd
             <div align="center" style={{ padding: "10px" }}>
                 <table width="100%">
                     <tr>
-                        <td align="left"><u>ราคา {product.price} บาท</u></td>
+                        <td align="left"><u>ราคา {product.menu_price||0} บาท</u></td>
                         <td align="right" style={{ color: "green", fontSize: "12px", fontWeight: "bold" }}>อาหารหลัก*</td>
                     </tr>
                 </table>
