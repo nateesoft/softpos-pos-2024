@@ -1,36 +1,49 @@
-import React, { useState, useEffect, useCallback, useRef, useContext } from "react"
-import { Background, BackgroundVariant, Controls, ReactFlow, ReactFlowProvider, useNodesState } from '@xyflow/react';
-import { useNavigate } from "react-router-dom";
-import Modal from '@mui/material/Modal'
-import { AppBar, Box, Button, IconButton, Toolbar } from "@mui/material";
-import Splitscreen from '@mui/icons-material/Splitscreen'
-import ManageAccounts from '@mui/icons-material/TableBar'
-import ExitToApp from '@mui/icons-material/ExitToApp'
-import PrintIcon from '@mui/icons-material/Print'
-import RefundIcon from '@mui/icons-material/ReceiptLong';
-import MoneyIcon from '@mui/icons-material/MonetizationOn'
-import { motion } from 'framer-motion'
-import Grid from '@mui/material/Grid2'
-import axios from 'axios'
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useContext
+} from "react"
+import {
+  Background,
+  BackgroundVariant,
+  Controls,
+  ReactFlow,
+  ReactFlowProvider,
+  useNodesState
+} from "@xyflow/react"
+import { useNavigate } from "react-router-dom"
+import Modal from "@mui/material/Modal"
+import { AppBar, Box, Button, IconButton, Toolbar } from "@mui/material"
+import Splitscreen from "@mui/icons-material/Splitscreen"
+import ManageAccounts from "@mui/icons-material/TableBar"
+import ExitToApp from "@mui/icons-material/ExitToApp"
+import PrintIcon from "@mui/icons-material/Print"
+import RefundIcon from "@mui/icons-material/ReceiptLong"
+import MoneyIcon from "@mui/icons-material/MonetizationOn"
+import { motion } from "framer-motion"
+import Grid from "@mui/material/Grid2"
+import axios from "axios"
 
-import '@xyflow/react/dist/style.css';
+import "@xyflow/react/dist/style.css"
 
 import RoundNode from "./nodes/RoundNode"
 import SquareNode from "./nodes/SquareNode"
 import LongNode from "./nodes/LongBarNode"
 import TallNode from "./nodes/TallBarNode"
 
-import { useKeyPress } from '../../util/PageListener'
-import { ModalConfirm } from "../../util/AlertPopup";
-import NumberPadLock from '../utils/NumberPadLock'
-import PinLock from './PinLock'
-import ManageCustTable from './ManageCustTable'
-import RecieptCopyPrint from './RecieptCopyPrint'
-import ManageCashDrawer from "./ManageCashDrawer";
-import RefundBill from "./RefundBill";
-import ResizeNode from "./nodes/ResizeNode";
-import FloorSelect from "./FloorSelect";
-import { POSContext } from "../../AppContext";
+import { useKeyPress } from "../../util/PageListener"
+import { ModalConfirm } from "../../util/AlertPopup"
+import NumberPadLock from "../utils/NumberPadLock"
+import PinLock from "./PinLock"
+import ManageCustTable from "./ManageCustTable"
+import RecieptCopyPrint from "./RecieptCopyPrint"
+import ManageCashDrawer from "./ManageCashDrawer"
+import RefundBill from "./RefundBill"
+import ResizeNode from "./nodes/ResizeNode"
+import FloorSelect from "./FloorSelect"
+import { POSContext } from "../../AppContext"
 
 const modalPinStyle = {
   position: "absolute",
@@ -48,7 +61,7 @@ const nodeTypes = {
 }
 
 function FloorPlanPage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const { appData, setAppData } = useContext(POSContext)
 
   const reactFlowWrapper = useRef(null)
@@ -64,39 +77,44 @@ function FloorPlanPage() {
 
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
 
-  const keyPressed = useKeyPress('Escape');
+  const keyPressed = useKeyPress("Escape")
 
   const confirmLogoutAlert = useCallback(() => {
-    console.log('confirmLogoutAlert')
-    axios.patch("/api/posuser/logout", { username: appData.userLogin })
+    console.log("confirmLogoutAlert")
+    axios
+      .patch("/api/posuser/logout", { username: appData.userLogin })
       .then((response) => {
         if (response.data.code === 200) {
-          setAppData({...appData, userLogin: ""})
-          localStorage.setItem('userLogin', '')
-          navigate("/");
+          setAppData({ ...appData, userLogin: "" })
+          localStorage.setItem("userLogin", "")
+          navigate("/")
         } else {
           setOpenLogout(false)
         }
       })
+      .catch((error) => {
+        alert(error)
+      })
   }, [setOpenLogout, navigate, appData, setAppData])
 
   const setupFloorPlan = () => {
-    navigate("/table-setup");
+    navigate("/table-setup")
   }
 
   const onNodeClick = (event, node) => {
-    console.log('onNodeClick:', node)
+    console.log("onNodeClick:", node)
     const tableNo = node.data.label
-    axios.post("/api/tablefile/checkTableOpen", { tableNo })
+    axios
+      .post("/api/tablefile/checkTableOpen", { tableNo })
       .then((response) => {
         console.log(response)
         if (response.status === 200) {
           const tableStatus = response.data.tableStatus
           if (tableStatus === "employInUse") {
-            alert('มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!')
+            alert("มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!")
           } else {
             setAppData({
-              ...appData, 
+              ...appData,
               tableInfo: {
                 tableNo: tableNo,
                 tableStatus: tableStatus
@@ -105,8 +123,11 @@ function FloorPlanPage() {
             setOpenPin(true)
           }
         } else {
-          alert('พบปัญหาในการเปิดโต๊ะ')
+          alert("พบปัญหาในการเปิดโต๊ะ")
         }
+      })
+      .catch((error) => {
+        alert(error)
       })
   }
 
@@ -115,15 +136,18 @@ function FloorPlanPage() {
     initialLoadFloorPlan(floor)
   }
 
-  const initialLoadFloorPlan = useCallback((floor) => {
-    console.log('initialLoadFloorPlan:', floor)
-    const flow = JSON.parse(localStorage.getItem(floor))
-    if (flow) {
-      setNodes(flow.nodes || [])
-    } else {
-      setNodes([])
-    }
-  }, [setNodes])
+  const initialLoadFloorPlan = useCallback(
+    (floor) => {
+      console.log("initialLoadFloorPlan:", floor)
+      const flow = JSON.parse(localStorage.getItem(floor))
+      if (flow) {
+        setNodes(flow.nodes || [])
+      } else {
+        setNodes([])
+      }
+    },
+    [setNodes]
+  )
 
   useEffect(() => {
     initialLoadFloorPlan(selectFloor)
@@ -133,7 +157,7 @@ function FloorPlanPage() {
     if (keyPressed) {
       setOpenLogout(true)
     }
-  }, [keyPressed]);
+  }, [keyPressed])
 
   return (
     <motion.div
@@ -142,26 +166,64 @@ function FloorPlanPage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <AppBar component="nav" sx={{ backgroundColor: "black", boxShadow: "5px 3px #aaa" }}>
+      <AppBar
+        component="nav"
+        sx={{ backgroundColor: "black", boxShadow: "5px 3px #aaa" }}
+      >
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-          >
-            <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
+          <IconButton color="inherit" aria-label="open drawer" edge="start">
+            <FloorSelect
+              selectFloor={selectFloor}
+              setSelectFloor={handleSelect}
+            />
           </IconButton>
 
           <Grid container spacing={2} sx={{ width: "100%" }}>
             <Grid size={12} display="flex" justifyContent="flex-end">
               <Grid container spacing={2}>
-
-                <Button variant="contained" startIcon={<MoneyIcon />} onClick={() => setOpenMgrCashDrawer(true)}>นำเงินเข้า/ออกลิ้นชัก</Button>
-                <Button variant="contained" startIcon={<RefundIcon />} onClick={() => setOpenRefundBill(true)}>ยกเลิกบิล (Refund Bill)</Button>
-                <Button variant="contained" startIcon={<PrintIcon />} onClick={() => setOpenCopyPrint(true)}>พิมพ์สำเนาบิล</Button>
-                <Button variant="contained" startIcon={<Splitscreen />} onClick={() => setOpenPinMgrTable(true)}>แยกโต๊ะ / รวมโต๊ะ</Button>
-                <Button variant="contained" onClick={setupFloorPlan} startIcon={<ManageAccounts />}>จัดการโต๊ะ</Button>
-                <Button variant="contained" color="error" onClick={() => setOpenLogout(true)} endIcon={<ExitToApp />}>Logout</Button>
+                <Button
+                  variant="contained"
+                  startIcon={<MoneyIcon />}
+                  onClick={() => setOpenMgrCashDrawer(true)}
+                >
+                  นำเงินเข้า/ออกลิ้นชัก
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<RefundIcon />}
+                  onClick={() => setOpenRefundBill(true)}
+                >
+                  ยกเลิกบิล (Refund Bill)
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<PrintIcon />}
+                  onClick={() => setOpenCopyPrint(true)}
+                >
+                  พิมพ์สำเนาบิล
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<Splitscreen />}
+                  onClick={() => setOpenPinMgrTable(true)}
+                >
+                  แยกโต๊ะ / รวมโต๊ะ
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={setupFloorPlan}
+                  startIcon={<ManageAccounts />}
+                >
+                  จัดการโต๊ะ
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => setOpenLogout(true)}
+                  endIcon={<ExitToApp />}
+                >
+                  Logout
+                </Button>
               </Grid>
             </Grid>
           </Grid>
@@ -201,7 +263,8 @@ function FloorPlanPage() {
       <Modal open={openPinMgrTable} onClose={() => setOpenPinMgrTable(false)}>
         <NumberPadLock
           close={() => setOpenPinMgrTable(false)}
-          nextStep={() => setOpenMgrTable(true)} />
+          nextStep={() => setOpenMgrTable(true)}
+        />
       </Modal>
 
       <Modal open={openCopyPrint} onClose={() => setOpenCopyPrint(false)}>
@@ -209,7 +272,10 @@ function FloorPlanPage() {
           <RecieptCopyPrint setOpen={setOpenCopyPrint} />
         </Box>
       </Modal>
-      <Modal open={openMgrCashDrawer} onClose={() => setOpenMgrCashDrawer(false)}>
+      <Modal
+        open={openMgrCashDrawer}
+        onClose={() => setOpenMgrCashDrawer(false)}
+      >
         <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
           <ManageCashDrawer setOpen={setOpenMgrCashDrawer} />
         </Box>
@@ -224,7 +290,8 @@ function FloorPlanPage() {
         setOpen={() => setOpenLogout(false)}
         onSubmit={confirmLogoutAlert}
         header="Confirm Logout"
-        content="ยืนยันการออกจากระบบ ?" />
+        content="ยืนยันการออกจากระบบ ?"
+      />
     </motion.div>
   )
 }

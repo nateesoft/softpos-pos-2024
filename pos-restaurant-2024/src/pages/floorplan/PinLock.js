@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react"
 import { Alert, Box, Button, Modal, Typography } from "@mui/material"
-import axios from 'axios'
+import axios from "axios"
 
-import CustomerCheckin from "./CustomerCheckin";
-import { POSContext } from "../../AppContext";
+import CustomerCheckin from "./CustomerCheckin"
+import { POSContext } from "../../AppContext"
 
 const bgText = {
   backgroundColor: "rgba(0, 0, 0, 0.8)",
@@ -52,18 +52,21 @@ const PinLock = ({ setOpenPin }) => {
 
   const handleSubmitPin = () => {
     if (pin1 || pin2 || pin3 || pin4) {
-
       const passPin = pin1 + pin2 + pin3 + pin4
-      axios.post("/api/employ/getEmployeeByCode", { code: passPin })
+      axios
+        .post("/api/employ/getEmployeeByCode", { code: passPin })
         .then((response) => {
           const { pinValid } = response.data.data
           if (pinValid === true) {
-            setAppData({...appData, empCode: passPin})
+            setAppData({ ...appData, empCode: passPin })
             setShowError(false)
             setOpenCustCheckIn(true)
           } else {
             setShowError(true)
           }
+        })
+        .catch((error) => {
+          alert(error)
         })
     }
   }
@@ -105,11 +108,18 @@ const PinLock = ({ setOpenPin }) => {
   return (
     <div style={bgText}>
       <h2 style={{ color: "gold", textShadow: "2px 3px black" }}>PIN LOGIN</h2>
-      {showError && <Alert severity="error" sx={{ width: "100%", margin: "5px", background: "none" }}>
-        <Box display="flex" textAlign="center">
-          <Typography variant='span' sx={{ color: "white" }}>รหัสอนุมัติไม่ถูกต้อง</Typography>
-        </Box>
-      </Alert>}
+      {showError && (
+        <Alert
+          severity="error"
+          sx={{ width: "100%", margin: "5px", background: "none" }}
+        >
+          <Box display="flex" textAlign="center">
+            <Typography variant="span" sx={{ color: "white" }}>
+              รหัสอนุมัติไม่ถูกต้อง
+            </Typography>
+          </Box>
+        </Alert>
+      )}
       <table>
         <tr>
           <td>
@@ -127,64 +137,256 @@ const PinLock = ({ setOpenPin }) => {
         </tr>
         <tr>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("1")}>1</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("1")}
+            >
+              1
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("2")}>2</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("2")}
+            >
+              2
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("3")}>3</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("3")}
+            >
+              3
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("<")}>{`<`}</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("<")}
+            >{`<`}</Button>
           </td>
         </tr>
         <tr>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("4")}>4</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("4")}
+            >
+              4
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("5")}>5</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("5")}
+            >
+              5
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("6")}>6</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("6")}
+            >
+              6
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("+")}>+</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("+")}
+            >
+              +
+            </Button>
           </td>
         </tr>
         <tr>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("7")}>7</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("7")}
+            >
+              7
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("8")}>8</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("8")}
+            >
+              8
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("9")}>9</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("9")}
+            >
+              9
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("-")}>-</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("-")}
+            >
+              -
+            </Button>
           </td>
         </tr>
         <tr>
           <td>
-            <Button variant="contained" color="error" sx={{ borderRadius: "50%", height: "65px", fontSize: "14px", border: "1px solid gray" }} onClick={() => handlePin("clear")}>CLR</Button>
+            <Button
+              variant="contained"
+              color="error"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "14px",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("clear")}
+            >
+              CLR
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("0")}>0</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("0")}
+            >
+              0
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "30px", bgcolor: "black", border: "1px solid gray" }} onClick={() => handlePin("_")}>_</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "30px",
+                bgcolor: "black",
+                border: "1px solid gray"
+              }}
+              onClick={() => handlePin("_")}
+            >
+              _
+            </Button>
           </td>
           <td>
-            <Button variant="contained" sx={{ borderRadius: "50%", height: "65px", fontSize: "14px", border: "1px solid gray" }} onClick={handleSubmitPin}>OK</Button>
+            <Button
+              variant="contained"
+              sx={{
+                borderRadius: "50%",
+                height: "65px",
+                fontSize: "14px",
+                border: "1px solid gray"
+              }}
+              onClick={handleSubmitPin}
+            >
+              OK
+            </Button>
           </td>
         </tr>
       </table>
       <Modal open={openCustCheckIn} onClose={() => setOpenPin(false)}>
         <Box sx={{ ...modalStyle, width: 450, padding: "10px" }}>
-          <CustomerCheckin setOpenPin={setOpenPin} openTable={openCustCheckIn} />
+          <CustomerCheckin
+            setOpenPin={setOpenPin}
+            openTable={openCustCheckIn}
+          />
         </Box>
       </Modal>
     </div>

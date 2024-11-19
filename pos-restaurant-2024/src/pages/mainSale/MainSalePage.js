@@ -1,20 +1,20 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import Grid from "@mui/material/Grid2";
-import axios from 'axios'
-import { motion } from 'framer-motion'
-import useMediaQuery from '@mui/material/useMediaQuery';
+import React, { useCallback, useContext, useEffect, useState } from "react"
+import Grid from "@mui/material/Grid2"
+import axios from "axios"
+import { motion } from "framer-motion"
+import useMediaQuery from "@mui/material/useMediaQuery"
 
-import AppbarMenu from './AppbarMenu'
-import ProductMenu from './ProductMenu'
-import OrderItem from './OrderItem'
-import { POSContext } from "../../AppContext";
+import AppbarMenu from "./AppbarMenu"
+import ProductMenu from "./ProductMenu"
+import OrderItem from "./OrderItem"
+import { POSContext } from "../../AppContext"
 
 function MainSalePage() {
-  console.log('MainSalePage')
+  console.log("MainSalePage")
   const { appData } = useContext(POSContext)
   const { tableNo } = appData.tableInfo
 
-  const matches = useMediaQuery('(min-width:1024px)');
+  const matches = useMediaQuery("(min-width:1024px)")
   const [ProductList, setProductList] = useState([])
   const [ProductA, setProductA] = useState([])
   const [ProductB, setProductB] = useState([])
@@ -26,41 +26,67 @@ function MainSalePage() {
   const [orderList, setOrderList] = useState([])
 
   const initLoadMenu = useCallback(() => {
-    axios.get("/api/menu_setup")
+    axios
+      .get("/api/menu_setup")
       .then((response) => {
-        console.log('initLoadMenu:', response)
+        console.log("initLoadMenu:", response)
         if (response.data.code === 200) {
           const productList = response.data.data
-          setProductList(productList.filter(product => product.tab_group !== ""))
+          setProductList(
+            productList.filter((product) => product.tab_group !== "")
+          )
 
-          setProductA(productList.filter(product => product.tab_group === "A"))
-          setProductB(productList.filter(product => product.tab_group === "B"))
-          setProductC(productList.filter(product => product.tab_group === "C"))
-          setProductD(productList.filter(product => product.tab_group === "D"))
-          setProductE(productList.filter(product => product.tab_group === "E"))
-          setProductF(productList.filter(product => product.tab_group === "F"))
+          setProductA(
+            productList.filter((product) => product.tab_group === "A")
+          )
+          setProductB(
+            productList.filter((product) => product.tab_group === "B")
+          )
+          setProductC(
+            productList.filter((product) => product.tab_group === "C")
+          )
+          setProductD(
+            productList.filter((product) => product.tab_group === "D")
+          )
+          setProductE(
+            productList.filter((product) => product.tab_group === "E")
+          )
+          setProductF(
+            productList.filter((product) => product.tab_group === "F")
+          )
         }
       })
-  },[])
+      .catch((error) => {
+        alert(error)
+      })
+  }, [])
 
   const initLoadOrder = useCallback(async () => {
     const responseMenuSetup = await axios.get(`/api/menu_setup/all`)
     const listMenuSetup = responseMenuSetup.data.data
     console.log(listMenuSetup)
-    axios.get(`/api/balance/table/${tableNo}`)
+    axios
+      .get(`/api/balance/table/${tableNo}`)
       .then((response) => {
-        console.log('initLoadOrder:', response)
+        console.log("initLoadOrder:", response)
         if (response.status === 200) {
           const dataList = response.data.data
-          console.log('dataList:', dataList)
-          setOrderList(dataList.map((item) =>  {
-            const menu = listMenuSetup.find(a=>a.menu_code==item.R_PluCode)
-            return {
-              ...item,
-              image_url: menu.image_url
-            }
-          }))
+          console.log("dataList:", dataList)
+          setOrderList(
+            dataList.map((item) => {
+              const menu = listMenuSetup.find(
+                (a) => a.menu_code == item.R_PluCode
+              )
+              return {
+                ...item,
+                image_url: menu.image_url
+              }
+            })
+          )
         }
+      })
+      .catch((error) => {
+        alert(error)
       })
   }, [])
 
@@ -70,35 +96,44 @@ function MainSalePage() {
   }, [initLoadMenu, initLoadOrder])
 
   return (
-    <motion.div initial={{ opacity: 0 }}
+    <motion.div
+      initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}>
+      exit={{ opacity: 0 }}
+    >
       <AppbarMenu tableNo={tableNo} />
       <Grid container>
         <Grid size={matches ? 8 : 12}>
-          <ProductMenu 
-            ProductList={ProductList} 
-            ProductA={ProductA} 
-            ProductB={ProductB} 
-            ProductC={ProductC} 
-            ProductD={ProductD} 
-            ProductE={ProductE} 
-            ProductF={ProductF} 
-            OrderList={orderList} 
-            initLoadMenu={initLoadMenu} 
-            initLoadOrder={initLoadOrder} />
+          <ProductMenu
+            ProductList={ProductList}
+            ProductA={ProductA}
+            ProductB={ProductB}
+            ProductC={ProductC}
+            ProductD={ProductD}
+            ProductE={ProductE}
+            ProductF={ProductF}
+            OrderList={orderList}
+            initLoadMenu={initLoadMenu}
+            initLoadOrder={initLoadOrder}
+          />
         </Grid>
-        {matches && <Grid size={4} sx={{backgroundColor: "white", border: "2px solid #ddd"}}>
-          <OrderItem 
-            tableNo={tableNo} 
-            OrderList={orderList} 
-            initLoadMenu={initLoadMenu} 
-            initLoadOrder={initLoadOrder} 
-            typePopup={false} />
-        </Grid>}
+        {matches && (
+          <Grid
+            size={4}
+            sx={{ backgroundColor: "white", border: "2px solid #ddd" }}
+          >
+            <OrderItem
+              tableNo={tableNo}
+              OrderList={orderList}
+              initLoadMenu={initLoadMenu}
+              initLoadOrder={initLoadOrder}
+              typePopup={false}
+            />
+          </Grid>
+        )}
       </Grid>
     </motion.div>
   )
 }
 
-export default MainSalePage;
+export default MainSalePage
