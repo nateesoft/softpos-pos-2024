@@ -1,9 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Grid from '@mui/material/Grid2'
 import { useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { motion } from 'framer-motion'
 import useMediaQuery from '@mui/material/useMediaQuery';
+import axios from "axios"
 
 import OrderItem from './OrderItem'
 import PaymentMethod from './PaymentMethod'
@@ -13,6 +14,7 @@ import PrintIcon from '@mui/icons-material/Print'
 import CloseIcon from '@mui/icons-material/Close'
 
 import ReceiptToPrint from './ReceiptToPrint'
+import { POSContext } from "../../AppContext";
 
 const modalStyle = {
   position: "absolute",
@@ -26,9 +28,14 @@ const modalStyle = {
 }
 
 function PaymentPage() {
+  const { appData } = useContext(POSContext)
+  const { tableNo } = appData.tableInfo
+  console.log('PaymentPage:', tableNo)
+
   const matches = useMediaQuery('(min-width:1024px)');
 
   const [open, setOpen] = useState(false)
+  const [orderList, setOrderList] = useState([])
   const navigate = useNavigate();
 
   const contentRef = useRef(null);
@@ -38,13 +45,31 @@ function PaymentPage() {
     navigate("/floorplan");
   }
 
+  const initLoadOrder = useCallback(() => {
+    axios
+      .get(`/api/balance/table/${tableNo}`)
+      .then((response) => {
+        if (response.status === 200) {
+          const dataList = response.data.data
+          setOrderList(dataList)
+        }
+      })
+      .catch((error) => {
+        alert(error)
+      })
+  }, [tableNo])
+
+  useEffect(()=> {
+    initLoadOrder()
+  }, [initLoadOrder])
+
   return (
     <motion.div initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}>
       <Grid container spacing={2}>
         {matches && <Grid size={6}>
-          <OrderItem />
+          <OrderItem tableNo={tableNo} orderList={orderList} />
           <PaymentMethod />
         </Grid>}
         <Grid size={matches ? 6: 12}>

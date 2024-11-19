@@ -12,43 +12,29 @@ function ccyFormat(num) {
   return `${num.toFixed(2)}`;
 }
 
-function priceRow(qty, unit) {
-  return qty * unit;
-}
-
-function createRow(desc, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
-}
-
 function subtotal(items) {
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
+  return items.map(({ R_Price }) => R_Price).reduce((sum, i) => sum + i, 0);
 }
 
-const rows = [
-  createRow('Food 01', 100, 1.15),
-  createRow('Food 02', 10, 45.99),
-  createRow('Food 03', 2, 17.99),
-];
 
-const invoiceSubtotal = subtotal(rows);
-const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+const OrderItem = ({ tableNo, orderList }) => {
+  const invoiceSubtotal = subtotal(orderList);
+  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
+  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
-const OrderItem = () => {
   return (
     <Paper elevation={3} sx={{padding: "10px", margin: "10px"}}>
       <Box sx={{ padding: "10px", borderRadius: "5px" }}>
-        <Button variant='text' sx={{fontWeight: "bold", fontSize: "18px"}}>Table No: R-3</Button>
+        <Button variant='text' sx={{fontWeight: "bold", fontSize: "18px"}}>Table No: {tableNo}</Button>
       </Box>
       <Table sx={{ minWidth: 300 }} aria-label="spanning table">
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell align="right">{row.qty}</TableCell>
-              <TableCell align="right">{row.unit}</TableCell>
-              <TableCell align="right">{ccyFormat(row.price)}</TableCell>
+          {orderList && orderList.map((order) => (
+            <TableRow key={order.R_Index}>
+              <TableCell>{order.R_PName}</TableCell>
+              <TableCell align="right">{order.R_Quan}</TableCell>
+              <TableCell align="right">{order.R_Unit}</TableCell>
+              <TableCell align="right">{ccyFormat(order.R_Price)}</TableCell>
             </TableRow>
           ))}
           <TableRow>

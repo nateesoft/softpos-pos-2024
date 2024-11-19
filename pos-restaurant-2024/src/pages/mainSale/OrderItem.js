@@ -4,7 +4,9 @@ import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
 import TabPanel from "@mui/lab/TabPanel"
 import { useNavigate } from "react-router-dom"
+import Moment from 'react-moment'
 import NoFoodIcon from "@mui/icons-material/NoFood"
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import {
   Alert,
   Box,
@@ -25,7 +27,6 @@ import VoidIcon from "@mui/icons-material/NotInterested"
 import ConfirmIcon from "@mui/icons-material/Check"
 import axios from "axios"
 import ArrowBack from "@mui/icons-material/TableBar"
-import MoneyIcon from "@mui/icons-material/Money"
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 import PrintIcon from "@mui/icons-material/Print"
 import PrintCheckboxIcon from "@mui/icons-material/CheckBox"
@@ -350,6 +351,9 @@ const TotalBill = ({ orderList }) => {
 const OrderItem = ({
   tableNo,
   OrderList,
+  OrderEList,
+  OrderTList,
+  OrderDList,
   initLoadMenu,
   initLoadOrder,
   typePopup = false
@@ -415,8 +419,7 @@ const OrderItem = ({
           value="1"
           sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}
         >
-          {OrderList &&
-            OrderList.map((product) => {
+          {OrderEList && OrderEList.map((product) => {
               return (
                 <ProductCard
                   product={product}
@@ -424,7 +427,7 @@ const OrderItem = ({
                 />
               )
             })}
-          {OrderList.length === 0 && (
+          {OrderEList && OrderEList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
                 <NoFoodIcon />
@@ -439,23 +442,47 @@ const OrderItem = ({
           value="2"
           sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}
         >
-          <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
-            <Box>
-              <NoFoodIcon />
+          {OrderTList && OrderTList.map((product) => {
+              return (
+                <ProductCard
+                  product={product}
+                  openModal={() => handleOpenMenu(product)}
+                />
+              )
+            })}
+          {OrderTList && OrderTList.length === 0 && (
+            <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
+              <Box>
+                <NoFoodIcon />
+              </Box>
+              <Typography variant="p">
+                ไม่พบรายการอาหารที่สั่ง Take Away
+              </Typography>
             </Box>
-            <Typography variant="p">ไม่พบรายการอาหาร Take Away</Typography>
-          </Box>
+          )}
         </TabPanel>
         <TabPanel
           value="3"
           sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}
         >
-          <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
-            <Box>
-              <NoFoodIcon />
+          {OrderDList && OrderDList.map((product) => {
+              return (
+                <ProductCard
+                  product={product}
+                  openModal={() => handleOpenMenu(product)}
+                />
+              )
+            })}
+          {OrderDList && OrderDList.length === 0 && (
+            <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
+              <Box>
+                <NoFoodIcon />
+              </Box>
+              <Typography variant="p">
+                ไม่พบรายการอาหารที่สั่ง Delivery
+              </Typography>
             </Box>
-            <Typography variant="p">ไม่พบรายการอาหาร Delevery</Typography>
-          </Box>
+          )}
         </TabPanel>
       </TabContext>
       <Grid container spacing={2} margin={3} justifyContent="center">
@@ -499,7 +526,7 @@ const OrderItem = ({
           variant="contained"
           color="success"
           onClick={handleClick}
-          endIcon={<MoneyIcon />}
+          endIcon={<PointOfSaleIcon />}
         >
           ชำระเงิน
         </Button>
@@ -530,26 +557,66 @@ const OrderItem = ({
         <Box sx={{ ...modalStyle, width: 450 }} id="paperPrint">
           <Paper elevation={3} sx={{ padding: "10px" }}>
             <div align="center">*** รายการส่งครัว ***</div>
-            <div>Table No: 101</div>
-            <div>Date: 11/11/2024 12:51:03</div>
+            <div>Table No: {tableNo}</div>
+            <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
             <hr />
-            <div>Dine in</div>
-            <hr />
-
-            <table width="100%">
-              {OrderList &&
-                OrderList.map((product) => {
-                  console.log("MyOrder=>", product)
-                  return (
-                    <tr>
-                      <td>{product.R_PName}</td>
-                      <td>x</td>
-                      <td>{product.R_Quan}</td>
-                    </tr>
-                  )
-                })}
-            </table>
-            <hr />
+            {OrderEList && OrderEList.length>0 && 
+              (<div>
+                <div>Dine in</div>
+                <hr />
+                <table width="100%">
+                  {OrderEList.map((product) => {
+                      return (
+                        <tr>
+                          <di>{product.R_ETD}</di>
+                          <td>{product.R_PName}</td>
+                          <td>x</td>
+                          <td>{product.R_Quan}</td>
+                        </tr>
+                      )
+                    })}
+                </table>
+                <hr />
+              </div>)
+            }
+            {OrderTList && OrderTList.length>0 && 
+              (<div>
+                <div>Take Away</div>
+                <hr />
+                <table width="100%">
+                  {OrderTList.map((product) => {
+                      return (
+                        <tr>
+                          <di>{product.R_ETD}</di>
+                          <td>{product.R_PName}</td>
+                          <td>x</td>
+                          <td>{product.R_Quan}</td>
+                        </tr>
+                      )
+                    })}
+                </table>
+                <hr />
+              </div>)
+            }
+            {OrderDList && OrderDList.length>0 && 
+              (<div>
+                <div>Deliver</div>
+                <hr />
+                <table width="100%">
+                  {OrderDList.map((product) => {
+                      return (
+                        <tr>
+                          <di>{product.R_ETD}</di>
+                          <td>{product.R_PName}</td>
+                          <td>x</td>
+                          <td>{product.R_Quan}</td>
+                        </tr>
+                      )
+                    })}
+                </table>
+                <hr />
+              </div>)
+            }
             <Box display="flex" justifyContent="center">
               <Button
                 variant="outlined"

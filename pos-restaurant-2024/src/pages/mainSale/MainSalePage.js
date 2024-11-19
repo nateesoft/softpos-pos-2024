@@ -24,6 +24,9 @@ function MainSalePage() {
   const [ProductF, setProductF] = useState([])
 
   const [orderList, setOrderList] = useState([])
+  const [orderEList, setOrderEList] = useState([])
+  const [orderTList, setOrderTList] = useState([])
+  const [orderDList, setOrderDList] = useState([])
 
   const initLoadMenu = useCallback(() => {
     axios
@@ -71,9 +74,44 @@ function MainSalePage() {
         console.log("initLoadOrder:", response)
         if (response.status === 200) {
           const dataList = response.data.data
-          console.log("dataList:", dataList)
+          const dataEList = dataList.filter(item => item.R_ETD==="E")
+          const dataTList = dataList.filter(item => item.R_ETD==="T")
+          const dataDList = dataList.filter(item => item.R_ETD==="D")
           setOrderList(
             dataList.map((item) => {
+              const menu = listMenuSetup.find(
+                (a) => a.menu_code === item.R_PluCode
+              )
+              return {
+                ...item,
+                image_url: menu.image_url
+              }
+            })
+          )
+          setOrderEList(
+            dataEList.map((item) => {
+              const menu = listMenuSetup.find(
+                (a) => a.menu_code === item.R_PluCode
+              )
+              return {
+                ...item,
+                image_url: menu.image_url
+              }
+            })
+          )
+          setOrderTList(
+            dataTList.map((item) => {
+              const menu = listMenuSetup.find(
+                (a) => a.menu_code === item.R_PluCode
+              )
+              return {
+                ...item,
+                image_url: menu.image_url
+              }
+            })
+          )
+          setOrderDList(
+            dataDList.map((item) => {
               const menu = listMenuSetup.find(
                 (a) => a.menu_code === item.R_PluCode
               )
@@ -125,6 +163,9 @@ function MainSalePage() {
             <OrderItem
               tableNo={tableNo}
               OrderList={orderList}
+              OrderEList={orderEList}
+              OrderTList={orderTList}
+              OrderDList={orderDList}
               initLoadMenu={initLoadMenu}
               initLoadOrder={initLoadOrder}
               typePopup={false}
