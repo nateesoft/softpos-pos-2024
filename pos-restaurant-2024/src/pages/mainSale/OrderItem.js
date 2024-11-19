@@ -400,11 +400,12 @@ const OrderItem = ({
           <Typography
             variant="p"
             sx={{
-              border: "2px solid salmon",
+              border: "1px solid salmon",
               fontWeight: "bold",
-              color: "gray",
-              borderRadius: "50%",
-              padding: "12px"
+              color: "snow",
+              borderRadius: "15px",
+              padding: "12px",
+              background: "chocolate"
             }}
           >
             โต๊ะ {tableNo}
@@ -538,11 +539,12 @@ const OrderItem = ({
             <table width="100%">
               {OrderList &&
                 OrderList.map((product) => {
+                  console.log("MyOrder=>", product)
                   return (
                     <tr>
-                      <td>{product.menu_name}</td>
+                      <td>{product.R_PName}</td>
                       <td>x</td>
-                      <td>{product.qty || 0}</td>
+                      <td>{product.R_Quan}</td>
                     </tr>
                   )
                 })}

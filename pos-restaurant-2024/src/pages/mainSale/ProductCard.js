@@ -30,14 +30,10 @@ const ProductCard = memo(
     //         })
     // }
     const addOrder = async (qty = 1) => {
-      const responseProduct = await axios.get(
-        `/api/pos-product/${product.menu_code}`
-      )
-      const responseRIndex = await axios.get(
-        `/api/balance/getMaxIndex/${tableInfo.tableNo}`
-      )
+      // const responseProduct = await axios.get(`/api/pos-product/${product.menu_code}`)
+      const responseRIndex = await axios.get(`/api/balance/getMaxIndex/${tableInfo.tableNo}`)
       const R_Index = responseRIndex.data.R_Index
-      const POSProduct = responseProduct.data.data
+      // const POSProduct = responseProduct.data.data
 
       const payload = {
         R_Index: R_Index,

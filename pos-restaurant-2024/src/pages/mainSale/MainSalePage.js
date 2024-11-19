@@ -75,7 +75,7 @@ function MainSalePage() {
           setOrderList(
             dataList.map((item) => {
               const menu = listMenuSetup.find(
-                (a) => a.menu_code == item.R_PluCode
+                (a) => a.menu_code === item.R_PluCode
               )
               return {
                 ...item,
@@ -88,7 +88,7 @@ function MainSalePage() {
       .catch((error) => {
         alert(error)
       })
-  }, [])
+  }, [tableNo])
 
   useEffect(() => {
     initLoadMenu()
