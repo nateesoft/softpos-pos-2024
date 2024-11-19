@@ -87,12 +87,12 @@ function PaymentForm({ open, close, orderList }) {
     }
 
     const handleAdd = (addMoney) => {
-        if (cashEnable) {
+        if (!cashEnable) {
             setCashAmount(cash => cash + addMoney)
         }
     }
     const handleConcat = (addMoney) => {
-        if (cashEnable) {
+        if (!cashEnable) {
             setCashAmount(cash => parseFloat(""+cash + addMoney))
         }
     }
@@ -205,7 +205,7 @@ function PaymentForm({ open, close, orderList }) {
                                     label="เงินทอน"
                                     type="number"
                                     value={tonAmount}
-                                    inputProps={{ min: 0, style: { textAlign: "right" } }}
+                                    inputProps={{ min: 0, style: { textAlign: "right", fontSize: "48px", fontWeight: "bold" } }}
                                     fullWidth
                                     disabled />
                             </Box>

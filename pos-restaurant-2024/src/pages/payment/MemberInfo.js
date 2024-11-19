@@ -16,7 +16,7 @@ const MemberInfo = () => {
                     <Typography variant='p' sx={{ color: "white", background: "purple", padding: "10px" }}>
                         ( ข้อมูลส่วนตัว )
                     </Typography>
-                    <Box padding={1}>
+                    <Box padding={1} sx={{borderBlock: "2px solid white"}}>
                         <Typography style={{ color: "white" }}>คุณสมชาย เก่งการเงิน</Typography>
                         <Typography style={{ color: "white" }}>วันเกิด 18/02/2000</Typography>
                         <Grid container spacing={1}>
@@ -29,7 +29,7 @@ const MemberInfo = () => {
                     <Typography variant='p' sx={{ color: "white", background: "green", padding: "10px" }}>
                         <u>คะแนนสะสม</u>
                     </Typography>
-                    <Box padding={1}>
+                    <Box padding={1} sx={{borderBlock: "2px solid yellow"}}>
                         <Typography style={{ color: "white" }}>วันที่สมัคร: 01/01/2016</Typography>
                         <Typography style={{ color: "white" }}>คะแนนสะสม 100 คะแนน</Typography>
                         <Typography style={{ color: "white" }}>ยอดซื้อสะสม 1,000 บาท</Typography>

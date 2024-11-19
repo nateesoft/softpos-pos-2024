@@ -33,23 +33,27 @@ const OrderItem = ({ tableNo, orderList }) => {
               <TableCell>{order.R_Index}</TableCell>
               <TableCell>{order.R_PName}</TableCell>
               <TableCell align="right">{order.R_Quan}</TableCell>
-              <TableCell align="right">{order.R_Unit}</TableCell>
               <TableCell align="right">{ccyFormat(order.R_Price)}</TableCell>
+              <TableCell align="right">{ccyFormat(order.R_Total)}</TableCell>
+              <TableCell align="right">{order.R_ETD}</TableCell>
             </TableRow>
           ))}
           <TableRow sx={{backgroundColor: "#aaa"}}>
             <TableCell rowSpan={4} />
             <TableCell colSpan={3} sx={{fontSize: "16px", fontWeight: "bold", color: "#555"}}>SUBTOTAL</TableCell>
             <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
+            <TableCell />
           </TableRow>
           <TableRow sx={{backgroundColor: "#bbb"}}>
             <TableCell sx={{fontSize: "16px", fontWeight: "bold", color: "#555"}}>VAT</TableCell>
             <TableCell colSpan={2} align="right">{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
             <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
+            <TableCell />
           </TableRow>
           <TableRow sx={{backgroundColor: "#ccc"}}>
             <TableCell colSpan={3} sx={{fontSize: "22px", fontWeight: "bold", color: "#555"}}>TOTAL</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+            <TableCell align="right" sx={{fontWeight: "bold", fontSize: "22px"}}>{ccyFormat(invoiceTotal)}</TableCell>
+            <TableCell />
           </TableRow>
         </TableBody>
       </Table>
