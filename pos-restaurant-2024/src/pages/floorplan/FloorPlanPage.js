@@ -133,21 +133,8 @@ function FloorPlanPage() {
 
   const handleSelect = (floor) => {
     setSelectFloor(floor)
-    initialLoadFloorPlan(floor)
+    loadFloorPlan(floor)
   }
-
-  const initialLoadFloorPlan = useCallback(
-    (floor) => {
-      console.log("initialLoadFloorPlan:", floor)
-      const flow = JSON.parse(localStorage.getItem(floor))
-      if (flow) {
-        setNodes(flow.nodes || [])
-      } else {
-        setNodes([])
-      }
-    },
-    [setNodes]
-  )
 
   const loadFloorPlan = useCallback((floor) => {
     axios.get(`/api/floorplan-template/${floor}`)
@@ -161,10 +148,9 @@ function FloorPlanPage() {
         }
       })
       .catch(err => alert(err))
-  }, [])
+  }, [setNodes])
 
   useEffect(() => {
-    // initialLoadFloorPlan(selectFloor)
     loadFloorPlan(selectFloor)
   }, [loadFloorPlan, selectFloor])
 
@@ -257,6 +243,7 @@ function FloorPlanPage() {
             onNodesChange={onNodesChange}
             onNodeClick={onNodeClick}
             nodeTypes={nodeTypes}
+            nodesDraggable={false}
             fitView
           >
             <Controls />

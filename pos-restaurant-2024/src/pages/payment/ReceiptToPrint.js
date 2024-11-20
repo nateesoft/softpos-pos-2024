@@ -7,8 +7,6 @@ import QrCodeGenerator from './QRCodePayment'
 export default class ReceiptToPrint extends Component {
   constructor(props) {
     super(props)
-
-    console.log('ReciptToPrint:', props)
   }
 
   render() {

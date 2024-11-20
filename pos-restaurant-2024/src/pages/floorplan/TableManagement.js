@@ -127,8 +127,14 @@ const TableManagement = () => {
 
   const onSave = () => {
     if (reactFlowInstance) {
-      const flow = reactFlowInstance.toObject()
-      localStorage.setItem(selectFloor, JSON.stringify(flow))
+      axios
+        .patch(`/api/floorplan-template/${selectFloor}`, { template: JSON.stringify(reactFlowInstance.toObject()) })
+        .then((response) => {
+          navigate("/floorplan")
+        })
+        .catch((error) => {
+          alert(error)
+        })
     }
   }
 
@@ -143,7 +149,7 @@ const TableManagement = () => {
 
   const handleSelect = (floor) => {
     setSelectFloor(floor)
-    initialLoadFloorPlan(floor)
+    loadFloorPlan(floor)
   }
 
   const onTableInfoChange = (props) => {
@@ -193,22 +199,23 @@ const TableManagement = () => {
     }
   }
 
-  const initialLoadFloorPlan = useCallback(
-    (floor) => {
-      console.log("initialLoadFloorPlan:", floor)
-      const flow = JSON.parse(localStorage.getItem(floor))
-      if (flow) {
-        setNodes(flow.nodes || [])
-      } else {
-        setNodes([])
-      }
-    },
-    [setNodes]
-  )
+  const loadFloorPlan = useCallback((floor) => {
+    axios.get(`/api/floorplan-template/${floor}`)
+      .then(response => {
+        const flow = response.data.data.template
+        console.log('loadFloorPlan:', flow.template)
+        if (flow) {
+          setNodes(flow.nodes || [])
+        } else {
+          setNodes([])
+        }
+      })
+      .catch(err => alert(err))
+  }, [setNodes])
 
   useEffect(() => {
-    initialLoadFloorPlan(selectFloor)
-  }, [initialLoadFloorPlan, selectFloor])
+    loadFloorPlan(selectFloor)
+  }, [loadFloorPlan, selectFloor])
 
   return (
     <motion.div

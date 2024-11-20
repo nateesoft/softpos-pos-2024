@@ -20,4 +20,22 @@ router.get('/:id', function (req, res) {
   })
 });
 
+router.patch('/:id', function (req, res, next) {
+  const id = req.params.id
+  const { template } = req.body
+
+  pool.query(
+    `UPDATE floorplan_template set template=? WHERE id = ?`,
+    [template, id],
+    (err, results) => {
+      if (err) {
+        console.log('err:', err)
+        throw err
+      }
+
+      res.status(200).json({ status: "update success" })
+    }
+  )
+})
+
 module.exports = router;
