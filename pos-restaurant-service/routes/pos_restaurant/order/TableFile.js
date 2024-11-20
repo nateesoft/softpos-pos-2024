@@ -25,7 +25,7 @@ router.put('/:id', function (req, res, next) {
     StkCode1, StkCode2, TDesk } = req.body
 
   pool.query(
-    `UPDATE MyRestaurantJefferSakon.tablefile 
+    `UPDATE tablefile 
       SET Tcode = ?,SoneCode = ?,TCustomer = ?,TItem = ?,TAmount = ?,TOnAct = ?,Service = ?,ServiceAmt = ?,
       EmpDiscAmt = ?,FastDiscAmt = ?,TrainDiscAmt = ?,MemDiscAmt = ?,SubDiscAmt = ?,DiscBath = ?,ProDiscAmt = ?,
       SpaDiscAmt = ?,CuponDiscAmt = ?,ItemDiscAmt = ?,MemCurAmt = ?,Food = ?,Drink = ?,Product = ?,NetTotal = ?,

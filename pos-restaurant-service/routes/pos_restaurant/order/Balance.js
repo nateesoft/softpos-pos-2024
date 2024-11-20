@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const pool = require('../../../config/database/MySqlConnect')
+const { Unicode2ASCII, ASCII2Unicode } = require('../../../utils/StringUtil')
 
 router.get('/', function (req, res) {
   const sql = `select * from balance`
@@ -19,8 +20,12 @@ router.get('/table/:tableNo', function (req, res) {
   pool.query(sql, (err, results) => {
     if (err) throw err
 
+    const newResult = results.map(data => {
+      return {...data, R_PName: ASCII2Unicode(data.R_PName)}
+    })
+
     const response = {
-      data: results
+      data: newResult
     }
     res.status(200).json(response)
   })
@@ -64,14 +69,14 @@ router.post('/', function (req, res, next) {
     Macno, Cashier, R_Emp, R_ETD } = req.body
 
   pool.query(
-    `INSERT INTO MyRestaurantJefferSakon.balance 
+    `INSERT INTO balance 
     (R_Index,R_Table,R_PluCode,R_PName,R_Quan,R_Price,R_Total,R_PrBath,R_PrAmt,R_DiscBath,R_PrCuQuan,R_PrCuAmt,
     R_Redule,R_Serve,R_PrintOK,R_KicOK,StkCode,PosStk,R_Order,R_PItemNo,R_PKicQue,R_MemSum,
     R_PrVcAmt,R_PrVcAdj,R_VoidQuan,R_MoveFlag,R_MovePrint,R_Pause,R_SPIndex,R_Earn,R_SeparateFrom, 
     R_Date, R_Time, macno, Cashier, R_Emp, R_ETD) 
     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, 
     curdate(), SUBSTR(now(), 12), ?, ?, ?, ?)`,
-    [R_Index, R_Table, R_PluCode, R_PName, R_Quan, R_Price, R_Total, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuQuan, R_PrCuAmt,
+    [R_Index, R_Table, R_PluCode, Unicode2ASCII(R_PName), R_Quan, R_Price, R_Total, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuQuan, R_PrCuAmt,
       R_Redule, R_Serve, R_PrintOK, R_KicOK, StkCode, PosStk, R_Order, R_PItemNo, R_PKicQue, R_MemSum, R_PrVcAmt,
       R_PrVcAdj, R_VoidQuan, R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_Earn, R_SeparateFrom, 
       Macno, Cashier, R_Emp, R_ETD],
@@ -89,7 +94,7 @@ router.put('/:id', function (req, res, next) {
     R_PrVcAdj, R_VoidQuan, R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_Earn, R_SeparateFrom } = req.body
 
   pool.query(
-    `UPDATE MyRestaurantJefferSakon.balance 
+    `UPDATE balance 
       SET R_Table = ?,R_PluCode = ?,R_Quan = ?,R_Price = ?,R_Total = ?,R_PrBath = ?,R_PrAmt = ?,R_DiscBath = ?,
       R_PrCuQuan = ?,R_PrCuAmt = ?,R_Redule = ?,R_Serve = ?,R_PrintOK = ?,R_KicOK = ?,StkCode = ?,PosStk = ?,
       R_Order = ?,R_PItemNo = ?,R_PKicQue = ?,R_MemSum = ?,R_PrVcAmt = ?,R_PrVcAdj = ?,R_VoidQuan = ?,

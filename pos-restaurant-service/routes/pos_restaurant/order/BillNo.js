@@ -24,7 +24,7 @@ router.post('/', function (req, res, next) {
     B_DetailProduct } = req.body
 
   pool.query(
-    `INSERT INTO MyRestaurantJefferSakon.billno (B_Refno,B_CuponDiscAmt,B_MacNo,B_Cashier,
+    `INSERT INTO billno (B_Refno,B_CuponDiscAmt,B_MacNo,B_Cashier,
     B_Cust,B_ETD,B_Total,B_Food,B_Drink,B_Product,B_Service,B_ServiceAmt,B_ItemDiscAmt,B_FastDiscAmt,
     B_EmpDiscAmt,B_TrainDiscAmt,B_MemDiscAmt,B_SubDiscBath,B_ProDiscAmt,B_SpaDiscAmt,B_AdjAmt,B_PreDisAmt,
     B_NetTotal,B_NetFood,B_NetDrink,B_NetProduct,B_NetVat,B_NetNonVat,B_Vat,B_PayAmt,B_Cash,B_GiftVoucher,
@@ -59,7 +59,7 @@ router.put('/:id', function (req, res, next) {
     B_VoucherOver, B_NetDiff, B_SumSetDiscAmt, B_DetailFood, B_DetailDrink, B_DetailProduct } = req.body
 
   pool.query(
-    `UPDATE MyRestaurantJefferSakon.billno 
+    `UPDATE billno 
         SET B_Refno = ?,B_CuponDiscAmt = ?,B_MacNo = ?,B_Cashier = ?,B_Cust = ?,B_ETD = ?,B_Total = ?,
         B_Food = ?,B_Drink = ?,B_Product = ?,B_Service = ?,B_ServiceAmt = ?,B_ItemDiscAmt = ?,B_FastDiscAmt = ?,
         B_EmpDiscAmt = ?,B_TrainDiscAmt = ?,B_MemDiscAmt = ?,B_SubDiscBath = ?,B_ProDiscAmt = ?,B_SpaDiscAmt = ?,

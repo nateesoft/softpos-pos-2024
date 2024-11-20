@@ -19,7 +19,7 @@ router.post('/', function (req, res, next) {
     R_SPIndex, R_SetPrice, R_SetDiscAmt, R_Return, R_Earn } = req.body
 
   pool.query(
-    `INSERT INTO MyRestaurantJefferSakon.t_sale (R_Index,R_Refno,R_Date,R_Time,MacNo,Cashier,
+    `INSERT INTO t_sale (R_Index,R_Refno,R_Date,R_Time,MacNo,Cashier,
        R_Emp,R_PluCode,R_Redule,R_PreDisAmt,R_Refund,R_Void,StkCode,PosStk,R_ServiceAmt,R_PItemNo,
        R_PKicQue,R_PrVcAmt,R_PrVcAdj,R_MoveFlag,R_Pause,R_SPIndex,R_SetPrice,R_SetDiscAmt,R_Return,R_Earn) 
       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
@@ -40,7 +40,7 @@ router.put('/:id', function (req, res, next) {
     R_Pause, R_SPIndex, R_SetPrice, R_SetDiscAmt, R_Return, R_Earn } = req.body
 
   pool.query(
-    `UPDATE MyRestaurantJefferSakon.t_sale 
+    `UPDATE t_sale 
         SET R_Index = ?,R_Refno = ?,R_Date = ?,R_Time = ?,MacNo = ?,Cashier = ?,R_Emp = ?,R_PluCode = ?,
         R_Redule = ?,R_PreDisAmt = ?,R_Refund = ?,R_VoStkCode = ?,PosStk = ?,R_ServiceAmt = ?,R_PItemNo = ?,
         R_PKicQue = ?,R_PrVcAmt = ?,R_PrVcAdj = ?,R_MoveFlag = ?,R_Pause = ?,R_SPIndex = ?,R_SetPrice = ?,
