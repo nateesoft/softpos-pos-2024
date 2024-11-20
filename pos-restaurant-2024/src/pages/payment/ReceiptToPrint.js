@@ -38,9 +38,9 @@ export default class ReceiptToPrint extends Component {
             </tr>
             {this.props.orderList && this.props.orderList.map((item) => (
               <tr>
-                <td style={{ width: "50px" }}>{item.R_ETD}</td>
+                <td>{item.R_ETD}</td>
                 <td>{item.R_PName}</td>
-                <td align="right">{item.R_Quan}</td>
+                <td align="right">X {item.R_Quan}</td>
                 <td align="right">{item.R_Price}</td>
               </tr>
             ))}

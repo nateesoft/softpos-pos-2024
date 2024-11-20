@@ -50,7 +50,6 @@ const ProductCard = memo(
         R_PrCuAmt: 0,
         R_Redule: 0,
         R_Serve: "",
-        R_PrintOK: "",
         R_KicOK: "",
         StkCode: "",
         PosStk: "",
@@ -63,14 +62,19 @@ const ProductCard = memo(
         R_VoidQuan: 0,
         R_MoveFlag: "",
         R_MovePrint: "",
-        R_Pause: "",
         R_SPIndex: "",
         R_Earn: "",
         R_SeparateFrom: "",
         Macno: macno,
         Cashier: userLogin,
         R_Emp: empCode,
-        R_ETD: "E"
+        R_ETD: "E",
+        R_PrintOK: "Y",
+        R_Pause: "",
+        TranType: "",
+        R_KicPrint: "",
+        R_Void: "",
+        R_Kic: ""
       }
       axios
         .post(`/api/balance`, payload)
