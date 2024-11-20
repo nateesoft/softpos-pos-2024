@@ -30,8 +30,8 @@ export default function MenuSet({ product }) {
     }, [loadOptionalList])
 
     return (
-        <ImageList sx={{ width: 500 }}>
-            <ImageListItem key="Subheader" cols={3} rowHeight={180}>
+        <ImageList sx={{ width: 750, height: 450 }}>
+            <ImageListItem key="Subheader" cols={4} rowHeight={100}>
                 <ListSubheader sx={{ backgroundColor: "#123456", color: "white" }}>{product.menu_name} ราคา {product.menu_price} (เลือกได้สูงสุด {product.max_count_set} รายการ)</ListSubheader>
             </ImageListItem>
             {optionalList && optionalList.map((item) => (
@@ -43,7 +43,7 @@ export default function MenuSet({ product }) {
                     <ImageListItemBar
                         title={item.menu_name}
                         subtitle={<Typography sx={{ fontSize: "12px", color: "yellow" }}>ราคา : {item.free === "N" ? "ไม่พรี" : "ฟรี"}</Typography>}
-                        actionIcon={<Checkbox {...label} color='warning' defaultChecked={item.auto_select==="Y"} />
+                        actionIcon={<Checkbox {...label} sx={{border: "1px solid white"}} color='warning' defaultChecked={item.auto_select === "Y"} />
                         }
                     />
                 </ImageListItem>
