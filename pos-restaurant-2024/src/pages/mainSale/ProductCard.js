@@ -8,7 +8,7 @@ import { Box, Button, Badge, Typography } from "@mui/material"
 import { POSContext } from "../../AppContext"
 
 const ProductCard = memo(
-  ({ id, product, openModal, initLoadMenu, initLoadOrder }) => {
+  ({ id, product, openModal, initLoadMenu, initLoadOrder, setShowMenuSet }) => {
     const { appData } = useContext(POSContext)
     const { tableInfo, empCode, macno, userLogin } = appData
     console.log("ProductCard:", tableInfo)
@@ -114,7 +114,7 @@ const ProductCard = memo(
               alt=""
               width={160}
               style={{ borderRadius: "8px 8px 0px 0px" }}
-              onClick={openModal}
+              onClick={product.show_list_menu === "N" ? openModal: ()=>setShowMenuSet(true)}
             />
             <br />
           </Box>
@@ -161,6 +161,7 @@ const ProductCard = memo(
                   marginTop: "5px"
                 }}
                 startIcon={<SetMealIcon />}
+                onClick={()=>setShowMenuSet(true)}
               >
                 Menu Set
               </Button>

@@ -1,8 +1,10 @@
 import React, { forwardRef, useState, useCallback } from "react";
-import { Box, Tabs, Tab, Badge, Modal, Typography, Fab, Slide, Dialog } from "@mui/material";
+import { Box, Tabs, Tab, Badge, Modal, Typography, Fab, Slide, Dialog, Button } from "@mui/material";
 import MenuBook from '@mui/icons-material/ShoppingCartOutlined';
 import { useTranslation } from "react-i18next"
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
 import NoFoodIcon from '@mui/icons-material/NoFood';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Grid from '@mui/material/Grid2'
@@ -10,6 +12,7 @@ import Grid from '@mui/material/Grid2'
 import OrderItem from './OrderItem'
 import ProductCard from "./ProductCard";
 import ProductDetailCard from "./ProductDetailCard";
+import MenuSet from "./MenuSet";
 
 const modalStyle = {
     position: "absolute",
@@ -67,7 +70,13 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="left" ref={ref} {...props} />;
 });
 
-const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, ProductE, ProductF, OrderList, initLoadMenu, initLoadOrder }) => {
+const ProductMenu = ({ 
+    tableNo,
+    ProductList, 
+    ProductA, ProductB, ProductC, ProductD, ProductE, ProductF, 
+    OrderList, OrderEList, OrderTList, OrderDList,
+    initLoadMenu, initLoadOrder
+ }) => {
     const { t } = useTranslation("global")
     const matches = useMediaQuery('(min-width:1024px)');
 
@@ -75,6 +84,7 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
     const [open, setOpen] = useState(false)
     const [productInfo, setProductInfo] = useState({})
     const [showMenu, setShowMenu] = useState(false)
+    const [showMenuSet, setShowMenuSet] = useState(false)
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -113,6 +123,7 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
                                 openModal={() => handleOpenMenu(product)}
                                 initLoadOrder={initLoadOrder}
                                 initLoadMenu={initLoadMenu}
+                                setShowMenuSet={setShowMenuSet}
                             />
                         </Grid>
                     )}
@@ -126,6 +137,7 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
+                        setShowMenuSet={setShowMenuSet}
                     />
                 )}
                 {ProductA.length === 0 && <NotfoundMenu />}
@@ -138,6 +150,7 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
+                        setShowMenuSet={setShowMenuSet}
                     />
                 )}
                 {ProductB.length === 0 && <NotfoundMenu />}
@@ -150,6 +163,7 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
+                        setShowMenuSet={setShowMenuSet}
                     />
                 )}
                 {ProductC.length === 0 && <NotfoundMenu />}
@@ -162,6 +176,7 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
+                        setShowMenuSet={setShowMenuSet}
                     />
                 )}
                 {ProductD.length === 0 && <NotfoundMenu />}
@@ -174,6 +189,7 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
+                        setShowMenuSet={setShowMenuSet}
                     />
                 )}
                 {ProductE.length === 0 && <NotfoundMenu />}
@@ -186,6 +202,7 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
+                        setShowMenuSet={setShowMenuSet}
                     />
                 )}
                 {ProductF.length === 0 && <NotfoundMenu />}
@@ -212,8 +229,27 @@ const ProductMenu = ({ ProductList, ProductA, ProductB, ProductC, ProductD, Prod
                 onClose={() => setShowMenu(false)}
                 aria-describedby="alert-dialog-slide-description"
             >
-                <OrderItem OrderList={OrderList} initLoadOrder={initLoadOrder} typePopup={true} />
+                <OrderItem 
+                    tableNo={tableNo}
+                    OrderList={OrderList} 
+                    OrderEList={OrderEList}
+                    OrderTList={OrderTList}
+                    OrderDList={OrderDList}
+                    initLoadMenu={initLoadMenu}
+                    initLoadOrder={initLoadOrder} 
+                    typePopup={true} />
             </Dialog>
+            <Modal open={showMenuSet} onClose={() => setShowMenuSet(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box sx={{ ...modalStyle }}>
+                    <MenuSet />
+                    <Box margin={1} padding={1} display="flex" justifyContent="space-between">
+                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={()=>setShowMenuSet(false)}>Cancel</Button>
+                        <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={()=>setShowMenuSet(false)}>Confirm</Button>
+                    </Box>
+                </Box>
+            </Modal>
         </Box>
     )
 }

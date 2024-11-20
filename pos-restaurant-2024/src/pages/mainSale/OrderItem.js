@@ -365,7 +365,7 @@ const OrderItem = ({
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
 
-  const styleMain = { width: "400px", typography: "body1", marginTop: "8vh" }
+  const styleMain = { typography: "body1", marginTop: "8vh" }
   const stylePopup = { width: "400px", height: "85vh", typography: "body1" }
 
   const handleChange = (event, newValue) => {

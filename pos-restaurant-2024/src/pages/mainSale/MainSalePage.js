@@ -85,9 +85,8 @@ function MainSalePage() {
           const dataDList = dataList.filter(item => item.R_ETD==="D")
           setOrderList(
             dataList.map((item) => {
-              const menu = listMenuSetup.find(
-                (a) => a.menu_code === item.R_PluCode
-              )
+              const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
+              if(!menu) return item
               return {
                 ...item,
                 image_url: menu.image_url
@@ -96,9 +95,8 @@ function MainSalePage() {
           )
           setOrderEList(
             dataEList.map((item) => {
-              const menu = listMenuSetup.find(
-                (a) => a.menu_code === item.R_PluCode
-              )
+              const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
+              if(!menu) return item
               return {
                 ...item,
                 image_url: menu.image_url
@@ -107,9 +105,8 @@ function MainSalePage() {
           )
           setOrderTList(
             dataTList.map((item) => {
-              const menu = listMenuSetup.find(
-                (a) => a.menu_code === item.R_PluCode
-              )
+              const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
+              if(!menu) return item
               return {
                 ...item,
                 image_url: menu.image_url
@@ -118,9 +115,8 @@ function MainSalePage() {
           )
           setOrderDList(
             dataDList.map((item) => {
-              const menu = listMenuSetup.find(
-                (a) => a.menu_code === item.R_PluCode
-              )
+              const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
+              if(!menu) return item
               return {
                 ...item,
                 image_url: menu.image_url
@@ -130,7 +126,7 @@ function MainSalePage() {
         }
       })
       .catch((error) => {
-        alert(error)
+        alert('initLoadOrder'+ error)
       })
   }, [tableNo])
 
@@ -149,6 +145,7 @@ function MainSalePage() {
       <Grid container>
         <Grid size={matches ? 8 : 12}>
           <ProductMenu
+            tableNo={tableNo}
             ProductList={ProductList}
             ProductA={ProductA}
             ProductB={ProductB}
@@ -157,6 +154,9 @@ function MainSalePage() {
             ProductE={ProductE}
             ProductF={ProductF}
             OrderList={orderList}
+            OrderEList={orderEList}
+            OrderTList={orderTList}
+            OrderDList={orderDList}
             initLoadMenu={initLoadMenu}
             initLoadOrder={initLoadOrder}
           />
