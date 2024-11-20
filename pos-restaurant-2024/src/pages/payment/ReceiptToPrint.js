@@ -1,73 +1,73 @@
 import React, { Component } from 'react'
-import { Paper } from '@mui/material'
+import { Divider, Paper } from '@mui/material'
+import Moment from 'react-moment'
+
 import QrCodeGenerator from './QRCodePayment'
 
 export default class ReceiptToPrint extends Component {
+  constructor(props) {
+    super(props)
+
+    console.log('ReciptToPrint:', props)
+  }
+
   render() {
     return (
-      <Paper elevation={3} sx={{ padding: "10px" }} ref={this.props.innerRef}>
-        <div align="center" style={{ fontSize: "22px", fontWeight: "bold", padding: "10px" }}>*** ใบเสร็จรับเงิน ***</div>
-        <div align="center">Table: 101</div>
+      <Paper elevation={0} sx={{ padding: "10px" }} ref={this.props.innerRef}>
+        <div align="center" style={{ fontSize: "22px", fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
+        <Paper elevation={0} sx={{ padding: "10px" }}>
+          <div align="center">
+            <b>ร้าน POS Restuarant</b>
+          </div>
+          <div align="center">Table: {this.props.tableNo}</div>
+        </Paper>
         <div align="center">
-          <img src="/images/payment/bill_logo.png" alt="" />
+          <img src="/images/payment/receipt.png" width={64} alt="" />
         </div>
+        <Paper elevation={0} sx={{ padding: "10px" }}>
+          <div>Receipt No: #00000001</div>
+          <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
+          <div>จำนวนลูกค้า: 2 ท่าน</div>
+        </Paper>
+        <Divider />
+        <Paper elevation={0} sx={{ padding: "10px" }}>
+          <table width="100%">
+            <tr>
+              <th align="left"></th>
+              <th align="left">Description</th>
+              <th align="left"></th>
+              <th align="right">Amount</th>
+            </tr>
+            {this.props.orderList && this.props.orderList.map((item) => (
+              <tr>
+                <td style={{ width: "50px" }}>{item.R_ETD}</td>
+                <td>{item.R_PName}</td>
+                <td align="right">{item.R_Quan}</td>
+                <td align="right">{item.R_Price}</td>
+              </tr>
+            ))}
+          </table>
+        </Paper>
+        <Divider />
+        <Paper elevation={0} sx={{ padding: "10px" }}>
+          <table width="100%">
+            <tr>
+              <td colSpan={2}>Sub-Total</td>
+              <td align="right">100</td>
+            </tr>
+            <tr>
+              <td colSpan={2}>Total</td>
+              <td align="right">100</td>
+            </tr>
+            <tr>
+              <td colSpan={2}>Vat</td>
+              <td align="right">50</td>
+            </tr>
+          </table>
+        </Paper>
+        <Divider />
         <div align="center">
-          <b>POS Restuarant</b>
-        </div>
-        <br />
-        <div>Receipt No: #00000001</div>
-        <div>Date: 11/11/2024 12:51:03</div>
-        <div>Table No: 101</div>
-        <hr />
-        <table width="100%">
-          <tr>
-            <th align="left">Qty</th>
-            <th align="left">Description</th>
-            <th align="right">Amount</th>
-          </tr>
-          <tr>
-            <td style={{ width: "50px" }}>1</td>
-            <td>Food 01</td>
-            <td align="right">100</td>
-          </tr>
-          <tr>
-            <td style={{ width: "50px" }}>1</td>
-            <td>Food 02</td>
-            <td align="right">50</td>
-          </tr>
-          <tr>
-            <td style={{ width: "50px" }}>2</td>
-            <td>Food 03</td>
-            <td align="right">80</td>
-          </tr>
-        </table>
-        <hr />
-        <table width="100%">
-          <tr>
-            <td style={{ width: "50px" }}></td>
-            <td>Sub total</td>
-            <td align="right">100</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>Vat</td>
-            <td align="right">50</td>
-          </tr>
-        </table>
-        <hr />
-        <table width="100%">
-          <tr>
-            <td colSpan={2}>Total</td>
-            <td align="right">100</td>
-          </tr>
-          <tr>
-            <td colSpan={2}>Vat</td>
-            <td align="right">50</td>
-          </tr>
-        </table>
-        <hr />
-        <div align="center">
-          <QrCodeGenerator mobileNumber="1100700536032" amount={1} />
+          <QrCodeGenerator mobileNumber="0864108403" amount={this.props.amount || 1} />
         </div>
         <div align="center">
           <span>แสกน qr code เพื่อชำระเงิน</span>

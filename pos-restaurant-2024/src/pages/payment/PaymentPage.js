@@ -32,20 +32,11 @@ const backgroundSpecial = {
   backgroundSize: "80px 80px",
   backgroundPosition: "-19px -19px"
 }
-// const backgroundSpecial2 = {
-//   background: "rgb(2,0,36)",
-//   background: "linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%)"
-// }
-// const backgroundSpecial = {
-//   backgroundColor: "black",
-//   backgroundImage:
-//     `radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-//   radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-//   radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
-//   radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px)`,
-//   backgroundSize: "550px 550px, 350px 350px, 250px 250px, 150px 150px",
-//   backgroundPosition: "0 0, 40px 60px, 130px 270px, 70px 100px"
-// }
+
+const TAX_RATE = 0.07;
+function subtotal(items) {
+  return items.map(({ R_Price }) => R_Price).reduce((sum, i) => sum + i, 0);
+}
 
 function PaymentPage() {
   const { tableNo } = useParams();
@@ -55,10 +46,21 @@ function PaymentPage() {
 
   const [open, setOpen] = useState(false)
   const [orderList, setOrderList] = useState([])
+  const [billAmount, setBillAmount] = useState(0)
+
   const navigate = useNavigate();
 
   const contentRef = useRef(null);
-  const handlePrint = useReactToPrint({ contentRef });
+  // const handlePrint = useReactToPrint({ contentRef });
+  const handlePrint = useReactToPrint({
+    contentRef,
+    onAfterPrint: () => {
+      toFloorPlan()
+    },
+    onPrintError: (err) => {
+      alert(err)
+    }
+  })
 
   const toFloorPlan = () => {
     navigate("/floorplan");
@@ -71,12 +73,17 @@ function PaymentPage() {
         if (response.status === 200) {
           const dataList = response.data.data
           setOrderList(dataList)
+
+          const invoiceSubtotal = subtotal(orderList);
+          const invoiceTaxes = TAX_RATE * invoiceSubtotal;
+          const invoiceTotal = Math.round(invoiceTaxes + invoiceSubtotal);
+          setBillAmount(invoiceTotal)
         }
       })
       .catch((error) => {
         alert(error)
       })
-  }, [tableNo])
+  }, [tableNo, billAmount])
 
   useEffect(() => {
     initLoadOrder()
@@ -99,9 +106,11 @@ function PaymentPage() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box sx={{ ...modalStyle, width: 450 }}>
-          <ReceiptToPrint innerRef={contentRef} />
-          <Box sx={{ padding: "10px" }} textAlign="center">
-            <Button variant="contained" color="error" onClick={() => toFloorPlan()} sx={{ marginRight: "10px" }} startIcon={<CloseIcon />}>Close</Button>
+          <div style={{ height: '700px', overflow: "auto" }}>
+            <ReceiptToPrint innerRef={contentRef} orderList={orderList} tableNo={tableNo} amount={billAmount} />
+          </div>
+          <Box sx={{ padding: "10px", backgroundColor: "#eee", borderRadius: "10px" }} textAlign="center">
+            <Button variant="contained" color="error" onClick={() => setOpen(false)} sx={{ marginRight: "10px" }} startIcon={<CloseIcon />}>Cancel</Button>
             <Button variant="contained" color="info" startIcon={<PrintIcon />} onClick={handlePrint}>Print</Button>
           </Box>
         </Box>
