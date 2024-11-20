@@ -6,7 +6,7 @@ const pool = require('../../config/database')
 
 router.get('/', function (req, res, next) {
   const response = {}
-  pool.query(`SELECT * FROM menu_setup_1 where menu_type='product'`, (err, results) => {
+  pool.query(`SELECT * FROM menu_setup where menu_type='product'`, (err, results) => {
     if (err) throw err
 
     response.status = true
@@ -20,7 +20,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/all', function (req, res, next) {
   const response = {}
-  pool.query(`SELECT * FROM menu_setup_1`, (err, results) => {
+  pool.query(`SELECT * FROM menu_setup`, (err, results) => {
     if (err) throw err
 
     response.status = true
@@ -36,7 +36,7 @@ router.get('/optional/:menuCode', function (req, res, next) {
   const menuCode = req.params.menuCode
 
   const response = {}
-  pool.query(`SELECT * FROM menu_setup_1 where menu_type='optional' and ref_menu='${menuCode}'`, (err, results) => {
+  pool.query(`SELECT * FROM menu_setup where menu_type='optional' and ref_menu='${menuCode}'`, (err, results) => {
     if (err) throw err
 
     response.status = true
@@ -52,7 +52,7 @@ router.get('/:menuCode', function (req, res, next) {
   const menuCode = req.params.menuCode
 
   const response = {}
-  pool.query(`SELECT * FROM menu_setup_1 
+  pool.query(`SELECT * FROM menu_setup 
       where menu_type='product' 
       and menu_code='${menuCode}'`, (err, results) => {
     if (err) throw err

@@ -10,6 +10,7 @@ var cors = require('cors')
 // login
 var posuserRouter = require('./routes/pos_restaurant/login/posuser');
 var employRouter = require('./routes/pos_restaurant/login/employ');
+
 // order
 var tableFileRouter = require('./routes/pos_restaurant/order/TableFile');
 var balanceRouter = require('./routes/pos_restaurant/order/Balance');
@@ -20,6 +21,7 @@ var genQrCode = require('./routes/payment/qrcode_promptpay')
 
 // for New POS apis
 var floorplanRouter = require('./routes/floorplan/floorplan');
+var floorplanTemplateRouter = require('./routes/floorplan/floorplan_template');
 var menuSetupRouter = require('./routes/pos/menu_setup');
 var ordersRouter = require('./routes/pos/orders');
 var productRouter = require('./routes/pos/product');
@@ -41,6 +43,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/floorplan', floorplanRouter);
+app.use('/api/floorplan-template', floorplanTemplateRouter);
 
 app.use('/api/posuser', posuserRouter);
 app.use('/api/tablefile', tableFileRouter);

@@ -149,9 +149,24 @@ function FloorPlanPage() {
     [setNodes]
   )
 
+  const loadFloorPlan = useCallback((floor) => {
+    axios.get(`/api/floorplan-template/${floor}`)
+      .then(response => {
+        const flow = response.data.data.template
+        console.log('loadFloorPlan:', flow.template)
+        if (flow) {
+          setNodes(flow.nodes || [])
+        } else {
+          setNodes([])
+        }
+      })
+      .catch(err => alert(err))
+  }, [])
+
   useEffect(() => {
-    initialLoadFloorPlan(selectFloor)
-  }, [initialLoadFloorPlan, selectFloor])
+    // initialLoadFloorPlan(selectFloor)
+    loadFloorPlan(selectFloor)
+  }, [loadFloorPlan, selectFloor])
 
   useEffect(() => {
     if (keyPressed) {
