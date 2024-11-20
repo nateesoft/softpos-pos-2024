@@ -6,6 +6,7 @@ const RegisterMacNo = () => {
 
     if (macno) {
         localStorage.setItem('macno', macno)
+        window.location.href = "/"
     }
 }
 
