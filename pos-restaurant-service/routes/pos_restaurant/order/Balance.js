@@ -28,7 +28,9 @@ router.get('/table/:tableNo', function (req, res) {
 
 router.get('/getMaxIndex/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
-  const sql = `select max(R_Index) R_Index from balance where R_Table='${tableNo}' order by r_index`
+  const sql = `select max(R_Index) R_Index 
+    from balance 
+    where R_Table='${tableNo}' order by r_index`
   pool.query(sql, (err, results) => {
     if (err) throw err
 
