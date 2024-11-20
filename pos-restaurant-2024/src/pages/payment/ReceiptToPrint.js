@@ -22,7 +22,7 @@ export default class ReceiptToPrint extends Component {
           <div align="center">Table: {this.props.tableNo}</div>
         </Paper>
         <div align="center">
-          <img src="/images/payment/receipt.png" width={64} alt="" />
+          <img src="/images/payment/com_logo.jpg" width={128} alt="" />
         </div>
         <Paper elevation={0} sx={{ padding: "10px" }}>
           <div>Receipt No: #00000001</div>
