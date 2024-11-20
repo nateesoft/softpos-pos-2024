@@ -95,6 +95,11 @@ const ProductMenu = ({
         setOpen(true)
     }, [])
 
+    const handleShowMenuSet = (product) => {
+        setProductInfo(product)
+        setShowMenuSet(true)
+    }
+
     return (
         <Box sx={{ flexGrow: 1, display: 'flex', alignContent: "flex-start", marginTop: "8vh" }}>
             {matches && <Tabs
@@ -123,7 +128,7 @@ const ProductMenu = ({
                                 openModal={() => handleOpenMenu(product)}
                                 initLoadOrder={initLoadOrder}
                                 initLoadMenu={initLoadMenu}
-                                setShowMenuSet={setShowMenuSet}
+                                setShowMenuSet={()=>handleShowMenuSet(product)}
                             />
                         </Grid>
                     )}
@@ -137,7 +142,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={setShowMenuSet}
+                        setShowMenuSet={()=>handleShowMenuSet(product)}
                     />
                 )}
                 {ProductA.length === 0 && <NotfoundMenu />}
@@ -150,7 +155,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={setShowMenuSet}
+                        setShowMenuSet={()=>handleShowMenuSet(product)}
                     />
                 )}
                 {ProductB.length === 0 && <NotfoundMenu />}
@@ -163,7 +168,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={setShowMenuSet}
+                        setShowMenuSet={()=>handleShowMenuSet(product)}
                     />
                 )}
                 {ProductC.length === 0 && <NotfoundMenu />}
@@ -176,7 +181,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={setShowMenuSet}
+                        setShowMenuSet={()=>handleShowMenuSet(product)}
                     />
                 )}
                 {ProductD.length === 0 && <NotfoundMenu />}
@@ -189,7 +194,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={setShowMenuSet}
+                        setShowMenuSet={()=>handleShowMenuSet(product)}
                     />
                 )}
                 {ProductE.length === 0 && <NotfoundMenu />}
@@ -202,7 +207,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={setShowMenuSet}
+                        setShowMenuSet={()=>handleShowMenuSet(product)}
                     />
                 )}
                 {ProductF.length === 0 && <NotfoundMenu />}
@@ -243,7 +248,7 @@ const ProductMenu = ({
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle }}>
-                    <MenuSet />
+                    <MenuSet product={productInfo} />
                     <Box margin={1} padding={1} display="flex" justifyContent="space-between">
                         <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={()=>setShowMenuSet(false)}>Cancel</Button>
                         <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={()=>setShowMenuSet(false)}>Confirm</Button>
