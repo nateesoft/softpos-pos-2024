@@ -2,3 +2,6 @@ docker pull biarms/mysql:5.7
 docker tag biarms/mysql:5.7 mysql:5.7
 
 docker run --rm -e MYSQL_ROOT_PASSWORD=nathee2024 -p 3307:3307 mysql:5.7
+
+set session old_passwords=FALSE
+set password = password('P@ssword!#')
