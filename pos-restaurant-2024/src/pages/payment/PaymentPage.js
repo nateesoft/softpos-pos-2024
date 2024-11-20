@@ -55,7 +55,16 @@ function PaymentPage() {
   const handlePrint = useReactToPrint({
     contentRef,
     onAfterPrint: () => {
-      toFloorPlan()
+      // clear balance
+      axios
+        .delete(`/api/balance/empty/${tableNo}`)
+        .then((response) => {
+          console.log("initLoadMenu:", response)
+          toFloorPlan()
+        })
+        .catch((error) => {
+          alert(error)
+        })
     },
     onPrintError: (err) => {
       alert(err)

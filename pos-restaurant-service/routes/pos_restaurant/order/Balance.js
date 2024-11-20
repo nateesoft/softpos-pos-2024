@@ -14,6 +14,17 @@ router.get('/', function (req, res) {
   })
 });
 
+router.delete('/empty/:tableNo', function (req, res) {
+  const tableNo = req.params.tableNo
+  const sql = `delete from balance where R_Table='${tableNo}'`
+  pool.query(sql, (err, results) => {
+    if (err) throw err
+
+    const response = {}
+    res.status(200).json(response)
+  })
+});
+
 router.get('/table/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
   const sql = `select * from balance where R_Table='${tableNo}'`
