@@ -137,3 +137,87 @@ VALUES('2c380a41-c783-41ff-80a0-911312ff9471', 'DELSET021', 'ไข่พะโ�
 INSERT INTO posdb.menu_setup
 (id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
 VALUES('2c380a41-c783-41ff-80a0-911312ff9472', 'DELSET022', 'ชามะนาว', '01', 'product', 'active', 'N', NULL, 'Y', 'N', 1, 1, 'N', 0.0, 0.0, 'images/product/drink-04.png', 'F', 60.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9450', 'APT030', 'ผัดฉ่าธรรมดา', '01', 'product', 'active', 'Y', NULL, NULL, NULL, 0, 1, 'N', 0.0, 0.0, '/images/product/food11.png', 'A', 69.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9451', 'APT031', 'หมูย่าง หมูปิ้ง', '', 'optional', 'active', 'N', 'APT030', 'Y', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food08.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9452', 'APT032', 'ไก่ย่างสามเกลอ แจ่วมะขามแซ่บ', '', 'optional', 'active', 'N', 'APT030', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food04.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9453', 'APT033', 'ผัดฉ่าทะเล', '02', 'product', 'active', 'Y', NULL, NULL, NULL, 0, 2, 'N', 0.0, 0.0, '/images/product/food11.png', 'B', 399.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9454', 'APT034', 'แกงเห็ดเผาะ', '', 'optional', 'active', 'N', 'APT033', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food03.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9455', 'APT035', 'ตำชมพู่มะเหมี่ยวกะปิปลากรอบ', '', 'optional', 'active', 'N', 'APT033', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food07.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9456', 'APT036', 'หมูย่าง หมูปิ้ง', '', 'optional', 'active', 'N', 'APT033', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food08.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9457', 'BF001', 'ปลาหมึกต้มมะนาว', '', 'optional', 'active', 'N', 'APT033', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food06.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9458', 'BF002', 'ผัดฉ่าทะเล พิเศษ', '03', 'product', 'active', 'Y', NULL, NULL, NULL, 3, 3, 'N', 0.0, 0.0, '/images/product/food11.png', 'C', 599.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9459', 'CB001', 'แกงเห็ดเผาะ', '', 'optional', 'active', 'N', 'BF002', 'Y', 'N', 0, 0, 'N', 0.0, 0.0, '/images/product/food03.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9460', 'CB002', 'ตำชมพู่มะเหมี่ยวกะปิปลากรอบ', '', 'optional', 'active', 'N', 'BF002', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food07.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9461', 'CB003', 'หมูย่าง หมูปิ้ง', '', 'optional', 'active', 'N', 'BF002', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food08.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9462', 'CF019', 'ปลาหมึกต้มมะนาว', '', 'optional', 'active', 'N', 'BF002', 'Y', 'N', 0, 0, 'N', 0.0, 0.0, '/images/product/food06.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9463', 'CF020', 'ไก่ย่าง', '', 'optional', 'active', 'N', 'BF002', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food10.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9464', 'CF021', 'ส้มตำ', '', 'optional', 'active', 'N', 'BF002', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food11.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9465', 'DELSET011', 'ตำเส้นพวงแคปหมูผักงูเขียว', '04', 'product', 'active', 'Y', NULL, NULL, NULL, 0, 1, 'N', 0.0, 0.0, '/images/product/food05.png', 'D', 259.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9466', 'DELSET012', 'เมี่ยงปลาทอด', '05', 'product', 'active', 'Y', NULL, NULL, NULL, 3, 4, 'N', 0.0, 0.0, '/images/product/food09.png', 'C', 300.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9467', 'DELSET013', 'แกงเห็ดเผาะ', '', 'optional', 'active', 'Y', 'DELSET012', 'Y', 'N', 1, 1, 'N', 0.0, 0.0, '/images/product/food03.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9468', 'DELSET014', 'ไก่ย่างสามเกลอ แจ่วมะขามแซ่บ', '', 'optional', 'active', 'N', 'DELSET012', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food04.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9469', 'DELSET015', 'หมูย่าง หมูปิ้ง', '', 'optional', 'active', 'N', 'DELSET012', 'N', 'Y', 0, 0, 'N', 0.0, 0.0, '/images/product/food08.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9470', 'DELSET020', 'หมูปลาร้าปั้นก้อน', '', 'optional', 'active', 'N', 'DELSET013', 'Y', 'Y', 0, 0, 'Y', 0.0, 0.0, '/images/product/food11.png', '', NULL);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9471', 'DELSET021', 'ไข่พะโล้หมูสามชั้น', '06', 'product', 'active', 'N', NULL, NULL, NULL, 0, 0, 'N', 0.0, 0.0, '/images/product/food01.png', 'C', 95.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9472', 'PROSET035', 'ชามะนาว', '07', 'product', 'active', 'N', NULL, 'N', 'N', 1, 1, 'N', 0.0, 0.0, '/images/product/drink-04.png', 'E', 60.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9474', 'ST029', 'บัวลอยไข่หวาน', '09', 'product', 'active', 'N', NULL, 'N', 'N', 1, 1, 'N', 0.0, 0.0, '/images/product/dessert-02.png', 'F', 35.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9475', 'TG015', 'ทับทิมกรอบน้ำกะทิ', '10', 'product', 'active', 'N', NULL, 'N', 'N', 1, 1, 'N', 0.0, 0.0, '/images/product/dessert-03.png', 'F', 40.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9481', 'PROSET036', 'โกโก้เย็น', '11', 'product', 'active', 'N', NULL, 'N', 'N', 1, 1, 'N', 0.0, 0.0, '/images/product/drink-02.png', 'E', 60.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9482', 'PROSET037', 'อเมริกาโน่มะพร้าว', '12', 'product', 'active', 'N', NULL, 'N', 'N', 1, 1, 'N', 0.0, 0.0, '/images/product/drink-03.png', 'E', 60.0);
+INSERT INTO posdb.menu_setup
+(id, menu_code, menu_name, menu_number, menu_type, menu_status, show_list_menu, ref_menu, auto_select, can_change, min_count_set, max_count_set, `free`, percent_discount, manual_discount, image_url, tab_group, menu_price)
+VALUES('2c380a41-c783-41ff-80a0-911312ff9483', 'ST026', 'กล้วยบวชชี', '08', 'product', 'active', 'N', NULL, 'N', 'N', 1, 1, 'N', 0.0, 0.0, '/images/product/dessert-01.png', 'F', 30.0);
