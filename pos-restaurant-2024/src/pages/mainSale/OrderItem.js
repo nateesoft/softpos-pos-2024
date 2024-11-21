@@ -387,8 +387,8 @@ const OrderItem = ({
 
   function handlePrint() {
     // update send to Kic
-    axios.patch(`/api/printToKic/${tableNo}`).then((response) => {
-      if (response.data.code === 200) {
+    axios.patch(`/api/balance/printToKic/${tableNo}`).then((response) => {
+      if (response.status === 200) {
         setShowKicPrint(false)
       }
     })

@@ -30,10 +30,11 @@ const ProductCard = memo(
     //         })
     // }
     const addOrder = async (qty = 1) => {
-      // const responseProduct = await axios.get(`/api/pos-product/${product.menu_code}`)
+      const responseProduct = await axios.get(`/api/pos-product/${product.menu_code}`)
       const responseRIndex = await axios.get(`/api/balance/getMaxIndex/${tableInfo.tableNo}`)
       const R_Index = responseRIndex.data.R_Index
-      // const POSProduct = responseProduct.data.data
+      const POSProduct = responseProduct.data.data
+      console.log('addOrder(POSProduct):', POSProduct)
 
       const payload = {
         R_Index: R_Index,
@@ -51,7 +52,7 @@ const ProductCard = memo(
         R_Redule: 0,
         R_Serve: "",
         R_KicOK: "",
-        StkCode: "",
+        StkCode: POSProduct.PStock,
         PosStk: "",
         R_Order: "",
         R_PItemNo: 0,
@@ -74,7 +75,7 @@ const ProductCard = memo(
         TranType: "",
         R_KicPrint: "",
         R_Void: "",
-        R_Kic: ""
+        R_Kic: POSProduct.PKic
       }
       axios
         .post(`/api/balance`, payload)

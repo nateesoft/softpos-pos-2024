@@ -24,6 +24,7 @@ router.delete('/empty/:tableNo', function (req, res) {
     res.status(200).json(response)
   })
 });
+
 router.patch('/printToKic/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
   const sql = `update balance 
