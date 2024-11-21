@@ -61,6 +61,7 @@ const ProductCard = ({ product, openModal }) => {
           <img
             src={product.image_url}
             alt=""
+            height={100}
             style={{ borderRadius: "5px", width: "120px" }}
             onClick={openModal}
           />
@@ -313,37 +314,15 @@ const TotalBill = ({ orderList }) => {
         backgroundColor: "salmon",
         border: "2px solid #eee",
         borderRadius: "10px",
-        marginBottom: "10px",
-        margin: "20px"
+        margin: "5px"
       }}
     >
-      <table width="100%">
-        <tr>
-          <td align="left" style={{ fontWeight: "bold" }}>
-            <Box
-              sx={{
-                marginLeft: "10px",
-                fontWeight: "bold",
-                fontSize: "16px",
-                color: "#555"
-              }}
-            >
-              Total Amount
-            </Box>
-          </td>
-          <td
-            align="right"
-            style={{
-              fontWeight: "bold",
-              fontSize: "48px",
-              color: "black",
-              textShadow: "1px 3px snow"
-            }}
-          >
-            <Box sx={{ marginRight: "10px" }}>{totalBill}</Box>
-          </td>
-        </tr>
-      </table>
+      <Grid container spacing={2}>
+        <Typography variant="p" sx={{fontWeight: "bold", margin: "4px"}}>Total Amount</Typography>
+      </Grid>
+      <Grid container display="flex" justifyContent="flex-end">
+        <Typography variant="h2" sx={{fontWeight: "bold", textShadow: "2px 2px white"}}>{totalBill}</Typography>
+      </Grid>
     </div>
   )
 }
@@ -426,13 +405,13 @@ const OrderItem = ({
           sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}
         >
           {OrderEList && OrderEList.map((product) => {
-              return (
-                <ProductCard
-                  product={product}
-                  openModal={() => handleOpenMenu(product)}
-                />
-              )
-            })}
+            return (
+              <ProductCard
+                product={product}
+                openModal={() => handleOpenMenu(product)}
+              />
+            )
+          })}
           {OrderEList && OrderEList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -449,13 +428,13 @@ const OrderItem = ({
           sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}
         >
           {OrderTList && OrderTList.map((product) => {
-              return (
-                <ProductCard
-                  product={product}
-                  openModal={() => handleOpenMenu(product)}
-                />
-              )
-            })}
+            return (
+              <ProductCard
+                product={product}
+                openModal={() => handleOpenMenu(product)}
+              />
+            )
+          })}
           {OrderTList && OrderTList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -472,13 +451,13 @@ const OrderItem = ({
           sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}
         >
           {OrderDList && OrderDList.map((product) => {
-              return (
-                <ProductCard
-                  product={product}
-                  openModal={() => handleOpenMenu(product)}
-                />
-              )
-            })}
+            return (
+              <ProductCard
+                product={product}
+                openModal={() => handleOpenMenu(product)}
+              />
+            )
+          })}
           {OrderDList && OrderDList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -566,59 +545,59 @@ const OrderItem = ({
             <div>Table No: {tableNo}</div>
             <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
             <hr />
-            {OrderEList && OrderEList.length>0 && 
+            {OrderEList && OrderEList.length > 0 &&
               (<div>
                 <div>Dine in</div>
                 <hr />
                 <table width="100%">
                   {OrderEList.map((product) => {
-                      return (
-                        <tr>
-                          <di>{product.R_ETD}</di>
-                          <td>{product.R_PName}</td>
-                          <td>x</td>
-                          <td>{product.R_Quan}</td>
-                        </tr>
-                      )
-                    })}
+                    return (
+                      <tr>
+                        <di>{product.R_ETD}</di>
+                        <td>{product.R_PName}</td>
+                        <td>x</td>
+                        <td>{product.R_Quan}</td>
+                      </tr>
+                    )
+                  })}
                 </table>
                 <hr />
               </div>)
             }
-            {OrderTList && OrderTList.length>0 && 
+            {OrderTList && OrderTList.length > 0 &&
               (<div>
                 <div>Take Away</div>
                 <hr />
                 <table width="100%">
                   {OrderTList.map((product) => {
-                      return (
-                        <tr>
-                          <di>{product.R_ETD}</di>
-                          <td>{product.R_PName}</td>
-                          <td>x</td>
-                          <td>{product.R_Quan}</td>
-                        </tr>
-                      )
-                    })}
+                    return (
+                      <tr>
+                        <di>{product.R_ETD}</di>
+                        <td>{product.R_PName}</td>
+                        <td>x</td>
+                        <td>{product.R_Quan}</td>
+                      </tr>
+                    )
+                  })}
                 </table>
                 <hr />
               </div>)
             }
-            {OrderDList && OrderDList.length>0 && 
+            {OrderDList && OrderDList.length > 0 &&
               (<div>
                 <div>Deliver</div>
                 <hr />
                 <table width="100%">
                   {OrderDList.map((product) => {
-                      return (
-                        <tr>
-                          <di>{product.R_ETD}</di>
-                          <td>{product.R_PName}</td>
-                          <td>x</td>
-                          <td>{product.R_Quan}</td>
-                        </tr>
-                      )
-                    })}
+                    return (
+                      <tr>
+                        <di>{product.R_ETD}</di>
+                        <td>{product.R_PName}</td>
+                        <td>x</td>
+                        <td>{product.R_Quan}</td>
+                      </tr>
+                    )
+                  })}
                 </table>
                 <hr />
               </div>)

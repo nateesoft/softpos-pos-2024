@@ -1,4 +1,7 @@
 const Unicode2ASCII = unicode => {
+    if (process.env.IS_OLD_MYSQL5 === true) {
+        return unicode
+    }
     if (!unicode) return '';
     let ascii = unicode.split('');
     let code;
@@ -12,6 +15,9 @@ const Unicode2ASCII = unicode => {
 }
 
 const ASCII2Unicode = ascii => {
+    if (process.env.IS_OLD_MYSQL5 === true) {
+        return ascii
+    }
     if (!ascii) return '';
     let unicode = ascii.split('');
     let code;

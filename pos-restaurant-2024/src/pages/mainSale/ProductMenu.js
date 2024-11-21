@@ -4,6 +4,7 @@ import MenuBook from '@mui/icons-material/ShoppingCartOutlined';
 import { useTranslation } from "react-i18next"
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import CloseIcon from '@mui/icons-material/Close';
+import CloseModalIcon from '@mui/icons-material/Cancel';
 import CheckIcon from '@mui/icons-material/Check';
 import NoFoodIcon from '@mui/icons-material/NoFood';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -12,7 +13,7 @@ import Grid from '@mui/material/Grid2'
 import OrderItem from './OrderItem'
 import ProductCard from "./ProductCard";
 import ProductDetailCard from "./ProductDetailCard";
-import MenuSet from "./MenuSet";
+import MenuSetModal from "./MenuSetModal";
 
 const modalStyle = {
     position: "absolute",
@@ -248,8 +249,15 @@ const ProductMenu = ({
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle }}>
-                    <MenuSet product={productInfo} />
-                    <Box margin={1} padding={1} display="flex" justifyContent="space-between">
+                    <Grid container justifyContent="center" display="flex" direction="column" padding={2}>
+                        <Grid display="flex" justifyContent="space-between">
+                            <Typography variant="h4" color="secondary" sx={{fontWeight: "bold", textShadow: "1px 1px orange"}}>{productInfo.menu_name}</Typography>
+                            <CloseModalIcon fontSize="large" color="error" onClick={()=>setShowMenuSet(false)} />
+                        </Grid>
+                        <Typography color="error" variant="h5" sx={{fontWeight: "bold"}}>( ราคา {productInfo.menu_price} )</Typography>
+                    </Grid>
+                    <MenuSetModal product={productInfo} />
+                    <Box margin={1} padding={1} display="flex" justifyContent="space-between" sx={{padding: "10px", borderRadius: "10px"}}>
                         <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={()=>setShowMenuSet(false)}>Cancel</Button>
                         <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={()=>setShowMenuSet(false)}>Confirm</Button>
                     </Box>

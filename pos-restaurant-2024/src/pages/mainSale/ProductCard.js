@@ -117,6 +117,7 @@ const ProductCard = memo(
             <img
               src={product.image_url}
               alt=""
+              height={150}
               width={160}
               style={{ borderRadius: "8px 8px 0px 0px" }}
               onClick={product.show_list_menu === "N" ? openModal: ()=>setShowMenuSet(true)}

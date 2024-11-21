@@ -73,13 +73,13 @@ function MainSalePage() {
         console.log("initLoadOrder:", response)
         if (response.status === 200) {
           const dataList = response.data.data
-          const dataEList = dataList.filter(item => item.R_ETD==="E")
-          const dataTList = dataList.filter(item => item.R_ETD==="T")
-          const dataDList = dataList.filter(item => item.R_ETD==="D")
+          const dataEList = dataList.filter(item => item.R_ETD === "E")
+          const dataTList = dataList.filter(item => item.R_ETD === "T")
+          const dataDList = dataList.filter(item => item.R_ETD === "D")
           setOrderList(
             dataList.map((item) => {
               const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
-              if(!menu) return item
+              if (!menu) return item
               return {
                 ...item,
                 image_url: menu.image_url
@@ -89,7 +89,7 @@ function MainSalePage() {
           setOrderEList(
             dataEList.map((item) => {
               const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
-              if(!menu) return item
+              if (!menu) return item
               return {
                 ...item,
                 image_url: menu.image_url
@@ -99,7 +99,7 @@ function MainSalePage() {
           setOrderTList(
             dataTList.map((item) => {
               const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
-              if(!menu) return item
+              if (!menu) return item
               return {
                 ...item,
                 image_url: menu.image_url
@@ -109,7 +109,7 @@ function MainSalePage() {
           setOrderDList(
             dataDList.map((item) => {
               const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
-              if(!menu) return item
+              if (!menu) return item
               return {
                 ...item,
                 image_url: menu.image_url
@@ -119,7 +119,7 @@ function MainSalePage() {
         }
       })
       .catch((error) => {
-        alert('initLoadOrder'+ error)
+        alert('initLoadOrder' + error)
       })
   }, [tableNo])
 

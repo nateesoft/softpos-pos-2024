@@ -142,12 +142,18 @@ function FloorPlanPage() {
   const loadFloorPlan = useCallback((floor) => {
     axios.get(`/api/floorplan-template/${floor}`)
       .then(response => {
-        const flow = response.data.data.template
-        console.log('loadFloorPlan:', flow.template)
-        if (flow) {
-          setNodes(flow.nodes || [])
-        } else {
-          setNodes([])
+        console.log('loadFloorPlan:', response)
+        const result = response.data
+        if (result.code === 200) {
+          if (result.data != null) {
+            const flow = result.data.template
+            console.log('loadFloorPlan:', flow)
+            if (flow) {
+              setNodes(flow.nodes || [])
+            } else {
+              setNodes([])
+            }
+          }
         }
       })
       .catch(err => alert(err))
@@ -182,56 +188,56 @@ function FloorPlanPage() {
             />
           </IconButton>
 
-          {matches && 
-          <Grid container spacing={2} sx={{ width: "100%" }}>
-            <Grid size={12} display="flex" justifyContent="flex-end">
-              <Grid container spacing={2}>
-                <Button
-                  variant="contained"
-                  startIcon={<MoneyIcon />}
-                  onClick={() => setOpenMgrCashDrawer(true)}
-                >
-                  นำเงินเข้า/ออกลิ้นชัก
-                </Button>
-                <Button
-                  variant="contained"
-                  startIcon={<RefundIcon />}
-                  onClick={() => setOpenRefundBill(true)}
-                >
-                  ยกเลิกบิล (Refund Bill)
-                </Button>
-                <Button
-                  variant="contained"
-                  startIcon={<PrintIcon />}
-                  onClick={() => setOpenCopyPrint(true)}
-                >
-                  พิมพ์สำเนาบิล
-                </Button>
-                <Button
-                  variant="contained"
-                  startIcon={<Splitscreen />}
-                  onClick={() => setOpenPinMgrTable(true)}
-                >
-                  แยกโต๊ะ / รวมโต๊ะ
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={setupFloorPlan}
-                  startIcon={<ManageAccounts />}
-                >
-                  จัดการโต๊ะ
-                </Button>
-                <Button
-                  variant="contained"
-                  color="error"
-                  onClick={() => setOpenLogout(true)}
-                  endIcon={<ExitToApp />}
-                >
-                  Logout
-                </Button>
+          {matches &&
+            <Grid container spacing={2} sx={{ width: "100%" }}>
+              <Grid size={12} display="flex" justifyContent="flex-end">
+                <Grid container spacing={2}>
+                  <Button
+                    variant="contained"
+                    startIcon={<MoneyIcon />}
+                    onClick={() => setOpenMgrCashDrawer(true)}
+                  >
+                    นำเงินเข้า/ออกลิ้นชัก
+                  </Button>
+                  <Button
+                    variant="contained"
+                    startIcon={<RefundIcon />}
+                    onClick={() => setOpenRefundBill(true)}
+                  >
+                    ยกเลิกบิล (Refund Bill)
+                  </Button>
+                  <Button
+                    variant="contained"
+                    startIcon={<PrintIcon />}
+                    onClick={() => setOpenCopyPrint(true)}
+                  >
+                    พิมพ์สำเนาบิล
+                  </Button>
+                  <Button
+                    variant="contained"
+                    startIcon={<Splitscreen />}
+                    onClick={() => setOpenPinMgrTable(true)}
+                  >
+                    แยกโต๊ะ / รวมโต๊ะ
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={setupFloorPlan}
+                    startIcon={<ManageAccounts />}
+                  >
+                    จัดการโต๊ะ
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => setOpenLogout(true)}
+                    endIcon={<ExitToApp />}
+                  >
+                    Logout
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
           }
         </Toolbar>
       </AppBar>

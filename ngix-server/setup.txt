@@ -1,0 +1,6 @@
+docker network create sandbox_network
+docker run -d \
+  --name reverse-proxy \
+  -p 80:80 \
+  -v /var/run/docker.sock:/tmp/docker.sock:ro \
+  --net sandbox_network jwilder/nginx-proxy

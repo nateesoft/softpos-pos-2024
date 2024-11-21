@@ -19,12 +19,12 @@ const config = {
 const pool = mysql8.createPool(config)
 // console.log('mysql8 config:',config )
 
-pool.query("SELECT 1 + 1 AS solution", function (error, results, fields) {
+pool.query("SELECT 4+4 AS solution", function (error, results, fields) {
   if (error) {
     console.log(error) 
     throw error
   }
-  console.log("Connect new mysql complete: ", results[0].solution)
+  console.log("Connect new mysql version: ", results[0].solution)
 })
 
 module.exports = pool

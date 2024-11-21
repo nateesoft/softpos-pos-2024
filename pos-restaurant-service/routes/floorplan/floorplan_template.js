@@ -14,7 +14,7 @@ router.get('/:id', function (req, res) {
     response.status = true
     response.code = 200
     response.message = "Success"
-    response.data = results[0]
+    response.data = results.length > 0 ? results[0] : null
 
     res.status(200).json(response)
   })
