@@ -15,7 +15,7 @@ import {
 } from "@xyflow/react"
 import { useNavigate } from "react-router-dom"
 import Modal from "@mui/material/Modal"
-import { AppBar, Box, Button, IconButton, Toolbar } from "@mui/material"
+import { AppBar, Box, Button, IconButton, Toolbar, useMediaQuery } from "@mui/material"
 import Splitscreen from "@mui/icons-material/Splitscreen"
 import ManageAccounts from "@mui/icons-material/TableBar"
 import ExitToApp from "@mui/icons-material/ExitToApp"
@@ -63,6 +63,9 @@ const nodeTypes = {
 function FloorPlanPage() {
   const navigate = useNavigate()
   const { appData, setAppData } = useContext(POSContext)
+
+  const matches = useMediaQuery("(min-width:600px)")
+  console.log('FoorPlanPage Size:', matches)
 
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes, onNodesChange] = useNodesState([])
@@ -179,6 +182,7 @@ function FloorPlanPage() {
             />
           </IconButton>
 
+          {matches && 
           <Grid container spacing={2} sx={{ width: "100%" }}>
             <Grid size={12} display="flex" justifyContent="flex-end">
               <Grid container spacing={2}>
@@ -228,6 +232,7 @@ function FloorPlanPage() {
               </Grid>
             </Grid>
           </Grid>
+          }
         </Toolbar>
       </AppBar>
       <ReactFlowProvider>
