@@ -18,6 +18,20 @@ router.get('/', function (req, res, next) {
   })
 });
 
+// router.get('/:tableNo', function (req, res, next) {
+//   const response = {}
+//   pool.query(`SELECT * FROM menu_setup where menu_type='product'`, (err, results) => {
+//     if (err) throw err
+
+//     response.status = true
+//     response.code = 200
+//     response.message = "Success"
+//     response.data = results
+
+//     res.status(200).json(response)
+//   })
+// });
+
 router.get('/all', function (req, res, next) {
   const response = {}
   pool.query(`SELECT * FROM menu_setup`, (err, results) => {

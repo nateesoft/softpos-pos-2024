@@ -14,6 +14,7 @@ import CloseIcon from '@mui/icons-material/Close'
 
 import ReceiptToPrint from './ReceiptToPrint'
 import MemberInfo from "./MemberInfo";
+import ShowNotification from "../utils/ShowNotification";
 
 const modalStyle = {
   position: "absolute",
@@ -48,6 +49,15 @@ function PaymentPage() {
   const [orderList, setOrderList] = useState([])
   const [billAmount, setBillAmount] = useState(0)
 
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type="error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
+
   const navigate = useNavigate();
 
   const contentRef = useRef(null);
@@ -59,15 +69,15 @@ function PaymentPage() {
       axios
         .delete(`/api/balance/empty/${tableNo}`)
         .then((response) => {
-          console.log("initLoadMenu:", response)
+          // console.log("initLoadMenu:", response)
           toFloorPlan()
         })
         .catch((error) => {
-          alert(error)
+          handleNotification(error)
         })
     },
     onPrintError: (err) => {
-      alert(err)
+      handleNotification(err)
     }
   })
 
@@ -77,7 +87,7 @@ function PaymentPage() {
 
   const initLoadOrder = useCallback(() => {
     axios
-      .get(`/api/balance/table/${tableNo}`)
+      .get(`/api/balance/${tableNo}`)
       .then((response) => {
         if (response.status === 200) {
           const dataList = response.data.data
@@ -90,9 +100,9 @@ function PaymentPage() {
         }
       })
       .catch((error) => {
-        alert(error)
+        handleNotification(error)
       })
-  }, [tableNo, billAmount])
+  }, [tableNo])
 
   useEffect(() => {
     initLoadOrder()
@@ -108,7 +118,12 @@ function PaymentPage() {
           <MemberInfo />
         </Grid>}
         <Grid size={matches ? 6 : 12}>
-          <PaymentForm open={() => setOpen(true)} close={() => setOpen(false)} tableNo={tableNo} orderList={orderList} />
+          <PaymentForm 
+            open={() => setOpen(true)} 
+            close={() => setOpen(false)} 
+            tableNo={tableNo} orderList={orderList}
+            handleNotification={handleNotification} 
+          />
         </Grid>
       </Grid>
       <Modal open={open} onClose={() => setOpen(false)}
@@ -124,6 +139,7 @@ function PaymentPage() {
           </Box>
         </Box>
       </Modal>
+      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   );
 }

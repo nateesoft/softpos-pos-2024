@@ -1,10 +1,13 @@
 require("dotenv").config()
 
 let mysqlConnection = require("mysql2")
-if (process.env.IS_OLD_MYSQL5 === true) {
+
+if (process.env.IS_OLD_MYSQL5 === "Y") {
   console.log("Connect old mysql")
   mysqlConnection = require("mysql")
 }
+
+const util = require('util')
 
 const config = {
   host: process.env.MYSQL5_DB_HOST,
@@ -20,5 +23,7 @@ pool.query("SELECT 5+0 AS solution", function (error, results, fields) {
   if (error) throw error
   console.log("Connect old mysql version: ", results[0].solution)
 })
+
+pool.query = util.promisify(pool.query)
 
 module.exports = pool

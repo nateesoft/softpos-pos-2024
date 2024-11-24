@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
@@ -10,22 +10,15 @@ import Container from "@mui/material/Container"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import Checkbox from "@mui/material/Checkbox"
 import FormControlLabel from "@mui/material/FormControlLabel"
-import { useState, forwardRef } from "react"
-import Snackbar from "@mui/material/Snackbar"
 import Stack from "@mui/material/Stack"
-import MuiAlert from "@mui/material/Alert"
-import Slide from "@mui/material/Slide"
 import { motion } from "framer-motion"
 import axios from "axios"
-import { POSContext } from "../../AppContext"
 
+import { POSContext } from "../../AppContext"
 import { handleEnter } from "../../util/EventLisener"
 import bg from "./bg/welcome.jpg"
 import bgimg from "./bg/bgbg.jpg"
-
-const Alert = forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
-})
+import ShowNotification from "../utils/ShowNotification"
 
 const darkTheme = createTheme({
   palette: {
@@ -48,17 +41,22 @@ export default function Login() {
   const { macno } = appData
 
   console.log("context:", appData)
-  const [open, setOpen] = useState(false)
   const [remember, setRemember] = useState(false)
-  const vertical = "top"
-  const horizontal = "right"
-
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
+  
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type="error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
+
   const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
-    setOpen(true)
     event.preventDefault()
 
     axios
@@ -70,41 +68,19 @@ export default function Login() {
             localStorage.setItem("userLogin", user)
             navigate("/floorplan")
           } else {
-            setOpen(true)
+            handleNotification("ข้อมูลผู้ใช้งาน Username/ Pasword ไม่ถูกต้อง !!!", "warning")
           }
         } else {
-          setOpen(true)
+          handleNotification("ไม่สามารถ Login เข้าระบบได้ !", "error")
         }
       })
       .catch((error) => {
-        alert(error)
+        handleNotification(error)
       })
-  }
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return
-    }
-    setOpen(false)
-  }
-
-  function TransitionLeft(props) {
-    return <Slide {...props} direction="left" />
   }
 
   return (
     <motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-      <Snackbar
-        open={open}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        TransitionComponent={TransitionLeft}
-        anchorOrigin={{ vertical, horizontal }}
-      >
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-          Failed! Enter correct username and password.
-        </Alert>
-      </Snackbar>
       <div
         style={{
           background: `url(${bgimg}) no-repeat center center fixed`,
@@ -250,6 +226,7 @@ export default function Login() {
             </Grid>
           </Grid>
         </Box>
+        <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
       </div>
     </motion.div>
   )

@@ -2,7 +2,7 @@ const mysql = require("mysql2")
 
 // const MySQLType = require('./msyql_column_type')
 
-const tableName = "MyRestaurantJefferSakon.t_sale"//MyRestaurantJefferSakon, posdb
+let tableName = "MyRestaurantJefferSakon.t_sale"//MyRestaurantJefferSakon, posdb
 
 const pool = mysql.createPool({
     host: "localhost",
@@ -18,7 +18,7 @@ const pool = mysql.createPool({
     keepAliveInitialDelay: 0
 })
 
-const queryType = 4;
+let queryType = 5;
 
 if (queryType == 1) {
     const sql = `select * from ${tableName}`
@@ -74,6 +74,14 @@ const getAllFieldsWithQuestion = (fields) => {
         if (field.Null === 'NO') {
             myField.push(field.Field + " = ?")
         }
+    })
+    return myField
+}
+
+const getQuestionMark = (fields) => {
+    const myField = []
+    fields.forEach(field => {
+        myField.push("?")
     })
     return myField
 }
@@ -156,5 +164,23 @@ if (queryType == 4) {
         console.log(`})`)
         console.log('########## PATCH UPDATE ########')
         console.log()
+    })
+}
+
+if (queryType == 5) {
+    tableName = "MyRestaurantJefferSakon.t_sale"
+    const sqlAllTable = `desc ${tableName} `
+    pool.query(sqlAllTable, (err, results) => {
+        if (err) throw err
+
+        const allFields = getAllFields(results)
+        const allFieldsDefault = genRequestBody(results)
+        const getQM = getQuestionMark(results)
+
+        const sqlQuery = `INSERT INTO ${tableName} (${allFields}) values (${getQM})`;
+
+        console.log(allFields.join(','))
+        console.log(allFieldsDefault)
+        console.log(sqlQuery)
     })
 }

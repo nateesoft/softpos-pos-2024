@@ -8,85 +8,25 @@ import { Box, Button, Badge, Typography } from "@mui/material"
 import { POSContext } from "../../AppContext"
 
 const ProductCard = memo(
-  ({ id, product, openModal, initLoadMenu, initLoadOrder, setShowMenuSet }) => {
+  ({ id, tableNo, product, openModal, initLoadMenu, initLoadOrder, setShowMenuSet, handleNotification }) => {
     const { appData } = useContext(POSContext)
-    const { tableInfo, empCode, macno, userLogin } = appData
-    console.log("ProductCard:", tableInfo)
-    // const addOrder = (updateQty) => {
-    //     product.qty = product.qty + updateQty
-    //     axios.patch(`/api/product/${product.id}`, { ...product })
-    //         .then((response) => {
-    //             if (response.data.code === 200) {
-    //                 // add order
-    //                 axios.post(`/api/product_order`,
-    //                     { name: product.name, url: product.url, qty: updateQty, price: product.price, totalAmount: updateQty * product.price })
-    //                     .then((response2) => {
-    //                         if (response2.data.code === 200) {
-    //                             initLoadMenu()
-    //                             initLoadOrder()
-    //                         }
-    //                     })
-    //             }
-    //         })
-    // }
-    const addOrder = async (qty = 1) => {
-      const responseProduct = await axios.get(`/api/pos-product/${product.menu_code}`)
-      const responseRIndex = await axios.get(`/api/balance/getMaxIndex/${tableInfo.tableNo}`)
-      const R_Index = responseRIndex.data.R_Index
-      const POSProduct = responseProduct.data.data
-      console.log('addOrder(POSProduct):', POSProduct)
+    const { empCode, macno, userLogin } = appData
+    console.log("ProductCard")
 
-      const payload = {
-        R_Index: R_Index,
-        R_Table: tableInfo.tableNo,
-        R_PluCode: product.menu_code,
-        R_PName: product.menu_name,
-        R_Quan: qty,
-        R_Price: product.menu_price,
-        R_Total: product.menu_price * qty,
-        R_PrBath: 0,
-        R_PrAmt: 0,
-        R_DiscBath: 0,
-        R_PrCuQuan: 0,
-        R_PrCuAmt: 0,
-        R_Redule: 0,
-        R_Serve: "",
-        R_KicOK: "",
-        StkCode: POSProduct.PStock,
-        PosStk: "",
-        R_Order: "",
-        R_PItemNo: 0,
-        R_PKicQue: 0,
-        R_MemSum: "",
-        R_PrVcAmt: 0,
-        R_PrVcAdj: 0,
-        R_VoidQuan: 0,
-        R_MoveFlag: "",
-        R_MovePrint: "",
-        R_SPIndex: "",
-        R_Earn: "",
-        R_SeparateFrom: "",
-        Macno: macno,
-        Cashier: userLogin,
-        R_Emp: empCode,
-        R_ETD: "E",
-        R_PrintOK: "Y",
-        R_Pause: "",
-        TranType: "",
-        R_KicPrint: "",
-        R_Void: "",
-        R_Kic: POSProduct.PKic
-      }
+    const addOrder = async (qty = 1) => {
       axios
-        .post(`/api/balance`, payload)
+        .post(`/api/balance`, {
+          tableNo, menuInfo: product, qty, macno, userLogin, empCode
+        })
         .then((response2) => {
           initLoadMenu()
           initLoadOrder()
         })
         .catch((error2) => {
-          alert(error2)
+          handleNotification(error2)
         })
     }
+
     return (
       <Badge
         id={id}

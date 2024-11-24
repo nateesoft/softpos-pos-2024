@@ -1,7 +1,7 @@
 import React, { memo, useState } from "react"
 import axios from "axios"
 import Grid from "@mui/material/Grid2"
-import { Box, Button, Typography, IconButton, TextField } from "@mui/material"
+import { Box, Button, Typography, IconButton, TextField, useMediaQuery } from "@mui/material"
 import CheckIcon from "@mui/icons-material/CheckCircle"
 import CancelIcon from "@mui/icons-material/CancelRounded"
 import AddIcon from "@mui/icons-material/Add"
@@ -9,9 +9,10 @@ import RemoveIcon from "@mui/icons-material/Remove"
 import OptionMenuSelect from "./OptionMenuSelect"
 
 const ProductDetailCard = memo(
-  ({ product, closeModal, initLoadMenu, initLoadOrder }) => {
+  ({ product, closeModal, initLoadMenu, initLoadOrder, handleNotification }) => {
     console.log("ProductDetailCard")
-    const [count, setCount] = useState(product.qty || 0)
+    const [count, setCount] = useState(product.qty || 1)
+    const matches = useMediaQuery("(min-width:600px)")
 
     const handleConfirm = () => {
       product.qty = count
@@ -19,7 +20,7 @@ const ProductDetailCard = memo(
       axios
         .patch(`/api/product/${product.id}`, { ...product })
         .then((response) => {
-          console.log("handleConfirm(2):", response)
+          // console.log("handleConfirm(2):", response)
           if (response.data.code === 200) {
             initLoadMenu()
             initLoadOrder()
@@ -27,7 +28,7 @@ const ProductDetailCard = memo(
           }
         })
         .catch((error) => {
-          alert(error)
+          handleNotification(error)
         })
     }
 
@@ -49,6 +50,7 @@ const ProductDetailCard = memo(
                 <img
                   src={product.image_url}
                   width={300}
+                  height={matches ? 250: "auto"}
                   alt=""
                   style={{ borderRadius: "5px", boxShadow: "2px 3px #ccc" }}
                 />

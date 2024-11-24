@@ -2,26 +2,50 @@ const express = require('express');
 const router = express.Router();
 
 const pool = require('../../../config/database/MySqlConnect')
+const TableFileService = require('../../../services/TableFileService')
 
 router.post('/checkTableOpen', function (req, res, next) {
-  const { tableNo } = req.body
-  const sql = `select Cashier from tablefile where TOnact='Y' and tcode='${tableNo}'`
-  pool.query(sql, (err, results) => {
-    if (err) throw err
+  const { tableNo, Cashier } = req.body
+  TableFileService.checkTableOpen(tableNo)
+    .then(rows => {
+      if (rows === null) {
+        return res.status(200).json({
+          status: 2000,
+          data: { tableStatus: "available" }
+        })
+      } else {
+        console.log(`Cashier logged in is: ${rows}`)
+        res.status(200).json({
+          status: 2000,
+          data: { tableStatus: "cashierInUse", Cashier: rows.Cashier, Employ: rows.TUser }
+        })
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+    })
+});
 
-    const response = { tableStatus: "available" }
-    if (results.length > 0) {
-      response.tableStatus = "employInUse"
-    }
-    res.status(200).json(response)
-  })
+router.patch('/updateOpenTable/:tableNo', function (req, res, next) {
+  const { tableNo } = req.params
+  const { Cashier, TUser } = req.body
+  TableFileService.updateTableOpenStatus(tableNo, Cashier, TUser)
+    .then(rows => {
+      return res.status(200).json({
+        status: 2000,
+        data: { message: `update success ${rows}` }
+      })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+    })
 });
 
 router.put('/:id', function (req, res, next) {
   const id = req.params.id
-  const { Tcode, SoneCode, TCustomer, TItem, TAmount, TOnAct, Service, ServiceAmt, EmpDiscAmt, FastDiscAmt, 
-    TrainDiscAmt, MemDiscAmt, SubDiscAmt, DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt, 
-    MemCurAmt, Food, Drink, Product, NetTotal, PrintTotal, PrintChkBill, PrintCnt, ChkBill, ChkBillTime, 
+  const { Tcode, SoneCode, TCustomer, TItem, TAmount, TOnAct, Service, ServiceAmt, EmpDiscAmt, FastDiscAmt,
+    TrainDiscAmt, MemDiscAmt, SubDiscAmt, DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt,
+    MemCurAmt, Food, Drink, Product, NetTotal, PrintTotal, PrintChkBill, PrintCnt, ChkBill, ChkBillTime,
     StkCode1, StkCode2, TDesk } = req.body
 
   pool.query(
@@ -31,9 +55,9 @@ router.put('/:id', function (req, res, next) {
       SpaDiscAmt = ?,CuponDiscAmt = ?,ItemDiscAmt = ?,MemCurAmt = ?,Food = ?,Drink = ?,Product = ?,NetTotal = ?,
       PrintTotal = ?,PrintChkBill = ?,PrintCnt = ?,ChkBill = ?,ChkBillTime = ?,StkCode1 = ?,StkCode2 = ?,TDesk = ? 
       WHERE id = ?`,
-    [Tcode, SoneCode, TCustomer, TItem, TAmount, TOnAct, Service, ServiceAmt, EmpDiscAmt, FastDiscAmt, 
-      TrainDiscAmt, MemDiscAmt, SubDiscAmt, DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt, 
-      MemCurAmt, Food, Drink, Product, NetTotal, PrintTotal, PrintChkBill, PrintCnt, ChkBill, ChkBillTime, 
+    [Tcode, SoneCode, TCustomer, TItem, TAmount, TOnAct, Service, ServiceAmt, EmpDiscAmt, FastDiscAmt,
+      TrainDiscAmt, MemDiscAmt, SubDiscAmt, DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt,
+      MemCurAmt, Food, Drink, Product, NetTotal, PrintTotal, PrintChkBill, PrintCnt, ChkBill, ChkBillTime,
       StkCode1, StkCode2, TDesk, id],
     (err, results) => {
       if (err) throw err

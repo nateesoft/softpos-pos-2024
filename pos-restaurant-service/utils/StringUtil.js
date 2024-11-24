@@ -1,5 +1,5 @@
 const Unicode2ASCII = unicode => {
-    if (process.env.IS_OLD_MYSQL5 === true) {
+    if (process.env.IS_OLD_MYSQL5 === "N") {
         return unicode
     }
     if (!unicode) return '';
@@ -15,7 +15,7 @@ const Unicode2ASCII = unicode => {
 }
 
 const ASCII2Unicode = ascii => {
-    if (process.env.IS_OLD_MYSQL5 === true) {
+    if (process.env.IS_OLD_MYSQL5 === "N") {
         return ascii
     }
     if (!ascii) return '';
@@ -30,7 +30,21 @@ const ASCII2Unicode = ascii => {
     return unicode.join('');
 }
 
+const PrefixFormat = (str, padString, length) => {
+    while (str.length < length)
+        str = padString + str;
+    return str;
+}
+
+const PrefixZeroFormat = (str, length) => {
+    while (("" + str).length < length)
+        str = "0" + str;
+    return str;
+}
+
 module.exports = {
     Unicode2ASCII,
-    ASCII2Unicode
+    ASCII2Unicode,
+    PrefixFormat,
+    PrefixZeroFormat
 }

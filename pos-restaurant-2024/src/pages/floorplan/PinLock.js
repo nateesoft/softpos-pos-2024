@@ -4,6 +4,7 @@ import axios from "axios"
 
 import CustomerCheckin from "./CustomerCheckin"
 import { POSContext } from "../../AppContext"
+import ShowNotification from "../utils/ShowNotification"
 
 const bgText = {
   backgroundColor: "rgba(0, 0, 0, 0.8)",
@@ -39,8 +40,9 @@ const inputPin = {
   color: "white"
 }
 
-const PinLock = ({ setOpenPin }) => {
+const PinLock = ({ setOpenPin, tableNo }) => {
   const { appData, setAppData } = useContext(POSContext)
+  const { userLogin, tableInfo } = appData
   const [openCustCheckIn, setOpenCustCheckIn] = useState(false)
 
   const [pin1, setPin1] = useState("")
@@ -50,15 +52,25 @@ const PinLock = ({ setOpenPin }) => {
 
   const [showError, setShowError] = useState(false)
 
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleErrorMessage = (message) => {
+    setNotiMessage(message)
+    setAlertType("error")
+    setShowNoti(true)
+  }
+
   const handleSubmitPin = () => {
     if (pin1 || pin2 || pin3 || pin4) {
-      const passPin = pin1 + pin2 + pin3 + pin4
+      const empCodeInput = pin1 + pin2 + pin3 + pin4
       axios
-        .post("/api/employ/getEmployeeByCode", { code: passPin })
-        .then((response) => {
+        .post("/api/employ/getEmployeeByCode", { code: empCodeInput })
+        .then(async (response) => {
           const { pinValid } = response.data.data
           if (pinValid === true) {
-            setAppData({ ...appData, empCode: passPin })
+            await axios.patch(`/api/tablefile/updateOpenTable/${tableInfo.tableNo}`, { Cashier: userLogin, TUser: empCodeInput})
+            setAppData({ ...appData, empCode: empCodeInput })
             setShowError(false)
             setOpenCustCheckIn(true)
           } else {
@@ -66,7 +78,7 @@ const PinLock = ({ setOpenPin }) => {
           }
         })
         .catch((error) => {
-          alert(error)
+          handleErrorMessage(error)
         })
     }
   }
@@ -389,6 +401,7 @@ const PinLock = ({ setOpenPin }) => {
           />
         </Box>
       </Modal>
+      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </div>
   )
 }

@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react"
+import { useParams } from "react-router-dom"
 import Grid from "@mui/material/Grid2"
-import axios from "axios"
-import { motion } from "framer-motion"
 import useMediaQuery from "@mui/material/useMediaQuery"
+import { motion } from "framer-motion"
+import axios from "axios"
 
 import AppbarMenu from "./AppbarMenu"
 import ProductMenu from "./ProductMenu"
 import OrderItem from "./OrderItem"
-import { useParams } from "react-router-dom"
+import ShowNotification from "../utils/ShowNotification"
 
 function MainSalePage() {
   const { tableNo } = useParams();
@@ -27,11 +28,20 @@ function MainSalePage() {
   const [orderTList, setOrderTList] = useState([])
   const [orderDList, setOrderDList] = useState([])
 
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type="error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
+
   const initLoadMenu = useCallback(() => {
     axios
       .get("/api/menu_setup")
       .then((response) => {
-        console.log("initLoadMenu:", response)
+        // console.log("initLoadMenu:", response)
         if (response.data.code === 200) {
           const productList = response.data.data
           setProductList(
@@ -59,7 +69,7 @@ function MainSalePage() {
         }
       })
       .catch((error) => {
-        alert(error)
+        handleNotification(error)
       })
   }, [])
 
@@ -68,9 +78,9 @@ function MainSalePage() {
     const listMenuSetup = responseMenuSetup.data.data
     console.log(listMenuSetup)
     axios
-      .get(`/api/balance/table/${tableNo}`)
+      .get(`/api/balance/${tableNo}`)
       .then((response) => {
-        console.log("initLoadOrder:", response)
+        // console.log("initLoadOrder:", response)
         if (response.status === 200) {
           const dataList = response.data.data
           const dataEList = dataList.filter(item => item.R_ETD === "E")
@@ -119,7 +129,7 @@ function MainSalePage() {
         }
       })
       .catch((error) => {
-        alert('initLoadOrder' + error)
+        handleNotification('initLoadOrder' + error)
       })
   }, [tableNo])
 
@@ -152,6 +162,7 @@ function MainSalePage() {
             OrderDList={orderDList}
             initLoadMenu={initLoadMenu}
             initLoadOrder={initLoadOrder}
+            handleNotification={handleNotification}
           />
         </Grid>
         {matches && (
@@ -168,10 +179,12 @@ function MainSalePage() {
               initLoadMenu={initLoadMenu}
               initLoadOrder={initLoadOrder}
               typePopup={false}
+              handleNotification={handleNotification}
             />
           </Grid>
         )}
       </Grid>
+      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   )
 }

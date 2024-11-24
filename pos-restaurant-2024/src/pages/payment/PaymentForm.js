@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Checkbox, Modal, Paper, TextField, Typography } from "@mui/material";
 import ArrowBack from '@mui/icons-material/ArrowBack'
@@ -7,6 +7,8 @@ import Grid from '@mui/material/Grid2'
 import DiscountIcon from '@mui/icons-material/Discount';
 import AddPaymentMethodIcon from '@mui/icons-material/AddBoxOutlined';
 import CloseIcon from '@mui/icons-material/Close';
+import axios from "axios"
+import { POSContext } from "../../AppContext";
 
 const TAX_RATE = 0.07;
 
@@ -30,7 +32,10 @@ const modalStyle = {
     boxShadow: 24
 }
 
-function PaymentForm({ open, close, orderList, tableNo }) {
+function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
+    const { appData } = useContext(POSContext)
+    const { macno } = appData
+
     const invoiceSubtotal = subtotal(orderList);
     const invoiceTaxes = TAX_RATE * invoiceSubtotal;
     const invoiceTotal = invoiceTaxes + invoiceSubtotal;
@@ -94,7 +99,7 @@ function PaymentForm({ open, close, orderList, tableNo }) {
     }
     const handleConcat = (addMoney) => {
         if (!cashEnable) {
-            setCashAmount(cash => parseFloat(""+cash + addMoney))
+            setCashAmount(cash => parseFloat("" + cash + addMoney))
         }
     }
 
@@ -115,14 +120,41 @@ function PaymentForm({ open, close, orderList, tableNo }) {
             setTonAmount(balanceAmt)
             setBalanceAmount(0)
         }
-    }, [cashAmount, creditAmount, invoiceTotal, transferAmount])
+    }, [cashAmount, creditAmount, transferAmount, invoiceTotal])
 
     const handleClear = () => {
         setCashAmount(0)
         totalAmount()
     }
-    
-    useEffect(()=> {
+
+    const handleConfirmPayment = () => {
+        if (balanceAmount >= 0) {
+            // update billno
+            axios.post(`/api/billno/${tableNo}`, { 
+                macno, 
+                orderList,
+                cashAmount,
+                creditAmount,
+                transferAmount,
+                discountAmount,
+                tonAmount,
+                paymentAmount,
+                invoiceTotal
+            })
+                .then(response => {
+                    // console.log('handleConfirmPayment:', response)
+                    open()
+                })
+                .catch(err => {
+                    handleNotification(err)
+                })
+            console.log(tableNo, orderList)
+        } else {
+            handleNotification("ข้อมูลรับชำระยังไม่ถูกต้อง!")
+        }
+    }
+
+    useEffect(() => {
         console.log('useEffect PaymentForm')
         totalAmount()
     }, [totalAmount])
@@ -227,48 +259,56 @@ function PaymentForm({ open, close, orderList, tableNo }) {
                             <Grid size={12}>
                                 <table width="100%">
                                     <tr>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(7)}>7</Button></td>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(8)}>8</Button></td>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(9)}>9</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(7)}>7</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(8)}>8</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(9)}>9</Button></td>
                                         <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "yellow", color: "black" }} fullWidth>+</Button></td>
                                     </tr>
                                 </table>
                                 <table width="100%">
                                     <tr>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(4)}>4</Button></td>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(5)}>5</Button></td>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(6)}>6</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(4)}>4</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(5)}>5</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(6)}>6</Button></td>
                                         <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "red", color: "black" }} fullWidth>-</Button></td>
                                     </tr>
                                 </table>
                                 <table width="100%">
                                     <tr>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(1)}>1</Button></td>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(2)}>2</Button></td>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(3)}>3</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(1)}>1</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(2)}>2</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(3)}>3</Button></td>
                                         <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "orange", color: "black" }} fullWidth>x</Button></td>
                                     </tr>
                                 </table>
                                 <table width="100%">
                                     <tr>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat(0)}>0</Button></td>
-                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={()=>handleConcat('00')}>00</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(0)}>0</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat('00')}>00</Button></td>
                                         <td colSpan={2}><Button variant="contained" sx={{ ...normalButton, bgcolor: "green", color: "white" }} fullWidth onClick={handleClear}>clear</Button></td>
                                     </tr>
                                 </table>
                             </Grid>
                             <Grid size={12}>
                                 <Grid container spacing={2}>
-                                    <img src="/images/payment/m1000.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(1000)} alt="" />
-                                    <img src="/images/payment/m500.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(500)} alt="" />
-                                    <img src="/images/payment/m100.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(100)} alt="" />
-                                    <img src="/images/payment/m50.png" style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} width={150} onClick={() => handleAdd(50)} alt="" />
+                                    <Grid size={6}>
+                                        <img src="/images/payment/m1000.png" width={160} style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} onClick={() => handleAdd(1000)} alt="" />
+                                    </Grid>
+                                    <Grid size={6}>
+                                        <img src="/images/payment/m500.png" width={160} style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} onClick={() => handleAdd(500)} alt="" />
+                                    </Grid>
+                                    <Grid size={6}>
+                                        <img src="/images/payment/m100.png" width={160} style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} onClick={() => handleAdd(100)} alt="" />
+                                    </Grid>
+                                    <Grid size={6}>
+                                        <img src="/images/payment/m50.png" width={160} style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} onClick={() => handleAdd(50)} alt="" />
+                                    </Grid>
                                 </Grid>
                             </Grid>
                             <Grid size={12}>
                                 <Box sx={{ marginTop: "30px" }} textAlign="center">
                                     <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}>ย้อนกลับ</Button>
-                                    <Button variant="contained" sx={{ margin: "5px" }} color="success" onClick={open} endIcon={<ConfirmIcon />}>ยืนยันชำระเงิน</Button>
+                                    <Button variant="contained" sx={{ margin: "5px" }} color="success" onClick={handleConfirmPayment} disabled={balanceAmount < 0} endIcon={<ConfirmIcon />}>ยืนยันชำระเงิน</Button>
                                 </Box>
                             </Grid>
                         </Grid>

@@ -11,6 +11,8 @@ var cors = require('cors')
 var posuserRouter = require('./routes/pos_restaurant/login/posuser');
 var employRouter = require('./routes/pos_restaurant/login/employ');
 
+var poshwsetupRouter = require('./routes/pos_restaurant/config/poshwsetup');
+
 // order
 var tableFileRouter = require('./routes/pos_restaurant/order/TableFile');
 var balanceRouter = require('./routes/pos_restaurant/order/Balance');
@@ -48,6 +50,7 @@ app.use('/api/floorplan-template', floorplanTemplateRouter);
 app.use('/api/posuser', posuserRouter);
 app.use('/api/tablefile', tableFileRouter);
 app.use('/api/employ', employRouter);
+app.use('/api/poshwsetup', poshwsetupRouter);
 
 app.use('/api/pos-product', posProductRouter);
 app.use('/api/balance', balanceRouter);

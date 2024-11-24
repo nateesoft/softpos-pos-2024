@@ -12,6 +12,9 @@ function QrCodeGenerator({ mobileNumber, amount }) {
                     setImage(response.data.Result)
                 }
             })
+            .catch(err=> {
+                alert(err)
+            })
     }, [mobileNumber, amount])
 
     useEffect(() => {

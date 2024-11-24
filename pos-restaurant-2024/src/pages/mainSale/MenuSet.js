@@ -3,22 +3,33 @@ import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios'
 import { Box, Checkbox, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+import ShowNotification from '../utils/ShowNotification';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 export default function MenuSet({ product }) {
     const [optionalList, setOptionalList] = useState([])
+
+    const [showNoti, setShowNoti] = useState(false)
+    const [notiMessage, setNotiMessage] = useState("")
+    const [alertType, setAlertType] = useState("info")
+    const handleNotification = (message, type = "error") => {
+        setNotiMessage(message)
+        setAlertType(type)
+        setShowNoti(true)
+    }
+
     const loadOptionalList = useCallback(() => {
         axios
             .get(`/api/menu_setup/optional/${product.menu_code}`)
             .then((response) => {
-                console.log("initLoadMenu:", response)
+                // console.log("initLoadMenu:", response)
                 if (response.data.code === 200) {
                     setOptionalList(response.data.data)
                 }
             })
             .catch((error) => {
-                alert(error)
+                handleNotification(error)
             })
     }, [product.menu_code])
 
@@ -60,6 +71,7 @@ export default function MenuSet({ product }) {
                     </Grid>
                 ))}
             </Grid>
+            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </div>
     );
 }

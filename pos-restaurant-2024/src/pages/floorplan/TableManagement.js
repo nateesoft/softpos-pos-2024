@@ -24,6 +24,7 @@ import "./index.css"
 import ResizeNode from "./nodes/ResizeNode"
 import AppbarMenu from "./AppbarMenu"
 import TableSetup from "./modal/TableSetup"
+import ShowNotification from "../utils/ShowNotification"
 
 const nodeTypes = {
   round: RoundNode,
@@ -52,6 +53,15 @@ const TableManagement = () => {
   const [openTableSetup, setOpenTableSetup] = useState(false)
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
   const [foundTable, setFoundTable] = useState(false)
+
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleErrorMessage = (message) => {
+    setNotiMessage(message)
+    setAlertType("error")
+    setShowNoti(true)
+  }
 
   const onDragOver = useCallback((event) => {
     event.preventDefault()
@@ -121,7 +131,7 @@ const TableManagement = () => {
         }
       })
       .catch((error) => {
-        alert(error)
+        handleErrorMessage(error)
       })
   }
 
@@ -133,7 +143,7 @@ const TableManagement = () => {
           navigate("/floorplan")
         })
         .catch((error) => {
-          alert(error)
+          handleErrorMessage(error)
         })
     }
   }
@@ -173,11 +183,11 @@ const TableManagement = () => {
             }
             setNodes((nds) => nds.concat(updNode))
           } else {
-            alert("Error Update Floorplan Table Setup !!!")
+            handleErrorMessage("Error Update Floorplan Table Setup !!!")
           }
         })
         .catch((error) => {
-          alert(error)
+          handleErrorMessage(error)
         })
     } else {
       axios
@@ -190,11 +200,11 @@ const TableManagement = () => {
             }
             setNodes((nds) => nds.concat(updNode))
           } else {
-            alert("Error Save Floorplan Table Setup !!!")
+            handleErrorMessage("Error Save Floorplan Table Setup !!!")
           }
         })
         .catch((error) => {
-          alert(error)
+          handleErrorMessage(error)
         })
     }
   }
@@ -210,7 +220,7 @@ const TableManagement = () => {
           setNodes([])
         }
       })
-      .catch(err => alert(err))
+      .catch(err => handleErrorMessage(err))
   }, [setNodes])
 
   useEffect(() => {
@@ -263,6 +273,7 @@ const TableManagement = () => {
           />
         </Box>
       </Modal>
+      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   )
 }

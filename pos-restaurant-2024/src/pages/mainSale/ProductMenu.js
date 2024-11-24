@@ -76,7 +76,8 @@ const ProductMenu = ({
     ProductList, 
     ProductA, ProductB, ProductC, ProductD, ProductE, ProductF, 
     OrderList, OrderEList, OrderTList, OrderDList,
-    initLoadMenu, initLoadOrder
+    initLoadMenu, initLoadOrder,
+    handleNotification
  }) => {
     const { t } = useTranslation("global")
     const matches = useMediaQuery('(min-width:1024px)');
@@ -125,11 +126,13 @@ const ProductMenu = ({
                         <Grid>
                             <ProductCard
                                 id={"all" + product.id}
+                                tableNo={tableNo}
                                 product={product}
                                 openModal={() => handleOpenMenu(product)}
                                 initLoadOrder={initLoadOrder}
                                 initLoadMenu={initLoadMenu}
                                 setShowMenuSet={()=>handleShowMenuSet(product)}
+                                handleNotification={handleNotification}
                             />
                         </Grid>
                     )}
@@ -139,11 +142,13 @@ const ProductMenu = ({
                 {ProductA && ProductA.map(product =>
                     <ProductCard
                         id={"a" + product.id}
+                        tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
                         setShowMenuSet={()=>handleShowMenuSet(product)}
+                        handleNotification={handleNotification}
                     />
                 )}
                 {ProductA.length === 0 && <NotfoundMenu />}
@@ -152,11 +157,13 @@ const ProductMenu = ({
                 {ProductB && ProductB.map(product =>
                     <ProductCard
                         id={"b" + product.id}
+                        tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
                         setShowMenuSet={()=>handleShowMenuSet(product)}
+                        handleNotification={handleNotification}
                     />
                 )}
                 {ProductB.length === 0 && <NotfoundMenu />}
@@ -165,11 +172,13 @@ const ProductMenu = ({
                 {ProductC && ProductC.map(product =>
                     <ProductCard
                         id={"c" + product.id}
+                        tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
                         setShowMenuSet={()=>handleShowMenuSet(product)}
+                        handleNotification={handleNotification}
                     />
                 )}
                 {ProductC.length === 0 && <NotfoundMenu />}
@@ -178,11 +187,13 @@ const ProductMenu = ({
                 {ProductD && ProductD.map(product =>
                     <ProductCard
                         id={"d" + product.id}
+                        tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
                         setShowMenuSet={()=>handleShowMenuSet(product)}
+                        handleNotification={handleNotification}
                     />
                 )}
                 {ProductD.length === 0 && <NotfoundMenu />}
@@ -191,11 +202,13 @@ const ProductMenu = ({
                 {ProductE && ProductE.map(product =>
                     <ProductCard
                         id={"e" + product.id}
+                        tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
                         setShowMenuSet={()=>handleShowMenuSet(product)}
+                        handleNotification={handleNotification}
                     />
                 )}
                 {ProductE.length === 0 && <NotfoundMenu />}
@@ -204,11 +217,13 @@ const ProductMenu = ({
                 {ProductF && ProductF.map(product =>
                     <ProductCard
                         id={"f" + product.id}
+                        tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
                         setShowMenuSet={()=>handleShowMenuSet(product)}
+                        handleNotification={handleNotification}
                     />
                 )}
                 {ProductF.length === 0 && <NotfoundMenu />}
@@ -217,7 +232,12 @@ const ProductMenu = ({
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle, width: 450 }}>
-                    <ProductDetailCard product={productInfo} closeModal={() => setOpen(false)} initLoadOrder={initLoadOrder} initLoadMenu={initLoadMenu} />
+                    <ProductDetailCard 
+                        product={productInfo} 
+                        closeModal={() => setOpen(false)} 
+                        initLoadOrder={initLoadOrder} 
+                        initLoadMenu={initLoadMenu} 
+                        handleNotification={handleNotification} />
                 </Box>
             </Modal>
             {matches === false &&
@@ -243,7 +263,9 @@ const ProductMenu = ({
                     OrderDList={OrderDList}
                     initLoadMenu={initLoadMenu}
                     initLoadOrder={initLoadOrder} 
-                    typePopup={true} />
+                    typePopup={true} 
+                    handleNotification={handleNotification}
+                />
             </Dialog>
             <Modal open={showMenuSet} onClose={() => setShowMenuSet(false)}
                 aria-labelledby="modal-modal-title"

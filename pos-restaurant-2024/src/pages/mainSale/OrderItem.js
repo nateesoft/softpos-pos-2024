@@ -31,6 +31,9 @@ import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 import PrintIcon from "@mui/icons-material/Print"
 import PrintCheckboxIcon from "@mui/icons-material/CheckBox"
 
+import AddCircleIcon from "@mui/icons-material/AddCircle"
+import RemoveCircleIcon from '@mui/icons-material/DoNotDisturbOn';
+
 import SplitBiPayment from "./SplitBillPayment"
 import OptionMenuSelect from "./OptionMenuSelect"
 
@@ -71,17 +74,17 @@ const ProductCard = ({ product, openModal }) => {
             <Grid>{product.R_PName}</Grid>
             <Grid display="flex" justifyContent="center">
               <IconButton onClick={() => setCount(Math.max(count - 1, 0))}>
-                <RemoveIcon />
+                <RemoveCircleIcon color="error" fontSize="large" />
               </IconButton>
               <TextField
-                inputProps={{ min: 0, style: { textAlign: "center" } }}
+                inputProps={{ min: 0, style: { textAlign: "right", width: '35px', fontWeight: "bold" } }}
                 variant="outlined"
                 type="number"
                 value={count}
                 onChange={(e) => setCount(e.target.value)}
               />
               <IconButton onClick={() => setCount(count + 1)}>
-                <AddIcon />
+                <AddCircleIcon color="success" fontSize="large" />
               </IconButton>
             </Grid>
             <Grid>
@@ -101,6 +104,7 @@ const ProductCard = ({ product, openModal }) => {
 }
 const ProductDetailCard = ({
   product,
+  handleNotification,
   closeModal,
   initLoadOrder,
   initLoadMenu
@@ -128,7 +132,7 @@ const ProductDetailCard = ({
               }
             })
             .catch((error) => {
-              alert(error)
+              handleNotification(error)
             })
         }
       })
@@ -153,12 +157,12 @@ const ProductDetailCard = ({
                 }
               })
               .catch((error1) => {
-                alert(error1)
+                handleNotification(error1)
               })
           }
         })
         .catch((error) => {
-          alert(error)
+          handleNotification(error)
         })
     }
   }
@@ -318,10 +322,10 @@ const TotalBill = ({ orderList }) => {
       }}
     >
       <Grid container spacing={2}>
-        <Typography variant="p" sx={{fontWeight: "bold", margin: "4px"}}>Total Amount</Typography>
+        <Typography variant="p" sx={{ fontWeight: "bold", margin: "4px" }}>Total Amount</Typography>
       </Grid>
       <Grid container display="flex" justifyContent="flex-end">
-        <Typography variant="h2" sx={{fontWeight: "bold", textShadow: "2px 2px white"}}>{totalBill}</Typography>
+        <Typography variant="h2" sx={{ fontWeight: "bold", textShadow: "2px 2px white" }}>{totalBill}</Typography>
       </Grid>
     </div>
   )
@@ -335,7 +339,8 @@ const OrderItem = ({
   OrderDList,
   initLoadMenu,
   initLoadOrder,
-  typePopup = false
+  typePopup = false,
+  handleNotification
 }) => {
   const navigate = useNavigate()
   const [value, setValue] = React.useState("1")
@@ -344,8 +349,18 @@ const OrderItem = ({
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
 
-  const styleMain = { typography: "body1", marginTop: "8vh" }
-  const stylePopup = { width: "400px", height: "85vh", typography: "body1" }
+  // const matches = useMediaQuery('(min-width:600px)');
+
+  const styleMain = {
+    typography: "body1",
+    marginTop: "8vh"
+  }
+
+  const stylePopup = {
+    width: "350x",
+    height: "85vh",
+    typography: "body1"
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -366,11 +381,15 @@ const OrderItem = ({
 
   function handlePrint() {
     // update send to Kic
-    axios.patch(`/api/balance/printToKic/${tableNo}`).then((response) => {
-      if (response.status === 200) {
-        setShowKicPrint(false)
-      }
-    })
+    axios.patch(`/api/balance/printToKic/${tableNo}`)
+      .then((response) => {
+        if (response.status === 200) {
+          setShowKicPrint(false)
+        }
+      })
+      .catch(err => {
+        handleNotification(err)
+      })
 
   }
 
@@ -408,6 +427,7 @@ const OrderItem = ({
             return (
               <ProductCard
                 product={product}
+                handleNotification={handleNotification}
                 openModal={() => handleOpenMenu(product)}
               />
             )
@@ -431,6 +451,7 @@ const OrderItem = ({
             return (
               <ProductCard
                 product={product}
+                handleNotification={handleNotification}
                 openModal={() => handleOpenMenu(product)}
               />
             )
@@ -454,6 +475,7 @@ const OrderItem = ({
             return (
               <ProductCard
                 product={product}
+                handleNotification={handleNotification}
                 openModal={() => handleOpenMenu(product)}
               />
             )
@@ -482,6 +504,7 @@ const OrderItem = ({
         <Button
           variant="outlined"
           startIcon={<PrintIcon />}
+          disabled={OrderList.length === 0}
           onClick={() => setShowKicPrint(true)}
         >
           ส่งครัว/ พักโต๊ะ
@@ -504,6 +527,7 @@ const OrderItem = ({
           color="secondary"
           onClick={() => setOpenSplitBill(true)}
           endIcon={<SplitBillIcon />}
+          disabled={OrderList.length === 0}
         >
           แยกชำระ
         </Button>
@@ -511,6 +535,7 @@ const OrderItem = ({
           variant="contained"
           color="success"
           onClick={handleClick}
+          disabled={OrderList.length === 0}
           endIcon={<PointOfSaleIcon />}
         >
           ชำระเงิน
@@ -526,6 +551,7 @@ const OrderItem = ({
         <Box sx={{ ...modalStyle, width: 450 }}>
           <ProductDetailCard
             product={productInfo}
+            handleNotification={handleNotification}
             closeModal={() => setOpen(false)}
             initLoadMenu={initLoadMenu}
             initLoadOrder={initLoadOrder}

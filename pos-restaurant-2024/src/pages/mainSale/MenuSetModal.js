@@ -2,24 +2,36 @@ import React, { useState, useEffect, useCallback } from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import axios from 'axios'
-import { Box, Button, Checkbox, ImageListItemBar, Typography } from '@mui/material';
+import { Button, Checkbox, ImageListItemBar, Typography } from '@mui/material';
 import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
+import ShowNotification from '../utils/ShowNotification';
 
 const MenuSetModal = ({ product }) => {
     const [optionalList, setOptionalList] = useState([])
     const [select, setSelect] = useState([])
 
+    const [showNoti, setShowNoti] = useState(false)
+    const [notiMessage, setNotiMessage] = useState("")
+    const [alertType, setAlertType] = useState("info")
+    const handleNotification = (message, type = "error") => {
+        setNotiMessage(message)
+        setAlertType(type)
+        setShowNoti(true)
+    }
+
+    // const matches = useMediaQuery('(min-width:600px)');
+
     const loadOptionalList = useCallback(() => {
         axios
             .get(`/api/menu_setup/optional/${product.menu_code}`)
             .then((response) => {
-                console.log("initLoadMenu:", response)
+                // console.log("initLoadMenu:", response)
                 if (response.data.code === 200) {
                     setOptionalList(response.data.data)
                 }
             })
             .catch((error) => {
-                alert(error)
+                handleNotification(error)
             })
     }, [product.menu_code])
 
@@ -51,7 +63,7 @@ const MenuSetModal = ({ product }) => {
                         position="bottom"
                         subtitle={
                             item.can_change==='Y' ? 
-                            <Button variant='contained'>เปลี่ยนรายการ</Button>: 
+                            <Button variant='contained'>เปลี่ยนเมนู</Button>: 
                             <Typography color='orange'>ไม่สามารถเปลี่ยนได้</Typography>
                         }
                         actionIcon={
@@ -61,6 +73,7 @@ const MenuSetModal = ({ product }) => {
                     />
                 </ImageListItem>
             ))}
+            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </ImageList>
     );
 }

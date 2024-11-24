@@ -44,6 +44,7 @@ import RefundBill from "./RefundBill"
 import ResizeNode from "./nodes/ResizeNode"
 import FloorSelect from "./FloorSelect"
 import { POSContext } from "../../AppContext"
+import ShowNotification from "../utils/ShowNotification"
 
 const modalPinStyle = {
   position: "absolute",
@@ -63,12 +64,16 @@ const nodeTypes = {
 function FloorPlanPage() {
   const navigate = useNavigate()
   const { appData, setAppData } = useContext(POSContext)
+  const { userLogin } = appData
 
   const matches = useMediaQuery("(min-width:600px)")
   console.log('FoorPlanPage Size:', matches)
 
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes, onNodesChange] = useNodesState([])
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
 
   const [openPin, setOpenPin] = useState(false)
   const [openMgrTable, setOpenMgrTable] = useState(false)
@@ -85,7 +90,7 @@ function FloorPlanPage() {
   const confirmLogoutAlert = useCallback(() => {
     console.log("confirmLogoutAlert")
     axios
-      .patch("/api/posuser/logout", { username: appData.userLogin })
+      .patch("/api/posuser/logout", { username: userLogin })
       .then((response) => {
         if (response.data.code === 200) {
           setAppData({ ...appData, userLogin: "" })
@@ -96,7 +101,7 @@ function FloorPlanPage() {
         }
       })
       .catch((error) => {
-        alert(error)
+        handleErrorMessage(error)
       })
   }, [setOpenLogout, navigate, appData, setAppData])
 
@@ -104,17 +109,27 @@ function FloorPlanPage() {
     navigate("/table-setup")
   }
 
+  const handleErrorMessage = (message) => {
+    setNotiMessage(message)
+    setAlertType("error")
+    setShowNoti(true)
+  }
+
   const onNodeClick = (event, node) => {
     console.log("onNodeClick:", node)
     const tableNo = node.data.label
     axios
-      .post("/api/tablefile/checkTableOpen", { tableNo })
-      .then((response) => {
-        console.log(response)
-        if (response.status === 200) {
-          const tableStatus = response.data.tableStatus
-          if (tableStatus === "employInUse") {
-            alert("มีพนักงานกำลังใช้งานโต๊ะนี้อยู่ !!!")
+      .post("/api/tablefile/checkTableOpen", { tableNo, Cashier: userLogin })
+      .then(async (response) => {
+        // console.log(response)
+        if (response.data.status === 2000) {
+          const tableStatus = response.data.data.tableStatus
+          const Cashier = response.data.data.Cashier
+          const Employ = response.data.data.Employ
+          if (tableStatus === "cashierInUse") {
+            setNotiMessage(`มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`)
+            setAlertType("warning")
+            setShowNoti(true)
           } else {
             setAppData({
               ...appData,
@@ -126,11 +141,11 @@ function FloorPlanPage() {
             setOpenPin(true)
           }
         } else {
-          alert("พบปัญหาในการเปิดโต๊ะ")
+          handleErrorMessage("พบปัญหาในการเปิดโต๊ะ")
         }
       })
       .catch((error) => {
-        alert(error)
+        handleErrorMessage(error)
       })
   }
 
@@ -142,7 +157,7 @@ function FloorPlanPage() {
   const loadFloorPlan = useCallback((floor) => {
     axios.get(`/api/floorplan-template/${floor}`)
       .then(response => {
-        console.log('loadFloorPlan:', response)
+        // console.log('loadFloorPlan:', response)
         const result = response.data
         if (result.code === 200) {
           if (result.data != null) {
@@ -156,7 +171,7 @@ function FloorPlanPage() {
           }
         }
       })
-      .catch(err => alert(err))
+      .catch(err => handleErrorMessage(err))
   }, [setNodes])
 
   useEffect(() => {
@@ -305,6 +320,7 @@ function FloorPlanPage() {
         header="Confirm Logout"
         content="ยืนยันการออกจากระบบ ?"
       />
+      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   )
 }
