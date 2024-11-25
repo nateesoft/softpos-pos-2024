@@ -1,9 +1,13 @@
+const moment = require('moment')
+
 const pool = require('../config/database/MySqlConnect')
-const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
-const { emptyTableBalance } = require('./BalanceService');
+const { PrefixZeroFormat } = require('../utils/StringUtil');
+const { emptyTableBalance, getBalanceByTableNo } = require('./BalanceService');
+const { getAllProtab, updatePromotion } = require('./PromotionService');
 
 const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService');
 const { addDataFromBalance } = require('./TSaleService');
+const { updateDiscount } = require('./DiscountService');
 
 const getBillNoByTableNo = async tableNo => {
     const sql = `select * from bill_no where B_Refno='${tableNo}'`;
@@ -200,8 +204,16 @@ const addNewBill = async (tableNo, requestPayload) => {
                 R_Opt3, R_Opt4, R_Opt5, R_Opt6, R_Opt7, R_Opt8, VoidMsg, B_EarnDocNo, B_UseEarnNo, B_UserEntertain,
                 B_SendOnline])
         if (results) {
+            // list all balance
+            const allBalance = await getBalanceByTableNo(tableNo)
+            console.log('addDataFromBalance:', allBalance)
+
             // save t_sale list
-            await addDataFromBalance(B_Table, B_Refno)
+            await addDataFromBalance(B_Table, B_Refno, allBalance)
+
+            // // update promotion
+            // await updateProSerTable(B_Table, allBalance);
+
             // update next bill id
             await updateNextBill(macno)
 
@@ -216,6 +228,29 @@ const addNewBill = async (tableNo, requestPayload) => {
         console.log('addNewBill', error)
         return null
     }
+}
+
+const updateService = async (tableNo, allBalance) => {
+
+}
+
+const updateProSerTable = async (tableNo, allBalance) => {
+    //คำนวนโปรโมชั่น
+    let allProtabs = await getAllProtab()
+    allProtabs.forEach(async protab => {
+        let dateEXP = moment(protab.pdate2);
+        let nowDate = moment();
+        if (dateEXP >= nowDate) {
+            await updatePromotion(tableNo);
+        }
+    })
+
+    //คำนวณส่วนลด
+    await updateDiscount(tableNo, allBalance);
+
+    //คำนวน % ชาร์จเครดิต
+    //คำนวณค่าบริการ + คำนวณภาษีมูลค่าเพิ่ม
+    await updateService(tableNo, allBalance);
 }
 
 module.exports = {

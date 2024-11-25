@@ -57,7 +57,7 @@ const assignFieldWithDefautValue = (fields) => {
     return myField
 }
 
-const tableName = 'MyRestaurantJefferSakon.tablefile'
+const tableName = 'MyRestaurantJefferSakon.stcard'
 const sqlAllTable = `desc ${tableName} `
 pool.query(sqlAllTable, (err, results) => {
     if (err) throw err

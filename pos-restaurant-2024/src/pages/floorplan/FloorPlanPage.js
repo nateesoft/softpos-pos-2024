@@ -123,14 +123,15 @@ function FloorPlanPage() {
       .then(async (response) => {
         // console.log(response)
         if (response.data.status === 2000) {
-          const tableStatus = response.data.data.tableStatus
+          let tableStatus = response.data.data.tableStatus
           const Cashier = response.data.data.Cashier
           const Employ = response.data.data.Employ
-          if (tableStatus === "cashierInUse") {
+          if (tableStatus === "cashierInUse" && Cashier !== userLogin) {
             setNotiMessage(`มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`)
             setAlertType("warning")
             setShowNoti(true)
           } else {
+            tableStatus = "available"
             setAppData({
               ...appData,
               tableInfo: {

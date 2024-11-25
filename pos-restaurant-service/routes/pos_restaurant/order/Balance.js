@@ -38,9 +38,31 @@ router.patch('/printToKic/:tableNo', (req, res) => {
     })
 });
 
+router.patch('/updateQty', (req, res) => {
+  const { tableNo, rIndex, qty} = req.body
+  BalanceService.updateBalanceQty(tableNo, rIndex, qty)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+    })
+});
+
 router.get('/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
   BalanceService.getBalanceByTableNo(tableNo)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+    })
+});
+
+router.get('/totalBalance/:tableNo', function (req, res) {
+  const tableNo = req.params.tableNo
+  BalanceService.getTotalBalance(tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

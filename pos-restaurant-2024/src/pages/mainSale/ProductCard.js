@@ -18,7 +18,7 @@ const ProductCard = memo(
         .post(`/api/balance`, {
           tableNo, menuInfo: product, qty, macno, userLogin, empCode
         })
-        .then((response2) => {
+        .then((response) => {
           initLoadMenu()
           initLoadOrder()
         })

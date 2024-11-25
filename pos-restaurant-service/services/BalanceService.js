@@ -3,6 +3,17 @@ const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
 
 const { getProductByPCode } = require('./ProductService');
 
+const getTotalBalance = async (tableNo) => {
+    const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
+    console.log('getAllBalance:', sql)
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        return results[0].R_Total
+    }
+
+    return 0.00
+}
+
 const getAllBalance = async () => {
     const sql = `select * from balance`;
     console.log('getAllBalance:', sql)
@@ -50,6 +61,26 @@ const updatePrint2Kic = async tableNo => {
     console.log('updatePrint2Kic:', sql)
     const results = await pool.query(sql)
     return results
+}
+
+const updateBalanceQty = async (tableNo, rIndex, qty) => {
+    if (qty === 0) {
+        const sql = `delete from balance 
+        where R_Table='${tableNo}' 
+        and R_Index='${rIndex}' 
+        and R_Pause <> 'P' `;
+        console.log('updateBalanceQty(delete):', sql)
+        const result = await pool.query(sql)
+        return result
+    } else {
+        const sql = `update balance set R_Quan=${qty} 
+        where R_Table='${tableNo}' 
+        and R_Index='${rIndex}' 
+        and R_Pause <> 'P'`
+        console.log('updateBalanceQty(update):', sql)
+        const result = await pool.query(sql)
+        return result
+    }
 }
 
 const addNewBalance = async payload => {
@@ -128,5 +159,7 @@ module.exports = {
     emptyTableBalance,
     updatePrint2Kic,
     getBalanceMaxIndex,
-    addNewBalance
+    addNewBalance,
+    updateBalanceQty,
+    getTotalBalance
 }

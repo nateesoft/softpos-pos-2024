@@ -2,6 +2,8 @@ const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
 
 const { getBalanceByTableNo } = require('./BalanceService');
+const { listIngredeint, getPSetByPCode } = require('./ProductService');
+const { ProcessStockOut } = require('./STCardService');
 
 const createNewTSale = async (balance, BillRefNo) => {
     const { R_Table, Macno, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal,
@@ -41,7 +43,7 @@ const createNewTSale = async (balance, BillRefNo) => {
     const R_BranchCode = "";
     const R_ServiceAmt = 0;
 
-    const MySQL_QUERY = `INSERT INTO t_sale 
+    const sql = `INSERT INTO t_sale 
     (R_Index,R_Refno,R_Table,R_Date,R_Time,MacNo,Cashier,R_Emp,R_PluCode,R_PName,R_Unit,R_Group,R_Status,R_Normal,
     R_Discount,R_Service,R_Stock,R_Set,R_Vat,R_Type,R_ETD,R_Quan,R_Price,R_Total,R_PrType,R_PrCode,R_PrDisc,R_PrBath,
     R_PrAmt,R_PrCuType,R_PrCuCode,R_PrCuQuan,R_PrCuAmt,R_Redule,R_DiscBath,R_PrAdj,R_PreDisAmt,R_NetTotal,R_Kic,
@@ -53,9 +55,9 @@ const createNewTSale = async (balance, BillRefNo) => {
     R_CountTime,R_Return,R_Earn,R_EarnNo,R_NetDiff,R_SendOnline,R_BranchCode,R_CardPay) 
     values (?,?,?,curdate(),curtime(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
     ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
-    console.log('createNewTSale:', MySQL_QUERY)
+    console.log('createNewTSale:', sql)
     try {
-        const results = await pool.query(MySQL_QUERY,
+        const results = await pool.query(sql,
             [R_Index, R_Refno, R_Table, MacNo, Cashier, R_Emp, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal,
                 R_Discount, R_Service, R_Stock, R_Set, R_Vat, R_Type, R_ETD, R_Quan, R_Price, R_Total, R_PrType, R_PrCode, R_PrDisc, R_PrBath,
                 R_PrAmt, R_PrCuType, R_PrCuCode, R_PrCuQuan, R_PrCuAmt, R_Redule, R_DiscBath, R_PrAdj, R_PreDisAmt, R_NetTotal, R_Kic,
@@ -72,14 +74,66 @@ const createNewTSale = async (balance, BillRefNo) => {
     }
 }
 
-const addDataFromBalance = async (tableNo, BillRefNo) => {
-    const allBalance = await getBalanceByTableNo(tableNo)
-    console.log('addDataFromBalance:', allBalance)
-    // loop insert
-    allBalance.forEach(balance => {
-        createNewTSale(balance, BillRefNo)
+const processAllPIngredent = (PCode, R_Quan, Cashier) => {
+    let listING = listIngredeint(PCode);
+    listING.forEach(async ingBean => {
+        if (ingBean.Pstock === "Y" && ingBean.Pactive === "Y") {
+            let PingCode = ingBean.PingCode;
+            let PBPack = ingBean.PBPack;
+            if (PBPack <= 0) {
+                PBPack = 1;
+            }
+            let R_QuanIng = ingBean.PingQty * R_Quan;
+            let R_Total = 0;
+            await ProcessStockOut(DocNo, StkCode, R_PluCode, new Date(), Stk_Remark, R_QuanIng, R_Total,
+                Cashier, "Y", "", "", "");
+        }
     })
 }
+
+const processAllPSet = (PCode, R_Quan, Cashier) => {
+    let listPset = getPSetByPCode(balance.PCode);
+    listPset.forEach(async psetBean => {
+        let pSubCode = psetBean.getPsubcode();
+        let pSubQTY = psetBean.getPsubQTY();
+        await ProcessStockOut(DocNo, StkCode, pSubCode, new Date(), "A1", pSubQTY * R_Quan, 0.00,
+        Cashier, "Y", "", "", "");
+    })
+}
+
+const addDataFromBalance = async (tableNo, BillRefNo, allBalance) => {
+    // loop insert
+    allBalance.forEach(async balance => {
+
+        // new t_sale
+        await createNewTSale(balance, BillRefNo)
+
+        // process stockcard and stkfile
+        // if (balance.R_Stock === 'Y') {
+        //     const DocNo = tableNo + "/" + BillRefNo
+        //     const StkCode = balance.StkCode
+        //     const PCode = balance.R_PluCode
+        //     const TDate = balance.R_Date
+        //     const Stk_Remark = "SAL"
+        //     const Qty = balance.R_Quan
+        //     const Amount = balance.R_Total
+        //     const UserPost = balance.Cashier
+        //     const PStock = balance.R_Stock
+        //     const PSet = balance.R_Set
+        //     const r_index = balance.R_Index
+        //     const SaleOrRefund = "1"
+        //     await ProcessStockOut(DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, Amount,
+        //         UserPost, PStock, PSet, r_index, SaleOrRefund)
+
+        //     // ตัดสต็อกสินค้าที่มี Ingredent
+        //     await processAllPIngredent(balance.R_PluCode, balance.R_Quan, balance.Cashier)
+
+        //     // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
+        //     await processAllPSet(balance.R_PluCode, balance.R_Quan, balance.Cashier)
+        // }
+    })
+}
+
 module.exports = {
     addDataFromBalance
 }

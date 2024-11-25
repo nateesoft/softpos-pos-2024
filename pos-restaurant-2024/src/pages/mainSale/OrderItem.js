@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Tab from "@mui/material/Tab"
 import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
@@ -30,12 +30,12 @@ import ArrowBack from "@mui/icons-material/TableBar"
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 import PrintIcon from "@mui/icons-material/Print"
 import PrintCheckboxIcon from "@mui/icons-material/CheckBox"
-
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import RemoveCircleIcon from '@mui/icons-material/DoNotDisturbOn';
 
 import SplitBiPayment from "./SplitBillPayment"
 import OptionMenuSelect from "./OptionMenuSelect"
+import { POSContext } from "../../AppContext"
 
 const modalStyle = {
   position: "absolute",
@@ -46,9 +46,49 @@ const modalStyle = {
   backgroundColor: "snow"
 }
 
-const ProductCard = ({ product, openModal }) => {
+const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder }) => {
   console.log("OrderItem(ProductCard):", product)
+  const { appData } = useContext(POSContext)
+  const { macno, userLogin, empCode } = appData
   const [count, setCount] = useState(product.qty || 1)
+
+  const handleRemoveItem = () => {
+    const updCount = Math.max(count - 1, 0)
+    axios.patch(`/api/balance/updateQty`, {
+      tableNo: tableNo,
+      rIndex: product.R_Index,
+      qty: updCount
+    })
+      .then(response => {
+        console.log('update qty success:', response)
+        if (updCount > 0) {
+          setCount(updCount)
+        }
+        initLoadMenu()
+        initLoadOrder()
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  const handleAddItem = () => {
+    axios.post(`/api/balance`, {
+      tableNo, menuInfo: {
+        menu_code: product.R_PluCode,
+        menu_name: product.R_PName,
+        menu_price: product.R_Price
+      }, qty: 1, macno, userLogin, empCode
+    })
+      .then(response => {
+        initLoadMenu()
+        initLoadOrder()
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   return (
     <div
       style={{
@@ -56,7 +96,8 @@ const ProductCard = ({ product, openModal }) => {
         border: "2px solid #eee",
         borderRadius: "5px",
         marginBottom: "10px",
-        boxShadow: "2px 2px #eee"
+        boxShadow: "2px 2px #eee",
+        backgroundColor: product.R_Pause==='P' ? "#f4fbfc": "snow"
       }}
     >
       <Grid container spacing={2}>
@@ -73,17 +114,18 @@ const ProductCard = ({ product, openModal }) => {
           <Grid container direction="column" justifyContent="flex-end">
             <Grid>{product.R_PName}</Grid>
             <Grid display="flex" justifyContent="center">
-              <IconButton onClick={() => setCount(Math.max(count - 1, 0))}>
-                <RemoveCircleIcon color="error" fontSize="large" />
+              <IconButton onClick={handleRemoveItem} disabled={product.R_Pause==='P'}>
+                <RemoveCircleIcon sx={{color: product.R_Pause==='P' ? "gray": "red"}} fontSize="large" />
               </IconButton>
               <TextField
                 inputProps={{ min: 0, style: { textAlign: "right", width: '35px', fontWeight: "bold" } }}
                 variant="outlined"
                 type="number"
                 value={count}
+                disabled
                 onChange={(e) => setCount(e.target.value)}
               />
-              <IconButton onClick={() => setCount(count + 1)}>
+              <IconButton onClick={handleAddItem}>
                 <AddCircleIcon color="success" fontSize="large" />
               </IconButton>
             </Grid>
@@ -305,10 +347,10 @@ const ProductDetailCard = ({
     </div>
   )
 }
-const TotalBill = ({ orderList }) => {
+const TotalBill = ({ tableNo, orderList }) => {
   let totalBill = 0
   for (let i = 0; i < orderList.length; i++) {
-    totalBill = totalBill + parseInt(orderList[i].R_Total)
+    totalBill = totalBill + parseInt(orderList[i].R_Quan*orderList[i].R_Price)
   }
   totalBill = totalBill.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
   return (
@@ -426,8 +468,11 @@ const OrderItem = ({
           {OrderEList && OrderEList.map((product) => {
             return (
               <ProductCard
+                tableNo={tableNo}
                 product={product}
                 handleNotification={handleNotification}
+                initLoadMenu={initLoadMenu}
+                initLoadOrder={initLoadOrder}
                 openModal={() => handleOpenMenu(product)}
               />
             )
@@ -450,8 +495,11 @@ const OrderItem = ({
           {OrderTList && OrderTList.map((product) => {
             return (
               <ProductCard
+                tableNo={tableNo}
                 product={product}
                 handleNotification={handleNotification}
+                initLoadMenu={initLoadMenu}
+                initLoadOrder={initLoadOrder}
                 openModal={() => handleOpenMenu(product)}
               />
             )
@@ -474,8 +522,11 @@ const OrderItem = ({
           {OrderDList && OrderDList.map((product) => {
             return (
               <ProductCard
+                tableNo={tableNo}
                 product={product}
                 handleNotification={handleNotification}
+                initLoadMenu={initLoadMenu}
+                initLoadOrder={initLoadOrder}
                 openModal={() => handleOpenMenu(product)}
               />
             )
