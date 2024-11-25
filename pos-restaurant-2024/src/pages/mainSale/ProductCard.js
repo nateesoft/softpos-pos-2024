@@ -11,7 +11,6 @@ const ProductCard = memo(
   ({ id, tableNo, product, openModal, initLoadMenu, initLoadOrder, setShowMenuSet, handleNotification }) => {
     const { appData } = useContext(POSContext)
     const { empCode, macno, userLogin } = appData
-    console.log("ProductCard")
 
     const addOrder = async (qty = 1) => {
       axios

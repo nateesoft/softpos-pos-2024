@@ -6,10 +6,7 @@ import { Button, Checkbox, ImageListItemBar, Typography } from '@mui/material';
 import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
 import ShowNotification from '../utils/ShowNotification';
 
-const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected }) => {
-    const [optionalList, setOptionalList] = useState([])
-    const [checkedState, setCheckedState] = useState()
-
+const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalList, setOptionalList }) => {
     const [showNoti, setShowNoti] = useState(false)
     const [notiMessage, setNotiMessage] = useState("")
     const [alertType, setAlertType] = useState("info")
@@ -22,43 +19,28 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected }) => {
     // const matches = useMediaQuery('(min-width:600px)');
 
     const handleOnChange = (position) => {
-        console.log('position:', position)
-        const updatedCheckedState = optionalList.map((item, index) => {
-            if(index === position) {
-                return {
-                    ...item,
-                    checked: !item.checked
-                }
-            } else {
-                return {
-                    ...item,
-                    checked: item.checked
-                }
-            }
-        })
-        setOptionalList(updatedCheckedState)
-        setCheckedState(updatedCheckedState)
+        const updatedCheckedState = subMenuSelected.map((item, index) => index === position ? !item : item)
         setSubMenuSelected(updatedCheckedState)
 
-        console.log('CheckedState Item:', checkedState)
-    }
-    // const handleOnChange = (position, value) => {
-    //     console.log('position:', position, value)
-    //     const updatedCheckedState = checkedState.map((item, index) => index === position ? !item : item)
-    //     setCheckedState(updatedCheckedState)
-    //     setSubMenuSelected(updatedCheckedState)
+        const updatedOrderListSelected = optionalList.map((item, index) => {
+            return {
+                ...item,
+                checked: updatedCheckedState[index]
+            }
+        })
 
-    //     console.log('CheckedState Item:', checkedState)
-    // }
+        setOptionalList(updatedOrderListSelected)
+    }
 
     const loadOptionalList = useCallback(() => {
         axios
             .get(`/api/menu_setup/optional/${product.menu_code}`)
             .then((response) => {
-                // console.log("initLoadMenu:", response)
                 if (response.data.code === 200) {
                     setOptionalList(response.data.data)
-                    setCheckedState(new Array(response.data.data.length).fill(false))
+                    setSubMenuSelected(new Array(response.data.data.length)
+                        .fill(false)
+                        .map((data, index) => response.data.data[index].auto_select === 'Y'))
                 }
             })
             .catch((error) => {
@@ -96,8 +78,7 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected }) => {
                         actionIcon={
                             <Checkbox
                                 id={`subProduct${item.menu_code}`}
-                                defaultChecked={item.auto_select === "Y"}
-                                checked={optionalList[index].checked ? optionalList[index].checked: item.auto_select === "Y"}
+                                checked={subMenuSelected[index]}
                                 checkedIcon={<LibraryAddCheckIcon sx={{ color: "yellow" }} />} sx={{ margin: "5px", color: "white" }}
                                 onChange={(e) => handleOnChange(index)}
                             />

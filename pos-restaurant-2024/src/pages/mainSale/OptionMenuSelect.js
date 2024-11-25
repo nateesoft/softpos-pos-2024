@@ -43,7 +43,6 @@ const OptionMenuSelect = ({ productCode }) => {
         axios
           .get(`/api/optionfile/${productCode}`)
           .then((response) => {
-            console.log("initLoad optionfile:", response)
             if(response.data.data){
                 setOptions(response.data.data)
             }

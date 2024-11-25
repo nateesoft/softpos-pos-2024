@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback } from "react";
+import React, { forwardRef, useState, useCallback, useContext } from "react";
 import { Box, Tabs, Tab, Badge, Modal, Typography, Fab, Slide, Dialog, Button } from "@mui/material";
 import MenuBook from '@mui/icons-material/ShoppingCartOutlined';
 import { useTranslation } from "react-i18next"
@@ -9,11 +9,13 @@ import CheckIcon from '@mui/icons-material/Check';
 import NoFoodIcon from '@mui/icons-material/NoFood';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Grid from '@mui/material/Grid2'
+import axios from "axios";
 
 import OrderItem from './OrderItem'
 import ProductCard from "./ProductCard";
 import ProductDetailCard from "./ProductDetailCard";
 import MenuSetModal from "./MenuSetModal";
+import { POSContext } from "../../AppContext";
 
 const modalStyle = {
     position: "absolute",
@@ -71,16 +73,18 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="left" ref={ref} {...props} />;
 });
 
-const ProductMenu = ({ 
+const ProductMenu = ({
     tableNo,
-    ProductList, 
-    ProductA, ProductB, ProductC, ProductD, ProductE, ProductF, 
+    ProductList,
+    ProductA, ProductB, ProductC, ProductD, ProductE, ProductF,
     OrderList, OrderEList, OrderTList, OrderDList,
     initLoadMenu, initLoadOrder,
     handleNotification
- }) => {
+}) => {
     const { t } = useTranslation("global")
     const matches = useMediaQuery('(min-width:1024px)');
+    const { appData } = useContext(POSContext)
+    const { empCode, macno, userLogin } = appData
 
     const [value, setValue] = useState(0)
     const [open, setOpen] = useState(false)
@@ -89,6 +93,9 @@ const ProductMenu = ({
     const [showMenuSet, setShowMenuSet] = useState(false)
 
     const [subMenuSelected, setSubMenuSelected] = useState([])
+    const [msgWarning, setMsgWarning] = useState(false)
+
+    const [optionalList, setOptionalList] = useState([])
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -104,9 +111,62 @@ const ProductMenu = ({
         setShowMenuSet(true)
     }
 
-    const handleConfirmSelectedSubMenu = () => {
-        console.log(subMenuSelected)
-        // setShowMenuSet(false)
+    const addOrderMain = async (product) => {
+        axios
+            .post(`/api/balance`, {
+                tableNo,
+                menuInfo: product,
+                qty: 1,
+                macno,
+                userLogin,
+                empCode
+            })
+            .then(response => {
+                initLoadMenu()
+                initLoadOrder()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    const addOrderSubMenuList = (optionalList) => {
+        optionalList.forEach(async product => {
+            await axios.post(`/api/balance`, {
+                tableNo,
+                menuInfo: {
+                    ...product,
+                    menu_price: 0.00
+                },
+                qty: 1,
+                macno,
+                userLogin,
+                empCode
+            })
+        })
+    }
+
+    const handleConfirmSelectedSubMenu = async (productInfo) => {
+        const itemSelected = subMenuSelected.filter(item => item === true).length
+        if (itemSelected < productInfo.min_count_set) {
+            setMsgWarning(true)
+        } else {
+            setMsgWarning(false)
+
+            // add main product
+            await addOrderMain(productInfo)
+
+            // add sub menu in set
+            const allListToAdd = optionalList.filter(item => item.checked === true)
+            console.log('allListToAdd:', allListToAdd)
+            await addOrderSubMenuList(allListToAdd)
+
+            // total summary display
+            initLoadMenu()
+            initLoadOrder()
+
+            setShowMenuSet(false)
+        }
     }
 
     return (
@@ -138,7 +198,7 @@ const ProductMenu = ({
                                 openModal={() => handleOpenMenu(product)}
                                 initLoadOrder={initLoadOrder}
                                 initLoadMenu={initLoadMenu}
-                                setShowMenuSet={()=>handleShowMenuSet(product)}
+                                setShowMenuSet={() => handleShowMenuSet(product)}
                                 handleNotification={handleNotification}
                             />
                         </Grid>
@@ -154,7 +214,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={()=>handleShowMenuSet(product)}
+                        setShowMenuSet={() => handleShowMenuSet(product)}
                         handleNotification={handleNotification}
                     />
                 )}
@@ -169,7 +229,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={()=>handleShowMenuSet(product)}
+                        setShowMenuSet={() => handleShowMenuSet(product)}
                         handleNotification={handleNotification}
                     />
                 )}
@@ -184,7 +244,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={()=>handleShowMenuSet(product)}
+                        setShowMenuSet={() => handleShowMenuSet(product)}
                         handleNotification={handleNotification}
                     />
                 )}
@@ -199,7 +259,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={()=>handleShowMenuSet(product)}
+                        setShowMenuSet={() => handleShowMenuSet(product)}
                         handleNotification={handleNotification}
                     />
                 )}
@@ -214,7 +274,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={()=>handleShowMenuSet(product)}
+                        setShowMenuSet={() => handleShowMenuSet(product)}
                         handleNotification={handleNotification}
                     />
                 )}
@@ -229,7 +289,7 @@ const ProductMenu = ({
                         openModal={() => handleOpenMenu(product)}
                         initLoadOrder={initLoadOrder}
                         initLoadMenu={initLoadMenu}
-                        setShowMenuSet={()=>handleShowMenuSet(product)}
+                        setShowMenuSet={() => handleShowMenuSet(product)}
                         handleNotification={handleNotification}
                     />
                 )}
@@ -239,12 +299,12 @@ const ProductMenu = ({
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle, width: 450 }}>
-                    <ProductDetailCard 
+                    <ProductDetailCard
                         tableNo={tableNo}
-                        product={productInfo} 
-                        closeModal={() => setOpen(false)} 
-                        initLoadOrder={initLoadOrder} 
-                        initLoadMenu={initLoadMenu} 
+                        product={productInfo}
+                        closeModal={() => setOpen(false)}
+                        initLoadOrder={initLoadOrder}
+                        initLoadMenu={initLoadMenu}
                         handleNotification={handleNotification} />
                 </Box>
             </Modal>
@@ -263,15 +323,15 @@ const ProductMenu = ({
                 onClose={() => setShowMenu(false)}
                 aria-describedby="alert-dialog-slide-description"
             >
-                <OrderItem 
+                <OrderItem
                     tableNo={tableNo}
-                    OrderList={OrderList} 
+                    OrderList={OrderList}
                     OrderEList={OrderEList}
                     OrderTList={OrderTList}
                     OrderDList={OrderDList}
                     initLoadMenu={initLoadMenu}
-                    initLoadOrder={initLoadOrder} 
-                    typePopup={true} 
+                    initLoadOrder={initLoadOrder}
+                    typePopup={true}
                     handleNotification={handleNotification}
                 />
             </Dialog>
@@ -281,15 +341,26 @@ const ProductMenu = ({
                 <Box sx={{ ...modalStyle }}>
                     <Grid container justifyContent="center" display="flex" direction="column" padding={2}>
                         <Grid display="flex" justifyContent="space-between">
-                            <Typography variant="h4" color="secondary" sx={{fontWeight: "bold", textShadow: "1px 1px orange"}}>{productInfo.menu_name}</Typography>
-                            <CloseModalIcon fontSize="large" color="error" onClick={()=>setShowMenuSet(false)} />
+                            <Typography variant="h4" color="secondary" sx={{ fontWeight: "bold", textShadow: "1px 1px orange" }}>{productInfo.menu_name}</Typography>
+                            <CloseModalIcon fontSize="large" color="error" onClick={() => setShowMenuSet(false)} />
                         </Grid>
-                        <Typography color="error" variant="h5" sx={{fontWeight: "bold"}}>( ราคา {productInfo.menu_price} )</Typography>
+                        <Typography color="error" variant="h5" sx={{ fontWeight: "bold" }}>( ราคา {productInfo.menu_price} )</Typography>
+                        {msgWarning && <Box display="flex" justifyContent="center" sx={{ backgroundColor: "gold", padding: "10px", marginTop: "10px" }}>
+                            <Typography>!!! ไม่ตรงตามเงื่อนไขในการสั่งอาหาร !!!</Typography>}
+                        </Box>}
                     </Grid>
-                    <MenuSetModal product={productInfo} subMenuSelected={subMenuSelected} setSubMenuSelected={setSubMenuSelected} />
-                    <Box margin={1} padding={1} display="flex" justifyContent="space-between" sx={{padding: "10px", borderRadius: "10px"}}>
-                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={()=>setShowMenuSet(false)}>Cancel</Button>
-                        <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={handleConfirmSelectedSubMenu}>Confirm</Button>
+                    <MenuSetModal
+                        product={productInfo}
+                        subMenuSelected={subMenuSelected}
+                        setSubMenuSelected={setSubMenuSelected}
+                        optionalList={optionalList}
+                        setOptionalList={setOptionalList}
+                    />
+                    <Box margin={1} padding={1} display="flex" alignContent="center" justifyContent="space-between" sx={{ padding: "10px", borderRadius: "10px" }}>
+                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setShowMenuSet(false)}>Cancel</Button>
+                        <Typography>SELECTED: {subMenuSelected.filter(item => item === true).length}</Typography>|
+                        <Typography>MIN: {productInfo.min_count_set}</Typography>
+                        <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={() => handleConfirmSelectedSubMenu(productInfo)}>Confirm</Button>
                     </Box>
                 </Box>
             </Modal>

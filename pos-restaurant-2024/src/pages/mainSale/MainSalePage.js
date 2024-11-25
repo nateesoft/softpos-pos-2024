@@ -12,7 +12,6 @@ import ShowNotification from "../utils/ShowNotification"
 
 function MainSalePage() {
   const { tableNo } = useParams();
-  console.log("MainSalePage:", tableNo)
 
   const matches = useMediaQuery("(min-width:1024px)")
   const [ProductList, setProductList] = useState([])
@@ -41,7 +40,6 @@ function MainSalePage() {
     axios
       .get("/api/menu_setup")
       .then((response) => {
-        // console.log("initLoadMenu:", response)
         if (response.data.code === 200) {
           const productList = response.data.data
           setProductList(
@@ -76,11 +74,9 @@ function MainSalePage() {
   const initLoadOrder = useCallback(async () => {
     const responseMenuSetup = await axios.get(`/api/menu_setup/all`)
     const listMenuSetup = responseMenuSetup.data.data
-    console.log(listMenuSetup)
     axios
       .get(`/api/balance/${tableNo}`)
       .then((response) => {
-        // console.log("initLoadOrder:", response)
         if (response.status === 200) {
           const dataList = response.data.data
           const dataEList = dataList.filter(item => item.R_ETD === "E")

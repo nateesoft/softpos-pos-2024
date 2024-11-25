@@ -47,7 +47,6 @@ const modalStyle = {
 }
 
 const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder }) => {
-  console.log("OrderItem(ProductCard):", product)
   const { appData } = useContext(POSContext)
   const { macno, userLogin, empCode } = appData
   const [count, setCount] = useState(product.R_Quan || 1)
@@ -60,7 +59,6 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
       qty: updCount
     })
       .then(response => {
-        console.log('update qty success:', response)
         if (updCount > 0) {
           setCount(updCount)
         }

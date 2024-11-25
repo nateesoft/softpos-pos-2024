@@ -23,7 +23,6 @@ export default function MenuSet({ product }) {
         axios
             .get(`/api/menu_setup/optional/${product.menu_code}`)
             .then((response) => {
-                // console.log("initLoadMenu:", response)
                 if (response.data.code === 200) {
                     setOptionalList(response.data.data)
                 }

@@ -11,7 +11,6 @@ import { POSContext } from "../../AppContext"
 
 const ProductDetailCard = memo(
   ({ tableNo, product, closeModal, initLoadMenu, initLoadOrder, handleNotification }) => {
-    console.log("ProductDetailCard")
     const { appData } = useContext(POSContext)
     const { empCode, macno, userLogin } = appData
 
@@ -20,7 +19,6 @@ const ProductDetailCard = memo(
 
     const handleConfirm = () => {
       product.qty = count
-      console.log("handleConfirm(1):", product)
       axios
         .post(`/api/balance`, {
           tableNo, menuInfo: 
