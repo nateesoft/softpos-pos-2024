@@ -88,6 +88,8 @@ const ProductMenu = ({
     const [showMenu, setShowMenu] = useState(false)
     const [showMenuSet, setShowMenuSet] = useState(false)
 
+    const [subMenuSelected, setSubMenuSelected] = useState([])
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -100,6 +102,11 @@ const ProductMenu = ({
     const handleShowMenuSet = (product) => {
         setProductInfo(product)
         setShowMenuSet(true)
+    }
+
+    const handleConfirmSelectedSubMenu = () => {
+        console.log(subMenuSelected)
+        // setShowMenuSet(false)
     }
 
     return (
@@ -123,7 +130,7 @@ const ProductMenu = ({
                 <Grid container>
                     {ProductList.length === 0 && <NotfoundMenu />}
                     {ProductList && ProductList.map(product =>
-                        <Grid>
+                        <Grid id={`productList_${product.id}`}>
                             <ProductCard
                                 id={"all" + product.id}
                                 tableNo={tableNo}
@@ -233,6 +240,7 @@ const ProductMenu = ({
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle, width: 450 }}>
                     <ProductDetailCard 
+                        tableNo={tableNo}
                         product={productInfo} 
                         closeModal={() => setOpen(false)} 
                         initLoadOrder={initLoadOrder} 
@@ -278,10 +286,10 @@ const ProductMenu = ({
                         </Grid>
                         <Typography color="error" variant="h5" sx={{fontWeight: "bold"}}>( ราคา {productInfo.menu_price} )</Typography>
                     </Grid>
-                    <MenuSetModal product={productInfo} />
+                    <MenuSetModal product={productInfo} subMenuSelected={subMenuSelected} setSubMenuSelected={setSubMenuSelected} />
                     <Box margin={1} padding={1} display="flex" justifyContent="space-between" sx={{padding: "10px", borderRadius: "10px"}}>
                         <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={()=>setShowMenuSet(false)}>Cancel</Button>
-                        <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={()=>setShowMenuSet(false)}>Confirm</Button>
+                        <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={handleConfirmSelectedSubMenu}>Confirm</Button>
                     </Box>
                 </Box>
             </Modal>

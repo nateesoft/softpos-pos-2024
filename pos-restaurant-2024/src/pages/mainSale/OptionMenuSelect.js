@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -8,6 +8,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import { Checkbox, ListItemText, TextField } from '@mui/material';
+import axios from 'axios';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -20,18 +21,6 @@ const MenuProps = {
     },
 };
 
-const options = [
-    'เผ็ดมาก',
-    'เผ็ดกลาง',
-    'เผ็ดน้อย',
-    'ไม่เผ็ด',
-    'ไม่ใส่ผัก',
-    'หวานน้อย',
-    'หวานมาก',
-    'ไม่ใส่ชูรส',
-    'ไม่ใส่น้ำปลา'
-];
-
 function getStyles(name, personName, theme) {
     return {
         fontWeight: personName.includes(name)
@@ -40,14 +29,33 @@ function getStyles(name, personName, theme) {
     };
 }
 
-const OptionMenuSelect = () => {
+const OptionMenuSelect = ({ productCode }) => {
     const theme = useTheme();
     const [personName, setPersonName] = useState([]);
+    const [options, setOptions] = useState([])
 
     const handleChange = (event) => {
         const { target: { value }, } = event;
         setPersonName(typeof value === 'string' ? value.split(',') : value);
     };
+
+    const initLoad = useCallback(() => {
+        axios
+          .get(`/api/optionfile/${productCode}`)
+          .then((response) => {
+            console.log("initLoad optionfile:", response)
+            if(response.data.data){
+                setOptions(response.data.data)
+            }
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }, [])
+
+    useEffect(()=> {
+        initLoad()
+    }, [initLoad])
 
     return (
         <FormControl sx={{ margin: "10px", width: "390px" }}>

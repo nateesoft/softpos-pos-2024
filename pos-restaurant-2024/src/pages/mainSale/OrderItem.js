@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import Tab from "@mui/material/Tab"
 import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
@@ -50,7 +50,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
   console.log("OrderItem(ProductCard):", product)
   const { appData } = useContext(POSContext)
   const { macno, userLogin, empCode } = appData
-  const [count, setCount] = useState(product.qty || 1)
+  const [count, setCount] = useState(product.R_Quan || 1)
 
   const handleRemoveItem = () => {
     const updCount = Math.max(count - 1, 0)
@@ -288,7 +288,7 @@ const ProductDetailCard = ({
           <AddIcon fontSize="large" />
         </IconButton>
       </Grid>
-      <OptionMenuSelect />
+      <OptionMenuSelect productCode={product.R_PluCode} />
       <Box sx={{ padding: "10px" }}>
         <Box>
           <Typography variant="p">ประเภทอาหาร</Typography>
@@ -447,7 +447,7 @@ const OrderItem = ({
           <Typography variant="h5">รายการอาหารที่สั่ง</Typography>
         </Box>
         <Box textAlign="center" sx={{ marginTop: "10px" }}>
-          <Typography
+          <Typography 
             variant="p"
             sx={{
               border: "1px solid salmon",

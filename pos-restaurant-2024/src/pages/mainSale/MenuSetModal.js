@@ -6,9 +6,9 @@ import { Button, Checkbox, ImageListItemBar, Typography } from '@mui/material';
 import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
 import ShowNotification from '../utils/ShowNotification';
 
-const MenuSetModal = ({ product }) => {
+const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected }) => {
     const [optionalList, setOptionalList] = useState([])
-    const [select, setSelect] = useState([])
+    const [checkedState, setCheckedState] = useState()
 
     const [showNoti, setShowNoti] = useState(false)
     const [notiMessage, setNotiMessage] = useState("")
@@ -21,6 +21,36 @@ const MenuSetModal = ({ product }) => {
 
     // const matches = useMediaQuery('(min-width:600px)');
 
+    const handleOnChange = (position) => {
+        console.log('position:', position)
+        const updatedCheckedState = optionalList.map((item, index) => {
+            if(index === position) {
+                return {
+                    ...item,
+                    checked: !item.checked
+                }
+            } else {
+                return {
+                    ...item,
+                    checked: item.checked
+                }
+            }
+        })
+        setOptionalList(updatedCheckedState)
+        setCheckedState(updatedCheckedState)
+        setSubMenuSelected(updatedCheckedState)
+
+        console.log('CheckedState Item:', checkedState)
+    }
+    // const handleOnChange = (position, value) => {
+    //     console.log('position:', position, value)
+    //     const updatedCheckedState = checkedState.map((item, index) => index === position ? !item : item)
+    //     setCheckedState(updatedCheckedState)
+    //     setSubMenuSelected(updatedCheckedState)
+
+    //     console.log('CheckedState Item:', checkedState)
+    // }
+
     const loadOptionalList = useCallback(() => {
         axios
             .get(`/api/menu_setup/optional/${product.menu_code}`)
@@ -28,16 +58,13 @@ const MenuSetModal = ({ product }) => {
                 // console.log("initLoadMenu:", response)
                 if (response.data.code === 200) {
                     setOptionalList(response.data.data)
+                    setCheckedState(new Array(response.data.data.length).fill(false))
                 }
             })
             .catch((error) => {
                 handleNotification(error)
             })
     }, [product.menu_code])
-
-    const handleChange = () => {
-        console.log(select)
-    }
 
     useEffect(() => {
         loadOptionalList()
@@ -62,12 +89,18 @@ const MenuSetModal = ({ product }) => {
                         title={item.menu_name}
                         position="bottom"
                         subtitle={
-                            item.can_change==='Y' ? 
-                            <Button variant='contained'>เปลี่ยนเมนู</Button>: 
-                            <Typography color='orange'>ไม่สามารถเปลี่ยนได้</Typography>
+                            item.can_change === 'Y' ?
+                                <Button variant='contained'>เปลี่ยนเมนู</Button> :
+                                <Typography color='orange'>ไม่สามารถเปลี่ยนได้</Typography>
                         }
                         actionIcon={
-                            <Checkbox defaultChecked={item.auto_select === "Y"} checkedIcon={<LibraryAddCheckIcon sx={{ color: "yellow" }} />} sx={{ margin: "5px", color: "white" }} />
+                            <Checkbox
+                                id={`subProduct${item.menu_code}`}
+                                defaultChecked={item.auto_select === "Y"}
+                                checked={optionalList[index].checked ? optionalList[index].checked: item.auto_select === "Y"}
+                                checkedIcon={<LibraryAddCheckIcon sx={{ color: "yellow" }} />} sx={{ margin: "5px", color: "white" }}
+                                onChange={(e) => handleOnChange(index)}
+                            />
                         }
                         actionPosition="left"
                     />
@@ -77,56 +110,5 @@ const MenuSetModal = ({ product }) => {
         </ImageList>
     );
 }
-
-const itemData = [
-    {
-        img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-        title: 'Breakfast',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-        title: 'Burger',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-        title: 'Camera',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-        title: 'Coffee',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-        title: 'Hats',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-        title: 'Honey',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-        title: 'Basketball',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-        title: 'Fern',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-        title: 'Mushrooms',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-        title: 'Tomato basil',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-        title: 'Sea star',
-    },
-    {
-        img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-        title: 'Bike',
-    },
-];
 
 export default MenuSetModal

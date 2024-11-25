@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react"
+import React, { memo, useContext, useState } from "react"
 import axios from "axios"
 import Grid from "@mui/material/Grid2"
 import { Box, Button, Typography, IconButton, TextField, useMediaQuery } from "@mui/material"
@@ -7,10 +7,14 @@ import CancelIcon from "@mui/icons-material/CancelRounded"
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
 import OptionMenuSelect from "./OptionMenuSelect"
+import { POSContext } from "../../AppContext"
 
 const ProductDetailCard = memo(
-  ({ product, closeModal, initLoadMenu, initLoadOrder, handleNotification }) => {
+  ({ tableNo, product, closeModal, initLoadMenu, initLoadOrder, handleNotification }) => {
     console.log("ProductDetailCard")
+    const { appData } = useContext(POSContext)
+    const { empCode, macno, userLogin } = appData
+
     const [count, setCount] = useState(product.qty || 1)
     const matches = useMediaQuery("(min-width:600px)")
 
@@ -18,14 +22,18 @@ const ProductDetailCard = memo(
       product.qty = count
       console.log("handleConfirm(1):", product)
       axios
-        .patch(`/api/product/${product.id}`, { ...product })
+        .post(`/api/balance`, {
+          tableNo, menuInfo: 
+          product, 
+          qty: count, 
+          macno, 
+          userLogin, 
+          empCode
+        })
         .then((response) => {
-          // console.log("handleConfirm(2):", response)
-          if (response.data.code === 200) {
-            initLoadMenu()
-            initLoadOrder()
-            closeModal()
-          }
+          initLoadMenu()
+          initLoadOrder()
+          closeModal()
         })
         .catch((error) => {
           handleNotification(error)
@@ -109,7 +117,7 @@ const ProductDetailCard = memo(
             <AddIcon fontSize="large" />
           </IconButton>
         </Grid>
-        <OptionMenuSelect />
+        <OptionMenuSelect productCode={product.menu_code} />
         <div align="center">
           <Button
             variant="contained"

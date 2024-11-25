@@ -19,6 +19,7 @@ var balanceRouter = require('./routes/pos_restaurant/order/Balance');
 var billNoRouter = require('./routes/pos_restaurant/order/BillNo');
 var tSaleRouter = require('./routes/pos_restaurant/order/TSale');
 var posProductRouter = require('./routes/pos_restaurant/product/Product');
+var optionFileRouter = require('./routes/pos_restaurant/optionfile');
 var genQrCode = require('./routes/payment/qrcode_promptpay')
 
 // for New POS apis
@@ -63,6 +64,7 @@ app.use('/api/orders', ordersRouter);
 app.use('/api/product', productRouter);
 app.use('/api/product_order', productOrderRouter);
 app.use('/api/menu_setup', menuSetupRouter);
+app.use('/api/optionfile', optionFileRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
