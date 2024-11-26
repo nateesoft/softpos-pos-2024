@@ -20,6 +20,7 @@ var billNoRouter = require('./routes/pos_restaurant/order/BillNo');
 var tSaleRouter = require('./routes/pos_restaurant/order/TSale');
 var posProductRouter = require('./routes/pos_restaurant/product/Product');
 var optionFileRouter = require('./routes/pos_restaurant/optionfile');
+var creditFileRouter = require('./routes/pos_restaurant/config/creditfile');
 var genQrCode = require('./routes/payment/qrcode_promptpay')
 
 // for New POS apis
@@ -68,6 +69,7 @@ app.use('/api/product', productRouter);
 app.use('/api/product_order', productOrderRouter);
 app.use('/api/menu_setup', menuSetupRouter);
 app.use('/api/optionfile', optionFileRouter);
+app.use('/api/creditfile', creditFileRouter);
 
 // route for test printer
 app.use('/api/printer-thermal', printerThermalRouter)

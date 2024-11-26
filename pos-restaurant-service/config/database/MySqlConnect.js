@@ -1,10 +1,13 @@
 require("dotenv").config()
 
-let mysqlConnection = require("mysql2")
+let mysqlConnection = null
 
 if (process.env.IS_OLD_MYSQL5 === "Y") {
-  console.log("Connect old mysql")
   mysqlConnection = require("mysql")
+  console.log('old db use mysql5')
+} else {
+  mysqlConnection = require("mysql2")
+  console.log('new db use mysql8')
 }
 
 const util = require('util')
@@ -17,7 +20,7 @@ const config = {
   port: process.env.MYSQL5_DB_PORT
 }
 const pool = mysqlConnection.createPool(config);
-// console.log('mysql5 config:', config)
+console.log('MySqlConnect config:', config)
 
 pool.query("SELECT 5+0 AS solution", function (error, results, fields) {
   if (error) throw error

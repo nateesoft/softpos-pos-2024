@@ -17,7 +17,7 @@ const config = {
   keepAliveInitialDelay: 0
 }
 const pool = mysql8.createPool(config)
-// console.log('mysql8 config:',config )
+console.log('mysql8 config(mysql2):',config )
 
 pool.query("SELECT 4+4 AS solution", function (error, results, fields) {
   if (error) {

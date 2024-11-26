@@ -7,7 +7,7 @@ const { PrefixFormat, PrefixZeroFormat } = require('../../../utils/StringUtil')
 router.get('/:macno', (req, res, next) => {
   const { macno } = req.params
   const response = {}
-  const sql = `select ReceNo1 from poshwsetup where Terminal='${macno}' limit 1`
+  const sql = `select * from poshwsetup where Terminal='${macno}' limit 1`
   console.log(sql)
   pool.query(sql, (err, results) => {
     if (err) throw err
@@ -19,7 +19,8 @@ router.get('/:macno', (req, res, next) => {
       PrefixZeroFormat(1, 7)
     }
 
-    response.billId = macno + RunningNumber
+    response.billId = macno + RunningNumber,
+    response.data = results[0]
 
     res.status(200).json(response)
   })

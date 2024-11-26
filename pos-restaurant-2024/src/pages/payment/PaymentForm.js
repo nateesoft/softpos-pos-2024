@@ -48,9 +48,11 @@ function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
     const [cashEnable, setCashEnable] = useState(true)
     const [cashAmount, setCashAmount] = useState(0)
 
+    const [crCode, setCrCode] = useState("")
     const [creditEnable, setCreditEnable] = useState(true)
     const [creditNumber, setCreditNumber] = useState("")
     const [creditRef, setCreditRef] = useState("")
+    const [creditChargePercent, setCreditChargePercent] = useState(0)
     const [creditAmount, setCreditAmount] = useState(0)
 
     const [transferEnable, setTransferEnable] = useState(true)
@@ -318,11 +320,13 @@ function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
             <Modal open={openCreditInfo} onClose={() => setOpenCreditInfo(false)}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
-                <Box sx={{ ...modalStyle, padding: "5px" }}>
+                <Box sx={{ ...modalStyle, width: "350px", padding: "5px" }}>
                     <Grid container spacing={2} padding={2} justifyContent="center" direction="column">
+                        <TextField variant="outlined" label="CrCode" value={crCode} onChange={e => setCrCode(e.target.value)} />
                         <TextField variant="outlined" label="เลขที่บัตรเครดิต" value={creditNumber} onChange={e => setCreditNumber(e.target.value)} />
-                        <TextField variant="outlined" label="Reference" value={creditRef} onChange={e => setCreditRef(e.target.value)} />
-                        <TextField variant="outlined" label="จำนวนเงิน" value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
+                        <TextField variant="outlined" label="approve code" value={creditRef} onChange={e => setCreditRef(e.target.value)} />
+                        <TextField variant="outlined" disabled type="number" label="Credit Charge" value={creditChargePercent} onChange={e => setCreditChargePercent(e.target.value)} />
+                        <TextField variant="outlined" type="number" label="จำนวนเงินที่ใส่เครดิต" value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
                     </Grid>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
                         <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={() => setOpenCreditInfo(false)}>ยกเลิก</Button>

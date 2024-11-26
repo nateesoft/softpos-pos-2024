@@ -215,7 +215,7 @@ const addNewBill = async (tableNo, requestPayload) => {
             // // update promotion
             // await updateProSerTable(B_Table, allBalance);
 
-            await ThermalPrinterConnect("192.168.1.209", "", B_Table)
+            // await ThermalPrinterConnect("192.168.1.209", "", B_Table)
 
             // update next bill id
             await updateNextBill(macno)

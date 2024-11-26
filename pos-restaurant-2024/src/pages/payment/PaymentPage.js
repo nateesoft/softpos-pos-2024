@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Grid from '@mui/material/Grid2'
 import { useNavigate, useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import ReceiptToPrint from './ReceiptToPrint'
 import MemberInfo from "./MemberInfo";
 import ShowNotification from "../utils/ShowNotification";
+import { POSContext } from "../../AppContext";
 
 const modalStyle = {
   position: "absolute",
@@ -44,10 +45,14 @@ function PaymentPage() {
   console.log('PaymentPage:', tableNo)
 
   const matches = useMediaQuery('(min-width:1024px)');
+  const { appData } = useContext(POSContext)
+    const { empCode, macno, userLogin, tableInfo } = appData
 
   const [open, setOpen] = useState(false)
   const [orderList, setOrderList] = useState([])
   const [billAmount, setBillAmount] = useState(0)
+  const [poshwsetup, setPosHwSetup] = useState({})
+  const [nextBillId, setNextBillId] = useState("")
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
@@ -104,9 +109,24 @@ function PaymentPage() {
       })
   }, [tableNo])
 
+  const loadPosHwSetup = useCallback(() => {
+    axios
+      .get(`/api/poshwsetup/${macno}`)
+      .then((response) => {
+        if (response.status === 200) {
+          setPosHwSetup(response.data.data)
+          setNextBillId(response.data.billId)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error)
+      })
+  }, [macno])
+
   useEffect(() => {
     initLoadOrder()
-  }, [initLoadOrder])
+    loadPosHwSetup()
+  }, [initLoadOrder, loadPosHwSetup])
 
   return (
     <motion.div initial={{ opacity: 0 }}
@@ -131,7 +151,15 @@ function PaymentPage() {
         aria-describedby="modal-modal-description">
         <Box sx={{ ...modalStyle, width: 450 }}>
           <div style={{ height: '700px', overflow: "auto" }}>
-            <ReceiptToPrint innerRef={contentRef} orderList={orderList} tableNo={tableNo} amount={billAmount} />
+            <ReceiptToPrint innerRef={contentRef} 
+              billId={nextBillId} 
+              orderList={orderList} 
+              tableNo={tableNo} 
+              poshwsetup={poshwsetup} 
+              empCode={empCode} 
+              userLogin={userLogin} 
+              customerCount={tableInfo.customerCount}
+          />
           </div>
           <Box sx={{ padding: "10px", backgroundColor: "#eee", borderRadius: "10px" }} textAlign="center">
             <Button variant="contained" color="error" onClick={() => setOpen(false)} sx={{ marginRight: "10px" }} startIcon={<CloseIcon />}>Cancel</Button>

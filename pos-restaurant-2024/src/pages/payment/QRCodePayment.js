@@ -3,7 +3,7 @@ import axios from "axios"
 
 function QrCodeGenerator({ mobileNumber, amount }) {
     const [image, setImage] = useState();
-    const [size, setSize] = useState(180)
+    const [size, setSize] = useState(120)
 
     const loadQRCodeImage = useCallback(() => {
         axios.post(`/api/qr-payment`, { mobileNumber, amount })
