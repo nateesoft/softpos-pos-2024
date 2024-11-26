@@ -43,6 +43,7 @@ const OptionMenuSelect = ({ productCode }) => {
         axios
           .get(`/api/optionfile/${productCode}`)
           .then((response) => {
+            console.log('OptionMenuSelect:', response)
             if(response.data.data){
                 setOptions(response.data.data)
             }
@@ -75,10 +76,10 @@ const OptionMenuSelect = ({ productCode }) => {
                 )}
                 MenuProps={MenuProps}
             >
-                {options.map((name) => (
-                    <MenuItem key={name} value={name} style={getStyles(name, personName, theme)}>
-                        <Checkbox checked={personName.includes(name)} />
-                        <ListItemText primary={name} />
+                {options && options.map((opt) => (
+                    <MenuItem key={opt.OptionName} value={opt.OptionName} style={getStyles(opt.OptionName, personName, theme)}>
+                        <Checkbox checked={personName.includes(opt.OptionName)} />
+                        <ListItemText primary={opt.OptionName} />
                     </MenuItem>
                 ))}
             </Select>

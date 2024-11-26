@@ -92,6 +92,17 @@ router.post('/', function (req, res, next) {
     })
 });
 
+router.post('/addList', function (req, res, next) {
+  console.log('addList=>', req.body)
+  BalanceService.addListBalance(req.body)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+    })
+});
+
 router.put('/:id', function (req, res, next) {
   const id = req.params.id
   BalanceService.updateBalance(req.body, id)

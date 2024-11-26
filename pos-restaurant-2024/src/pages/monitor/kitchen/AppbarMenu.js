@@ -7,8 +7,7 @@ import Typography from '@mui/material/Typography';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Button } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import AssessmentIcon from '@mui/icons-material/Print';
-import TableBarIcon from '@mui/icons-material/TableBar';
+import FilterFramesIcon from '@mui/icons-material/FilterFrames';
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from "react-router-dom";
 
@@ -21,9 +20,9 @@ export default function AppbarMenu() {
   }
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" sx={{backgroundColor: "purple"}}>
       <Toolbar>
-        <AssessmentIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+        <FilterFramesIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
         <Typography
           variant="h5"
           noWrap
@@ -36,9 +35,7 @@ export default function AppbarMenu() {
         </Typography>
         <Box sx={{ flexGrow: 1 }} />
         <Grid container spacing={1}>
-          <Button variant='contained' color="info" startIcon={<TableBarIcon />} onClick={onBackFloorPlan}>Zone ร้านอาหาร</Button>
-          <Button variant='contained' color="info" startIcon={<TableBarIcon />} onClick={onBackFloorPlan}>Zone บาร์น้ำ</Button>
-          <Button variant='contained' color="error" endIcon={<HomeIcon />} onClick={onBackFloorPlan}>กลับหน้าหลัก</Button>
+          <Button variant='text' sx={{color: "white"}} endIcon={<HomeIcon />} onClick={onBackFloorPlan}>Floor Plan</Button>
         </Grid>
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
           <IconButton

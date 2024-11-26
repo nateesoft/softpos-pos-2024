@@ -16,14 +16,10 @@ import {
 import { useNavigate } from "react-router-dom"
 import Modal from "@mui/material/Modal"
 import { AppBar, Box, Button, IconButton, Toolbar, useMediaQuery } from "@mui/material"
-import Splitscreen from "@mui/icons-material/Splitscreen"
-import ManageAccounts from "@mui/icons-material/TableBar"
+import TableBar from "@mui/icons-material/TableBar"
 import ExitToApp from "@mui/icons-material/ExitToApp"
-import PrintIcon from "@mui/icons-material/Print"
-import RefundIcon from "@mui/icons-material/ReceiptLong"
-import MoneyIcon from "@mui/icons-material/MonetizationOn"
+import MicrowaveIcon from '@mui/icons-material/Microwave';
 import { motion } from "framer-motion"
-import Grid from "@mui/material/Grid2"
 import axios from "axios"
 
 import "@xyflow/react/dist/style.css"
@@ -38,13 +34,15 @@ import { ModalConfirm } from "../../util/AlertPopup"
 import NumberPadLock from "../utils/NumberPadLock"
 import PinLock from "./PinLock"
 import ManageCustTable from "./ManageCustTable"
-import RecieptCopyPrint from "./RecieptCopyPrint"
+
 import ManageCashDrawer from "./ManageCashDrawer"
-import RefundBill from "./RefundBill"
+
 import ResizeNode from "./nodes/ResizeNode"
 import FloorSelect from "./FloorSelect"
+import OtherMenuSelect from "./OtherMenuSelect"
 import { POSContext } from "../../AppContext"
 import ShowNotification from "../utils/ShowNotification"
+import ReportSelect from "./ReportSelect"
 
 const modalPinStyle = {
   position: "absolute",
@@ -76,15 +74,10 @@ function FloorPlanPage() {
   const [alertType, setAlertType] = useState("info")
 
   const [openPin, setOpenPin] = useState(false)
-  const [openMgrTable, setOpenMgrTable] = useState(false)
-  const [openPinMgrTable, setOpenPinMgrTable] = useState(false)
-  const [openCopyPrint, setOpenCopyPrint] = useState(false)
-  const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
-  const [openRefundBill, setOpenRefundBill] = useState(false)
+
   const [openLogout, setOpenLogout] = useState(false)
 
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
-
   const keyPressed = useKeyPress("Escape")
 
   const confirmLogoutAlert = useCallback(() => {
@@ -104,6 +97,10 @@ function FloorPlanPage() {
         handleErrorMessage(error)
       })
   }, [setOpenLogout, navigate, appData, setAppData])
+
+  const kitchenReport = () => {
+    navigate("/kitchen-monitor")
+  }
 
   const setupFloorPlan = () => {
     navigate("/table-setup")
@@ -169,7 +166,11 @@ function FloorPlanPage() {
             } else {
               setNodes([])
             }
+          } else {
+            setNodes([])
           }
+        } else {
+          setNodes([])
         }
       })
       .catch(err => handleErrorMessage(err))
@@ -192,69 +193,39 @@ function FloorPlanPage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <AppBar
-        component="nav"
-        sx={{ backgroundColor: "black", boxShadow: "5px 3px #aaa" }}
-      >
+      <AppBar component="nav" sx={{ backgroundColor: "#123456", boxShadow: "5px 3px #aaa" }}>
         <Toolbar>
-          <IconButton color="inherit" aria-label="open drawer" edge="start">
-            <FloorSelect
-              selectFloor={selectFloor}
-              setSelectFloor={handleSelect}
-            />
-          </IconButton>
-
-          {matches &&
-            <Grid container spacing={2} sx={{ width: "100%" }}>
-              <Grid size={12} display="flex" justifyContent="flex-end">
-                <Grid container spacing={2}>
-                  <Button
-                    variant="contained"
-                    startIcon={<MoneyIcon />}
-                    onClick={() => setOpenMgrCashDrawer(true)}
-                  >
-                    นำเงินเข้า/ออกลิ้นชัก
-                  </Button>
-                  <Button
-                    variant="contained"
-                    startIcon={<RefundIcon />}
-                    onClick={() => setOpenRefundBill(true)}
-                  >
-                    ยกเลิกบิล (Refund Bill)
-                  </Button>
-                  <Button
-                    variant="contained"
-                    startIcon={<PrintIcon />}
-                    onClick={() => setOpenCopyPrint(true)}
-                  >
-                    พิมพ์สำเนาบิล
-                  </Button>
-                  <Button
-                    variant="contained"
-                    startIcon={<Splitscreen />}
-                    onClick={() => setOpenPinMgrTable(true)}
-                  >
-                    แยกโต๊ะ / รวมโต๊ะ
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={setupFloorPlan}
-                    startIcon={<ManageAccounts />}
-                  >
-                    จัดการโต๊ะ
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => setOpenLogout(true)}
-                    endIcon={<ExitToApp />}
-                  >
-                    Logout
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid>
-          }
+          <Box sx={{ flexGrow: 1 }}>
+            <IconButton color="inherit" aria-label="open drawer" edge="start">
+              <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
+            </IconButton>
+            <IconButton color="inherit" aria-label="open drawer" edge="start">
+              <OtherMenuSelect />
+            </IconButton>
+            <IconButton color="inherit" aria-label="open drawer" edge="start">
+              <ReportSelect />
+            </IconButton>
+          </Box>
+          <Box display="flex" justifyContent="space-evenly" >
+            <Button
+              variant="contained"
+              onClick={kitchenReport}
+              color="secondary"
+              startIcon={<MicrowaveIcon />} sx={{ marginRight: "10px" }}
+            >
+              รายงานส่งครัว
+            </Button>
+            <Button
+              variant="contained"
+              onClick={setupFloorPlan}
+              startIcon={<TableBar />} sx={{ marginRight: "10px" }}
+            >
+              จัดการโต๊ะ
+            </Button>
+            <Button variant="contained" color="error" onClick={() => setOpenLogout(true)} endIcon={<ExitToApp />}>
+              Logout
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
       <ReactFlowProvider>
@@ -278,40 +249,10 @@ function FloorPlanPage() {
           </ReactFlow>
         </div>
       </ReactFlowProvider>
+
       <Modal open={openPin} onClose={() => setOpenPin(false)}>
         <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
           <PinLock setOpenPin={setOpenPin} />
-        </Box>
-      </Modal>
-
-      <Modal open={openMgrTable} onClose={() => setOpenMgrTable(false)}>
-        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
-          <ManageCustTable setOpen={setOpenMgrTable} />
-        </Box>
-      </Modal>
-      <Modal open={openPinMgrTable} onClose={() => setOpenPinMgrTable(false)}>
-        <NumberPadLock
-          close={() => setOpenPinMgrTable(false)}
-          nextStep={() => setOpenMgrTable(true)}
-        />
-      </Modal>
-
-      <Modal open={openCopyPrint} onClose={() => setOpenCopyPrint(false)}>
-        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
-          <RecieptCopyPrint setOpen={setOpenCopyPrint} />
-        </Box>
-      </Modal>
-      <Modal
-        open={openMgrCashDrawer}
-        onClose={() => setOpenMgrCashDrawer(false)}
-      >
-        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
-          <ManageCashDrawer setOpen={setOpenMgrCashDrawer} />
-        </Box>
-      </Modal>
-      <Modal open={openRefundBill} onClose={() => setOpenRefundBill(false)}>
-        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
-          <RefundBill setOpen={setOpenRefundBill} />
         </Box>
       </Modal>
       <ModalConfirm

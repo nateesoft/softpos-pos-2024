@@ -130,19 +130,13 @@ const ProductMenu = ({
             })
     }
 
-    const addOrderSubMenuList = (optionalList) => {
-        optionalList.forEach(async product => {
-            await axios.post(`/api/balance`, {
-                tableNo,
-                menuInfo: {
-                    ...product,
-                    menu_price: 0.00
-                },
-                qty: 1,
-                macno,
-                userLogin,
-                empCode
-            })
+    const addOrderSubMenuList = async (optionalList) => {
+        await axios.post(`/api/balance/addList`, {
+            listBalance: optionalList,
+            tableNo,
+            macno,
+            userLogin,
+            empCode
         })
     }
 

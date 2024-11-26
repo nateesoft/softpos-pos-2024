@@ -1,13 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, forwardRef } from 'react';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import axios from 'axios'
-import { Button, Checkbox, ImageListItemBar, Typography } from '@mui/material';
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Grid2, IconButton, ImageListItemBar, Slide, Typography } from '@mui/material';
 import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
+import CloseIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
+import ChangeProductList from './ChangeProductList'
 import ShowNotification from '../utils/ShowNotification';
+
+const Transition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="top" ref={ref} {...props} />;
+});
 
 const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalList, setOptionalList }) => {
     const [showNoti, setShowNoti] = useState(false)
+    const [showChangeListMenu, setShowChangeListMenu] = useState(false)
     const [notiMessage, setNotiMessage] = useState("")
     const [alertType, setAlertType] = useState("info")
     const handleNotification = (message, type = "error") => {
@@ -72,7 +81,7 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
                         position="bottom"
                         subtitle={
                             item.can_change === 'Y' ?
-                                <Button variant='contained'>เปลี่ยนเมนู</Button> :
+                                <Button variant='contained' onClick={() => setShowChangeListMenu(true)}>เปลี่ยนเมนู</Button> :
                                 <Typography color='orange'>ไม่สามารถเปลี่ยนได้</Typography>
                         }
                         actionIcon={
@@ -87,6 +96,37 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
                     />
                 </ImageListItem>
             ))}
+            <Dialog
+                open={showChangeListMenu}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={() => setShowChangeListMenu(false)}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                    เมนูสินค้าที่สามารถเปลี่ยนได้
+                </DialogTitle>
+                <IconButton
+                    aria-label="close"
+                    onClick={() => setShowChangeListMenu(false)}
+                    sx={(theme) => ({
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: theme.palette.grey[500],
+                    })}
+                >
+                    <CloseIcon fontSize='large' color='error' />
+                </IconButton>
+                <DialogContent dividers>
+                    <ChangeProductList />
+                </DialogContent>
+                <DialogActions>
+                    <Button startIcon={<CheckCircleIcon />} color='success' variant='contained' autoFocus onClick={() => setShowChangeListMenu(false)}>
+                        CONFIRM
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </ImageList>
     );

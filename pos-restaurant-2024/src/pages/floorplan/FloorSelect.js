@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -13,13 +13,13 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 
 const FloorSelect = (props) => {
     const { selectFloor, setSelectFloor, sxStyle={color: "white"}, variant='outlined' } = props
-    console.log('FloorSelect:', props)
+    
     const handleChange = (event) => {
         setSelectFloor(event.target.value);
     };
 
     return (
-        <Box sx={{ minWidth: 250 }}>
+        <Box sx={{ minWidth: 250, border: "2px solid gold" }}>
             <FormControl fullWidth>
                 <Select
                     labelId="demo-simple-select-label"

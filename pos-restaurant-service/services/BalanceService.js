@@ -83,9 +83,24 @@ const updateBalanceQty = async (tableNo, rIndex, qty) => {
     }
 }
 
+const addListBalance = async (payload) => {
+    const { listBalance, tableNo, macno, userLogin, empCode } = payload
+    listBalance.forEach(async product => {
+        console.log('product to add new balance:', product)
+        await addNewBalance({
+            tableNo, menuInfo: {...product, menu_price: 0}, qty: 1, macno, userLogin, empCode
+        })
+    });
+}
+
 const addNewBalance = async payload => {
     const { tableNo, menuInfo, qty, macno, userLogin, empCode } = payload
-    const posProduct = await getProductByPCode(menuInfo.menu_code)
+    // const posProduct = await getProductByPCode(menuInfo.menu_code)
+    const posProduct = {
+        PStock: "N",
+        PKic: "",
+        PType: ""
+    }
 
     const R_Index = await getBalanceMaxIndex(tableNo)
     const R_Table = tableNo
@@ -161,5 +176,6 @@ module.exports = {
     getBalanceMaxIndex,
     addNewBalance,
     updateBalanceQty,
-    getTotalBalance
+    getTotalBalance,
+    addListBalance
 }
