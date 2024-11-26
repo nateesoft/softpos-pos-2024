@@ -8,6 +8,7 @@ const { getAllProtab, updatePromotion } = require('./PromotionService');
 const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService');
 const { addDataFromBalance } = require('./TSaleService');
 const { updateDiscount } = require('./DiscountService');
+const { ThermalPrinterConnect } = require('./ThermalPrinter');
 
 const getBillNoByTableNo = async tableNo => {
     const sql = `select * from bill_no where B_Refno='${tableNo}'`;
@@ -213,6 +214,8 @@ const addNewBill = async (tableNo, requestPayload) => {
 
             // // update promotion
             // await updateProSerTable(B_Table, allBalance);
+
+            await ThermalPrinterConnect("192.168.1.209", "", B_Table)
 
             // update next bill id
             await updateNextBill(macno)
