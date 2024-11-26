@@ -58,7 +58,7 @@ const createNewTSale = async (balance, BillRefNo) => {
     console.log('createNewTSale:', sql)
     try {
         const results = await pool.query(sql,
-            [R_Index, R_Refno, R_Table, MacNo, Cashier, R_Emp, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal,
+            [R_Index, R_Refno, R_Table, MacNo, Cashier, R_Emp, R_PluCode, Unicode2ASCII(R_PName), R_Unit, R_Group, R_Status, R_Normal,
                 R_Discount, R_Service, R_Stock, R_Set, R_Vat, R_Type, R_ETD, R_Quan, R_Price, R_Total, R_PrType, R_PrCode, R_PrDisc, R_PrBath,
                 R_PrAmt, R_PrCuType, R_PrCuCode, R_PrCuQuan, R_PrCuAmt, R_Redule, R_DiscBath, R_PrAdj, R_PreDisAmt, R_NetTotal, R_Kic,
                 R_KicPrint, R_Refund, VoidMsg, R_Void, R_VoidUser, R_VoidTime, StkCode, PosStk, R_ServiceAmt, R_PrChkType, R_PrQuan,
