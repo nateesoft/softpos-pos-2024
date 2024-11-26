@@ -7,15 +7,36 @@ import { Divider, Typography } from '@mui/material';
 
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SummarizeIcon from '@mui/icons-material/Summarize';
+import { useNavigate } from 'react-router-dom';
 
 const ReportSelect = (props) => {
     const { sxStyle = { color: "white" }, variant = 'outlined' } = props
+    const navigate = useNavigate()
 
     const [value, setValue] = useState("")
 
     const handleChange = (event) => {
-        setValue(event.target.value);
+        const data = event.target.value
+        if (data === 'saleReport') {
+            viewReport("")
+        } else if (data === 'saleReport1') {
+            viewReport("1")
+        }  else if (data === 'saleReport2') {
+            viewReport("2")
+        } else if (data === 'saleReport3') {
+            viewReport("3")
+        } else if (data === 'saleReport4') {
+            viewReport("4")
+        } else if (data === 'saleReport5') {
+            viewReport("5")
+        }
+
+        setValue("");
     };
+
+    const viewReport = (page) => {
+        navigate("/sale-report" + page)
+    }
 
     return (
         <Box sx={{ minWidth: 250, border: "2px solid white" }}>

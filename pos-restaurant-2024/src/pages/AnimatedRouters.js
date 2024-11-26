@@ -10,7 +10,15 @@ import FloorPlanPage from "./floorplan/FloorPlanPage"
 import TableManagement from "./floorplan/TableManagement"
 import MainSalePage from "./mainSale/MainSalePage"
 import PaymentPage from "./payment/PaymentPage"
-import SaleReportPage from "./SaleReportPage"
+
+// report all page
+import SaleReport from "./reports/SaleReport"
+import SaleReport1 from "./reports/SaleReport1"
+import SaleReport2 from "./reports/SaleReport2"
+import SaleReport3 from "./reports/SaleReport3"
+import SaleReport4 from "./reports/SaleReport4"
+import SaleReport5 from "./reports/SaleReport5"
+
 import PageNotFound from './PageNotFound'
 
 import TrelloBoard from '../pages/monitor/kitchen'
@@ -40,7 +48,12 @@ const AnimatedRoutes = () => {
                         <Route path="/kitchen-monitor" element={<TrelloBoard />} />
                         <Route path="/sale/:tableNo" element={<MainSalePage />} />
                         <Route path="/payment/:tableNo" element={<PaymentPage />} />
-                        <Route path="/sale-report" element={<SaleReportPage />} />
+                        <Route path="/sale-report" element={<SaleReport />} />
+                        <Route path="/sale-report1" element={<SaleReport1 />} />
+                        <Route path="/sale-report2" element={<SaleReport2 />} />
+                        <Route path="/sale-report3" element={<SaleReport3 />} />
+                        <Route path="/sale-report4" element={<SaleReport4 />} />
+                        <Route path="/sale-report5" element={<SaleReport5 />} />
                     </Route>
                 </Route>
 

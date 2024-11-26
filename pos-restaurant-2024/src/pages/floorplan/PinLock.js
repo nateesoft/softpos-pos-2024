@@ -40,7 +40,7 @@ const inputPin = {
   color: "white"
 }
 
-const PinLock = ({ setOpenPin, tableNo }) => {
+const PinLock = ({ setOpenPin }) => {
   const { appData, setAppData } = useContext(POSContext)
   const { userLogin, tableInfo } = appData
   const [openCustCheckIn, setOpenCustCheckIn] = useState(false)
@@ -69,7 +69,7 @@ const PinLock = ({ setOpenPin, tableNo }) => {
         .then(async (response) => {
           const { pinValid } = response.data.data
           if (pinValid === true) {
-            await axios.patch(`/api/tablefile/updateOpenTable/${tableInfo.tableNo}`, { Cashier: userLogin, TUser: empCodeInput})
+            await axios.patch(`/api/tablefile/updateOpenTable/${tableInfo.tableNo}`, { Cashier: userLogin, TUser: empCodeInput })
             setAppData({ ...appData, empCode: empCodeInput })
             setShowError(false)
             setOpenCustCheckIn(true)
@@ -115,6 +115,10 @@ const PinLock = ({ setOpenPin, tableNo }) => {
         setPin4(keyPad)
       }
     }
+  }
+
+  if (tableInfo.tableNo === '') {
+    setOpenPin(false)
   }
 
   return (
