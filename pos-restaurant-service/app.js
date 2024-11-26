@@ -30,6 +30,9 @@ var ordersRouter = require('./routes/pos/orders');
 var productRouter = require('./routes/pos/product');
 var productOrderRouter = require('./routes/pos/product_order');
 
+// for printer thermal
+var printerThermalRouter = require('./routes/printer');
+
 var app = express();
 app.use(cors())
 app.use(bodyParser.json())
@@ -65,6 +68,9 @@ app.use('/api/product', productRouter);
 app.use('/api/product_order', productOrderRouter);
 app.use('/api/menu_setup', menuSetupRouter);
 app.use('/api/optionfile', optionFileRouter);
+
+// route for test printer
+app.use('/api/printer-thermal', printerThermalRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
