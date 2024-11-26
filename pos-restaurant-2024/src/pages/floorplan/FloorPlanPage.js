@@ -31,11 +31,7 @@ import TallNode from "./nodes/TallBarNode"
 
 import { useKeyPress } from "../../util/PageListener"
 import { ModalConfirm } from "../../util/AlertPopup"
-import NumberPadLock from "../utils/NumberPadLock"
 import PinLock from "./PinLock"
-import ManageCustTable from "./ManageCustTable"
-
-import ManageCashDrawer from "./ManageCashDrawer"
 
 import ResizeNode from "./nodes/ResizeNode"
 import FloorSelect from "./FloorSelect"

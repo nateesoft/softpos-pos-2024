@@ -13,7 +13,7 @@ const ReportSelect = (props) => {
     const { sxStyle = { color: "white" }, variant = 'outlined' } = props
     const navigate = useNavigate()
 
-    const [value, setValue] = useState("")
+    const [value, setValue] = useState("overview")
 
     const handleChange = (event) => {
         const data = event.target.value
@@ -39,7 +39,7 @@ const ReportSelect = (props) => {
     }
 
     return (
-        <Box sx={{ minWidth: 250, border: "2px solid white" }}>
+        <Box sx={{ minWidth: 250, border: "1px solid white", borderRadius: "5px" }}>
             <FormControl fullWidth>
                 <Select
                     labelId="demo-simple-select-label"
@@ -49,6 +49,12 @@ const ReportSelect = (props) => {
                     sx={sxStyle}
                     onChange={handleChange}
                 >
+                    <MenuItem value="overview">
+                        <Box display="flex" justifyContent="center">
+                            <AssessmentIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>Sale Reports</Typography>
+                        </Box>
+                    </MenuItem>
+                    <Divider />
                     <MenuItem value="saleReport">
                         <Box display="flex" justifyContent="center">
                             <AssessmentIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>ภาพรวมการขาย</Typography>

@@ -9,6 +9,7 @@ import MoneyIcon from "@mui/icons-material/MonetizationOn"
 import Splitscreen from "@mui/icons-material/Splitscreen"
 import PrintIcon from "@mui/icons-material/Print"
 import RefundIcon from "@mui/icons-material/ReceiptLong"
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 
 import RecieptCopyPrint from "./RecieptCopyPrint"
 import RefundBill from "./RefundBill"
@@ -26,7 +27,7 @@ const modalPinStyle = {
 const OtherMenuSelect = (props) => {
     const { sxStyle = { color: "white" }, variant = 'outlined' } = props
 
-    const [value, setValue] = useState("")
+    const [value, setValue] = useState("main")
     const [openCopyPrint, setOpenCopyPrint] = useState(false)
     const [openRefundBill, setOpenRefundBill] = useState(false)
     const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
@@ -53,7 +54,7 @@ const OtherMenuSelect = (props) => {
     }
 
     return (
-        <Box sx={{ minWidth: 250, border: "2px solid orange" }}>
+        <Box sx={{ minWidth: 250, border: "1px solid orange", borderRadius: "5px" }}>
             <FormControl fullWidth>
                 <Select
                     labelId="demo-simple-select-label"
@@ -63,6 +64,12 @@ const OtherMenuSelect = (props) => {
                     sx={sxStyle}
                     onChange={handleChange}
                 >
+                    <MenuItem value="main">
+                        <Box display="flex" justifyContent="center">
+                            <SettingsSuggestIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>Other Setup</Typography>
+                        </Box>
+                    </MenuItem>
+                    <Divider />
                     <MenuItem value="CashDrawer">
                         <Box display="flex" justifyContent="center">
                             <MoneyIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>นำเงินเข้า/ออกลิ้นชัก</Typography>
