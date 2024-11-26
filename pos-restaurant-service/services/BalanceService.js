@@ -1,5 +1,5 @@
 const pool = require('../config/database/MySqlConnect')
-const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
+const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
 
 const { getProductByPCode } = require('./ProductService');
 
@@ -25,7 +25,11 @@ const getBalanceByTableNo = async tableNo => {
     const sql = `select * from balance where R_Table='${tableNo}'`;
     console.log('getBalanceByTableNo:', sql)
     const results = await pool.query(sql)
-    return results
+    const mappingResult = results.map((item, index) => {
+        return {...item, R_PName: ASCII2Unicode(item.R_PName)}
+    })
+    // console.log(mappingResult)
+    return mappingResult
 }
 
 const getBalanceMaxIndex = async tableNo => {
