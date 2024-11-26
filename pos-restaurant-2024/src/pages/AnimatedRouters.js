@@ -26,6 +26,9 @@ import Protected from "../routes/ProtectedRoute"
 import DashboardLayout from "../layouts"
 import RegisterMacNo from './RegisterMacno'
 
+// test printer
+import TestPrinter from '../pages/thermal'
+
 const AnimatedRoutes = () => {
     const location = useLocation()
 
@@ -57,6 +60,7 @@ const AnimatedRoutes = () => {
                     </Route>
                 </Route>
 
+                <Route path="/test-print" element={<TestPrinter />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/reset-password" element={<ForgotPassPage />} />
                 <Route path="/" element={<LoginPage />} />

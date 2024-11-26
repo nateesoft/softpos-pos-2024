@@ -151,19 +151,19 @@ const addNewBalance = async payload => {
               ( R_Index,R_Table,R_PluCode,R_PName,R_Quan,R_Price,R_Total,R_PrBath,R_PrAmt,R_DiscBath,
                 R_PrCuQuan,R_PrCuAmt,R_Redule,R_Serve,R_PrintOK,R_KicOK,StkCode,PosStk,R_Order,R_PItemNo,
                 R_PKicQue,R_MemSum,R_PrVcAmt,R_PrVcAdj,R_VoidQuan,R_MoveFlag,R_MovePrint,R_Pause,R_SPIndex,R_Earn,
-                R_SeparateFrom,R_Date, R_Time, macno, Cashier, R_Emp, R_ETD, TranType, R_KicPrint, R_Void, R_Kic,
+                R_Date, R_Time, macno, Cashier, R_Emp, R_ETD, TranType, R_KicPrint, R_Void, R_Kic,
                 R_Type) 
                 VALUES (
               ?,?,?,?,?,?,?,?,?,?,
               ?,?,?,?,?,?,?,?,?,?,
-              ?,?,?,?,?,?,?,?,?,?,
+              ?,?,?,?,?,?,?,?,?,
               ?, curdate(), SUBSTR(now(), 12), 
               ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         console.log('addNewBalance:', sql)
         const results = await pool.query(sql,
             [R_Index, R_Table, R_PluCode, R_PName, R_Quan, R_Price, R_Total, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuQuan, R_PrCuAmt,
                 R_Redule, R_Serve, R_PrintOK, R_KicOK, StkCode, PosStk, R_Order, R_PItemNo, R_PKicQue, R_MemSum,
-                R_PrVcAmt, R_PrVcAdj, R_VoidQuan, R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_Earn, R_SeparateFrom,
+                R_PrVcAmt, R_PrVcAdj, R_VoidQuan, R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_Earn,
                 Macno, Cashier, R_Emp, R_ETD, TranType, R_KicPrint, R_Void, R_Kic, R_Type])
         return results
     } catch (error) {

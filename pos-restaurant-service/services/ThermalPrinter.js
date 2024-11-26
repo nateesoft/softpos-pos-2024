@@ -1,6 +1,6 @@
 const { ThermalPrinter, PrinterTypes, CharacterSet, BreakLine } = require('node-thermal-printer');
 
-const ThermalPrinterConnect = async ({ printerIp, printerPort }) => {
+const ThermalPrinterConnect = async (printerIp, printerPort, message) => {
     let interfacePrinter = printerIp
     if (printerPort) {
         interfacePrinter = printerIp + ":" + printerPort
@@ -17,15 +17,20 @@ const ThermalPrinterConnect = async ({ printerIp, printerPort }) => {
         }
     });
 
+    const bytes = [
+        29, 86, 1
+      ]
+
     let isConnected = await printer.isPrinterConnected();       // Check if printer is connected, return bool of status
     let execute = await printer.execute();                      // Executes all the commands. Returns success or throws error
-    let raw = await printer.raw(Buffer.from("Hello world"));    // Print instantly. Returns success or throws error
-    printer.print("Hello World");                               // Append text
-    printer.println("Hello World");                             // Append text with new line
+    let raw = await printer.raw(Buffer.from(message));    // Print instantly. Returns success or throws error
+    await printer.raw(Buffer.from(bytes));    // Print instantly. Returns success or throws error
+    // printer.print(message);                               // Append text
+    // printer.println(message);                             // Append text with new line
     printer.openCashDrawer();                                   // Kick the cash drawer
     printer.cut();                                              // Cuts the paper (if printer only supports one mode use this)
     printer.partialCut();                                       // Cuts the paper leaving a small bridge in middle (if printer supports multiple cut modes)
-    printer.beep();                                             // Sound internal beeper/buzzer (if available)
+    // printer.beep();                                             // Sound internal beeper/buzzer (if available)
     printer.upsideDown(true);                                   // Content is printed upside down (rotated 180 degrees)
     printer.setCharacterSet(CharacterSet.PC852_LATIN2);         // Set character set - default set on init
     printer.setPrinterDriver(Object)                            // Set printer drive - default set on init
@@ -48,7 +53,7 @@ const ThermalPrinterConnect = async ({ printerIp, printerPort }) => {
     printer.setTextDoubleHeight();                              // Set text to double height
     printer.setTextDoubleWidth();                               // Set text to double width
     printer.setTextQuadArea();                                  // Set text to quad area
-    printer.setTextSize(7, 7);                                   // Set text height (0-7) and width (0-7)
+    // printer.setTextSize(7, 7);                                   // Set text height (0-7) and width (0-7)
 
     printer.leftRight("Left", "Right");                         // Prints text left and right
     printer.table(["One", "Two", "Three"]);                     // Prints table equally
@@ -60,12 +65,12 @@ const ThermalPrinterConnect = async ({ printerIp, printerPort }) => {
 
     printer.code128("Code128");                                 // Print code128 bar code
     printer.printQR("QR CODE");                                 // Print QR code
-    await printer.printImage('./assets/com_logo.jpg');          // Print JPG image
+    // await printer.printImage('com_logo.jpg');          // Print JPG image
 
     printer.clear();                                              // Clears printText value
     printer.getText();                                            // Returns printer buffer string value
     printer.getBuffer();                                          // Returns printer buffer
-    printer.setBuffer(newBuffer);                                 // Set the printer buffer to a copy of newBuffer
+    // printer.setBuffer(newBuffer);                                 // Set the printer buffer to a copy of newBuffer
     printer.getWidth();
 }
 

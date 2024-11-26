@@ -4,10 +4,10 @@ const router = express.Router();
 
 const { ThermalPrinterConnect } = require("../../services/ThermalPrinter");
 
-router.post('/', function (req, res, next) {
-  const { printerIp, printerPort} = req.body
+router.post('/', async (req, res, next) => {
+  const { printerIp, printerPort, message} = req.body
 
-  ThermalPrinterConnect(printerIp, printerPort)
+  await ThermalPrinterConnect(printerIp, printerPort, message)
   res.status(200).json({
     printerIp, printerPort
   })
