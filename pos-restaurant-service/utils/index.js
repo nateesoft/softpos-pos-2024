@@ -81,7 +81,7 @@ const assignFieldWithDefautValue = (fields) => {
     return myField
 }
 
-const tableName = 'MyRestaurantJefferSakon.balance'
+const tableName = 'MyRestaurantJefferSakon.stcard'
 const sqlAllTable = `desc ${tableName} `
 pool.query(sqlAllTable, (err, results) => {
     if (err) throw err
@@ -100,6 +100,6 @@ pool.query(sqlAllTable, (err, results) => {
     console.log(tableName + "=>", allFieldsDefault.join('\n'))
     console.log(tableName + "=>", sqlQuery)
     console.log(tableName + "(insert)=>", sqlQueryInsert)
-    console.log(paramAssign)
-    console.log(tableName + "(update)=>", sqlUpdate)
+    // console.log(paramAssign)
+    // console.log(tableName + "(update)=>", sqlUpdate)
 })

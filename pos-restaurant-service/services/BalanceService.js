@@ -81,7 +81,7 @@ const updatePrint2Kic = async tableNo => {
         console.log('updatePrint2Kic(balance):', balance)
         // update stock and process stockcard and stkfile
         if (balance.R_Stock === 'Y') {
-            const DocNo = tableNo + "/" + "BillRefNo"
+            const DocNo = tableNo + "-" + moment().format('HH:mm:ss')
             const StkCode = balance.StkCode
             const PCode = balance.R_PluCode
             const TDate = balance.R_Date
@@ -118,7 +118,7 @@ const updateBalanceQty = async (tableNo, rIndex, qty) => {
         and R_Index='${rIndex}' 
         and R_Pause <> 'P' `;
         console.log('updateBalanceQty(delete):', sql)
-        const result = await pool.query(sql)
+        const result = pool.query(sql)
         return result
     } else {
         const sql = `update balance set R_Quan=${qty} 
@@ -152,8 +152,8 @@ const addListBalance = async (payload) => {
 }
 
 const addBalance = async payload => {
-    const { tableNo, menuInfo, qty, optList, specialText, macno, userLogin, empCode } = payload
-    console.log('nathee_test ===> ', optList, specialText)
+    const { tableNo, menuInfo, qty, optList=[], specialText="", macno, userLogin, empCode } = payload
+    // console.log('nathee_test ===> ', optList, specialText)
     const R_Index = await getBalanceMaxIndex(tableNo)
     const posProduct = await getProductByPCode(menuInfo.menu_code)
     const result = await addNewBalance({

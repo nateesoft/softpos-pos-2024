@@ -2,6 +2,7 @@ require("dotenv").config()
 
 const mysql8 = require("mysql2")
 
+const util = require('util')
 const config = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -16,7 +17,7 @@ const config = {
   enableKeepAlive: true,
   keepAliveInitialDelay: 0
 }
-const pool = mysql8.createPool(config)
+const pool = mysql8.createConnection(config)
 console.log('mysql8 config(mysql2):',config )
 
 pool.query("SELECT 4+4 AS solution", function (error, results, fields) {
@@ -26,5 +27,7 @@ pool.query("SELECT 4+4 AS solution", function (error, results, fields) {
   }
   console.log("Connect new mysql version: ", results[0].solution)
 })
+
+pool.query = util.promisify(pool.query)
 
 module.exports = pool

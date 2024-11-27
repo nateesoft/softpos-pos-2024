@@ -193,11 +193,12 @@ const ProcessSelectSetUpdateStockOutRefund = async (DocNo, StkCode, XCode, TDate
 
 const ProcessStockOut = async (DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, Amount,
     UserPost, PStock, PSet, r_index, SaleOrRefund) => {
+    const S_Date = moment().format('YYYY-MM-DD')
     const S_No = DocNo;
     const S_SubNo = "";
     const S_Que = 0;
     const S_PCode = PCode;
-    const S_Stk = StkCode;
+    const S_Stk = "A1";
     const S_In = 0;
     const S_Out = Qty;
     const S_InCost = 0;
@@ -207,20 +208,21 @@ const ProcessStockOut = async (DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, Am
     const S_User = UserPost;
     const S_Link = "";
 
+    const S_EntryDate = moment().format('YYYY-MM-DD')
+    const S_EntryTime = moment().format('HH:mm');
+
     if (PStock === 'Y') {
         try {
             let sql = `INSERT INTO stcard 
-            (S_Date,S_No,S_SubNo,S_Que,S_PCode,S_Stk,S_In,S_Out,S_InCost,S_OutCost,S_ACost,
-            S_Rem,S_User,S_EntryDate,S_EntryTime) 
-            VALUES (curdate(),?,?,?,?,?,?,?,?,?,?,?,?,curdate(),curtime())`
+            (S_Date,S_No,S_SubNo,S_Que,S_PCode,S_Stk,S_In,S_Out,S_InCost,S_OutCost,S_ACost,S_Rem,
+            S_User,S_EntryDate,S_EntryTime,S_Link) 
+            VALUES (S_Date='${S_Date}',S_No='${S_No}',S_SubNo='${S_SubNo}',S_Que='${S_Que}',
+            S_PCode='${S_PCode}',S_Stk='${S_Stk}',S_In='${S_In}',S_Out='${S_Out}',
+            S_InCost='${S_InCost}',S_OutCost='${S_OutCost}',S_ACost='${S_ACost}',S_Rem='${S_Rem}',
+            S_User='${S_User}',S_EntryDate='${S_EntryDate}',S_EntryTime='${S_EntryTime}',
+            S_Link='${S_Link}')`
             console.log('ProcessStockOut:', sql)
-            await pool.query(sql,
-                [
-                    S_No, S_SubNo, S_Que, S_PCode, S_Stk,
-                    S_In, S_Out, S_InCost, S_OutCost, S_ACost,
-                    S_Rem, S_User, S_Link
-                ]
-            )
+            await pool.query(sql)
 
             let TempAct = await GetActionMon(TDate)
             let resultSeekStkFile = await SeekStkFile(PCode, StkCode)

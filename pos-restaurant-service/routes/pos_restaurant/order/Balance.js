@@ -102,7 +102,7 @@ router.post('/', (req, res) => {
 });
 
 router.post('/addList', function (req, res, next) {
-  console.log('addList=>', req.body)
+  // console.log('addList=>', req.body)
   BalanceService.addListBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
