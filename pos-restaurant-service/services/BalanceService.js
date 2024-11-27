@@ -107,13 +107,6 @@ const addBalance = async payload => {
 
 const addNewBalance = async payload => {
     const { tableNo, menuInfo, qty, macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct } = payload
-    console.log('posProduct:', posProduct)
-    // const posProduct = {
-    //     PStock: "N",
-    //     PKic: "",
-    //     PType: ""
-    // }
-
     const R_Table = tableNo
     const R_PluCode = menuInfo.menu_code
     const R_PName = Unicode2ASCII(menuInfo.menu_name)
@@ -127,7 +120,7 @@ const addNewBalance = async payload => {
     const R_PrCuAmt = 0
     const R_Redule = 0
     const R_Serve = ""
-    const R_PrintOK = ""
+    const R_PrintOK = "Y"
     const R_KicOK = ""
     const StkCode = posProduct.PStock
     const PosStk = ""
