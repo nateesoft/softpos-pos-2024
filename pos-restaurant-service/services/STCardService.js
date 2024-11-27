@@ -214,13 +214,9 @@ const ProcessStockOut = async (DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, Am
     if (PStock === 'Y') {
         try {
             let sql = `INSERT INTO stcard 
-            (S_Date,S_No,S_SubNo,S_Que,S_PCode,S_Stk,S_In,S_Out,S_InCost,S_OutCost,S_ACost,S_Rem,
-            S_User,S_EntryDate,S_EntryTime,S_Link) 
-            VALUES (S_Date='${S_Date}',S_No='${S_No}',S_SubNo='${S_SubNo}',S_Que='${S_Que}',
-            S_PCode='${S_PCode}',S_Stk='${S_Stk}',S_In='${S_In}',S_Out='${S_Out}',
-            S_InCost='${S_InCost}',S_OutCost='${S_OutCost}',S_ACost='${S_ACost}',S_Rem='${S_Rem}',
-            S_User='${S_User}',S_EntryDate='${S_EntryDate}',S_EntryTime='${S_EntryTime}',
-            S_Link='${S_Link}')`
+            (S_Date,S_No,S_SubNo,S_Que,S_PCode,S_Stk,S_In,S_Out,S_InCost,S_OutCost,S_ACost,S_Rem,S_User,S_EntryDate,S_EntryTime,S_Link) 
+            VALUES ('${S_Date}','${S_No}','${S_SubNo}','${S_Que}','${S_PCode}','${S_Stk}','${S_In}','${S_Out}','${S_InCost}',
+            '${S_OutCost}','${S_ACost}','${S_Rem}','${S_User}','${S_EntryDate}','${S_EntryTime}','${S_Link}')`
             console.log('ProcessStockOut:', sql)
             await pool.query(sql)
 

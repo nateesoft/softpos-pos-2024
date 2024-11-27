@@ -92,7 +92,7 @@ pool.query(sqlAllTable, (err, results) => {
     const getQM = displayQuestionMark(results)
 
     const sqlQuery = `INSERT INTO ${tableName} (${allFields}) VALUES (${getQM})`;
-    const sqlQueryInsert = `INSERT INTO ${tableName} (${allFields}) \nVALUES (${allFieldsAssign})`;
+    const sqlQueryInsert = `INSERT INTO ${tableName} (${allFields}) \nVALUES (${displayQueryUpdateAssign(results)})`;
     const sqlUpdate = `UPDATE ${tableName} SET ${displayAllFieldAssign(results)} WHERE id='xxxx'`;
     const paramAssign = displayOldToNewAssign(results, "Balance").join(';\n');
 
@@ -100,6 +100,6 @@ pool.query(sqlAllTable, (err, results) => {
     console.log(tableName + "=>", allFieldsDefault.join('\n'))
     console.log(tableName + "=>", sqlQuery)
     console.log(tableName + "(insert)=>", sqlQueryInsert)
-    // console.log(paramAssign)
-    // console.log(tableName + "(update)=>", sqlUpdate)
+    console.log(paramAssign)
+    console.log(tableName + "(update)=>", sqlUpdate)
 })
