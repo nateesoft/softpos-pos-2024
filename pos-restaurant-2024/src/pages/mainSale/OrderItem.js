@@ -138,10 +138,10 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
               </Grid>
             </Grid>
             <Box display="flex" flexDirection="row">
-                {optList && optList.filter(o => o !== "").map((opt) => 
-                  <Typography sx={{ fontSize: "10px", color: "green" }}>{opt},</Typography>
-                )}
-              </Box>
+              {optList && optList.filter(o => o !== "").map((opt) =>
+                <Typography sx={{ fontSize: "10px", color: "green" }}>{opt},</Typography>
+              )}
+            </Box>
           </Grid>
         </Grid>
       </Grid>
@@ -149,14 +149,20 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
   )
 }
 const ProductDetailCard = ({
+  tableNo,
   product,
   handleNotification,
   closeModal,
   initLoadOrder,
   initLoadMenu
 }) => {
-  const [count, setCount] = useState(product.qty || 0)
+  const { appData } = useContext(POSContext)
+  const { empCode, macno, userLogin } = appData
+  
+  const [count, setCount] = useState(product.R_Quan || 1)
   const [orderType, setOrderType] = useState("E")
+  const [optList, setOptList] = useState([])
+  const [specialText, setSpecialText] = useState("")
 
   const handleChange = (event, oType) => {
     setOrderType(oType)
@@ -165,47 +171,26 @@ const ProductDetailCard = ({
   const handleConfirm = () => {
     if (count === 0) {
       // delete item
-      axios.delete(`/api/product_order/${product.id}`).then((response) => {
-        if (response.data.code === 200) {
-          // update product qty
-          axios
-            .patch(`/api/product/${product.id}`, { id: product.id, qty: count })
-            .then((response2) => {
-              if (response2.data.code === 200) {
-                initLoadMenu()
-                initLoadOrder()
-                closeModal()
-              }
-            })
-            .catch((error) => {
-              handleNotification(error)
-            })
-        }
-      })
+      axios.delete(`/api/balance/${product.R_Index}`)
+        .then((response) => {
+          initLoadMenu()
+          initLoadOrder()
+          closeModal()
+        })
+        .catch((error) => {
+          handleNotification(error)
+        })
     } else {
       // update item
       product.qty = count
       axios
-        .patch(`/api/product_order/${product.id}`, { ...product })
+        .patch(`/api/balance/${product.R_Index}`, {
+          tableNo, menuInfo: product, optList, specialText, qty: count, macno, userLogin, empCode
+        })
         .then((response) => {
-          if (response.data.code === 200) {
-            // update product qty
-            axios
-              .patch(`/api/product/${product.id}`, {
-                id: product.id,
-                qty: count
-              })
-              .then((response2) => {
-                if (response2.data.code === 200) {
-                  initLoadMenu()
-                  initLoadOrder()
-                  closeModal()
-                }
-              })
-              .catch((error1) => {
-                handleNotification(error1)
-              })
-          }
+          initLoadMenu()
+          initLoadOrder()
+          closeModal()
         })
         .catch((error) => {
           handleNotification(error)
@@ -292,7 +277,7 @@ const ProductDetailCard = ({
           <AddIcon fontSize="large" />
         </IconButton>
       </Grid>
-      <OptionMenuSelect productCode={product.R_PluCode} />
+      <OptionMenuSelect setSpecialText={setSpecialText} productCode={product.R_PluCode} optList={optList} setOptList={setOptList} />
       <Box sx={{ padding: "10px" }}>
         <Box>
           <Typography variant="p">ประเภทอาหาร</Typography>
@@ -605,11 +590,12 @@ const OrderItem = ({
       >
         <Box sx={{ ...modalStyle, width: 450 }}>
           <ProductDetailCard
+            tableNo={tableNo}
             product={productInfo}
-            handleNotification={handleNotification}
             closeModal={() => setOpen(false)}
             initLoadMenu={initLoadMenu}
             initLoadOrder={initLoadOrder}
+            handleNotification={handleNotification}
           />
         </Box>
       </Modal>

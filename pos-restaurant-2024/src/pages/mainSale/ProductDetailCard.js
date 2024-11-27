@@ -9,8 +9,14 @@ import RemoveIcon from "@mui/icons-material/Remove"
 import OptionMenuSelect from "./OptionMenuSelect"
 import { POSContext } from "../../AppContext"
 
-const ProductDetailCard = memo(
-  ({ tableNo, product, closeModal, initLoadMenu, initLoadOrder, handleNotification }) => {
+const ProductDetailCard = memo(({ 
+    tableNo, 
+    product, 
+    handleNotification,
+    closeModal,
+    initLoadOrder, 
+    initLoadMenu 
+  }) => {
     const { appData } = useContext(POSContext)
     const { empCode, macno, userLogin } = appData
 
