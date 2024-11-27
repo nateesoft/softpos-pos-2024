@@ -90,11 +90,9 @@ const updateBalanceQty = async (tableNo, rIndex, qty) => {
 const addListBalance = async (payload) => {
     const { listBalance, tableNo, macno, userLogin, empCode, R_LinkIndex } = payload
     listBalance.forEach(async (product, index) => {
-        const newRIndex = await getBalanceMaxIndex(tableNo)
-        // console.log('product to add new balance:', product)
-        // const newRIndex = tableNo + "/" + PrefixZeroFormat(parseInt(R_Index.split('/')[1]) + (index+1), 3)
+        const posProduct = await getProductByPCode(product.menu_code)
         await addNewBalance({
-            tableNo, menuInfo: { ...product, menu_price: 0 }, qty: 1, macno, userLogin, empCode, R_Index: (R_LinkIndex + "/" + (index + 1)), R_LinkIndex
+            tableNo, menuInfo: { ...product, menu_price: 0 }, qty: 1, macno, userLogin, empCode, R_Index: (R_LinkIndex + "/" + (index + 1)), R_LinkIndex, posProduct
         })
     });
 }
@@ -102,18 +100,19 @@ const addListBalance = async (payload) => {
 const addBalance = async payload => {
     const { tableNo, menuInfo, qty, macno, userLogin, empCode } = payload
     const R_Index = await getBalanceMaxIndex(tableNo)
-    const result = await addNewBalance({ tableNo, menuInfo, qty, macno, userLogin, empCode, R_Index })
+    const posProduct = await getProductByPCode(menuInfo.menu_code)
+    const result = await addNewBalance({ tableNo, menuInfo, qty, macno, userLogin, empCode, R_Index, R_LinkIndex: "", posProduct })
     return result
 }
 
 const addNewBalance = async payload => {
-    const { tableNo, menuInfo, qty, macno, userLogin, empCode, R_Index, R_LinkIndex = "" } = payload
-    // const posProduct = await getProductByPCode(menuInfo.menu_code)
-    const posProduct = {
-        PStock: "N",
-        PKic: "",
-        PType: ""
-    }
+    const { tableNo, menuInfo, qty, macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct } = payload
+    console.log('posProduct:', posProduct)
+    // const posProduct = {
+    //     PStock: "N",
+    //     PKic: "",
+    //     PType: ""
+    // }
 
     const R_Table = tableNo
     const R_PluCode = menuInfo.menu_code
