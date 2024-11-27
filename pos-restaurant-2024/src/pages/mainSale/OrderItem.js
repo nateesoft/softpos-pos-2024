@@ -171,7 +171,7 @@ const ProductDetailCard = ({
   const handleConfirm = () => {
     if (count === 0) {
       // delete item
-      axios.delete(`/api/balance/${product.R_Index}`)
+      axios.post(`/api/balance/deleteBalance`, { index: product.R_Index })
         .then((response) => {
           initLoadMenu()
           initLoadOrder()
@@ -184,8 +184,15 @@ const ProductDetailCard = ({
       // update item
       product.qty = count
       axios
-        .patch(`/api/balance/${product.R_Index}`, {
-          tableNo, menuInfo: product, optList, specialText, qty: count, macno, userLogin, empCode
+        .patch(`/api/balance/updateInfo`, {
+          tableNo, 
+          menuInfo: product, 
+          optList, 
+          specialText, 
+          qty: count, 
+          macno, 
+          userLogin, 
+          empCode
         })
         .then((response) => {
           initLoadMenu()
