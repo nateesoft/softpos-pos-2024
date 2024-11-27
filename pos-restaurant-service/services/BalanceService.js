@@ -250,7 +250,6 @@ const addNewBalance = async payload => {
     const R_ServiceAmt = 0;
     const R_PEName = "";
     const R_Indulgent = "";
-    const R_CardPay = "";
 
     try {
         const sql = `INSERT INTO balance 
@@ -262,7 +261,7 @@ const addNewBalance = async payload => {
         R_PrSubBath,R_PrSubAmt,R_PrSubAdj,R_PrCuDisc,R_PrCuBath,R_PrCuAdj,R_QuanCanDisc,R_Order,R_PItemNo,R_PKicQue,
         R_MemSum,R_PrVcType,R_PrVcCode,R_PrVcAmt,R_PrVcAdj,R_VoidQuan,R_MoveFlag,R_MovePrint,R_Pause,R_SPIndex,
         R_LinkIndex,R_VoidPause,R_MoveItem,R_MoveFrom,R_MoveUser,VoidMsg,R_PrintItemBill,R_CountTime,SoneCode,
-        R_Earn,R_EarnNo,TranType,PDAPrintCheck,PDAEMP,R_empName,R_ServiceAmt,R_PEName,R_Indulgent,R_CardPay) 
+        R_Earn,R_EarnNo,TranType,PDAPrintCheck,PDAEMP,R_empName,R_ServiceAmt,R_PEName,R_Indulgent) 
         VALUES ('${R_Index}','${R_Table}','${R_Date}','${R_Time}','${Macno}','${Cashier}','${R_Emp}','${R_PluCode}','${R_PName}',
         '${R_Unit}','${R_Group}','${R_Status}','${R_Normal}','${R_Discount}','${R_Service}','${R_Stock}','${R_Set}','${R_Vat}',
         '${R_Type}','${R_ETD}','${R_Quan}','${R_Price}','${R_Total}','${R_PrType}','${R_PrCode}','${R_PrDisc}','${R_PrBath}',
@@ -274,7 +273,7 @@ const addNewBalance = async payload => {
         '${R_PKicQue}','${R_MemSum}','${R_PrVcType}','${R_PrVcCode}','${R_PrVcAmt}','${R_PrVcAdj}','${R_VoidQuan}','${R_MoveFlag}',
         '${R_MovePrint}','${R_Pause}','${R_SPIndex}','${R_LinkIndex}','${R_VoidPause}','${R_MoveItem}','${R_MoveFrom}','${R_MoveUser}',
         '${VoidMsg}','${R_PrintItemBill}','${R_CountTime}','${SoneCode}','${R_Earn}','${R_EarnNo}','${TranType}',
-        '${PDAPrintCheck}','${PDAEMP}','${R_empName}','${R_ServiceAmt}','${R_PEName}','${R_Indulgent}','${R_CardPay}')`
+        '${PDAPrintCheck}','${PDAEMP}','${R_empName}','${R_ServiceAmt}','${R_PEName}','${R_Indulgent}')`
         console.log('addNewBalance:', sql)
         await pool.query(sql)
         return R_Index
@@ -387,7 +386,6 @@ const updateExistsBalance = async payload => {
     const R_ServiceAmt = 0;
     const R_PEName = "";
     const R_Indulgent = "";
-    const R_CardPay = "";
 
     try {
         const sql = `INSERT INTO balance 
@@ -399,7 +397,7 @@ const updateExistsBalance = async payload => {
         R_PrSubBath,R_PrSubAmt,R_PrSubAdj,R_PrCuDisc,R_PrCuBath,R_PrCuAdj,R_QuanCanDisc,R_Order,R_PItemNo,R_PKicQue,
         R_MemSum,R_PrVcType,R_PrVcCode,R_PrVcAmt,R_PrVcAdj,R_VoidQuan,R_MoveFlag,R_MovePrint,R_Pause,R_SPIndex,
         R_LinkIndex,R_VoidPause,R_MoveItem,R_MoveFrom,R_MoveUser,VoidMsg,R_PrintItemBill,R_CountTime,SoneCode,
-        R_Earn,R_EarnNo,TranType,PDAPrintCheck,PDAEMP,R_empName,R_ServiceAmt,R_PEName,R_Indulgent,R_CardPay) 
+        R_Earn,R_EarnNo,TranType,PDAPrintCheck,PDAEMP,R_empName,R_ServiceAmt,R_PEName,R_Indulgent) 
         VALUES ('${R_Index}','${R_Table}','${R_Date}','${R_Time}','${Macno}','${Cashier}','${R_Emp}','${R_PluCode}','${R_PName}',
         '${R_Unit}','${R_Group}','${R_Status}','${R_Normal}','${R_Discount}','${R_Service}','${R_Stock}','${R_Set}','${R_Vat}',
         '${R_Type}','${R_ETD}','${R_Quan}','${R_Price}','${R_Total}','${R_PrType}','${R_PrCode}','${R_PrDisc}','${R_PrBath}',
@@ -411,7 +409,7 @@ const updateExistsBalance = async payload => {
         '${R_PKicQue}','${R_MemSum}','${R_PrVcType}','${R_PrVcCode}','${R_PrVcAmt}','${R_PrVcAdj}','${R_VoidQuan}','${R_MoveFlag}',
         '${R_MovePrint}','${R_Pause}','${R_SPIndex}','${R_LinkIndex}','${R_VoidPause}','${R_MoveItem}','${R_MoveFrom}','${R_MoveUser}',
         '${VoidMsg}','${R_PrintItemBill}','${R_CountTime}','${SoneCode}','${R_Earn}','${R_EarnNo}','${TranType}',
-        '${PDAPrintCheck}','${PDAEMP}','${R_empName}','${R_ServiceAmt}','${R_PEName}','${R_Indulgent}','${R_CardPay}')`
+        '${PDAPrintCheck}','${PDAEMP}','${R_empName}','${R_ServiceAmt}','${R_PEName}','${R_Indulgent}')`
         console.log('addNewBalance:', sql)
         await pool.query(sql)
         return R_Index

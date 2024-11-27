@@ -14,7 +14,7 @@ const createNewTSale = async (balance, BillRefNo) => {
         R_PrSubBath, R_PrSubAmt, R_PrSubAdj, R_PrCuDisc, R_PrCuBath, R_PrCuAdj, R_PItemNo, R_PKicQue,
         R_PrVcType, R_PrVcCode, R_PrVcAmt, R_PrVcAdj, R_MoveFlag, R_Pause, R_SPIndex,
         R_LinkIndex, R_VoidPause, R_MoveItem, R_MoveFrom, R_MoveUser, VoidMsg, R_PrintItemBill, R_CountTime,
-        R_Earn, R_EarnNo, R_CardPay } = balance
+        R_Earn, R_EarnNo } = balance
 
     const R_Refno = BillRefNo;
     const R_Index = BillRefNo + "/" + balance.R_Index.split('/')[1]
@@ -52,7 +52,7 @@ const createNewTSale = async (balance, BillRefNo) => {
     R_PrChkType2,R_PrQuan2,R_PrType2,R_PrCode2,R_PrDisc2,R_PrBath2,R_PrAmt2,R_PrAdj2,R_PItemNo,R_PKicQue,R_PrVcType,
     R_PrVcCode,R_PrVcAmt,R_PrVcAdj,R_MoveFlag,R_Pause,R_SPIndex,R_LinkIndex,R_VoidPause,R_SetPrice,R_SetDiscAmt,
     R_MoveItem,R_MoveFrom,R_MoveUser,R_Opt9,R_Opt1,R_Opt2,R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8,R_PrintItemBill,
-    R_CountTime,R_Return,R_Earn,R_EarnNo,R_NetDiff,R_SendOnline,R_BranchCode,R_CardPay) 
+    R_CountTime,R_Return,R_Earn,R_EarnNo,R_NetDiff,R_SendOnline,R_BranchCode) 
     values (?,?,?,curdate(),curtime(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,
     ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
     console.log('createNewTSale:', sql)
@@ -66,7 +66,7 @@ const createNewTSale = async (balance, BillRefNo) => {
                 R_PrChkType2, R_PrQuan2, R_PrType2, R_PrCode2, R_PrDisc2, R_PrBath2, R_PrAmt2, R_PrAdj2, R_PItemNo, R_PKicQue, R_PrVcType,
                 R_PrVcCode, R_PrVcAmt, R_PrVcAdj, R_MoveFlag, R_Pause, R_SPIndex, R_LinkIndex, R_VoidPause, R_SetPrice, R_SetDiscAmt,
                 R_MoveItem, R_MoveFrom, R_MoveUser, R_Opt9, R_Opt1, R_Opt2, R_Opt3, R_Opt4, R_Opt5, R_Opt6, R_Opt7, R_Opt8, R_PrintItemBill,
-                R_CountTime, R_Return, R_Earn, R_EarnNo, R_NetDiff, R_SendOnline, R_BranchCode, R_CardPay])
+                R_CountTime, R_Return, R_Earn, R_EarnNo, R_NetDiff, R_SendOnline, R_BranchCode])
         return results
     } catch (error) {
         console.log('createNewTSale', error)
