@@ -53,6 +53,7 @@ function PaymentPage() {
   const [billAmount, setBillAmount] = useState(0)
   const [poshwsetup, setPosHwSetup] = useState({})
   const [nextBillId, setNextBillId] = useState("")
+  const [billInfo, setBillInfo] = useState("")
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
@@ -109,6 +110,21 @@ function PaymentPage() {
       })
   }, [tableNo])
 
+  const handleLoadBillInfo = billNo => {
+    axios
+      .get(`/api/billno/${billNo}`)
+      .then((response) => {
+        console.log('PaymentPage:handleLoadBillInfo:', response)
+        if (response.status === 200) {
+          setBillInfo(response.data.data)
+          setOpen(true)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error)
+      })
+  }
+
   const loadPosHwSetup = useCallback(() => {
     axios
       .get(`/api/poshwsetup/${macno}`)
@@ -133,26 +149,26 @@ function PaymentPage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}>
       <Grid container spacing={2} sx={backgroundSpecial}>
-        {matches && <Grid size={6}>
+        {matches && <Grid size={4}>
           <OrderItem tableNo={tableNo} orderList={orderList} />
           <MemberInfo />
         </Grid>}
-        <Grid size={matches ? 6 : 12}>
+        <Grid size={matches ? 8 : 12}>
           <PaymentForm 
-            open={() => setOpen(true)} 
             close={() => setOpen(false)} 
-            tableNo={tableNo} orderList={orderList}
+            tableNo={tableNo} 
+            orderList={orderList}
             handleNotification={handleNotification} 
+            loadBillInfo={handleLoadBillInfo}
           />
         </Grid>
       </Grid>
-      <Modal open={open} onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+      <Modal open={open} aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description" disableEnforceFocus>
         <Box sx={{ ...modalStyle, width: 450 }}>
           <div style={{ height: '700px', overflow: "auto" }}>
             <ReceiptToPrint innerRef={contentRef} 
-              billId={nextBillId} 
+              billInfo={billInfo} 
               orderList={orderList} 
               tableNo={tableNo} 
               poshwsetup={poshwsetup} 
@@ -162,7 +178,6 @@ function PaymentPage() {
           />
           </div>
           <Box sx={{ padding: "10px", backgroundColor: "#eee", borderRadius: "10px" }} textAlign="center">
-            <Button variant="contained" color="error" onClick={() => setOpen(false)} sx={{ marginRight: "10px" }} startIcon={<CloseIcon />}>Cancel</Button>
             <Button variant="contained" color="info" startIcon={<PrintIcon />} onClick={handlePrint}>Print</Button>
           </Box>
         </Box>

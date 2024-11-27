@@ -4,9 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Button } from '@mui/material';
-
-const TAX_RATE = 0.07;
+import { Box, Button, Grid2, TableContainer, Typography } from '@mui/material';
 
 function ccyFormat(num) {
   return `${Math.round(num).toFixed(2)}`;
@@ -18,45 +16,44 @@ function subtotal(items) {
 
 const OrderItem = ({ tableNo, orderList }) => {
   const invoiceSubtotal = subtotal(orderList);
-  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+  const R_NetTotal = invoiceSubtotal;
 
   return (
     <Paper elevation={3} sx={{padding: "10px", margin: "10px"}}>
       <Box sx={{ padding: "10px", borderRadius: "5px", backgroundColor: "#123456" }}>
         <Button variant='text' sx={{fontWeight: "bold", fontSize: "18px", color: "white"}}>Table No: {tableNo}</Button>
       </Box>
-      <Table sx={{ minWidth: 300 }} aria-label="spanning table">
-        <TableBody>
-          {orderList && orderList.map((order) => (
-            <TableRow key={order.R_Index}>
-              <TableCell>{order.R_Index}</TableCell>
-              <TableCell>{order.R_PName}</TableCell>
-              <TableCell align="right">{order.R_Quan}</TableCell>
-              <TableCell align="right">{ccyFormat(order.R_Price)}</TableCell>
-              <TableCell align="right">{ccyFormat(order.R_Total)}</TableCell>
-              <TableCell align="right">{order.R_ETD}</TableCell>
-            </TableRow>
-          ))}
-          <TableRow sx={{backgroundColor: "#aaa"}}>
-            <TableCell rowSpan={4} />
-            <TableCell colSpan={3} sx={{fontSize: "16px", fontWeight: "bold", color: "#555"}}>SUBTOTAL</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
-            <TableCell />
-          </TableRow>
-          <TableRow sx={{backgroundColor: "#bbb"}}>
-            <TableCell sx={{fontSize: "16px", fontWeight: "bold", color: "#555"}}>VAT</TableCell>
-            <TableCell colSpan={2} align="right">{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
-            <TableCell />
-          </TableRow>
-          <TableRow sx={{backgroundColor: "#ccc"}}>
-            <TableCell colSpan={3} sx={{fontSize: "22px", fontWeight: "bold", color: "#555"}}>TOTAL</TableCell>
-            <TableCell align="right" sx={{fontWeight: "bold", fontSize: "22px"}}>{ccyFormat(invoiceTotal)}</TableCell>
-            <TableCell />
-          </TableRow>
-        </TableBody>
-      </Table>
+      <TableContainer sx={{width: "300px", overflow: "auto"}}>
+        <Table aria-label="spanning table">
+          <TableBody>
+            {orderList && orderList.map((order) => (
+              <TableRow key={order.R_Index}>
+                <TableCell>{order.R_Index}</TableCell>
+                <TableCell sx={{whiteSpace: "nowrap"}}>{order.R_PName}</TableCell>
+                <TableCell align="right">{order.R_Quan}</TableCell>
+                <TableCell align="right">{ccyFormat(order.R_Price)}</TableCell>
+                <TableCell align="right">{ccyFormat(order.R_Total)}</TableCell>
+                <TableCell align="right">{order.R_ETD}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Box padding={2}>
+        <Grid2 display="flex" justifyContent="space-between">
+          <Typography sx={{fontSize: "14px"}}>SUBTOTAL</Typography>
+          <Typography>{ccyFormat(invoiceSubtotal-(R_NetTotal*7/107))}</Typography>
+        </Grid2>
+        <Grid2 display="flex" justifyContent="space-between">
+          <Typography sx={{fontSize: "14px"}}>VAT</Typography>
+          <Typography sx={{fontSize: "14px"}}>7%</Typography>
+          <Typography>{ccyFormat(R_NetTotal*7/107)}</Typography>
+        </Grid2>
+        <Grid2 display="flex" justifyContent="space-between">
+          <Typography sx={{fontSize: "14px"}}>TOTAL</Typography>
+          <Typography>{ccyFormat(R_NetTotal)}</Typography>
+        </Grid2>
+      </Box>
     </Paper>
   );
 }

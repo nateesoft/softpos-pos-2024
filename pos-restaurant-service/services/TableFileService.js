@@ -20,6 +20,7 @@ const getTableByCode = async tableNo => {
     const sql = `select * from tablefile where TCode='${tableNo}' limit 1`;
     console.log('getTableByCode:', sql)
     const results = await pool.query(sql)
+    console.log('getTableByCode:', results)
     if (results.length > 0) {
         return results[0]
     }

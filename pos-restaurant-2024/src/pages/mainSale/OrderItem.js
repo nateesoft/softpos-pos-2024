@@ -576,7 +576,7 @@ const OrderItem = ({
           color="secondary"
           onClick={() => setOpenSplitBill(true)}
           endIcon={<SplitBillIcon />}
-          disabled={OrderList.length === 0}
+          disabled={true}
         >
           แยกชำระ
         </Button>

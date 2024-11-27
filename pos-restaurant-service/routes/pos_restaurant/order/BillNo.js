@@ -15,9 +15,20 @@ router.get('/', function (req, res) {
   })
 });
 
-router.post('/:tableNo', function (req, res, next) {
-  const { tableNo } = req.params
-  BillNoService.addNewBill(tableNo, req.body)
+router.get('/:billNo', function (req, res) {
+  const { billNo } = req.params
+  BillNoService.getBillNoByRefno(billNo)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+    })
+});
+
+// update billno
+router.post('/', (req, res) => {
+  BillNoService.addNewBill(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

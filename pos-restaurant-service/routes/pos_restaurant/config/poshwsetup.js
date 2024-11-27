@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const pool = require('../../../config/database/MySqlConnect')
-const { PrefixFormat, PrefixZeroFormat } = require('../../../utils/StringUtil')
+const { PrefixFormat, PrefixZeroFormat, ASCII2Unicode } = require('../../../utils/StringUtil')
 
 router.get('/:macno', (req, res, next) => {
   const { macno } = req.params
@@ -20,7 +20,7 @@ router.get('/:macno', (req, res, next) => {
     }
 
     response.billId = macno + RunningNumber,
-    response.data = results[0]
+    response.data = {...results[0], Footting3: ASCII2Unicode(results[0].Footting3)}
 
     res.status(200).json(response)
   })

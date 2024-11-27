@@ -91,6 +91,7 @@ const ProductMenu = ({
     const [productInfo, setProductInfo] = useState({})
     const [showMenu, setShowMenu] = useState(false)
     const [showMenuSet, setShowMenuSet] = useState(false)
+    const [R_LinkIndex, setRLinkIndex] = useState("")
 
     const [subMenuSelected, setSubMenuSelected] = useState([])
     const [msgWarning, setMsgWarning] = useState(false)
@@ -124,6 +125,8 @@ const ProductMenu = ({
             .then(response => {
                 initLoadMenu()
                 initLoadOrder()
+                console.log('addOrderMain:', response)
+                setRLinkIndex(response.data.data)
             })
             .catch(err => {
                 console.log(err)
@@ -136,7 +139,8 @@ const ProductMenu = ({
             tableNo,
             macno,
             userLogin,
-            empCode
+            empCode,
+            R_LinkIndex
         })
     }
 
@@ -152,8 +156,8 @@ const ProductMenu = ({
 
             // add sub menu in set
             const allListToAdd = optionalList.filter(item => item.checked === true)
-            console.log('allListToAdd:', allListToAdd)
-            await addOrderSubMenuList(allListToAdd)
+            console.log('allListToAdd:', allListToAdd, R_LinkIndex)
+            await addOrderSubMenuList(allListToAdd, R_LinkIndex)
 
             // total summary display
             initLoadMenu()

@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const pool = require('../../../config/database/MySqlConnect')
-const { Unicode2ASCII, ASCII2Unicode } = require('../../../utils/StringUtil')
-
 const BalanceService = require('../../../services/BalanceService')
 
 router.get('/', (req, res) => {
@@ -82,8 +79,8 @@ router.get('/getMaxIndex/:tableNo', function (req, res) {
     })
 });
 
-router.post('/', function (req, res, next) {
-  BalanceService.addNewBalance(req.body)
+router.post('/', (req, res) => {
+  BalanceService.addBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

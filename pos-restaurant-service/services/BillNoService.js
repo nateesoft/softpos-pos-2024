@@ -11,10 +11,20 @@ const { updateDiscount } = require('./DiscountService');
 const { ThermalPrinterConnect } = require('./ThermalPrinter');
 
 const getBillNoByTableNo = async tableNo => {
-    const sql = `select * from bill_no where B_Refno='${tableNo}'`;
+    const sql = `select * from bill_no where B_Table='${tableNo}'`;
     console.log('getBillNoByTableNo:', sql)
     const results = await pool.query(sql)
     return results
+}
+
+const getBillNoByRefno = async billNo => {
+    const sql = `select * from billno where B_Refno='${billNo}'`;
+    console.log('getBillNoByRefno:', sql)
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        return results[0]
+    }
+    return null
 }
 
 const updateNextBill = async (macno) => {
@@ -30,44 +40,72 @@ const getBillIDCurrent = async (macno) => {
     const results = await pool.query(sql)
 
     let NextBillId = null;
-    if (results) {
-        if (results) {
-            const ReceNo1 = parseInt(results[0].ReceNo1)
-            NextBillId = PrefixZeroFormat(ReceNo1, 7)
-        }
+    if (results.length > 0) {
+        const ReceNo1 = parseInt(results[0].ReceNo1)
+        NextBillId = PrefixZeroFormat(ReceNo1, 7)
     }
+
+    console.log("NextBillId:", NextBillId)
 
     return NextBillId
 }
 
-const addNewBill = async (tableNo, requestPayload) => {
-    const { macno, orderList,
-        cashAmount,
-        creditAmount,
-        transferAmount,
-        discountAmount,
-        tonAmount,
-        paymentAmount,
-        invoiceTotal
-    } = requestPayload
+const addNewBill = async (payload) => {
+    const {
+        macno, tableNo, billType, orderList, tonAmount, paymentAmount, netTotal,
+        memberInfo, cashInfo, creditInfo, transferInfo, discountInfo
+    } = payload
+    // console.log('addNewBill:', payload)
     const tableFile = await getTableByCode(tableNo)
-    const { Tcode, MacNo, Cashier, TLoginTime, TCurTime, TCustomer } = tableFile
+    const { Cashier, TCustomer, Food, Drink, Product } = tableFile
+
+    const { cashEnable, cashAmount } = cashInfo
+    const {
+        creditEnable,
+        crCode,
+        creditNumber,
+        creditRef,
+        creditChargePercent,
+        creditChargeAmount,
+        creditAmount
+    } = creditInfo
+    const {
+        transferEnable,
+        transferAmount,
+        transferAccountNo,
+        transferAccount
+    } = transferInfo
+    const {
+        discountEnable,
+        discountAmount,
+    } = discountInfo
+    const {
+        memberCode,
+        memberName,
+        memberBegin,
+        memberEnd,
+        memberCurSum
+    } = memberInfo
+
+    const curdate = moment().format('YYYY-MM-DD')
+    const curtime = moment().format('HH:mm:ss')
 
     const B_Refno = await getBillIDCurrent(macno);
     const B_CuponDiscAmt = 0;
-    const B_Ontime = "curdate()";
-    const B_LoginTime = "curdate()";
-    // const B_OnDate = "curdate()"
-    // const B_PostDate = "curdate()"
-    const B_Table = Tcode;
-    const B_MacNo = MacNo;
+    const B_Ontime = curtime;
+    const B_LoginTime = curtime;
+    const B_OnDate = curdate
+    const B_PostDate = curdate
+    const B_Table = tableNo;
+    const B_MacNo = macno;
     const B_Cashier = Cashier;
     const B_Cust = TCustomer;
-    const B_ETD = "E";
-    const B_Food = 0;
-    const B_Drink = 0;
-    const B_Product = 0;
+    const B_ETD = billType;
+    const B_Food = Food;
+    const B_Drink = Drink;
+    const B_Product = Product;
     const B_Total = (B_Food + B_Drink + B_Product);
+
     const B_Service = 0;
     const B_ServiceAmt = 0;
     const B_ItemDiscAmt = 0;
@@ -86,33 +124,33 @@ const addNewBill = async (tableNo, requestPayload) => {
     const B_SpaDiscAmt = 0;
     const B_AdjAmt = 0;
     const B_PreDisAmt = 0;
-    const B_NetTotal = invoiceTotal;
+    const B_NetTotal = netTotal;
     const B_NetFood = 0;
     const B_NetDrink = 0;
     const B_NetProduct = 0;
-    const B_NetVat = 0;
+    const B_NetVat = netTotal;
     const B_NetNonVat = 0;
-    const B_Vat = 0;
+    const B_Vat = (netTotal * 7 / 100);
     const B_PayAmt = paymentAmount;
     const B_Cash = cashAmount;
     const B_GiftVoucher = 0;
     const B_Earnest = 0;
     const B_Ton = tonAmount;
-    const B_CrCode1 = "";
-    const B_CardNo1 = "";
-    const B_AppCode1 = "";
-    const B_CrCharge1 = 0;
-    const B_CrChargeAmt1 = 0;
-    const B_CrAmt1 = 0;
+    const B_CrCode1 = crCode;
+    const B_CardNo1 = creditNumber;
+    const B_AppCode1 = creditRef;
+    const B_CrCharge1 = creditChargePercent;
+    const B_CrChargeAmt1 = creditChargeAmount;
+    const B_CrAmt1 = creditAmount;
     const B_AccrCode = "";
     const B_AccrAmt = 0;
     const B_AccrCr = 0;
-    const B_MemCode = "";
-    const B_MemName = "";
-    // const B_MemBegin = "now()"
-    // const B_MemEnd = "now()"
-    const B_MemCurSum = 0;
-    const B_Void = "";
+    const B_MemCode = memberCode;
+    const B_MemName = memberName;
+    const B_MemBegin = memberBegin
+    const B_MemEnd = memberEnd
+    const B_MemCurSum = memberCurSum;
+    const B_Void = "-";
     const B_VoidUser = "";
     const B_VoidTime = "";
     const B_BillCopy = 0;
@@ -129,10 +167,10 @@ const addNewBill = async (tableNo, requestPayload) => {
     const MScore = "";
     const CurStamp = "";
     const StampRate = "";
-    const B_ChkBill = "";
-    const B_ChkBillTime = "";
-    const B_CashTime = "";
-    const B_WaitTime = "";
+    const B_ChkBill = "Y";
+    const B_ChkBillTime = curtime;
+    const B_CashTime = curtime;
+    const B_WaitTime = "00:00:00";
     const B_SumScore = 0;
     const B_CrBank = "";
     const B_CrCardAmt = creditAmount;
@@ -147,7 +185,7 @@ const addNewBill = async (tableNo, requestPayload) => {
     const B_DetailDrink = 0;
     const B_DetailProduct = 0;
     const B_KicQue = "";
-    const B_ROUNDCLOSE = "";
+    const B_ROUNDCLOSE = "N";
     const R_Opt9 = "";
     const R_Opt1 = "";
     const R_Opt2 = "";
@@ -157,7 +195,7 @@ const addNewBill = async (tableNo, requestPayload) => {
     const R_Opt6 = "";
     const R_Opt7 = "";
     const R_Opt8 = "";
-    const VoidMsg = tableFile.VoidMsg;
+    const VoidMsg = "";
     const B_EarnDocNo = "";
     const B_UseEarnNo = "";
     const B_UserEntertain = "";
@@ -165,45 +203,36 @@ const addNewBill = async (tableNo, requestPayload) => {
 
     try {
         const sql = `INSERT INTO billno 
-            (B_Refno,B_CuponDiscAmt,B_Ontime,B_LoginTime,B_OnDate,B_PostDate,B_Table,B_MacNo,
-            B_Cashier,B_Cust,B_ETD,B_Total,B_Food,B_Drink,B_Product,B_Service,B_ServiceAmt,B_ItemDiscAmt,
-            B_FastDisc,B_FastDiscAmt,B_EmpDisc,B_EmpDiscAmt,B_TrainDisc,B_TrainDiscAmt,B_MemDisc,B_MemDiscAmt,B_SubDisc,B_SubDiscAmt,
-            B_SubDiscBath,B_ProDiscAmt,B_SpaDiscAmt,B_AdjAmt,B_PreDisAmt,B_NetTotal,B_NetFood,B_NetDrink,B_NetProduct,B_NetVat,
-            B_NetNonVat,B_Vat,B_PayAmt,B_Cash,B_GiftVoucher,B_Earnest,B_Ton,B_CrCode1,B_CardNo1,B_AppCode1,
-            B_CrCharge1,B_CrChargeAmt1,B_CrAmt1,B_AccrCode,B_AccrAmt,B_AccrCr,B_MemCode,B_MemName,
-            B_MemCurSum,B_Void,B_VoidUser,B_VoidTime,B_BillCopy,B_PrnCnt,B_PrnTime1,B_PrnTime2,B_InvNo,B_InvType,
-            B_Bran,B_BranName,B_Tel,B_RecTime,MStamp,MScore,CurStamp,StampRate,B_ChkBill,B_ChkBillTime,
-            B_CashTime,B_WaitTime,B_SumScore,B_CrBank,B_CrCardAmt,B_CrCurPoint,B_CrSumPoint,B_Entertain,B_VoucherDiscAmt,B_VoucherOver,
-            B_NetDiff,B_SumSetDiscAmt,B_DetailFood,B_DetailDrink,B_DetailProduct,B_KicQue,B_ROUNDCLOSE,R_Opt9,R_Opt1,R_Opt2,
-            R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8,VoidMsg,B_EarnDocNo,B_UseEarnNo,B_UserEntertain,
-            B_SendOnline) 
-            VALUES (?,?,curdate(),curdate(),curdate(),curdate(),?,?,
-            ?,?,?,?,?,?,?,?,?,?,
-            ?,?,?,?,?,?,?,?,?,?,
-            ?,?,?,?,?,?,?,?,?,?,
-            ?,?,?,?,?,?,?,?,?,?,
-            ?,?,?,?,?,?,?,?,
-            ?,?,?,?,?,?,?,?,?,?,
-            ?,?,?,?,?,?,?,?,?,curtime(),
-            ?,?,?,?,?,?,?,?,?,?,
-            ?,?,?,?,?,?,?,?,?,?,
-            ?,?,?,?,?,?,?,?,?,?,
-            ?)`;
+        (B_Refno,B_CuponDiscAmt,B_Ontime,B_LoginTime,B_OnDate,B_PostDate,B_Table,B_MacNo,B_Cashier,B_Cust,B_ETD,
+        B_Total,B_Food,B_Drink,B_Product,B_Service,B_ServiceAmt,B_ItemDiscAmt,B_FastDisc,B_FastDiscAmt,B_EmpDisc,
+        B_EmpDiscAmt,B_TrainDisc,B_TrainDiscAmt,B_MemDisc,B_MemDiscAmt,B_SubDisc,B_SubDiscAmt,B_SubDiscBath,
+        B_ProDiscAmt,B_SpaDiscAmt,B_AdjAmt,B_PreDisAmt,B_NetTotal,B_NetFood,B_NetDrink,B_NetProduct,B_NetVat,
+        B_NetNonVat,B_Vat,B_PayAmt,B_Cash,B_GiftVoucher,B_Earnest,B_Ton,B_CrCode1,B_CardNo1,B_AppCode1,
+        B_CrCharge1,B_CrChargeAmt1,B_CrAmt1,B_AccrCode,B_AccrAmt,B_AccrCr,B_MemCode,B_MemName,B_MemBegin,
+        B_MemEnd,B_MemCurSum,B_Void,B_VoidUser,B_VoidTime,B_BillCopy,B_PrnCnt,B_PrnTime1,B_PrnTime2,B_InvNo,
+        B_InvType,B_Bran,B_BranName,B_Tel,B_RecTime,MStamp,MScore,CurStamp,StampRate,B_ChkBill,B_ChkBillTime,
+        B_CashTime,B_WaitTime,B_SumScore,B_CrBank,B_CrCardAmt,B_CrCurPoint,B_CrSumPoint,B_Entertain,
+        B_VoucherDiscAmt,B_VoucherOver,B_NetDiff,B_SumSetDiscAmt,B_DetailFood,B_DetailDrink,B_DetailProduct,
+        B_KicQue,B_ROUNDCLOSE,R_Opt9,R_Opt1,R_Opt2,R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8,VoidMsg,
+        B_EarnDocNo,B_UseEarnNo,B_UserEntertain,B_SendOnline) 
+        VALUES ('${B_Refno}','${B_CuponDiscAmt}','${B_Ontime}','${B_LoginTime}','${B_OnDate}','${B_PostDate}','${B_Table}',
+        '${B_MacNo}','${B_Cashier}','${B_Cust}','${B_ETD}','${B_Total}','${B_Food}','${B_Drink}','${B_Product}',
+        '${B_Service}','${B_ServiceAmt}','${B_ItemDiscAmt}','${B_FastDisc}','${B_FastDiscAmt}','${B_EmpDisc}',
+        '${B_EmpDiscAmt}','${B_TrainDisc}','${B_TrainDiscAmt}','${B_MemDisc}','${B_MemDiscAmt}','${B_SubDisc}',
+        '${B_SubDiscAmt}','${B_SubDiscBath}','${B_ProDiscAmt}','${B_SpaDiscAmt}','${B_AdjAmt}','${B_PreDisAmt}',
+        '${B_NetTotal}','${B_NetFood}','${B_NetDrink}','${B_NetProduct}','${B_NetVat}','${B_NetNonVat}','${B_Vat}',
+        '${B_PayAmt}','${B_Cash}','${B_GiftVoucher}','${B_Earnest}','${B_Ton}','${B_CrCode1}','${B_CardNo1}',
+        '${B_AppCode1}','${B_CrCharge1}','${B_CrChargeAmt1}','${B_CrAmt1}','${B_AccrCode}','${B_AccrAmt}','${B_AccrCr}',
+        '${B_MemCode}','${B_MemName}','${B_MemBegin}','${B_MemEnd}','${B_MemCurSum}','${B_Void}','${B_VoidUser}',
+        '${B_VoidTime}','${B_BillCopy}','${B_PrnCnt}','${B_PrnTime1}','${B_PrnTime2}','${B_InvNo}','${B_InvType}',
+        '${B_Bran}','${B_BranName}','${B_Tel}','${B_RecTime}','${MStamp}','${MScore}','${CurStamp}','${StampRate}',
+        '${B_ChkBill}','${B_ChkBillTime}','${B_CashTime}','${B_WaitTime}','${B_SumScore}','${B_CrBank}','${B_CrCardAmt}',
+        '${B_CrCurPoint}','${B_CrSumPoint}','${B_Entertain}','${B_VoucherDiscAmt}','${B_VoucherOver}','${B_NetDiff}',
+        '${B_SumSetDiscAmt}','${B_DetailFood}','${B_DetailDrink}','${B_DetailProduct}','${B_KicQue}','${B_ROUNDCLOSE}',
+        '${R_Opt9}','${R_Opt1}','${R_Opt2}','${R_Opt3}','${R_Opt4}','${R_Opt5}','${R_Opt6}','${R_Opt7}','${R_Opt8}',
+        '${VoidMsg}','${B_EarnDocNo}','${B_UseEarnNo}','${B_UserEntertain}','${B_SendOnline}')`;
         console.log('addNewBill:', sql)
-        const results = await pool.query(
-            sql,
-            [B_Refno, B_CuponDiscAmt, B_Table, B_MacNo,
-                B_Cashier, B_Cust, B_ETD, B_Total, B_Food, B_Drink, B_Product, B_Service, B_ServiceAmt, B_ItemDiscAmt,
-                B_FastDisc, B_FastDiscAmt, B_EmpDisc, B_EmpDiscAmt, B_TrainDisc, B_TrainDiscAmt, B_MemDisc, B_MemDiscAmt, B_SubDisc, B_SubDiscAmt,
-                B_SubDiscBath, B_ProDiscAmt, B_SpaDiscAmt, B_AdjAmt, B_PreDisAmt, B_NetTotal, B_NetFood, B_NetDrink, B_NetProduct, B_NetVat,
-                B_NetNonVat, B_Vat, B_PayAmt, B_Cash, B_GiftVoucher, B_Earnest, B_Ton, B_CrCode1, B_CardNo1, B_AppCode1,
-                B_CrCharge1, B_CrChargeAmt1, B_CrAmt1, B_AccrCode, B_AccrAmt, B_AccrCr, B_MemCode, B_MemName,
-                B_MemCurSum, B_Void, B_VoidUser, B_VoidTime, B_BillCopy, B_PrnCnt, B_PrnTime1, B_PrnTime2, B_InvNo, B_InvType,
-                B_Bran, B_BranName, B_Tel, B_RecTime, MStamp, MScore, CurStamp, StampRate, B_ChkBill,
-                B_CashTime, B_WaitTime, B_SumScore, B_CrBank, B_CrCardAmt, B_CrCurPoint, B_CrSumPoint, B_Entertain, B_VoucherDiscAmt, B_VoucherOver,
-                B_NetDiff, B_SumSetDiscAmt, B_DetailFood, B_DetailDrink, B_DetailProduct, B_KicQue, B_ROUNDCLOSE, R_Opt9, R_Opt1, R_Opt2,
-                R_Opt3, R_Opt4, R_Opt5, R_Opt6, R_Opt7, R_Opt8, VoidMsg, B_EarnDocNo, B_UseEarnNo, B_UserEntertain,
-                B_SendOnline])
+        const results = await pool.query(sql)
         if (results) {
             // list all balance
             const allBalance = await getBalanceByTableNo(tableNo)
@@ -225,6 +254,8 @@ const addNewBill = async (tableNo, requestPayload) => {
 
             // update tablefile
             await updateTableAvailableStatus(B_Table)
+
+            return B_Refno
         }
         return null
     } catch (error) {
@@ -260,5 +291,6 @@ module.exports = {
     getBillNoByTableNo,
     addNewBill,
     updateNextBill,
-    getBillIDCurrent
+    getBillIDCurrent,
+    getBillNoByRefno
 }

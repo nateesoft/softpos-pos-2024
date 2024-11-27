@@ -6,7 +6,7 @@ function QrCodeGenerator({ mobileNumber, amount }) {
     const [size, setSize] = useState(120)
 
     const loadQRCodeImage = useCallback(() => {
-        axios.post(`/api/qr-payment`, { mobileNumber, amount })
+        axios.post(`/api/qr-payment`, { mobileNumber, amount: parseFloat(amount) })
             .then((response) => {
                 if (response.data.RespCode === 200) {
                     setImage(response.data.Result)

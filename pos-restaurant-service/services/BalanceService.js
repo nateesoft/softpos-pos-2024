@@ -26,7 +26,7 @@ const getBalanceByTableNo = async tableNo => {
     console.log('getBalanceByTableNo:', sql)
     const results = await pool.query(sql)
     const mappingResult = results.map((item, index) => {
-        return {...item, R_PName: ASCII2Unicode(item.R_PName)}
+        return { ...item, R_PName: ASCII2Unicode(item.R_PName) }
     })
     // console.log(mappingResult)
     return mappingResult
@@ -88,17 +88,26 @@ const updateBalanceQty = async (tableNo, rIndex, qty) => {
 }
 
 const addListBalance = async (payload) => {
-    const { listBalance, tableNo, macno, userLogin, empCode } = payload
-    listBalance.forEach(async product => {
-        console.log('product to add new balance:', product)
+    const { listBalance, tableNo, macno, userLogin, empCode, R_LinkIndex } = payload
+    listBalance.forEach(async (product, index) => {
+        const newRIndex = await getBalanceMaxIndex(tableNo)
+        // console.log('product to add new balance:', product)
+        // const newRIndex = tableNo + "/" + PrefixZeroFormat(parseInt(R_Index.split('/')[1]) + (index+1), 3)
         await addNewBalance({
-            tableNo, menuInfo: {...product, menu_price: 0}, qty: 1, macno, userLogin, empCode
+            tableNo, menuInfo: { ...product, menu_price: 0 }, qty: 1, macno, userLogin, empCode, R_Index: (R_LinkIndex + "/" + (index + 1)), R_LinkIndex
         })
     });
 }
 
-const addNewBalance = async payload => {
+const addBalance = async payload => {
     const { tableNo, menuInfo, qty, macno, userLogin, empCode } = payload
+    const R_Index = await getBalanceMaxIndex(tableNo)
+    const result = await addNewBalance({ tableNo, menuInfo, qty, macno, userLogin, empCode, R_Index })
+    return result
+}
+
+const addNewBalance = async payload => {
+    const { tableNo, menuInfo, qty, macno, userLogin, empCode, R_Index, R_LinkIndex = "" } = payload
     // const posProduct = await getProductByPCode(menuInfo.menu_code)
     const posProduct = {
         PStock: "N",
@@ -106,7 +115,6 @@ const addNewBalance = async payload => {
         PType: ""
     }
 
-    const R_Index = await getBalanceMaxIndex(tableNo)
     const R_Table = tableNo
     const R_PluCode = menuInfo.menu_code
     const R_PName = Unicode2ASCII(menuInfo.menu_name)
@@ -152,20 +160,20 @@ const addNewBalance = async payload => {
                 R_PrCuQuan,R_PrCuAmt,R_Redule,R_Serve,R_PrintOK,R_KicOK,StkCode,PosStk,R_Order,R_PItemNo,
                 R_PKicQue,R_MemSum,R_PrVcAmt,R_PrVcAdj,R_VoidQuan,R_MoveFlag,R_MovePrint,R_Pause,R_SPIndex,R_Earn,
                 R_Date, R_Time, macno, Cashier, R_Emp, R_ETD, TranType, R_KicPrint, R_Void, R_Kic,
-                R_Type) 
+                R_Type, R_LinkIndex) 
                 VALUES (
               ?,?,?,?,?,?,?,?,?,?,
               ?,?,?,?,?,?,?,?,?,?,
               ?,?,?,?,?,?,?,?,?,
               ?, curdate(), SUBSTR(now(), 12), 
-              ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+              ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         console.log('addNewBalance:', sql)
         const results = await pool.query(sql,
             [R_Index, R_Table, R_PluCode, R_PName, R_Quan, R_Price, R_Total, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuQuan, R_PrCuAmt,
                 R_Redule, R_Serve, R_PrintOK, R_KicOK, StkCode, PosStk, R_Order, R_PItemNo, R_PKicQue, R_MemSum,
                 R_PrVcAmt, R_PrVcAdj, R_VoidQuan, R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_Earn,
-                Macno, Cashier, R_Emp, R_ETD, TranType, R_KicPrint, R_Void, R_Kic, R_Type])
-        return results
+                Macno, Cashier, R_Emp, R_ETD, TranType, R_KicPrint, R_Void, R_Kic, R_Type, R_LinkIndex])
+        return R_Index
     } catch (error) {
         console.log('addNewBalance', error)
         return null
@@ -181,5 +189,6 @@ module.exports = {
     addNewBalance,
     updateBalanceQty,
     getTotalBalance,
-    addListBalance
+    addListBalance,
+    addBalance
 }

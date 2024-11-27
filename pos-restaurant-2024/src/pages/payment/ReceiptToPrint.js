@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Box, Divider, Paper, Typography } from '@mui/material'
 import Moment from 'react-moment'
+import axios from 'axios'
 
 import QrCodeGenerator from './QRCodePayment'
 
@@ -9,12 +10,28 @@ export default class ReceiptToPrint extends Component {
     super(props)
   }
 
+  // componentDidMount() {
+  //   axios.get(`/api/billno/${this.props.billNo}`)
+  //     .then(res => {
+  //       const billInfo = res.data.data;
+  //       console.log('ReceiptToPrint:', billInfo)
+  //       this.setState({ billInfo });
+  //     })
+  // }
+
   render() {
+    const billInfo = this.props.billInfo
+    const {
+      B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct, 
+      B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
+      B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1
+    } = billInfo
+    console.log('billInfo:', billInfo)
     const poshwsetup = this.props.poshwsetup
     console.log('poshwsetup:', poshwsetup)
     let headers = [poshwsetup.Heading1, poshwsetup.Heading2, poshwsetup.Heading3, poshwsetup.Heading4]
     headers = headers.filter(h => h !== "")
-    let footers = [poshwsetup.Footting1, poshwsetup.Footting2]
+    let footers = [poshwsetup.Footting1, poshwsetup.Footting2, poshwsetup.Footting3]
     let orderList = this.props.orderList
     orderList = orderList.filter(o => o.R_Price > 0)
     console.log(this.props)
@@ -31,10 +48,10 @@ export default class ReceiptToPrint extends Component {
           <img src="/images/payment/com_logo.jpg" width={128} alt="" />
         </div>
         <Paper elevation={0} sx={{ padding: "10px" }}>
-          <div>Receipt No: {this.props.billId}</div>
+          <div>Receipt No: {B_Refno}</div>
           <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
-          <div>Customer: {this.props.customerCount}</div>
-          <div>Cashier: {this.props.userLogin} Employ: {this.props.empCode}</div>
+          <div>Customer: {B_Cust}</div>
+          <div>Cashier: {B_Cashier} Employ: {this.props.empCode} Mac:{B_MacNo}</div>
         </Paper>
         <Divider />
         <Paper elevation={0} sx={{ padding: "10px" }}>
@@ -59,50 +76,45 @@ export default class ReceiptToPrint extends Component {
         <Paper elevation={0} sx={{ padding: "10px" }}>
           <Box display="flex" justifyContent="space-between">
             <Typography>Sub-Total</Typography>
-            <Typography>3,800.00</Typography>
+            <Typography>{B_Total}</Typography>
           </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>อาหาร (Food)</Typography>
-            <Typography>3,800.00</Typography>
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>เครื่องดื่ม (Drink)</Typography>
-            <Typography>0.00</Typography>
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>สินค้าอื่นๆ (Other)</Typography>
-            <Typography>0.00</Typography>
+          <Box padding={2}>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>อาหาร (Food)</Typography>
+              <Typography>{B_NetFood}</Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>เครื่องดื่ม (Drink)</Typography>
+              <Typography>{B_NetDrink}</Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>สินค้าอื่นๆ (Other)</Typography>
+              <Typography>{B_NetProduct}</Typography>
+            </Box>
           </Box>
           <Divider />
           <Box display="flex" justifyContent="space-between">
             <Typography>ค่าบริการ 10%</Typography>
-            <Typography>380.00</Typography>
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>Net Total</Typography>
-            <Typography>4,180.00</Typography>
+            <Typography>{B_ServiceAmt}</Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
             <Typography>Vat 7%</Typography>
-            <Typography>234.46.00</Typography>
+            <Typography>{B_Vat}</Typography>
+          </Box>
+          <Box display="flex" justifyContent="space-between">
+            <Typography>Net Total</Typography>
+            <Typography>{B_NetTotal}</Typography>
           </Box>
           <Divider />
           <Box display="flex" justifyContent="space-between">
-            <Typography>Visa Visa</Typography>
-            <Typography>credit_card_number | approve_code</Typography>
+            <Typography>{B_CrCode1} {B_CrBank}</Typography>
+            <Typography>{B_CardNo1} | {B_AppCode1}</Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
-            <Typography>CR-Charge 3% (125.40) 4,305.40</Typography>
+            <Typography>CR-Charge {B_CrCharge1}% ({B_CrChargeAmt1}) {B_CrAmt1}</Typography>
           </Box>
         </Paper>
-        <Divider />
-        <div align="center">
-          <QrCodeGenerator mobileNumber="0864108403" amount={1} />
-        </div>
-        <div align="center">
-          <span>แสกน qr code เพื่อชำระเงิน</span>
-        </div>
-        <Divider />
+        <Divider sx={{marginTop: "10px"}} />
         {footers && footers.map((footer) => 
           <div align="center">{footer}</div>
         )}

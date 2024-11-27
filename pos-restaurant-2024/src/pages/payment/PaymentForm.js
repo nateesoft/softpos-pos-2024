@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Checkbox, Modal, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Divider, Modal, Paper, TextField, Typography } from "@mui/material";
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import Grid from '@mui/material/Grid2'
@@ -9,8 +9,7 @@ import AddPaymentMethodIcon from '@mui/icons-material/AddBoxOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from "axios"
 import { POSContext } from "../../AppContext";
-
-const TAX_RATE = 0.07;
+import QrCodeGenerator from "./QRCodePayment";
 
 function ccyFormat(num) {
     return `${Math.round(num).toFixed(2)}`;
@@ -32,36 +31,44 @@ const modalStyle = {
     boxShadow: 24
 }
 
-function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
+function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotification }) {
     const { appData } = useContext(POSContext)
     const { macno } = appData
 
     const invoiceSubtotal = subtotal(orderList);
-    const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-    const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+    const R_NetTotal = invoiceSubtotal;
 
     const [paymentAmount, setPaymentAmount] = useState(0)
+
+    // discount info
+    const [discountEnable, setDiscountEnable] = useState(false)
     const [discountAmount, setDiscountAmount] = useState(0)
+
     const [balanceAmount, setBalanceAmount] = useState(0)
     const [tonAmount, setTonAmount] = useState(0)
 
+    // cash info
     const [cashEnable, setCashEnable] = useState(true)
     const [cashAmount, setCashAmount] = useState(0)
 
-    const [crCode, setCrCode] = useState("")
+    // credit info
     const [creditEnable, setCreditEnable] = useState(true)
+    const [crCode, setCrCode] = useState("")
     const [creditNumber, setCreditNumber] = useState("")
     const [creditRef, setCreditRef] = useState("")
     const [creditChargePercent, setCreditChargePercent] = useState(0)
+    const [creditChargeAmount, setCreditChargeAmount] = useState(0)
     const [creditAmount, setCreditAmount] = useState(0)
-
-    const [transferEnable, setTransferEnable] = useState(true)
-    const [transferAmount, setTransferAmount] = useState(0)
-    const [transferAccountNo, setTransferAccountNo] = useState("")
-    const [transferAccount, setTransferAccount] = useState("")
 
     const [openCreditInfo, setOpenCreditInfo] = useState(false)
     const [openTransferInfo, setOpenTransferInfo] = useState(false)
+
+    // transfer info
+    const [transferEnable, setTransferEnable] = useState(true)
+    const [transferAmount, setTransferAmount] = useState(0)
+    const [transferAccountNo, setTransferAccountNo] = useState("")
+    const [transferToAccount, setTransferToAccount] = useState("0864108403")
+    const [transferAccount, setTransferAccount] = useState("")
 
     const navigate = useNavigate();
     const handleBackPage = () => {
@@ -109,7 +116,7 @@ function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
         const cc = cashAmount ? parseFloat(cashAmount) : 0
         const cd = creditAmount ? parseFloat(creditAmount) : 0
         const ta = transferAmount ? parseFloat(transferAmount) : 0
-        const toalNetAmt = parseFloat(Math.round(invoiceTotal))
+        const toalNetAmt = parseFloat(Math.round(R_NetTotal))
         const paymentAmt = parseFloat(cc + cd + ta)
         const discountAmt = 0
         const balanceAmt = parseFloat((paymentAmt - discountAmt) - toalNetAmt)
@@ -122,7 +129,7 @@ function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
             setTonAmount(balanceAmt)
             setBalanceAmount(0)
         }
-    }, [cashAmount, creditAmount, transferAmount, invoiceTotal])
+    }, [cashAmount, creditAmount, transferAmount, R_NetTotal])
 
     const handleClear = () => {
         setCashAmount(0)
@@ -132,20 +139,53 @@ function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
     const handleConfirmPayment = () => {
         if (balanceAmount >= 0) {
             // update billno
-            axios.post(`/api/billno/${tableNo}`, { 
-                macno, 
+            const payload = {
+                macno,
+                tableNo,
+                billType: "E",
                 orderList,
-                cashAmount,
-                creditAmount,
-                transferAmount,
-                discountAmount,
+                cashInfo: {
+                    cashEnable,
+                    cashAmount
+                },
+                creditInfo: {
+                    creditEnable,
+                    crCode,
+                    creditNumber,
+                    creditRef,
+                    creditChargePercent,
+                    creditChargeAmount,
+                    creditAmount
+                },
+                transferInfo: {
+                    transferEnable,
+                    transferAmount,
+                    transferAccountNo,
+                    transferAccount
+                },
+                discountInfo: {
+                    discountEnable,
+                    discountAmount,
+                },
+                memberInfo: {
+                    memberCode: "",
+                    memberName: "",
+                    memberBegin: "2024-01-01",
+                    memberEnd: "2024-01-01",
+                    memberCurSum: 0
+                },
                 tonAmount,
                 paymentAmount,
-                invoiceTotal
-            })
+                netTotal: R_NetTotal
+            }
+            axios.post(`/api/billno`, payload)
                 .then(response => {
-                    // console.log('handleConfirmPayment:', response)
-                    open()
+                    console.log('handleConfirmPayment:', response)
+                    if (response.data.data != null) {
+                        loadBillInfo(response.data.data)
+                    } else {
+                        handleNotification("พบข้อผิดพลาดในการรับชำระเงิน!")
+                    }
                 })
                 .catch(err => {
                     handleNotification(err)
@@ -166,7 +206,7 @@ function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
             <Grid size={12}>
                 <Box display="flex" sx={{ padding: "20px", backgroundColor: "salmon", border: "2px solid gray", borderRadius: "10px" }} justifyContent="space-between">
                     <Typography variant="h3" sx={{ fontWeight: "bold", color: "#444" }}>TOTAL</Typography>
-                    <Typography variant="h3" sx={{ marginRight: "20px", fontSize: "72px", textShadow: "3px 3px snow", fontWeight: "bold" }}>{ccyFormat(invoiceTotal)}</Typography>
+                    <Typography variant="h3" sx={{ marginRight: "20px", fontSize: "72px", textShadow: "3px 3px snow", fontWeight: "bold" }}>{ccyFormat(R_NetTotal)}</Typography>
                 </Box>
             </Grid>
             <Grid size={12}>
@@ -325,7 +365,8 @@ function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
                         <TextField variant="outlined" label="CrCode" value={crCode} onChange={e => setCrCode(e.target.value)} />
                         <TextField variant="outlined" label="เลขที่บัตรเครดิต" value={creditNumber} onChange={e => setCreditNumber(e.target.value)} />
                         <TextField variant="outlined" label="approve code" value={creditRef} onChange={e => setCreditRef(e.target.value)} />
-                        <TextField variant="outlined" disabled type="number" label="Credit Charge" value={creditChargePercent} onChange={e => setCreditChargePercent(e.target.value)} />
+                        <TextField variant="outlined" disabled type="number" label="Credit Charge" value={creditChargePercent} />
+                        <TextField variant="outlined" disabled type="number" label="Charge Amount" value={creditChargeAmount} />
                         <TextField variant="outlined" type="number" label="จำนวนเงินที่ใส่เครดิต" value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
                     </Grid>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
@@ -337,12 +378,24 @@ function PaymentForm({ open, close, orderList, tableNo, handleNotification }) {
             <Modal open={openTransferInfo} onClose={() => setOpenTransferInfo(false)}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
-                <Box sx={{ ...modalStyle, padding: "5px" }}>
+                <Box sx={{ ...modalStyle, width: "350px", padding: "5px" }}>
                     <Grid container spacing={2} padding={2} justifyContent="center" direction="column">
                         <TextField variant="outlined" label="เลขที่บัญชีที่โอน" value={transferAccountNo} onChange={e => setTransferAccountNo(e.target.value)} />
                         <TextField variant="outlined" label="ชื่อบัญชีที่โอน" value={transferAccount} onChange={e => setTransferAccount(e.target.value)} />
                         <TextField variant="outlined" label="จำนวนเงิน" value={transferAmount} onChange={e => setTransferAmount(e.target.value)} />
+                        <Box>
+                            <TextField variant="filled"
+                                label="โอนเงินเข้าบัญขีนี้"
+                                value={transferToAccount}
+                                onChange={e => setTransferToAccount(e.target.value)} fullWidth
+                            />
+                        </Box>
                     </Grid>
+                    <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center">
+                        <QrCodeGenerator mobileNumber={transferToAccount} amount={transferAmount} />
+                        <Typography>ยอดเงินโอน {transferAmount}</Typography>
+                        <Typography>โอนเข้าบัญชี {transferToAccount}</Typography>
+                    </Box>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
                         <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={() => setOpenTransferInfo(false)}>ยกเลิก</Button>
                         <Button variant="contained" sx={{ margin: "5px" }} onClick={() => setOpenTransferInfo(false)} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>

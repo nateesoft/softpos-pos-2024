@@ -22,6 +22,14 @@ const displayAllField = (fields) => {
     return myField
 }
 
+const displayAllFieldAssign = (fields) => {
+    const myField = []
+    fields.forEach(field => {
+        myField.push("'${" + field.Field + "}'")
+    })
+    return myField
+}
+
 const displayQuestionMark = (fields) => {
     const myField = []
     fields.forEach(field => {
@@ -57,18 +65,21 @@ const assignFieldWithDefautValue = (fields) => {
     return myField
 }
 
-const tableName = 'MyRestaurantJefferSakon.stcard'
+const tableName = 'MyRestaurantJefferSakon.billno'
 const sqlAllTable = `desc ${tableName} `
 pool.query(sqlAllTable, (err, results) => {
     if (err) throw err
 
     const allFields = displayAllField(results)
+    const allFieldsAssign = displayAllFieldAssign(results)
     const allFieldsDefault = assignFieldWithDefautValue(results)
     const getQM = displayQuestionMark(results)
 
     const sqlQuery = `INSERT INTO ${tableName} (${allFields}) VALUES (${getQM})`;
+    const sqlQueryInsert = `INSERT INTO ${tableName} (${allFields}) \nVALUES (${allFieldsAssign})`;
 
     console.log(tableName + "=>", allFields.join(','))
     console.log(tableName + "=>", allFieldsDefault.join('\n'))
     console.log(tableName + "=>", sqlQuery)
+    console.log(tableName + "(insert)=>", sqlQueryInsert)
 })
