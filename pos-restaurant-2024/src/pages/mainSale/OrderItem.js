@@ -49,6 +49,7 @@ const modalStyle = {
 const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder }) => {
   const { appData } = useContext(POSContext)
   const { macno, userLogin, empCode } = appData
+  const [optList] = useState([product.R_Opt1, product.R_Opt2, product.R_Opt3, product.R_Opt4, product.R_Opt5, product.R_Opt6, product.R_Opt7, product.R_Opt8, product.R_Opt9])
   const [count, setCount] = useState(product.R_Quan || 1)
 
   const handleRemoveItem = () => {
@@ -95,7 +96,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
         borderRadius: "5px",
         marginBottom: "10px",
         boxShadow: "2px 2px #eee",
-        backgroundColor: product.R_Pause==='P' ? "#f4fbfc": "snow"
+        backgroundColor: product.R_Pause === 'P' ? "#f4fbfc" : "snow"
       }}
     >
       <Grid container spacing={2}>
@@ -112,8 +113,8 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
           <Grid container direction="column" justifyContent="flex-end">
             <Grid>{product.R_PName}</Grid>
             <Grid display="flex" justifyContent="center">
-              <IconButton onClick={handleRemoveItem} disabled={product.R_Pause==='P'}>
-                <RemoveCircleIcon sx={{color: product.R_Pause==='P' ? "gray": "red"}} fontSize="large" />
+              <IconButton onClick={handleRemoveItem} disabled={product.R_Pause === 'P'}>
+                <RemoveCircleIcon sx={{ color: product.R_Pause === 'P' ? "gray" : "red" }} fontSize="large" />
               </IconButton>
               <TextField
                 inputProps={{ min: 0, style: { textAlign: "right", width: '35px', fontWeight: "bold" } }}
@@ -136,6 +137,11 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
                 <Typography>{product.R_Price * product.R_Quan}</Typography>
               </Grid>
             </Grid>
+            <Box display="flex" flexDirection="row">
+                {optList && optList.filter(o => o !== "").map((opt) => 
+                  <Typography sx={{ fontSize: "10px", color: "green" }}>{opt},</Typography>
+                )}
+              </Box>
           </Grid>
         </Grid>
       </Grid>
@@ -348,7 +354,7 @@ const ProductDetailCard = ({
 const TotalBill = ({ tableNo, orderList }) => {
   let totalBill = 0
   for (let i = 0; i < orderList.length; i++) {
-    totalBill = totalBill + parseInt(orderList[i].R_Quan*orderList[i].R_Price)
+    totalBill = totalBill + parseInt(orderList[i].R_Quan * orderList[i].R_Price)
   }
   totalBill = totalBill.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
   return (
@@ -445,7 +451,7 @@ const OrderItem = ({
           <Typography variant="h5">รายการอาหารที่สั่ง</Typography>
         </Box>
         <Box textAlign="center" sx={{ marginTop: "10px" }}>
-          <Typography 
+          <Typography
             variant="p"
             sx={{
               border: "1px solid salmon",

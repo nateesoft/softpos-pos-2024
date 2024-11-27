@@ -21,39 +21,42 @@ const MenuProps = {
     },
 };
 
-function getStyles(name, personName, theme) {
+function getStyles(name, optList, theme) {
     return {
-        fontWeight: personName.includes(name)
+        fontWeight: optList.includes(name)
             ? theme.typography.fontWeightMedium
             : theme.typography.fontWeightRegular,
     };
 }
 
-const OptionMenuSelect = ({ productCode }) => {
+const OptionMenuSelect = ({ productCode, optList, setSpecialText, setOptList }) => {
     const theme = useTheme();
-    const [personName, setPersonName] = useState([]);
     const [options, setOptions] = useState([])
 
     const handleChange = (event) => {
         const { target: { value }, } = event;
-        setPersonName(typeof value === 'string' ? value.split(',') : value);
+        setOptList(typeof value === 'string' ? value.split(',') : value);
     };
+
+    const addSpecialMessage = (data) => {
+        setSpecialText(data)
+    }
 
     const initLoad = useCallback(() => {
         axios
-          .get(`/api/optionfile/${productCode}`)
-          .then((response) => {
-            console.log('OptionMenuSelect:', response)
-            if(response.data.data){
-                setOptions(response.data.data)
-            }
-          })
-          .catch((error) => {
-            console.log(error)
-          })
-      }, [])
+            .get(`/api/optionfile/${productCode}`)
+            .then((response) => {
+                console.log('OptionMenuSelect:', response)
+                if (response.data.data) {
+                    setOptions(response.data.data)
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
 
-    useEffect(()=> {
+    useEffect(() => {
         initLoad()
     }, [initLoad])
 
@@ -64,7 +67,7 @@ const OptionMenuSelect = ({ productCode }) => {
                 labelId="demo-multiple-chip-label"
                 id="demo-multiple-chip"
                 multiple
-                value={personName}
+                value={optList}
                 onChange={handleChange}
                 input={<OutlinedInput id="select-multiple-chip" label="ข้อความพิเศษ" />}
                 renderValue={(selected) => (
@@ -77,13 +80,13 @@ const OptionMenuSelect = ({ productCode }) => {
                 MenuProps={MenuProps}
             >
                 {options && options.map((opt) => (
-                    <MenuItem key={opt.OptionName} value={opt.OptionName} style={getStyles(opt.OptionName, personName, theme)}>
-                        <Checkbox checked={personName.includes(opt.OptionName)} />
+                    <MenuItem key={opt.OptionName} value={opt.OptionName} style={getStyles(opt.OptionName, optList, theme)}>
+                        <Checkbox checked={optList.includes(opt.OptionName)} />
                         <ListItemText primary={opt.OptionName} />
                     </MenuItem>
                 ))}
             </Select>
-            <TextField fullWidth label="ระบุข้อความเพิ่มเติม..." sx={{ marginTop: "10px" }} id="fullWidth" multiline={true} rows={2} />
+            <TextField fullWidth label="ระบุข้อความเพิ่มเติม..." onChange={e => addSpecialMessage(e.target.value)} sx={{ marginTop: "10px" }} id="fullWidth" multiline={true} rows={2} />
         </FormControl>
     );
 }

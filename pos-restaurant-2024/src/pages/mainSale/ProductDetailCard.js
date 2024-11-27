@@ -15,18 +15,15 @@ const ProductDetailCard = memo(
     const { empCode, macno, userLogin } = appData
 
     const [count, setCount] = useState(product.qty || 1)
+    const [optList, setOptList] = useState([])
+    const [specialText, setSpecialText] = useState("")
     const matches = useMediaQuery("(min-width:600px)")
 
     const handleConfirm = () => {
       product.qty = count
       axios
         .post(`/api/balance`, {
-          tableNo, menuInfo: 
-          product, 
-          qty: count, 
-          macno, 
-          userLogin, 
-          empCode
+          tableNo, menuInfo: product, optList, specialText, qty: count, macno, userLogin, empCode
         })
         .then((response) => {
           initLoadMenu()
@@ -115,7 +112,7 @@ const ProductDetailCard = memo(
             <AddIcon fontSize="large" />
           </IconButton>
         </Grid>
-        <OptionMenuSelect productCode={product.menu_code} />
+        <OptionMenuSelect setSpecialText={setSpecialText} productCode={product.menu_code} optList={optList} setOptList={setOptList} />
         <div align="center">
           <Button
             variant="contained"

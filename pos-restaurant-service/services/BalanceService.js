@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
 
@@ -92,21 +94,54 @@ const addListBalance = async (payload) => {
     listBalance.forEach(async (product, index) => {
         const posProduct = await getProductByPCode(product.menu_code)
         await addNewBalance({
-            tableNo, menuInfo: { ...product, menu_price: 0 }, qty: 1, macno, userLogin, empCode, R_Index: (R_LinkIndex + "/" + (index + 1)), R_LinkIndex, posProduct
+            tableNo,
+            menuInfo: { ...product, menu_price: 0 },
+            qty: 1,
+            optList: [],
+            specialText: "",
+            macno,
+            userLogin,
+            empCode,
+            R_Index: (R_LinkIndex + "/" + (index + 1)),
+            R_LinkIndex,
+            posProduct
         })
     });
 }
 
 const addBalance = async payload => {
-    const { tableNo, menuInfo, qty, macno, userLogin, empCode } = payload
+    const { tableNo, menuInfo, qty, optList, specialText, macno, userLogin, empCode } = payload
+    console.log('nathee_test ===> ', optList, specialText)
     const R_Index = await getBalanceMaxIndex(tableNo)
     const posProduct = await getProductByPCode(menuInfo.menu_code)
-    const result = await addNewBalance({ tableNo, menuInfo, qty, macno, userLogin, empCode, R_Index, R_LinkIndex: "", posProduct })
+    const result = await addNewBalance({
+        tableNo,
+        menuInfo,
+        qty,
+        optList,
+        specialText,
+        macno,
+        userLogin,
+        empCode,
+        R_Index,
+        R_LinkIndex: "",
+        posProduct
+    })
     return result
 }
 
+const mappingOpt = (optList, specialText) => {
+    const R_Opt = [...optList, specialText]
+    const arrSize = R_Opt.length
+    for (let i = arrSize; i < 9; i++) {
+        R_Opt[i] = ""
+    }
+
+    return R_Opt
+}
+
 const addNewBalance = async payload => {
-    const { tableNo, menuInfo, qty, macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct } = payload
+    const { tableNo, menuInfo, qty, optList = [], specialText = "", macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct } = payload
     const R_Table = tableNo
     const R_PluCode = menuInfo.menu_code
     const R_PName = Unicode2ASCII(menuInfo.menu_name)
@@ -123,16 +158,16 @@ const addNewBalance = async payload => {
     const R_PrintOK = "Y"
     const R_KicOK = ""
     const StkCode = posProduct.PStock
-    const PosStk = ""
-    const R_Order = ""
+    const PosStk = posProduct.POSStk
+    const R_Order = "1"
     const R_PItemNo = 0
     const R_PKicQue = 0
-    const R_MemSum = ""
+    const R_MemSum = "N"
     const R_PrVcAmt = 0
     const R_PrVcAdj = 0
     const R_VoidQuan = 0
     const R_MoveFlag = ""
-    const R_MovePrint = ""
+    const R_MovePrint = "N"
     const R_Pause = ""
     const R_SPIndex = ""
     const R_Earn = ""
@@ -146,25 +181,96 @@ const addNewBalance = async payload => {
     const R_Void = ""
     const R_Kic = posProduct.PKic
     const R_Type = posProduct.PType
+
+    const R_Date = moment().format('YYYY-MM-DD')
+    const R_Time = moment().format('HH:mm:ss');
+    const R_Unit = Unicode2ASCII(posProduct.PUnit1);
+    const R_Group = posProduct.PGroup;
+    const R_Status = posProduct.PStatus;
+    const R_Normal = posProduct.PNormal;
+    const R_Discount = posProduct.PDiscount;
+    const R_Service = posProduct.PService;
+    const R_Stock = posProduct.PStock;
+    const R_Set = posProduct.PSet;
+    const R_Vat = posProduct.PVat;
+    const R_PrType = "";
+    const R_PrCode = "";
+    const R_PrDisc = 0;
+    const R_PrCuType = "";
+    const R_VoidUser = "";
+    const R_VoidTime = "";
+    const FieldName = 0;
+
+    const R_Opt = mappingOpt(optList, specialText)
+
+    const R_Opt1 = Unicode2ASCII(R_Opt[0]);
+    const R_Opt2 = Unicode2ASCII(R_Opt[1]);
+    const R_Opt3 = Unicode2ASCII(R_Opt[2]);
+    const R_Opt4 = Unicode2ASCII(R_Opt[3]);
+    const R_Opt5 = Unicode2ASCII(R_Opt[4]);
+    const R_Opt6 = Unicode2ASCII(R_Opt[5]);
+    const R_Opt7 = Unicode2ASCII(R_Opt[6]);
+    const R_Opt8 = Unicode2ASCII(R_Opt[7]);
+    const R_Opt9 = Unicode2ASCII(R_Opt[8]);
+
+    const R_PrCuCode = "";
+    const R_PrChkType = "";
+    const R_PrQuan = 0;
+    const R_PrSubType = "";
+    const R_PrSubCode = "";
+    const R_PrSubQuan = 0;
+    const R_PrSubDisc = 0;
+    const R_PrSubBath = 0;
+    const R_PrSubAmt = 0;
+    const R_PrSubAdj = 0;
+    const R_PrCuDisc = 0;
+    const R_PrCuBath = 0;
+    const R_PrCuAdj = 0;
+    const R_QuanCanDisc = 0;
+    const R_PrVcType = "";
+    const R_PrVcCode = "";
+    const R_VoidPause = "";
+    const R_MoveItem = "N";
+    const R_MoveFrom = "";
+    const R_MoveUser = "";
+    const VoidMsg = "";
+    const R_PrintItemBill = "";
+    const R_CountTime = "";
+    const SoneCode = "";
+    const R_EarnNo = "";
+    const PDAPrintCheck = "";
+    const PDAEMP = "";
+    const R_empName = "";
+    const R_ServiceAmt = 0;
+    const R_PEName = "";
+    const R_Indulgent = "";
+    const R_CardPay = "";
+
     try {
         const sql = `INSERT INTO balance 
-              ( R_Index,R_Table,R_PluCode,R_PName,R_Quan,R_Price,R_Total,R_PrBath,R_PrAmt,R_DiscBath,
-                R_PrCuQuan,R_PrCuAmt,R_Redule,R_Serve,R_PrintOK,R_KicOK,StkCode,PosStk,R_Order,R_PItemNo,
-                R_PKicQue,R_MemSum,R_PrVcAmt,R_PrVcAdj,R_VoidQuan,R_MoveFlag,R_MovePrint,R_Pause,R_SPIndex,R_Earn,
-                R_Date, R_Time, macno, Cashier, R_Emp, R_ETD, TranType, R_KicPrint, R_Void, R_Kic,
-                R_Type, R_LinkIndex) 
-                VALUES (
-              ?,?,?,?,?,?,?,?,?,?,
-              ?,?,?,?,?,?,?,?,?,?,
-              ?,?,?,?,?,?,?,?,?,
-              ?, curdate(), SUBSTR(now(), 12), 
-              ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        (R_Index,R_Table,R_Date,R_Time,Macno,Cashier,R_Emp,R_PluCode,R_PName,R_Unit,R_Group,R_Status,R_Normal,
+        R_Discount,R_Service,R_Stock,R_Set,R_Vat,R_Type,R_ETD,R_Quan,R_Price,R_Total,R_PrType,R_PrCode,R_PrDisc,
+        R_PrBath,R_PrAmt,R_DiscBath,R_PrCuType,R_PrCuQuan,R_PrCuAmt,R_Redule,R_Kic,R_KicPrint,R_Void,R_VoidUser,
+        R_VoidTime,FieldName,R_Opt1,R_Opt2,R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8,R_Opt9,R_PrCuCode,R_Serve,
+        R_PrintOK,R_KicOK,StkCode,PosStk,R_PrChkType,R_PrQuan,R_PrSubType,R_PrSubCode,R_PrSubQuan,R_PrSubDisc,
+        R_PrSubBath,R_PrSubAmt,R_PrSubAdj,R_PrCuDisc,R_PrCuBath,R_PrCuAdj,R_QuanCanDisc,R_Order,R_PItemNo,R_PKicQue,
+        R_MemSum,R_PrVcType,R_PrVcCode,R_PrVcAmt,R_PrVcAdj,R_VoidQuan,R_MoveFlag,R_MovePrint,R_Pause,R_SPIndex,
+        R_LinkIndex,R_VoidPause,R_MoveItem,R_MoveFrom,R_MoveUser,VoidMsg,R_PrintItemBill,R_CountTime,SoneCode,
+        R_Earn,R_EarnNo,R_SeparateFrom,TranType,PDAPrintCheck,PDAEMP,R_empName,R_ServiceAmt,R_PEName,R_Indulgent,R_CardPay) 
+        VALUES ('${R_Index}','${R_Table}','${R_Date}','${R_Time}','${Macno}','${Cashier}','${R_Emp}','${R_PluCode}','${R_PName}',
+        '${R_Unit}','${R_Group}','${R_Status}','${R_Normal}','${R_Discount}','${R_Service}','${R_Stock}','${R_Set}','${R_Vat}',
+        '${R_Type}','${R_ETD}','${R_Quan}','${R_Price}','${R_Total}','${R_PrType}','${R_PrCode}','${R_PrDisc}','${R_PrBath}',
+        '${R_PrAmt}','${R_DiscBath}','${R_PrCuType}','${R_PrCuQuan}','${R_PrCuAmt}','${R_Redule}','${R_Kic}','${R_KicPrint}',
+        '${R_Void}','${R_VoidUser}','${R_VoidTime}','${FieldName}','${R_Opt1}','${R_Opt2}','${R_Opt3}','${R_Opt4}','${R_Opt5}',
+        '${R_Opt6}','${R_Opt7}','${R_Opt8}','${R_Opt9}','${R_PrCuCode}','${R_Serve}','${R_PrintOK}','${R_KicOK}','${StkCode}',
+        '${PosStk}','${R_PrChkType}','${R_PrQuan}','${R_PrSubType}','${R_PrSubCode}','${R_PrSubQuan}','${R_PrSubDisc}','${R_PrSubBath}',
+        '${R_PrSubAmt}','${R_PrSubAdj}','${R_PrCuDisc}','${R_PrCuBath}','${R_PrCuAdj}','${R_QuanCanDisc}','${R_Order}','${R_PItemNo}',
+        '${R_PKicQue}','${R_MemSum}','${R_PrVcType}','${R_PrVcCode}','${R_PrVcAmt}','${R_PrVcAdj}','${R_VoidQuan}','${R_MoveFlag}',
+        '${R_MovePrint}','${R_Pause}','${R_SPIndex}','${R_LinkIndex}','${R_VoidPause}','${R_MoveItem}','${R_MoveFrom}','${R_MoveUser}',
+        '${VoidMsg}','${R_PrintItemBill}','${R_CountTime}','${SoneCode}','${R_Earn}','${R_EarnNo}','${R_SeparateFrom}','${TranType}',
+        '${PDAPrintCheck}','${PDAEMP}','${R_empName}','${R_ServiceAmt}','${R_PEName}','${R_Indulgent}','${R_CardPay}')`
         console.log('addNewBalance:', sql)
-        const results = await pool.query(sql,
-            [R_Index, R_Table, R_PluCode, R_PName, R_Quan, R_Price, R_Total, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuQuan, R_PrCuAmt,
-                R_Redule, R_Serve, R_PrintOK, R_KicOK, StkCode, PosStk, R_Order, R_PItemNo, R_PKicQue, R_MemSum,
-                R_PrVcAmt, R_PrVcAdj, R_VoidQuan, R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_Earn,
-                Macno, Cashier, R_Emp, R_ETD, TranType, R_KicPrint, R_Void, R_Kic, R_Type, R_LinkIndex])
+        await pool.query(sql)
         return R_Index
     } catch (error) {
         console.log('addNewBalance', error)
