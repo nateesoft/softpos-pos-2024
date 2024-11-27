@@ -1,3 +1,4 @@
+const moment = require('moment')
 const pool = require('../config/database/MySqlConnect')
 
 const { getProductByPCode } = require('./ProductService');
@@ -37,9 +38,9 @@ const getTSaleSet = async (XCode, r_index, XDocNo) => {
 
 const GetActionMon = async (EndofdayDate) => {
     let Company = await getDataCompany()
-    let TempYear = moment(Company.Accterm).format('YYYY')
-    let CurYear = moment(EndofdayDate).format('YYYY')
-    let CurMonth = moment(EndofdayDate).format('MM')
+    let TempYear = moment().format('YYYY')
+    let CurYear = moment().format('YYYY')
+    let CurMonth = moment().format('MM')
 
     let RetVal = 0
     if (TempYear === CurYear) {
@@ -234,7 +235,7 @@ const ProcessStockOut = async (DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, Am
                 await pool.query(sql, [Qty, PCode, StkCode])
             }
 
-            return results
+            return resultSeekStkFile
         } catch (error) {
             console.log('ProcessStockOut', error)
             return null

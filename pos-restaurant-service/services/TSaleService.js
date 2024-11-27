@@ -74,8 +74,8 @@ const createNewTSale = async (balance, BillRefNo) => {
     }
 }
 
-const processAllPIngredent = (PCode, R_Quan, Cashier) => {
-    let listING = listIngredeint(PCode);
+const processAllPIngredent = async (PCode, R_Quan, Cashier) => {
+    let listING = await listIngredeint(PCode);
     listING.forEach(async ingBean => {
         if (ingBean.Pstock === "Y" && ingBean.Pactive === "Y") {
             let PingCode = ingBean.PingCode;
@@ -91,8 +91,8 @@ const processAllPIngredent = (PCode, R_Quan, Cashier) => {
     })
 }
 
-const processAllPSet = (PCode, R_Quan, Cashier) => {
-    let listPset = getPSetByPCode(balance.PCode);
+const processAllPSet = async (PCode, R_Quan, Cashier) => {
+    let listPset = await getPSetByPCode(PCode);
     listPset.forEach(async psetBean => {
         let pSubCode = psetBean.getPsubcode();
         let pSubQTY = psetBean.getPsubQTY();
@@ -107,33 +107,11 @@ const addDataFromBalance = async (tableNo, BillRefNo, allBalance) => {
 
         // new t_sale
         await createNewTSale(balance, BillRefNo)
-
-        // process stockcard and stkfile
-        // if (balance.R_Stock === 'Y') {
-        //     const DocNo = tableNo + "/" + BillRefNo
-        //     const StkCode = balance.StkCode
-        //     const PCode = balance.R_PluCode
-        //     const TDate = balance.R_Date
-        //     const Stk_Remark = "SAL"
-        //     const Qty = balance.R_Quan
-        //     const Amount = balance.R_Total
-        //     const UserPost = balance.Cashier
-        //     const PStock = balance.R_Stock
-        //     const PSet = balance.R_Set
-        //     const r_index = balance.R_Index
-        //     const SaleOrRefund = "1"
-        //     await ProcessStockOut(DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, Amount,
-        //         UserPost, PStock, PSet, r_index, SaleOrRefund)
-
-        //     // ตัดสต็อกสินค้าที่มี Ingredent
-        //     await processAllPIngredent(balance.R_PluCode, balance.R_Quan, balance.Cashier)
-
-        //     // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
-        //     await processAllPSet(balance.R_PluCode, balance.R_Quan, balance.Cashier)
-        // }
     })
 }
 
 module.exports = {
-    addDataFromBalance
+    addDataFromBalance,
+    processAllPIngredent,
+    processAllPSet
 }

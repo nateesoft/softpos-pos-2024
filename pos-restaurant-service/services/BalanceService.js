@@ -4,6 +4,8 @@ const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
 
 const { getProductByPCode } = require('./ProductService');
+const { ProcessStockOut } = require('./STCardService');
+const { processAllPIngredent, processAllPSet } = require('./TSaleService');
 
 const getTotalBalance = async (tableNo) => {
     const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
@@ -73,6 +75,39 @@ const updatePrint2Kic = async tableNo => {
     const sql = `update balance set TranType='PDA', R_Pause='P' where R_Table='${tableNo}'`;
     console.log('updatePrint2Kic:', sql)
     const results = await pool.query(sql)
+
+    const listBalance = await getBalanceByTableNo(tableNo)
+    listBalance.forEach(async (balance) => {
+        console.log('updatePrint2Kic(balance):', balance)
+        // update stock and process stockcard and stkfile
+        if (balance.R_Stock === 'Y') {
+            const DocNo = tableNo + "/" + "BillRefNo"
+            const StkCode = balance.StkCode
+            const PCode = balance.R_PluCode
+            const TDate = balance.R_Date
+            const Stk_Remark = "SAL"
+            const Qty = balance.R_Quan
+            const Amount = balance.R_Total
+            const UserPost = balance.Cashier
+            const PStock = balance.R_Stock
+            const PSet = balance.R_Set
+            const r_index = balance.R_Index
+            const SaleOrRefund = "1"
+    
+            console.log('ProcessStockOut')
+            await ProcessStockOut(DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, Amount,
+                UserPost, PStock, PSet, r_index, SaleOrRefund)
+    
+            console.log('processAllPIngredent')
+            // ตัดสต็อกสินค้าที่มี Ingredent
+            await processAllPIngredent(balance.R_PluCode, balance.R_Quan, balance.Cashier)
+    
+            // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
+            console.log('processAllPSet')
+            await processAllPSet(balance.R_PluCode, balance.R_Quan, balance.Cashier)
+        }
+    })
+
     return results
 }
 
@@ -285,17 +320,17 @@ const addNewBalance = async payload => {
 
 const updateBalance = async payload => {
     const { oldBalance, qty, optList = [], specialText = "", macno, userLogin, empCode } = payload
-    const { R_Index, R_Table, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal, R_Discount, 
-        R_Service, R_Stock, R_Set, R_Vat, R_Type, R_ETD, R_Price, R_Total, R_PrType, R_PrCode, 
-        R_PrDisc, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuType, R_PrCuQuan, R_PrCuAmt, R_Redule, R_Kic, 
-        R_KicPrint, R_Void, R_VoidUser, R_VoidTime, FieldName, R_PrCuCode, R_Serve, R_PrintOK, R_KicOK, 
-        StkCode, PosStk, R_PrChkType, R_PrQuan, R_PrSubType, R_PrSubCode, R_PrSubQuan, R_PrSubDisc, 
-        R_PrSubBath, R_PrSubAmt, R_PrSubAdj, R_PrCuDisc, R_PrCuBath, R_PrCuAdj, R_Order, 
-        R_PItemNo, R_PKicQue, R_MemSum, R_PrVcType, R_PrVcCode, R_PrVcAmt, R_PrVcAdj, R_VoidQuan, 
-        R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_LinkIndex, R_VoidPause, R_MoveItem, R_MoveFrom, 
-        R_MoveUser, VoidMsg, R_PrintItemBill, R_CountTime, SoneCode, R_Earn, R_EarnNo, TranType, 
+    const { R_Index, R_Table, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal, R_Discount,
+        R_Service, R_Stock, R_Set, R_Vat, R_Type, R_ETD, R_Price, R_Total, R_PrType, R_PrCode,
+        R_PrDisc, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuType, R_PrCuQuan, R_PrCuAmt, R_Redule, R_Kic,
+        R_KicPrint, R_Void, R_VoidUser, R_VoidTime, FieldName, R_PrCuCode, R_Serve, R_PrintOK, R_KicOK,
+        StkCode, PosStk, R_PrChkType, R_PrQuan, R_PrSubType, R_PrSubCode, R_PrSubQuan, R_PrSubDisc,
+        R_PrSubBath, R_PrSubAmt, R_PrSubAdj, R_PrCuDisc, R_PrCuBath, R_PrCuAdj, R_Order,
+        R_PItemNo, R_PKicQue, R_MemSum, R_PrVcType, R_PrVcCode, R_PrVcAmt, R_PrVcAdj, R_VoidQuan,
+        R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_LinkIndex, R_VoidPause, R_MoveItem, R_MoveFrom,
+        R_MoveUser, VoidMsg, R_PrintItemBill, R_CountTime, SoneCode, R_Earn, R_EarnNo, TranType,
         PDAPrintCheck, PDAEMP, R_empName, R_ServiceAmt, R_PEName, R_Indulgent } = oldBalance
-    
+
     const R_Opt = mappingOpt(optList, specialText)
 
     const R_Opt1 = Unicode2ASCII(R_Opt[0]);
@@ -316,7 +351,7 @@ const updateBalance = async payload => {
 
     const R_Quan = qty
     const R_QuanCanDisc = qty
-    
+
     try {
         const sql = `UPDATE balance 
         SET R_Index='${R_Index}',R_Table='${R_Table}',R_Date='${R_Date}',R_Time='${R_Time}',
