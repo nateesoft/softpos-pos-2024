@@ -158,7 +158,7 @@ const ProductDetailCard = ({
 }) => {
   const { appData } = useContext(POSContext)
   const { empCode, macno, userLogin } = appData
-  
+
   const [count, setCount] = useState(product.R_Quan || 1)
   const [orderType, setOrderType] = useState("E")
   const [optList, setOptList] = useState([])
@@ -173,9 +173,11 @@ const ProductDetailCard = ({
       // delete item
       axios.post(`/api/balance/deleteBalance`, { index: product.R_Index })
         .then((response) => {
-          initLoadMenu()
-          initLoadOrder()
-          closeModal()
+          if (response.data.status = 200) {
+            initLoadMenu()
+            initLoadOrder()
+            closeModal()
+          }
         })
         .catch((error) => {
           handleNotification(error)
@@ -184,20 +186,22 @@ const ProductDetailCard = ({
       // update item
       product.qty = count
       axios
-        .patch(`/api/balance/updateInfo`, {
-          tableNo, 
-          menuInfo: product, 
-          optList, 
-          specialText, 
-          qty: count, 
-          macno, 
-          userLogin, 
+        .put(`/api/balance`, {
+          oldBalance: product,
+          optList,
+          specialText,
+          qty: count,
+          macno,
+          userLogin,
           empCode
         })
         .then((response) => {
-          initLoadMenu()
-          initLoadOrder()
-          closeModal()
+          console.log('UPDATE BALANCE=>', response)
+          if (response.data.status === 200) {
+            initLoadMenu()
+            initLoadOrder()
+            closeModal()
+          }
         })
         .catch((error) => {
           handleNotification(error)

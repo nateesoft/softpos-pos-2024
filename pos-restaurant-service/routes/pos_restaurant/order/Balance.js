@@ -58,18 +58,6 @@ router.patch('/updateQty', (req, res) => {
     })
 });
 
-router.patch('/updateInfo', (req, res) => {
-  const { tableNo, rIndex, qty} = req.body
-  console.log('updateInfo:', req.body)
-  BalanceService.updateExistsBalance(tableNo, rIndex, qty)
-    .then(rows => {
-      res.status(200).json({ status: 2000, data: rows })
-    })
-    .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
-    })
-});
-
 router.get('/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
   BalanceService.getBalanceByTableNo(tableNo)
@@ -124,7 +112,7 @@ router.post('/addList', function (req, res, next) {
     })
 });
 
-router.put('/:id', function (req, res, next) {
+router.put('/', function (req, res, next) {
   const id = req.params.id
   BalanceService.updateBalance(req.body, id)
     .then(rows => {

@@ -25,6 +25,22 @@ const displayAllField = (fields) => {
 const displayAllFieldAssign = (fields) => {
     const myField = []
     fields.forEach(field => {
+        myField.push(field.Field + "='${" + field.Field + "}'")
+    })
+    return myField
+}
+
+const displayOldToNewAssign = (fields, tableName) => {
+    const myField = []
+    fields.forEach(field => {
+        myField.push(`const ${field.Field}= old${tableName}.${field.Field}`)
+    })
+    return myField
+}
+
+const displayQueryUpdateAssign = (fields) => {
+    const myField = []
+    fields.forEach(field => {
         myField.push("'${" + field.Field + "}'")
     })
     return myField
@@ -77,9 +93,13 @@ pool.query(sqlAllTable, (err, results) => {
 
     const sqlQuery = `INSERT INTO ${tableName} (${allFields}) VALUES (${getQM})`;
     const sqlQueryInsert = `INSERT INTO ${tableName} (${allFields}) \nVALUES (${allFieldsAssign})`;
+    const sqlUpdate = `UPDATE ${tableName} SET ${displayAllFieldAssign(results)} WHERE id='xxxx'`;
+    const paramAssign = displayOldToNewAssign(results, "Balance").join(';\n');
 
     console.log(tableName + "=>", allFields.join(','))
     console.log(tableName + "=>", allFieldsDefault.join('\n'))
     console.log(tableName + "=>", sqlQuery)
     console.log(tableName + "(insert)=>", sqlQueryInsert)
+    console.log(paramAssign)
+    console.log(tableName + "(update)=>", sqlUpdate)
 })
