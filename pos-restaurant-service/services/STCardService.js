@@ -3,6 +3,7 @@ const pool = require('../config/database/MySqlConnect')
 
 const { getProductByPCode, getProductActiveByPCode } = require('./ProductService');
 const { getDataCompany } = require('./CompanyService');
+const BalanceService = require('./BalanceService');
 
 const SeekStkFile = async (TempCode, T_Stk) => {
     const sql = `select bpcode from stkfile 
@@ -22,9 +23,9 @@ const getPSetByPCode = async (TempCode) => {
     return results
 }
 
-const getBalanceSetByPCodeRIndex = async (XCode, r_index) => {
+const getBalanceSetByPCodeRIndex = async (XCode, R_Index) => {
     const sql = `select * from balanceset 
-    where r_plucode='${XCode}' and r_index='${r_index}' `;
+    where r_plucode='${XCode}' and r_index='${R_Index}' `;
     console.log('getBalanceSetByPCodeRIndex:', sql)
     const results = await pool.query(sql)
     return results
@@ -43,7 +44,7 @@ const getCompany = async () => {
     const sql = `select * from company limit 1`;
     console.log('getTSaleSet:', sql)
     const results = await pool.query(sql)
-    if(results.length>0){
+    if (results.length > 0) {
         return results[0]
     }
     return moment().format('YYYY-MM-DD')
@@ -51,7 +52,7 @@ const getCompany = async () => {
 
 const GetActionMon = async () => {
     const Company = await getCompany()
-    let TempYear = Company.Accterm.split('/')[0]
+    let TempYear = Company.Accterm ? moment(Company.Accterm).format("YYYY"): moment().format("YYYY")
     let CurYear = moment().format('YYYY')
     let CurMonth = moment().format('MM')
 
@@ -134,7 +135,7 @@ const ProcessSelectSetUpdateStockOut = async (DocNo, StkCode, XCode, StkRemark, 
             const s_outcost = TempAmt
             const s_rem = StkRemark
             const s_user = UserPost //User
-            await pool.query(InsertQuery, 
+            await pool.query(InsertQuery,
                 [s_no, s_stk, s_pcode, s_que, s_in, s_incost, s_out, s_outcost, s_rem, s_user])
 
             let TempAct = await GetActionMon();
@@ -197,45 +198,34 @@ const ProcessSelectSetUpdateStockOutRefund = async (DocNo, StkCode, XCode, StkRe
     })
 }
 
-const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, 
-    S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link,
-    PStock, PSet, r_index, SaleOrRefund) => {
+const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund) => {
     const S_Date = moment().format('YYYY-MM-DD')
-    const S_Stk = "A1";
+    const S_Stk = "A1"
     const S_EntryDate = moment().format('YYYY-MM-DD')
     const S_EntryTime = moment().format('HH:mm');
 
     // remove from stock
-    if (PStock === 'Y') {
-        try {
-            let sql = `INSERT INTO stcard 
-            (S_Date,S_No,S_SubNo,S_Que,S_PCode,S_Stk,S_In,S_Out,S_InCost,S_OutCost,
-            S_ACost,S_Rem,S_User,S_EntryDate,S_EntryTime,S_Link) 
-            VALUES ('${S_Date}','${S_No}','${S_SubNo}','${S_Que}','${S_PCode}',
-            '${S_Stk}','${S_In}','${S_Out}',
-            '${S_InCost}','${S_OutCost}','${S_ACost}','${S_Rem}','${S_User}',
-            '${S_EntryDate}','${S_EntryTime}','${S_Link}')`
-            console.log('ProcessStockOut:', sql)
-            await pool.query(sql)
+    let sql = `INSERT INTO stcard 
+    (S_Date,S_No,S_SubNo,S_Que,S_PCode,S_Stk,S_In,S_Out,S_InCost,S_OutCost,
+    S_ACost,S_Rem,S_User,S_EntryDate,S_EntryTime,S_Link) 
+    VALUES ('${S_Date}','${S_No}','${S_SubNo}','${S_Que}','${S_PCode}',
+    '${S_Stk}','${S_In}','${S_Out}',
+    '${S_InCost}','${S_OutCost}','${S_ACost}','${S_Rem}','${S_User}',
+    '${S_EntryDate}','${S_EntryTime}','${S_Link}')`
+    console.log('ProcessStockOut:', sql)
+    await pool.query(sql)
 
-            let TempAct = GetActionMon()
-            let resultSeekStkFile = await SeekStkFile(S_PCode, S_Stk)
-            if (!resultSeekStkFile) {
-                let sql1 = `insert into stkfile (bpcode,bstk) values (?,?)`
-                await pool.query(sql1, [S_PCode, S_Stk])
-            }
+    let TempAct = await GetActionMon()
+    let resultSeekStkFile = await SeekStkFile(S_PCode, S_Stk)
+    if (!resultSeekStkFile) {
+        let sql1 = `insert into stkfile (bpcode,bstk) values (?,?)`
+        await pool.query(sql1, [S_PCode, S_Stk])
+    }
 
-            for (let i = TempAct; i <= 24; i++) {
-                let T_Mon = "bqty" + i;
-                let sql1 = `update stkfile set ${T_Mon}=${T_Mon}-? where (bpcode=?) and (bstk=?)`
-                await pool.query(sql1, [S_Out, S_PCode, S_Stk])
-            }
-
-            return resultSeekStkFile
-        } catch (error) {
-            console.log('ProcessStockOut', error)
-            return null
-        }
+    for (let i = TempAct; i <= 24; i++) {
+        let T_Mon = "bqty" + i;
+        let sql1 = `update stkfile set ${T_Mon}=${T_Mon}-? where (bpcode=?) and (bstk=?)`
+        await pool.query(sql1, [S_Out, S_PCode, S_Stk])
     }
 
     // check pset or not
@@ -246,60 +236,41 @@ const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out,
         } else {
             if (SaleOrRefund === "SALE") {
                 await ProcessSelectSetUpdateStockOut(S_No, S_Stk, S_PCode, S_Rem, S_Out, S_User, r_index);
-            } else if (SaleOrRefund === "REFUND") {
+            } else if (SaleOrRefund === "REFUND" || SaleOrRefund === "VOID") {
                 await ProcessSelectSetUpdateStockOutRefund(S_No, S_Stk, S_PCode, S_Rem, S_Out, S_User, r_index);
             }
         }
     }
 }
 
-// const ProcessStockIn = async (DocNo, StkCode, PCode, TDate,
-//     Stk_Remark, Qty, Amount, UserPost, PStock, PSet, r_index, SaleOrRefund) => {
+const executeProcess = async (R_Index) => {
+    const balance = await BalanceService.getBalanceByRIndex(R_Index)
+    const S_No = balance.R_Table + "-" + moment().format('HH:mm:ss')
+    const S_SubNo = ""
+    const S_Que = 0
+    const S_PCode = balance.R_PluCode
+    const S_Stk = "A1"
+    const S_In = 0
+    const S_Out = balance.R_Quan
+    const S_InCost = 0
+    const S_OutCost = balance.R_Total
+    const S_ACost = 0
+    const S_Rem = "SAL"
+    const S_User = balance.Cashier
+    const S_Link = ""
 
-//     if (PStock === "Y") {
-//         let InsertQuery = `insert into stcard 
-//         (s_date,s_no,s_stk,s_pcode,s_que,s_in,s_incost,s_out,s_outcost,s_rem,
-//         s_user,s_entrydate,s_entrytime) 
-//         values (curdate(),?,?,?,?,?,?,?,?,?,?,curdate(),curtime())`;
-//         const s_no = DocNo
-//         const s_stk = StkCode
-//         const s_pcode = PCode
-//         const s_que = 1
-//         const s_in = 0
-//         const s_incost = 0
-//         const s_out = Qty
-//         const s_outcost = Amount
-//         const s_rem = Stk_Remark
-//         const s_user = UserPost //User
-//         await pool.query(InsertQuery, [s_no, s_stk, s_pcode, s_que, s_in, s_incost, s_out, s_outcost, s_rem, s_user])
+    const PStock = balance.R_Stock
+    const PSet = balance.R_Set
+    const r_index = balance.R_Index
+    const SaleOrRefund = "SALE" // SALE or REFUND
 
-//         let TempAct = await GetActionMon(TDate);
-//         let resultSeekStkFile = await SeekStkFile(PCode, StkCode)
-//         if (!resultSeekStkFile) {
-//             let InsertQuery4 = `insert into stkfile (bpcode,bstk) values (?,?)`
-//             await pool.query(InsertQuery4, [PCode, StkCode])
-//         }
-//         for (let i = TempAct; i <= 24; i++) {
-//             let T_Mon = "bqty" + i;
-//             let InsertQuery4 = `update stkfile set ${T_Mon}=${T_Mon}-? where (bpcode=?) and (bstk=?)`;
-//             await pool.query(InsertQuery4, [Qty, PCode, StkCode])
-//         }
-//     }
-//     if (PSet === "Y") {
-//         let productBean = await getProductByPCode(PCode);
-//         if (!productBean) {
-//             ProcessSetUpdateStockOut(DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, UserPost);
-//         } else {
-//             if (SaleOrRefund === "1") {
-//                 ProcessSelectSetUpdateStockOut(DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, UserPost, r_index);
-//             } else if (SaleOrRefund === "2") {
-//                 ProcessSelectSetUpdateStockOutRefund(DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, UserPost, r_index);
-//             }
+    await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_Stk, S_In, S_Out,
+        S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link,
+        PStock, PSet, r_index, SaleOrRefund)
 
-//         }
-//     }
-// }
+}
 
 module.exports = {
-    ProcessStockOut
+    ProcessStockOut,
+    executeProcess
 }

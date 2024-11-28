@@ -4,12 +4,13 @@ const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
 
 const { getProductByPCode } = require('./ProductService');
-const { ProcessStockOut } = require('./STCardService');
+const STCardService = require('./STCardService');
 const { processAllPIngredent, processAllPSet } = require('./TSaleService');
+const Console = require('../utils/Console')
 
 const getTotalBalance = async (tableNo) => {
     const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
-    console.log('getAllBalance:', sql)
+    console.log('getTotalBalance:', sql)
     const results = await pool.query(sql)
     if (results.length > 0) {
         return results[0].R_Total
@@ -20,9 +21,11 @@ const getTotalBalance = async (tableNo) => {
 
 const deleteMenuBalance = async (R_Index) => {
     const sql = `delete from balance where R_Index='${R_Index}'`;
-    console.log('deleteMenuBalance:', R_Index)
     const results = await pool.query(sql)
-    return results
+    if (results.affectedRows > 0) {
+        return `${R_Index} Deleted`
+    }
+    return `Cannot delete R_Index: ${R_Index}`
 }
 
 const getAllBalance = async () => {
@@ -45,7 +48,7 @@ const getBalanceByTableNo = async tableNo => {
 
 const getBalanceByRIndex = async R_Index => {
     const sql = `select * from balance where R_Index='${R_Index}'`;
-    console.log('getBalanceByTableNo:', sql)
+    console.log('getBalanceByRIndex:', sql)
     const results = await pool.query(sql)
     if (results.length > 0) {
         return results[0]
@@ -113,7 +116,8 @@ const addListBalance = async (payload) => {
     console.log('addListBalance:', payload)
     listBalance.forEach(async (product, index) => {
         const posProduct = await getProductByPCode(product.menu_code)
-        await addNewBalance({
+        const R_Index = (R_LinkIndex + "-" + PrefixZeroFormat(index + 1, 2))
+        const reponseR_Index = await addNewBalance({
             tableNo,
             menuInfo: { ...product, menu_price: 0 },
             qty: 1,
@@ -122,19 +126,28 @@ const addListBalance = async (payload) => {
             macno,
             userLogin,
             empCode,
-            R_Index: (R_LinkIndex + "-" + PrefixZeroFormat(index + 1, 2)),
+            R_Index: R_Index,
             R_LinkIndex,
             posProduct
         })
+
+        // process stock out
+        await orderStockOut(reponseR_Index)
     });
 }
 
 const addBalance = async payload => {
-    const { tableNo, menuInfo, qty, optList = [], specialText = "", macno, userLogin, empCode } = payload
-    // console.log('nathee_test ===> ', optList, specialText)
+    const { tableNo, menuInfo, qty, optList = [], specialText = "",
+        macno, userLogin, empCode } = payload
     const R_Index = await getBalanceMaxIndex(tableNo)
+    if (!R_Index) {
+        throw new Error('Not found Max R_Index !!!')
+    }
     const posProduct = await getProductByPCode(menuInfo.menu_code)
-    const result = await addNewBalance({
+    if (!posProduct) {
+        throw new Error('Not found product !!!')
+    }
+    const reponseR_Index = await addNewBalance({
         tableNo,
         menuInfo,
         qty,
@@ -147,6 +160,10 @@ const addBalance = async payload => {
         R_LinkIndex: "",
         posProduct
     })
+
+    // process stock out
+    await orderStockOut(reponseR_Index)
+
     return result
 }
 
@@ -161,7 +178,8 @@ const mappingOpt = (optList, specialText) => {
 }
 
 const addNewBalance = async payload => {
-    const { tableNo, menuInfo, qty, optList = [], specialText = "", macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct } = payload
+    const { tableNo, menuInfo, qty, optList = [], specialText = "",
+        macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct } = payload
     const R_Table = tableNo
     const R_PluCode = menuInfo.menu_code
     const R_PName = Unicode2ASCII(menuInfo.menu_name)
@@ -177,7 +195,7 @@ const addNewBalance = async payload => {
     const R_Serve = ""
     const R_PrintOK = "Y"
     const R_KicOK = ""
-    const StkCode = posProduct.PStock
+    const StkCode = "A1"
     const PosStk = posProduct.POSStk
     const R_Order = "1"
     const R_PItemNo = 0
@@ -290,9 +308,6 @@ const addNewBalance = async payload => {
         console.log('addNewBalance:', sql)
         await pool.query(sql)
 
-        // process stock into inventory
-        await inventoryStock(R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index)
-
         return R_Index
     } catch (error) {
         console.log('addNewBalance', error)
@@ -373,7 +388,7 @@ const updateBalance = async payload => {
     }
 }
 
-const inventoryStock = async (R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index) => {
+const inventoryStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index }) => {
     // update stock and process stockcard and stkfile
     console.log('inventoryStock(R_Stock):', R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index)
     if (R_Stock === 'Y') {
@@ -381,7 +396,6 @@ const inventoryStock = async (R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cash
         const S_SubNo = ""
         const S_Que = 0
         const S_PCode = R_PluCode
-        const S_Stk = "A1"
         const S_In = 0
         const S_Out = R_Quan
         const S_InCost = 0
@@ -397,7 +411,7 @@ const inventoryStock = async (R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cash
         const SaleOrRefund = "SALE" // SALE or REFUND
 
         console.log('ProcessStockOut')
-        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_Stk, S_In, S_Out,
+        await STCardService.ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out,
             S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link,
             PStock, PSet, r_index, SaleOrRefund)
 
@@ -411,9 +425,83 @@ const inventoryStock = async (R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cash
     }
 }
 
+const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index }) => {
+    // update stock and process stockcard and stkfile
+    console.log('inventoryStock(R_Stock):', R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index)
+    if (R_Stock === 'Y') {
+        const S_No = R_Table + "-" + moment().format('HH:mm:ss')
+        const S_SubNo = ""
+        const S_Que = 0
+        const S_PCode = R_PluCode
+        const S_In = R_Quan
+        const S_Out = 0
+        const S_InCost = R_Total
+        const S_OutCost = 0
+        const S_ACost = 0
+        const S_Rem = "SAL"
+        const S_User = Cashier
+        const S_Link = ""
+
+        const PStock = R_Stock
+        const PSet = R_Set
+        const r_index = R_Index
+        const SaleOrRefund = "VOID" // SALE or REFUND
+
+        console.log('ProcessStockOut')
+        await STCardService.ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out,
+            S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link,
+            PStock, PSet, r_index, SaleOrRefund)
+
+        console.log('processAllPIngredent')
+        // ตัดสต็อกสินค้าที่มี Ingredent
+        await processAllPIngredent(S_No, R_PluCode, R_Quan, Cashier)
+
+        // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
+        console.log('processAllPSet')
+        await processAllPSet(R_PluCode, R_Quan, Cashier)
+    }
+}
+
+const orderStockOut = async (R_Index) => {
+    const balance = await getBalanceByRIndex(R_Index)
+    Console.log('orderStockOut:' + balance)
+
+    // process stock into inventory
+    const response = await inventoryStock(
+        {
+            R_Stock: balance.R_Stock,
+            R_Table: balance.R_Table,
+            R_PluCode: balance.R_PluCode,
+            R_Quan: balance.R_Quan,
+            R_Total: balance.R_Total,
+            Cashier: balance.Cashier,
+            R_Set: balance.R_Set,
+            R_Index
+        })
+    return response
+}
+
+const returnStockIn = async (R_Index) => {
+    const balance = await getBalanceByRIndex(R_Index)
+    Console.log('orderStockOut:' + balance)
+
+    // process stock into inventory
+    const response = await inventoryReturnStock(
+        {
+            R_Stock: balance.R_Stock,
+            R_Table: balance.R_Table,
+            R_PluCode: balance.R_PluCode,
+            R_Quan: balance.R_Quan,
+            R_Total: balance.R_Total,
+            Cashier: balance.Cashier,
+            R_Set: balance.R_Set,
+            R_Index
+        })
+    return response
+}
+
 module.exports = {
     getAllBalance,
-    getBalanceByTableNo,
     emptyTableBalance,
     updatePrint2Kic,
     getBalanceMaxIndex,
@@ -424,5 +512,9 @@ module.exports = {
     addBalance,
     deleteMenuBalance,
     updateBalance,
-    inventoryStock
+    inventoryStock,
+    getBalanceByTableNo,
+    getBalanceByRIndex,
+    orderStockOut,
+    returnStockIn
 }

@@ -34,6 +34,9 @@ var productOrderRouter = require('./routes/pos/product_order');
 // for printer thermal
 var printerThermalRouter = require('./routes/printer');
 
+// process stock
+var processStockRouter = require('./routes/pos_restaurant/stock/processStock')
+
 var app = express();
 app.use(cors())
 app.use(bodyParser.json())
@@ -70,6 +73,8 @@ app.use('/api/product_order', productOrderRouter);
 app.use('/api/menu_setup', menuSetupRouter);
 app.use('/api/optionfile', optionFileRouter);
 app.use('/api/creditfile', creditFileRouter);
+
+app.use('/api/process-stock', processStockRouter);
 
 // route for test printer
 app.use('/api/printer-thermal', printerThermalRouter)

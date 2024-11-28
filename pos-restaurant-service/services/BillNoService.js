@@ -287,6 +287,12 @@ const updateProSerTable = async (tableNo, allBalance) => {
     await updateService(tableNo, allBalance);
 }
 
+const billRefundStockIn = (billNo) => {
+    const result = []
+    
+    return result
+}
+
 module.exports = {
     getBillNoByTableNo,
     addNewBill,

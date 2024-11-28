@@ -9,19 +9,33 @@ router.get('/', (req, res) => {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
-router.post('/deleteBalance', (req, res) => {
-  const { index } = req.body
-  console.log('route to delete:', req.body)
-  BalanceService.deleteMenuBalance(index)
+// order adjust stock
+router.post('/stock-out', (req, res) => {
+  const { R_Index } = req.body
+  console.log('balance stock out:', R_Index)
+  BalanceService.orderStockOut(R_Index)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+// void
+router.post('/stock-in', (req, res) => {
+  const { R_Index } = req.body
+  console.log('balance stock in:', R_Index)
+  BalanceService.voidStockIn(R_Index)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -32,7 +46,7 @@ router.delete('/empty/:tableNo', (req, res) => {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -43,18 +57,18 @@ router.patch('/printToKic/:tableNo', (req, res) => {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
 router.patch('/updateQty', (req, res) => {
-  const { tableNo, rIndex, qty} = req.body
+  const { tableNo, rIndex, qty } = req.body
   BalanceService.updateBalanceQty(tableNo, rIndex, qty)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -65,7 +79,7 @@ router.get('/:tableNo', function (req, res) {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -76,7 +90,7 @@ router.get('/totalBalance/:tableNo', function (req, res) {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -87,17 +101,50 @@ router.get('/getMaxIndex/:tableNo', function (req, res) {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
+// add new menu in balance
 router.post('/', (req, res) => {
+  if (Object.keys(req.body).length === 0) {
+    throw new Error("Payload Information Notfound !!!")
+  }
   BalanceService.addBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+// void or refund menu in balance
+router.post('/void', (req, res) => {
+  const { R_Index } = req.body
+  if (Object.keys(req.body).length === 0) {
+    throw new Error("R_Index !!!")
+  }
+  BalanceService.deleteMenuBalance(R_Index)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.post('/getData', (req, res) => {
+  if (Object.keys(req.body).length === 0) {
+    throw new Error("Payload Information Notfound !!!")
+  }
+  const { R_Index } = req.body
+  BalanceService.getBalanceByRIndex(R_Index)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -108,7 +155,7 @@ router.post('/addList', function (req, res, next) {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -119,7 +166,7 @@ router.put('/', function (req, res, next) {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 })
 

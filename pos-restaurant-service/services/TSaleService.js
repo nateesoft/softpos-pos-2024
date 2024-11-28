@@ -1,7 +1,5 @@
 const pool = require('../config/database/MySqlConnect')
-const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
 const moment = require('moment')
-const { getBalanceByTableNo } = require('./BalanceService');
 const { listIngredeint, getPSetByPCode } = require('./ProductService');
 const { ProcessStockOut } = require('./STCardService');
 

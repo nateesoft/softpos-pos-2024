@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "local": "nodemon --env-file=.env.local ./bin/www",
+    "local2": "node --trace-warnings --env-file=.env.local ./bin/www",
     "watch": "nodemon ./bin/www"
   },
   "dependencies": {
