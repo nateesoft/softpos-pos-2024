@@ -145,6 +145,7 @@ const ProductMenu = ({
     }
 
     const handleConfirmSelectedSubMenu = async (productInfo) => {
+        // console.log('handleConfirmSelectedSubMenu:', productInfo)
         const itemSelected = subMenuSelected.filter(item => item === true).length
         if (itemSelected < productInfo.min_count_set) {
             setMsgWarning(true)
@@ -155,7 +156,10 @@ const ProductMenu = ({
             await addOrderMain(productInfo)
 
             // add sub menu in set
-            const allListToAdd = optionalList.filter(item => item.checked === true)
+            let allListToAdd = optionalList.filter(item => item.checked === true)
+            if (allListToAdd.length === 0) {
+                allListToAdd = optionalList.filter(item => item.auto_select === 'Y')
+            }
             console.log('allListToAdd:', allListToAdd, R_LinkIndex)
             await addOrderSubMenuList(allListToAdd, R_LinkIndex)
 

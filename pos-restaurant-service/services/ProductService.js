@@ -10,6 +10,16 @@ const getProductByPCode = async pcode => {
     return results
 }
 
+const getProductActiveByPCode = async pcode => {
+    const sql = `select * from product where PCode='${pcode}' and pactive='Y' limit 1`;
+    console.log('getProductByPCode:', sql)
+    const results = await pool.query(sql)
+    if (results) {
+        return results[0]
+    }
+    return results
+}
+
 const listIngredeint = async (pluCode) => {
     const sql = `select i.*,pdesc,PBPack,pstock,pactive 
     from product p inner join pingredent i on p.pcode=i.pingcode 
@@ -28,6 +38,7 @@ const getPSetByPCode = async (pluCode) => {
 
 module.exports = {
     getProductByPCode,
+    getProductActiveByPCode,
     listIngredeint,
     getPSetByPCode
 }

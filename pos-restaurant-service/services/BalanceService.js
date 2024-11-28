@@ -75,39 +75,6 @@ const updatePrint2Kic = async tableNo => {
     const sql = `update balance set TranType='PDA', R_Pause='P' where R_Table='${tableNo}'`;
     console.log('updatePrint2Kic:', sql)
     const results = await pool.query(sql)
-
-    const listBalance = await getBalanceByTableNo(tableNo)
-    listBalance.forEach(async (balance) => {
-        console.log('updatePrint2Kic(balance):', balance)
-        // update stock and process stockcard and stkfile
-        if (balance.R_Stock === 'Y') {
-            const DocNo = tableNo + "-" + moment().format('HH:mm:ss')
-            const StkCode = balance.StkCode
-            const PCode = balance.R_PluCode
-            const TDate = balance.R_Date
-            const Stk_Remark = "SAL"
-            const Qty = balance.R_Quan
-            const Amount = balance.R_Total
-            const UserPost = balance.Cashier
-            const PStock = balance.R_Stock
-            const PSet = balance.R_Set
-            const r_index = balance.R_Index
-            const SaleOrRefund = "1"
-    
-            console.log('ProcessStockOut')
-            await ProcessStockOut(DocNo, StkCode, PCode, TDate, Stk_Remark, Qty, Amount,
-                UserPost, PStock, PSet, r_index, SaleOrRefund)
-    
-            console.log('processAllPIngredent')
-            // ตัดสต็อกสินค้าที่มี Ingredent
-            await processAllPIngredent(balance.R_PluCode, balance.R_Quan, balance.Cashier)
-    
-            // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
-            console.log('processAllPSet')
-            await processAllPSet(balance.R_PluCode, balance.R_Quan, balance.Cashier)
-        }
-    })
-
     return results
 }
 
@@ -144,7 +111,7 @@ const addListBalance = async (payload) => {
             macno,
             userLogin,
             empCode,
-            R_Index: (R_LinkIndex + "/" + (index + 1)),
+            R_Index: (R_LinkIndex + "-" + PrefixZeroFormat(index+1, 2)),
             R_LinkIndex,
             posProduct
         })
@@ -311,6 +278,11 @@ const addNewBalance = async payload => {
         '${PDAPrintCheck}','${PDAEMP}','${R_empName}','${R_ServiceAmt}','${R_PEName}','${R_Indulgent}')`
         console.log('addNewBalance:', sql)
         await pool.query(sql)
+
+        // process stock into inventory
+        const balance = {}
+        await inventoryStock(balance)
+
         return R_Index
     } catch (error) {
         console.log('addNewBalance', error)
@@ -391,6 +363,43 @@ const updateBalance = async payload => {
     }
 }
 
+const inventoryStock = async (balance) => {
+    // update stock and process stockcard and stkfile
+    if (balance.R_Stock === 'Y') {
+        const S_No = tableNo + "-" + moment().format('HH:mm:ss')
+        const S_SubNo = ""
+        const S_Que = 0
+        const S_PCode = balance.R_PluCode
+        const S_Stk = "A1"
+        const S_In = 0
+        const S_Out = balance.R_Quan
+        const S_InCost = 0
+        const S_OutCost = balance.R_Total
+        const S_ACost = 0
+        const S_Rem = "SAL"
+        const S_User = balance.Cashier
+        const S_Link = ""
+
+        const PStock = balance.R_Stock
+        const PSet = balance.R_Set
+        const r_index = balance.R_Index
+        const SaleOrRefund = "SALE" // SALE or REFUND
+
+        console.log('ProcessStockOut')
+        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_Stk, S_In, S_Out, 
+            S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link, 
+            PStock, PSet, r_index, SaleOrRefund)
+
+        console.log('processAllPIngredent')
+        // ตัดสต็อกสินค้าที่มี Ingredent
+        await processAllPIngredent(balance.R_PluCode, balance.R_Quan, balance.Cashier)
+
+        // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
+        console.log('processAllPSet')
+        await processAllPSet(balance.R_PluCode, balance.R_Quan, balance.Cashier)
+    }
+}
+
 module.exports = {
     getAllBalance,
     getBalanceByTableNo,
@@ -403,5 +412,6 @@ module.exports = {
     addListBalance,
     addBalance,
     deleteMenuBalance,
-    updateBalance
+    updateBalance,
+    inventoryStock
 }

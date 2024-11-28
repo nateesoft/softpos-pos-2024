@@ -86,30 +86,65 @@ const createNewTSale = async (balance, BillRefNo) => {
     }
 }
 
-const processAllPIngredent = async (PCode, R_Quan, Cashier) => {
+const processAllPIngredent = async (S_No, PCode, R_Quan, Cashier) => {
     let listING = await listIngredeint(PCode);
-    listING.forEach(async ingBean => {
-        if (ingBean.Pstock === "Y" && ingBean.Pactive === "Y") {
-            let PingCode = ingBean.PingCode;
+    listING.forEach(async (ingBean, index) => {
+        if (ingBean.pstock === "Y" && ingBean.pactive === "Y") {
             let PBPack = ingBean.PBPack;
             if (PBPack <= 0) {
                 PBPack = 1;
             }
             let R_QuanIng = ingBean.PingQty * R_Quan;
-            let R_Total = 0;
-            await ProcessStockOut(DocNo, StkCode, R_PluCode, new Date(), Stk_Remark, R_QuanIng, R_Total,
-                Cashier, "Y", "", "", "");
+
+            const S_SubNo = "@"+ingBean.PCode
+            const S_Que = (index+1)
+            const S_PCode = ingBean.PingCode
+            const S_Stk = "A1"
+            const S_In = 0
+            const S_Out = R_QuanIng
+            const S_InCost = 0
+            const S_OutCost = 0
+            const S_ACost = 0
+            const S_Rem = "SAL"
+            const S_User = Cashier
+            const S_Link = "@"+ingBean.PCode
+    
+            const PStock = "Y"
+            const PSet = "N"
+            const r_index = ""
+            const SaleOrRefund = "SALE" // SALE or REFUND
+
+            await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_Stk, S_In, S_Out, 
+                S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link, 
+                PStock, PSet, r_index, SaleOrRefund);
         }
     })
 }
 
-const processAllPSet = async (PCode, R_Quan, Cashier) => {
+const processAllPSet = async (S_No, PCode, R_Quan, Cashier) => {
     let listPset = await getPSetByPCode(PCode);
     listPset.forEach(async psetBean => {
-        let pSubCode = psetBean.getPsubcode();
-        let pSubQTY = psetBean.getPsubQTY();
-        await ProcessStockOut(DocNo, StkCode, pSubCode, new Date(), "A1", pSubQTY * R_Quan, 0.00,
-            Cashier, "Y", "", "", "");
+        const S_SubNo = ""
+        const S_Que = 0
+        const S_PCode = psetBean.PSubCode
+        const S_Stk = "A1"
+        const S_In = 0
+        const S_Out = R_Quan * psetBean.PSubQty
+        const S_InCost = 0
+        const S_OutCost = 0
+        const S_ACost = 0
+        const S_Rem = "SAL"
+        const S_User = Cashier
+        const S_Link = ""
+
+        const PStock = "N"
+        const PSet = "N"
+        const r_index = ""
+        const SaleOrRefund = "SALE" // SALE or REFUND
+
+        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_Stk, S_In, S_Out, 
+            S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link, 
+            PStock, PSet, r_index, SaleOrRefund);
     })
 }
 
