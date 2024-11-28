@@ -47,7 +47,7 @@ const getBalanceByRIndex = async R_Index => {
     const sql = `select * from balance where R_Index='${R_Index}'`;
     console.log('getBalanceByTableNo:', sql)
     const results = await pool.query(sql)
-    if(results.length>0){
+    if (results.length > 0) {
         return results[0]
     }
     return null
@@ -122,7 +122,7 @@ const addListBalance = async (payload) => {
             macno,
             userLogin,
             empCode,
-            R_Index: (R_LinkIndex + "-" + PrefixZeroFormat(index+1, 2)),
+            R_Index: (R_LinkIndex + "-" + PrefixZeroFormat(index + 1, 2)),
             R_LinkIndex,
             posProduct
         })
@@ -130,7 +130,7 @@ const addListBalance = async (payload) => {
 }
 
 const addBalance = async payload => {
-    const { tableNo, menuInfo, qty, optList=[], specialText="", macno, userLogin, empCode } = payload
+    const { tableNo, menuInfo, qty, optList = [], specialText = "", macno, userLogin, empCode } = payload
     // console.log('nathee_test ===> ', optList, specialText)
     const R_Index = await getBalanceMaxIndex(tableNo)
     const posProduct = await getProductByPCode(menuInfo.menu_code)
@@ -291,10 +291,7 @@ const addNewBalance = async payload => {
         await pool.query(sql)
 
         // process stock into inventory
-        const balance = await getBalanceByRIndex(R_Index)
-        if(balance){
-            await inventoryStock(balance)
-        }
+        await inventoryStock(R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index)
 
         return R_Index
     } catch (error) {
@@ -376,40 +373,41 @@ const updateBalance = async payload => {
     }
 }
 
-const inventoryStock = async (balance) => {
+const inventoryStock = async (R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index) => {
     // update stock and process stockcard and stkfile
-    if (balance.R_Stock === 'Y') {
-        const S_No = balance.R_Table + "-" + moment().format('HH:mm:ss')
+    console.log('inventoryStock(R_Stock):', R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index)
+    if (R_Stock === 'Y') {
+        const S_No = R_Table + "-" + moment().format('HH:mm:ss')
         const S_SubNo = ""
         const S_Que = 0
-        const S_PCode = balance.R_PluCode
+        const S_PCode = R_PluCode
         const S_Stk = "A1"
         const S_In = 0
-        const S_Out = balance.R_Quan
+        const S_Out = R_Quan
         const S_InCost = 0
-        const S_OutCost = balance.R_Total
+        const S_OutCost = R_Total
         const S_ACost = 0
         const S_Rem = "SAL"
-        const S_User = balance.Cashier
+        const S_User = Cashier
         const S_Link = ""
 
-        const PStock = balance.R_Stock
-        const PSet = balance.R_Set
-        const r_index = balance.R_Index
+        const PStock = R_Stock
+        const PSet = R_Set
+        const r_index = R_Index
         const SaleOrRefund = "SALE" // SALE or REFUND
 
         console.log('ProcessStockOut')
-        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_Stk, S_In, S_Out, 
-            S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link, 
+        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_Stk, S_In, S_Out,
+            S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link,
             PStock, PSet, r_index, SaleOrRefund)
 
         console.log('processAllPIngredent')
         // ตัดสต็อกสินค้าที่มี Ingredent
-        await processAllPIngredent(S_No, balance.R_PluCode, balance.R_Quan, balance.Cashier)
+        await processAllPIngredent(S_No, R_PluCode, R_Quan, Cashier)
 
         // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
         console.log('processAllPSet')
-        await processAllPSet(balance.R_PluCode, balance.R_Quan, balance.Cashier)
+        await processAllPSet(R_PluCode, R_Quan, Cashier)
     }
 }
 
