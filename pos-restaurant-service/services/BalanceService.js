@@ -43,6 +43,16 @@ const getBalanceByTableNo = async tableNo => {
     return mappingResult
 }
 
+const getBalanceByRIndex = async R_Index => {
+    const sql = `select * from balance where R_Index='${R_Index}'`;
+    console.log('getBalanceByTableNo:', sql)
+    const results = await pool.query(sql)
+    if(results.length>0){
+        return results[0]
+    }
+    return null
+}
+
 const getBalanceMaxIndex = async tableNo => {
     const sql = `select max(R_Index) R_Index from balance where R_Table='${tableNo}' order by r_index`;
     console.log('getBalanceMaxIndex:', sql)
@@ -280,8 +290,10 @@ const addNewBalance = async payload => {
         await pool.query(sql)
 
         // process stock into inventory
-        const balance = {}
-        await inventoryStock(balance)
+        const balance = await getBalanceByRIndex(R_Index)
+        if(balance){
+            await inventoryStock(balance)
+        }
 
         return R_Index
     } catch (error) {
@@ -392,7 +404,7 @@ const inventoryStock = async (balance) => {
 
         console.log('processAllPIngredent')
         // ตัดสต็อกสินค้าที่มี Ingredent
-        await processAllPIngredent(balance.R_PluCode, balance.R_Quan, balance.Cashier)
+        await processAllPIngredent(S_No, balance.R_PluCode, balance.R_Quan, balance.Cashier)
 
         // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
         console.log('processAllPSet')
