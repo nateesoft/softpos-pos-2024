@@ -171,7 +171,13 @@ const ProductDetailCard = ({
   const handleConfirm = () => {
     if (count === 0) {
       // delete item
-      axios.post(`/api/balance/void`, { R_Index: product.R_Index })
+      axios.post(`/api/balance/void`, { 
+        R_Index: product.R_Index, 
+        Cachier: userLogin, 
+        empCode: empCode, 
+        macno: macno,
+        voidMsg: "Test void" 
+      })
         .then((response) => {
           if (response.data.status = 200) {
             initLoadMenu()

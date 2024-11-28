@@ -135,7 +135,7 @@ router.post('/void', (req, res) => {
   if (Object.keys(req.body).length === 0) {
     throw new Error("R_Index !!!")
   }
-  BalanceService.deleteMenuBalance(R_Index)
+  BalanceService.voidMenuBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

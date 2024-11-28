@@ -24,7 +24,7 @@ const config = {
   // timeout: 60 * 60 * 1000
 }
 const pool = mysqlConnection.createConnection(config);
-console.log('MySqlConnect config:', config)
+// console.log('MySqlConnect config:', config)
 
 pool.query("SELECT 5+0 AS solution", function (error, results, fields) {
   if (error) throw error

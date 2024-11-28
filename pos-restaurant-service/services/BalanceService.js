@@ -19,32 +19,32 @@ const getTotalBalance = async (tableNo) => {
     return 0.00
 }
 
-const voidMenuBalance = async (R_Index, Cachier, empCode, voidMsg) => {
-    //Update  Balance File For Void
+const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) => {
+    // Update  Balance File For Void
     const balance = await getBalanceByRIndex(R_Index);
-    let updBalance = `update balance "
-            set r_void='V,"
-            cashier='${Cachier}',"
-            r_emp='${empCode}',"
-            r_voiduser='${Cachier}',"
-            r_voidtime=curtime(),"
-            r_discbath='0',"
-            r_kicprint='',"
-            r_opt9='${Unicode2ASCII(voidMsg)}',"
-            voidmsg='${Unicode2ASCII(voidMsg)}' "
-            where r_index='${balance.R_Index}' "
-            and r_table='${balance.R_Table}'`;
-    await pool.query(updBalance);
-
-    const results = await pool.query(sql)
-    if (results.affectedRows > 0) {
-        return `${R_Index} Updated.`
+    if (balance) {
+        let updBalance = `UPDATE balance 
+                SET r_void='V',
+                cashier='${Cachier}',
+                r_emp='${empCode}',
+                r_voiduser='${Cachier}',
+                r_voidtime=curtime(),
+                r_discbath='0',
+                macno='${macno}',
+                r_kicprint='',
+                r_opt9='${Unicode2ASCII(voidMsg)}',
+                voidmsg='${Unicode2ASCII(voidMsg)}' 
+                WHERE r_index='${balance.R_Index}' and r_table='${balance.R_Table}'`;
+        const results = await pool.query(updBalance)
+        if (results.affectedRows > 0) {
+            return `${R_Index} Updated.`
+        }
     }
     return `Cannot void R_Index: ${R_Index}`
 }
 
 const getAllBalance = async () => {
-    const sql = `select * from balance`;
+    const sql = `select * from balance order by R_Table, R_Index`;
     console.log('getAllBalance:', sql)
     const results = await pool.query(sql)
     return results
@@ -61,7 +61,8 @@ const getBalanceByTableNo = async tableNo => {
 }
 
 const getBalanceByRIndex = async R_Index => {
-    const sql = `select * from balance where R_Index='${R_Index}'`;
+    const sql = `select * from balance 
+    where R_Index='${R_Index}' order by R_Table, R_Index`;
     console.log('getBalanceByRIndex:', sql)
     const results = await pool.query(sql)
     if (results.length > 0) {
@@ -81,7 +82,8 @@ const getVoidMsgList = async () => {
 }
 
 const getBalanceMaxIndex = async tableNo => {
-    const sql = `select max(R_Index) R_Index from balance where R_Table='${tableNo}' order by r_index`;
+    const sql = `select max(R_Index) R_Index from balance 
+    where R_Table='${tableNo}' order by r_index`;
     console.log('getBalanceMaxIndex:', sql)
     const results = await pool.query(sql)
 
@@ -109,7 +111,9 @@ const emptyTableBalance = async tableNo => {
 }
 
 const updatePrint2Kic = async tableNo => {
-    const sql = `update balance set TranType='PDA', R_Pause='P' where R_Table='${tableNo}'`;
+    const sql = `update balance 
+    set TranType='PDA', R_Pause='P' 
+    where R_Table='${tableNo}'`;
     console.log('updatePrint2Kic:', sql)
     const results = await pool.query(sql)
     return results
