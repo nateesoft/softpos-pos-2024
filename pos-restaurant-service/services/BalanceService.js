@@ -379,7 +379,7 @@ const updateBalance = async payload => {
 const inventoryStock = async (balance) => {
     // update stock and process stockcard and stkfile
     if (balance.R_Stock === 'Y') {
-        const S_No = tableNo + "-" + moment().format('HH:mm:ss')
+        const S_No = balance.R_Table + "-" + moment().format('HH:mm:ss')
         const S_SubNo = ""
         const S_Que = 0
         const S_PCode = balance.R_PluCode
