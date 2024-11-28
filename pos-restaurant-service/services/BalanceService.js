@@ -19,13 +19,28 @@ const getTotalBalance = async (tableNo) => {
     return 0.00
 }
 
-const deleteMenuBalance = async (R_Index) => {
-    const sql = `delete from balance where R_Index='${R_Index}'`;
+const voidMenuBalance = async (R_Index, Cachier, empCode, voidMsg) => {
+    //Update  Balance File For Void
+    const balance = await getBalanceByRIndex(R_Index);
+    let updBalance = `update balance "
+            set r_void='V,"
+            cashier='${Cachier}',"
+            r_emp='${empCode}',"
+            r_voiduser='${Cachier}',"
+            r_voidtime=curtime(),"
+            r_discbath='0',"
+            r_kicprint='',"
+            r_opt9='${Unicode2ASCII(voidMsg)}',"
+            voidmsg='${Unicode2ASCII(voidMsg)}' "
+            where r_index='${balance.R_Index}' "
+            and r_table='${balance.R_Table}'`;
+    await pool.query(updBalance);
+
     const results = await pool.query(sql)
     if (results.affectedRows > 0) {
-        return `${R_Index} Deleted`
+        return `${R_Index} Updated.`
     }
-    return `Cannot delete R_Index: ${R_Index}`
+    return `Cannot void R_Index: ${R_Index}`
 }
 
 const getAllBalance = async () => {
@@ -42,7 +57,6 @@ const getBalanceByTableNo = async tableNo => {
     const mappingResult = results.map((item, index) => {
         return { ...item, R_PName: ASCII2Unicode(item.R_PName) }
     })
-    // console.log(mappingResult)
     return mappingResult
 }
 
@@ -54,6 +68,16 @@ const getBalanceByRIndex = async R_Index => {
         return results[0]
     }
     return null
+}
+
+const getVoidMsgList = async () => {
+    const sql = `select * from voidmsg order by VCode`;
+    console.log('getVoidMsgList:', sql)
+    const results = await pool.query(sql)
+    const mappingResult = results.map((item, index) => {
+        return { ...item, VName: ASCII2Unicode(item.VName) }
+    })
+    return mappingResult
 }
 
 const getBalanceMaxIndex = async tableNo => {
@@ -500,6 +524,94 @@ const returnStockIn = async (R_Index) => {
     return response
 }
 
+const processVoid = async (RIndex, LoginName) => {
+    const balance = await getBalanceByRIndex(RIndex);
+
+    if (balance.R_Void === "V") {
+        balance.R_Void = ""
+        balance.R_VoidUser = ""
+        balance.R_VoidTime = ""
+        balance.R_DiscBath = 0.00
+
+        let StkRemark;
+        let DocNo;
+        let StkCode = "A1"
+
+        let PublicVar = {}//temp wait remove
+        if (PublicVar.ChargeCode === "") {
+            StkRemark = "SAL";
+            DocNo = "EV" + balance.R_Table + "/" + moment().format('HH:mm:ss')
+        } else {
+            StkRemark = "FRE";
+            if (PublicVar.ChargeDocNo === "") {
+                DocNo = balance.R_Table + "/" + moment().format('HH:mm:ss')
+                PublicVar.ChargeDocNo = DocNo;
+            } else {
+                DocNo = PublicVar.ChargeDocNo;
+            }
+        }
+
+        const TDate = moment().format('YYYY-MM-DD')
+        STCardService.ProcessStockOut(DocNo, StkCode, balance.R_PluCode, TDate, StkRemark, balance.R_Quan, balance.R_Total, balance.Cashier, balance.R_Stock, balance.R_Set, balance.R_Index, "SALE");
+
+        const listING = await listIngredeint(balance.balance.R_PluCode)
+        //ตัดสต็อกสินค้าที่มี Ingredent
+        listING.forEach(ingbalance => {
+            let R_PluCode = ingbalance.PingCode
+            let PBPack = ingbalance.PBPack
+            if (PBPack <= 0) {
+                PBPack = 1;
+            }
+            let R_QuanIng = ingbalance.PingQty * balance.R_Quan
+            let R_Total = 0;
+            STCardService.ProcessStockOut(DocNo, StkCode, R_PluCode, TDate, StkRemark, R_QuanIng, R_Total, balance.Cashier, "Y", "", "", "")
+        })
+    } else {
+        balance.R_Void = "V"
+        balance.R_VoidUser = LoginName;
+        balance.R_VoidTime = moment().format('HH:mm:ss')
+        balance.R_DiscBath = 0.00
+
+        let StkCode = "A1";
+        let StkRemark;
+        let DocNo;
+        if (PublicVar.ChargeCode === "") {
+            StkRemark = "SAL";
+            DocNo = "V" + balance.R_Table + "/" + moment().format('HH:mm:ss')
+        } else {
+            StkRemark = "FRE";
+            if (PublicVar.ChargeDocNo === "") {
+                DocNo = balance.R_Table + "/" + moment().format('HH:mm:ss')
+                PublicVar.ChargeDocNo = DocNo;
+            } else {
+                DocNo = PublicVar.ChargeDocNo;
+            }
+        }
+
+        const TDate = moment().format('YYYY-MM-DD')
+        STCardService.ProcessStockOut(DocNo, StkCode, balance.R_PluCode, TDate, StkRemark, -1 * balance.R_Quan, -1 * balance.R_Total,
+            posUser.UserName, balance.R_Stock, balance.R_Set, balance.R_Index, "SALE");
+
+        //ตัดสต็อกสินค้าที่มี Ingredent
+        const listING = await listIngredeint(balance.R_PluCode);
+        listING.forEach(ingBean => {
+            let R_PluCode = ingBean.PingCode
+            let PBPack = ingBean.PBPack
+            if (PBPack <= 0) {
+                PBPack = 1;
+            }
+            let R_QuanIng = (ingBean.PingQty * bean.R_Quan);
+            let R_Total = 0;
+            STCardService.ProcessStockOut(DocNo, StkCode, R_PluCode, TDate, StkRemark, -1 * R_QuanIng, R_Total, posUser.UserName, "Y", "", "", "");
+        })
+    }
+
+    //update promotion, discount
+    // BalanceControl.updateProSerTable(tableNo, memberBean);
+    PublicVar.ErrorColect = false;
+    PublicVar.TableRec_DiscBath = 0.0;
+}
+
 module.exports = {
     getAllBalance,
     emptyTableBalance,
@@ -510,11 +622,13 @@ module.exports = {
     getTotalBalance,
     addListBalance,
     addBalance,
-    deleteMenuBalance,
+    voidMenuBalance,
     updateBalance,
     inventoryStock,
     getBalanceByTableNo,
     getBalanceByRIndex,
     orderStockOut,
-    returnStockIn
+    returnStockIn,
+    processVoid,
+    getVoidMsgList
 }

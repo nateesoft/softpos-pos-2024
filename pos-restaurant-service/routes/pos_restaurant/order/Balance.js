@@ -72,6 +72,16 @@ router.patch('/updateQty', (req, res) => {
     })
 });
 
+router.get('/void-msg-list', function (req, res) {
+  BalanceService.getVoidMsgList()
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 router.get('/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
   BalanceService.getBalanceByTableNo(tableNo)
