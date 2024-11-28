@@ -110,6 +110,7 @@ const updateBalanceQty = async (tableNo, rIndex, qty) => {
 
 const addListBalance = async (payload) => {
     const { listBalance, tableNo, macno, userLogin, empCode, R_LinkIndex } = payload
+    console.log('addListBalance:', payload)
     listBalance.forEach(async (product, index) => {
         const posProduct = await getProductByPCode(product.menu_code)
         await addNewBalance({

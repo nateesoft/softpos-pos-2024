@@ -133,7 +133,7 @@ const ProductMenu = ({
             })
     }
 
-    const addOrderSubMenuList = async (optionalList) => {
+    const addOrderSubMenuList = async (tableNo, optionalList) => {
         await axios.post(`/api/balance/addList`, {
             listBalance: optionalList,
             tableNo,
@@ -160,8 +160,8 @@ const ProductMenu = ({
             if (allListToAdd.length === 0) {
                 allListToAdd = optionalList.filter(item => item.auto_select === 'Y')
             }
-            console.log('allListToAdd:', allListToAdd, R_LinkIndex)
-            await addOrderSubMenuList(allListToAdd, R_LinkIndex)
+            console.log('allListToAdd:', allListToAdd)
+            await addOrderSubMenuList(tableNo, allListToAdd)
 
             // total summary display
             initLoadMenu()
