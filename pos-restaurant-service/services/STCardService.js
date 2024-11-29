@@ -2,8 +2,21 @@ const moment = require('moment')
 const pool = require('../config/database/MySqlConnect')
 
 const { getProductByPCode, getProductActiveByPCode } = require('./ProductService');
-const { getDataCompany } = require('./CompanyService');
 const BalanceService = require('./BalanceService');
+
+const getSTCard = async () => {
+    const sql = `select * from stcard`;
+    console.log('getSTCard:', sql)
+    const results = await pool.query(sql)
+    return results
+}
+
+const getSTCardBySPCode = async (S_PCode) => {
+    const sql = `select * from stcard where S_PCode='${S_PCode}'`;
+    console.log('getSTCardBySPCode:', sql)
+    const results = await pool.query(sql)
+    return results
+}
 
 const SeekStkFile = async (TempCode, T_Stk) => {
     const sql = `select bpcode from stkfile 
@@ -273,5 +286,7 @@ const executeProcess = async (R_Index) => {
 
 module.exports = {
     ProcessStockOut,
-    executeProcess
+    executeProcess,
+    getSTCard,
+    getSTCardBySPCode
 }

@@ -158,6 +158,8 @@ function FloorPlanPage() {
             const flow = result.data.template
             console.log('loadFloorPlan:', flow)
             if (flow) {
+              // const updFlow = flow.nodes.map(node => ({...node, bgColor: "red"}))
+              // setNodes(updFlow || [])
               setNodes(flow.nodes || [])
             } else {
               setNodes([])
@@ -202,7 +204,10 @@ function FloorPlanPage() {
               <ReportSelect />
             </IconButton>
           </Box>
-          <Box display="flex" justifyContent="space-evenly" >
+          <Box margin={3} display="flex" justifyContent="space-around">
+            Userlogin: {userLogin}
+          </Box>
+          <Box display="flex" justifyContent="space-evenly">
             <Button
               variant="contained"
               onClick={kitchenReport}

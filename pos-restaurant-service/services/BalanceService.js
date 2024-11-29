@@ -6,7 +6,6 @@ const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/Str
 const { getProductByPCode } = require('./ProductService');
 const STCardService = require('./STCardService');
 const { processAllPIngredent, processAllPSet } = require('./TSaleService');
-const Console = require('../utils/Console')
 
 const getTotalBalance = async (tableNo) => {
     const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
@@ -36,6 +35,10 @@ const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) =>
                 voidmsg='${Unicode2ASCII(voidMsg)}' 
                 WHERE r_index='${balance.R_Index}' and r_table='${balance.R_Table}'`;
         const results = await pool.query(updBalance)
+
+        // process return stock
+        await returnStockIn(reponseR_Index)
+
         if (results.affectedRows > 0) {
             return `${R_Index} Updated.`
         }
@@ -106,6 +109,13 @@ const getBalanceMaxIndex = async tableNo => {
 const emptyTableBalance = async tableNo => {
     const sql = `delete from balance where R_Table='${tableNo}'`;
     console.log('emptyTableBalance:', sql)
+    const results = await pool.query(sql)
+    return results
+}
+
+const deleteBalanceOnly = async R_Index => {
+    const sql = `delete from balance where R_Index='${R_Index}'`;
+    console.log('deleteBalanceOnly:', sql)
     const results = await pool.query(sql)
     return results
 }
@@ -192,7 +202,7 @@ const addBalance = async payload => {
     // process stock out
     await orderStockOut(reponseR_Index)
 
-    return result
+    return reponseR_Index
 }
 
 const mappingOpt = (optList, specialText) => {
@@ -225,7 +235,7 @@ const addNewBalance = async payload => {
     const R_KicOK = ""
     const StkCode = "A1"
     const PosStk = posProduct.POSStk
-    const R_Order = "1"
+    const R_Order = posProduct.POrder
     const R_PItemNo = 0
     const R_PKicQue = 0
     const R_MemSum = "N"
@@ -451,6 +461,8 @@ const inventoryStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Ca
         console.log('processAllPSet')
         await processAllPSet(R_PluCode, R_Quan, Cashier)
     }
+
+    return null
 }
 
 const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index }) => {
@@ -488,44 +500,53 @@ const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Tot
         console.log('processAllPSet')
         await processAllPSet(R_PluCode, R_Quan, Cashier)
     }
+    return null
 }
 
 const orderStockOut = async (R_Index) => {
     const balance = await getBalanceByRIndex(R_Index)
-    Console.log('orderStockOut:' + balance)
+    console.log('orderStockOut:' + balance)
 
     // process stock into inventory
-    const response = await inventoryStock(
-        {
-            R_Stock: balance.R_Stock,
-            R_Table: balance.R_Table,
-            R_PluCode: balance.R_PluCode,
-            R_Quan: balance.R_Quan,
-            R_Total: balance.R_Total,
-            Cashier: balance.Cashier,
-            R_Set: balance.R_Set,
-            R_Index
-        })
-    return response
+    if(balance){
+        const response = await inventoryStock(
+            {
+                R_Stock: balance.R_Stock,
+                R_Table: balance.R_Table,
+                R_PluCode: balance.R_PluCode,
+                R_Quan: balance.R_Quan,
+                R_Total: balance.R_Total,
+                Cashier: balance.Cashier,
+                R_Set: balance.R_Set,
+                R_Index
+            })
+        return response
+    }else {
+        return null
+    }
 }
 
 const returnStockIn = async (R_Index) => {
     const balance = await getBalanceByRIndex(R_Index)
-    Console.log('orderStockOut:' + balance)
+    console.log('returnStockIn:' + balance)
 
-    // process stock into inventory
-    const response = await inventoryReturnStock(
-        {
-            R_Stock: balance.R_Stock,
-            R_Table: balance.R_Table,
-            R_PluCode: balance.R_PluCode,
-            R_Quan: balance.R_Quan,
-            R_Total: balance.R_Total,
-            Cashier: balance.Cashier,
-            R_Set: balance.R_Set,
-            R_Index
-        })
-    return response
+    if(balance){
+        // process stock into inventory
+        const response = await inventoryReturnStock(
+            {
+                R_Stock: balance.R_Stock,
+                R_Table: balance.R_Table,
+                R_PluCode: balance.R_PluCode,
+                R_Quan: balance.R_Quan,
+                R_Total: balance.R_Total,
+                Cashier: balance.Cashier,
+                R_Set: balance.R_Set,
+                R_Index
+            })
+        return response
+    }else{
+        return null
+    }
 }
 
 const processVoid = async (RIndex, LoginName) => {
@@ -634,5 +655,6 @@ module.exports = {
     orderStockOut,
     returnStockIn,
     processVoid,
-    getVoidMsgList
+    getVoidMsgList,
+    deleteBalanceOnly
 }

@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Checkbox, Divider, Modal, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Modal, Paper, TextField, Typography } from "@mui/material";
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import Grid from '@mui/material/Grid2'
@@ -8,6 +8,9 @@ import DiscountIcon from '@mui/icons-material/Discount';
 import AddPaymentMethodIcon from '@mui/icons-material/AddBoxOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from "axios"
+import SplitBillIcon from "@mui/icons-material/VerticalSplit"
+import SplitBiPayment from "./SplitBillPayment"
+
 import { POSContext } from "../../AppContext";
 import QrCodeGenerator from "./QRCodePayment";
 
@@ -69,6 +72,8 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
     const [transferAccountNo, setTransferAccountNo] = useState("")
     const [transferToAccount, setTransferToAccount] = useState("0864108403")
     const [transferAccount, setTransferAccount] = useState("")
+
+    const [openSplitBill, setOpenSplitBill] = useState(false)
 
     const navigate = useNavigate();
     const handleBackPage = () => {
@@ -350,7 +355,11 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                             <Grid size={12}>
                                 <Box sx={{ marginTop: "30px" }} textAlign="center">
                                     <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}>ย้อนกลับ</Button>
-                                    <Button variant="contained" sx={{ margin: "5px" }} color="success" onClick={handleConfirmPayment} disabled={balanceAmount < 0} endIcon={<ConfirmIcon />}>ยืนยันชำระเงิน</Button>
+                                    <Button variant="contained" color="secondary" 
+                                        onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled={false}>
+                                        แยกชำระ
+                                    </Button>
+                                    <Button variant="contained" sx={{ margin: "5px" }} color="success" onClick={handleConfirmPayment} disabled={balanceAmount < 0} endIcon={<ConfirmIcon />}>ชำระเงิน</Button>
                                 </Box>
                             </Grid>
                         </Grid>
@@ -400,6 +409,11 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                         <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={() => setOpenTransferInfo(false)}>ยกเลิก</Button>
                         <Button variant="contained" sx={{ margin: "5px" }} onClick={() => setOpenTransferInfo(false)} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
                     </Box>
+                </Box>
+            </Modal>
+            <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
+                <Box sx={{ ...modalStyle, width: "80%" }}>
+                    <SplitBiPayment onClose={() => setOpenSplitBill(false)} />
                 </Box>
             </Modal>
         </Grid>

@@ -1,43 +1,45 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser')
-var logger = require('morgan');
-// var cors = require('cors')
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser')
+const logger = require('morgan');
+// const cors = require('cors')
 
 // for Restaurant POS (old)
 // login
-var posuserRouter = require('./routes/pos_restaurant/login/posuser');
-var employRouter = require('./routes/pos_restaurant/login/employ');
+const posuserRouter = require('./routes/pos_restaurant/login/posuser');
+const employRouter = require('./routes/pos_restaurant/login/employ');
 
-var poshwsetupRouter = require('./routes/pos_restaurant/config/poshwsetup');
+const poshwsetupRouter = require('./routes/pos_restaurant/config/poshwsetup');
 
 // order
-var tableFileRouter = require('./routes/pos_restaurant/order/TableFile');
-var balanceRouter = require('./routes/pos_restaurant/order/Balance');
-var billNoRouter = require('./routes/pos_restaurant/order/BillNo');
-var tSaleRouter = require('./routes/pos_restaurant/order/TSale');
-var posProductRouter = require('./routes/pos_restaurant/product/Product');
-var optionFileRouter = require('./routes/pos_restaurant/optionfile');
-var creditFileRouter = require('./routes/pos_restaurant/config/creditfile');
-var genQrCode = require('./routes/payment/qrcode_promptpay')
+const tableFileRouter = require('./routes/pos_restaurant/order/TableFile');
+const balanceRouter = require('./routes/pos_restaurant/order/Balance');
+const billNoRouter = require('./routes/pos_restaurant/order/BillNo');
+const tSaleRouter = require('./routes/pos_restaurant/order/TSale');
+const posProductRouter = require('./routes/pos_restaurant/product/Product');
+const optionFileRouter = require('./routes/pos_restaurant/optionfile');
+const creditFileRouter = require('./routes/pos_restaurant/config/creditfile');
+const genQrCode = require('./routes/payment/qrcode_promptpay')
 
 // for New POS apis
-var floorplanRouter = require('./routes/floorplan/floorplan');
-var floorplanTemplateRouter = require('./routes/floorplan/floorplan_template');
-var menuSetupRouter = require('./routes/pos/menu_setup');
-var ordersRouter = require('./routes/pos/orders');
-var productRouter = require('./routes/pos/product');
-var productOrderRouter = require('./routes/pos/product_order');
+const floorplanRouter = require('./routes/floorplan/floorplan');
+const floorplanTemplateRouter = require('./routes/floorplan/floorplan_template');
+const menuSetupRouter = require('./routes/pos/menu_setup');
+const ordersRouter = require('./routes/pos/orders');
+const productRouter = require('./routes/pos/product');
+const productOrderRouter = require('./routes/pos/product_order');
 
 // for printer thermal
-var printerThermalRouter = require('./routes/printer');
+const printerThermalRouter = require('./routes/printer');
 
 // process stock
-var processStockRouter = require('./routes/pos_restaurant/stock/processStock')
+const processStockRouter = require('./routes/pos_restaurant/stock/processStock')
+const stkFileRouter = require('./routes/pos_restaurant/stock/stkfile')
+const stcardRouter = require('./routes/pos_restaurant/stock/stcard')
 
-var app = express();
+const app = express();
 // app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded( { extended: true }))
@@ -75,6 +77,8 @@ app.use('/api/optionfile', optionFileRouter);
 app.use('/api/creditfile', creditFileRouter);
 
 app.use('/api/process-stock', processStockRouter);
+app.use('/api/stkfile', stkFileRouter);
+app.use('/api/stcard', stcardRouter);
 
 // route for test printer
 app.use('/api/printer-thermal', printerThermalRouter)

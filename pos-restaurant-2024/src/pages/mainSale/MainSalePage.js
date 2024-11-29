@@ -7,7 +7,7 @@ import axios from "axios"
 
 import AppbarMenu from "./AppbarMenu"
 import ProductMenu from "./ProductMenu"
-import OrderItem from "./OrderItem"
+import OrderItem from "./addOrderItem/OrderItem"
 import ShowNotification from "../utils/ShowNotification"
 
 function MainSalePage() {

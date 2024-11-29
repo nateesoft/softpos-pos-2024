@@ -50,6 +50,17 @@ router.delete('/empty/:tableNo', (req, res) => {
     })
 });
 
+router.post('/delete', (req, res) => {
+  const { R_Index } = req.body
+  BalanceService.deleteBalanceOnly(R_Index)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 router.patch('/printToKic/:tableNo', (req, res) => {
   const tableNo = req.params.tableNo
   BalanceService.updatePrint2Kic(tableNo)

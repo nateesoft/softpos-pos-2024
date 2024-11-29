@@ -139,10 +139,7 @@ export default function SplitBillPayment({onClose}) {
   );
 
   return (
-    <Grid
-      container
-      sx={{ justifyContent: 'center', alignItems: 'center' }}
-    >
+    <Grid container sx={{ justifyContent: 'center', alignItems: 'center' }}>
       <Grid size={12}>{customList('Table A', '(รายการอาหารโต๊ะหลัก)', left)}</Grid>
       <Grid size={12} sx={{ backgroundColor: "snow" }}>
         <Grid container spacing={2} padding={2}>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import Tab from "@mui/material/Tab"
 import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
@@ -8,34 +8,19 @@ import Moment from 'react-moment'
 import NoFoodIcon from "@mui/icons-material/NoFood"
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import {
-  Alert,
   Box,
   Button,
   Modal,
-  TextField,
   Typography,
   Paper,
-  ToggleButtonGroup,
-  ToggleButton,
-  IconButton
+  Grid2,
 } from "@mui/material"
-import Grid from "@mui/material/Grid2"
-import AddIcon from "@mui/icons-material/Add"
-import RemoveIcon from "@mui/icons-material/Remove"
-import CloseIcon from "@mui/icons-material/Cancel"
-import VoidIcon from "@mui/icons-material/NotInterested"
-import ConfirmIcon from "@mui/icons-material/Check"
 import axios from "axios"
 import ArrowBack from "@mui/icons-material/TableBar"
-import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 import PrintIcon from "@mui/icons-material/Print"
 import PrintCheckboxIcon from "@mui/icons-material/CheckBox"
-import AddCircleIcon from "@mui/icons-material/AddCircle"
-import RemoveCircleIcon from '@mui/icons-material/DoNotDisturbOn';
-
-import SplitBiPayment from "./SplitBillPayment"
-import OptionMenuSelect from "./OptionMenuSelect"
-import { POSContext } from "../../AppContext"
+import ProductCard from './ProductCard'
+import ProductDetailCard from './ProductDetailCard'
 
 const modalStyle = {
   position: "absolute",
@@ -46,313 +31,6 @@ const modalStyle = {
   backgroundColor: "snow"
 }
 
-const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder }) => {
-  const { appData } = useContext(POSContext)
-  const { macno, userLogin, empCode } = appData
-  const [optList] = useState([product.R_Opt1, product.R_Opt2, product.R_Opt3, product.R_Opt4, product.R_Opt5, product.R_Opt6, product.R_Opt7, product.R_Opt8, product.R_Opt9])
-  const [count, setCount] = useState(product.R_Quan || 1)
-
-  const handleRemoveItem = () => {
-    const updCount = Math.max(count - 1, 0)
-    axios.patch(`/api/balance/updateQty`, {
-      tableNo: tableNo,
-      rIndex: product.R_Index,
-      qty: updCount
-    })
-      .then(response => {
-        if (updCount > 0) {
-          setCount(updCount)
-        }
-        initLoadMenu()
-        initLoadOrder()
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
-  const handleAddItem = () => {
-    axios.post(`/api/balance`, {
-      tableNo, menuInfo: {
-        menu_code: product.R_PluCode,
-        menu_name: product.R_PName,
-        menu_price: product.R_Price
-      }, qty: 1, macno, userLogin, empCode
-    })
-      .then(response => {
-        initLoadMenu()
-        initLoadOrder()
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }
-
-  return (
-    <div
-      style={{
-        padding: "15px",
-        border: "2px solid #eee",
-        borderRadius: "5px",
-        marginBottom: "10px",
-        boxShadow: "2px 2px #eee",
-        backgroundColor: product.R_Pause === 'P' ? "#f4fbfc" : "snow"
-      }}
-    >
-      <Grid container spacing={2}>
-        <Grid size={5}>
-          <img
-            src={product.image_url}
-            alt=""
-            height={100}
-            style={{ borderRadius: "5px", width: "120px" }}
-            onClick={openModal}
-          />
-        </Grid>
-        <Grid size={7}>
-          <Grid container direction="column" justifyContent="flex-end">
-            <Grid>{product.R_PName}</Grid>
-            <Grid display="flex" justifyContent="center">
-              <IconButton onClick={handleRemoveItem} disabled={product.R_Pause === 'P'}>
-                <RemoveCircleIcon sx={{ color: product.R_Pause === 'P' ? "gray" : "red" }} fontSize="large" />
-              </IconButton>
-              <TextField
-                inputProps={{ min: 0, style: { textAlign: "right", width: '35px', fontWeight: "bold" } }}
-                variant="outlined"
-                type="number"
-                value={count}
-                disabled
-                onChange={(e) => setCount(e.target.value)}
-              />
-              <IconButton onClick={handleAddItem}>
-                <AddCircleIcon color="success" fontSize="large" />
-              </IconButton>
-            </Grid>
-            <Grid>
-              <Grid container>
-                <Typography>
-                  {product.R_Price} x {product.R_Quan}{" "}
-                </Typography>
-                <Typography>&nbsp;=</Typography>
-                <Typography>{product.R_Price * product.R_Quan}</Typography>
-              </Grid>
-            </Grid>
-            <Box display="flex" flexDirection="row">
-              {optList && optList.filter(o => o !== "").map((opt) =>
-                <Typography sx={{ fontSize: "10px", color: "green" }}>{opt},</Typography>
-              )}
-            </Box>
-          </Grid>
-        </Grid>
-      </Grid>
-    </div>
-  )
-}
-const ProductDetailCard = ({
-  tableNo,
-  product,
-  handleNotification,
-  closeModal,
-  initLoadOrder,
-  initLoadMenu
-}) => {
-  const { appData } = useContext(POSContext)
-  const { empCode, macno, userLogin } = appData
-
-  const [count, setCount] = useState(product.R_Quan || 1)
-  const [orderType, setOrderType] = useState("E")
-  const [optList, setOptList] = useState([])
-  const [specialText, setSpecialText] = useState("")
-
-  const handleChange = (event, oType) => {
-    setOrderType(oType)
-  }
-
-  const handleConfirm = () => {
-    if (count === 0) {
-      // delete item
-      axios.post(`/api/balance/void`, { 
-        R_Index: product.R_Index, 
-        Cachier: userLogin, 
-        empCode: empCode, 
-        macno: macno,
-        voidMsg: "Test void" 
-      })
-        .then((response) => {
-          if (response.data.status = 200) {
-            initLoadMenu()
-            initLoadOrder()
-            closeModal()
-          }
-        })
-        .catch((error) => {
-          handleNotification(error)
-        })
-    } else {
-      // update item
-      product.qty = count
-      axios
-        .put(`/api/balance`, {
-          oldBalance: product,
-          optList,
-          specialText,
-          qty: count,
-          macno,
-          userLogin,
-          empCode
-        })
-        .then((response) => {
-          console.log('UPDATE BALANCE=>', response)
-          if (response.data.status === 200) {
-            initLoadMenu()
-            initLoadOrder()
-            closeModal()
-          }
-        })
-        .catch((error) => {
-          handleNotification(error)
-        })
-    }
-  }
-
-  return (
-    <div
-      style={{
-        padding: "15px",
-        border: "2px solid #eee",
-        borderRadius: "10px"
-      }}
-    >
-      <div align="center" style={{ padding: "10px" }}>
-        <Box sx={{ padding: "10px" }}>
-          <Typography variant="h5">{product.menu_name}</Typography>
-        </Box>
-        <table width="100%">
-          <tr>
-            <td colSpan={2} align="center">
-              <img
-                src={product.image_url}
-                width={150}
-                alt=""
-                style={{ borderRadius: "10px", boxShadow: "2px 3px #ccc" }}
-              />
-              <br />
-            </td>
-          </tr>
-        </table>
-      </div>
-      <Alert severity="success" sx={{ width: "100%" }}>
-        <Box>
-          <Typography variant="span">เวลาสั่ง: 06/11/2024 10.10.000</Typography>
-        </Box>
-        <Box>
-          <Typography variant="span">สถานะส่งครัว: ยังไม่ได้ส่ง</Typography>
-        </Box>
-      </Alert>
-      <div align="center" style={{ padding: "10px" }}>
-        <table width="100%">
-          <tr>
-            <td align="left">
-              <u>ราคา {product.menu_price} บาท</u>
-            </td>
-            <td
-              align="right"
-              style={{ color: "green", fontSize: "12px", fontWeight: "bold" }}
-            >
-              อาหารหลัก*
-            </td>
-          </tr>
-        </table>
-      </div>
-      <Grid container spacing={2} display="flex" justifyContent="space-evenly">
-        <IconButton
-          size="large"
-          sx={{ backgroundColor: "red", color: "white" }}
-          onClick={() => {
-            setCount(Math.max(count - 1, 0))
-          }}
-        >
-          <RemoveIcon fontSize="large" />
-        </IconButton>
-        <TextField
-          variant="outlined"
-          type="number"
-          value={count}
-          onChange={(evt) => setCount(evt.target.value)}
-          inputProps={{
-            min: 0,
-            style: { textAlign: "center", fontSize: "20px", width: "100px" }
-          }}
-        />
-        <IconButton
-          size="large"
-          sx={{ backgroundColor: "green", color: "white" }}
-          onClick={() => {
-            setCount(count + 1)
-          }}
-        >
-          <AddIcon fontSize="large" />
-        </IconButton>
-      </Grid>
-      <OptionMenuSelect setSpecialText={setSpecialText} productCode={product.R_PluCode} optList={optList} setOptList={setOptList} />
-      <Box sx={{ padding: "10px" }}>
-        <Box>
-          <Typography variant="p">ประเภทอาหาร</Typography>
-        </Box>
-        <Box display="flex" justifyContent="center" sx={{ margin: "10px" }}>
-          <ToggleButtonGroup
-            color="primary"
-            value={orderType}
-            exclusive
-            onChange={handleChange}
-            aria-label="Platform"
-          >
-            <ToggleButton value="E">Dine In</ToggleButton>
-            <ToggleButton value="T">Take Away</ToggleButton>
-            <ToggleButton value="D">Delivery</ToggleButton>
-          </ToggleButtonGroup>
-        </Box>
-      </Box>
-      {count === 0 && (
-        <Alert severity="error" sx={{ width: "100%", marginBottom: "5px" }}>
-          <Box>
-            <Typography variant="span">
-              คุณต้องการลบรายการอาหารนี้หรือไม่ !!!
-            </Typography>
-          </Box>
-        </Alert>
-      )}
-      <Grid container justifyContent="center">
-        <Button
-          variant="contained"
-          color="error"
-          onClick={closeModal}
-          sx={{ marginRight: "10px" }}
-          startIcon={<CloseIcon />}
-        >
-          CANCEL
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={closeModal}
-          sx={{ marginRight: "10px" }}
-          startIcon={<VoidIcon />}
-        >
-          ยกเลิก (VOID)
-        </Button>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={handleConfirm}
-          startIcon={<ConfirmIcon />}
-        >
-          CONFIRM
-        </Button>
-      </Grid>
-    </div>
-  )
-}
 const TotalBill = ({ tableNo, orderList }) => {
   let totalBill = 0
   for (let i = 0; i < orderList.length; i++) {
@@ -369,12 +47,12 @@ const TotalBill = ({ tableNo, orderList }) => {
         margin: "5px"
       }}
     >
-      <Grid container spacing={2}>
+      <Grid2 container spacing={2}>
         <Typography variant="p" sx={{ fontWeight: "bold", margin: "4px" }}>Total Amount</Typography>
-      </Grid>
-      <Grid container display="flex" justifyContent="flex-end">
+      </Grid2>
+      <Grid2 container display="flex" justifyContent="flex-end">
         <Typography variant="h2" sx={{ fontWeight: "bold", textShadow: "2px 2px white" }}>{totalBill}</Typography>
-      </Grid>
+      </Grid2>
     </div>
   )
 }
@@ -393,7 +71,7 @@ const OrderItem = ({
   const navigate = useNavigate()
   const [value, setValue] = React.useState("1")
   const [open, setOpen] = useState(false)
-  const [openSplitBill, setOpenSplitBill] = useState(false)
+  
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
 
@@ -549,7 +227,7 @@ const OrderItem = ({
           )}
         </TabPanel>
       </TabContext>
-      <Grid container spacing={2} margin={3} justifyContent="center">
+      <Grid2 container spacing={2} margin={3} justifyContent="center">
         <Button
           variant="outlined"
           startIcon={<PrintCheckboxIcon />}
@@ -566,9 +244,9 @@ const OrderItem = ({
         >
           ส่งครัว/ พักโต๊ะ
         </Button>
-      </Grid>
+      </Grid2>
       <TotalBill tableNo={tableNo} orderList={OrderList} />
-      <Grid container spacing={1} justifyContent="center">
+      <Grid2 container spacing={1} justifyContent="center">
         {typePopup === false && (
           <Button
             variant="contained"
@@ -581,15 +259,6 @@ const OrderItem = ({
         )}
         <Button
           variant="contained"
-          color="secondary"
-          onClick={() => setOpenSplitBill(true)}
-          endIcon={<SplitBillIcon />}
-          disabled={true}
-        >
-          แยกชำระ
-        </Button>
-        <Button
-          variant="contained"
           color="success"
           onClick={handleClick}
           disabled={OrderList.length === 0}
@@ -597,7 +266,7 @@ const OrderItem = ({
         >
           ชำระเงิน
         </Button>
-      </Grid>
+      </Grid2>
 
       <Modal
         open={open}
@@ -696,12 +365,6 @@ const OrderItem = ({
               </Button>
             </Box>
           </Paper>
-        </Box>
-      </Modal>
-
-      <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
-        <Box sx={{ ...modalStyle, width: "80%" }}>
-          <SplitBiPayment onClose={() => setOpenSplitBill(false)} />
         </Box>
       </Modal>
     </Box>

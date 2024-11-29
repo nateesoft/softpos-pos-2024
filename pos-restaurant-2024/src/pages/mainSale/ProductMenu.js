@@ -11,7 +11,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Grid from '@mui/material/Grid2'
 import axios from "axios";
 
-import OrderItem from './OrderItem'
+import OrderItem from './addOrderItem/OrderItem'
 import ProductCard from "./ProductCard";
 import ProductDetailCard from "./ProductDetailCard";
 import MenuSetModal from "./MenuSetModal";
