@@ -203,6 +203,7 @@ const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InC
     const S_Stk = "A1"
     const S_EntryDate = moment().format('YYYY-MM-DD')
     const S_EntryTime = moment().format('HH:mm');
+    // console.log('(ProcessStockOut)')
 
     // remove from stock
     let sql = `INSERT INTO stcard 
@@ -212,7 +213,7 @@ const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InC
     '${S_Stk}','${S_In}','${S_Out}',
     '${S_InCost}','${S_OutCost}','${S_ACost}','${S_Rem}','${S_User}',
     '${S_EntryDate}','${S_EntryTime}','${S_Link}')`
-    console.log('ProcessStockOut:', sql)
+    // console.log('ProcessStockOut:', sql)
     await pool.query(sql)
 
     let TempAct = await GetActionMon()

@@ -28,6 +28,7 @@ const pool = mysqlConnection.createConnection(config);
 
 pool.query("SELECT 5+0 AS solution", function (error, results, fields) {
   if (error) throw error
+  console.log("Connect old mysql ip: ", config.host)
   console.log("Connect old mysql version: ", results[0].solution)
 })
 

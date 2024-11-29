@@ -141,7 +141,7 @@ const updateBalanceQty = async (tableNo, rIndex, qty) => {
 
 const addListBalance = async (payload) => {
     const { listBalance, tableNo, macno, userLogin, empCode, R_LinkIndex } = payload
-    console.log('addListBalance:', payload)
+    // console.log('addListBalance:', payload)
     listBalance.forEach(async (product, index) => {
         const posProduct = await getProductByPCode(product.menu_code)
         const R_Index = (R_LinkIndex + "-" + PrefixZeroFormat(index + 1, 2))
@@ -333,7 +333,7 @@ const addNewBalance = async payload => {
         '${R_MovePrint}','${R_Pause}','${R_SPIndex}','${R_LinkIndex}','${R_VoidPause}','${R_MoveItem}','${R_MoveFrom}','${R_MoveUser}',
         '${VoidMsg}','${R_PrintItemBill}','${R_CountTime}','${SoneCode}','${R_Earn}','${R_EarnNo}','${TranType}',
         '${PDAPrintCheck}','${PDAEMP}','${R_empName}','${R_ServiceAmt}','${R_PEName}','${R_Indulgent}')`
-        console.log('addNewBalance:', sql)
+        // console.log('addNewBalance:', sql)
         await pool.query(sql)
 
         return R_Index
