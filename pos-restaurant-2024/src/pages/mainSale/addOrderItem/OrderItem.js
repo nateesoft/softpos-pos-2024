@@ -34,7 +34,10 @@ const modalStyle = {
 const TotalBill = ({ tableNo, orderList }) => {
   let totalBill = 0
   for (let i = 0; i < orderList.length; i++) {
-    totalBill = totalBill + parseInt(orderList[i].R_Quan * orderList[i].R_Price)
+    const balance = orderList[i]
+    if (balance.R_Void !== 'V') {
+      totalBill = totalBill + parseInt(balance.R_Quan * balance.R_Price)
+    }
   }
   totalBill = totalBill.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
   return (
@@ -71,7 +74,7 @@ const OrderItem = ({
   const navigate = useNavigate()
   const [value, setValue] = React.useState("1")
   const [open, setOpen] = useState(false)
-  
+
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
 
@@ -116,7 +119,6 @@ const OrderItem = ({
       .catch(err => {
         handleNotification(err)
       })
-
   }
 
   return (
@@ -228,14 +230,14 @@ const OrderItem = ({
         </TabPanel>
       </TabContext>
       <Grid2 container spacing={2} margin={3} justifyContent="center">
-        <Button
+        {/* <Button
           variant="outlined"
           startIcon={<PrintCheckboxIcon />}
           onClick={() => setShowKicPrint(true)}
           sx={{ marginRight: "10px" }}
         >
           ตรวจสอบปริ้นเตอร์
-        </Button>
+        </Button> */}
         <Button
           variant="outlined"
           startIcon={<PrintIcon />}
