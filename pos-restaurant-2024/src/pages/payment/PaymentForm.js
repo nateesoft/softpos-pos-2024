@@ -141,7 +141,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
         totalAmount()
     }
 
-    const handleConfirmPayment = () => {
+    const handleConfirmPayment = async () => {
         if (balanceAmount >= 0) {
             // update billno
             const payload = {
@@ -183,6 +183,10 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                 paymentAmount,
                 netTotal: R_NetTotal
             }
+            // update print2kic
+            await axios.patch(`/api/balance/printToKic/${tableNo}`)
+
+            // send bill payment
             axios.post(`/api/billno`, payload)
                 .then(response => {
                     console.log('handleConfirmPayment:', response)

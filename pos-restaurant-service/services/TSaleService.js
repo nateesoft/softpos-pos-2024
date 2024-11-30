@@ -65,7 +65,6 @@ const createNewTSale = async (balance, BillRefNo) => {
         '${R_LinkIndex}','${R_VoidPause}','${R_SetPrice}','${R_SetDiscAmt}','${R_MoveItem}','${R_MoveFrom}','${R_MoveUser}','${R_Opt9}',
         '${R_Opt1}','${R_Opt2}','${R_Opt3}','${R_Opt4}','${R_Opt5}','${R_Opt6}','${R_Opt7}','${R_Opt8}','${R_PrintItemBill}',
         '${R_CountTime}','${R_Return}','${R_Earn}','${R_EarnNo}','${R_NetDiff}','${R_SendOnline}','${R_BranchCode}','${R_CardPay}')`;
-    // console.log('createNewTSale:', sql)
     try {
         const results = await pool.query(sql)
         return results

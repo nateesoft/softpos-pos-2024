@@ -2,7 +2,6 @@ const pool = require('../config/database/MySqlConnect')
 
 const getAllProtab = async (pluCode) => {
     const sql = `select procode,prodesc,pdate1,pdate2,ptype,psum1 from protab`;
-    console.log('getPSetByPCode:', sql)
     const results = await pool.query(sql)
     return results
 }

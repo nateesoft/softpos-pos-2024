@@ -12,14 +12,12 @@ const { ThermalPrinterConnect } = require('./ThermalPrinter');
 
 const getBillNoByTableNo = async tableNo => {
     const sql = `select * from bill_no where B_Table='${tableNo}'`;
-    console.log('getBillNoByTableNo:', sql)
     const results = await pool.query(sql)
     return results
 }
 
 const getBillNoByRefno = async billNo => {
     const sql = `select * from billno where B_Refno='${billNo}'`;
-    console.log('getBillNoByRefno:', sql)
     const results = await pool.query(sql)
     if (results.length > 0) {
         return results[0]
@@ -29,14 +27,12 @@ const getBillNoByRefno = async billNo => {
 
 const updateNextBill = async (macno) => {
     const sql = `UPDATE poshwsetup SET receno1=receno1+1 WHERE terminal='${macno}' `;
-    console.log('updateNextBill:', sql)
     const results = await pool.query(sql)
     return results
 }
 
 const getBillIDCurrent = async (macno) => {
     const sql = `select ReceNo1 from poshwsetup where Terminal='${macno}' limit 1`;
-    console.log('getBillIDCurrent:', sql)
     const results = await pool.query(sql)
 
     let NextBillId = null;
@@ -44,8 +40,6 @@ const getBillIDCurrent = async (macno) => {
         const ReceNo1 = parseInt(results[0].ReceNo1)
         NextBillId = PrefixZeroFormat(ReceNo1, 7)
     }
-
-    console.log("NextBillId:", NextBillId)
 
     return NextBillId
 }
@@ -55,7 +49,6 @@ const addNewBill = async (payload) => {
         macno, tableNo, billType, orderList, tonAmount, paymentAmount, netTotal,
         memberInfo, cashInfo, creditInfo, transferInfo, discountInfo
     } = payload
-    // console.log('addNewBill:', payload)
     const tableFile = await getTableByCode(tableNo)
     const { Cashier, TCustomer, Food, Drink, Product } = tableFile
 
@@ -231,12 +224,10 @@ const addNewBill = async (payload) => {
         '${B_SumSetDiscAmt}','${B_DetailFood}','${B_DetailDrink}','${B_DetailProduct}','${B_KicQue}','${B_ROUNDCLOSE}',
         '${R_Opt9}','${R_Opt1}','${R_Opt2}','${R_Opt3}','${R_Opt4}','${R_Opt5}','${R_Opt6}','${R_Opt7}','${R_Opt8}',
         '${VoidMsg}','${B_EarnDocNo}','${B_UseEarnNo}','${B_UserEntertain}','${B_SendOnline}')`;
-        console.log('addNewBill:', sql)
         const results = await pool.query(sql)
         if (results) {
             // list all balance
             const allBalance = await getBalanceByTableNo(tableNo)
-            console.log('addDataFromBalance:', allBalance)
 
             // save t_sale list
             await addDataFromBalance(B_Table, B_Refno, allBalance)

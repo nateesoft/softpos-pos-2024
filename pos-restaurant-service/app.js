@@ -20,6 +20,7 @@ const billNoRouter = require('./routes/pos_restaurant/order/BillNo');
 const tSaleRouter = require('./routes/pos_restaurant/order/TSale');
 const posProductRouter = require('./routes/pos_restaurant/product/Product');
 const optionFileRouter = require('./routes/pos_restaurant/optionfile');
+const voidMsgRouter = require('./routes/pos_restaurant/order/VoidMsg');
 const creditFileRouter = require('./routes/pos_restaurant/config/creditfile');
 const genQrCode = require('./routes/payment/qrcode_promptpay')
 
@@ -74,6 +75,7 @@ app.use('/api/product', productRouter);
 app.use('/api/product_order', productOrderRouter);
 app.use('/api/menu_setup', menuSetupRouter);
 app.use('/api/optionfile', optionFileRouter);
+app.use('/api/voidmsg', voidMsgRouter);
 app.use('/api/creditfile', creditFileRouter);
 
 app.use('/api/process-stock', processStockRouter);

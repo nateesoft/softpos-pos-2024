@@ -6,14 +6,12 @@ const BalanceService = require('./BalanceService');
 
 const getSTCard = async () => {
     const sql = `select * from stcard`;
-    console.log('getSTCard:', sql)
     const results = await pool.query(sql)
     return results
 }
 
 const getSTCardBySPCode = async (S_PCode) => {
     const sql = `select * from stcard where S_PCode='${S_PCode}'`;
-    console.log('getSTCardBySPCode:', sql)
     const results = await pool.query(sql)
     return results
 }
@@ -21,7 +19,6 @@ const getSTCardBySPCode = async (S_PCode) => {
 const SeekStkFile = async (TempCode, T_Stk) => {
     const sql = `select bpcode from stkfile 
     where (bpcode='${TempCode}') and (bstk='${T_Stk}') limit 1 `;
-    console.log('SeekStkFile:', sql)
     const results = await pool.query(sql)
     if (results.length > 0) {
         return results[0]
@@ -31,7 +28,6 @@ const SeekStkFile = async (TempCode, T_Stk) => {
 
 const getPSetByPCode = async (TempCode) => {
     const sql = `select * from pset where pcode='${TempCode}'`;
-    console.log('getPSetByPCode:', sql)
     const results = await pool.query(sql)
     return results
 }
@@ -39,7 +35,6 @@ const getPSetByPCode = async (TempCode) => {
 const getBalanceSetByPCodeRIndex = async (XCode, R_Index) => {
     const sql = `select * from balanceset 
     where r_plucode='${XCode}' and r_index='${R_Index}' `;
-    console.log('getBalanceSetByPCodeRIndex:', sql)
     const results = await pool.query(sql)
     return results
 }
@@ -48,14 +43,12 @@ const getTSaleSet = async (XCode, r_index, XDocNo) => {
     const sql = `select * from t_saleset 
     where r_plucode='${XCode}' 
     and r_index='${r_index}'  and r_refno='${XDocNo}' `;
-    console.log('getTSaleSet:', sql)
     const results = await pool.query(sql)
     return results
 }
 
 const getCompany = async () => {
     const sql = `select * from company limit 1`;
-    console.log('getTSaleSet:', sql)
     const results = await pool.query(sql)
     if (results.length > 0) {
         return results[0]
@@ -65,7 +58,7 @@ const getCompany = async () => {
 
 const GetActionMon = async () => {
     const Company = await getCompany()
-    let TempYear = Company.Accterm ? moment(Company.Accterm).format("YYYY"): moment().format("YYYY")
+    let TempYear = Company.Accterm ? moment(Company.Accterm).format("YYYY") : moment().format("YYYY")
     let CurYear = moment().format('YYYY')
     let CurMonth = moment().format('MM')
 
@@ -216,7 +209,6 @@ const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InC
     const S_Stk = "A1"
     const S_EntryDate = moment().format('YYYY-MM-DD')
     const S_EntryTime = moment().format('HH:mm');
-    // console.log('(ProcessStockOut)')
 
     // remove from stock
     let sql = `INSERT INTO stcard 
@@ -226,7 +218,6 @@ const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InC
     '${S_Stk}','${S_In}','${S_Out}',
     '${S_InCost}','${S_OutCost}','${S_ACost}','${S_Rem}','${S_User}',
     '${S_EntryDate}','${S_EntryTime}','${S_Link}')`
-    // console.log('ProcessStockOut:', sql)
     await pool.query(sql)
 
     let TempAct = await GetActionMon()
@@ -236,10 +227,11 @@ const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InC
         await pool.query(sql1, [S_PCode, S_Stk])
     }
 
+    const qtyAdjust = SaleOrRefund === "SALE" ? S_Out : (S_In * -1)
     for (let i = TempAct; i <= 24; i++) {
         let T_Mon = "bqty" + i;
         let sql1 = `update stkfile set ${T_Mon}=${T_Mon}-? where (bpcode=?) and (bstk=?)`
-        await pool.query(sql1, [S_Out, S_PCode, S_Stk])
+        await pool.query(sql1, [qtyAdjust, S_PCode, S_Stk])
     }
 
     // check pset or not

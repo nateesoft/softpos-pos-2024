@@ -142,10 +142,6 @@ router.post('/', (req, res) => {
 
 // void or refund menu in balance
 router.post('/void', (req, res) => {
-  const { R_Index } = req.body
-  if (Object.keys(req.body).length === 0) {
-    throw new Error("R_Index !!!")
-  }
   BalanceService.voidMenuBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
