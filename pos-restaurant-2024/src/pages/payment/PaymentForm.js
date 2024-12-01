@@ -1,18 +1,18 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Checkbox, Modal, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid2, Modal, Paper, TextField, Typography } from "@mui/material";
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import Grid from '@mui/material/Grid2'
 import DiscountIcon from '@mui/icons-material/Discount';
-import AddPaymentMethodIcon from '@mui/icons-material/AddBoxOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from "axios"
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
-import SplitBiPayment from "./SplitBillPayment"
 
+import SplitBiPayment from "./SplitBillPayment"
 import { POSContext } from "../../AppContext";
 import QrCodeGenerator from "./QRCodePayment";
+import CreditChargeModal from "./CreditChargeModal";
 
 function ccyFormat(num) {
     return `${Math.round(num).toFixed(2)}`;
@@ -55,7 +55,6 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
     const [cashAmount, setCashAmount] = useState(0)
 
     // credit info
-    const [creditEnable, setCreditEnable] = useState(true)
     const [crCode, setCrCode] = useState("")
     const [creditNumber, setCreditNumber] = useState("")
     const [creditRef, setCreditRef] = useState("")
@@ -67,54 +66,57 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
     const [openTransferInfo, setOpenTransferInfo] = useState(false)
 
     // transfer info
-    const [transferEnable, setTransferEnable] = useState(true)
     const [transferAmount, setTransferAmount] = useState(0)
     const [transferAccountNo, setTransferAccountNo] = useState("")
     const [transferToAccount, setTransferToAccount] = useState("0864108403")
     const [transferAccount, setTransferAccount] = useState("")
 
     const [openSplitBill, setOpenSplitBill] = useState(false)
+    const [openCreditFile, setOpenCreditFile] = useState(false)
 
     const navigate = useNavigate();
     const handleBackPage = () => {
         navigate(`/sale/${tableNo}`);
     }
 
-    const handleCashEnabled = () => {
-        if (!cashEnable) {
-            setCashAmount(0)
-        }
-        setCashEnable(!cashEnable)
+    const handleCreditInfoSelect = (cInfo) => {
+        console.log('cInfo:', cInfo, R_NetTotal)
+        const totalCreditCharge = Math.abs(R_NetTotal) * cInfo.crCharge / 100
+        const totalCreditChargeAmount = Math.abs(R_NetTotal) + totalCreditCharge
+        setCrCode(cInfo.crCode)
+        setCreditNumber("")
+        setCreditRef("")
+        setCreditChargePercent(cInfo.crCharge)
+        setCreditChargeAmount(totalCreditCharge)
+        setCreditAmount(totalCreditChargeAmount)
     }
+
     const handleCreditEnabled = () => {
-        if (!creditEnable) {
-            setCreditAmount(0)
-        }
-        if (creditEnable) {
-            setOpenCreditInfo(true)
-        }
-        setCreditEnable(!creditEnable)
+        setOpenCreditInfo(true)
     }
     const handleTransferEnabled = () => {
-        if (!transferEnable) {
-            setTransferAmount(0)
-        }
-        if (transferEnable) {
-            setOpenTransferInfo(true)
-        }
-        setTransferEnable(!transferEnable)
+        setTransferAmount(R_NetTotal)
+        setOpenTransferInfo(true)
     }
 
     const handleAdd = (addMoney) => {
-        if (!cashEnable) {
+        if (cashEnable) {
             setCashAmount(cash => cash + addMoney)
             totalAmount()
         }
     }
     const handleConcat = (addMoney) => {
-        if (!cashEnable) {
+        if (cashEnable) {
             setCashAmount(cash => parseFloat("" + cash + addMoney))
         }
+    }
+
+    const handleShowOpenCreditFile = () => {
+        setCreditAmount(0)
+        setCrCode("")
+        setCreditChargeAmount()
+        setBalanceAmount(0)
+        setOpenCreditFile(true)
     }
 
     const totalAmount = useCallback(() => {
@@ -154,7 +156,6 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                     cashAmount
                 },
                 creditInfo: {
-                    creditEnable,
                     crCode,
                     creditNumber,
                     creditRef,
@@ -163,7 +164,6 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                     creditAmount
                 },
                 transferInfo: {
-                    transferEnable,
                     transferAmount,
                     transferAccountNo,
                     transferAccount
@@ -205,6 +205,11 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
         }
     }
 
+    const cancelTransferAmount = () => {
+        setTransferAmount(0)
+        setOpenTransferInfo(false)
+    }
+
     useEffect(() => {
         console.log('useEffect PaymentForm')
         totalAmount()
@@ -223,42 +228,46 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                     <Grid size={6}>
                         <Paper elevation={3} sx={{ padding: "10px" }}>
                             <Box display="flex" justifyContent="space-between" margin={2}>
-                                <img width={60} src={"/images/payment/cash.png"} alt="" style={{ marginRight: "20px" }} />
+                                <img width={48} height={48} src={"/images/payment/cash.png"} alt="" style={{marginRight: "8px"}} />
                                 <TextField
                                     type="number"
                                     value={cashAmount}
+                                    onFocus={()=>setCashEnable(true)}
                                     onChange={e => setCashAmount(e.target.value)}
                                     onKeyUp={totalAmount}
                                     id="txtCashAmount"
                                     label="ชำระด้วยเงินสด"
-                                    disabled={cashEnable}
+                                    fullWidth
                                     inputProps={{ min: 0, style: { textAlign: "right" } }} />
-                                <Checkbox onChange={handleCashEnabled} icon={<AddPaymentMethodIcon fontSize="large" />} />
                             </Box>
                             <Box display="flex" justifyContent="space-between" margin={2}>
-                                <img width={60} src={"/images/payment/credit-card.png"} alt="" style={{ marginRight: "20px" }} />
-                                <TextField
-                                    type="number"
-                                    value={creditAmount}
-                                    onChange={e => setCreditAmount(e.target.value)}
-                                    onKeyUp={totalAmount}
-                                    id="txtCreditAmount"
-                                    label="ชำระด้วยบัตรเครดิต"
-                                    disabled={creditEnable}
-                                    inputProps={{ min: 0, style: { textAlign: "right" } }} />
-                                <Checkbox onChange={handleCreditEnabled} icon={<AddPaymentMethodIcon fontSize="large" />} />
+                                <Grid2 container spacing={1}>
+                                    <img width={48} src={"/images/payment/banking_money.png"} alt="" />
+                                    <TextField
+                                        type="number"
+                                        value={transferAmount}
+                                        onChange={e => setTransferAmount(e.target.value)}
+                                        id="txtTransferAmount"
+                                        label="เงินโอน"
+                                        disabled
+                                        inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                                    <Button variant="outlined" onClick={handleTransferEnabled}>...</Button>
+                                </Grid2>
                             </Box>
                             <Box display="flex" justifyContent="space-between" margin={2}>
-                                <img width={55} src={"/images/payment/banking_money.png"} alt="" style={{ marginRight: "20px" }} />
-                                <TextField
-                                    type="number"
-                                    value={transferAmount}
-                                    onChange={e => setTransferAmount(e.target.value)}
-                                    id="txtTransferAmount"
-                                    label="เงินโอน"
-                                    disabled={transferEnable}
-                                    inputProps={{ min: 0, style: { textAlign: "right" } }} />
-                                <Checkbox onChange={handleTransferEnabled} icon={<AddPaymentMethodIcon fontSize="large" />} />
+                                <Grid2 container spacing={1} justifyContent="space-between">
+                                    <img width={48} src={"/images/payment/credit-card.png"} alt="" />
+                                    <TextField
+                                        type="number"
+                                        value={creditAmount}
+                                        onChange={e => setCreditAmount(e.target.value)}
+                                        onKeyUp={totalAmount}
+                                        id="txtCreditAmount"
+                                        label="ชำระด้วยบัตรเครดิต"
+                                        disabled
+                                        inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                                    <Button variant="outlined" onClick={handleCreditEnabled}>...</Button>
+                                </Grid2>
                             </Box>
                             <Box display="flex" justifyContent="flex-end" margin={2}>
                                 <TextField
@@ -359,7 +368,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                             <Grid size={12}>
                                 <Box sx={{ marginTop: "30px" }} textAlign="center">
                                     <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}>ย้อนกลับ</Button>
-                                    <Button variant="contained" color="secondary" 
+                                    <Button variant="contained" color="secondary"
                                         onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled={false}>
                                         แยกชำระ
                                     </Button>
@@ -375,11 +384,15 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle, width: "350px", padding: "5px" }}>
                     <Grid container spacing={2} padding={2} justifyContent="center" direction="column">
-                        <TextField variant="outlined" label="CrCode" value={crCode} onChange={e => setCrCode(e.target.value)} />
+                        <Grid2 container>
+                            <TextField variant="outlined" label="CrCode" value={crCode} onChange={e => setCrCode(e.target.value)} />
+                            <Button variant="contained" onClick={() => handleShowOpenCreditFile()}>...</Button>
+                        </Grid2>
                         <TextField variant="outlined" label="เลขที่บัตรเครดิต" value={creditNumber} onChange={e => setCreditNumber(e.target.value)} />
                         <TextField variant="outlined" label="approve code" value={creditRef} onChange={e => setCreditRef(e.target.value)} />
                         <TextField variant="outlined" disabled type="number" label="Credit Charge" value={creditChargePercent} />
                         <TextField variant="outlined" disabled type="number" label="Charge Amount" value={creditChargeAmount} />
+                        <TextField variant="outlined" type="number" label="ยอดค้างชำระ" value={0} disabled />
                         <TextField variant="outlined" type="number" label="จำนวนเงินที่ใส่เครดิต" value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
                     </Grid>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
@@ -410,7 +423,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                         <Typography>โอนเข้าบัญชี {transferToAccount}</Typography>
                     </Box>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
-                        <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={() => setOpenTransferInfo(false)}>ยกเลิก</Button>
+                        <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={cancelTransferAmount}>ยกเลิก</Button>
                         <Button variant="contained" sx={{ margin: "5px" }} onClick={() => setOpenTransferInfo(false)} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
                     </Box>
                 </Box>
@@ -418,6 +431,14 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
             <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
                 <Box sx={{ ...modalStyle, width: "80%" }}>
                     <SplitBiPayment onClose={() => setOpenSplitBill(false)} />
+                </Box>
+            </Modal>
+            <Modal open={openCreditFile}>
+                <Box sx={{ ...modalStyle, width: "80%" }}>
+                    <CreditChargeModal
+                        setClose={() => setOpenCreditFile(false)}
+                        setCreditInfo={handleCreditInfoSelect}
+                    />
                 </Box>
             </Modal>
         </Grid>

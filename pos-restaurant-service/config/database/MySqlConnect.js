@@ -17,11 +17,7 @@ const config = {
   user: process.env.MYSQL5_DB_USER,
   password: process.env.MYSQL5_DB_PASSWORD,
   database: process.env.MYSQL5_DB_NAME,
-  port: process.env.MYSQL5_DB_PORT,
-  // connectionLimit: 1000,
-  // connectTimeout: 60 * 60 * 1000,
-  // acquireTimeout: 60 * 60 * 1000,
-  // timeout: 60 * 60 * 1000
+  port: process.env.MYSQL5_DB_PORT
 }
 const pool = mysqlConnection.createConnection(config);
 // console.log('MySqlConnect config:', config)
@@ -30,6 +26,7 @@ pool.query("SELECT 5+0 AS solution", function (error, results, fields) {
   if (error) throw error
   console.log("Connect old mysql ip: ", config.host)
   console.log("Connect old mysql version: ", results[0].solution)
+  console.log('##### ##### #####')
 })
 
 pool.query = util.promisify(pool.query)

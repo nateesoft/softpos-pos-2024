@@ -27,6 +27,7 @@ pool.query("SELECT 4+4 AS solution", function (error, results, fields) {
   }
   console.log("Connect new mysql ip: ", config.host)
   console.log("Connect new mysql version: ", results[0].solution)
+  console.log('##### ##### #####')
 })
 
 pool.query = util.promisify(pool.query)

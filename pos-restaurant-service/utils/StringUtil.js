@@ -1,5 +1,5 @@
 const Unicode2ASCII = unicode => {
-    if (process.env.IS_OLD_MYSQL5 === "N") {
+    if (process.env.CONVERT_LATIN_UTF === "N") {
         return unicode
     }
     if (!unicode) return '';
@@ -15,7 +15,7 @@ const Unicode2ASCII = unicode => {
 }
 
 const ASCII2Unicode = ascii => {
-    if (process.env.IS_OLD_MYSQL5 === "N") {
+    if (process.env.CONVERT_LATIN_UTF === "N") {
         return ascii
     }
     if (!ascii) return '';

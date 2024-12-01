@@ -23,7 +23,7 @@ const OrderItem = ({ tableNo, orderList }) => {
       <Box sx={{ padding: "10px", borderRadius: "5px", backgroundColor: "#123456" }}>
         <Button variant='text' sx={{fontWeight: "bold", fontSize: "18px", color: "white"}}>Table No: {tableNo}</Button>
       </Box>
-      <TableContainer sx={{width: "300px", overflow: "auto"}}>
+      <TableContainer sx={{width: "415px", overflow: "auto"}}>
         <Table aria-label="spanning table">
           <TableBody>
             {orderList && orderList.map((order) => (

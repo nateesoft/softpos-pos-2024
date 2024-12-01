@@ -1,3 +1,4 @@
+const moment = require('moment')
 const pool = require('../config/database/MySqlConnect')
 
 const updateTableAvailableStatus = async tableNo => {
@@ -10,6 +11,19 @@ const updateTableOpenStatus = async (tableNo, Cashier, TUser) => {
     const sql = `update tablefile 
     set TOnact='Y', Cashier='${Cashier}', TUser=${TUser} 
     where TCode='${tableNo}'`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const updateMember = async (memberInfo, tableNo) => {
+    const memBegin = moment(memberInfo.Member_AppliedDate).format('YYYY-MM-DD')
+    const memEnd = moment(memberInfo.Member_ExpiredDate).format('YYYY-MM-DD')
+    const sql = `UPDATE tablefile SET 
+    MemCode='${memberInfo.Member_Code}',
+    MemName='${memberInfo.Member_NameThai}',
+    MemBegin='${memBegin}',
+    MemEnd='${memEnd}' 
+    WHERE Tcode='${tableNo}'`;
     const results = await pool.query(sql)
     return results
 }
@@ -36,5 +50,6 @@ module.exports = {
     getTableByCode,
     updateTableAvailableStatus,
     updateTableOpenStatus,
-    checkTableOpen
+    checkTableOpen,
+    updateMember
 }

@@ -151,7 +151,7 @@ function PaymentPage() {
       <Grid container spacing={2} sx={backgroundSpecial}>
         {matches && <Grid size={4}>
           <OrderItem tableNo={tableNo} orderList={orderList} />
-          <MemberInfo />
+          <MemberInfo tableNo={tableNo} />
         </Grid>}
         <Grid size={matches ? 8 : 12}>
           <PaymentForm 

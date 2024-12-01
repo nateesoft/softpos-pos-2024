@@ -21,7 +21,7 @@ const tSaleRouter = require('./routes/pos_restaurant/order/TSale');
 const posProductRouter = require('./routes/pos_restaurant/product/Product');
 const optionFileRouter = require('./routes/pos_restaurant/optionfile');
 const voidMsgRouter = require('./routes/pos_restaurant/order/VoidMsg');
-const creditFileRouter = require('./routes/pos_restaurant/config/creditfile');
+const creditFileRouter = require('./routes/pos_restaurant/order/CreditFile');
 const genQrCode = require('./routes/payment/qrcode_promptpay')
 
 // for New POS apis
@@ -31,6 +31,9 @@ const menuSetupRouter = require('./routes/pos/menu_setup');
 const ordersRouter = require('./routes/pos/orders');
 const productRouter = require('./routes/pos/product');
 const productOrderRouter = require('./routes/pos/product_order');
+
+// for CRM POS
+const memmasterRouter = require('./routes/member/crm/Memmaster');
 
 // for printer thermal
 const printerThermalRouter = require('./routes/printer');
@@ -81,6 +84,9 @@ app.use('/api/creditfile', creditFileRouter);
 app.use('/api/process-stock', processStockRouter);
 app.use('/api/stkfile', stkFileRouter);
 app.use('/api/stcard', stcardRouter);
+
+// crm member
+app.use('/api/crm/member', memmasterRouter)
 
 // route for test printer
 app.use('/api/printer-thermal', printerThermalRouter)
