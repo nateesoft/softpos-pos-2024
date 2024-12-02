@@ -17,6 +17,7 @@ function createWindow() {
   mainWindow.setMenu(null)
   const DESKTOP_RUNNING = process.env.DESKTOP
   const MACNO = process.env.MACNO
+  const WEB_HOSTING = process.env.WEB_HOSTING
 
   const prodUrlPath = `file://${path.join(__dirname, 'build/index.html')}`
   const startURL = isDev ? `${WEB_HOSTING}/register-macno?macno=${MACNO}` : prodUrlPath;
