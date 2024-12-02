@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path')
+require('dotenv').config();
 
 const isDev = true
 let mainWindow;
@@ -13,9 +14,12 @@ function createWindow() {
     },
   });
 
-  const prodUrlPath = `file://${path.join(__dirname, 'build/index.html')}`
+  mainWindow.setMenu(null)
+  const DESKTOP_RUNNING = process.env.DESKTOP
+  const MACNO = process.env.MACNO
 
-  const startURL = isDev ? 'http://localhost:3000' : prodUrlPath;
+  const prodUrlPath = `file://${path.join(__dirname, 'build/index.html')}`
+  const startURL = isDev ? `${WEB_HOSTING}/register-macno?macno=${MACNO}` : prodUrlPath;
 
   mainWindow.loadURL(startURL);
   mainWindow.on('closed', () => (mainWindow = null));
