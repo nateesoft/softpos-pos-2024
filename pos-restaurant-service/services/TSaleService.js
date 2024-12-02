@@ -132,7 +132,7 @@ const processAllPIngredentReturnStock = async (S_No, PCode, R_Quan, Cashier) => 
             const PStock = "Y"
             const PSet = "N"
             const r_index = ""
-            const SaleOrRefund = "SALE" // SALE or REFUND
+            const SaleOrRefund = "VOID" // SALE or REFUND
 
             await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, S_OutCost, 
                 S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
@@ -183,7 +183,7 @@ const processAllPSetReturn = async (S_No, PCode, R_Quan, Cashier) => {
         const PStock = "N"
         const PSet = "N"
         const r_index = ""
-        const SaleOrRefund = "SALE" // SALE or REFUND
+        const SaleOrRefund = "VOID" // SALE or REFUND
 
         await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, 
             S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);

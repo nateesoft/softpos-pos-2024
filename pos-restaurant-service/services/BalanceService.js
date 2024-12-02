@@ -523,94 +523,6 @@ const returnStockIn = async (R_Index) => {
     }
 }
 
-const processVoid = async (RIndex, LoginName) => {
-    const balance = await getBalanceByRIndex(RIndex);
-
-    if (balance.R_Void === "V") {
-        balance.R_Void = ""
-        balance.R_VoidUser = ""
-        balance.R_VoidTime = ""
-        balance.R_DiscBath = 0.00
-
-        let StkRemark;
-        let DocNo;
-        let StkCode = "A1"
-
-        let PublicVar = {}//temp wait remove
-        if (PublicVar.ChargeCode === "") {
-            StkRemark = "SAL";
-            DocNo = "EV" + balance.R_Table + "/" + moment().format('HH:mm:ss')
-        } else {
-            StkRemark = "FRE";
-            if (PublicVar.ChargeDocNo === "") {
-                DocNo = balance.R_Table + "/" + moment().format('HH:mm:ss')
-                PublicVar.ChargeDocNo = DocNo;
-            } else {
-                DocNo = PublicVar.ChargeDocNo;
-            }
-        }
-
-        const TDate = moment().format('YYYY-MM-DD')
-        STCardService.ProcessStockOut(DocNo, StkCode, balance.R_PluCode, TDate, StkRemark, balance.R_Quan, balance.R_Total, balance.Cashier, balance.R_Stock, balance.R_Set, balance.R_Index, "SALE");
-
-        const listING = await listIngredeint(balance.balance.R_PluCode)
-        //ตัดสต็อกสินค้าที่มี Ingredent
-        listING.forEach(ingbalance => {
-            let R_PluCode = ingbalance.PingCode
-            let PBPack = ingbalance.PBPack
-            if (PBPack <= 0) {
-                PBPack = 1;
-            }
-            let R_QuanIng = ingbalance.PingQty * balance.R_Quan
-            let R_Total = 0;
-            STCardService.ProcessStockOut(DocNo, StkCode, R_PluCode, TDate, StkRemark, R_QuanIng, R_Total, balance.Cashier, "Y", "", "", "")
-        })
-    } else {
-        balance.R_Void = "V"
-        balance.R_VoidUser = LoginName;
-        balance.R_VoidTime = moment().format('HH:mm:ss')
-        balance.R_DiscBath = 0.00
-
-        let StkCode = "A1";
-        let StkRemark;
-        let DocNo;
-        if (PublicVar.ChargeCode === "") {
-            StkRemark = "SAL";
-            DocNo = "V" + balance.R_Table + "/" + moment().format('HH:mm:ss')
-        } else {
-            StkRemark = "FRE";
-            if (PublicVar.ChargeDocNo === "") {
-                DocNo = balance.R_Table + "/" + moment().format('HH:mm:ss')
-                PublicVar.ChargeDocNo = DocNo;
-            } else {
-                DocNo = PublicVar.ChargeDocNo;
-            }
-        }
-
-        const TDate = moment().format('YYYY-MM-DD')
-        STCardService.ProcessStockOut(DocNo, StkCode, balance.R_PluCode, TDate, StkRemark, -1 * balance.R_Quan, -1 * balance.R_Total,
-            posUser.UserName, balance.R_Stock, balance.R_Set, balance.R_Index, "SALE");
-
-        //ตัดสต็อกสินค้าที่มี Ingredent
-        const listING = await listIngredeint(balance.R_PluCode);
-        listING.forEach(ingBean => {
-            let R_PluCode = ingBean.PingCode
-            let PBPack = ingBean.PBPack
-            if (PBPack <= 0) {
-                PBPack = 1;
-            }
-            let R_QuanIng = (ingBean.PingQty * bean.R_Quan);
-            let R_Total = 0;
-            STCardService.ProcessStockOut(DocNo, StkCode, R_PluCode, TDate, StkRemark, -1 * R_QuanIng, R_Total, posUser.UserName, "Y", "", "", "");
-        })
-    }
-
-    //update promotion, discount
-    // BalanceControl.updateProSerTable(tableNo, memberBean);
-    PublicVar.ErrorColect = false;
-    PublicVar.TableRec_DiscBath = 0.0;
-}
-
 module.exports = {
     getAllBalance,
     emptyTableBalance,
@@ -628,7 +540,6 @@ module.exports = {
     getBalanceByRIndex,
     orderStockOut,
     returnStockIn,
-    processVoid,
     getVoidMsgList,
     deleteBalanceOnly
 }
