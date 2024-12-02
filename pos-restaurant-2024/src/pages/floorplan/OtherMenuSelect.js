@@ -10,12 +10,14 @@ import Splitscreen from "@mui/icons-material/Splitscreen"
 import PrintIcon from "@mui/icons-material/Print"
 import RefundIcon from "@mui/icons-material/ReceiptLong"
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import TableBar from "@mui/icons-material/TableBar"
 
 import RecieptCopyPrint from "./RecieptCopyPrint"
 import RefundBill from "./RefundBill"
 import ManageCashDrawer from './ManageCashDrawer';
 import NumberPadLock from '../utils/NumberPadLock';
 import ManageCustTable from './ManageCustTable';
+import { useNavigate } from 'react-router-dom';
 
 const modalPinStyle = {
     position: "absolute",
@@ -26,6 +28,7 @@ const modalPinStyle = {
 
 const OtherMenuSelect = (props) => {
     const { sxStyle = { color: "white" }, variant = 'outlined' } = props
+    const navigate = useNavigate()
 
     const [value, setValue] = useState("main")
     const [openCopyPrint, setOpenCopyPrint] = useState(false)
@@ -44,17 +47,19 @@ const OtherMenuSelect = (props) => {
             setOpenMgrCashDrawer(true)
         } else if (data === 'MgrTable') {
             setOpenPinMgrTable(true)
+        } else if (data === 'SetupTableFlorPlan') {
+            navigate("/table-setup")
         }
         setValue(data)
     };
 
     const handleCloseModal = (func) => {
         func()
-        setValue("")
+        setValue("main")
     }
 
     return (
-        <Box sx={{ minWidth: 250, border: "1px solid orange", borderRadius: "5px" }}>
+        <Box sx={{ border: "1px solid orange", borderRadius: "5px" }}>
             <FormControl fullWidth>
                 <Select
                     labelId="demo-simple-select-label"
@@ -66,7 +71,7 @@ const OtherMenuSelect = (props) => {
                 >
                     <MenuItem value="main">
                         <Box display="flex" justifyContent="center">
-                            <SettingsSuggestIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>Other Setup</Typography>
+                            <SettingsSuggestIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>ตั้งค่าระบบ</Typography>
                         </Box>
                     </MenuItem>
                     <Divider />
@@ -89,6 +94,12 @@ const OtherMenuSelect = (props) => {
                     <MenuItem value="MgrTable">
                         <Box display="flex" justifyContent="center">
                             <Splitscreen sx={{ marginRight: "10px" }} /> <Typography variant='p'>แยกโต๊ะ / รวมโต๊ะ</Typography>
+                        </Box>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem value="SetupTableFlorPlan">
+                        <Box display="flex" justifyContent="center">
+                            <TableBar sx={{ marginRight: "10px" }} /> <Typography variant='p'>จัดการโต๊ะ</Typography>
                         </Box>
                     </MenuItem>
                 </Select>

@@ -5,6 +5,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { Divider, Typography } from '@mui/material';
 
+import MicrowaveIcon from '@mui/icons-material/Microwave';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +30,8 @@ const ReportSelect = (props) => {
             viewReport("4")
         } else if (data === 'saleReport5') {
             viewReport("5")
+        } else if (data === 'print2kic') {
+            navigate("/kitchen-monitor")
         }
 
         setValue("");
@@ -39,7 +42,7 @@ const ReportSelect = (props) => {
     }
 
     return (
-        <Box sx={{ minWidth: 250, border: "1px solid white", borderRadius: "5px" }}>
+        <Box sx={{ border: "1px solid white", borderRadius: "5px" }}>
             <FormControl fullWidth>
                 <Select
                     labelId="demo-simple-select-label"
@@ -51,7 +54,7 @@ const ReportSelect = (props) => {
                 >
                     <MenuItem value="overview">
                         <Box display="flex" justifyContent="center">
-                            <AssessmentIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>Sale Reports</Typography>
+                            <AssessmentIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>รายงาน</Typography>
                         </Box>
                     </MenuItem>
                     <Divider />
@@ -84,6 +87,12 @@ const ReportSelect = (props) => {
                     <MenuItem value="saleReport5">
                         <Box display="flex" justifyContent="center">
                             <SummarizeIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>รายงานการขาย 5</Typography>
+                        </Box>
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem value="print2kic">
+                        <Box display="flex" justifyContent="center">
+                            <MicrowaveIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>รายงานส่งครัว</Typography>
                         </Box>
                     </MenuItem>
                 </Select>

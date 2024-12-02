@@ -60,7 +60,7 @@ const addNewBill = async (payload) => {
         creditRef,
         creditChargePercent,
         creditChargeAmount,
-        creditAmount
+        creditAmount,
     } = creditInfo
     const {
         transferEnable,

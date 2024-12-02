@@ -42,6 +42,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
       .then(response => {
         initLoadMenu()
         initLoadOrder()
+        setOpen(false)
       })
       .catch(err => {
         console.log(err)

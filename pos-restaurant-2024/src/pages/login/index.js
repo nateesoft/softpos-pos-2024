@@ -168,55 +168,24 @@ export default function Login() {
                             autoComplete="new-password"
                           />
                         </Grid>
-                        <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
-                          <Stack direction="row" spacing={2}>
-                            <FormControlLabel
-                              sx={{ width: "60%" }}
-                              onClick={() => setRemember(!remember)}
-                              control={<Checkbox checked={remember} />}
-                              label="Remember"
-                            />
-                            <Typography
-                              variant="body1"
-                              component="span"
-                              onClick={() => {
-                                navigate("/reset-password")
-                              }}
-                              style={{ marginTop: "10px", cursor: "pointer" }}
-                            >
-                              Forgot ?
-                            </Typography>
-                          </Stack>
-                        </Grid>
                         <Grid item xs={12} sx={{ ml: "5em", mr: "5em" }}>
                           <Button
                             type="submit"
                             variant="contained"
                             fullWidth
                             size="large"
+                            color="primary"
                             sx={{
                               mt: "10px",
                               mr: "20px",
                               borderRadius: 28,
                               color: "#ffffff",
                               minWidth: "170px",
-                              backgroundColor: "#FF9A01"
+                              backgroundColor: "chocolate"
                             }}
                           >
                             Login
                           </Button>
-                        </Grid>
-                        <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
-                          <Stack direction="row" spacing={2}>
-                            <span
-                              style={{ color: "#beb4fb", cursor: "pointer" }}
-                              onClick={() => {
-                                navigate("/register")
-                              }}
-                            >
-                              Create an Account
-                            </span>
-                          </Stack>
                         </Grid>
                       </Grid>
                     </Box>

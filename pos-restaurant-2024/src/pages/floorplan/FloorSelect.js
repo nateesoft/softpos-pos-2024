@@ -19,7 +19,7 @@ const FloorSelect = (props) => {
     };
 
     return (
-        <Box sx={{ minWidth: 250, border: "1px solid gold", borderRadius: "5px" }}>
+        <Box sx={{ border: "1px solid gold", borderRadius: "5px" }}>
             <FormControl fullWidth>
                 <Select
                     labelId="demo-simple-select-label"

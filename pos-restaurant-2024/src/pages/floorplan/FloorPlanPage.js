@@ -15,10 +15,10 @@ import {
 } from "@xyflow/react"
 import { useNavigate } from "react-router-dom"
 import Modal from "@mui/material/Modal"
-import { AppBar, Box, Button, IconButton, Toolbar, useMediaQuery } from "@mui/material"
+import { AppBar, Box, Button, Grid2, IconButton, Toolbar, Typography, useMediaQuery } from "@mui/material"
 import TableBar from "@mui/icons-material/TableBar"
 import ExitToApp from "@mui/icons-material/ExitToApp"
-import MicrowaveIcon from '@mui/icons-material/Microwave';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { motion } from "framer-motion"
 import axios from "axios"
 
@@ -93,14 +93,6 @@ function FloorPlanPage() {
         handleErrorMessage(error)
       })
   }, [setOpenLogout, navigate, appData, setAppData])
-
-  const kitchenReport = () => {
-    navigate("/kitchen-monitor")
-  }
-
-  const setupFloorPlan = () => {
-    navigate("/table-setup")
-  }
 
   const handleErrorMessage = (message) => {
     setNotiMessage(message)
@@ -191,44 +183,32 @@ function FloorPlanPage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <AppBar component="nav" sx={{ backgroundColor: "#123456", boxShadow: "5px 3px #aaa" }}>
-        <Toolbar>
-          <Box sx={{ flexGrow: 1 }}>
-            <IconButton color="inherit" aria-label="open drawer" edge="start">
-              <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
-            </IconButton>
-            <IconButton color="inherit" aria-label="open drawer" edge="start">
-              <OtherMenuSelect />
-            </IconButton>
-            <IconButton color="inherit" aria-label="open drawer" edge="start">
-              <ReportSelect />
-            </IconButton>
-          </Box>
-          <Box margin={3} display="flex" justifyContent="space-around">
-            Userlogin: {userLogin}
-          </Box>
-          <Box display="flex" justifyContent="space-evenly">
-            <Button
-              variant="contained"
-              onClick={kitchenReport}
-              color="secondary"
-              startIcon={<MicrowaveIcon />} sx={{ marginRight: "10px" }}
-            >
-              รายงานส่งครัว
-            </Button>
-            <Button
-              variant="contained"
-              onClick={setupFloorPlan}
-              startIcon={<TableBar />} sx={{ marginRight: "10px" }}
-            >
-              จัดการโต๊ะ
-            </Button>
-            <Button variant="contained" color="error" onClick={() => setOpenLogout(true)} endIcon={<ExitToApp />}>
-              Logout
-            </Button>
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar component="static" sx={{ backgroundColor: "#123456", boxShadow: "5px 3px #aaa" }}>
+          <Toolbar>
+            <Grid2 container justifyContent="flex-start">
+              <IconButton color="inherit" aria-label="open drawer" edge="start">
+                <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
+              </IconButton>
+              <IconButton color="inherit" aria-label="open drawer" edge="start">
+                <OtherMenuSelect />
+              </IconButton>
+              <IconButton color="inherit" aria-label="open drawer" edge="start">
+                <ReportSelect />
+              </IconButton>
+            </Grid2>
+            <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{flexGrow: 1}}>
+              <IconButton>
+                <AccountCircleIcon sx={{color: "snow"}} />
+              </IconButton>
+              <Typography>User: {userLogin}</Typography>
+              <Button variant="contained" color="error" onClick={() => setOpenLogout(true)} endIcon={<ExitToApp />}>
+                Logout
+              </Button>
+            </Grid2>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <ReactFlowProvider>
         <div
           className="reactflow-wrapper"
