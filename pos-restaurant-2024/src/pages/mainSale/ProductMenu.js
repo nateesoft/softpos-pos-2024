@@ -122,25 +122,40 @@ const ProductMenu = ({
                 userLogin,
                 empCode
             })
-            .then(response => {
+            .then(async response => {
                 initLoadMenu()
                 initLoadOrder()
                 console.log('addOrderMain:', response)
-                setRLinkIndex(response.data.data)
+                const R_LinkIndex = response.data.data
+                setRLinkIndex(R_LinkIndex)
+
+                // add sub menu in set
+                let allListToAdd = optionalList.filter(item => item.checked === true)
+                if (allListToAdd.length === 0) {
+                    allListToAdd = optionalList.filter(item => item.auto_select === 'Y')
+                }
+                console.log('allListToAdd:', allListToAdd)
+                await addOrderSubMenuList(tableNo, allListToAdd, R_LinkIndex)
+
+                // total summary display
+                initLoadMenu()
+                initLoadOrder()
+
+                setShowMenuSet(false)
             })
             .catch(err => {
                 console.log(err)
             })
     }
 
-    const addOrderSubMenuList = async (tableNo, optionalList) => {
+    const addOrderSubMenuList = async (tableNo, optionalList, R_LinkIndex) => {
         await axios.post(`/api/balance/addList`, {
             listBalance: optionalList,
             tableNo,
             macno,
             userLogin,
             empCode,
-            R_LinkIndex
+            R_LinkIndex: R_LinkIndex
         })
     }
 
@@ -154,20 +169,6 @@ const ProductMenu = ({
 
             // add main product
             await addOrderMain(productInfo)
-
-            // add sub menu in set
-            let allListToAdd = optionalList.filter(item => item.checked === true)
-            if (allListToAdd.length === 0) {
-                allListToAdd = optionalList.filter(item => item.auto_select === 'Y')
-            }
-            console.log('allListToAdd:', allListToAdd)
-            await addOrderSubMenuList(tableNo, allListToAdd)
-
-            // total summary display
-            initLoadMenu()
-            initLoadOrder()
-
-            setShowMenuSet(false)
         }
     }
 
