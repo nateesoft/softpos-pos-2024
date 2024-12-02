@@ -87,7 +87,7 @@ const getBalanceMaxIndex = async tableNo => {
     let id = 1
     let index = tableNo + "/001"; // default
 
-    if (results) {
+    if (results.length>0) {
         const R_Index = results[0].R_Index
         if (R_Index) {
             let data = R_Index.split("/");

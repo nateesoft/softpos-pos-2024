@@ -2,6 +2,7 @@
   "name": "pos-restaurant-2024",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
@@ -35,14 +36,19 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1"
+    "@testing-library/user-event": "^13.2.1",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "electron-packager": "^17.1.2"
   },
   "scripts": {
     "start": "SET PORT=3333 && react-scripts start",
     "local": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "package": "electron-packager ."
   },
   "eslintConfig": {
     "extends": [

@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { Box, Divider, Paper, Typography } from '@mui/material'
 import Moment from 'react-moment'
-import axios from 'axios'
-
-import QrCodeGenerator from './QRCodePayment'
+// import axios from 'axios'
+// import QrCodeGenerator from './QRCodePayment'
 
 export default class ReceiptToPrint extends Component {
   constructor(props) {

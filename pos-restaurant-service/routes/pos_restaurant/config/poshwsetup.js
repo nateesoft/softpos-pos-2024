@@ -13,16 +13,16 @@ router.get('/:macno', (req, res, next) => {
     if (err) throw err
 
     let RunningNumber = ""
-    if (results) {
+    if (results.length > 0) {
       RunningNumber = PrefixZeroFormat(results[0].ReceNo1, 7)
+
+      response.billId = macno + RunningNumber
+      response.data = { ...results[0], Footting3: ASCII2Unicode(results[0].Footting3) }
+
+      res.status(200).json(response)
     } else {
-      PrefixZeroFormat(1, 7)
+      res.status(400).json({})
     }
-
-    response.billId = macno + RunningNumber,
-    response.data = {...results[0], Footting3: ASCII2Unicode(results[0].Footting3)}
-
-    res.status(200).json(response)
   })
 });
 

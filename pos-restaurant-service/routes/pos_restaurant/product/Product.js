@@ -21,10 +21,14 @@ router.get('/:productCode', function (req, res) {
   pool.query(sql, (err, results) => {
     if (err) throw err
 
-    const response = {
-      data: results[0]
+    if (results.length > 0) {
+      const response = {
+        data: results[0]
+      }
+      res.status(200).json(response)
+    } else {
+      res.status(400).json({})
     }
-    res.status(200).json(response)
   })
 });
 

@@ -10,7 +10,6 @@ import OrderItem from './OrderItem'
 import PaymentForm from './PaymentForm'
 import { Box, Button, Modal } from "@mui/material";
 import PrintIcon from '@mui/icons-material/Print'
-import CloseIcon from '@mui/icons-material/Close'
 
 import ReceiptToPrint from './ReceiptToPrint'
 import MemberInfo from "./MemberInfo";

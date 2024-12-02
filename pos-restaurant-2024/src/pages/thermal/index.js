@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Button, Grid2, TextField } from '@mui/material'
+import { Button, Grid2, TextField } from '@mui/material'
 import axios from 'axios'
 
 const ConnectThermalPrinter = () => {
