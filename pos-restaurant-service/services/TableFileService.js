@@ -46,10 +46,34 @@ const checkTableOpen = async (tableNo) => {
     return null
 }
 
+const summaryNetTotal = (results, netTotal = 0)=> {
+    results.forEach(data => {
+        netTotal = netTotal + data.R_Total
+    });
+
+    return netTotal
+}
+
+const summaryTableFile = async (tableNo) => {
+    const sql = `select * from balance where R_Table='${tableNo}'`;
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        let netTotal = summaryNetTotal(tableNo)
+
+        // update summary tablefile
+        const sqlUpdate = `update tablefile 
+        set NetTotal='${netTotal}' where Tcode='${tableNo}'`;
+        const results2 = await pool.query(sqlUpdate)
+        return results2
+    }
+    return null
+}
+
 module.exports = {
     getTableByCode,
     updateTableAvailableStatus,
     updateTableOpenStatus,
     checkTableOpen,
-    updateMember
+    updateMember,
+    summaryTableFile
 }

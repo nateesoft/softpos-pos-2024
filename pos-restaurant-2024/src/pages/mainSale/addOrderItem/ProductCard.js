@@ -1,10 +1,11 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 
-import { IconButton, TextField, Typography, Box, Grid2, Modal, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+import { IconButton, TextField, Typography, Box, Grid2, Modal, Button, FormControl, InputLabel, Select, MenuItem, Divider, ImageListItem } from '@mui/material'
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import RemoveCircleIcon from '@mui/icons-material/DoNotDisturbOn';
 import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
+import GppGoodIcon from '@mui/icons-material/GppGood';
 
 import { POSContext } from '../../../AppContext';
 
@@ -85,31 +86,23 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
   }, [loadVoidMsgList])
 
   return (
-    <div
-      style={{
-        padding: "15px",
-        border: "2px solid #eee",
-        borderRadius: "5px",
-        marginBottom: "10px",
-        boxShadow: "2px 2px #eee",
-        backgroundColor: backgroundItem
-      }}
-    >
-      <Grid2 container spacing={2}>
-        <Grid2 size={5}>
-          <img
-            src={product.image_url}
-            alt=""
-            height={100}
-            style={{ borderRadius: "5px", width: "120px" }}
-            onClick={!voidStatus ? openModal: console.log('')}
-          />
+    <>
+      <Grid2 container spacing={1}>
+        <Grid2 container>
+          <div style={{ position: 'relative', textAlign: 'center', color: 'white' }}>
+            <img src={product.image_url} alt="" height={100} width={100} style={{ borderRadius: "5px" }}
+              onClick={!voidStatus ? openModal : console.log('')}
+            />
+            {!product.R_LinkIndex && <ImageListItem sx={{ position: "absolute", top: "0px", right: "0px" }}>
+              <GppGoodIcon fontSize='large' sx={{ color: "gold" }} />
+            </ImageListItem>}
+          </div>
         </Grid2>
-        <Grid2 size={7}>
-          <Grid2 container direction="column" justifyContent="flex-end">
-            <Grid2>{product.R_PName}</Grid2>
-            {voidStatus && <Typography sx={{ fontWeight: "bold", color: "red" }}>( * ยกเลิกรายการอาหาร = {optList[8]} * )</Typography>}
-            {!voidStatus && <Grid2 display="flex" justifyContent="center">
+        <Grid2>
+          <Grid2 margin={1}>{product.R_PName}</Grid2>
+          {voidStatus && <Typography sx={{ fontWeight: "bold", color: "red" }}>( * ยกเลิกรายการอาหาร = {optList[8]} * )</Typography>}
+          {!voidStatus &&
+            <Grid2 display="flex" justifyContent="center">
               <IconButton onClick={() => handleOpen(product.R_Index)} disabled={product.R_Pause === 'P'}>
                 <RemoveCircleIcon sx={{ color: product.R_Pause === 'P' ? "gray" : "red" }} fontSize="large" />
               </IconButton>
@@ -125,24 +118,21 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
                 <AddCircleIcon color="success" fontSize="large" />
               </IconButton>
             </Grid2>}
-            <Grid2>
-              <Grid2 container>
-                <Typography>
-                  {product.R_Price} x {product.R_Quan}{" "}
-                </Typography>
-                <Typography>&nbsp;=</Typography>
-                <Typography>{product.R_Price * product.R_Quan}</Typography>
-              </Grid2>
-            </Grid2>
-            {!voidStatus && <Box display="flex" flexDirection="row">
+          <Grid2 container>
+            <Typography>
+              ราคา {product.R_Price} x {product.R_Quan}{" "}
+            </Typography>
+            <Typography>&nbsp;=&nbsp;</Typography>
+            <Typography>{product.R_Price * product.R_Quan}</Typography>
+          </Grid2>
+          {!voidStatus &&
+            <Box display="flex" flexDirection="row">
               {optList && optList.filter(o => o !== "").map((opt) =>
                 <Typography sx={{ fontSize: "10px", color: "green" }}>{opt},</Typography>
               )}
             </Box>}
-          </Grid2>
         </Grid2>
       </Grid2>
-
       <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -167,7 +157,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
           </Grid2>
         </Box>
       </Modal>
-    </div>
+    </>
   )
 }
 

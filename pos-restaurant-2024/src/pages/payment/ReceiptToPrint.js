@@ -23,7 +23,8 @@ export default class ReceiptToPrint extends Component {
     const {
       B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct, 
       B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
-      B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1
+      B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1,
+      B_Ton
     } = billInfo
     console.log('billInfo:', billInfo)
     const poshwsetup = this.props.poshwsetup
@@ -103,6 +104,11 @@ export default class ReceiptToPrint extends Component {
           <Box display="flex" justifyContent="space-between">
             <Typography>Net Total</Typography>
             <Typography>{B_NetTotal}</Typography>
+          </Box>
+          <Divider />
+          <Box display="flex" justifyContent="space-between">
+            <Typography>เงินทอน</Typography>
+            <Typography sx={{fontSize: "22px"}}>{B_Ton}</Typography>
           </Box>
           <Divider />
           <Box display="flex" justifyContent="space-between">

@@ -14,6 +14,7 @@ import {
   Typography,
   Paper,
   Grid2,
+  Divider,
 } from "@mui/material"
 import axios from "axios"
 import ArrowBack from "@mui/icons-material/TableBar"
@@ -153,14 +154,17 @@ const OrderItem = ({
         >
           {OrderEList && OrderEList.map((product) => {
             return (
-              <ProductCard
-                tableNo={tableNo}
-                product={product}
-                handleNotification={handleNotification}
-                initLoadMenu={initLoadMenu}
-                initLoadOrder={initLoadOrder}
-                openModal={() => handleOpenMenu(product)}
-              />
+              <div style={{margin: "5px"}}>
+                <ProductCard
+                  tableNo={tableNo}
+                  product={product}
+                  handleNotification={handleNotification}
+                  initLoadMenu={initLoadMenu}
+                  initLoadOrder={initLoadOrder}
+                  openModal={() => handleOpenMenu(product)}
+                />
+                <Divider />
+              </div>
             )
           })}
           {OrderEList && OrderEList.length === 0 && (

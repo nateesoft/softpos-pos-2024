@@ -87,7 +87,7 @@ const getBalanceMaxIndex = async tableNo => {
     let id = 1
     let index = tableNo + "/001"; // default
 
-    if (results.length>0) {
+    if (results.length > 0) {
         const R_Index = results[0].R_Index
         if (R_Index) {
             let data = R_Index.split("/");
@@ -140,9 +140,10 @@ const updateBalanceQty = async (tableNo, rIndex, qty) => {
 
 const addListBalance = async (payload) => {
     const { listBalance, tableNo, macno, userLogin, empCode, R_LinkIndex } = payload
+    const Main_Index = await getBalanceMaxIndex(tableNo)
     listBalance.forEach(async (product, index) => {
         const posProduct = await getProductByPCode(product.menu_code)
-        const R_Index = (R_LinkIndex + "-" + PrefixZeroFormat(index + 1, 2))
+        const R_Index = Main_Index + "/" + PrefixZeroFormat(index + 1, 2)
         const reponseR_Index = await addNewBalance({
             tableNo,
             menuInfo: { ...product, menu_price: 0 },
@@ -341,9 +342,9 @@ const addNewBalance = async payload => {
 }
 
 const updateBalance = async payload => {
-    const { oldBalance, qty, optList = [], specialText = "", macno, userLogin, empCode } = payload
+    const { oldBalance, optList = [], specialText = "", macno, userLogin, empCode, R_ETD } = payload
     const { R_Index, R_Table, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal, R_Discount,
-        R_Service, R_Stock, R_Set, R_Vat, R_Type, R_ETD, R_Price, R_Total, R_PrType, R_PrCode,
+        R_Service, R_Stock, R_Set, R_Vat, R_Type, R_Price, R_Total, R_PrType, R_PrCode,
         R_PrDisc, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuType, R_PrCuQuan, R_PrCuAmt, R_Redule, R_Kic,
         R_KicPrint, R_Void, R_VoidUser, R_VoidTime, FieldName, R_PrCuCode, R_Serve, R_PrintOK, R_KicOK,
         StkCode, PosStk, R_PrChkType, R_PrQuan, R_PrSubType, R_PrSubCode, R_PrSubQuan, R_PrSubDisc,
@@ -351,7 +352,7 @@ const updateBalance = async payload => {
         R_PItemNo, R_PKicQue, R_MemSum, R_PrVcType, R_PrVcCode, R_PrVcAmt, R_PrVcAdj, R_VoidQuan,
         R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_LinkIndex, R_VoidPause, R_MoveItem, R_MoveFrom,
         R_MoveUser, VoidMsg, R_PrintItemBill, R_CountTime, SoneCode, R_Earn, R_EarnNo, TranType,
-        PDAPrintCheck, PDAEMP, R_empName, R_ServiceAmt, R_PEName, R_Indulgent } = oldBalance
+        PDAPrintCheck, PDAEMP, R_empName, R_ServiceAmt, R_PEName, R_Indulgent, R_Quan, R_QuanCanDisc } = oldBalance
 
     const R_Opt = mappingOpt(optList, specialText)
 
@@ -370,9 +371,6 @@ const updateBalance = async payload => {
     const Macno = macno;
     const Cashier = userLogin;
     const R_Emp = empCode;
-
-    const R_Quan = qty
-    const R_QuanCanDisc = qty
 
     try {
         const sql = `UPDATE balance 
@@ -405,7 +403,7 @@ const updateBalance = async payload => {
         R_ServiceAmt='${R_ServiceAmt}',R_PEName='${R_PEName}',R_Indulgent='${R_Indulgent}' 
         WHERE R_Index='${R_Index}'`
         await pool.query(sql)
-        
+
         return R_Index
     } catch (error) {
         console.log('updateBalance', error)
@@ -486,7 +484,7 @@ const orderStockOut = async (R_Index) => {
     const balance = await getBalanceByRIndex(R_Index)
 
     // process stock into inventory
-    if(balance){
+    if (balance) {
         const response = await inventoryStock(
             {
                 R_Stock: balance.R_Stock,
@@ -499,14 +497,14 @@ const orderStockOut = async (R_Index) => {
                 R_Index
             })
         return response
-    }else {
+    } else {
         return null
     }
 }
 
 const returnStockIn = async (R_Index) => {
     const balance = await getBalanceByRIndex(R_Index)
-    if(balance){
+    if (balance) {
         // process stock into inventory
         const response = await inventoryReturnStock(
             {
@@ -520,7 +518,7 @@ const returnStockIn = async (R_Index) => {
                 R_Index
             })
         return response
-    }else{
+    } else {
         return null
     }
 }
