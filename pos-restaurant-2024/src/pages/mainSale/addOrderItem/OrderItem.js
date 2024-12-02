@@ -299,7 +299,7 @@ const OrderItem = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={{ ...modalStyle, width: 450 }} id="paperPrint">
-          <Paper elevation={3} sx={{ padding: "10px" }}>
+          <Paper elevation={3} sx={{ padding: "10px", height: '450px', overflow: 'auto' }}>
             <div align="center">*** รายการส่งครัว ***</div>
             <div>Table No: {tableNo}</div>
             <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>

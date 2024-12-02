@@ -19,7 +19,7 @@ function ccyFormat(num) {
 }
 
 function subtotal(items) {
-    return items.map(({ R_Price }) => R_Price).reduce((sum, i) => sum + i, 0);
+    return items.filter(item => item.R_Void !== 'V').map(({ R_Price }) => R_Price).reduce((sum, i) => sum + i, 0);
 }
 
 const normalButton = { bgcolor: "#123456", color: "white", fontWeight: "bold", fontSize: "36px", borderRadius: "10px" }
@@ -81,8 +81,9 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
 
     const handleCreditInfoSelect = (cInfo) => {
         console.log('cInfo:', cInfo, R_NetTotal)
-        const totalCreditCharge = Math.abs(R_NetTotal) * cInfo.crCharge / 100
-        const totalCreditChargeAmount = Math.abs(R_NetTotal) + totalCreditCharge
+        const NetTotal = R_NetTotal - cashAmount
+        const totalCreditCharge = Math.abs(NetTotal) * cInfo.crCharge / 100
+        const totalCreditChargeAmount = Math.abs(NetTotal) + totalCreditCharge
         setCrCode(cInfo.crCode)
         setCreditNumber("")
         setCreditRef("")
@@ -92,10 +93,11 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
     }
 
     const handleCreditEnabled = () => {
+        setCreditAmount(R_NetTotal - cashAmount - transferAmount)
         setOpenCreditInfo(true)
     }
     const handleTransferEnabled = () => {
-        setTransferAmount(R_NetTotal)
+        setTransferAmount(R_NetTotal - cashAmount)
         setOpenTransferInfo(true)
     }
 
@@ -114,14 +116,14 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
     const handleShowOpenCreditFile = () => {
         setCreditAmount(0)
         setCrCode("")
-        setCreditChargeAmount()
+        setCreditChargeAmount(0)
         setBalanceAmount(0)
         setOpenCreditFile(true)
     }
 
     const totalAmount = useCallback(() => {
         const cc = cashAmount ? parseFloat(cashAmount) : 0
-        const cd = creditAmount ? parseFloat(creditAmount) : 0
+        const cd = creditAmount ? parseFloat(creditAmount-creditChargeAmount) : 0
         const ta = transferAmount ? parseFloat(transferAmount) : 0
         const toalNetAmt = parseFloat(Math.round(R_NetTotal))
         const paymentAmt = parseFloat(cc + cd + ta)
