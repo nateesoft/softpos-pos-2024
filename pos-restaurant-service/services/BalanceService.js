@@ -5,7 +5,7 @@ const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/Str
 
 const { getProductByPCode } = require('./ProductService');
 const STCardService = require('./STCardService');
-const { processAllPIngredent, processAllPSet } = require('./TSaleService');
+const { processAllPIngredent, processAllPSet, processAllPIngredentReturnStock, processAllPSetReturn } = require('./TSaleService');
 
 const getTotalBalance = async (tableNo) => {
     const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
@@ -472,10 +472,10 @@ const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Tot
             PStock, PSet, r_index, SaleOrRefund)
 
         // ตัดสต็อกสินค้าที่มี Ingredent
-        await processAllPIngredent(S_No, R_PluCode, R_Quan, Cashier)
+        await processAllPIngredentReturnStock(S_No, R_PluCode, R_Quan, Cashier)
 
         // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
-        await processAllPSet(R_PluCode, R_Quan, Cashier)
+        await processAllPSetReturn(R_PluCode, R_Quan, Cashier)
     }
     return null
 }

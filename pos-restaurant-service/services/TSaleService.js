@@ -87,9 +87,41 @@ const processAllPIngredent = async (S_No, PCode, R_Quan, Cashier) => {
             const S_SubNo = "@"+ingBean.PCode
             const S_Que = (index+1)
             const S_PCode = ingBean.PingCode
-            const S_Stk = "A1"
             const S_In = 0
             const S_Out = R_QuanIng
+            const S_InCost = 0
+            const S_OutCost = 0
+            const S_ACost = 0
+            const S_Rem = "SAL"
+            const S_User = Cashier
+            const S_Link = "@"+ingBean.PCode
+    
+            const PStock = "Y"
+            const PSet = "N"
+            const r_index = ""
+            const SaleOrRefund = "SALE" // SALE or REFUND
+
+            await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, S_OutCost, 
+                S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
+        }
+    })
+}
+
+const processAllPIngredentReturnStock = async (S_No, PCode, R_Quan, Cashier) => {
+    let listING = await listIngredeint(PCode);
+    listING && listING.forEach(async (ingBean, index) => {
+        if (ingBean.pstock === "Y" && ingBean.pactive === "Y") {
+            let PBPack = ingBean.PBPack;
+            if (PBPack <= 0) {
+                PBPack = 1;
+            }
+            let R_QuanIng = ingBean.PingQty * R_Quan;
+
+            const S_SubNo = "@"+ingBean.PCode
+            const S_Que = (index+1)
+            const S_PCode = ingBean.PingCode
+            const S_In = R_QuanIng
+            const S_Out = 0
             const S_InCost = 0
             const S_OutCost = 0
             const S_ACost = 0
@@ -114,9 +146,33 @@ const processAllPSet = async (S_No, PCode, R_Quan, Cashier) => {
         const S_SubNo = ""
         const S_Que = 0
         const S_PCode = psetBean.PSubCode
-        const S_Stk = "A1"
         const S_In = 0
         const S_Out = R_Quan * psetBean.PSubQty
+        const S_InCost = 0
+        const S_OutCost = 0
+        const S_ACost = 0
+        const S_Rem = "SAL"
+        const S_User = Cashier
+        const S_Link = ""
+
+        const PStock = "N"
+        const PSet = "N"
+        const r_index = ""
+        const SaleOrRefund = "SALE" // SALE or REFUND
+
+        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, 
+            S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
+    })
+}
+
+const processAllPSetReturn = async (S_No, PCode, R_Quan, Cashier) => {
+    let listPset = await getPSetByPCode(PCode);
+    listPset && listPset.forEach(async psetBean => {
+        const S_SubNo = ""
+        const S_Que = 0
+        const S_PCode = psetBean.PSubCode
+        const S_In = R_Quan * psetBean.PSubQty
+        const S_Out = 0
         const S_InCost = 0
         const S_OutCost = 0
         const S_ACost = 0
@@ -146,5 +202,7 @@ const addDataFromBalance = async (tableNo, BillRefNo, allBalance) => {
 module.exports = {
     addDataFromBalance,
     processAllPIngredent,
-    processAllPSet
+    processAllPIngredentReturnStock,
+    processAllPSet,
+    processAllPSetReturn
 }

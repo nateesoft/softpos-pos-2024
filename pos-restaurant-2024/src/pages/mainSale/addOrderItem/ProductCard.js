@@ -33,21 +33,23 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
   const backgroundItem = product.R_Void === 'V' ? "yellow" : pauseStatus ? "#eee" : "snow"
 
   const handleVoidItem = (R_Index) => {
-    axios.post(`/api/balance/void`, {
-      R_Index: R_Index,
-      Cachier: userLogin,
-      empCode: empCode,
-      macno: macno,
-      voidMsg: voidMsg
-    })
-      .then(response => {
-        initLoadMenu()
-        initLoadOrder()
-        setOpen(false)
+    if (voidMsg) {
+      axios.post(`/api/balance/void`, {
+        R_Index: R_Index,
+        Cachier: userLogin,
+        empCode: empCode,
+        macno: macno,
+        voidMsg: voidMsg
       })
-      .catch(err => {
-        console.log(err)
-      })
+        .then(response => {
+          initLoadMenu()
+          initLoadOrder()
+          setOpen(false)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 
   const handleAddItem = () => {
@@ -87,8 +89,8 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
 
   return (
     <>
-      <Grid2 container spacing={1}>
-        <Grid2 container>
+      <Grid2 container spacing={1} justifyContent="space-evenly">
+        <Grid2 size={3}>
           <div style={{ position: 'relative', textAlign: 'center', color: 'white' }}>
             <img src={product.image_url} alt="" height={100} width={100} style={{ borderRadius: "5px" }}
               onClick={!voidStatus ? openModal : console.log('')}
@@ -98,8 +100,8 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
             </ImageListItem>}
           </div>
         </Grid2>
-        <Grid2>
-          <Grid2 margin={1}>{product.R_PName}</Grid2>
+        <Grid2 size={7} padding={1} margin={1} sx={{backgroundColor: product.R_Void === 'V' ? "#eee": "snow"}}>
+          <Grid2 margin={1}>{product.R_PluCode}-{product.R_PName}</Grid2>
           {voidStatus && <Typography sx={{ fontWeight: "bold", color: "red" }}>( * ยกเลิกรายการอาหาร = {optList[8]} * )</Typography>}
           {!voidStatus &&
             <Grid2 display="flex" justifyContent="center">
@@ -107,7 +109,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
                 <RemoveCircleIcon sx={{ color: product.R_Pause === 'P' ? "gray" : "red" }} fontSize="large" />
               </IconButton>
               <TextField
-                inputProps={{ min: 0, style: { textAlign: "right", width: '35px', fontWeight: "bold" } }}
+                inputProps={{ min: 0, style: { textAlign: "right", minWidth: '35px', fontWeight: "bold" } }}
                 variant="outlined"
                 type="number"
                 value={count}
