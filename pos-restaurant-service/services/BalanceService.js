@@ -52,7 +52,7 @@ const getAllBalance = async () => {
 }
 
 const getBalanceByTableNo = async tableNo => {
-    const sql = `select * from balance where R_Table='${tableNo}'`;
+    const sql = `select * from balance where R_Table='${tableNo}' order by R_Table, R_Index`;
     const results = await pool.query(sql)
     const mappingResult = results.map((item, index) => {
         return { ...item, R_PName: ASCII2Unicode(item.R_PName) }
