@@ -10,7 +10,7 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { Button } from '@mui/material';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import axios from 'axios';
-import CloseIcon from '@mui/icons-material/Close'
+import CalendarMonth from '@mui/icons-material/CalendarMonth'
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -45,17 +45,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         [theme.breakpoints.up('sm')]: {
-            width: '22ch',
+            width: '12ch',
             '&:focus': {
-                width: '40ch',
+                width: '22ch',
             },
         },
     },
 }));
 
-export default function RefundBillModal({ setMemberMasters }) {
+const SearchMenu = ({ setMemberMasters }) => {
     const [recieptNo, setRecieptNo] = useState("")
     const [macNo, setMacNo] = useState("")
+    const [billDate, setBillDate] = useState("")
 
     const handleSearchBillno = () => {
         if (!recieptNo && !macNo) {
@@ -99,6 +100,15 @@ export default function RefundBillModal({ setMemberMasters }) {
                             inputProps={{ 'aria-label': 'search' }} value={macNo} onChange={e => setMacNo(e.target.value)}
                         />
                     </Search>
+                    <Search>
+                        <SearchIconWrapper>
+                            <CalendarMonth />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder="Bill Date..."
+                            inputProps={{ 'aria-label': 'search' }} value={billDate} onChange={e => setBillDate(e.target.value)}
+                        />
+                    </Search>
                     <Box margin={1}>
                         <Button
                             variant='contained'
@@ -111,3 +121,5 @@ export default function RefundBillModal({ setMemberMasters }) {
         </Box>
     );
 }
+
+export default SearchMenu

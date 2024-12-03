@@ -45,7 +45,7 @@ function PaymentPage() {
 
   const matches = useMediaQuery('(min-width:1024px)');
   const { appData } = useContext(POSContext)
-    const { empCode, macno, userLogin, tableInfo } = appData
+  const { empCode, macno, userLogin, tableInfo } = appData
 
   const [open, setOpen] = useState(false)
   const [orderList, setOrderList] = useState([])

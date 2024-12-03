@@ -199,10 +199,17 @@ const addDataFromBalance = async (tableNo, BillRefNo, allBalance) => {
     })
 }
 
+const getTSaleByBillNo = async billNo => {
+    const sql = `select * from t_sale where R_Refno='${billNo}' order by R_Index`;
+    const results = await pool.query(sql)
+    return results
+}
+
 module.exports = {
     addDataFromBalance,
     processAllPIngredent,
     processAllPIngredentReturnStock,
     processAllPSet,
-    processAllPSetReturn
+    processAllPSetReturn,
+    getTSaleByBillNo
 }

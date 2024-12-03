@@ -104,7 +104,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
                                                     <TableCell key={column.id} align={column.align}>
                                                         {value}
                                                     </TableCell>
-                                                );
+                                                )
                                             })}
                                         </TableRow>
                                     );

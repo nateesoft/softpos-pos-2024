@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,23 +7,26 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Box, Button, Divider, TextField, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import SearchIcon from '@mui/icons-material/Search'
-import ClearIcon from '@mui/icons-material/Restore'
-import CloseIcon from '@mui/icons-material/Close'
 import RefundIcon from '@mui/icons-material/ReceiptLong';
+import axios from 'axios';
+import ReceiptIcon from '@mui/icons-material/ReceiptLong';
+import moment from 'moment'
 
-import RefundBillModal from '../refund/RefundBillModal';
+import SearchMenu from './SearchMenu';
+import { POSContext } from '../../../AppContext';
 
 const columns = [
-  { id: 'V', label: 'V', minWidth: 170 },
-  { id: 'ETD', label: 'ETD', minWidth: 100 },
-  { id: 'PLUCode', label: 'PLU Code', minWidth: 170 },
-  { id: 'Description', label: 'Description', minWidth: 170 },
-  { id: 'Qty', label: 'Qty', minWidth: 170 },
-  { id: 'Price', label: 'Price', minWidth: 170 },
-  { id: 'Amount', label: 'Amount', minWidth: 170 },
+  { id: 'action', label: '' },
+  { id: 'B_Refno', label: 'B_Refno' },
+  { id: 'B_PostDate', label: 'B_PostDate', type: "date" },
+  { id: 'B_Table', label: 'B_Table' },
+  { id: 'B_MacNo', label: 'B_MacNo' },
+  { id: 'B_Cashier', label: 'B_Cashier' },
+  { id: 'B_NetTotal', label: 'B_NetTotal' },
+  { id: 'B_Void', label: 'B_Void' },
+  { id: 'B_VoidUser', label: 'B_VoidUser' },
 ];
 
 function createData(V, ETD, PLUCode, Description, Qty, Price, Amount) {
@@ -59,9 +62,13 @@ const modalStyle = {
   boxShadow: 24
 }
 
-export default function RefundBill({ setOpen }) {
+const RefundBill = ({ setOpen }) => {
+  const { appData } = useContext(POSContext)
+  const { userLogin } = appData
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [billList, setBillList] = useState([])
 
   const [recieptNo, setRecieptNo] = useState("")
   const [macNo, setMacNo] = useState("")
@@ -75,19 +82,33 @@ export default function RefundBill({ setOpen }) {
     setPage(0);
   }
 
-  const handleSearch = () => {
-
+  const handleRefundBill = (billNoData) => {
+    axios.post(`/api/billno/refund`, {
+      billNo: billNoData.B_Refno,
+      Cashier: userLogin
+    })
+      .then(response => {
+        setOpen(false)
+      })
+      .catch(err => console.log(err))
   }
 
-  const handleClear = () => {
-    setRecieptNo("")
-    setMacNo("")
-  }
+  const loadBIllNo = useCallback(() => {
+    axios.get('/api/billno')
+      .then(response => {
+        setBillList(response.data.data)
+      })
+      .catch(err => console.log(err))
+  }, [])
+
+  useEffect(() => {
+    loadBIllNo()
+  }, [loadBIllNo])
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px" }}>
-      <RefundBillModal setMemberMasters={() => console.log('')} />
-      <Grid container spacing={2} sx={{marginTop: '15px'}}>
+      <SearchMenu setBillList={setBillList} />
+      <Grid container spacing={2} sx={{ marginTop: '15px' }}>
         <RefundIcon color="error" />
         <Typography variant='h5' color='error'>
           ยกเลิกรายการบิลที่รับชำระเงินแล้ว (Refund Bill)
@@ -99,7 +120,7 @@ export default function RefundBill({ setOpen }) {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  {columns.map((column) => (
+                  {columns && columns.map((column) => (
                     <TableCell
                       key={column.id}
                       align={column.align}
@@ -111,13 +132,34 @@ export default function RefundBill({ setOpen }) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
+                {billList && billList
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
                         {columns.map((column) => {
-                          const value = row[column.id];
+                          let value = row[column.id];
+                          if (column.type === 'date') {
+                            value = moment(value).format('DD/MM/YYYY')
+                          }
+                          if (column.id === 'action') {
+                            if (row.B_Void === 'V') {
+                              return <TableCell>
+                                <Typography color='error'>( ยกเลิกรายการ )</Typography>
+                              </TableCell>
+                            } else {
+                              return (
+                                <TableCell>
+                                  <Button
+                                    variant='contained'
+                                    color='error'
+                                    onClick={() => handleRefundBill(row)} startIcon={<ReceiptIcon />}>
+                                    Refund
+                                  </Button>
+                                </TableCell>
+                              )
+                            }
+                          }
                           return (
                             <TableCell key={column.id} align={column.align}>
                               {column.format && typeof value === 'number'
@@ -146,3 +188,5 @@ export default function RefundBill({ setOpen }) {
     </Box>
   );
 }
+
+export default RefundBill

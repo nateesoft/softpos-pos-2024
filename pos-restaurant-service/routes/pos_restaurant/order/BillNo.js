@@ -6,13 +6,13 @@ const pool = require('../../../config/database/MySqlConnect')
 const BillNoService = require('../../../services/BillNoService')
 
 router.get('/', function (req, res) {
-  const sql = `select * from billno`
-  pool.query(sql, (err, results) => {
-    if (err) throw err
-
-    const response = {}
-    res.status(200).json(response)
-  })
+  BillNoService.getAllBillNoToday()
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+    })
 });
 
 router.get('/:billNo', function (req, res) {
@@ -26,7 +26,7 @@ router.get('/:billNo', function (req, res) {
     })
 });
 
-// update billno
+// create new billno
 router.post('/', (req, res) => {
   BillNoService.addNewBill(req.body)
     .then(rows => {
@@ -37,11 +37,22 @@ router.post('/', (req, res) => {
     })
 });
 
+// search data
+router.post('/search', function (req, res) {
+  const { billNo, postDate, macno } = req.body
+  BillNoService.searchBillNoCondition(billNo, postDate, macno)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+    })
+});
 
 // refund bill
-router.post('/:billNo', (req, res) => {
-  const { billNo } = req.params
-  BillNoService.billRefundStockIn(billNo)
+router.post('/refund', (req, res) => {
+  const { billNo, Cashier } = req.body
+  BillNoService.billRefundStockIn(billNo, Cashier)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

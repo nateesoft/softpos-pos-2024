@@ -52,16 +52,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function SearchAppBar({setMemberMasters}) {
+const SearchMember = ({ setMemberMasters }) => {
     const [phone, setPhone] = useState("")
     const [code, setCode] = useState("")
     const [name, setName] = useState("")
 
     const handleSearchMember = () => {
-        if(!phone && !code && !name){
+        if (!phone && !code && !name) {
             return;
         }
-        axios.post('/api/crm/member/search', {phone, code, name})
+        axios.post('/api/crm/member/search', { phone, code, name })
             .then(response => {
                 setMemberMasters(response.data.data)
             })
@@ -109,10 +109,10 @@ export default function SearchAppBar({setMemberMasters}) {
                         />
                     </Search>
                     <Box margin={2}>
-                        <Button 
-                            variant='contained' 
-                            sx={{backgroundColor: "#eee", color: "black"}} 
-                            startIcon={<FindInPageIcon />} 
+                        <Button
+                            variant='contained'
+                            sx={{ backgroundColor: "#eee", color: "black" }}
+                            startIcon={<FindInPageIcon />}
                             onClick={handleSearchMember}>ค้นหาสมาชิก</Button>
                     </Box>
                 </Toolbar>
@@ -120,3 +120,5 @@ export default function SearchAppBar({setMemberMasters}) {
         </Box>
     );
 }
+
+export default SearchMember
