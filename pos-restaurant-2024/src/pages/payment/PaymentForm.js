@@ -436,7 +436,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                 </Box>
             </Modal>
             <Modal open={openCreditFile}>
-                <Box sx={{ ...modalStyle, width: "80%" }}>
+                <Box sx={{ ...modalStyle }}>
                     <CreditChargeModal
                         setClose={() => setOpenCreditFile(false)}
                         setCreditInfo={handleCreditInfoSelect}

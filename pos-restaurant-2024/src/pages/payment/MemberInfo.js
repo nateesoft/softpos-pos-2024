@@ -20,6 +20,14 @@ const modalStyle = {
     boxShadow: 24
 }
 
+const PointFormat = data => {
+    return parseInt(data).toLocaleString("en", {minimumFractionDigits: 0 })
+}
+
+const NumFormat = data => {
+    return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+}
+
 const MemberInfo = ({tableNo}) => {
     const [openMember, setOpenMember] = useState(false)
     const [memberInfo, setMemberInfo] = useState({})
@@ -30,7 +38,7 @@ const MemberInfo = ({tableNo}) => {
                 <img src="/images/profile_crm.png" alt="" />
                 <Button variant='contained' onClick={()=>setOpenMember(true)} endIcon={<PersonSearchIcon fontSize='large' />}>เลือกสมาชิก</Button>
             </Grid>
-            <Grid container spacing={1} padding={1} justifyContent="center" sx={{border: "1px solid snow", boxShadow: "3px 4px black"}}>
+            {memberInfo.Member_Code && <Grid container spacing={1} padding={1} justifyContent="center" sx={{border: "1px solid snow", boxShadow: "3px 4px black"}}>
                 <Grid padding={1}>
                     <Typography variant='p' sx={{ color: "white", background: "purple", padding: "10px" }}>
                         ( ข้อมูลส่วนตัว )
@@ -50,11 +58,11 @@ const MemberInfo = ({tableNo}) => {
                     </Typography>
                     <Box padding={1} sx={{borderBlock: "2px solid yellow"}}>
                         <Typography style={{ color: "white" }}>วันที่สมัคร: <Moment format="DD/MM/YYYY" date={memberInfo.Member_AppliedDate} /></Typography>
-                        <Typography style={{ color: "white" }}>คะแนน {memberInfo.Member_TotalScore}</Typography>
-                        <Typography style={{ color: "white" }}>ยอดซื้อสะสม {memberInfo.Member_TotalPurchase} บาท</Typography>
+                        <Typography style={{ color: "white" }}>คะแนน {PointFormat(memberInfo.Member_TotalScore)}</Typography>
+                        <Typography style={{ color: "white" }}>ยอดซื้อ {NumFormat(memberInfo.Member_TotalPurchase)} บาท</Typography>
                     </Box>
                 </Grid>
-            </Grid>
+            </Grid>}
             <Modal open={openMember} onClose={()=>setOpenMember(false)}>
                 <Box sx={{ ...modalStyle, width: "80%" }}>
                     <MemberInfoModal 

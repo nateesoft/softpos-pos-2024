@@ -71,7 +71,7 @@ const OtherMenuSelect = (props) => {
                 >
                     <MenuItem value="main">
                         <Box display="flex" justifyContent="center">
-                            <SettingsSuggestIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>ตั้งค่าระบบ</Typography>
+                            <SettingsSuggestIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>ข้อมูลระบบ</Typography>
                         </Box>
                     </MenuItem>
                     <Divider />

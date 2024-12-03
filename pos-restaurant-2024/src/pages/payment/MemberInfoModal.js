@@ -9,18 +9,19 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import axios from 'axios';
 import { Button } from '@mui/material';
+import SelectIcon from '@mui/icons-material/CheckCircle';
+
+import SearchAppBar from './member/SearchMember';
 
 const columns = [
+    { id: 'action', label: '', minWidth: 50 },
     { id: 'Member_Code', label: 'Member_Code', minWidth: 50 },
-    { id: 'Member_TypeCode', label: 'Member_TypeCode', minWidth: 50 },
-    { id: 'Member_BranchCode', label: 'Member_BranchCode', minWidth: 100 },
     { id: 'Member_NameThai', label: 'Member_NameThai', minWidth: 100 },
     { id: 'Member_NameEng', label: 'Member_NameEng', minWidth: 50 },
     { id: 'Member_Brithday', label: 'Member_Brithday', minWidth: 50 },
-    { id: 'Member_TotalPurchase', label: 'Member_TotalPurchase', minWidth: 50 },
     { id: 'Member_Mobile', label: 'Member_Mobile', minWidth: 50 },
+    { id: 'Member_TotalPurchase', label: 'Member_TotalPurchase', minWidth: 50 },
     { id: 'Member_TotalScore', label: 'Member_TotalScore', minWidth: 50 },
-    { id: 'action', label: '', minWidth: 50 },
 ];
 
 const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
@@ -60,65 +61,68 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
     }, [loadMemmaster])
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {columns && columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{ minWidth: column.minWidth }}
-                                >
-                                    {column.label}
-                                </TableCell>
-                            ))}
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {memmasters && memmasters
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
-                                return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.CrCode}>
-                                        {columns && columns.map((column) => {
-                                            const value = row[column.id];
-                                            if (column.id === 'action') {
+        <>
+            <SearchAppBar setMemberMasters={setMemberMasters} />
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                <TableContainer sx={{ maxHeight: 440 }}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                {columns && columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                        style={{ minWidth: column.minWidth }}
+                                    >
+                                        {column.label}
+                                    </TableCell>
+                                ))}
+                                <TableCell></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {memmasters && memmasters
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row) => {
+                                    return (
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.CrCode}>
+                                            {columns && columns.map((column) => {
+                                                const value = row[column.id];
+                                                if (column.id === 'action') {
+                                                    return (
+                                                        <TableCell>
+                                                            <Button
+                                                                variant='contained'
+                                                                color='primary'
+                                                                onClick={() => handleSelectMember(row)} endIcon={<SelectIcon />}>
+                                                                เลือก
+                                                            </Button>
+                                                        </TableCell>
+                                                    )
+                                                }
                                                 return (
-                                                    <TableCell>
-                                                        <Button
-                                                            variant='contained'
-                                                            color='primary'
-                                                            onClick={() => handleSelectMember(row)}>
-                                                            Select
-                                                        </Button>
+                                                    <TableCell key={column.id} align={column.align}>
+                                                        {value}
                                                     </TableCell>
-                                                )
-                                            }
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {value}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={memmasters.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-        </Paper>
+                                                );
+                                            })}
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={memmasters.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            </Paper>
+        </>
     );
 }
 

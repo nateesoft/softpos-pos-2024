@@ -115,6 +115,7 @@ const OrderItem = ({
       .then((response) => {
         if (response.status === 200) {
           setShowKicPrint(false)
+          navigate("/floorplan")
         }
       })
       .catch(err => {

@@ -12,13 +12,9 @@ import { Button } from '@mui/material';
 
 const columns = [
     { id: 'CrCode', label: 'CrCode', minWidth: 50 },
-    { id: 'CrBank', label: 'CrBank', minWidth: 50 },
     { id: 'CrName', label: 'CrName', minWidth: 100 },
     { id: 'CrGetCardNo', label: 'CrGetCardNo', minWidth: 100 },
     { id: 'CrCharge', label: 'CrCharge', minWidth: 50 },
-    { id: 'CrRedule', label: 'CrRedule', minWidth: 50 },
-    { id: 'CrList', label: 'CrList', minWidth: 50 },
-    { id: 'CrMemScore', label: 'CrMemScore', minWidth: 50 },
     { id: 'action', label: '', minWidth: 50 },
 ];
 

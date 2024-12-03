@@ -14,6 +14,8 @@ import ClearIcon from '@mui/icons-material/Restore'
 import CloseIcon from '@mui/icons-material/Close'
 import RefundIcon from '@mui/icons-material/ReceiptLong';
 
+import RefundBillModal from '../refund/RefundBillModal';
+
 const columns = [
   { id: 'V', label: 'V', minWidth: 170 },
   { id: 'ETD', label: 'ETD', minWidth: 100 },
@@ -84,25 +86,12 @@ export default function RefundBill({ setOpen }) {
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px" }}>
-      <Grid container spacing={2} sx={{marginBottom: "15px"}}>
+      <RefundBillModal setMemberMasters={() => console.log('')} />
+      <Grid container spacing={2} sx={{marginTop: '15px'}}>
         <RefundIcon color="error" />
         <Typography variant='h5' color='error'>
           ยกเลิกรายการบิลที่รับชำระเงินแล้ว (Refund Bill)
         </Typography>
-      </Grid>
-      <Divider />
-      <Grid container spacing={2} sx={{marginBottom: "15px", marginTop: "5px"}}>
-        <Grid size={6}>
-            <TextField label="เลขที่ใบเสร็จรับเงิน" value={recieptNo} onChange={e => setRecieptNo(e.target.value)} sx={{marginRight: "15px"}} />
-            <TextField label="Mac No/Cahier" value={macNo} onChange={e => setMacNo(e.target.value)} />
-        </Grid>
-        <Grid size={6} spacing={2}>
-          <Box display="flex" justifyContent="flex-end">
-            <Button variant='contained' endIcon={<SearchIcon />} onClick={handleSearch} sx={{marginRight: "5px"}}>Search</Button>
-            <Button variant='contained' color="warning" endIcon={<ClearIcon />} onClick={handleClear} sx={{marginRight: "5px"}}>Clear</Button>
-            <Button variant='contained' color="error" endIcon={<CloseIcon />} onClick={() => setOpen(false)}>Close</Button>
-          </Box>
-        </Grid>
       </Grid>
       <Grid container spacing={2}>
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -155,6 +144,5 @@ export default function RefundBill({ setOpen }) {
         </Paper>
       </Grid>
     </Box>
-
   );
 }
