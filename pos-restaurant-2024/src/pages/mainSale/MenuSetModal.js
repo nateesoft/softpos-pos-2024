@@ -81,13 +81,14 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
                         position="bottom"
                         subtitle={
                             item.can_change === 'Y' ?
-                                <Button variant='contained' onClick={() => setShowChangeListMenu(true)}>เปลี่ยนเมนู</Button> :
+                                <Typography color='green'>สามารถเปลี่ยนเมนูได้</Typography> :
                                 <Typography color='orange'>ไม่สามารถเปลี่ยนได้</Typography>
                         }
                         actionIcon={
                             <Checkbox
                                 id={`subProduct${item.menu_code}`}
                                 checked={subMenuSelected[index]}
+                                disabled={item.can_change !== 'Y'}
                                 checkedIcon={<LibraryAddCheckIcon sx={{ color: "yellow" }} />} sx={{ margin: "5px", color: "white" }}
                                 onChange={(e) => handleOnChange(index)}
                             />
