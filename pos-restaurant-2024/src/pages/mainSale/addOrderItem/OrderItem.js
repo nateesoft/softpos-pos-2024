@@ -151,7 +151,7 @@ const OrderItem = ({
         </Box>
         <TabPanel
           value="1"
-          sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}
+          sx={{ height: typePopup ? "210px" : "270px", overflow: "auto" }}
         >
           {OrderEList && OrderEList.map((product) => {
             return (
