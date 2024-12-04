@@ -1,47 +1,35 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import axios from 'axios';
+import { Grid2, Typography } from '@mui/material';
 
-const ChangeProductList = () => {
-  const [menuList, setMenuList] = useState([])
+const ChangeProductList = ({ optionalList, currentMenu, closeDialog }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const newOptionList = optionalList.filter(item => (item.checked === false && item.menu_code !== currentMenu))
 
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
+    closeDialog()
   };
 
-  const initLoadMenu = useCallback(() => {
-    axios
-      .get(`/api/menu_setup/all`)
-      .then(response => {
-        setMenuList(response.data.data)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  }, [])
-
-  useEffect(() => {
-    initLoadMenu()
-  }, [initLoadMenu])
-
   return (
-    <Box sx={{ width: "500px", height: "550px", bgcolor: 'background.paper' }}>
+    <Box sx={{ width: "500px", height: "350px", bgcolor: 'background.paper' }}>
       <List component="nav" aria-label="main mailbox folders">
-        {menuList && menuList.map((menu, index) =>
+        {newOptionList.length === 0 && <Typography variant='h5'>ไม่มีเมนูอาหารที่สามารถเปลี่ยนได้ !!!</Typography>}
+        {newOptionList && newOptionList.map((menu, index) =>
           <ListItemButton
             selected={selectedIndex === index}
             onClick={(event) => handleListItemClick(event, index)}
           >
-            <ListItemIcon>
-              <MenuBookIcon />
-            </ListItemIcon>
-            <ListItemText primary={`${menu.menu_name} ราคา: ${menu.menu_price||0} บาท`} />
+              <ListItemIcon>
+                <img src={menu.image_url} alt={menu.menu_name} width={100} height={100} />
+              </ListItemIcon>
+            <Grid2 container padding={2} spacing={2} display="flex" direction="column">
+              <Typography>{menu.menu_name}</Typography>
+              <Typography>ราคา: {menu.menu_price||0} บาท</Typography>
+            </Grid2>
           </ListItemButton>
         )}
       </List>

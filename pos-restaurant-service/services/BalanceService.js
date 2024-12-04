@@ -6,6 +6,7 @@ const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/Str
 const { getProductByPCode } = require('./ProductService');
 const STCardService = require('./STCardService');
 const { processAllPIngredent, processAllPSet, processAllPIngredentReturnStock, processAllPSetReturn } = require('./TSaleService');
+const { summaryBalance } = require('./TableFileService');
 
 const getTotalBalance = async (tableNo) => {
     const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
@@ -158,6 +159,9 @@ const addListBalance = async (payload) => {
             posProduct
         })
 
+        // summary tablefile
+        await summaryBalance()
+
         // process stock out
         await orderStockOut(reponseR_Index)
     });
@@ -187,6 +191,9 @@ const addBalance = async payload => {
         R_LinkIndex: "",
         posProduct
     })
+
+    // summary tablefile
+    await summaryBalance()
 
     // process stock out
     await orderStockOut(reponseR_Index)
@@ -333,7 +340,6 @@ const addNewBalance = async payload => {
         '${VoidMsg}','${R_PrintItemBill}','${R_CountTime}','${SoneCode}','${R_Earn}','${R_EarnNo}','${TranType}',
         '${PDAPrintCheck}','${PDAEMP}','${R_empName}','${R_ServiceAmt}','${R_PEName}','${R_Indulgent}')`
         await pool.query(sql)
-
         return R_Index
     } catch (error) {
         console.log('addNewBalance', error)

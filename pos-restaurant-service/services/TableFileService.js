@@ -46,12 +46,41 @@ const checkTableOpen = async (tableNo) => {
     return null
 }
 
-const summaryNetTotal = (results, netTotal = 0)=> {
+const summaryNetTotal = (results, netTotal = 0) => {
     results.forEach(data => {
         netTotal = netTotal + data.R_Total
     });
 
     return netTotal
+}
+
+const summaryBalance = async (tableNo) => {
+    const sql = `select * from balance 
+    where R_Table='${tableNo}' and R_Void <> 'V' 
+    order by r_index`;
+    const results = await pool.query(sql)
+
+    const summaryRType = (type, netTotal = 0) => {
+        results.forEach(data => {
+            if (data.R_Type === type) {
+                netTotal = netTotal + data.R_Total
+            }
+            return netTotal
+        })
+
+        return netTotal
+    }
+
+    let Food = 0
+    let Drink = 0
+    let Product = 0
+    if (results.length > 0) {
+        Food = summaryRType("1")
+        Drink = summaryRType("2")
+        Product = summaryRType("3")
+    }
+
+    return {Food, Drink, Product}
 }
 
 const summaryTableFile = async (tableNo) => {
@@ -75,5 +104,6 @@ module.exports = {
     updateTableOpenStatus,
     checkTableOpen,
     updateMember,
-    summaryTableFile
+    summaryTableFile,
+    summaryBalance
 }

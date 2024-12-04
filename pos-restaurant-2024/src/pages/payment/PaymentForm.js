@@ -282,7 +282,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                                     disabled />
                             </Box>
                             <Grid container spacing={2} margin={2} display="flex" justifyContent="center">
-                                <Button variant="outlined" fullWidth startIcon={<DiscountIcon />}>ให้ส่วนลดเพิ่ม</Button>
+                                <Button variant="outlined" fullWidth startIcon={<DiscountIcon />} disabled>ให้ส่วนลดเพิ่ม</Button>
                             </Grid>
                             <Box display="flex" justifyContent="flex-end" margin={2}>
                                 <TextField
@@ -371,7 +371,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                                 <Box sx={{ marginTop: "30px" }} textAlign="center">
                                     <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}>ย้อนกลับ</Button>
                                     <Button variant="contained" color="secondary"
-                                        onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled={false}>
+                                        onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled>
                                         แยกชำระ
                                     </Button>
                                     <Button variant="contained" sx={{ margin: "5px" }} color="success" onClick={handleConfirmPayment} disabled={balanceAmount < 0} endIcon={<ConfirmIcon />}>ชำระเงิน</Button>

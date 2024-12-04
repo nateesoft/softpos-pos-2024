@@ -1,5 +1,5 @@
 import React, { forwardRef, useState, useCallback, useContext } from "react";
-import { Box, Tabs, Tab, Badge, Modal, Typography, Fab, Slide, Dialog, Button } from "@mui/material";
+import { Box, Tabs, Tab, Badge, Modal, Typography, Fab, Slide, Dialog, Button, Grid2 } from "@mui/material";
 import MenuBook from '@mui/icons-material/ShoppingCartOutlined';
 import { useTranslation } from "react-i18next"
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
@@ -134,7 +134,6 @@ const ProductMenu = ({
                 if (allListToAdd.length === 0) {
                     allListToAdd = optionalList.filter(item => item.auto_select === 'Y')
                 }
-                console.log('allListToAdd:', allListToAdd)
                 await addOrderSubMenuList(tableNo, allListToAdd, R_LinkIndex)
 
                 // total summary display
@@ -160,7 +159,6 @@ const ProductMenu = ({
     }
 
     const handleConfirmSelectedSubMenu = async (productInfo) => {
-        // console.log('handleConfirmSelectedSubMenu:', productInfo)
         const itemSelected = subMenuSelected.filter(item => item === true).length
         if (itemSelected < productInfo.min_count_set) {
             setMsgWarning(true)
@@ -170,6 +168,12 @@ const ProductMenu = ({
             // add main product
             await addOrderMain(productInfo)
         }
+    }
+
+    const handleCloseMenuSet = () => {
+        setOptionalList([])
+        setSubMenuSelected([])
+        setShowMenuSet(false)
     }
 
     return (
@@ -338,7 +342,7 @@ const ProductMenu = ({
                     handleNotification={handleNotification}
                 />
             </Dialog>
-            <Modal open={showMenuSet} onClose={() => setShowMenuSet(false)}
+            <Modal open={showMenuSet} onClose={handleCloseMenuSet}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle }}>
@@ -361,8 +365,10 @@ const ProductMenu = ({
                     />
                     <Box margin={1} padding={1} display="flex" alignContent="center" justifyContent="space-between" sx={{ padding: "10px", borderRadius: "10px" }}>
                         <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setShowMenuSet(false)}>Cancel</Button>
-                        <Typography>SELECTED: {subMenuSelected.filter(item => item === true).length}</Typography>|
-                        <Typography>MIN: {productInfo.min_count_set}</Typography>
+                        <Grid2 container margin={1} display="flex" justifyContent="center" direction="column">
+                            <Typography>SELECTED: {subMenuSelected.filter(item => item === true).length}</Typography>
+                            <Typography>MIN: {productInfo.min_count_set}</Typography>
+                        </Grid2>
                         <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={() => handleConfirmSelectedSubMenu(productInfo)}>Confirm</Button>
                     </Box>
                 </Box>

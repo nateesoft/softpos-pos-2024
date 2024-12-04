@@ -50,7 +50,9 @@ function PaymentPage() {
   const [open, setOpen] = useState(false)
   const [orderList, setOrderList] = useState([])
   const [billAmount, setBillAmount] = useState(0)
-  const [poshwsetup, setPosHwSetup] = useState({})
+  const [poshwSetup, setPosHwSetup] = useState({})
+  const [posConfigSetup, setPOSConfigSetup] = useState({})
+
   const [nextBillId, setNextBillId] = useState("")
   const [billInfo, setBillInfo] = useState("")
 
@@ -138,10 +140,24 @@ function PaymentPage() {
       })
   }, [macno])
 
+  const loadPosConfigSetup = useCallback(() => {
+    axios
+      .get(`/api/posconfigsetup`)
+      .then((response) => {
+        if (response.status === 200) {
+          setPOSConfigSetup(response.data.data)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error)
+      })
+  }, [macno])
+
   useEffect(() => {
     initLoadOrder()
     loadPosHwSetup()
-  }, [initLoadOrder, loadPosHwSetup])
+    loadPosConfigSetup()
+  }, [initLoadOrder, loadPosHwSetup, loadPosConfigSetup])
 
   return (
     <motion.div initial={{ opacity: 0 }}
@@ -170,7 +186,8 @@ function PaymentPage() {
               billInfo={billInfo} 
               orderList={orderList} 
               tableNo={tableNo} 
-              poshwsetup={poshwsetup} 
+              poshwSetup={poshwSetup} 
+              posConfigSetup={posConfigSetup} 
               empCode={empCode} 
               userLogin={userLogin} 
               customerCount={tableInfo.customerCount}

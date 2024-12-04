@@ -4,7 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Button, Grid2, TableContainer, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid2, TableContainer, Typography } from '@mui/material';
 
 function ccyFormat(num) {
   return `${Math.round(num).toFixed(2)}`;
@@ -23,7 +23,7 @@ const OrderItem = ({ tableNo, orderList }) => {
       <Box sx={{ padding: "10px", borderRadius: "5px", backgroundColor: "#123456" }}>
         <Button variant='text' sx={{fontWeight: "bold", fontSize: "18px", color: "white"}}>Table No: {tableNo}</Button>
       </Box>
-      <TableContainer sx={{width: "415px", overflow: "auto"}}>
+      <TableContainer sx={{width: "415px", height: "300px", overflow: "auto"}}>
         <Table aria-label="spanning table">
           <TableBody>
             {orderList && orderList.map((order) => (
@@ -39,6 +39,7 @@ const OrderItem = ({ tableNo, orderList }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Divider />
       <Box padding={2}>
         <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{fontSize: "14px"}}>SUBTOTAL</Typography>

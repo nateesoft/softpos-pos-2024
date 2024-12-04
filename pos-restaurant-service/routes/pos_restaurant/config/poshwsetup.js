@@ -2,7 +2,18 @@ const express = require('express');
 const router = express.Router();
 
 const pool = require('../../../config/database/MySqlConnect')
-const { PrefixFormat, PrefixZeroFormat, ASCII2Unicode } = require('../../../utils/StringUtil')
+const { PrefixFormat, PrefixZeroFormat, ASCII2Unicode } = require('../../../utils/StringUtil');
+const { updateNextBillNo, getAllData } = require('../../../services/PosHwSetup');
+
+router.get('/', (req, res, next) => {
+  getAllData()
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
 
 router.get('/:macno', (req, res, next) => {
   const { macno } = req.params
@@ -28,10 +39,13 @@ router.get('/:macno', (req, res, next) => {
 
 router.patch('/:macno', (req, res, next) => {
   const { macno } = req.params
-  const sql = `UPDATE poshwsetup set receno1=receno1+1 where terminal='${macno}'`
-  pool.query(sql, (err, results) => {
-    res.status(200).json({ status: "update next billno success" })
-  })
+  updateNextBillNo(macno)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: "update next billno success" })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
 })
 
 module.exports = router;

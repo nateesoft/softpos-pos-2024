@@ -121,6 +121,9 @@ const addNewBill = async (payload) => {
         memberCurSum
     } = memberInfo
 
+    // summary before create billno
+    
+
     const curdate = moment().format('YYYY-MM-DD')
     const curtime = moment().format('HH:mm:ss')
 

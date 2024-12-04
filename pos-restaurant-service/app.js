@@ -28,9 +28,6 @@ const genQrCode = require('./routes/payment/qrcode_promptpay')
 const floorplanRouter = require('./routes/floorplan/floorplan');
 const floorplanTemplateRouter = require('./routes/floorplan/floorplan_template');
 const menuSetupRouter = require('./routes/pos/menu_setup');
-const ordersRouter = require('./routes/pos/orders');
-const productRouter = require('./routes/pos/product');
-const productOrderRouter = require('./routes/pos/product_order');
 
 // for CRM POS
 const memmasterRouter = require('./routes/member/crm/Memmaster');
@@ -42,6 +39,10 @@ const printerThermalRouter = require('./routes/printer');
 const processStockRouter = require('./routes/pos_restaurant/stock/processStock')
 const stkFileRouter = require('./routes/pos_restaurant/stock/stkfile')
 const stcardRouter = require('./routes/pos_restaurant/stock/stcard')
+
+// pos config
+const posConfigSetup = require('./routes/pos_restaurant/config/posconfigsetup')
+const posHwSetup = require('./routes/pos_restaurant/config/poshwsetup')
 
 const app = express();
 // app.use(cors())
@@ -73,9 +74,6 @@ app.use('/api/billno', billNoRouter);
 app.use('/api/tsale', tSaleRouter);
 app.use('/api/qr-payment', genQrCode);
 
-app.use('/api/orders', ordersRouter);
-app.use('/api/product', productRouter);
-app.use('/api/product_order', productOrderRouter);
 app.use('/api/menu_setup', menuSetupRouter);
 app.use('/api/optionfile', optionFileRouter);
 app.use('/api/voidmsg', voidMsgRouter);
@@ -84,6 +82,9 @@ app.use('/api/creditfile', creditFileRouter);
 app.use('/api/process-stock', processStockRouter);
 app.use('/api/stkfile', stkFileRouter);
 app.use('/api/stcard', stcardRouter);
+
+app.use('/api/posconfigsetup', posConfigSetup);
+app.use('/api/poshwsetup', posHwSetup);
 
 // crm member
 app.use('/api/crm/member', memmasterRouter)

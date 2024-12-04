@@ -9,15 +9,6 @@ export default class ReceiptToPrint extends Component {
     super(props)
   }
 
-  // componentDidMount() {
-  //   axios.get(`/api/billno/${this.props.billNo}`)
-  //     .then(res => {
-  //       const billInfo = res.data.data;
-  //       console.log('ReceiptToPrint:', billInfo)
-  //       this.setState({ billInfo });
-  //     })
-  // }
-
   render() {
     const billInfo = this.props.billInfo
     const {
@@ -26,15 +17,18 @@ export default class ReceiptToPrint extends Component {
       B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1,
       B_Ton
     } = billInfo
-    console.log('billInfo:', billInfo)
-    const poshwsetup = this.props.poshwsetup
-    console.log('poshwsetup:', poshwsetup)
-    let headers = [poshwsetup.Heading1, poshwsetup.Heading2, poshwsetup.Heading3, poshwsetup.Heading4]
+    
+    const posConfigSetup = this.props.posConfigSetup
+    const poshwSetup = this.props.poshwSetup
+
+    let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
     headers = headers.filter(h => h !== "")
-    let footers = [poshwsetup.Footting1, poshwsetup.Footting2, poshwsetup.Footting3]
+
+    let footers = [poshwSetup.Footting1, poshwSetup.Footting2, poshwSetup.Footting3]
+
     let orderList = this.props.orderList
     orderList = orderList.filter(o => o.R_Price > 0)
-    console.log(this.props)
+    
     return (
       <Paper elevation={0} sx={{ padding: "5px" }} ref={this.props.innerRef}>
         <div align="center" style={{ fontSize: "18px", fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
@@ -120,6 +114,9 @@ export default class ReceiptToPrint extends Component {
           </Box>
         </Paper>
         <Divider sx={{marginTop: "10px"}} />
+        <div align="center">
+          {posConfigSetup.P_PrintRecpMessage}
+        </div>
         {footers && footers.map((footer) => 
           <div align="center">{footer}</div>
         )}

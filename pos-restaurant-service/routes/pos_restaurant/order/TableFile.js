@@ -84,4 +84,15 @@ router.put('/:id', function (req, res, next) {
   )
 })
 
+router.post('/summaryBalance', (req, res) => {
+  const {tableNo} = req.body
+  TableFileService.summaryBalance(tableNo)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 module.exports = router;
