@@ -14,13 +14,13 @@ import { POSContext } from "../../AppContext";
 import QrCodeGenerator from "./QRCodePayment";
 import CreditChargeModal from "./CreditChargeModal";
 
-function ccyFormat(num) {
-    return `${Math.round(num).toFixed(2)}`;
+const NumFormat = data => {
+    return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
-function subtotal(items) {
-    return items.filter(item => item.R_Void !== 'V').map(({ R_Price }) => R_Price).reduce((sum, i) => sum + i, 0);
-}
+// function subtotal(items) {
+//     return items.filter(item => item.R_Void !== 'V').map(({ R_Price }) => R_Price).reduce((sum, i) => sum + i, 0);
+// }
 
 const normalButton = { bgcolor: "#123456", color: "white", fontWeight: "bold", fontSize: "36px", borderRadius: "10px" }
 const modalStyle = {
@@ -34,12 +34,18 @@ const modalStyle = {
     boxShadow: 24
 }
 
-function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotification }) {
+function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotification, tableFile }) {
     const { appData } = useContext(POSContext)
     const { macno } = appData
 
-    const invoiceSubtotal = subtotal(orderList);
-    const R_NetTotal = invoiceSubtotal;
+    const { 
+        subTotalAmount, 
+        serviceAmount,
+        vatAmount,
+        netTotalAmount,
+        productAndService,
+        printRecpMessage } = tableFile
+    const R_NetTotal = netTotalAmount;
 
     const [paymentAmount, setPaymentAmount] = useState(0)
 
@@ -80,7 +86,6 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
     }
 
     const handleCreditInfoSelect = (cInfo) => {
-        console.log('cInfo:', cInfo, R_NetTotal)
         const NetTotal = R_NetTotal - cashAmount
         const totalCreditCharge = Math.abs(NetTotal) * cInfo.crCharge / 100
         const totalCreditChargeAmount = Math.abs(NetTotal) + totalCreditCharge
@@ -96,6 +101,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
         setCreditAmount(R_NetTotal - cashAmount - transferAmount)
         setOpenCreditInfo(true)
     }
+
     const handleTransferEnabled = () => {
         setTransferAmount(R_NetTotal - cashAmount)
         setOpenTransferInfo(true)
@@ -123,20 +129,29 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
 
     const totalAmount = useCallback(() => {
         const cc = cashAmount ? parseFloat(cashAmount) : 0
-        const cd = creditAmount ? parseFloat(creditAmount-creditChargeAmount) : 0
+        const cd = creditAmount ? parseFloat(creditAmount - creditChargeAmount) : 0
         const ta = transferAmount ? parseFloat(transferAmount) : 0
-        const toalNetAmt = parseFloat(Math.round(R_NetTotal))
+        const toalNetAmt = parseFloat(Math.round(R_NetTotal)) + creditChargeAmount
         const paymentAmt = parseFloat(cc + cd + ta)
         const discountAmt = 0
         const balanceAmt = parseFloat((paymentAmt - discountAmt) - toalNetAmt)
         setPaymentAmount(paymentAmt)
         setDiscountAmount(discountAmt)
         if (balanceAmt < 0) {
-            setBalanceAmount(balanceAmt)
-            setTonAmount(0)
+            if (creditAmount > 0) {
+                setBalanceAmount(0)
+            } else {
+                setBalanceAmount(balanceAmt)
+                setTonAmount(0)
+            }
         } else {
-            setTonAmount(balanceAmt)
-            setBalanceAmount(0)
+            if (creditAmount > 0) {
+                setTonAmount(0)
+                setBalanceAmount(0)
+            } else {
+                setTonAmount(balanceAmt)
+                setBalanceAmount(0)
+            }
         }
     }, [cashAmount, creditAmount, transferAmount, R_NetTotal])
 
@@ -147,12 +162,18 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
 
     const handleConfirmPayment = async () => {
         if (balanceAmount >= 0) {
+
             // update billno
             const payload = {
                 macno,
                 tableNo,
                 billType: "E",
                 orderList,
+                serviceInfo: {
+                    serviceAmount,
+                    vatAmount
+
+                },
                 cashInfo: {
                     cashEnable,
                     cashAmount
@@ -183,15 +204,15 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                 },
                 tonAmount,
                 paymentAmount,
-                netTotal: R_NetTotal
+                netTotal: (R_NetTotal+creditChargeAmount)
             }
+
             // update print2kic
             await axios.patch(`/api/balance/printToKic/${tableNo}`)
 
             // send bill payment
             axios.post(`/api/billno`, payload)
                 .then(response => {
-                    console.log('handleConfirmPayment:', response)
                     if (response.data.data != null) {
                         loadBillInfo(response.data.data)
                     } else {
@@ -212,8 +233,12 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
         setOpenTransferInfo(false)
     }
 
+    const handleCloseCreditModal = () => {
+        totalAmount()
+        setOpenCreditInfo(false)
+    }
+
     useEffect(() => {
-        console.log('useEffect PaymentForm')
         totalAmount()
     }, [totalAmount])
 
@@ -222,7 +247,9 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
             <Grid size={12}>
                 <Box display="flex" sx={{ padding: "20px", backgroundColor: "salmon", border: "2px solid gray", borderRadius: "10px" }} justifyContent="space-between">
                     <Typography variant="h3" sx={{ fontWeight: "bold", color: "#444" }}>TOTAL</Typography>
-                    <Typography variant="h3" sx={{ marginRight: "20px", fontSize: "72px", textShadow: "3px 3px snow", fontWeight: "bold" }}>{ccyFormat(R_NetTotal)}</Typography>
+                    <Typography variant="h3" sx={{ marginRight: "20px", fontSize: "72px", textShadow: "3px 3px snow", fontWeight: "bold" }}>
+                        {NumFormat(R_NetTotal + creditChargeAmount)}
+                    </Typography>
                 </Box>
             </Grid>
             <Grid size={12}>
@@ -230,11 +257,11 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                     <Grid size={6}>
                         <Paper elevation={3} sx={{ padding: "10px" }}>
                             <Box display="flex" justifyContent="space-between" margin={2}>
-                                <img width={48} height={48} src={"/images/payment/cash.png"} alt="" style={{marginRight: "8px"}} />
+                                <img width={48} height={48} src={"/images/payment/cash.png"} alt="" style={{ marginRight: "8px" }} />
                                 <TextField
                                     type="number"
                                     value={cashAmount}
-                                    onFocus={()=>setCashEnable(true)}
+                                    onFocus={() => setCashEnable(true)}
                                     onChange={e => setCashAmount(e.target.value)}
                                     onKeyUp={totalAmount}
                                     id="txtCashAmount"
@@ -260,9 +287,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                                 <Grid2 container spacing={1} justifyContent="space-between">
                                     <img width={48} src={"/images/payment/credit-card.png"} alt="" />
                                     <TextField
-                                        type="number"
-                                        value={creditAmount}
-                                        onChange={e => setCreditAmount(e.target.value)}
+                                        value={NumFormat(creditAmount - creditChargeAmount)}
                                         onKeyUp={totalAmount}
                                         id="txtCreditAmount"
                                         label="ชำระด้วยบัตรเครดิต"
@@ -271,12 +296,23 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                                     <Button variant="outlined" onClick={handleCreditEnabled}>...</Button>
                                 </Grid2>
                             </Box>
+                            <Box display="flex" justifyContent="space-between" margin={2}>
+                                <Grid2 container spacing={1} justifyContent="space-between">
+                                    <img width={48} src={"/images/payment/credit-card.png"} alt="" />
+                                    <TextField
+                                        value={NumFormat(creditChargeAmount)}
+                                        onKeyUp={totalAmount}
+                                        id="txtCreditAmount"
+                                        label="Credit Charge Amount"
+                                        disabled
+                                        inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                                </Grid2>
+                            </Box>
                             <Box display="flex" justifyContent="flex-end" margin={2}>
                                 <TextField
                                     variant="filled"
                                     label="ยอดรับชำระทั้งหมด"
-                                    type="number"
-                                    value={paymentAmount}
+                                    value={NumFormat(paymentAmount+creditChargeAmount)}
                                     inputProps={{ min: 0, style: { textAlign: "right" } }}
                                     fullWidth
                                     disabled />
@@ -298,7 +334,6 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                                 <TextField
                                     variant="filled"
                                     label="ค้างชำระ"
-                                    type="number"
                                     value={balanceAmount}
                                     inputProps={{ min: 0, style: { textAlign: "right" } }}
                                     fullWidth
@@ -310,7 +345,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                                     label="เงินทอน"
                                     type="number"
                                     value={tonAmount}
-                                    inputProps={{ min: 0, style: { textAlign: "right", fontSize: "48px", fontWeight: "bold" } }}
+                                    inputProps={{ min: 0, style: { textAlign: "right", fontSize: "22px", fontWeight: "bold" } }}
                                     fullWidth
                                     disabled />
                             </Box>
@@ -374,7 +409,12 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                                         onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled>
                                         แยกชำระ
                                     </Button>
-                                    <Button variant="contained" sx={{ margin: "5px" }} color="success" onClick={handleConfirmPayment} disabled={balanceAmount < 0} endIcon={<ConfirmIcon />}>ชำระเงิน</Button>
+                                    <Button variant="contained"
+                                        sx={{ margin: "5px" }}
+                                        color="success"
+                                        onClick={handleConfirmPayment}
+                                        disabled={balanceAmount < 0}
+                                        endIcon={<ConfirmIcon />}>ชำระเงิน</Button>
                                 </Box>
                             </Grid>
                         </Grid>
@@ -395,11 +435,11 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                         <TextField variant="outlined" disabled type="number" label="Credit Charge" value={creditChargePercent} />
                         <TextField variant="outlined" disabled type="number" label="Charge Amount" value={creditChargeAmount} />
                         <TextField variant="outlined" type="number" label="ยอดค้างชำระ" value={0} disabled />
-                        <TextField variant="outlined" type="number" label="จำนวนเงินที่ใส่เครดิต" value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
+                        <TextField variant="outlined" type="number" disabled label="จำนวนเงินที่ใส่เครดิต" value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
                     </Grid>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
                         <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={() => setOpenCreditInfo(false)}>ยกเลิก</Button>
-                        <Button variant="contained" sx={{ margin: "5px" }} onClick={() => setOpenCreditInfo(false)} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
+                        <Button variant="contained" sx={{ margin: "5px" }} onClick={handleCloseCreditModal} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
                     </Box>
                 </Box>
             </Modal>

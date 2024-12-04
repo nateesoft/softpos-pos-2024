@@ -33,7 +33,7 @@ const displayAllFieldAssign = (fields) => {
 const displayOldToNewAssign = (fields, tableName) => {
     const myField = []
     fields.forEach(field => {
-        myField.push(`const ${field.Field}= old${tableName}.${field.Field}`)
+        myField.push(`const ${field.Field}=${tableName}.${field.Field}`)
     })
     return myField
 }
@@ -81,7 +81,7 @@ const assignFieldWithDefautValue = (fields) => {
     return myField
 }
 
-const tableName = 'MyRestaurantJefferSakon.stcard'
+const tableName = 'MyRestaurantJefferSakon.tablefile'
 const sqlAllTable = `desc ${tableName} `
 pool.query(sqlAllTable, (err, results) => {
     if (err) throw err
@@ -94,7 +94,7 @@ pool.query(sqlAllTable, (err, results) => {
     const sqlQuery = `INSERT INTO ${tableName} (${allFields}) VALUES (${getQM})`;
     const sqlQueryInsert = `INSERT INTO ${tableName} (${allFields}) \nVALUES (${displayQueryUpdateAssign(results)})`;
     const sqlUpdate = `UPDATE ${tableName} SET ${displayAllFieldAssign(results)} WHERE id='xxxx'`;
-    const paramAssign = displayOldToNewAssign(results, "Balance").join(';\n');
+    const paramAssign = displayOldToNewAssign(results, "tablefile").join(';\n');
 
     console.log(tableName + "=>", allFields.join(','))
     console.log(tableName + "=>", allFieldsDefault.join('\n'))

@@ -43,6 +43,7 @@ const stcardRouter = require('./routes/pos_restaurant/stock/stcard')
 // pos config
 const posConfigSetup = require('./routes/pos_restaurant/config/posconfigsetup')
 const posHwSetup = require('./routes/pos_restaurant/config/poshwsetup')
+const company = require('./routes/pos_restaurant/config/company')
 
 const app = express();
 // app.use(cors())
@@ -85,6 +86,7 @@ app.use('/api/stcard', stcardRouter);
 
 app.use('/api/posconfigsetup', posConfigSetup);
 app.use('/api/poshwsetup', posHwSetup);
+app.use('/api/company', company);
 
 // crm member
 app.use('/api/crm/member', memmasterRouter)

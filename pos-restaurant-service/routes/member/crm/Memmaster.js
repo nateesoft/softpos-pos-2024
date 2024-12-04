@@ -15,7 +15,8 @@ router.get('/', function (req, res) {
 
 router.post('/search', function (req, res) {
   const {phone, code, name} = req.body
-  MemberMasterService.searchData(phone, code, name)
+  const phoneFormat = phone.replace('-', '')
+  MemberMasterService.searchData(phoneFormat, code, name)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

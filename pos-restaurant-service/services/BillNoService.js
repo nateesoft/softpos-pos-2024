@@ -10,6 +10,7 @@ const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock, p
 const { updateDiscount } = require('./DiscountService');
 const { ThermalPrinterConnect } = require('./ThermalPrinter');
 const { ProcessStockOut } = require('./STCardService');
+const { getPOSConfigSetup } = require('./POSConfigSetupService')
 
 const getAllBillNoToday = async () => {
     const sql = `select * from billno where B_PostDate=curdate()`;
@@ -86,11 +87,13 @@ const getBillIDCurrent = async (macno) => {
 }
 
 const addNewBill = async (payload) => {
+    const posConfigSetup = await getPOSConfigSetup()
     const {
         macno, tableNo, billType, orderList, tonAmount, paymentAmount, netTotal,
-        memberInfo, cashInfo, creditInfo, transferInfo, discountInfo
+        memberInfo, cashInfo, creditInfo, transferInfo, discountInfo, serviceInfo,
     } = payload
     const tableFile = await getTableByCode(tableNo)
+    const { serviceAmount, vatAmount  } = serviceInfo
     const { Cashier, TCustomer, Food, Drink, Product } = tableFile
 
     const { cashEnable, cashAmount } = cashInfo
@@ -122,8 +125,6 @@ const addNewBill = async (payload) => {
     } = memberInfo
 
     // summary before create billno
-    
-
     const curdate = moment().format('YYYY-MM-DD')
     const curtime = moment().format('HH:mm:ss')
 
@@ -143,8 +144,8 @@ const addNewBill = async (payload) => {
     const B_Product = Product;
     const B_Total = (B_Food + B_Drink + B_Product);
 
-    const B_Service = 0;
-    const B_ServiceAmt = 0;
+    const B_Service = posConfigSetup.P_Service;
+    const B_ServiceAmt = serviceAmount;
     const B_ItemDiscAmt = 0;
     const B_FastDisc = "";
     const B_FastDiscAmt = 0;
@@ -162,13 +163,13 @@ const addNewBill = async (payload) => {
     const B_AdjAmt = 0;
     const B_PreDisAmt = 0;
     const B_NetTotal = netTotal;
-    const B_NetFood = 0;
-    const B_NetDrink = 0;
-    const B_NetProduct = 0;
-    const B_NetVat = netTotal;
+    const B_NetFood = Food;
+    const B_NetDrink = Drink;
+    const B_NetProduct = Product;
+    const B_NetVat = netTotal-creditChargeAmount;
     const B_NetNonVat = 0;
-    const B_Vat = (netTotal * 7 / 100);
-    const B_PayAmt = paymentAmount;
+    const B_Vat = vatAmount;
+    const B_PayAmt = cashAmount;
     const B_Cash = cashAmount;
     const B_GiftVoucher = 0;
     const B_Earnest = 0;
@@ -204,7 +205,7 @@ const addNewBill = async (payload) => {
     const MScore = "";
     const CurStamp = "";
     const StampRate = "";
-    const B_ChkBill = "Y";
+    const B_ChkBill = "";
     const B_ChkBillTime = curtime;
     const B_CashTime = curtime;
     const B_WaitTime = "00:00:00";

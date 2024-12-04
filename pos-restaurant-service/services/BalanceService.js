@@ -14,7 +14,6 @@ const getTotalBalance = async (tableNo) => {
     if (results.length > 0) {
         return results[0].R_Total
     }
-
     return 0.00
 }
 

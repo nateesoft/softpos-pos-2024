@@ -43,6 +43,14 @@ function PaymentPage() {
   const { tableNo } = useParams();
   console.log('PaymentPage:', tableNo)
 
+  // Load summary tablefile
+  const [subTotalAmount, setSubTotalAmount] = useState(0)
+  const [serviceAmount, setServiceAmount] = useState(0)
+  const [productAndService, setProductAndService] = useState(0)
+  const [vatAmount, setVatAmount] = useState(0)
+  const [netTotalAmount, setNetTotalAmount] = useState(0)
+  const [printRecpMessage, setPrintRecpMessage] = useState("")
+
   const matches = useMediaQuery('(min-width:1024px)');
   const { appData } = useContext(POSContext)
   const { empCode, macno, userLogin, tableInfo } = appData
@@ -66,7 +74,6 @@ function PaymentPage() {
   }
 
   const navigate = useNavigate();
-
   const contentRef = useRef(null);
   // const handlePrint = useReactToPrint({ contentRef });
   const handlePrint = useReactToPrint({
@@ -153,19 +160,41 @@ function PaymentPage() {
       })
   }, [macno])
 
+  const summaryTableFileBalance = useCallback(async () => {
+    const response = await axios.post('/api/tablefile/summaryBalance', {tableNo})
+    if(response.data.data){
+      const data = response.data.data
+      setSubTotalAmount(data.TAmount)
+      setServiceAmount(data.ServiceAmt)
+      setVatAmount(data.vatAmount)
+      setNetTotalAmount(data.NetTotal)
+      setProductAndService(data.productAndService)
+      setPrintRecpMessage(data.printRecpMessage)
+    }
+  }, [])
+
   useEffect(() => {
     initLoadOrder()
     loadPosHwSetup()
     loadPosConfigSetup()
   }, [initLoadOrder, loadPosHwSetup, loadPosConfigSetup])
 
+  useEffect(() => {
+    summaryTableFileBalance()
+  }, [summaryTableFileBalance])
+
   return (
-    <motion.div initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <Grid container spacing={2} sx={backgroundSpecial}>
         {matches && <Grid size={4}>
-          <OrderItem tableNo={tableNo} orderList={orderList} />
+          <OrderItem tableNo={tableNo} orderList={orderList} tableFile={{
+            subTotalAmount,
+            serviceAmount,
+            vatAmount,
+            netTotalAmount,
+            productAndService,
+            printRecpMessage
+          }} />
           <MemberInfo tableNo={tableNo} />
         </Grid>}
         <Grid size={matches ? 8 : 12}>
@@ -174,7 +203,15 @@ function PaymentPage() {
             tableNo={tableNo} 
             orderList={orderList}
             handleNotification={handleNotification} 
-            loadBillInfo={handleLoadBillInfo}
+            loadBillInfo={handleLoadBillInfo} 
+            tableFile={{
+              subTotalAmount,
+              serviceAmount,
+              vatAmount,
+              netTotalAmount,
+              productAndService,
+              printRecpMessage
+            }}
           />
         </Grid>
       </Grid>
