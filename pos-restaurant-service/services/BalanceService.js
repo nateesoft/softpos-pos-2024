@@ -159,7 +159,7 @@ const addListBalance = async (payload) => {
         })
 
         // summary tablefile
-        await summaryBalance()
+        await summaryBalance(tableNo)
 
         // process stock out
         await orderStockOut(reponseR_Index)
@@ -192,7 +192,7 @@ const addBalance = async payload => {
     })
 
     // summary tablefile
-    await summaryBalance()
+    await summaryBalance(tableNo)
 
     // process stock out
     await orderStockOut(reponseR_Index)
