@@ -15,7 +15,7 @@ const createNewTSale = async (balance, BillRefNo) => {
         R_Earn, R_EarnNo } = balance
 
     const R_Refno = BillRefNo;
-    const R_Index = BillRefNo + "/" + balance.R_Index.split('/')[1]
+    const R_Index = BillRefNo + "/" + balance.R_Index
     const Cashier = balance.Cashier; // can change
     const R_Emp = balance.R_Emp; // can change
     const R_Date = moment().format('YYYY-MM-DD');

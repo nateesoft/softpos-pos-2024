@@ -4,6 +4,10 @@ import Moment from 'react-moment'
 // import axios from 'axios'
 // import QrCodeGenerator from './QRCodePayment'
 
+const NumFormat = data => {
+  return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+}
+
 export default class ReceiptToPrint extends Component {
   constructor(props) {
     super(props)
@@ -15,7 +19,7 @@ export default class ReceiptToPrint extends Component {
       B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct, 
       B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
       B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1,
-      B_Ton
+      B_Ton,B_NetVat
     } = billInfo
     
     const posConfigSetup = this.props.posConfigSetup
@@ -33,7 +37,7 @@ export default class ReceiptToPrint extends Component {
       <Paper elevation={0} sx={{ padding: "5px" }} ref={this.props.innerRef}>
         <div align="center" style={{ fontSize: "18px", fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
         <Paper elevation={0} sx={{ padding: "10px" }}>
-          {headers && headers.map((header) => <div align="center">
+          {headers && headers.map((header) => <div>
             {header}
           </div>)}
           <div align="center">Table: {this.props.tableNo}</div>
@@ -61,7 +65,7 @@ export default class ReceiptToPrint extends Component {
                 <td>{item.R_ETD}</td>
                 <td>{item.R_PName}</td>
                 <td align="right">X {item.R_Quan}</td>
-                <td align="right">{item.R_Price}</td>
+                <td align="right">{NumFormat(item.R_Price)}</td>
               </tr>
             ))}
           </table>
@@ -69,35 +73,39 @@ export default class ReceiptToPrint extends Component {
         <Divider />
         <Paper elevation={0} sx={{ padding: "10px" }}>
           <Box display="flex" justifyContent="space-between">
-            <Typography>Sub-Total</Typography>
-            <Typography>{B_Total}</Typography>
+            <Typography>Sub-TOTAL....(Item {orderList.length})</Typography>
+            <Typography>{NumFormat(B_Total)}</Typography>
           </Box>
           <Box padding={2}>
             <Box display="flex" justifyContent="space-between">
               <Typography>อาหาร (Food)</Typography>
-              <Typography>{B_NetFood}</Typography>
+              <Typography>{NumFormat(B_NetFood)}</Typography>
             </Box>
             <Box display="flex" justifyContent="space-between">
               <Typography>เครื่องดื่ม (Drink)</Typography>
-              <Typography>{B_NetDrink}</Typography>
+              <Typography>{NumFormat(B_NetDrink)}</Typography>
             </Box>
             <Box display="flex" justifyContent="space-between">
               <Typography>สินค้าอื่นๆ (Other)</Typography>
-              <Typography>{B_NetProduct}</Typography>
+              <Typography>{NumFormat(B_NetProduct)}</Typography>
             </Box>
           </Box>
           <Divider />
           <Box display="flex" justifyContent="space-between">
-            <Typography>ค่าบริการ 10%</Typography>
-            <Typography>{B_ServiceAmt}</Typography>
+            <Typography>ค่าบริการ {posConfigSetup.P_Service}%</Typography>
+            <Typography>{NumFormat(B_ServiceAmt)}</Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
-            <Typography>Vat 7%</Typography>
+            <Typography>มูลค่าสินค้า/บริการ.....</Typography>
+            <Typography>{NumFormat(B_NetVat-B_Vat)}</Typography>
+          </Box>
+          <Box display="flex" justifyContent="space-between">
+            <Typography>Vat {posConfigSetup.P_Vat}%</Typography>
             <Typography>{B_Vat}</Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
             <Typography>Net Total</Typography>
-            <Typography>{B_NetTotal}</Typography>
+            <Typography>{NumFormat(B_NetTotal)}</Typography>
           </Box>
           <Divider />
           <Box display="flex" justifyContent="space-between">
@@ -110,7 +118,7 @@ export default class ReceiptToPrint extends Component {
             <Typography>{B_CardNo1} | {B_AppCode1}</Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
-            <Typography>CR-Charge {B_CrCharge1}% ({B_CrChargeAmt1}) {B_CrAmt1}</Typography>
+            <Typography>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</Typography>
           </Box>
         </Paper>
         <Divider sx={{marginTop: "10px"}} />
