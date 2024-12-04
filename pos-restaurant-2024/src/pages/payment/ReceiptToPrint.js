@@ -8,6 +8,11 @@ const NumFormat = data => {
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
+const formatBindCredit = (creditNumber) => {
+  const newCreditBind = creditNumber.substr(creditNumber.length - 4, creditNumber.length)
+  return "******"+newCreditBind;
+}
+
 export default class ReceiptToPrint extends Component {
   constructor(props) {
     super(props)
@@ -115,7 +120,7 @@ export default class ReceiptToPrint extends Component {
           <Divider />
           <Box display="flex" justifyContent="space-between">
             <Typography>{B_CrCode1} {B_CrBank}</Typography>
-            <Typography>{B_CardNo1} | {B_AppCode1}</Typography>
+            <Typography>{formatBindCredit(B_CardNo1)}</Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
             <Typography>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</Typography>
