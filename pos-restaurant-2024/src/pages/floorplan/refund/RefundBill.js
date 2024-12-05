@@ -16,9 +16,10 @@ import moment from 'moment'
 
 import SearchMenu from './SearchMenu';
 import { POSContext } from '../../../AppContext';
+import { ModalConfirm } from '../../../util/AlertPopup';
 
 const columns = [
-  { id: 'action', label: '' },
+  { id: 'action', label: '', minWidth: 150 },
   { id: 'B_Refno', label: 'B_Refno' },
   { id: 'B_PostDate', label: 'B_PostDate', type: "date" },
   { id: 'B_Table', label: 'B_Table' },
@@ -27,28 +28,6 @@ const columns = [
   { id: 'B_NetTotal', label: 'B_NetTotal' },
   { id: 'B_Void', label: 'B_Void' },
   { id: 'B_VoidUser', label: 'B_VoidUser' },
-];
-
-function createData(V, ETD, PLUCode, Description, Qty, Price, Amount) {
-  return { V, ETD, PLUCode, Description, Qty, Price, Amount };
-}
-
-const rows = [
-  createData('', 'E', 'India', 1, 'IN', 1324171354, 3287263),
-  createData('', 'E', 'China', 1, 'CN', 1403500365, 9596961),
-  createData('', 'E', 'Italy', 1, 'IT', 60483973, 301340),
-  createData('', 'E', 'United States', 1, 'US', 327167434, 9833520),
-  createData('', 'E', 'Canada', 1, 'CA', 37602103, 9984670),
-  createData('', 'E', 'Australia', 1, 'AU', 25475400, 7692024),
-  createData('', 'E', 'Germany', 1, 'DE', 83019200, 357578),
-  createData('', 'E', 'Ireland', 1, 'IE', 4857000, 70273),
-  createData('', 'E', 'Mexico', 1, 'MX', 126577691, 1972550),
-  createData('', 'E', 'Japan', 1, 'JP', 126317000, 377973),
-  createData('', 'E', 'France', 1, 'FR', 67022000, 640679),
-  createData('', 'E', 'United Kingdom', 1, 'GB', 67545757, 242495),
-  createData('', 'E', 'Russia', 1, 'RU', 146793744, 17098246),
-  createData('', 'E', 'Nigeria', 1, 'NG', 200962417, 923768),
-  createData('', 'E', 'Brazil', 1, 'BR', 210147125, 8515767),
 ];
 
 const modalStyle = {
@@ -64,11 +43,13 @@ const modalStyle = {
 
 const RefundBill = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
-  const { userLogin } = appData
+  const { userLogin, posuser } = appData
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [billList, setBillList] = useState([])
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [B_Refno, setBRefno] = useState("")
 
   const [recieptNo, setRecieptNo] = useState("")
   const [macNo, setMacNo] = useState("")
@@ -82,13 +63,19 @@ const RefundBill = ({ setOpen }) => {
     setPage(0);
   }
 
-  const handleRefundBill = (billNoData) => {
+  const handleShowConfirm = (B_Refno) => {
+    setBRefno(B_Refno)
+    setShowConfirm(true)
+  }
+
+  const handleRefundBill = () => {
     axios.post(`/api/billno/refund`, {
-      billNo: billNoData.B_Refno,
+      billNo: B_Refno,
       Cashier: userLogin
     })
       .then(response => {
-        setOpen(false)
+        loadBIllNo()
+        setShowConfirm(false)
       })
       .catch(err => console.log(err))
   }
@@ -111,7 +98,7 @@ const RefundBill = ({ setOpen }) => {
       <Grid container spacing={2} sx={{ marginTop: '15px' }}>
         <RefundIcon color="error" />
         <Typography variant='h5' color='error'>
-          ยกเลิกรายการบิลที่รับชำระเงินแล้ว (Refund Bill)
+          ยกเลิกบิล (Refund Bill)
         </Typography>
       </Grid>
       <Grid container spacing={2}>
@@ -152,8 +139,9 @@ const RefundBill = ({ setOpen }) => {
                                 <TableCell>
                                   <Button
                                     variant='contained'
-                                    color='error'
-                                    onClick={() => handleRefundBill(row)} startIcon={<ReceiptIcon />}>
+                                    color='error' 
+                                    disabled={posuser.Sale2==='N'}
+                                    onClick={() => handleShowConfirm(row.B_Refno)} startIcon={<ReceiptIcon />}>
                                     Refund
                                   </Button>
                                 </TableCell>
@@ -177,7 +165,7 @@ const RefundBill = ({ setOpen }) => {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={billList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -185,8 +173,15 @@ const RefundBill = ({ setOpen }) => {
           />
         </Paper>
       </Grid>
+      <ModalConfirm
+        open={showConfirm}
+        setOpen={() => setShowConfirm(false)}
+        onSubmit={handleRefundBill}
+        header="Refund Bill"
+        content="ยืนยันการทำรายการ ?"
+      />
     </Box>
-  );
+  )
 }
 
 export default RefundBill

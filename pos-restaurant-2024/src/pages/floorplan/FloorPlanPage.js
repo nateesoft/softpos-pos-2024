@@ -81,8 +81,8 @@ function FloorPlanPage() {
     axios
       .patch("/api/posuser/logout", { username: userLogin })
       .then((response) => {
-        if (response.data.code === 200) {
-          setAppData({ ...appData, userLogin: "" })
+        if (response.data.status === 2000) {
+          setAppData({ ...appData, userLogin: "", posuser: null })
           localStorage.setItem("userLogin", "")
           navigate("/")
         } else {

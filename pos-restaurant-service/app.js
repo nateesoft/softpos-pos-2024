@@ -45,6 +45,8 @@ const posConfigSetup = require('./routes/pos_restaurant/config/posconfigsetup')
 const posHwSetup = require('./routes/pos_restaurant/config/poshwsetup')
 const company = require('./routes/pos_restaurant/config/company')
 
+const invenotryDbRouter = require('./routes/inventory')
+
 const app = express();
 // app.use(cors())
 app.use(bodyParser.json())
@@ -87,6 +89,9 @@ app.use('/api/stcard', stcardRouter);
 app.use('/api/posconfigsetup', posConfigSetup);
 app.use('/api/poshwsetup', posHwSetup);
 app.use('/api/company', company);
+
+// support load all table
+app.use('/api/inventory', invenotryDbRouter)
 
 // crm member
 app.use('/api/crm/member', memmasterRouter)

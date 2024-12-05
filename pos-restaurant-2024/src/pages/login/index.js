@@ -8,9 +8,6 @@ import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
-import Checkbox from "@mui/material/Checkbox"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Stack from "@mui/material/Stack"
 import { motion } from "framer-motion"
 import axios from "axios"
 
@@ -62,9 +59,9 @@ export default function Login() {
     axios
       .post("/api/posuser/login", { username: user, password, macno: macno })
       .then((response) => {
-        if (response.data.code === 200) {
-          if (response.data.data.length > 0) {
-            setAppData({ ...appData, userLogin: user })
+        if (response.data.status === 2000) {
+          if (response.data.data) {
+            setAppData({ ...appData, userLogin: user, posuser: response.data.data })
             localStorage.setItem("userLogin", user)
             navigate("/floorplan")
           } else {

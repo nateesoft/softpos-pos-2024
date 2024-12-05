@@ -54,20 +54,14 @@ const updateNextBill = async (macno) => {
 }
 
 const updateRefundBill = async (billNoData) => {
-    const sql = `UPDATE billno 
-    SET B_Void='V', 
-    B_VoidTime='${billNoData.B_VoidTime}',
-    B_VoidUser='${billNoData.B_VoidUser}' 
+    const sql = `UPDATE billno SET B_Void='V', B_VoidTime='${billNoData.B_VoidTime}', B_VoidUser='${billNoData.B_VoidUser}' 
     WHERE B_Refno='${billNoData.B_Refno}'`;
     const results = await pool.query(sql)
     return results
 }
 
 const updateRefundTsale = async (tSaleData) => {
-    const sql = `UPDATE t_sale 
-    SET R_Void='V', 
-    R_VoidTime='${tSaleData.R_VoidTime}',
-    R_VoidUser='${tSaleData.R_VoidUser}' 
+    const sql = `UPDATE t_sale SET R_Void='V', R_VoidTime='${tSaleData.R_VoidTime}', R_VoidUser='${tSaleData.R_VoidUser}' 
     WHERE R_Refno='${tSaleData.R_Refno}'`;
     const results = await pool.query(sql)
     return results

@@ -26,6 +26,9 @@ import Protected from "../routes/ProtectedRoute"
 import DashboardLayout from "../layouts"
 import RegisterMacNo from './RegisterMacno'
 
+// inventory stock
+import TemplateReport from './inventory'
+
 // test printer
 import TestPrinter from '../pages/thermal'
 
@@ -57,6 +60,7 @@ const AnimatedRoutes = () => {
                         <Route path="/sale-report3" element={<SaleReport3 />} />
                         <Route path="/sale-report4" element={<SaleReport4 />} />
                         <Route path="/sale-report5" element={<SaleReport5 />} />
+                        <Route path="/inventory/db" element={<TemplateReport />} />
                     </Route>
                 </Route>
 

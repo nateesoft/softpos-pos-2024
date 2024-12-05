@@ -127,7 +127,7 @@ export default class ReceiptToPrint extends Component {
           </Box>
         </Paper>
         <Divider sx={{marginTop: "10px"}} />
-        <div align="center">
+        <div>
           {posConfigSetup.P_PrintRecpMessage}
         </div>
         {footers && footers.map((footer) => 

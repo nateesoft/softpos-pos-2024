@@ -1,8 +1,10 @@
 import { useContext } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+
 import { POSContext } from "../AppContext";
 
-const Protected = () => {
+const Protected = (props) => {
+  console.log('Protected:', props)
   const { appData } = useContext(POSContext)
 
   if (!appData.macno) {
