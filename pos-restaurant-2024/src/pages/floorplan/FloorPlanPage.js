@@ -186,21 +186,26 @@ function FloorPlanPage() {
         <AppBar component="static" sx={{ backgroundColor: "#123456", boxShadow: "5px 3px #aaa" }}>
           <Toolbar>
             <Grid2 container justifyContent="flex-start">
-              <IconButton color="inherit" aria-label="open drawer" edge="start">
-                <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
-              </IconButton>
-              {!iphonePro14max && <>
+              {iphonePro14max && <div>
+                <IconButton color="inherit" aria-label="open drawer" edge="start">
+                  <MenuIcon />
+                </IconButton>
+              </div>}
+              {!iphonePro14max && <div>
+                <IconButton color="inherit" aria-label="open drawer" edge="start">
+                  <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
+                </IconButton>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <OtherMenuSelect />
                 </IconButton>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <ReportSelect />
                 </IconButton>
-              </>}
+              </div>}
             </Grid2>
-            <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{flexGrow: 1}}>
+            <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{ flexGrow: 1 }}>
               <IconButton>
-                <AccountCircleIcon sx={{color: "snow"}} />
+                <AccountCircleIcon sx={{ color: "snow" }} />
               </IconButton>
               <Typography>User: {userLogin}</Typography>
               <Button variant="contained" color="error" onClick={() => setOpenLogout(true)} endIcon={<ExitToApp />}>
