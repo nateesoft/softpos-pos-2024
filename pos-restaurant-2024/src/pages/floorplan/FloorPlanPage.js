@@ -60,7 +60,8 @@ function FloorPlanPage() {
   const { userLogin } = appData
 
   const matches = useMediaQuery("(min-width:600px)")
-  const iphonePro14max = useMediaQuery('(min-width:430px)');
+  const iphonePro14max = useMediaQuery('(max-width:430px)');
+  console.log('iphone:', iphonePro14max)
 
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes, onNodesChange] = useNodesState([])
@@ -186,12 +187,12 @@ function FloorPlanPage() {
         <AppBar component="static" sx={{ backgroundColor: "#123456", boxShadow: "5px 3px #aaa" }}>
           <Toolbar>
             <Grid2 container justifyContent="flex-start">
-              {iphonePro14max && <div>
+              {iphonePro14max === true && <div>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <MenuIcon />
                 </IconButton>
               </div>}
-              {!iphonePro14max && <div>
+              {iphonePro14max === false && <div>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
                 </IconButton>
