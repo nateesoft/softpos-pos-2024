@@ -5,7 +5,7 @@ const pool = require('../../../config/database/MySqlConnect')
 const TableFileService = require('../../../services/TableFileService')
 
 router.post('/checkTableOpen', function (req, res, next) {
-  const { tableNo, Cashier } = req.body
+  const { tableNo } = req.body
   TableFileService.checkTableOpen(tableNo)
     .then(rows => {
       if (rows === null) {

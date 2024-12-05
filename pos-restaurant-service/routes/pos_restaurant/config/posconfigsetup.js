@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const pool = require('../../../config/database/MySqlConnect')
 const { getPOSConfigSetup } = require('../../../services/POSConfigSetupService');
 
 router.get('/', (req, res, next) => {

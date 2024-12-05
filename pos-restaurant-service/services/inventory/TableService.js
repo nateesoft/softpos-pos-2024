@@ -1,7 +1,4 @@
-const { getStkFile } = require("../StkFileService")
-
 const pool = require('../../config/database/MySqlConnect');
-const { getSTCard } = require("../STCardService");
 
 const getTableColumn = async (tableName) => {
     const sql = `desc ${tableName}`;

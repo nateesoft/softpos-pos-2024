@@ -9,7 +9,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { Button } from '@mui/material';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
-import axios from 'axios';
+
+import apiClient from '../../../httpRequest';
 import CalendarMonth from '@mui/icons-material/CalendarMonth'
 
 const Search = styled('div')(({ theme }) => ({
@@ -62,7 +63,7 @@ const SearchMenu = ({ setMemberMasters }) => {
         if (!recieptNo && !macNo) {
             return;
         }
-        axios.post('/api/billno/search', { recieptNo, macNo })
+        apiClient.post('/api/billno/search', { recieptNo, macNo })
             .then(response => {
                 setMemberMasters(response.data.data)
             })

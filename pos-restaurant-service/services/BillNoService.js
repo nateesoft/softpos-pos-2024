@@ -3,14 +3,14 @@ const moment = require('moment')
 const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat } = require('../utils/StringUtil');
 const { emptyTableBalance, getBalanceByTableNo } = require('./BalanceService');
-const { getAllProtab, updatePromotion } = require('./PromotionService');
 
 const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService');
-const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock, processAllPSetReturn } = require('./TSaleService');
-const { updateDiscount } = require('./DiscountService');
-const { ThermalPrinterConnect } = require('./ThermalPrinter');
+const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock } = require('./TSaleService');
+
+const { getBranch } = require('./BranchService')
 const { ProcessStockOut } = require('./STCardService');
-const { getPOSConfigSetup } = require('./POSConfigSetupService')
+const { getPOSConfigSetup } = require('./POSConfigSetupService');
+const { updateRefundMember } = require('./member/crm/MemberMasterService');
 
 const getAllBillNoToday = async () => {
     const sql = `select * from billno where B_PostDate=curdate()`;
@@ -54,15 +54,56 @@ const updateNextBill = async (macno) => {
 }
 
 const updateRefundBill = async (billNoData) => {
-    const sql = `UPDATE billno SET B_Void='V', B_VoidTime='${billNoData.B_VoidTime}', B_VoidUser='${billNoData.B_VoidUser}' 
+    const sql = `UPDATE billno SET B_Void='${billNoData.B_Void}', B_VoidTime='${billNoData.B_VoidTime}', B_VoidUser='${billNoData.B_VoidUser}' 
     WHERE B_Refno='${billNoData.B_Refno}'`;
     const results = await pool.query(sql)
     return results
 }
 
-const updateRefundTsale = async (tSaleData) => {
-    const sql = `UPDATE t_sale SET R_Void='V', R_VoidTime='${tSaleData.R_VoidTime}', R_VoidUser='${tSaleData.R_VoidUser}' 
-    WHERE R_Refno='${tSaleData.R_Refno}'`;
+const updateRefundTsale = async (billNo) => {
+    const sql = `UPDATE t_sale SET R_Refund='V' WHERE R_Refno='${billNo}'`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const updateRefundTSaleSet = async (billNo) => {
+    const sql = `UPDATE t_saleset SET R_Refund='V' WHERE R_Refno='${billNo}'`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const updateRefundTCupon = async (billNo) => {
+    const sql = `update t_cupon set refund='V' where r_refno='${billNo}'`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const updateRefundTPromotion = async (billNo) => {
+    const sql = `delete from t_promotion where r_refno='${billNo}'`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const updateRefundTGift = async (billNo) => {
+    const sql = `update t_gift set fat='V'  where refno='${billNo}'`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const updateRefundAccr = async (billNo, macno, branchCode) => {
+    const sql = `delete from accr where (arno='${branchCode}/${macno}/${billNo}')`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const updateRefundMTran = async (billNo, macno) => {
+    const sql = "delete from mtran where m_billno='" + macno + "/" + billNo + "'";
+    const results = await pool.query(sql)
+    return results
+}
+
+const updateRefundMTranPlu = async (billNo, macno) => {
+    const sql = "delete from mtranplu where m_billno='" + macno + "/" + billNo + "'";
     const results = await pool.query(sql)
     return results
 }
@@ -87,7 +128,7 @@ const addNewBill = async (payload) => {
         memberInfo, cashInfo, creditInfo, transferInfo, discountInfo, serviceInfo,
     } = payload
     const tableFile = await getTableByCode(tableNo)
-    const { serviceAmount, vatAmount  } = serviceInfo
+    const { serviceAmount, vatAmount } = serviceInfo
     const { Cashier, TCustomer, Food, Drink, Product } = tableFile
 
     const { cashEnable, cashAmount } = cashInfo
@@ -160,7 +201,7 @@ const addNewBill = async (payload) => {
     const B_NetFood = Food;
     const B_NetDrink = Drink;
     const B_NetProduct = Product;
-    const B_NetVat = netTotal-creditChargeAmount;
+    const B_NetVat = netTotal - creditChargeAmount;
     const B_NetNonVat = 0;
     const B_Vat = vatAmount;
     const B_PayAmt = cashAmount;
@@ -294,33 +335,10 @@ const addNewBill = async (payload) => {
     }
 }
 
-const updateService = async (tableNo, allBalance) => {
-
-}
-
-const updateProSerTable = async (tableNo, allBalance) => {
-    //คำนวนโปรโมชั่น
-    let allProtabs = await getAllProtab()
-    allProtabs.forEach(async protab => {
-        let dateEXP = moment(protab.pdate2);
-        let nowDate = moment();
-        if (dateEXP >= nowDate) {
-            await updatePromotion(tableNo);
-        }
-    })
-
-    //คำนวณส่วนลด
-    await updateDiscount(tableNo, allBalance);
-
-    //คำนวน % ชาร์จเครดิต
-    //คำนวณค่าบริการ + คำนวณภาษีมูลค่าเพิ่ม
-    await updateService(tableNo, allBalance);
-}
-
 const refundTSale = async (tSaleData, Cashier) => {
     tSaleData.forEach(async tSale => {
         if (tSale.R_Void !== 'V' && tSale.R_Stock === 'Y') {
-            const S_No = tSale.R_Refno + "-" + moment().format('HHmm')
+            const S_No = "R" + tSale.R_Refno
             const S_SubNo = ""
             const S_Que = 0
             const S_PCode = tSale.R_PluCode
@@ -344,31 +362,37 @@ const refundTSale = async (tSaleData, Cashier) => {
 
             // ตัดสต็อกสินค้าที่มี Ingredent
             await processAllPIngredentReturnStock(S_No, tSale.R_PluCode, tSale.R_Quan, tSale.Cashier)
-
-            // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
-            await processAllPSetReturn(tSale.R_PluCode, tSale.R_Quan, tSale.Cashier)
-
-            // update table t_sale void
-            tSale.R_Void = 'V'
-            tSale.R_VoidUser = Cashier
-            tSale.R_VoidTime = moment().format('HH:mm:ss')
-            await updateRefundTsale(tSale, Cashier)
         }
     })
 }
 
-const billRefundStockIn = async (billNo, Cashier) => {
+const billRefundStockIn = async (billNo, Cashier, macno) => {
+    const branchData = await getBranch()
     const billNoData = await getBillNoByRefno(billNo)
     const tSaleData = await getTSaleByBillNo(billNo)
 
-    // update refund tSale List
-    await refundTSale(tSaleData, Cashier)
+    // update table t_sale void
+    await updateRefundTsale(tSale.R_Refno)
+    await updateRefundTSaleSet(tSale.R_Refno)
+    await updateRefundTCupon(tSale.R_Refno)
+    await updateRefundTPromotion(tSale.R_Refno)
+    await updateRefundTGift(tSale.R_Refno)
+    await updateRefundAccr(tSale.R_Refno, macno, branchData.Code)
+
+    if (!tSale.B_MemCode) {
+        await updateRefundMember(tSale.R_Refno, memberCode)
+        await updateRefundMTran(tSale.R_Refno, macno)
+        await updateRefundMTranPlu(tSale.R_Refno, macno)
+    }
 
     // update billno
     billNoData.B_Void = 'V'
     billNoData.B_VoidUser = Cashier
     billNoData.B_VoidTime = moment().format('HH:mm:ss')
     const result = await updateRefundBill(billNoData)
+
+    // update refund tSale List
+    await refundTSale(tSaleData, Cashier)
 
     return result
 }

@@ -9,8 +9,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import NoFoodIcon from '@mui/icons-material/NoFood';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Grid from '@mui/material/Grid2'
-import axios from "axios";
 
+import apiClient from '../../httpRequest'
 import OrderItem from './addOrderItem/OrderItem'
 import ProductCard from "./ProductCard";
 import ProductDetailCard from "./ProductDetailCard";
@@ -113,7 +113,7 @@ const ProductMenu = ({
     }
 
     const addOrderMain = async (product) => {
-        axios
+        apiClient
             .post(`/api/balance`, {
                 tableNo,
                 menuInfo: product,
@@ -148,7 +148,7 @@ const ProductMenu = ({
     }
 
     const addOrderSubMenuList = async (tableNo, optionalList, R_LinkIndex) => {
-        await axios.post(`/api/balance/addList`, {
+        await apiClient.post(`/api/balance/addList`, {
             listBalance: optionalList,
             tableNo,
             macno,
@@ -317,7 +317,7 @@ const ProductMenu = ({
             </Modal>
             {matches === false &&
                 <Fab sx={fabStyle} aria-label='Add' color='primary' onClick={() => setShowMenu(true)}>
-                    <Badge badgeContent={1} color="warning">
+                    <Badge badgeContent={OrderList.length} color="warning">
                         <MenuBook />
                     </Badge>
                 </Fab>

@@ -10,10 +10,10 @@ import {
 import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 import { Box, Modal } from "@mui/material"
-import axios from "axios"
 
 import "@xyflow/react/dist/style.css"
 
+import apiClient from '../../httpRequest'
 import RoundNode from "./nodes/RoundNode"
 import SquareNode from "./nodes/SquareNode"
 import LongNode from "./nodes/LongBarNode"
@@ -117,7 +117,7 @@ const TableManagement = () => {
 
   const onNodeClick = (event, node) => {
     console.log("onNodeClick:", node)
-    axios
+    apiClient
       .get(`/api/floorplan/${node.id}`)
       .then((response) => {
         if (response.data.data.length > 0) {
@@ -137,7 +137,7 @@ const TableManagement = () => {
 
   const onSave = () => {
     if (reactFlowInstance) {
-      axios
+      apiClient
         .patch(`/api/floorplan-template/${selectFloor}`, { template: JSON.stringify(reactFlowInstance.toObject()) })
         .then((response) => {
           navigate("/floorplan")
@@ -173,7 +173,7 @@ const TableManagement = () => {
       table_status: props.tableStatus
     }
     if (foundTable) {
-      axios
+      apiClient
         .put(`/api/floorplan/${tableInfo.id}`, payload)
         .then((response) => {
           if (response.status === 200) {
@@ -190,7 +190,7 @@ const TableManagement = () => {
           handleErrorMessage(error)
         })
     } else {
-      axios
+      apiClient
         .post(`/api/floorplan`, payload)
         .then((response) => {
           if (response.status === 200) {
@@ -210,7 +210,7 @@ const TableManagement = () => {
   }
 
   const loadFloorPlan = useCallback((floor) => {
-    axios.get(`/api/floorplan-template/${floor}`)
+    apiClient.get(`/api/floorplan-template/${floor}`)
       .then(response => {
         const flow = response.data.data.template
         console.log('loadFloorPlan:', flow.template)

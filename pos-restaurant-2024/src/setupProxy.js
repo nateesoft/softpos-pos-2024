@@ -6,7 +6,7 @@ module.exports = function (app) {
     app.use(
         '/api',
         createProxyMiddleware({
-            target: `${serviceHost}/api`,
+            target: `${serviceHost}`,
             changeOrigin: true,
         })
     );

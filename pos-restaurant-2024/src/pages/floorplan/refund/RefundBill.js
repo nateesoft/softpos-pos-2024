@@ -10,10 +10,10 @@ import TableRow from '@mui/material/TableRow';
 import { Box, Button, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import RefundIcon from '@mui/icons-material/ReceiptLong';
-import axios from 'axios';
 import ReceiptIcon from '@mui/icons-material/ReceiptLong';
 import moment from 'moment'
 
+import apiClient from '../../../httpRequest';
 import SearchMenu from './SearchMenu';
 import { POSContext } from '../../../AppContext';
 import { ModalConfirm } from '../../../util/AlertPopup';
@@ -43,13 +43,14 @@ const modalStyle = {
 
 const RefundBill = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
-  const { userLogin, posuser } = appData
+  const { userLogin, posuser, macno } = appData
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [billList, setBillList] = useState([])
   const [showConfirm, setShowConfirm] = useState(false)
   const [B_Refno, setBRefno] = useState("")
+  const [B_MacNo, setBMacno] = useState("")
 
   const [recieptNo, setRecieptNo] = useState("")
   const [macNo, setMacNo] = useState("")
@@ -63,15 +64,17 @@ const RefundBill = ({ setOpen }) => {
     setPage(0);
   }
 
-  const handleShowConfirm = (B_Refno) => {
+  const handleShowConfirm = (B_Refno, B_MacNo) => {
     setBRefno(B_Refno)
+    setBMacno(B_MacNo)
     setShowConfirm(true)
   }
 
   const handleRefundBill = () => {
-    axios.post(`/api/billno/refund`, {
+    apiClient.post(`/api/billno/refund`, {
       billNo: B_Refno,
-      Cashier: userLogin
+      Cashier: userLogin,
+      macno: B_MacNo
     })
       .then(response => {
         loadBIllNo()
@@ -81,7 +84,7 @@ const RefundBill = ({ setOpen }) => {
   }
 
   const loadBIllNo = useCallback(() => {
-    axios.get('/api/billno')
+    apiClient.get('/api/billno')
       .then(response => {
         setBillList(response.data.data)
       })
@@ -141,7 +144,7 @@ const RefundBill = ({ setOpen }) => {
                                     variant='contained'
                                     color='error' 
                                     disabled={posuser.Sale2==='N'}
-                                    onClick={() => handleShowConfirm(row.B_Refno)} startIcon={<ReceiptIcon />}>
+                                    onClick={() => handleShowConfirm(row.B_Refno, row.B_MacNo)} startIcon={<ReceiptIcon />}>
                                     Refund
                                   </Button>
                                 </TableCell>

@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const pool = require('../../../config/database/MySqlConnect')
-
 const CreditFileService = require('../../../services/CreditFileService')
 
 router.get('/', function (req, res) {

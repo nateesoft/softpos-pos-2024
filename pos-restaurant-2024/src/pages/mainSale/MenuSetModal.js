@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, forwardRef } from 'react';
-import axios from 'axios'
 import { Button, Checkbox, Dialog, DialogContent, DialogTitle, Grid2, IconButton, Slide, Typography } from '@mui/material';
 import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
 import CloseIcon from '@mui/icons-material/Cancel';
@@ -7,6 +6,7 @@ import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 
 import ChangeProductList from './ChangeProductList'
 import ShowNotification from '../utils/ShowNotification';
+import apiClient from '../../httpRequest';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -42,7 +42,7 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
     }
 
     const loadOptionalList = useCallback(() => {
-        axios
+        apiClient
             .get(`/api/menu_setup/optional/${product.menu_code}`)
             .then((response) => {
                 if (response.data.code === 200) {

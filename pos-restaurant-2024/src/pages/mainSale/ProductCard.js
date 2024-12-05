@@ -1,11 +1,11 @@
 import React, { memo, useContext } from "react"
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline"
 import SetMealIcon from "@mui/icons-material/MenuOpen"
-import axios from "axios"
 import Grid from "@mui/material/Grid2"
 import { Box, Button, Badge, Typography } from "@mui/material"
 
 import { POSContext } from "../../AppContext"
+import apiClient from '../../httpRequest'
 
 const ProductCard = memo(
   ({ id, tableNo, product, openModal, initLoadMenu, initLoadOrder, setShowMenuSet, handleNotification }) => {
@@ -13,7 +13,7 @@ const ProductCard = memo(
     const { empCode, macno, userLogin } = appData
 
     const addOrder = async (qty = 1) => {
-      axios
+      apiClient
         .post(`/api/balance`, {
           tableNo, menuInfo: product, qty, macno, userLogin, empCode
         })

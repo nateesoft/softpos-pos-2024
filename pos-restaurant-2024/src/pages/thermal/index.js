@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { Button, Grid2, TextField } from '@mui/material'
-import axios from 'axios'
+
+import apiClient from '../../httpRequest';
 
 const ConnectThermalPrinter = () => {
     const [printerIp, setPrinterIp] = useState("192.168.1.209")
     const [message, setMessage] = useState("")
 
     const handlePrinter = () => {
-        axios.post('/api/printer-thermal', {
+        apiClient.post('/api/printer-thermal', {
             "printerIp": printerIp,
             "message": message
         })

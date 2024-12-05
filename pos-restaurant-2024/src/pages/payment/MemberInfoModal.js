@@ -7,10 +7,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import axios from 'axios';
 import { Button } from '@mui/material';
 import SelectIcon from '@mui/icons-material/CheckCircle';
 
+import apiClient from '../../httpRequest';
 import SearchAppBar from './member/SearchMember';
 
 const columns = [
@@ -40,7 +40,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
 
     const handleSelectMember = (data) => {
         // update table member
-        axios.patch(`/api/tablefile/updateMember/${tableNo}`, data)
+        apiClient.patch(`/api/tablefile/updateMember/${tableNo}`, data)
             .then(response => {
                 setMemberInfo(data)
                 setClose()
@@ -49,7 +49,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
     }
 
     const loadMemmaster = useCallback(() => {
-        axios.get('/api/crm/member')
+        apiClient.get('/api/crm/member')
             .then(response => {
                 setMemberMasters(response.data.data)
             })

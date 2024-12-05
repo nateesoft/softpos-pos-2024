@@ -3,10 +3,10 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { IconButton, TextField, Typography, Box, Grid2, Modal, Button, FormControl, InputLabel, Select, MenuItem, Divider, ImageListItem } from '@mui/material'
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import RemoveCircleIcon from '@mui/icons-material/DoNotDisturbOn';
-import axios from 'axios';
 import BlockIcon from '@mui/icons-material/Block';
 import GppGoodIcon from '@mui/icons-material/GppGood';
 
+import apiClient from '../../../httpRequest';
 import { POSContext } from '../../../AppContext';
 
 const modalStyle = {
@@ -34,7 +34,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
 
   const handleVoidItem = (R_Index) => {
     if (voidMsg) {
-      axios.post(`/api/balance/void`, {
+      apiClient.post(`/api/balance/void`, {
         R_Index: R_Index,
         Cachier: userLogin,
         empCode: empCode,
@@ -53,7 +53,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
   }
 
   const handleAddItem = () => {
-    axios.post(`/api/balance`, {
+    apiClient.post(`/api/balance`, {
       tableNo, menuInfo: {
         menu_code: product.R_PluCode,
         menu_name: product.R_PName,
@@ -76,7 +76,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
   }
 
   const loadVoidMsgList = useCallback(() => {
-    axios.get(`/api/voidmsg`)
+    apiClient.get(`/api/voidmsg`)
       .then(response => {
         const voidMsgData = response.data.data
         setVoidMsgList(voidMsgData)

@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
-import { POSContext } from './AppContext'
 
+import { POSContext } from './AppContext'
 import AnimatedRoutes from "./pages/AnimatedRouters"
 
 const initContext = {

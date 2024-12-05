@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { Box, Divider, Paper, Typography } from '@mui/material'
 import Moment from 'react-moment'
-// import axios from 'axios'
-// import QrCodeGenerator from './QRCodePayment'
 
 const NumFormat = data => {
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")

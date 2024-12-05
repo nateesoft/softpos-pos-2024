@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom"
 import Grid from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { motion } from "framer-motion"
-import axios from "axios"
 
+import apiClient from '../../httpRequest'
 import AppbarMenu from "./AppbarMenu"
 import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
@@ -37,7 +37,7 @@ function MainSalePage() {
   }
 
   const initLoadMenu = useCallback(() => {
-    axios
+    apiClient
       .get("/api/menu_setup")
       .then((response) => {
         if (response.data.code === 200) {
@@ -72,9 +72,9 @@ function MainSalePage() {
   }, [])
 
   const initLoadOrder = useCallback(async () => {
-    const responseMenuSetup = await axios.get(`/api/menu_setup/all`)
+    const responseMenuSetup = await apiClient.get(`/api/menu_setup/all`)
     const listMenuSetup = responseMenuSetup.data.data
-    axios
+    apiClient
       .get(`/api/balance/${tableNo}`)
       .then((response) => {
         if (response.status === 200) {

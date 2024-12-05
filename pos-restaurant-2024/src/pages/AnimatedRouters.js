@@ -4,8 +4,6 @@ import { AnimatePresence } from 'framer-motion'
 
 import PinLock from "./PinLock"
 import LoginPage from './login'
-import RegisterPage from './login/Register'
-import ForgotPassPage from './login/ForgotPassword'
 import FloorPlanPage from "./floorplan/FloorPlanPage"
 import TableManagement from "./floorplan/TableManagement"
 import MainSalePage from "./mainSale/MainSalePage"
@@ -65,8 +63,6 @@ const AnimatedRoutes = () => {
                 </Route>
 
                 <Route path="/test-print" element={<TestPrinter />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/reset-password" element={<ForgotPassPage />} />
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/register-macno" element={<RegisterMacNo />} />
                 <Route path="404" element={<PageNotFound />} />

@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const pool = require('../../../config/database/MySqlConnect')
-
 const BillNoService = require('../../../services/BillNoService')
 
 router.get('/', function (req, res) {
@@ -51,8 +49,8 @@ router.post('/search', function (req, res) {
 
 // refund bill
 router.post('/refund', (req, res) => {
-  const { billNo, Cashier } = req.body
-  BillNoService.billRefundStockIn(billNo, Cashier)
+  const { billNo, Cashier, macno } = req.body
+  BillNoService.billRefundStockIn(billNo, Cashier, macno)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

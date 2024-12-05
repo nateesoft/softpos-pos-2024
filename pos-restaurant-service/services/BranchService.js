@@ -1,7 +1,7 @@
 const pool = require('../config/database/MySqlConnect')
 
-const getDataCompany = async () => {
-    const sql = `select * from company limit 1`;
+const getBranch = async () => {
+    const sql = `select * from branch limit 1`;
     const results = await pool.query(sql)
     if (results.length > 0) {
         return results[0]
@@ -10,5 +10,5 @@ const getDataCompany = async () => {
 }
 
 module.exports = {
-    getDataCompany
+    getBranch
 }

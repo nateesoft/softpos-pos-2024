@@ -7,8 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import axios from 'axios';
 import { Button } from '@mui/material';
+
+import apiClient from '../../httpRequest';
 
 const columns = [
     { id: 'CrCode', label: 'CrCode', minWidth: 50 },
@@ -38,7 +39,7 @@ const CreditFileList = ({ setClose, setCreditInfo }) => {
     }
 
     const loadCreditFile = useCallback(() => {
-        axios.get('/api/creditfile')
+        apiClient.get('/api/creditfile')
             .then(response => {
                 setCreditFiles(response.data.data)
             })

@@ -10,8 +10,8 @@ import {
     ToggleButton,
     Grid2
 } from "@mui/material"
-import axios from 'axios';
 
+import apiClient from '../../../httpRequest'
 import OptionMenuSelect from "../OptionMenuSelect"
 import { POSContext } from '../../../AppContext'
 
@@ -37,7 +37,7 @@ const ProductDetailCard = ({
 
     const handleConfirm = () => {
         // update balance
-        axios
+        apiClient
             .put(`/api/balance`, {
                 oldBalance: product,
                 optList,

@@ -16,14 +16,13 @@ import {
 import { useNavigate } from "react-router-dom"
 import Modal from "@mui/material/Modal"
 import { AppBar, Box, Button, Grid2, IconButton, Toolbar, Typography, useMediaQuery } from "@mui/material"
-import TableBar from "@mui/icons-material/TableBar"
 import ExitToApp from "@mui/icons-material/ExitToApp"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { motion } from "framer-motion"
-import axios from "axios"
-
 import "@xyflow/react/dist/style.css"
+import MenuIcon from '@mui/icons-material/Menu';
 
+import apiClient from '../../httpRequest'
 import RoundNode from "./nodes/RoundNode"
 import SquareNode from "./nodes/SquareNode"
 import LongNode from "./nodes/LongBarNode"
@@ -61,7 +60,7 @@ function FloorPlanPage() {
   const { userLogin } = appData
 
   const matches = useMediaQuery("(min-width:600px)")
-  console.log('FoorPlanPage Size:', matches)
+  const iphonePro14max = useMediaQuery('(min-width:430px)');
 
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes, onNodesChange] = useNodesState([])
@@ -78,7 +77,7 @@ function FloorPlanPage() {
 
   const confirmLogoutAlert = useCallback(() => {
     console.log("confirmLogoutAlert")
-    axios
+    apiClient
       .patch("/api/posuser/logout", { username: userLogin })
       .then((response) => {
         if (response.data.status === 2000) {
@@ -103,7 +102,7 @@ function FloorPlanPage() {
   const onNodeClick = (event, node) => {
     console.log("onNodeClick:", node)
     const tableNo = node.data.label
-    axios
+    apiClient
       .post("/api/tablefile/checkTableOpen", { tableNo, Cashier: userLogin })
       .then(async (response) => {
         // console.log(response)
@@ -141,7 +140,7 @@ function FloorPlanPage() {
   }
 
   const loadFloorPlan = useCallback((floor) => {
-    axios.get(`/api/floorplan-template/${floor}`)
+    apiClient.get(`/api/floorplan-template/${floor}`)
       .then(response => {
         // console.log('loadFloorPlan:', response)
         const result = response.data
@@ -190,12 +189,14 @@ function FloorPlanPage() {
               <IconButton color="inherit" aria-label="open drawer" edge="start">
                 <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
               </IconButton>
-              <IconButton color="inherit" aria-label="open drawer" edge="start">
-                <OtherMenuSelect />
-              </IconButton>
-              <IconButton color="inherit" aria-label="open drawer" edge="start">
-                <ReportSelect />
-              </IconButton>
+              {!iphonePro14max && <>
+                <IconButton color="inherit" aria-label="open drawer" edge="start">
+                  <OtherMenuSelect />
+                </IconButton>
+                <IconButton color="inherit" aria-label="open drawer" edge="start">
+                  <ReportSelect />
+                </IconButton>
+              </>}
             </Grid2>
             <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{flexGrow: 1}}>
               <IconButton>

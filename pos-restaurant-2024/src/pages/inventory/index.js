@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import axios from 'axios';
 
+import apiClient from '../../httpRequest'
 import AppbarSearch from './AppbarSearch'
 import TemplateReport from './TemplateTable'
 
@@ -10,7 +10,7 @@ const InventoryReport = () => {
     const [dataTable, setDataTable] = useState([])
 
     const loadTableColumn = () => {
-        axios.get(`/api/inventory/column/${search}`)
+        apiClient.get(`/api/inventory/column/${search}`)
             .then(response => {
                 setColumnTable(response.data.data)
             })
@@ -18,7 +18,7 @@ const InventoryReport = () => {
     }
 
     const loadTableData = () => {
-        axios.get(`/api/inventory/${search}`)
+        apiClient.get(`/api/inventory/${search}`)
             .then(response => {
                 setDataTable(response.data.data)
             })

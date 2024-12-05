@@ -44,8 +44,17 @@ const getDataByMemberCode = async (Member_Code) => {
     return null
 }
 
+const updateRefundMember = async (tSaleData, memberCode) => {
+    let sql = `update memmaster 
+        set m_sum=m_sum-${tSaleData.R_NetTotal} 
+        where (m_code='${memberCode}')`
+    const results = await pool.query(sql)
+    return results
+}
+
 module.exports = {
     getData,
     getDataByMemberCode,
-    searchData
+    searchData,
+    updateRefundMember
 }

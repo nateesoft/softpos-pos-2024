@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
 import { Alert, Box, Button, Modal, Typography } from "@mui/material"
-import axios from "axios"
 
+import apiClient from '../../httpRequest'
 import CustomerCheckin from "./CustomerCheckin"
 import { POSContext } from "../../AppContext"
 import ShowNotification from "../utils/ShowNotification"
@@ -64,12 +64,12 @@ const PinLock = ({ setOpenPin }) => {
   const handleSubmitPin = () => {
     if (pin1 || pin2 || pin3 || pin4) {
       const empCodeInput = pin1 + pin2 + pin3 + pin4
-      axios
+      apiClient
         .post("/api/employ/getEmployeeByCode", { code: empCodeInput })
         .then(async (response) => {
           const { pinValid } = response.data.data
           if (pinValid === true) {
-            await axios.patch(`/api/tablefile/updateOpenTable/${tableInfo.tableNo}`, { Cashier: userLogin, TUser: empCodeInput })
+            await apiClient.patch(`/api/tablefile/updateOpenTable/${tableInfo.tableNo}`, { Cashier: userLogin, TUser: empCodeInput })
             setAppData({ ...appData, empCode: empCodeInput })
             setShowError(false)
             setOpenCustCheckIn(true)

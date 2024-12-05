@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-
-import axios from 'axios'
 import { Box, Checkbox, Paper, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
+
+import apiClient from '../../httpRequest';
 import ShowNotification from '../utils/ShowNotification';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -20,7 +20,7 @@ export default function MenuSet({ product }) {
     }
 
     const loadOptionalList = useCallback(() => {
-        axios
+        apiClient
             .get(`/api/menu_setup/optional/${product.menu_code}`)
             .then((response) => {
                 if (response.data.code === 200) {

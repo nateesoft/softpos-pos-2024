@@ -1,13 +1,14 @@
 import React, { memo, useContext, useState } from "react"
-import axios from "axios"
 import Grid from "@mui/material/Grid2"
 import { Box, Button, Typography, IconButton, TextField, useMediaQuery } from "@mui/material"
 import CheckIcon from "@mui/icons-material/CheckCircle"
 import CancelIcon from "@mui/icons-material/CancelRounded"
 import AddIcon from "@mui/icons-material/Add"
 import RemoveIcon from "@mui/icons-material/Remove"
+
 import OptionMenuSelect from "./OptionMenuSelect"
 import { POSContext } from "../../AppContext"
+import apiClient from '../../httpRequest'
 
 const ProductDetailCard = memo(({ 
     tableNo, 
@@ -27,7 +28,7 @@ const ProductDetailCard = memo(({
 
     const handleConfirm = () => {
       product.qty = count
-      axios
+      apiClient
         .post(`/api/balance`, {
           tableNo, menuInfo: product, optList, specialText, qty: count, macno, userLogin, empCode
         })

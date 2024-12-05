@@ -16,10 +16,10 @@ import {
   Grid2,
   Divider,
 } from "@mui/material"
-import axios from "axios"
+
+import apiClient from '../../../httpRequest'
 import ArrowBack from "@mui/icons-material/TableBar"
 import PrintIcon from "@mui/icons-material/Print"
-import PrintCheckboxIcon from "@mui/icons-material/CheckBox"
 import ProductCard from './ProductCard'
 import ProductDetailCard from './ProductDetailCard'
 
@@ -111,7 +111,7 @@ const OrderItem = ({
 
   function handlePrint() {
     // update send to Kic
-    axios.patch(`/api/balance/printToKic/${tableNo}`)
+    apiClient.patch(`/api/balance/printToKic/${tableNo}`)
       .then((response) => {
         if (response.status === 200) {
           setShowKicPrint(false)
@@ -155,7 +155,7 @@ const OrderItem = ({
         >
           {OrderEList && OrderEList.map((product) => {
             return (
-              <div style={{margin: "5px"}}>
+              <div style={{ margin: "5px" }}>
                 <ProductCard
                   tableNo={tableNo}
                   product={product}
@@ -235,14 +235,6 @@ const OrderItem = ({
         </TabPanel>
       </TabContext>
       <Grid2 container spacing={2} margin={3} justifyContent="center">
-        {/* <Button
-          variant="outlined"
-          startIcon={<PrintCheckboxIcon />}
-          onClick={() => setShowKicPrint(true)}
-          sx={{ marginRight: "10px" }}
-        >
-          ตรวจสอบปริ้นเตอร์
-        </Button> */}
         <Button
           variant="outlined"
           startIcon={<PrintIcon />}
@@ -254,16 +246,14 @@ const OrderItem = ({
       </Grid2>
       <TotalBill tableNo={tableNo} orderList={OrderList} />
       <Grid2 container spacing={1} justifyContent="center">
-        {typePopup === false && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={backFloorPlan}
-            startIcon={<ArrowBack />}
-          >
-            Floor Plan
-          </Button>
-        )}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={backFloorPlan}
+          startIcon={<ArrowBack />}
+        >
+          Floor Plan
+        </Button>
         <Button
           variant="contained"
           color="success"

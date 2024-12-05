@@ -9,8 +9,8 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { motion } from "framer-motion"
-import axios from "axios"
 
+import apiClient from '../../httpRequest'
 import { POSContext } from "../../AppContext"
 import { handleEnter } from "../../util/EventLisener"
 import bg from "./bg/welcome.jpg"
@@ -55,8 +55,7 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-
-    axios
+    apiClient
       .post("/api/posuser/login", { username: user, password, macno: macno })
       .then((response) => {
         if (response.data.status === 2000) {

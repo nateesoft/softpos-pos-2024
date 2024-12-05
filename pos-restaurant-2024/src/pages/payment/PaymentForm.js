@@ -6,7 +6,7 @@ import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import Grid from '@mui/material/Grid2'
 import DiscountIcon from '@mui/icons-material/Discount';
 import CloseIcon from '@mui/icons-material/Close';
-import axios from "axios"
+import apiClient from '../../httpRequest'
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 
 import SplitBiPayment from "./SplitBillPayment"
@@ -208,10 +208,10 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
             }
 
             // update print2kic
-            await axios.patch(`/api/balance/printToKic/${tableNo}`)
+            await apiClient.patch(`/api/balance/printToKic/${tableNo}`)
 
             // send bill payment
-            axios.post(`/api/billno`, payload)
+            apiClient.post(`/api/billno`, payload)
                 .then(response => {
                     if (response.data.data != null) {
                         loadBillInfo(response.data.data)

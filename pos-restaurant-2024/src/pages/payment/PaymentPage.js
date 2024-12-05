@@ -4,13 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { motion } from 'framer-motion'
 import useMediaQuery from '@mui/material/useMediaQuery';
-import axios from "axios"
+import PrintIcon from '@mui/icons-material/Print'
+import { Box, Button, Modal } from "@mui/material";
 
+import apiClient from '../../httpRequest'
 import OrderItem from './OrderItem'
 import PaymentForm from './PaymentForm'
-import { Box, Button, Modal } from "@mui/material";
-import PrintIcon from '@mui/icons-material/Print'
-
 import ReceiptToPrint from './ReceiptToPrint'
 import MemberInfo from "./MemberInfo";
 import ShowNotification from "../utils/ShowNotification";
@@ -80,7 +79,7 @@ function PaymentPage() {
     contentRef,
     onAfterPrint: () => {
       // clear balance
-      axios
+      apiClient
         .delete(`/api/balance/empty/${tableNo}`)
         .then((response) => {
           // console.log("initLoadMenu:", response)
@@ -100,7 +99,7 @@ function PaymentPage() {
   }
 
   const initLoadOrder = useCallback(() => {
-    axios
+    apiClient
       .get(`/api/balance/${tableNo}`)
       .then((response) => {
         if (response.status === 200) {
@@ -119,7 +118,7 @@ function PaymentPage() {
   }, [tableNo])
 
   const handleLoadBillInfo = billNo => {
-    axios
+    apiClient
       .get(`/api/billno/${billNo}`)
       .then((response) => {
         console.log('PaymentPage:handleLoadBillInfo:', response)
@@ -134,7 +133,7 @@ function PaymentPage() {
   }
 
   const loadPosHwSetup = useCallback(() => {
-    axios
+    apiClient
       .get(`/api/poshwsetup/${macno}`)
       .then((response) => {
         if (response.status === 200) {
@@ -148,7 +147,7 @@ function PaymentPage() {
   }, [macno])
 
   const loadPosConfigSetup = useCallback(() => {
-    axios
+    apiClient
       .get(`/api/posconfigsetup`)
       .then((response) => {
         if (response.status === 200) {
@@ -161,7 +160,7 @@ function PaymentPage() {
   }, [macno])
 
   const summaryTableFileBalance = useCallback(async () => {
-    const response = await axios.post('/api/tablefile/summaryBalance', {tableNo})
+    const response = await apiClient.post('/api/tablefile/summaryBalance', {tableNo})
     if(response.data.data){
       const data = response.data.data
       setSubTotalAmount(data.TAmount)

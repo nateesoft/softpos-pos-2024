@@ -9,7 +9,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { Button } from '@mui/material';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
-import axios from 'axios';
+
+import apiClient from '../../../httpRequest';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -61,7 +62,7 @@ const SearchMember = ({ setMemberMasters }) => {
         if (!phone && !code && !name) {
             return;
         }
-        axios.post('/api/crm/member/search', { phone, code, name })
+        apiClient.post('/api/crm/member/search', { phone, code, name })
             .then(response => {
                 setMemberMasters(response.data.data)
             })
