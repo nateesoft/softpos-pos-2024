@@ -38,6 +38,7 @@ import OtherMenuSelect from "./OtherMenuSelect"
 import { POSContext } from "../../AppContext"
 import ShowNotification from "../utils/ShowNotification"
 import ReportSelect from "./ReportSelect"
+import Footer from '../Footer'
 
 const modalPinStyle = {
   position: "absolute",
@@ -221,7 +222,7 @@ function FloorPlanPage() {
           className="reactflow-wrapper"
           ref={reactFlowWrapper}
           style={{
-            height: "100vh"
+            height: "90vh"
           }}
         >
           <ReactFlow
@@ -237,7 +238,7 @@ function FloorPlanPage() {
           </ReactFlow>
         </div>
       </ReactFlowProvider>
-
+      <Footer />
       <Modal open={openPin} onClose={() => setOpenPin(false)}>
         <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
           <PinLock setOpenPin={setOpenPin} />

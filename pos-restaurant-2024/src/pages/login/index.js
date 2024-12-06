@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { motion } from "framer-motion"
+import { Divider, Grid2, useMediaQuery } from "@mui/material"
 
 import apiClient from '../../httpRequest'
 import { POSContext } from "../../AppContext"
@@ -16,6 +17,8 @@ import { handleEnter } from "../../util/EventLisener"
 import bg from "./bg/welcome.jpg"
 import bgimg from "./bg/bgbg.jpg"
 import ShowNotification from "../utils/ShowNotification"
+
+import Footer from '../Footer'
 
 const darkTheme = createTheme({
   palette: {
@@ -29,7 +32,6 @@ const boxstyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "75%",
-  height: "70%",
   boxShadow: 24
 }
 
@@ -37,15 +39,15 @@ export default function Login() {
   const { appData, setAppData } = useContext(POSContext)
   const { macno } = appData
 
+  const iphonePro14max = useMediaQuery('(max-width:430px)');
   console.log("context:", appData)
-  const [remember, setRemember] = useState(false)
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
-  
+
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
   const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type="error") => {
+  const handleNotification = (message, type = "error") => {
     setNotiMessage(message)
     setAlertType(type)
     setShowNoti(true)
@@ -120,6 +122,10 @@ export default function Login() {
                         POS Restaurant
                       </Typography>
                     </Box>
+                    {iphonePro14max === true && <Grid2 container justifyContent="center">
+                      <img src={bg} width={220} alt='' />
+                    </Grid2>}
+                    <Divider sx={{ marginBottom: "20px" }} />
                     <Box display="flex" justifyContent="center">
                       {macno && (
                         <Typography variant="p" sx={{ color: "yellow" }}>
@@ -143,9 +149,8 @@ export default function Login() {
                           <TextField
                             required
                             fullWidth
-                            id="email"
+                            id="username"
                             label="Username"
-                            name="email"
                             value={user}
                             onChange={(e) => setUser(e.target.value)}
                             autoComplete="email"
@@ -157,7 +162,6 @@ export default function Login() {
                           <TextField
                             required
                             fullWidth
-                            name="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             label="Password"
@@ -171,14 +175,8 @@ export default function Login() {
                             type="submit"
                             variant="contained"
                             fullWidth
-                            size="large"
-                            color="primary"
                             sx={{
-                              mt: "10px",
-                              mr: "20px",
-                              borderRadius: 28,
                               color: "#ffffff",
-                              minWidth: "170px",
                               backgroundColor: "chocolate"
                             }}
                           >
@@ -193,6 +191,7 @@ export default function Login() {
             </Grid>
           </Grid>
         </Box>
+        <Footer />
         <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
       </div>
     </motion.div>

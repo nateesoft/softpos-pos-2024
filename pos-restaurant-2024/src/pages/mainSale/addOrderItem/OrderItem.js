@@ -151,7 +151,7 @@ const OrderItem = ({
         </Box>
         <TabPanel
           value="1"
-          sx={{ height: typePopup ? "210px" : "270px", overflow: "auto" }}
+          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
         >
           {OrderEList && OrderEList.map((product) => {
             return (
@@ -181,7 +181,7 @@ const OrderItem = ({
         </TabPanel>
         <TabPanel
           value="2"
-          sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}
+          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
         >
           {OrderTList && OrderTList.map((product) => {
             return (
@@ -208,7 +208,7 @@ const OrderItem = ({
         </TabPanel>
         <TabPanel
           value="3"
-          sx={{ height: typePopup ? "320px" : "380px", overflow: "auto" }}
+          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
         >
           {OrderDList && OrderDList.map((product) => {
             return (

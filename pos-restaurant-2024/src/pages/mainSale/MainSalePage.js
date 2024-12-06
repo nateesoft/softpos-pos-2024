@@ -9,6 +9,7 @@ import AppbarMenu from "./AppbarMenu"
 import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
 import ShowNotification from "../utils/ShowNotification"
+import Footer from '../Footer'
 
 function MainSalePage() {
   const { tableNo } = useParams();
@@ -180,6 +181,7 @@ function MainSalePage() {
           </Grid>
         )}
       </Grid>
+      <Footer />
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   )

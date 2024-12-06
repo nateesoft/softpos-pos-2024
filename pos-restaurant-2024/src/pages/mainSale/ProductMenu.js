@@ -29,7 +29,7 @@ const modalStyle = {
 }
 
 const fabStyle = {
-    position: 'absolute',
+    position: 'fixed',
     top: 70,
     right: 16,
 };
