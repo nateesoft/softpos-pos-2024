@@ -18,7 +18,8 @@ const initContext = {
     },
     orderDetails: []
   },
-  productList: []
+  productList: [],
+  posuser: {}
 }
 
 function App() {

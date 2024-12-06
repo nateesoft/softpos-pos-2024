@@ -9,7 +9,7 @@ router.get('/', function (req, res) {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -20,7 +20,7 @@ router.get('/:billNo', function (req, res) {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -43,7 +43,7 @@ router.post('/search', function (req, res) {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 
@@ -55,7 +55,7 @@ router.post('/refund', (req, res) => {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
 

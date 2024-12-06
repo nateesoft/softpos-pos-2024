@@ -44,11 +44,18 @@ const getDataByMemberCode = async (Member_Code) => {
     return null
 }
 
-const updateRefundMember = async (tSaleData, memberCode) => {
+const updateRefundMember = async (billData) => {
     let sql = `update memmaster 
-        set m_sum=m_sum-${tSaleData.R_NetTotal} 
-        where (m_code='${memberCode}')`
+        set Member_TotalPurchase=Member_TotalPurchase-${billData.B_NetTotal} ,
+        Member_TotalScore=Member_TotalScore-${billData.B_MemCurSum} 
+        where (Member_Code='${billData.B_MemCode}')`
     const results = await pool.query(sql)
+
+    // empty mplu
+    let receiptNo = `${billData.B_MacNo}/${billData.B_Refno}`;
+    await pool.query(`delete from mplu where Receipt_No='${receiptNo}'`)
+    await pool.query(`delete from mtran where Receipt_No='${receiptNo}'`)
+    
     return results
 }
 

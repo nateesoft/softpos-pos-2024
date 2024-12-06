@@ -56,6 +56,7 @@ const nodeTypes = {
 
 function FloorPlanPage() {
   const navigate = useNavigate()
+  
   const { appData, setAppData } = useContext(POSContext)
   const { userLogin } = appData
 
@@ -70,7 +71,6 @@ function FloorPlanPage() {
   const [alertType, setAlertType] = useState("info")
 
   const [openPin, setOpenPin] = useState(false)
-
   const [openLogout, setOpenLogout] = useState(false)
 
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")

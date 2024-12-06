@@ -1,4 +1,4 @@
-const moment = require('moment')
+const fs = require('fs');
 
 const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat } = require('../utils/StringUtil');
@@ -10,10 +10,12 @@ const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock } 
 const { getBranch } = require('./BranchService')
 const { ProcessStockOut } = require('./STCardService');
 const { getPOSConfigSetup } = require('./POSConfigSetupService');
+const { getAllData } = require('./PosHwSetup');
 const { updateRefundMember } = require('./member/crm/MemberMasterService');
+const { getMoment } = require('../utils/MomentUtil');
 
 const getAllBillNoToday = async () => {
-    const sql = `select * from billno where B_PostDate=curdate()`;
+    const sql = `select * from billno where B_OnDate=curdate()`;
     const results = await pool.query(sql)
     return results
 }
@@ -54,7 +56,9 @@ const updateNextBill = async (macno) => {
 }
 
 const updateRefundBill = async (billNoData) => {
-    const sql = `UPDATE billno SET B_Void='${billNoData.B_Void}', B_VoidTime='${billNoData.B_VoidTime}', B_VoidUser='${billNoData.B_VoidUser}' 
+    const sql = `UPDATE billno SET B_Void='${billNoData.B_Void}', 
+    B_VoidTime=curtime(), 
+    B_VoidUser='${billNoData.B_VoidUser}' 
     WHERE B_Refno='${billNoData.B_Refno}'`;
     const results = await pool.query(sql)
     return results
@@ -85,7 +89,7 @@ const updateRefundTPromotion = async (billNo) => {
 }
 
 const updateRefundTGift = async (billNo) => {
-    const sql = `update t_gift set fat='V'  where refno='${billNo}'`;
+    const sql = `update t_gift set fat='V' where refno='${billNo}'`;
     const results = await pool.query(sql)
     return results
 }
@@ -160,8 +164,8 @@ const addNewBill = async (payload) => {
     } = memberInfo
 
     // summary before create billno
-    const curdate = moment().format('YYYY-MM-DD')
-    const curtime = moment().format('HH:mm:ss')
+    const curdate = getMoment().format('YYYY-MM-DD')
+    const curtime = getMoment().format('HH:mm:ss')
 
     const B_Refno = await getBillIDCurrent(macno);
     const B_CuponDiscAmt = 0;
@@ -372,23 +376,24 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
     const tSaleData = await getTSaleByBillNo(billNo)
 
     // update table t_sale void
-    await updateRefundTsale(tSale.R_Refno)
-    await updateRefundTSaleSet(tSale.R_Refno)
-    await updateRefundTCupon(tSale.R_Refno)
-    await updateRefundTPromotion(tSale.R_Refno)
-    await updateRefundTGift(tSale.R_Refno)
-    await updateRefundAccr(tSale.R_Refno, macno, branchData.Code)
+    await updateRefundTsale(billNo)
+    await updateRefundTSaleSet(billNo)
+    await updateRefundTCupon(billNo)
+    await updateRefundTPromotion(billNo)
+    await updateRefundTGift(billNo)
+    await updateRefundAccr(billNo, macno, branchData.Code)
 
-    if (!tSale.B_MemCode) {
-        await updateRefundMember(tSale.R_Refno, memberCode)
-        await updateRefundMTran(tSale.R_Refno, macno)
-        await updateRefundMTranPlu(tSale.R_Refno, macno)
+    if (!billNoData.B_MemCode) {
+        await updateRefundMember(billNoData)
+
+        // empty member on POS
+        await updateRefundMTran(billNo, macno)
+        await updateRefundMTranPlu(billNo, macno)
     }
 
     // update billno
     billNoData.B_Void = 'V'
     billNoData.B_VoidUser = Cashier
-    billNoData.B_VoidTime = moment().format('HH:mm:ss')
     const result = await updateRefundBill(billNoData)
 
     // update refund tSale List

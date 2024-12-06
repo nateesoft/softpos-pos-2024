@@ -1,7 +1,19 @@
-const pool = require('../config/database/MySqlConnect')
-const moment = require('moment')
+const pool = require('../config/database/MySqlConnect');
+const { getMoment } = require('../utils/MomentUtil');
 const { listIngredeint, getPSetByPCode } = require('./ProductService');
 const { ProcessStockOut } = require('./STCardService');
+
+const getAllTSale = async () => {
+    const sql = `select * from t_sale`
+  const results = await pool.query(sql)
+  return results
+}
+
+const getAllTSaleByRefno = async (refno) => {
+    const sql = `select * from t_sale where R_Refno='${refno}'`
+  const results = await pool.query(sql)
+  return results
+}
 
 const createNewTSale = async (balance, BillRefNo) => {
     const { R_Table, Macno, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal,
@@ -18,8 +30,8 @@ const createNewTSale = async (balance, BillRefNo) => {
     const R_Index = BillRefNo + "/" + balance.R_Index
     const Cashier = balance.Cashier; // can change
     const R_Emp = balance.R_Emp; // can change
-    const R_Date = moment().format('YYYY-MM-DD');
-    const R_Time = moment().format('HH:mm:ss');
+    const R_Date = getMoment().format('YYYY-MM-DD');
+    const R_Time = getMoment().format('HH:mm:ss');
     const MacNo = Macno;
     const R_PrAdj = 0;
     const R_PreDisAmt = 0;
@@ -211,5 +223,7 @@ module.exports = {
     processAllPIngredentReturnStock,
     processAllPSet,
     processAllPSetReturn,
-    getTSaleByBillNo
+    getTSaleByBillNo,
+    getAllTSale,
+    getAllTSaleByRefno
 }

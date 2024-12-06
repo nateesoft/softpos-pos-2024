@@ -59,7 +59,9 @@ export default function Login() {
       .post("/api/posuser/login", { username: user, password, macno: macno })
       .then((response) => {
         if (response.data.status === 2000) {
-          if (response.data.data) {
+          const responseLogin = response.data.data
+          console.log('handleSubmit(posuser):', responseLogin)
+          if (responseLogin) {
             setAppData({ ...appData, userLogin: user, posuser: response.data.data })
             localStorage.setItem("userLogin", user)
             navigate("/floorplan")

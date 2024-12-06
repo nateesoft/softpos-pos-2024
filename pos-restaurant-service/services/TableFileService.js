@@ -1,5 +1,5 @@
-const moment = require('moment')
 const pool = require('../config/database/MySqlConnect');
+const { getMoment } = require('../utils/MomentUtil');
 const { getPOSConfigSetup } = require('./POSConfigSetupService');
 
 const updateTableAvailableStatus = async tableNo => {
@@ -17,8 +17,8 @@ const updateTableOpenStatus = async (tableNo, Cashier, TUser) => {
 }
 
 const updateMember = async (memberInfo, tableNo) => {
-    const memBegin = moment(memberInfo.Member_AppliedDate).format('YYYY-MM-DD')
-    const memEnd = moment(memberInfo.Member_ExpiredDate).format('YYYY-MM-DD')
+    const memBegin = getMoment(memberInfo.Member_AppliedDate).format('YYYY-MM-DD')
+    const memEnd = getMoment(memberInfo.Member_ExpiredDate).format('YYYY-MM-DD')
     const sql = `UPDATE tablefile SET 
     MemCode='${memberInfo.Member_Code}',
     MemName='${memberInfo.Member_NameThai}',

@@ -1,5 +1,3 @@
-const moment = require('moment')
-
 const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
 
@@ -7,6 +5,7 @@ const { getProductByPCode } = require('./ProductService');
 const STCardService = require('./STCardService');
 const { processAllPIngredent, processAllPSet, processAllPIngredentReturnStock, processAllPSetReturn } = require('./TSaleService');
 const { summaryBalance } = require('./TableFileService');
+const { getMoment } = require('../utils/MomentUtil');
 
 const getTotalBalance = async (tableNo) => {
     const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
@@ -252,8 +251,8 @@ const addNewBalance = async payload => {
     const R_Kic = posProduct.PKic
     const R_Type = posProduct.PType
 
-    const R_Date = moment().format('YYYY-MM-DD')
-    const R_Time = moment().format('HH:mm:ss');
+    const R_Date = getMoment().format('YYYY-MM-DD')
+    const R_Time = getMoment().format('HH:mm:ss');
     const R_Unit = Unicode2ASCII(posProduct.PUnit1);
     const R_Group = posProduct.PGroup;
     const R_Status = posProduct.PStatus;
@@ -371,8 +370,8 @@ const updateBalance = async payload => {
     const R_Opt8 = Unicode2ASCII(R_Opt[7]);
     const R_Opt9 = Unicode2ASCII(R_Opt[8]);
 
-    const R_Date = moment().format('YYYY-MM-DD');
-    const R_Time = moment().format('HH:mm:ss');
+    const R_Date = getMoment().format('YYYY-MM-DD');
+    const R_Time = getMoment().format('HH:mm:ss');
     const Macno = macno;
     const Cashier = userLogin;
     const R_Emp = empCode;
@@ -419,7 +418,7 @@ const updateBalance = async payload => {
 const inventoryStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index }) => {
     // update stock and process stockcard and stkfile
     if (R_Stock === 'Y') {
-        const S_No = R_Table + "-" + moment().format('HH:mm:ss')
+        const S_No = R_Table + "-" + getMoment().format('HH:mm:ss')
         const S_SubNo = ""
         const S_Que = 0
         const S_PCode = R_PluCode
@@ -454,7 +453,7 @@ const inventoryStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Ca
 const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index }) => {
     // update stock and process stockcard and stkfile
     if (R_Stock === 'Y') {
-        const S_No = R_Table + "-" + moment().format('HH:mm:ss')
+        const S_No = R_Table + "-" + getMoment().format('HH:mm:ss')
         const S_SubNo = ""
         const S_Que = 0
         const S_PCode = R_PluCode

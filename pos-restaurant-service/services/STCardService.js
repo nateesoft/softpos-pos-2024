@@ -1,8 +1,8 @@
-const moment = require('moment')
 const pool = require('../config/database/MySqlConnect')
 
 const { getProductByPCode, getProductActiveByPCode } = require('./ProductService');
 const BalanceService = require('./BalanceService');
+const { getMoment } = require('../utils/MomentUtil');
 
 const getSTCard = async () => {
     const sql = `select * from stcard`;
@@ -53,14 +53,14 @@ const getCompany = async () => {
     if (results.length > 0) {
         return results[0]
     }
-    return moment().format('YYYY-MM-DD')
+    return getMoment().format('YYYY-MM-DD')
 }
 
 const GetActionMon = async () => {
     const Company = await getCompany()
-    let TempYear = Company.Accterm ? moment(Company.Accterm).format("YYYY") : moment().format("YYYY")
-    let CurYear = moment().format('YYYY')
-    let CurMonth = moment().format('MM')
+    let TempYear = Company.Accterm ? getMoment(Company.Accterm).format("YYYY") : getMoment().format("YYYY")
+    let CurYear = getMoment().format('YYYY')
+    let CurMonth = getMoment().format('MM')
 
     let responseMonth = 0
     if (TempYear === CurYear) {
@@ -205,10 +205,10 @@ const ProcessSelectSetUpdateStockOutRefund = async (DocNo, StkCode, XCode, StkRe
 }
 
 const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund) => {
-    const S_Date = moment().format('YYYY-MM-DD')
+    const S_Date = getMoment().format('YYYY-MM-DD')
     const S_Stk = "A1"
-    const S_EntryDate = moment().format('YYYY-MM-DD')
-    const S_EntryTime = moment().format('HH:mm');
+    const S_EntryDate = getMoment().format('YYYY-MM-DD')
+    const S_EntryTime = getMoment().format('HH:mm');
 
     // remove from stock
     let sql = `INSERT INTO stcard 
@@ -251,7 +251,7 @@ const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InC
 
 const executeProcess = async (R_Index) => {
     const balance = await BalanceService.getBalanceByRIndex(R_Index)
-    const S_No = balance.R_Table + "-" + moment().format('HH:mm:ss')
+    const S_No = balance.R_Table + "-" + getMoment().format('HH:mm:ss')
     const S_SubNo = ""
     const S_Que = 0
     const S_PCode = balance.R_PluCode
