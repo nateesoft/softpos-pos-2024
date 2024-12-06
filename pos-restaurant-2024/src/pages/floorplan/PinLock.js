@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { Alert, Box, Button, Modal, Typography } from "@mui/material"
+import { Alert, Box, Button, Grid2, Modal, Typography } from "@mui/material"
 
 import apiClient from '../../httpRequest'
 import CustomerCheckin from "./CustomerCheckin"
