@@ -222,7 +222,6 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                 .catch(err => {
                     handleNotification(err.message)
                 })
-            console.log(tableNo, orderList)
         } else {
             handleNotification("ข้อมูลรับชำระยังไม่ถูกต้อง!")
         }

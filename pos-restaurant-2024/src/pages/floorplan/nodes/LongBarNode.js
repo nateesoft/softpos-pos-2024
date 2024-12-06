@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
 function LongBarNode({ data }) {
-  console.log('LongBarNode:', data)
   return (
     <Box
       display="flex"

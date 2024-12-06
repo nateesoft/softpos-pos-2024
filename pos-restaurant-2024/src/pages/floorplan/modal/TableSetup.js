@@ -17,7 +17,6 @@ const modalStyle = {
 
 const TableSetup = (props) => {
   const { tableInfo, setTableInfo, closeModal, onChange } = props
-  console.log('tableInfo:', tableInfo)
   const [tableNo, setTableNo] = useState(tableInfo.data.label || "")
   const [image, setImage] = useState(tableInfo.data.image || "")
   const [zone, setZone] = useState(tableInfo.data.zone || "STAND_ROOM")

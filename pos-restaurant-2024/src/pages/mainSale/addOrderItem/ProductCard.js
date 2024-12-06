@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 
-import { IconButton, TextField, Typography, Box, Grid2, Modal, Button, FormControl, InputLabel, Select, MenuItem, Divider, ImageListItem } from '@mui/material'
+import { IconButton, TextField, Typography, Box, Grid2, Modal, Button, FormControl, InputLabel, Select, MenuItem, ImageListItem } from '@mui/material'
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import RemoveCircleIcon from '@mui/icons-material/DoNotDisturbOn';
 import BlockIcon from '@mui/icons-material/Block';
@@ -8,6 +8,7 @@ import GppGoodIcon from '@mui/icons-material/GppGood';
 
 import apiClient from '../../../httpRequest';
 import { POSContext } from '../../../AppContext';
+import ShowNotification from "../../utils/ShowNotification"
 
 const modalStyle = {
   position: "absolute",
@@ -30,7 +31,16 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
 
   const voidStatus = product.R_Void === 'V'
   const pauseStatus = product.R_Pause === 'P'
-  const backgroundItem = product.R_Void === 'V' ? "yellow" : pauseStatus ? "#eee" : "snow"
+  // const backgroundItem = product.R_Void === 'V' ? "yellow" : pauseStatus ? "#eee" : "snow"
+
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type = "error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
 
   const handleVoidItem = (R_Index) => {
     if (voidMsg) {
@@ -47,7 +57,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
           setOpen(false)
         })
         .catch(err => {
-          console.log(err.message)
+          handleNotification(err.message)
         })
     }
   }
@@ -65,7 +75,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
         initLoadOrder()
       })
       .catch(err => {
-        console.log(err.message)
+        handleNotification(err.message)
       })
   }
 
@@ -81,7 +91,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
         const voidMsgData = response.data.data
         setVoidMsgList(voidMsgData)
       })
-      .catch(err=>console.log(err.message))
+      .catch(err=>handleNotification(err.message))
   }, [])
 
   useEffect(() => {
@@ -160,6 +170,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
           </Grid2>
         </Box>
       </Modal>
+      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </>
   )
 }

@@ -15,10 +15,10 @@ const Transition = forwardRef(function Transition(props, ref) {
 const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalList, setOptionalList }) => {
     const [showNoti, setShowNoti] = useState(false)
     const [showChangeListMenu, setShowChangeListMenu] = useState(false)
+    
     const [notiMessage, setNotiMessage] = useState("")
     const [alertType, setAlertType] = useState("info")
     const [currentMenu, setCurrentMenu] = useState("")
-
     const handleNotification = (message, type = "error") => {
         setNotiMessage(message)
         setAlertType(type)

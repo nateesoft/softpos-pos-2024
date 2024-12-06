@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import apiClient from '../../httpRequest'
 import AppbarSearch from './AppbarSearch'
@@ -14,7 +14,7 @@ const InventoryReport = () => {
             .then(response => {
                 setColumnTable(response.data.data)
             })
-            .catch(err => console.log(err))
+            .catch(err => alert(err))
     }
 
     const loadTableData = () => {
@@ -22,7 +22,7 @@ const InventoryReport = () => {
             .then(response => {
                 setDataTable(response.data.data)
             })
-            .catch(err => console.log(err.message))
+            .catch(err => alert(err.message))
     }
 
     const handleLoad = () => {

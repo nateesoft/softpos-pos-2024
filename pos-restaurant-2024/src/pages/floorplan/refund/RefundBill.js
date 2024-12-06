@@ -20,6 +20,7 @@ import SearchMenu from './SearchMenu';
 import { POSContext } from '../../../AppContext';
 import { ModalConfirm } from '../../../util/AlertPopup';
 import RefundToPrint from './RefundToPrint'
+import ShowNotification from "../../utils/ShowNotification"
 
 const columns = [
   { id: 'action', label: '', minWidth: 150 },
@@ -46,8 +47,7 @@ const modalStyle = {
 
 const RefundBill = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
-  const { userLogin, posuser, macno, empCode, tableInfo} = appData
-  console.log('RefundBill(posuser):', posuser)
+  const { userLogin, posuser, macno, empCode, tableInfo } = appData
 
   const contentRef = useRef(null);
   const handlePrint = useReactToPrint({ contentRef });
@@ -57,6 +57,15 @@ const RefundBill = ({ setOpen }) => {
   const [poshwSetup, setPosHwSetup] = useState({})
   const [posConfigSetup, setPOSConfigSetup] = useState({})
 
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type = "error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [billList, setBillList] = useState([])
@@ -64,8 +73,8 @@ const RefundBill = ({ setOpen }) => {
   const [B_Refno, setBRefno] = useState("")
   const [B_MacNo, setBMacno] = useState("")
 
-  const [recieptNo, setRecieptNo] = useState("")
-  const [macNo, setMacNo] = useState("")
+  // const [recieptNo, setRecieptNo] = useState("")
+  // const [macNo, setMacNo] = useState("")
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -99,7 +108,7 @@ const RefundBill = ({ setOpen }) => {
         setShowConfirm(false)
         setOpenRefundBill(true)
       })
-      .catch(err => console.log(err.message))
+      .catch(err => { handleNotification(err.message) })
   }
 
   const loadBillNo = useCallback(() => {
@@ -107,7 +116,7 @@ const RefundBill = ({ setOpen }) => {
       .then(response => {
         setBillList(response.data.data)
       })
-      .catch(err => console.log(err.message))
+      .catch(err => { handleNotification(err.message) })
   }, [])
 
   const loadTSale = useCallback(() => {
@@ -115,7 +124,7 @@ const RefundBill = ({ setOpen }) => {
       .then(response => {
         setOrderList(response.data.data)
       })
-      .catch(err => console.log(err.message))
+      .catch(err => { handleNotification(err.message) })
   }, [])
 
   const loadPosHwSetup = useCallback(() => {
@@ -127,7 +136,7 @@ const RefundBill = ({ setOpen }) => {
         }
       })
       .catch((error) => {
-        console.log(error.message)
+        handleNotification(error.message)
       })
   }, [macno])
 
@@ -140,7 +149,7 @@ const RefundBill = ({ setOpen }) => {
         }
       })
       .catch((error) => {
-        console.log(error.message)
+        handleNotification(error.message)
       })
   }, [macno])
 
@@ -198,7 +207,7 @@ const RefundBill = ({ setOpen }) => {
                                 <TableCell>
                                   <Button
                                     variant='contained'
-                                    color='error' 
+                                    color='error'
                                     disabled={'Y' !== posuser.Sale2}
                                     onClick={() => handleShowConfirm(row, row.B_Refno, row.B_MacNo)} startIcon={<ReceiptIcon />}>
                                     Refund
@@ -239,25 +248,26 @@ const RefundBill = ({ setOpen }) => {
         header="Refund Bill"
         content="ยืนยันการทำรายการ ?"
       />
-      <Modal open={openRefundBill} onClose={()=>setOpenRefundBill(false)} aria-labelledby="modal-modal-title"
+      <Modal open={openRefundBill} onClose={() => setOpenRefundBill(false)} aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description" disableEnforceFocus>
         <Box sx={{ ...modalStyle, width: 450 }}>
           <div style={{ height: '700px', overflow: "auto" }}>
-            <RefundToPrint innerRef={contentRef} 
-              billInfo={billInfo} 
-              orderList={orderList} 
-              poshwSetup={poshwSetup} 
-              posConfigSetup={posConfigSetup} 
-              empCode={empCode} 
-              userLogin={userLogin} 
+            <RefundToPrint innerRef={contentRef}
+              billInfo={billInfo}
+              orderList={orderList}
+              poshwSetup={poshwSetup}
+              posConfigSetup={posConfigSetup}
+              empCode={empCode}
+              userLogin={userLogin}
               customerCount={tableInfo.customerCount}
-          />
+            />
           </div>
           <Box sx={{ padding: "10px", backgroundColor: "#eee", borderRadius: "10px" }} textAlign="center">
             <Button variant="contained" color="info" startIcon={<PrintIcon />} onClick={handlePrint}>Print</Button>
           </Box>
         </Box>
       </Modal>
+      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </Box>
   )
 }

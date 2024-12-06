@@ -1,7 +1,6 @@
 const style = { border: "1px solid #aaa", boxShadow: "2px 2px chocolate", borderRadius: "10px" }
 
 function SquareNode({ data, bgColor }) {
-  console.log('SquareNode:', bgColor)
   return (
     <div align="center" style={{ width: "128px" }}>
       <img src={data.image ?? "/images/floorplan/rectangle-table.png"} width={128} alt="" />

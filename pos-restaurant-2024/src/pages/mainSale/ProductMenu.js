@@ -125,7 +125,6 @@ const ProductMenu = ({
             .then(async response => {
                 initLoadMenu()
                 initLoadOrder()
-                console.log('addOrderMain:', response)
                 const R_LinkIndex = response.data.data
                 setRLinkIndex(R_LinkIndex)
 
@@ -143,7 +142,7 @@ const ProductMenu = ({
                 setShowMenuSet(false)
             })
             .catch(err => {
-                console.log(err.message)
+                handleNotification(err.message)
             })
     }
 

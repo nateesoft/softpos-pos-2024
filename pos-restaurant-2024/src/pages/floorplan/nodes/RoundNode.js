@@ -1,7 +1,6 @@
 const style = { border: "1px solid #aaa", boxShadow: "2px 2px chocolate", borderRadius: "10px" }
 
 function RoundNode({ data }) {
-  console.log('RoundNode:', data)
   return (
     <div align="center" style={{ width: "256px" }}>
       <img src={data.image ?? "/images/floorplan/oval-table.png"} width={200} alt="" />

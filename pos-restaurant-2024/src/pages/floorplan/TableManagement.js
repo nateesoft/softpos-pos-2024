@@ -57,9 +57,9 @@ const TableManagement = () => {
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
   const [alertType, setAlertType] = useState("info")
-  const handleErrorMessage = (message) => {
+  const handleNotification = (message, type = "error") => {
     setNotiMessage(message)
-    setAlertType("error")
+    setAlertType(type)
     setShowNoti(true)
   }
 
@@ -116,7 +116,6 @@ const TableManagement = () => {
   )
 
   const onNodeClick = (event, node) => {
-    console.log("onNodeClick:", node)
     apiClient
       .get(`/api/floorplan/${node.id}`)
       .then((response) => {
@@ -131,7 +130,7 @@ const TableManagement = () => {
         }
       })
       .catch((error) => {
-        handleErrorMessage(error.message)
+        handleNotification(error.message)
       })
   }
 
@@ -143,7 +142,7 @@ const TableManagement = () => {
           navigate("/floorplan")
         })
         .catch((error) => {
-          handleErrorMessage(error.message)
+          handleNotification(error.message)
         })
     }
   }
@@ -163,7 +162,6 @@ const TableManagement = () => {
   }
 
   const onTableInfoChange = (props) => {
-    console.log("onTableInfoChange:", props)
     const payload = {
       id: tableInfo.id,
       table_no: props.label,
@@ -183,11 +181,11 @@ const TableManagement = () => {
             }
             setNodes((nds) => nds.concat(updNode))
           } else {
-            handleErrorMessage("Error Update Floorplan Table Setup !!!")
+            handleNotification("Error Update Floorplan Table Setup !!!")
           }
         })
         .catch((error) => {
-          handleErrorMessage(error.message)
+          handleNotification(error.message)
         })
     } else {
       apiClient
@@ -200,11 +198,11 @@ const TableManagement = () => {
             }
             setNodes((nds) => nds.concat(updNode))
           } else {
-            handleErrorMessage("Error Save Floorplan Table Setup !!!")
+            handleNotification("Error Save Floorplan Table Setup !!!")
           }
         })
         .catch((error) => {
-          handleErrorMessage(error.message)
+          handleNotification(error.message)
         })
     }
   }
@@ -213,14 +211,13 @@ const TableManagement = () => {
     apiClient.get(`/api/floorplan-template/${floor}`)
       .then(response => {
         const flow = response.data.data.template
-        console.log('loadFloorPlan:', flow.template)
         if (flow) {
           setNodes(flow.nodes || [])
         } else {
           setNodes([])
         }
       })
-      .catch(err => handleErrorMessage(err.message))
+      .catch(err => handleNotification(err.message))
   }, [setNodes])
 
   useEffect(() => {

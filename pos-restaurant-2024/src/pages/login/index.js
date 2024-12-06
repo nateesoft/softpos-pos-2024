@@ -16,7 +16,6 @@ import { handleEnter } from "../../util/EventLisener"
 import bg from "./bg/welcome.jpg"
 import bgimg from "./bg/bgbg.jpg"
 import ShowNotification from "../utils/ShowNotification"
-
 import Footer from '../Footer'
 
 const darkTheme = createTheme({
@@ -34,12 +33,11 @@ const boxstyle = {
   boxShadow: 24
 }
 
-export default function Login() {
+const Login = () => {
   const { appData, setAppData } = useContext(POSContext)
   const { macno } = appData
 
   const iphonePro14max = useMediaQuery('(max-width:430px)');
-  console.log("context:", appData)
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
 
@@ -59,10 +57,8 @@ export default function Login() {
     apiClient
       .post("/api/posuser/login", { username: user, password, macno: macno })
       .then((response) => {
-        console.log('response from api:', response)
         if (response.data.status === 2000) {
           const responseLogin = response.data.data
-          console.log('handleSubmit(posuser):', responseLogin)
           if (responseLogin) {
             setAppData({ ...appData, userLogin: user, posuser: response.data.data })
             localStorage.setItem("userLogin", user)
@@ -74,7 +70,7 @@ export default function Login() {
           handleNotification("ไม่สามารถ Login เข้าระบบได้ !", "error")
         }
       })
-      .catch((error) => {
+      .catch(error => {
         handleNotification(error.message)
       })
   }
@@ -197,3 +193,5 @@ export default function Login() {
     </motion.div>
   )
 }
+
+export default Login

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { Alert, Box, Button, Grid2, Modal, Typography } from "@mui/material"
+import { Alert, Box, Button, Modal, Typography } from "@mui/material"
 
 import apiClient from '../../httpRequest'
 import CustomerCheckin from "./CustomerCheckin"
@@ -55,9 +55,9 @@ const PinLock = ({ setOpenPin }) => {
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
   const [alertType, setAlertType] = useState("info")
-  const handleErrorMessage = (message) => {
+  const handleNotification = (message, type = "error") => {
     setNotiMessage(message)
-    setAlertType("error")
+    setAlertType(type)
     setShowNoti(true)
   }
 
@@ -78,7 +78,7 @@ const PinLock = ({ setOpenPin }) => {
           }
         })
         .catch((error) => {
-          handleErrorMessage(error.message)
+          handleNotification(error.message)
         })
     }
   }

@@ -15,7 +15,6 @@ const max = 10;
 const CustomerCheckin = (props) => {
     const { appData, setAppData } = useContext(POSContext)
     const { tableNo, tableStatus } = appData.tableInfo
-    console.log(appData)
 
     const { setOpenPin } = props
     const navigate = useNavigate();

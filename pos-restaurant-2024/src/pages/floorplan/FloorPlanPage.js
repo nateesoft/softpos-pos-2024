@@ -57,19 +57,24 @@ const nodeTypes = {
 
 function FloorPlanPage() {
   const navigate = useNavigate()
-  
+
   const { appData, setAppData } = useContext(POSContext)
   const { userLogin } = appData
 
-  const matches = useMediaQuery("(min-width:600px)")
+  // const matches = useMediaQuery("(min-width:600px)")
   const iphonePro14max = useMediaQuery('(max-width:430px)');
-  console.log('iphone:', iphonePro14max)
-
   const reactFlowWrapper = useRef(null)
+
   const [nodes, setNodes, onNodesChange] = useNodesState([])
+
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
   const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type = "error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
 
   const [openPin, setOpenPin] = useState(false)
   const [openLogout, setOpenLogout] = useState(false)
@@ -78,7 +83,6 @@ function FloorPlanPage() {
   const keyPressed = useKeyPress("Escape")
 
   const confirmLogoutAlert = useCallback(() => {
-    console.log("confirmLogoutAlert")
     apiClient
       .patch("/api/posuser/logout", { username: userLogin })
       .then((response) => {
@@ -91,27 +95,19 @@ function FloorPlanPage() {
         }
       })
       .catch((error) => {
-        handleErrorMessage(error.message)
+        handleNotification(error.message)
       })
   }, [setOpenLogout, navigate, appData, setAppData])
 
-  const handleErrorMessage = (message) => {
-    setNotiMessage(message)
-    setAlertType("error")
-    setShowNoti(true)
-  }
-
   const onNodeClick = (event, node) => {
-    console.log("onNodeClick:", node)
     const tableNo = node.data.label
     apiClient
       .post("/api/tablefile/checkTableOpen", { tableNo, Cashier: userLogin })
       .then(async (response) => {
-        // console.log(response)
         if (response.data.status === 2000) {
           let tableStatus = response.data.data.tableStatus
           const Cashier = response.data.data.Cashier
-          const Employ = response.data.data.Employ
+          // const Employ = response.data.data.Employ
           if (tableStatus === "cashierInUse" && Cashier !== userLogin) {
             setNotiMessage(`มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`)
             setAlertType("warning")
@@ -128,11 +124,11 @@ function FloorPlanPage() {
             setOpenPin(true)
           }
         } else {
-          handleErrorMessage("พบปัญหาในการเปิดโต๊ะ")
+          handleNotification("พบปัญหาในการเปิดโต๊ะ")
         }
       })
       .catch((error) => {
-        handleErrorMessage(error.message)
+        handleNotification(error.message)
       })
   }
 
@@ -144,12 +140,10 @@ function FloorPlanPage() {
   const loadFloorPlan = useCallback((floor) => {
     apiClient.get(`/api/floorplan-template/${floor}`)
       .then(response => {
-        // console.log('loadFloorPlan:', response)
         const result = response.data
         if (result.code === 200) {
           if (result.data != null) {
             const flow = result.data.template
-            console.log('loadFloorPlan:', flow)
             if (flow) {
               // const updFlow = flow.nodes.map(node => ({...node, bgColor: "red"}))
               // setNodes(updFlow || [])
@@ -164,7 +158,7 @@ function FloorPlanPage() {
           setNodes([])
         }
       })
-      .catch(err => handleErrorMessage(err.message))
+      .catch(err => handleNotification(err.message))
   }, [setNodes])
 
   useEffect(() => {

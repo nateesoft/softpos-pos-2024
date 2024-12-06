@@ -16,7 +16,6 @@ const mobileMenuId = 'primary-search-account-menu-mobile';
 
 const AppbarMenu = (props) => {
   const {onSave, onExit, selectFloor, setSelectFloor} = props
-  console.log('AppbarMenu:', props)
   return (
       <AppBar position="fixed">
         <Toolbar>

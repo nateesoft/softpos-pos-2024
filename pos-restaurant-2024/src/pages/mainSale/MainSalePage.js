@@ -126,7 +126,7 @@ function MainSalePage() {
         }
       })
       .catch((error) => {
-        handleNotification('initLoadOrder' + error.message)
+        handleNotification(error.message)
       })
   }, [tableNo])
 

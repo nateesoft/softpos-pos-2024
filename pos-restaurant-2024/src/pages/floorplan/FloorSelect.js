@@ -10,7 +10,6 @@ import LocalBarIcon from '@mui/icons-material/LocalBar';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 
-
 const FloorSelect = (props) => {
     const { selectFloor, setSelectFloor, sxStyle={color: "white"}, variant='outlined' } = props
     

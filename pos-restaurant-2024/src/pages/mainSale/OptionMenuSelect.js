@@ -9,6 +9,7 @@ import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import { Checkbox, ListItemText, TextField } from '@mui/material';
 
+import ShowNotification from "../utils/ShowNotification"
 import apiClient from '../../httpRequest';
 
 const ITEM_HEIGHT = 48;
@@ -34,6 +35,15 @@ const OptionMenuSelect = ({ productCode, optList, setSpecialText, setOptList }) 
     const theme = useTheme();
     const [options, setOptions] = useState([])
 
+    const [showNoti, setShowNoti] = useState(false)
+    const [notiMessage, setNotiMessage] = useState("")
+    const [alertType, setAlertType] = useState("info")
+    const handleNotification = (message, type = "error") => {
+      setNotiMessage(message)
+      setAlertType(type)
+      setShowNoti(true)
+    }
+
     const handleChange = (event) => {
         const { target: { value }, } = event;
         setOptList(typeof value === 'string' ? value.split(',') : value);
@@ -47,13 +57,12 @@ const OptionMenuSelect = ({ productCode, optList, setSpecialText, setOptList }) 
         apiClient
             .get(`/api/optionfile/${productCode}`)
             .then((response) => {
-                console.log('OptionMenuSelect:', response)
                 if (response.data.data) {
                     setOptions(response.data.data)
                 }
             })
             .catch((error) => {
-                console.log(error.message)
+                handleNotification(error.message)
             })
     }, [])
 
@@ -88,6 +97,7 @@ const OptionMenuSelect = ({ productCode, optList, setSpecialText, setOptList }) 
                 ))}
             </Select>
             <TextField fullWidth label="ระบุข้อความเพิ่มเติม..." onChange={e => addSpecialMessage(e.target.value)} sx={{ marginTop: "10px" }} id="fullWidth" multiline={true} rows={2} />
+            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </FormControl>
     );
 }

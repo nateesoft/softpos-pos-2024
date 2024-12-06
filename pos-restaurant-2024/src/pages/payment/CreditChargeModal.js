@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import { Button } from '@mui/material';
 
 import apiClient from '../../httpRequest';
+import ShowNotification from "../utils/ShowNotification"
 
 const columns = [
     { id: 'CrCode', label: 'CrCode', minWidth: 50 },
@@ -23,6 +24,15 @@ const CreditFileList = ({ setClose, setCreditInfo }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [creditFiles, setCreditFiles] = useState([])
+
+    const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type = "error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -43,7 +53,7 @@ const CreditFileList = ({ setClose, setCreditInfo }) => {
             .then(response => {
                 setCreditFiles(response.data.data)
             })
-            .catch(err => console.log(err.message))
+            .catch(err => handleNotification(err.message))
     }, [])
 
     useEffect(() => {
@@ -109,6 +119,7 @@ const CreditFileList = ({ setClose, setCreditInfo }) => {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
             />
+            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </Paper>
     );
 }

@@ -48,7 +48,6 @@ const ProductDetailCard = ({
                 R_ETD: orderType
             })
             .then((response) => {
-                console.log('UPDATE BALANCE=>', response)
                 if (response.data.status === 2000) {
                     initLoadMenu()
                     initLoadOrder()

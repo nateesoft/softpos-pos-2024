@@ -40,7 +40,6 @@ function subtotal(items) {
 
 function PaymentPage() {
   const { tableNo } = useParams();
-  console.log('PaymentPage:', tableNo)
 
   // Load summary tablefile
   const [subTotalAmount, setSubTotalAmount] = useState(0)
@@ -82,7 +81,6 @@ function PaymentPage() {
       apiClient
         .delete(`/api/balance/empty/${tableNo}`)
         .then((response) => {
-          // console.log("initLoadMenu:", response)
           toFloorPlan()
         })
         .catch((error) => {
@@ -121,7 +119,6 @@ function PaymentPage() {
     apiClient
       .get(`/api/billno/${billNo}`)
       .then((response) => {
-        console.log('PaymentPage:handleLoadBillInfo:', response)
         if (response.status === 200) {
           setBillInfo(response.data.data)
           setOpen(true)

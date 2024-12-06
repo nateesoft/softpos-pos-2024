@@ -12,6 +12,7 @@ import SelectIcon from '@mui/icons-material/CheckCircle';
 
 import apiClient from '../../httpRequest';
 import SearchAppBar from './member/SearchMember';
+import ShowNotification from "../utils/ShowNotification"
 
 const columns = [
     { id: 'action', label: '', minWidth: 50 },
@@ -29,6 +30,15 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [memmasters, setMemberMasters] = useState([])
 
+    const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type = "error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -45,7 +55,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
                 setMemberInfo(data)
                 setClose()
             })
-            .catch(err => console.log(err.message))
+            .catch(err => handleNotification(err.message))
     }
 
     const loadMemmaster = useCallback(() => {
@@ -53,7 +63,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
             .then(response => {
                 setMemberMasters(response.data.data)
             })
-            .catch(err => console.log(err.message))
+            .catch(err => handleNotification(err.message))
     }, [])
 
     useEffect(() => {
@@ -121,6 +131,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
+                <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
             </Paper>
         </>
     );
