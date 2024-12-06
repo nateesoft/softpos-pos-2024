@@ -41,7 +41,7 @@ function MainSalePage() {
     apiClient
       .get("/api/menu_setup")
       .then((response) => {
-        if (response.data.code === 200) {
+        if (response.status === 200) {
           const productList = response.data.data
           setProductList(
             productList.filter((product) => product.tab_group !== "")

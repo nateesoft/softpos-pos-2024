@@ -45,7 +45,7 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
         apiClient
             .get(`/api/menu_setup/optional/${product.menu_code}`)
             .then((response) => {
-                if (response.data.code === 200) {
+                if (response.status === 200) {
                     setOptionalList(response.data.data)
                     setSubMenuSelected(new Array(response.data.data.length)
                         .fill(false)

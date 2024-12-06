@@ -8,9 +8,14 @@ import { POSContext } from "../../AppContext"
 import apiClient from '../../httpRequest'
 
 const ProductCard = memo(
-  ({ id, tableNo, product, openModal, initLoadMenu, initLoadOrder, setShowMenuSet, handleNotification }) => {
+  ({ id, tableNo, product, openModal, initLoadMenu, initLoadOrder, setShowMenuSet, handleNotification, OrderList }) => {
     const { appData } = useContext(POSContext)
     const { empCode, macno, userLogin } = appData
+
+    const productList = OrderList.filter(p => p.R_PluCode === product.menu_code)
+    const saleQty = productList.reduce((totalQty, p) => totalQty + p.R_Quan, 0);
+
+    console.log('saleQty:', product.menu_code, saleQty)
 
     const addOrder = async (qty = 1) => {
       apiClient
@@ -29,7 +34,7 @@ const ProductCard = memo(
     return (
       <Badge
         id={id}
-        badgeContent={product.qty}
+        badgeContent={saleQty}
         color="primary"
         sx={{
           "& .MuiBadge-badge": {
@@ -59,7 +64,7 @@ const ProductCard = memo(
               height={150}
               width={160}
               style={{ borderRadius: "8px 8px 0px 0px" }}
-              onClick={product.show_list_menu === "N" ? openModal: ()=>setShowMenuSet(true)}
+              onClick={product.show_list_menu === "N" ? openModal : () => setShowMenuSet(true)}
             />
             <br />
           </Box>
@@ -81,7 +86,7 @@ const ProductCard = memo(
               {product.menu_name}
             </Typography>
           </Grid>
-          <Grid container justifyContent="space-between" padding={1} sx={{border: "1px solid #bbb", borderRadius: "5px"}}>
+          <Grid container justifyContent="space-between" padding={1} sx={{ border: "1px solid #bbb", borderRadius: "5px" }}>
             <Typography
               sx={{
                 backgroundColor: "white",
@@ -106,7 +111,7 @@ const ProductCard = memo(
                   marginTop: "5px"
                 }}
                 startIcon={<SetMealIcon />}
-                onClick={()=>setShowMenuSet(true)}
+                onClick={() => setShowMenuSet(true)}
               >
                 Menu Set
               </Button>

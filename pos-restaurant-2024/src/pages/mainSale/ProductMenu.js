@@ -199,6 +199,7 @@ const ProductMenu = ({
                         <Grid id={`productList_${product.id}`}>
                             <ProductCard
                                 id={"all" + product.id}
+                                OrderList={OrderList}
                                 tableNo={tableNo}
                                 product={product}
                                 openModal={() => handleOpenMenu(product)}
@@ -215,6 +216,7 @@ const ProductMenu = ({
                 {ProductA && ProductA.map(product =>
                     <ProductCard
                         id={"a" + product.id}
+                        OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
@@ -230,6 +232,7 @@ const ProductMenu = ({
                 {ProductB && ProductB.map(product =>
                     <ProductCard
                         id={"b" + product.id}
+                        OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
@@ -245,6 +248,7 @@ const ProductMenu = ({
                 {ProductC && ProductC.map(product =>
                     <ProductCard
                         id={"c" + product.id}
+                        OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
@@ -260,6 +264,7 @@ const ProductMenu = ({
                 {ProductD && ProductD.map(product =>
                     <ProductCard
                         id={"d" + product.id}
+                        OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
@@ -275,6 +280,7 @@ const ProductMenu = ({
                 {ProductE && ProductE.map(product =>
                     <ProductCard
                         id={"e" + product.id}
+                        OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
@@ -290,6 +296,7 @@ const ProductMenu = ({
                 {ProductF && ProductF.map(product =>
                     <ProductCard
                         id={"f" + product.id}
+                        OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
                         openModal={() => handleOpenMenu(product)}
