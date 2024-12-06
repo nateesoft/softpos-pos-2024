@@ -67,7 +67,7 @@ const SearchMenu = ({ setMemberMasters }) => {
             .then(response => {
                 setMemberMasters(response.data.data)
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err.message))
     }
 
     return (

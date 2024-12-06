@@ -119,7 +119,7 @@ const OrderItem = ({
         }
       })
       .catch(err => {
-        handleNotification(err)
+        handleNotification(err.message)
       })
   }
 

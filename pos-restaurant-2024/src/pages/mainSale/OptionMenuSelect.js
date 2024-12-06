@@ -53,7 +53,7 @@ const OptionMenuSelect = ({ productCode, optList, setSpecialText, setOptList }) 
                 }
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error.message)
             })
     }, [])
 

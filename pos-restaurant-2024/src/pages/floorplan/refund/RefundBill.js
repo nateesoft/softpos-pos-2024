@@ -99,7 +99,7 @@ const RefundBill = ({ setOpen }) => {
         setShowConfirm(false)
         setOpenRefundBill(true)
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err.message))
   }
 
   const loadBillNo = useCallback(() => {
@@ -107,7 +107,7 @@ const RefundBill = ({ setOpen }) => {
       .then(response => {
         setBillList(response.data.data)
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err.message))
   }, [])
 
   const loadTSale = useCallback(() => {
@@ -115,7 +115,7 @@ const RefundBill = ({ setOpen }) => {
       .then(response => {
         setOrderList(response.data.data)
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err.message))
   }, [])
 
   const loadPosHwSetup = useCallback(() => {
@@ -127,7 +127,7 @@ const RefundBill = ({ setOpen }) => {
         }
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error.message)
       })
   }, [macno])
 
@@ -140,7 +140,7 @@ const RefundBill = ({ setOpen }) => {
         }
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error.message)
       })
   }, [macno])
 

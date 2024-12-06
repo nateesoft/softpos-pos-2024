@@ -53,7 +53,7 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
                 }
             })
             .catch((error) => {
-                handleNotification(error)
+                handleNotification(error.message)
             })
     }, [product.menu_code])
 

@@ -131,7 +131,7 @@ const TableManagement = () => {
         }
       })
       .catch((error) => {
-        handleErrorMessage(error)
+        handleErrorMessage(error.message)
       })
   }
 
@@ -143,7 +143,7 @@ const TableManagement = () => {
           navigate("/floorplan")
         })
         .catch((error) => {
-          handleErrorMessage(error)
+          handleErrorMessage(error.message)
         })
     }
   }
@@ -187,7 +187,7 @@ const TableManagement = () => {
           }
         })
         .catch((error) => {
-          handleErrorMessage(error)
+          handleErrorMessage(error.message)
         })
     } else {
       apiClient
@@ -204,7 +204,7 @@ const TableManagement = () => {
           }
         })
         .catch((error) => {
-          handleErrorMessage(error)
+          handleErrorMessage(error.message)
         })
     }
   }
@@ -220,7 +220,7 @@ const TableManagement = () => {
           setNodes([])
         }
       })
-      .catch(err => handleErrorMessage(err))
+      .catch(err => handleErrorMessage(err.message))
   }, [setNodes])
 
   useEffect(() => {

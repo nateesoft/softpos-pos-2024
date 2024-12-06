@@ -45,7 +45,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
                 setMemberInfo(data)
                 setClose()
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err.message))
     }
 
     const loadMemmaster = useCallback(() => {
@@ -53,7 +53,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
             .then(response => {
                 setMemberMasters(response.data.data)
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err.message))
     }, [])
 
     useEffect(() => {

@@ -3,6 +3,7 @@ import { Box, Button, Divider, Grid2, Paper, Typography } from '@mui/material'
 import Moment from 'react-moment'
 import { useReactToPrint } from 'react-to-print'
 
+import './index.css'
 const NumFormat = data => {
     return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
@@ -14,7 +15,7 @@ class ComponentToPrint extends Component {
 
     render() {
         return (
-            <div>
+            <div id="content">
                 <Paper elevation={0} sx={{ padding: "5px" }} ref={this.props.innerRef}>
                     <div align="center" style={{ fontSize: "18px", fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
                     <Paper elevation={0} sx={{ padding: "10px" }}>
@@ -105,6 +106,11 @@ const PrintDemo = () => {
             console.log('error=>', err)
         }
     })
+    const printNative = () => {
+        let printContents = document.getElementById('content').innerHTML
+        document.body.innerHTML = printContents
+        window.print()
+    }
 
     return (
         <div>
@@ -113,6 +119,7 @@ const PrintDemo = () => {
                 <Grid2 container spacing={2} justifyContent="center" padding={3}>
                     <Button variant='contained' color='primary' onClick={handlePrint1}>Print1</Button>
                     <Button variant='contained' color='secondary' onClick={handlePrint2}>Print2</Button>
+                    <Button variant='contained' color='success' onClick={printNative}>Print Native</Button>
                 </Grid2>
             </Paper>
         </div>

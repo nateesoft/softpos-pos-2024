@@ -13,7 +13,7 @@ function QrCodeGenerator({ mobileNumber, amount }) {
                 }
             })
             .catch(err=> {
-                alert(err)
+                alert(err.message)
             })
     }, [mobileNumber, amount])
 

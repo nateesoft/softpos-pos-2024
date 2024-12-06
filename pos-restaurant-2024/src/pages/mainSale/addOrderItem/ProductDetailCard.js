@@ -56,7 +56,7 @@ const ProductDetailCard = ({
                 }
             })
             .catch((error) => {
-                handleNotification(error)
+                handleNotification(error.message)
             })
     }
 

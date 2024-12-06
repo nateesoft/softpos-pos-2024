@@ -68,7 +68,7 @@ function MainSalePage() {
         }
       })
       .catch((error) => {
-        handleNotification(error)
+        handleNotification(error.message)
       })
   }, [])
 
@@ -126,7 +126,7 @@ function MainSalePage() {
         }
       })
       .catch((error) => {
-        handleNotification('initLoadOrder' + error)
+        handleNotification('initLoadOrder' + error.message)
       })
   }, [tableNo])
 

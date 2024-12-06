@@ -91,7 +91,7 @@ function FloorPlanPage() {
         }
       })
       .catch((error) => {
-        handleErrorMessage(error)
+        handleErrorMessage(error.message)
       })
   }, [setOpenLogout, navigate, appData, setAppData])
 
@@ -132,7 +132,7 @@ function FloorPlanPage() {
         }
       })
       .catch((error) => {
-        handleErrorMessage(error)
+        handleErrorMessage(error.message)
       })
   }
 
@@ -164,7 +164,7 @@ function FloorPlanPage() {
           setNodes([])
         }
       })
-      .catch(err => handleErrorMessage(err))
+      .catch(err => handleErrorMessage(err.message))
   }, [setNodes])
 
   useEffect(() => {

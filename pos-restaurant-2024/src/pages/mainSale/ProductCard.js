@@ -22,7 +22,7 @@ const ProductCard = memo(
           initLoadOrder()
         })
         .catch((error2) => {
-          handleNotification(error2)
+          handleNotification(error2.message)
         })
     }
 

@@ -143,7 +143,7 @@ const ProductMenu = ({
                 setShowMenuSet(false)
             })
             .catch(err => {
-                console.log(err)
+                console.log(err.message)
             })
     }
 

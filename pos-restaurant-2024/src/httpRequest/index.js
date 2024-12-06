@@ -6,6 +6,4 @@ const apiClient = axios.create({
     },
 });
 
-console.log('apiClient:', apiClient)
-
 export default apiClient;

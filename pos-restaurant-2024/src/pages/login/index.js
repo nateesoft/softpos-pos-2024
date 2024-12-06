@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
-
 import Button from "@mui/material/Button"
 import TextField from "@mui/material/TextField"
 import Typography from "@mui/material/Typography"
@@ -60,6 +59,7 @@ export default function Login() {
     apiClient
       .post("/api/posuser/login", { username: user, password, macno: macno })
       .then((response) => {
+        console.log('response from api:', response)
         if (response.data.status === 2000) {
           const responseLogin = response.data.data
           console.log('handleSubmit(posuser):', responseLogin)
@@ -75,7 +75,7 @@ export default function Login() {
         }
       })
       .catch((error) => {
-        handleNotification(error)
+        handleNotification(error.message)
       })
   }
 

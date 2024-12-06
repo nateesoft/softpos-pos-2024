@@ -16,7 +16,7 @@ const ConnectThermalPrinter = () => {
                 console.log(response)
             })
             .catch(err => {
-                alert(err)
+                alert(err.message)
             })
     }
     return (

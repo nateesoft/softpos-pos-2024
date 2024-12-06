@@ -220,7 +220,7 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
                     }
                 })
                 .catch(err => {
-                    handleNotification(err)
+                    handleNotification(err.message)
                 })
             console.log(tableNo, orderList)
         } else {

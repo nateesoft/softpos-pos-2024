@@ -47,7 +47,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
           setOpen(false)
         })
         .catch(err => {
-          console.log(err)
+          console.log(err.message)
         })
     }
   }
@@ -65,7 +65,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
         initLoadOrder()
       })
       .catch(err => {
-        console.log(err)
+        console.log(err.message)
       })
   }
 
@@ -81,6 +81,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
         const voidMsgData = response.data.data
         setVoidMsgList(voidMsgData)
       })
+      .catch(err=>console.log(err.message))
   }, [])
 
   useEffect(() => {

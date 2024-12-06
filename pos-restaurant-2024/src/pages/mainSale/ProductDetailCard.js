@@ -38,7 +38,7 @@ const ProductDetailCard = memo(({
           closeModal()
         })
         .catch((error) => {
-          handleNotification(error)
+          handleNotification(error.message)
         })
     }
 

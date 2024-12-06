@@ -86,11 +86,11 @@ function PaymentPage() {
           toFloorPlan()
         })
         .catch((error) => {
-          handleNotification(error)
+          handleNotification(error.message)
         })
     },
     onPrintError: (err) => {
-      handleNotification(err)
+      handleNotification(err.message)
     }
   })
 
@@ -113,7 +113,7 @@ function PaymentPage() {
         }
       })
       .catch((error) => {
-        handleNotification(error)
+        handleNotification(error.message)
       })
   }, [tableNo])
 
@@ -128,7 +128,7 @@ function PaymentPage() {
         }
       })
       .catch((error) => {
-        handleNotification(error)
+        handleNotification(error.message)
       })
   }
 
@@ -142,7 +142,7 @@ function PaymentPage() {
         }
       })
       .catch((error) => {
-        handleNotification(error)
+        handleNotification(error.message)
       })
   }, [macno])
 
@@ -155,7 +155,7 @@ function PaymentPage() {
         }
       })
       .catch((error) => {
-        handleNotification(error)
+        handleNotification(error.message)
       })
   }, [macno])
 

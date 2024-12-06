@@ -78,7 +78,7 @@ const PinLock = ({ setOpenPin }) => {
           }
         })
         .catch((error) => {
-          handleErrorMessage(error)
+          handleErrorMessage(error.message)
         })
     }
   }
