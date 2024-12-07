@@ -31,6 +31,7 @@ import TemplateReport from './inventory'
 // test printer
 import TestPrinter from '../pages/thermal'
 import PrinterDemo from '../pages/printer'
+import ReceiptToPrint from './payment/ReceiptToPrint'
 
 const AnimatedRoutes = () => {
     const location = useLocation()
@@ -54,7 +55,7 @@ const AnimatedRoutes = () => {
                         <Route path="/kitchen-monitor" element={<TrelloBoard />} />
                         <Route path="/sale/:tableNo" element={<MainSalePage />} />
                         <Route path="/payment/:tableNo" element={<PaymentPage />} />
-                        <Route path="/payment/receipt/:billNo" element={<ReceiptPayment />} />
+                        <Route path="/payment/receipt/:billNo" element={<ReceiptToPrint />} />
                         <Route path="/sale-report" element={<SaleReport />} />
                         <Route path="/sale-report1" element={<SaleReport1 />} />
                         <Route path="/sale-report2" element={<SaleReport2 />} />

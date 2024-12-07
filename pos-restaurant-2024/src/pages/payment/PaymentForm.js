@@ -34,17 +34,14 @@ const modalStyle = {
     boxShadow: 24
 }
 
-function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotification, tableFile }) {
+function PaymentForm({ orderList, tableNo, handleNotification, tableFile }) {
     const { appData } = useContext(POSContext)
     const { macno } = appData
 
     const { 
-        subTotalAmount, 
         serviceAmount,
         vatAmount,
-        netTotalAmount,
-        productAndService,
-        printRecpMessage } = tableFile
+        netTotalAmount } = tableFile
     const R_NetTotal = netTotalAmount;
 
     const [paymentAmount, setPaymentAmount] = useState(0)
@@ -213,8 +210,10 @@ function PaymentForm({ loadBillInfo, close, orderList, tableNo, handleNotificati
             // send bill payment
             apiClient.post(`/api/billno`, payload)
                 .then(response => {
+                    console.log(response)
+                    const billNo = response.data.data
                     if (response.data.data != null) {
-                        loadBillInfo(response.data.data)
+                        navigate(`/payment/receipt/${billNo}`)
                     } else {
                         handleNotification("พบข้อผิดพลาดในการรับชำระเงิน!")
                     }

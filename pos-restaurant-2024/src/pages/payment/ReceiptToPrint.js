@@ -1,17 +1,26 @@
-import React, { Component } from 'react'
-import { Box, Divider, Paper, Typography } from '@mui/material'
+import React, { Component, useContext, useEffect, useRef, useState } from 'react'
+import { Box, Divider, Paper, Typography, Button, Grid2 } from '@mui/material'
 import Moment from 'react-moment'
+import { useNavigate, useParams } from 'react-router-dom'
+import PrintIcon from '@mui/icons-material/Print'
+import { useReactToPrint } from 'react-to-print'
+
+import apiClient from '../../httpRequest'
+import { POSContext } from '../../AppContext'
+import ShowNotification from "../utils/ShowNotification";
 
 const NumFormat = data => {
-  return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+  return data;
+  // return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
 const formatBindCredit = (creditNumber) => {
-  const newCreditBind = creditNumber.substr(creditNumber.length - 4, creditNumber.length)
-  return "******"+newCreditBind;
+  return creditNumber
+  // const newCreditBind = creditNumber.substr(creditNumber.length - 4, creditNumber.length)
+  // return "******" + newCreditBind;
 }
 
-export default class ReceiptToPrint extends Component {
+class ComponentToPrint extends Component {
   constructor(props) {
     super(props)
   }
@@ -19,12 +28,12 @@ export default class ReceiptToPrint extends Component {
   render() {
     const billInfo = this.props.billInfo
     const {
-      B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct, 
+      B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct,
       B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
       B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1,
-      B_Ton,B_NetVat
+      B_Ton, B_NetVat,B_Table
     } = billInfo
-    
+
     const posConfigSetup = this.props.posConfigSetup
     const poshwSetup = this.props.poshwSetup
 
@@ -35,7 +44,7 @@ export default class ReceiptToPrint extends Component {
 
     let orderList = this.props.orderList
     orderList = orderList.filter(o => o.R_Price > 0)
-    
+
     return (
       <Paper elevation={0} sx={{ padding: "5px" }} ref={this.props.innerRef}>
         <div align="center" style={{ fontSize: "18px", fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
@@ -43,7 +52,7 @@ export default class ReceiptToPrint extends Component {
           {headers && headers.map((header) => <div>
             {header}
           </div>)}
-          <div align="center">Table: {this.props.tableNo}</div>
+          <div align="center">Table: {B_Table}</div>
         </Paper>
         <div align="center">
           <img src="/images/payment/com_logo.jpg" width={128} alt="" />
@@ -100,7 +109,7 @@ export default class ReceiptToPrint extends Component {
           </Box>
           <Box display="flex" justifyContent="space-between">
             <Typography>มูลค่าสินค้า/บริการ.....</Typography>
-            <Typography>{NumFormat(B_NetVat-B_Vat)}</Typography>
+            <Typography>{NumFormat(B_NetVat - B_Vat)}</Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
             <Typography>Vat {posConfigSetup.P_Vat}%</Typography>
@@ -113,7 +122,7 @@ export default class ReceiptToPrint extends Component {
           <Divider />
           <Box display="flex" justifyContent="space-between">
             <Typography>เงินทอน</Typography>
-            <Typography sx={{fontSize: "22px"}}>{B_Ton}</Typography>
+            <Typography sx={{ fontSize: "22px" }}>{B_Ton}</Typography>
           </Box>
           <Divider />
           <Box display="flex" justifyContent="space-between">
@@ -124,14 +133,159 @@ export default class ReceiptToPrint extends Component {
             <Typography>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</Typography>
           </Box>
         </Paper>
-        <Divider sx={{marginTop: "10px"}} />
+        <Divider sx={{ marginTop: "10px" }} />
         <div>
           {posConfigSetup.P_PrintRecpMessage}
         </div>
-        {footers && footers.map((footer) => 
+        {footers && footers.map((footer) =>
           <div align="center">{footer}</div>
         )}
       </Paper>
     )
   }
 }
+
+const ReceiptToPrint = () => {
+  const { billNo } = useParams()
+  const navigate = useNavigate();
+  const contentRef = useRef(null);
+
+  const { appData } = useContext(POSContext)
+  const { empCode, macno, userLogin } = appData
+
+  const [billInfo, setBillInfo] = useState("")
+  const [orderList, setOrderList] = useState([])
+  const [poshwSetup, setPosHwSetup] = useState({})
+  const [posConfigSetup, setPOSConfigSetup] = useState({})
+
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type="error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
+
+  const printNative = () => {
+    let printContents = document.getElementById('content').innerHTML
+    document.body.innerHTML = printContents
+    window.print()
+
+    // redirect to floorplan
+    window.location.href = '/floorplan'
+  }
+
+  const handlePrint = useReactToPrint({ contentRef });
+  // const handlePrint = useReactToPrint({
+  //   contentRef,
+  //   onAfterPrint: () => {
+  //     // clear balance
+  //     apiClient
+  //       .delete(`/api/balance/empty/${tableNo}`)
+  //       .then((response) => {
+  //         toFloorPlan()
+  //       })
+  //       .catch((error) => {
+  //         handleNotification(error.message)
+  //       })
+  //   },
+  //   onPrintError: (err) => {
+  //     handleNotification(err.message)
+  //   }
+  // })
+
+  const toFloorPlan = () => {
+    navigate("/floorplan");
+  }
+
+  // useEffect(() => {
+  //   window.onpopstate = function (event) {
+  //     window.history.go(1);
+  //   };
+  // }, [])
+
+  const handleLoadBillInfo = () => {
+    apiClient
+      .get(`/api/billno/${billNo}`)
+      .then((response) => {
+        if (response.status === 200) {
+          setBillInfo(response.data.data)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error.message)
+      })
+  }
+
+  const initLoadOrderTSale = () => {
+    apiClient
+      .get(`/api/tsale/${billNo}`)
+      .then((response) => {
+        if (response.status === 200) {
+          const dataList = response.data.data
+          setOrderList(dataList)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error.message)
+      })
+  }
+
+  const loadPosHwSetup = () => {
+    apiClient
+      .get(`/api/poshwsetup/${macno}`)
+      .then((response) => {
+        if (response.status === 200) {
+          setPosHwSetup(response.data.data)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error.message)
+      })
+  }
+
+  const loadPosConfigSetup = () => {
+    apiClient
+      .get(`/api/posconfigsetup`)
+      .then((response) => {
+        if (response.status === 200) {
+          setPOSConfigSetup(response.data.data)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error.message)
+      })
+  }
+
+  useEffect(() => {
+    handleLoadBillInfo()
+    initLoadOrderTSale()
+    loadPosHwSetup()
+    loadPosConfigSetup()
+  }, [])
+
+  return (
+    <div>
+      <ComponentToPrint 
+        innerRef={contentRef} 
+        billInfo={billInfo} 
+        orderList={orderList} 
+        poshwSetup={poshwSetup} 
+        posConfigSetup={posConfigSetup} 
+        empCode={empCode} 
+        userLogin={userLogin} 
+      />
+      <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
+        <Grid2 container spacing={2} justifyContent="center" padding={3}>
+          <Button variant='contained' color='success' onClick={handlePrint}>Print React</Button>
+          <Button variant='contained' color='primary' onClick={printNative}>Print Native</Button>
+        </Grid2>
+      </Paper>
+      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
+    </div>
+
+  );
+}
+
+export default ReceiptToPrint
