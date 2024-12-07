@@ -15,12 +15,20 @@ import {
 } from "@xyflow/react"
 import { useNavigate } from "react-router-dom"
 import Modal from "@mui/material/Modal"
-import { AppBar, Box, Button, Grid2, IconButton, Toolbar, Typography, useMediaQuery } from "@mui/material"
+import { AppBar, Box, Button, Divider, Grid2, IconButton, Menu, MenuItem, Toolbar, Typography, useMediaQuery } from "@mui/material"
 import ExitToApp from "@mui/icons-material/ExitToApp"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { motion } from "framer-motion"
 import "@xyflow/react/dist/style.css"
 import MenuIcon from '@mui/icons-material/Menu';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import VipPeopleIcon from '@mui/icons-material/Hail';
+import RefundIcon from "@mui/icons-material/ReceiptLong"
+import RecieptCopyPrint from "./RecieptCopyPrint"
+import RefundBill from "./refund/RefundBill"
+import ManageCashDrawer from './ManageCashDrawer';
+import NumberPadLock from '../utils/NumberPadLock';
+import ManageCustTable from './ManageCustTable';
 
 import apiClient from '../../httpRequest'
 import RoundNode from "./nodes/RoundNode"
@@ -58,6 +66,16 @@ const nodeTypes = {
 function FloorPlanPage() {
   const navigate = useNavigate()
 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const { appData, setAppData } = useContext(POSContext)
   const { userLogin } = appData
 
@@ -66,6 +84,12 @@ function FloorPlanPage() {
   const reactFlowWrapper = useRef(null)
 
   const [nodes, setNodes, onNodesChange] = useNodesState([])
+
+  const [openCopyPrint, setOpenCopyPrint] = useState(false)
+  const [openRefundBill, setOpenRefundBill] = useState(false)
+  const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
+  const [openPinMgrTable, setOpenPinMgrTable] = useState(false)
+  const [openMgrTable, setOpenMgrTable] = useState(false)
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
@@ -135,6 +159,27 @@ function FloorPlanPage() {
   const handleSelect = (floor) => {
     setSelectFloor(floor)
     loadFloorPlan(floor)
+
+    setAnchorEl(null);
+  }
+
+  const handleChange = (data) => {
+    setAnchorEl(null);
+    if (data === 'CopyPrint') {
+      setOpenCopyPrint(true)
+    } else if (data === 'RefundBill') {
+      setOpenRefundBill(true)
+    } else if (data === 'CashDrawer') {
+      setOpenMgrCashDrawer(true)
+    } else if (data === 'MgrTable') {
+      setOpenPinMgrTable(true)
+    } else if (data === 'SetupTableFlorPlan') {
+      navigate("/table-setup")
+    }
+  };
+
+  const handleCloseModal = (func) => {
+    func()
   }
 
   const loadFloorPlan = useCallback((floor) => {
@@ -183,16 +228,47 @@ function FloorPlanPage() {
           <Toolbar>
             <Grid2 container justifyContent="flex-start">
               {iphonePro14max === true && <div>
-                <IconButton color="inherit" aria-label="open drawer" edge="start">
+                <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={handleClick}>
                   <MenuIcon />
                 </IconButton>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  handleClose={handleClose}
+                  MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                  }}
+                >
+                  <MenuItem onClick={() => handleSelect('STAND_ROOM')}>
+                    <Box display="flex" justifyContent="center">
+                      <RestaurantIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>Normal Room</Typography>
+                    </Box>
+                  </MenuItem>
+                  <MenuItem onClick={() => handleSelect('VIP_ROOM')}>
+                    <Box display="flex" justifyContent="center">
+                      <VipPeopleIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>VIP Room</Typography>
+                    </Box>
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={() => handleChange('RefundBill')}>
+                    <Box display="flex" justifyContent="center">
+                      <RefundIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>ยกเลิกบิล (Refund Bill)</Typography>
+                    </Box>
+                  </MenuItem>
+                </Menu>
               </div>}
               {iphonePro14max === false && <div>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
                 </IconButton>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
-                  <OtherMenuSelect />
+                  <OtherMenuSelect 
+                    handleChange={handleChange} 
+                    handleClick={handleClick}
+                    handleClose={handleClose}
+                    open={open}
+                    anchorEl={anchorEl} />
                 </IconButton>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <ReportSelect />
@@ -245,6 +321,32 @@ function FloorPlanPage() {
         header="Confirm Logout"
         content="ยืนยันการออกจากระบบ ?"
       />
+      <Modal open={openCopyPrint} onClose={() => handleCloseModal(() => setOpenCopyPrint(false))}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <RecieptCopyPrint setOpen={setOpenCopyPrint} />
+        </Box>
+      </Modal>
+      <Modal open={openRefundBill} onClose={() => handleCloseModal(() => setOpenRefundBill(false))}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <RefundBill setOpen={setOpenRefundBill} />
+        </Box>
+      </Modal>
+      <Modal open={openMgrCashDrawer} onClose={() => handleCloseModal(() => setOpenMgrCashDrawer(false))}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <ManageCashDrawer setOpen={setOpenMgrCashDrawer} />
+        </Box>
+      </Modal>
+      <Modal open={openPinMgrTable} onClose={() => handleCloseModal(() => setOpenPinMgrTable(false))}>
+        <NumberPadLock
+          close={() => handleCloseModal(() => setOpenPinMgrTable(false))}
+          nextStep={() => setOpenMgrTable(true)}
+        />
+      </Modal>
+      <Modal open={openMgrTable} onClose={() => handleCloseModal(() => setOpenMgrTable(false))}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <ManageCustTable setOpen={setOpenMgrTable} />
+        </Box>
+      </Modal>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   )
