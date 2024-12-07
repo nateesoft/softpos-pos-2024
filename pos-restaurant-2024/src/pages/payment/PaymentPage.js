@@ -121,7 +121,8 @@ function PaymentPage() {
       .then((response) => {
         if (response.status === 200) {
           setBillInfo(response.data.data)
-          setOpen(true)
+          // setOpen(true)
+          navigate(`/payment/receipt/${billNo}`)
         }
       })
       .catch((error) => {

@@ -29,7 +29,6 @@ const searchBillNoCondition = async (billNo, postDate, macno) => {
     } else if (macno) {
         sql = sql + ` where B_MacNo='${macno}' or B_Cashier='${macno}' order by B_PostDate`;
     }
-    console.log(sql);
     const results = await pool.query(sql)
     return results
 }
@@ -334,7 +333,6 @@ const addNewBill = async (payload) => {
         }
         return null
     } catch (error) {
-        console.log('addNewBill', error)
         return null
     }
 }

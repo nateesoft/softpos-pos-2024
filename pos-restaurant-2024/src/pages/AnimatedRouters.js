@@ -8,6 +8,7 @@ import FloorPlanPage from "./floorplan/FloorPlanPage"
 import TableManagement from "./floorplan/TableManagement"
 import MainSalePage from "./mainSale/MainSalePage"
 import PaymentPage from "./payment/PaymentPage"
+import ReceiptPayment from "./payment/print"
 
 // report all page
 import SaleReport from "./reports/SaleReport"
@@ -53,6 +54,7 @@ const AnimatedRoutes = () => {
                         <Route path="/kitchen-monitor" element={<TrelloBoard />} />
                         <Route path="/sale/:tableNo" element={<MainSalePage />} />
                         <Route path="/payment/:tableNo" element={<PaymentPage />} />
+                        <Route path="/payment/receipt/:billNo" element={<ReceiptPayment />} />
                         <Route path="/sale-report" element={<SaleReport />} />
                         <Route path="/sale-report1" element={<SaleReport1 />} />
                         <Route path="/sale-report2" element={<SaleReport2 />} />

@@ -19,7 +19,6 @@ router.post('/', function (req, res, next) {
 
   QRCode.toDataURL(payload, option, (err, url) => {
     if (err) {
-      console.log('generate qr code payment failure!')
       return res.status(400).json({
         RespCode: 400,
         RespMessage: 'bad: ' + err

@@ -14,7 +14,6 @@ router.post('/checkTableOpen', function (req, res, next) {
           data: { tableStatus: "available" }
         })
       } else {
-        console.log(`Cashier logged in is: ${rows}`)
         res.status(200).json({
           status: 2000,
           data: { tableStatus: "cashierInUse", Cashier: rows.Cashier, Employ: rows.TUser }

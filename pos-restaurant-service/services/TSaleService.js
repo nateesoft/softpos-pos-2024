@@ -81,7 +81,6 @@ const createNewTSale = async (balance, BillRefNo) => {
         const results = await pool.query(sql)
         return results
     } catch (error) {
-        console.log('createNewTSale', error)
         return null
     }
 }

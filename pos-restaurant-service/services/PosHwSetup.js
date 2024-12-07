@@ -1,4 +1,5 @@
 const pool = require('../config/database/MySqlConnect')
+const { ASCII2Unicode, PrefixZeroFormat } = require('../utils/StringUtil')
 
 const getAllData = async () => {
     const sql = `select * from poshwsetup limit 1`;
@@ -18,6 +19,18 @@ const getDataByMacno = async (macno) => {
     return null
 }
 
+const getBillNoByMacno = async (macno) => {
+    const sql = `select * from poshwsetup where Terminal='${macno}' limit 1`
+    const results = await pool.query(sql)
+    let RunningNumber = ""
+    if (results.length > 0) {
+        RunningNumber = PrefixZeroFormat(results[0].ReceNo1, 7)
+
+        return {...results[0], Footting3: ASCII2Unicode(results[0].Footting3)}
+    }
+    return null
+}
+
 const updateNextBillNo = async (macno) => {
     const sql = `UPDATE poshwsetup set receno1=receno1+1 where terminal='${macno}'`
     pool.query(sql, (err, results) => {
@@ -29,5 +42,6 @@ const updateNextBillNo = async (macno) => {
 module.exports = {
     getDataByMacno,
     getAllData,
-    updateNextBillNo
+    updateNextBillNo,
+    getBillNoByMacno
 }

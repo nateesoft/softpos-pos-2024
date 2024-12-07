@@ -1,31 +1,16 @@
 const express = require('express');
+const { getEmployeeByCode } = require('../../../services/EmployeeService');
 const router = express.Router();
-
-const pool = require('../../../config/database/MySqlConnect')
 
 router.post('/getEmployeeByCode', function (req, res, next) {
   const { code } = req.body
-  const response = {}
-  const sql = `select code,name from employ where Code='${code}' limit 1`
-  console.log(sql)
-  pool.query(sql, (err, results) => {
-    if (err) throw err
-
-    response.status = true
-    response.code = 200
-    response.message = "Success"
-    if (results.length > 0) {
-      response.data = {
-        pinValid: true
-      }
-    } else {
-      response.data = {
-        pinValid: false
-      }
-    }
-
-    res.status(200).json(response)
-  })
+  getEmployeeByCode(code)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
 });
 
 module.exports = router;

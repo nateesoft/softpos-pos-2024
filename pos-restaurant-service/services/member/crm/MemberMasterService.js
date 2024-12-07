@@ -26,7 +26,6 @@ const searchData = async (phone, code, name) => {
     } else {
         sql = sql + ` limit 0,0`
     }
-    console.log('search query:', sql)
     const results = await pool.query(sql)
     const mappingResult = results.map((item, index) => {
         return { ...item, Member_NameThai: ASCII2Unicode(item.Member_NameThai) }

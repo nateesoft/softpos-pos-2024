@@ -16,7 +16,6 @@ router.get('/', (req, res) => {
 // order adjust stock
 router.post('/stock-out', (req, res) => {
   const { R_Index } = req.body
-  console.log('balance stock out:', R_Index)
   BalanceService.orderStockOut(R_Index)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
@@ -29,7 +28,6 @@ router.post('/stock-out', (req, res) => {
 // void
 router.post('/stock-in', (req, res) => {
   const { R_Index } = req.body
-  console.log('balance stock in:', R_Index)
   BalanceService.voidStockIn(R_Index)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
@@ -166,7 +164,6 @@ router.post('/getData', (req, res) => {
 });
 
 router.post('/addList', function (req, res, next) {
-  // console.log('addList=>', req.body)
   BalanceService.addListBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })

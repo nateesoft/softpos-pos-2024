@@ -186,7 +186,7 @@ function FloorPlanPage() {
     apiClient.get(`/api/floorplan-template/${floor}`)
       .then(response => {
         const result = response.data
-        if (result.code === 200) {
+        if (result.status === 2000) {
           if (result.data != null) {
             const flow = result.data.template
             if (flow) {

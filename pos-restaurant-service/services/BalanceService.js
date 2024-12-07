@@ -340,7 +340,6 @@ const addNewBalance = async payload => {
         await pool.query(sql)
         return R_Index
     } catch (error) {
-        console.log('addNewBalance', error)
         return null
     }
 }
@@ -410,7 +409,6 @@ const updateBalance = async payload => {
 
         return R_Index
     } catch (error) {
-        console.log('updateBalance', error)
         return null
     }
 }

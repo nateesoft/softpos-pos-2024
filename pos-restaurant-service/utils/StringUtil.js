@@ -42,8 +42,6 @@ const PrefixZeroFormat = (str, length) => {
     return str;
 }
 
-// console.log(ASCII2Unicode('Å´ºÒ·'))
-
 module.exports = {
     Unicode2ASCII,
     ASCII2Unicode,

@@ -1,41 +1,28 @@
 const express = require('express');
 const router = express.Router();
 
-const pool = require('../../config/database')
+const { getTemplateById, updateTemplate } = require('../../services/FloorPlanService');
 
 router.get('/:id', function (req, res) {
   const id = req.params.id
-  const response = {}
-  const sql = `select * from floorplan_template where id='${id}'`
-  console.log(sql)
-  pool.query(sql, (err, results) => {
-    if (err) throw err
-
-    response.status = true
-    response.code = 200
-    response.message = "Success"
-    response.data = results.length > 0 ? results[0] : null
-
-    res.status(200).json(response)
-  })
+  getTemplateById(id)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
 });
 
 router.patch('/:id', function (req, res, next) {
   const id = req.params.id
-  const { template } = req.body
-
-  pool.query(
-    `UPDATE floorplan_template set template=? WHERE id = ?`,
-    [template, id],
-    (err, results) => {
-      if (err) {
-        console.log('err:', err)
-        throw err
-      }
-
-      res.status(200).json({ status: "update success" })
-    }
-  )
+  updateTemplate(req.body, id)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
 })
 
 module.exports = router;

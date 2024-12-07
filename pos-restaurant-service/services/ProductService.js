@@ -1,5 +1,11 @@
 const pool = require('../config/database/MySqlConnect')
 
+const getAllProduct = async pcode => {
+    const sql = `select * from product`;
+    const results = await pool.query(sql)
+    return results
+}
+
 const getProductByPCode = async pcode => {
     const sql = `select * from product where PCode='${pcode}'`;
     const results = await pool.query(sql)
@@ -36,5 +42,6 @@ module.exports = {
     getProductByPCode,
     getProductActiveByPCode,
     listIngredeint,
-    getPSetByPCode
+    getPSetByPCode,
+    getAllProduct
 }
