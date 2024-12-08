@@ -1,23 +1,34 @@
 import React, { Component, useContext, useEffect, useRef, useState } from 'react'
-import { Box, Divider, Paper, Typography, Button, Grid2 } from '@mui/material'
+import { Box, Button, Divider, Grid2, Paper, Typography } from '@mui/material'
 import Moment from 'react-moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import PrintIcon from '@mui/icons-material/Print'
-import { useReactToPrint } from 'react-to-print'
 
 import apiClient from '../../httpRequest'
 import { POSContext } from '../../AppContext'
-import ShowNotification from "../utils/ShowNotification";
+
+import './index.css'
 
 const NumFormat = data => {
-  return data;
-  // return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+  console.log('NumFormat:', data)
+  if (!data) {
+    return ""
+  }
+  return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
 const formatBindCredit = (creditNumber) => {
-  return creditNumber
-  // const newCreditBind = creditNumber.substr(creditNumber.length - 4, creditNumber.length)
-  // return "******" + newCreditBind;
+  if (!creditNumber) {
+    return ""
+  }
+  const newCreditBind = creditNumber.substr(creditNumber.length - 4, creditNumber.length)
+  return "******" + newCreditBind;
+}
+
+const MyTypo = ({ value }) => {
+  return <Typography sx={{ fontSize: '12px' }}>
+    {value}
+  </Typography>
 }
 
 class ComponentToPrint extends Component {
@@ -31,7 +42,7 @@ class ComponentToPrint extends Component {
       B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct,
       B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
       B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1,
-      B_Ton, B_NetVat,B_Table
+      B_Ton, B_NetVat, B_Table
     } = billInfo
 
     const posConfigSetup = this.props.posConfigSetup
@@ -46,25 +57,23 @@ class ComponentToPrint extends Component {
     orderList = orderList.filter(o => o.R_Price > 0)
 
     return (
-      <Paper elevation={0} sx={{ padding: "5px" }} ref={this.props.innerRef}>
-        <div align="center" style={{ fontSize: "18px", fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
-        <Paper elevation={0} sx={{ padding: "10px" }}>
-          {headers && headers.map((header) => <div>
-            {header}
-          </div>)}
+      <div id='content' style={{ margin: "5px" }} ref={this.props.innerRef}>
+        <div align="center" style={{ fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
+        <div>
+          {headers && headers.map((header) => <MyTypo value={header} />)}
           <div align="center">Table: {B_Table}</div>
-        </Paper>
+        </div>
         <div align="center">
           <img src="/images/payment/com_logo.jpg" width={128} alt="" />
         </div>
-        <Paper elevation={0} sx={{ padding: "10px" }}>
+        <div>
           <div>Receipt No: {B_Refno}</div>
           <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
           <div>Customer: {B_Cust}</div>
           <div>Cashier: {B_Cashier} Employ: {this.props.empCode} Mac:{B_MacNo}</div>
-        </Paper>
+        </div>
         <Divider />
-        <Paper elevation={0} sx={{ padding: "10px" }}>
+        <div>
           <table width="100%">
             <tr>
               <th align="left"></th>
@@ -81,9 +90,9 @@ class ComponentToPrint extends Component {
               </tr>
             ))}
           </table>
-        </Paper>
+        </div>
         <Divider />
-        <Paper elevation={0} sx={{ padding: "10px" }}>
+        <div>
           <Box display="flex" justifyContent="space-between">
             <Typography>Sub-TOTAL....(Item {orderList.length})</Typography>
             <Typography>{NumFormat(B_Total)}</Typography>
@@ -122,7 +131,7 @@ class ComponentToPrint extends Component {
           <Divider />
           <Box display="flex" justifyContent="space-between">
             <Typography>เงินทอน</Typography>
-            <Typography sx={{ fontSize: "22px" }}>{B_Ton}</Typography>
+            <Typography>{B_Ton}</Typography>
           </Box>
           <Divider />
           <Box display="flex" justifyContent="space-between">
@@ -132,15 +141,15 @@ class ComponentToPrint extends Component {
           <Box display="flex" justifyContent="space-between">
             <Typography>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</Typography>
           </Box>
-        </Paper>
+        </div>
         <Divider sx={{ marginTop: "10px" }} />
-        <div>
-          {posConfigSetup.P_PrintRecpMessage}
+        <div align="center">
+          <MyTypo value={posConfigSetup.P_PrintRecpMessage} />
         </div>
         {footers && footers.map((footer) =>
-          <div align="center">{footer}</div>
+          <div align="center"><MyTypo value={footer} /></div>
         )}
-      </Paper>
+      </div>
     )
   }
 }
@@ -148,6 +157,8 @@ class ComponentToPrint extends Component {
 const ReceiptToPrint = () => {
   const { billNo } = useParams()
   const navigate = useNavigate();
+
+  const [isPrinting, setIsPrinting] = useState(false);
   const contentRef = useRef(null);
 
   const { appData } = useContext(POSContext)
@@ -158,52 +169,16 @@ const ReceiptToPrint = () => {
   const [poshwSetup, setPosHwSetup] = useState({})
   const [posConfigSetup, setPOSConfigSetup] = useState({})
 
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type="error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
-
   const printNative = () => {
+    setIsPrinting(true)
+
     let printContents = document.getElementById('content').innerHTML
     document.body.innerHTML = printContents
     window.print()
-
-    // redirect to floorplan
-    window.location.href = '/floorplan'
+    setTimeout(function () {
+      window.location.replace('/floorplan')
+    }, 5000);
   }
-
-  const handlePrint = useReactToPrint({ contentRef });
-  // const handlePrint = useReactToPrint({
-  //   contentRef,
-  //   onAfterPrint: () => {
-  //     // clear balance
-  //     apiClient
-  //       .delete(`/api/balance/empty/${tableNo}`)
-  //       .then((response) => {
-  //         toFloorPlan()
-  //       })
-  //       .catch((error) => {
-  //         handleNotification(error.message)
-  //       })
-  //   },
-  //   onPrintError: (err) => {
-  //     handleNotification(err.message)
-  //   }
-  // })
-
-  const toFloorPlan = () => {
-    navigate("/floorplan");
-  }
-
-  // useEffect(() => {
-  //   window.onpopstate = function (event) {
-  //     window.history.go(1);
-  //   };
-  // }, [])
 
   const handleLoadBillInfo = () => {
     apiClient
@@ -214,7 +189,7 @@ const ReceiptToPrint = () => {
         }
       })
       .catch((error) => {
-        handleNotification(error.message)
+        alert(error.message)
       })
   }
 
@@ -228,7 +203,7 @@ const ReceiptToPrint = () => {
         }
       })
       .catch((error) => {
-        handleNotification(error.message)
+        alert(error.message)
       })
   }
 
@@ -241,7 +216,7 @@ const ReceiptToPrint = () => {
         }
       })
       .catch((error) => {
-        handleNotification(error.message)
+        alert(error.message)
       })
   }
 
@@ -254,7 +229,7 @@ const ReceiptToPrint = () => {
         }
       })
       .catch((error) => {
-        handleNotification(error.message)
+        alert(error.message)
       })
   }
 
@@ -266,25 +241,24 @@ const ReceiptToPrint = () => {
   }, [])
 
   return (
-    <div>
-      <ComponentToPrint 
-        innerRef={contentRef} 
-        billInfo={billInfo} 
-        orderList={orderList} 
-        poshwSetup={poshwSetup} 
-        posConfigSetup={posConfigSetup} 
-        empCode={empCode} 
-        userLogin={userLogin} 
+    <>
+      <ComponentToPrint
+        innerRef={contentRef}
+        billInfo={billInfo}
+        orderList={orderList}
+        poshwSetup={poshwSetup}
+        posConfigSetup={posConfigSetup}
+        empCode={empCode}
+        userLogin={userLogin}
       />
-      <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
-        <Grid2 container spacing={2} justifyContent="center" padding={3}>
-          <Button variant='contained' color='success' onClick={handlePrint}>Print React</Button>
-          <Button variant='contained' color='primary' onClick={printNative}>Print Native</Button>
-        </Grid2>
-      </Paper>
-      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
-    </div>
-
+      {isPrinting === false &&
+        <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
+          <Grid2 container spacing={2} justifyContent="center" padding={3}>
+            <Button startIcon={<PrintIcon />} variant='contained' color='primary' onClick={printNative}>Print</Button>
+          </Grid2>
+        </Paper>
+      }
+    </>
   );
 }
 

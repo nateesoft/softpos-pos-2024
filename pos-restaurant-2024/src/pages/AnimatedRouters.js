@@ -8,7 +8,6 @@ import FloorPlanPage from "./floorplan/FloorPlanPage"
 import TableManagement from "./floorplan/TableManagement"
 import MainSalePage from "./mainSale/MainSalePage"
 import PaymentPage from "./payment/PaymentPage"
-import ReceiptPayment from "./payment/print"
 
 // report all page
 import SaleReport from "./reports/SaleReport"
@@ -65,7 +64,6 @@ const AnimatedRoutes = () => {
                         <Route path="/inventory/db" element={<TemplateReport />} />
                     </Route>
                 </Route>
-                <Route path="/print-demo" element={<PrinterDemo />} />
                 <Route path="/test-print" element={<TestPrinter />} />
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/register-macno" element={<RegisterMacNo />} />
