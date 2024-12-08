@@ -2,6 +2,11 @@ const pool = require('../config/database/MySqlConnect');
 const { getMoment } = require('../utils/MomentUtil');
 const { getPOSConfigSetup } = require('./POSConfigSetupService');
 
+const getAllTable = async () => {
+    const sql = `select * FROM tablefile ORDER By Tcode`;
+    const results = await pool.query(sql)
+    return results
+}
 const updateTableAvailableStatus = async tableNo => {
     const sql = `update tablefile set TOnact='N', Cashier=null where TCode='${tableNo}'`;
     const results = await pool.query(sql)
@@ -213,5 +218,6 @@ module.exports = {
     checkTableOpen,
     updateMember,
     summaryBalance,
-    updateTableFile
+    updateTableFile,
+    getAllTable
 }

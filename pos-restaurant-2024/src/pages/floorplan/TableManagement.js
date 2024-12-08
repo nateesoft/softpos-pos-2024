@@ -119,7 +119,7 @@ const TableManagement = () => {
     apiClient
       .get(`/api/floorplan/${node.id}`)
       .then((response) => {
-        if (response.data.data.length > 0) {
+        if (response.status === 200 && response.data.data != null) {
           setTableInfo({ ...node })
           setFoundTable(true)
           setOpenTableSetup(true)
@@ -137,9 +137,15 @@ const TableManagement = () => {
   const onSave = () => {
     if (reactFlowInstance) {
       apiClient
-        .patch(`/api/floorplan-template/${selectFloor}`, { template: JSON.stringify(reactFlowInstance.toObject()) })
+        .patch(`/api/floorplan-template/${selectFloor}`, {
+          template: JSON.stringify(reactFlowInstance.toObject())
+        })
         .then((response) => {
-          navigate("/floorplan")
+          if (response.status === 200) {
+            navigate("/floorplan")
+          } else {
+            handleNotification('พบข้อผิดพลาดในการแสดงข้อมูล!')
+          }
         })
         .catch((error) => {
           handleNotification(error.message)
@@ -210,9 +216,13 @@ const TableManagement = () => {
   const loadFloorPlan = useCallback((floor) => {
     apiClient.get(`/api/floorplan-template/${floor}`)
       .then(response => {
-        const flow = response.data.data.template
-        if (flow) {
-          setNodes(flow.nodes || [])
+        if (response.data.data) {
+          const flow = response.data.data.template
+          if (flow) {
+            setNodes(flow.nodes || [])
+          } else {
+            setNodes([])
+          }
         } else {
           setNodes([])
         }

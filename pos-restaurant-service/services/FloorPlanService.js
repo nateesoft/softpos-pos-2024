@@ -1,19 +1,68 @@
 const pool = require('../config/database')
 
+const { getAllTable } = require('../services/TableFileService')
+
+const getNewArray = (tables, nodes) => {
+
+    const getStatusBG = (tableNo) => {
+        const getTcode = tables.filter(tb => tb.Tcode === tableNo)
+        if (getTcode[0].TOnAct === 'Y') {
+            return "purple"
+        } else {
+            return "black"
+        }
+    }
+
+    const newNodes = nodes.filter(item => item.data.label !== "")
+    return newNodes.map(item => {
+        const backgroundColor = getStatusBG(item.data.label)
+        return {
+            ...item,
+            data: {
+                ...item.data,
+                bgColor: backgroundColor
+            }
+        }
+    })
+}
+
 const getTemplateById = async (id) => {
+    const tables = await getAllTable()
+
     const sql = `select * from floorplan_template where id='${id}'`
     const results = await pool.query(sql)
     if (results.length > 0) {
-        return results[0]
+        const unique = [...new Set(getNewArray(tables, results[0].template.nodes))]
+        console.log(unique)
+        // const newResponse = {
+        //     id: results[0].id,
+        //     template: { ...results[0].template, nodes: unique }
+        // }
+        const newResponse = {
+            id: results[0].id,
+            template: { 
+                ...results[0].template,
+                nodes: unique
+            }
+        }
+        return newResponse
     }
     return null
 }
 
 const updateTemplate = async (payload, id) => {
     const { template } = payload
-    const sql = `UPDATE floorplan_template set template=? WHERE id = '${id}'`
-    const results = await pool.query(sql, [template])
-    return results
+    const sqlQuery = `select * from floorplan_template where id='${id}'`
+    const results = await pool.query(sqlQuery)
+    if (results.length > 0) {
+        const sql = `UPDATE floorplan_template set template=? WHERE id = '${id}'`
+        await pool.query(sql, [template])
+    } else {
+        const sqlInsert = `INSERT INTO floorplan_template (id, template) 
+                values ('${id}', '${template}')`;
+        await pool.query(sqlInsert)
+    }
+    return id
 }
 
 const getFloorPlanById = async (id) => {

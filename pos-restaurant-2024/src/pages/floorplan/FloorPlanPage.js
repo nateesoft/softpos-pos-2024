@@ -190,8 +190,6 @@ function FloorPlanPage() {
           if (result.data != null) {
             const flow = result.data.template
             if (flow) {
-              // const updFlow = flow.nodes.map(node => ({...node, bgColor: "red"}))
-              // setNodes(updFlow || [])
               setNodes(flow.nodes || [])
             } else {
               setNodes([])
@@ -263,8 +261,8 @@ function FloorPlanPage() {
                   <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
                 </IconButton>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
-                  <OtherMenuSelect 
-                    handleChange={handleChange} 
+                  <OtherMenuSelect
+                    handleChange={handleChange}
                     handleClick={handleClick}
                     handleClose={handleClose}
                     open={open}
