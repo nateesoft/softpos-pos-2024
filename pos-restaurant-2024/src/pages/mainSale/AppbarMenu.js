@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -6,16 +6,20 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
+// import Badge from '@mui/material/Badge';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import PrintIcon from '@mui/icons-material/Print';
-import MenuOpenIcon from '@mui/icons-material/MenuBook';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+// import PrintIcon from '@mui/icons-material/Print';
+// import MenuOpenIcon from '@mui/icons-material/MenuBook';
+// import NotificationsIcon from '@mui/icons-material/Notifications';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import SettingIcon from '@mui/icons-material/Settings';
+import TableBarIcon from '@mui/icons-material/TableBar';
 import { Modal } from '@mui/material';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import { POSContext } from '../../AppContext';
+import Moment from 'react-moment';
+import { useNavigate } from 'react-router-dom';
 
 const modalStyle = {
   position: "absolute",
@@ -66,9 +70,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function LeftMenu() {
+  const { appData } = useContext(POSContext)
+  const { userLogin } = appData
+
   const menuId = 'primary-search-account-menu';
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const [open, setOpen] = useState(false)
+
+  const navigate = useNavigate()
+  const backFloorPlan = () => {
+    navigate('/floorplan')
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -96,17 +108,17 @@ export default function LeftMenu() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={36} color="error">
                 <MenuOpenIcon />
               </Badge>
-            </IconButton>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+            </IconButton> */}
+            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
               <Badge badgeContent={4} color="error">
                 <PrintIcon />
               </Badge>
-            </IconButton>
-            <IconButton
+            </IconButton> */}
+            {/* <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
@@ -114,7 +126,7 @@ export default function LeftMenu() {
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               size="large"
               edge="end"
@@ -124,6 +136,18 @@ export default function LeftMenu() {
               color="inherit"
             >
               <AccountCircle />
+              <Typography sx={{fontSize: "12px"}}>{userLogin}</Typography>
+            </IconButton>
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccessTimeIcon />
+              <Typography sx={{fontSize: "12px"}}><Moment format='DD/MM/YYYY HH:mm' /></Typography>
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex' } }}>
@@ -142,8 +166,9 @@ export default function LeftMenu() {
               aria-controls={mobileMenuId}
               aria-haspopup="true"
               color="inherit"
+              onClick={backFloorPlan}
             >
-              <SettingIcon />
+              <TableBarIcon />
             </IconButton>
           </Box>
         </Toolbar>

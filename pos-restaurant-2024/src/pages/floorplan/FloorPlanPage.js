@@ -63,6 +63,8 @@ const nodeTypes = {
   resize: ResizeNode
 }
 
+const defaultViewport = { x: 400, y: 400, zoom: 0.5 };
+
 function FloorPlanPage() {
   const navigate = useNavigate()
 
@@ -299,7 +301,7 @@ function FloorPlanPage() {
             onNodeClick={onNodeClick}
             nodeTypes={nodeTypes}
             nodesDraggable={false}
-            fitView
+            defaultViewport={defaultViewport}
           >
             <Controls />
             <Background variant={BackgroundVariant.Dots} />

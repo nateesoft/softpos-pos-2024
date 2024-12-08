@@ -33,11 +33,6 @@ const getTemplateById = async (id) => {
     const results = await pool.query(sql)
     if (results.length > 0) {
         const unique = [...new Set(getNewArray(tables, results[0].template.nodes))]
-        console.log(unique)
-        // const newResponse = {
-        //     id: results[0].id,
-        //     template: { ...results[0].template, nodes: unique }
-        // }
         const newResponse = {
             id: results[0].id,
             template: { 

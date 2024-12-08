@@ -109,6 +109,7 @@ const ProductMenu = ({
 
     const handleShowMenuSet = (product) => {
         setProductInfo(product)
+        setMsgWarning(false)
         setShowMenuSet(true)
     }
 
@@ -173,6 +174,7 @@ const ProductMenu = ({
         setOptionalList([])
         setSubMenuSelected([])
         setShowMenuSet(false)
+        setMsgWarning(false)
     }
 
     return (
@@ -355,13 +357,18 @@ const ProductMenu = ({
                     <Grid container justifyContent="center" display="flex" direction="column" padding={2}>
                         <Grid display="flex" justifyContent="space-between">
                             <Typography variant="h4" color="secondary" sx={{ fontWeight: "bold", textShadow: "1px 1px orange" }}>{productInfo.menu_name}</Typography>
-                            <CloseModalIcon fontSize="large" color="error" onClick={() => setShowMenuSet(false)} />
+                            <CloseModalIcon fontSize="large" color="error" onClick={handleCloseMenuSet} />
                         </Grid>
                         <Typography color="error" variant="h5" sx={{ fontWeight: "bold" }}>( ราคา {productInfo.menu_price} )</Typography>
                         {msgWarning && <Box display="flex" justifyContent="center" sx={{ backgroundColor: "gold", padding: "10px", marginTop: "10px" }}>
-                            <Typography>!!! ไม่ตรงตามเงื่อนไขในการสั่งอาหาร !!!</Typography>}
+                            <Typography>!!! ไม่ตรงตามเงื่อนไขในการสั่งอาหาร !!!</Typography>
                         </Box>}
                     </Grid>
+                    <Grid2 container spacing={2} padding={1} justifyContent="space-between">
+                            <Typography sx={{color: "green", fontWeight: "bold"}}>รายการที่เลือก: {subMenuSelected.filter(item => item === true).length}</Typography>
+                            <Typography sx={{color: "blue"}}>สั่งขั้นต่ำ: {productInfo.min_count_set}</Typography>
+                            <Typography sx={{color: 'red'}}>สั่งได้ไม่เกิน: {productInfo.max_count_set}</Typography>
+                        </Grid2>
                     <MenuSetModal
                         product={productInfo}
                         subMenuSelected={subMenuSelected}
@@ -370,11 +377,7 @@ const ProductMenu = ({
                         setOptionalList={setOptionalList}
                     />
                     <Box margin={1} padding={1} display="flex" alignContent="center" justifyContent="space-between" sx={{ padding: "10px", borderRadius: "10px" }}>
-                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setShowMenuSet(false)}>Cancel</Button>
-                        <Grid2 container margin={1} display="flex" justifyContent="center" direction="column">
-                            <Typography>SELECTED: {subMenuSelected.filter(item => item === true).length}</Typography>
-                            <Typography>MIN: {productInfo.min_count_set}</Typography>
-                        </Grid2>
+                        <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={handleCloseMenuSet}>Cancel</Button>
                         <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={() => handleConfirmSelectedSubMenu(productInfo)}>Confirm</Button>
                     </Box>
                 </Box>

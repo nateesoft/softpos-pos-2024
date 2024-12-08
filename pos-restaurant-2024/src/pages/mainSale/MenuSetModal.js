@@ -114,7 +114,14 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
                     <CloseIcon fontSize='large' color='error' />
                 </IconButton>
                 <DialogContent dividers>
-                    <ChangeProductList optionalList={optionalList} currentMenu={currentMenu} closeDialog={()=>setShowChangeListMenu(false)} />
+                    <ChangeProductList 
+                        optionalList={optionalList} 
+                        setOptionalList={setOptionalList}
+                        subMenuSelected={subMenuSelected}
+                        setSubMenuSelected={setSubMenuSelected}
+                        currentMenu={currentMenu} 
+                        closeDialog={()=>setShowChangeListMenu(false)} 
+                    />
                 </DialogContent>
             </Dialog>
             <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />

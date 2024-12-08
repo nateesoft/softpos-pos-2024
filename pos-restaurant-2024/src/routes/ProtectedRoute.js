@@ -4,7 +4,6 @@ import { Navigate, Outlet } from "react-router-dom";
 import { POSContext } from "../AppContext";
 
 const Protected = (props) => {
-  console.log('Protected:', props)
   const { appData } = useContext(POSContext)
 
   if (!appData.macno) {

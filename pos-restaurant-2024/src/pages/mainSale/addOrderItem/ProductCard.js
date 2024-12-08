@@ -20,6 +20,7 @@ const modalStyle = {
 }
 
 const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder }) => {
+  console.log('ProductCard:', product)
   const { appData } = useContext(POSContext)
   const { macno, userLogin, empCode } = appData
   const [voidMsgList, setVoidMsgList] = useState([])
@@ -91,8 +92,16 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
         const voidMsgData = response.data.data
         setVoidMsgList(voidMsgData)
       })
-      .catch(err=>handleNotification(err.message))
+      .catch(err => handleNotification(err.message))
   }, [])
+
+  const showActionBalance = product => {
+    if ("" === product.R_LinkIndex || null === product.R_LinkIndex || "null" === product.R_LinkIndex) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   useEffect(() => {
     loadVoidMsgList()
@@ -111,14 +120,14 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
             </ImageListItem>}
           </div>
         </Grid2>
-        <Grid2 size={7} padding={1} margin={1} sx={{backgroundColor: product.R_Void === 'V' ? "#eee": "snow"}}>
+        <Grid2 size={7} padding={1} margin={1} sx={{ backgroundColor: product.R_Void === 'V' ? "#eee" : "snow" }}>
           <Grid2 margin={1}>{product.R_PluCode}-{product.R_PName}</Grid2>
           {voidStatus && <Typography sx={{ fontWeight: "bold", color: "red" }}>( * ยกเลิกรายการอาหาร = {optList[8]} * )</Typography>}
           {!voidStatus &&
             <Grid2 display="flex" justifyContent="center">
-              <IconButton onClick={() => handleOpen(product.R_Index)} disabled={product.R_Pause === 'P'}>
+              {showActionBalance(product) && <IconButton onClick={() => handleOpen(product.R_Index)} disabled={product.R_Pause === 'P'}>
                 <RemoveCircleIcon sx={{ color: product.R_Pause === 'P' ? "gray" : "red" }} fontSize="large" />
-              </IconButton>
+              </IconButton>}
               <TextField
                 inputProps={{ min: 0, style: { textAlign: "right", minWidth: '35px', fontWeight: "bold" } }}
                 variant="outlined"
@@ -127,9 +136,9 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
                 disabled
                 onChange={(e) => setCount(e.target.value)}
               />
-              <IconButton onClick={handleAddItem}>
+              {showActionBalance(product) && <IconButton onClick={handleAddItem}>
                 <AddCircleIcon color="success" fontSize="large" />
-              </IconButton>
+              </IconButton>}
             </Grid2>}
           <Grid2 container>
             <Typography>
@@ -166,7 +175,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
                 {voidMsgList && voidMsgList.map(item => <MenuItem value={item.VName}>{item.VName}</MenuItem>)}
               </Select>
             </FormControl>
-            <Button variant='contained' color='error' startIcon={<BlockIcon />} onClick={() => handleVoidItem(currRIndex)}>ยกเลิกอาหาร</Button>
+            <Button variant='contained' color='error' startIcon={<BlockIcon />} onClick={() => handleVoidItem(currRIndex)}>ยืนยันการ Void</Button>
           </Grid2>
         </Box>
       </Modal>

@@ -15,8 +15,6 @@ const ProductCard = memo(
     const productList = OrderList.filter(p => p.R_PluCode === product.menu_code)
     const saleQty = productList.reduce((totalQty, p) => totalQty + p.R_Quan, 0);
 
-    console.log('saleQty:', product.menu_code, saleQty)
-
     const addOrder = async (qty = 1) => {
       apiClient
         .post(`/api/balance`, {

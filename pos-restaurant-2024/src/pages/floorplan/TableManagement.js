@@ -44,6 +44,8 @@ const modalStyle = {
   boxShadow: 24
 }
 
+const defaultViewport = { x: 400, y: 400, zoom: 0.5 };
+
 const TableManagement = () => {
   const navigate = useNavigate()
   const reactFlowWrapper = useRef(null)
@@ -263,7 +265,7 @@ const TableManagement = () => {
             onDragOver={onDragOver}
             onNodeClick={onNodeClick}
             nodeTypes={nodeTypes}
-            fitView
+            defaultViewport={defaultViewport}
           >
             <Controls />
             <Background variant={BackgroundVariant.Dots} />
