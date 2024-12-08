@@ -4,7 +4,6 @@ const generatePayload = require('promptpay-qr')
 
 const router = express.Router();
 
-
 router.post('/', function (req, res, next) {
   const { mobileNumber = "0864108403", amount = 0.00 } = req.body
   const response = {}

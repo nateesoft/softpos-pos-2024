@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllOptionFile, getOptionfileByProductCode } = require('../../services/OptionfileService');
+const { createPaidIn, createPaidOut } = require('../../services/PaidInOutService');
 
-/* GET all optionfile. */
-router.get('/', function (req, res, next) {
-  getAllOptionFile()
+/* create paid-in */
+router.post('/in', function (req, res, next) {
+  createPaidIn(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -14,10 +14,9 @@ router.get('/', function (req, res, next) {
     })
 });
 
-/* GET optionfile by Product Code. */
-router.get('/:productCode', function (req, res, next) {
-  const { productCode } = req.params
-  getOptionfileByProductCode(productCode)
+/* create paid-out */
+router.post('/out', function (req, res, next) {
+  createPaidOut(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

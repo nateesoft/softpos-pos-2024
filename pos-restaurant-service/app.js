@@ -47,6 +47,9 @@ const company = require('./routes/pos_restaurant/config/company')
 
 const invenotryDbRouter = require('./routes/inventory')
 
+// paid-in, paid-out
+const paidInOutRouter = require('./routes/pos_restaurant/padinout')
+
 const app = express();
 app.use(cors())
 app.use(bodyParser.json())
@@ -98,6 +101,8 @@ app.use('/api/crm/member', memmasterRouter)
 
 // route for test printer
 app.use('/api/printer-thermal', printerThermalRouter)
+
+app.use('/api/paidinout', paidInOutRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

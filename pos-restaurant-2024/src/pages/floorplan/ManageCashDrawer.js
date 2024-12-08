@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { Button, Divider, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import MoneyIcon from '@mui/icons-material/MonetizationOn'
+
+import ShowNotification from "../utils/ShowNotification"
+import apiClient from '../../httpRequest';
+import { POSContext } from '../../AppContext';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -41,25 +45,67 @@ const modalStyle = {
 }
 
 export default function ManageCashDrawer({ setOpen }) {
+    const { appData } = useContext(POSContext)
+    const { userLogin, macno } = appData
+
     const [value, setValue] = useState(0);
     const [inCash, setInCash] = useState(0)
     const [outCash, setOutCash] = useState(0)
     const [outReason, setOutReason] = useState("")
+
+    const [showNoti, setShowNoti] = useState(false)
+    const [notiMessage, setNotiMessage] = useState("")
+    const [alertType, setAlertType] = useState("info")
+    const handleNotification = (message, type = "error") => {
+        setNotiMessage(message)
+        setAlertType(type)
+        setShowNoti(true)
+    }
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     const handleConfirmIn = () => {
-        setOpen(false)
-      }
+        if (inCash <= 0) {
+            return;
+        }
+        apiClient.post(`/api/paidinout/in`, {
+            macno: macno, cashier: userLogin, paidinAmt: inCash
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    setOpen(false)
+                } else {
+                    handleNotification("พบข้อผิดพลาดในการนำเงินเข้าระบบ!")
+                }
+            })
+            .catch(err => {
+                handleNotification(err.message)
+            })
+    }
     const handleConfirmOut = () => {
-        setOpen(false)
-      }
+        if (outCash <= 0) {
+            return;
+        }
+        apiClient.post(`/api/paidinout/out`, {
+            macno: macno, cashier: userLogin, paidoutAmt: outCash, reason: outReason
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    setOpen(false)
+                } else {
+                    handleNotification("พบข้อผิดพลาดในการนำเงินเข้าระบบ!")
+                }
+            })
+            .catch(err => {
+                handleNotification(err.message)
+            })
+    }
 
     return (
         <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
-            <Grid container spacing={2} sx={{marginBottom: "15px"}}>
+            <Grid container spacing={2} sx={{ marginBottom: "15px" }}>
                 <MoneyIcon fontSize='large' color='info' />
                 <Typography variant='h5' color='info'>
                     รายการนำเงินเข้า | ออกลิ้นชัก
@@ -73,22 +119,23 @@ export default function ManageCashDrawer({ setOpen }) {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <TextField label="เงินสำรองทอน เข้าลิ้นชัก" type="number" value={inCash} onChange={e=>setInCash(e.target.value)} fullWidth />
+                <TextField label="เงินสำรองทอน เข้าลิ้นชัก" type="number" value={inCash} onChange={e => setInCash(e.target.value)} fullWidth />
                 <Grid container spacing={2} margin={2} justifyContent="center">
-                    <Button variant='contained' color='error' onClick={()=>setOpen(false)}>Cancel</Button>
+                    <Button variant='contained' color='error' onClick={() => setOpen(false)}>Cancel</Button>
                     <Button variant='contained' color='info' onClick={handleConfirmIn}>Confirm</Button>
                 </Grid>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
                 <Grid container spacing={2}>
-                    <TextField multiline rows={3} label="สาเหตุการนำเงินออกจากลิ้นชัก" value={outReason} onChange={e=>setOutReason(e.target.value)} fullWidth />
-                    <TextField label="เงินสำรองทอน ออกจากลิ้นชัก" type="number" value={outCash} onChange={e=>setOutCash(e.target.value)} fullWidth />
+                    <TextField multiline rows={3} label="สาเหตุการนำเงินออกจากลิ้นชัก" value={outReason} onChange={e => setOutReason(e.target.value)} fullWidth />
+                    <TextField label="เงินสำรองทอน ออกจากลิ้นชัก" type="number" value={outCash} onChange={e => setOutCash(e.target.value)} fullWidth />
                 </Grid>
                 <Grid container spacing={2} margin={2} justifyContent="center">
-                    <Button variant='contained' color='error' onClick={()=>setOpen(false)}>Cancel</Button>
+                    <Button variant='contained' color='error' onClick={() => setOpen(false)}>Cancel</Button>
                     <Button variant='contained' color='info' onClick={handleConfirmOut}>Confirm</Button>
                 </Grid>
             </CustomTabPanel>
+            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </Box>
     );
 }
