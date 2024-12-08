@@ -59,4 +59,16 @@ router.post('/refund', (req, res) => {
     })
 });
 
+// print copy bill
+router.post('/billCopy', (req, res) => {
+  const { billNo, Cashier, macno, copy } = req.body
+  BillNoService.printCopyBill(billNo, Cashier, macno, copy)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 module.exports = router;

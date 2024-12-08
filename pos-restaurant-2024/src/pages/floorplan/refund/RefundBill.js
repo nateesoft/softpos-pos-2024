@@ -12,14 +12,12 @@ import Grid from '@mui/material/Grid2';
 import RefundIcon from '@mui/icons-material/ReceiptLong';
 import ReceiptIcon from '@mui/icons-material/ReceiptLong';
 import moment from 'moment'
-import { useReactToPrint } from "react-to-print"
-import PrintIcon from '@mui/icons-material/Print'
+import { useNavigate } from 'react-router-dom';
 
 import apiClient from '../../../httpRequest';
 import SearchMenu from './SearchMenu';
 import { POSContext } from '../../../AppContext';
 import { ModalConfirm } from '../../../util/AlertPopup';
-import RefundToPrint from './RefundToPrint'
 import ShowNotification from "../../utils/ShowNotification"
 
 const columns = [
@@ -45,17 +43,11 @@ const modalStyle = {
   boxShadow: 24
 }
 
-const RefundBill = ({ setOpen }) => {
+const RefundBill = () => {
+  const navigate = useNavigate();
   const { appData } = useContext(POSContext)
-  const { userLogin, posuser, macno, empCode, tableInfo } = appData
-
-  const contentRef = useRef(null);
-  const handlePrint = useReactToPrint({ contentRef });
-  const [openRefundBill, setOpenRefundBill] = useState(false)
-  const [billInfo, setBillInfo] = useState("")
-  const [orderList, setOrderList] = useState([])
-  const [poshwSetup, setPosHwSetup] = useState({})
-  const [posConfigSetup, setPOSConfigSetup] = useState({})
+  const { userLogin, posuser, macno } = appData
+  const getPosUser = JSON.parse(posuser)
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
@@ -92,8 +84,6 @@ const RefundBill = ({ setOpen }) => {
     billNo.B_VoidUser = userLogin
     billNo.B_VoidTime = moment().format('HH:mm:ss')
 
-    setBillInfo(billNo)
-
     setShowConfirm(true)
   }
 
@@ -104,9 +94,12 @@ const RefundBill = ({ setOpen }) => {
       macno: B_MacNo
     })
       .then(response => {
-        loadBillNo()
-        setShowConfirm(false)
-        setOpenRefundBill(true)
+        if(response.status === 200){
+          const billNo = response.data.data
+          navigate(`/payment/receipt/${billNo}`)
+        }else {
+          handleNotification("พบข้อผิดพลาดในการยกเลิกบิล!")
+        }
       })
       .catch(err => { handleNotification(err.message) })
   }
@@ -119,45 +112,8 @@ const RefundBill = ({ setOpen }) => {
       .catch(err => { handleNotification(err.message) })
   }, [])
 
-  const loadTSale = useCallback(() => {
-    apiClient.get('/api/tsale')
-      .then(response => {
-        setOrderList(response.data.data)
-      })
-      .catch(err => { handleNotification(err.message) })
-  }, [])
-
-  const loadPosHwSetup = useCallback(() => {
-    apiClient
-      .get(`/api/poshwsetup/${macno}`)
-      .then((response) => {
-        if (response.status === 200) {
-          setPosHwSetup(response.data.data)
-        }
-      })
-      .catch((error) => {
-        handleNotification(error.message)
-      })
-  }, [macno])
-
-  const loadPosConfigSetup = useCallback(() => {
-    apiClient
-      .get(`/api/posconfigsetup`)
-      .then((response) => {
-        if (response.status === 200) {
-          setPOSConfigSetup(response.data.data)
-        }
-      })
-      .catch((error) => {
-        handleNotification(error.message)
-      })
-  }, [macno])
-
   useEffect(() => {
     loadBillNo()
-    loadPosHwSetup()
-    loadPosConfigSetup()
-    loadTSale()
   }, [loadBillNo])
 
   return (
@@ -208,7 +164,7 @@ const RefundBill = ({ setOpen }) => {
                                   <Button
                                     variant='contained'
                                     color='error'
-                                    disabled={'Y' !== posuser.Sale2}
+                                    disabled={'Y' !== getPosUser.Sale2}
                                     onClick={() => handleShowConfirm(row, row.B_Refno, row.B_MacNo)} startIcon={<ReceiptIcon />}>
                                     Refund
                                   </Button>
@@ -248,25 +204,6 @@ const RefundBill = ({ setOpen }) => {
         header="Refund Bill"
         content="ยืนยันการทำรายการ ?"
       />
-      <Modal open={openRefundBill} onClose={() => setOpenRefundBill(false)} aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description" disableEnforceFocus>
-        <Box sx={{ ...modalStyle, width: 450 }}>
-          <div style={{ height: '700px', overflow: "auto" }}>
-            <RefundToPrint innerRef={contentRef}
-              billInfo={billInfo}
-              orderList={orderList}
-              poshwSetup={poshwSetup}
-              posConfigSetup={posConfigSetup}
-              empCode={empCode}
-              userLogin={userLogin}
-              customerCount={tableInfo.customerCount}
-            />
-          </div>
-          <Box sx={{ padding: "10px", backgroundColor: "#eee", borderRadius: "10px" }} textAlign="center">
-            <Button variant="contained" color="info" startIcon={<PrintIcon />} onClick={handlePrint}>Print</Button>
-          </Box>
-        </Box>
-      </Modal>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </Box>
   )

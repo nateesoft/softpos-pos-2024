@@ -10,7 +10,6 @@ const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock } 
 const { getBranch } = require('./BranchService')
 const { ProcessStockOut } = require('./STCardService');
 const { getPOSConfigSetup } = require('./POSConfigSetupService');
-const { getAllData } = require('./PosHwSetup');
 const { updateRefundMember } = require('./member/crm/MemberMasterService');
 const { getMoment } = require('../utils/MomentUtil');
 
@@ -52,6 +51,16 @@ const updateNextBill = async (macno) => {
     const sql = `UPDATE poshwsetup SET receno1=receno1+1 WHERE terminal='${macno}' `;
     const results = await pool.query(sql)
     return results
+}
+
+const printCopyBill = async (billNo, Cashier, macno, copy) => {
+    const sql = `UPDATE billno 
+    SET B_MacNo='${macno}',
+    B_Cashier='${Cashier}',
+    B_BillCopy=B_BillCopy+${copy} WHERE B_Refno='${billNo}'`;
+    await pool.query(sql)
+    
+    return billNo
 }
 
 const updateRefundBill = async (billNoData) => {
@@ -392,12 +401,12 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
     // update billno
     billNoData.B_Void = 'V'
     billNoData.B_VoidUser = Cashier
-    const result = await updateRefundBill(billNoData)
+    await updateRefundBill(billNoData)
 
     // update refund tSale List
     await refundTSale(tSaleData, Cashier)
 
-    return result
+    return billNo
 }
 
 module.exports = {
@@ -408,5 +417,6 @@ module.exports = {
     getBillNoByRefno,
     getAllBillNoToday,
     searchBillNoCondition,
-    billRefundStockIn
+    billRefundStockIn,
+    printCopyBill
 }

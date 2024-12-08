@@ -210,9 +210,8 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile }) {
             // send bill payment
             apiClient.post(`/api/billno`, payload)
                 .then(response => {
-                    console.log(response)
-                    const billNo = response.data.data
-                    if (response.data.data != null) {
+                    if (response.status === 200) {
+                        const billNo = response.data.data
                         navigate(`/payment/receipt/${billNo}`)
                     } else {
                         handleNotification("พบข้อผิดพลาดในการรับชำระเงิน!")

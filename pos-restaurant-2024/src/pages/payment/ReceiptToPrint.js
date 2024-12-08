@@ -1,7 +1,7 @@
-import React, { Component, useContext, useEffect, useRef, useState } from 'react'
+import React, { Component, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { Box, Button, Divider, Grid2, Paper, Typography } from '@mui/material'
 import Moment from 'react-moment'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import PrintIcon from '@mui/icons-material/Print'
 
 import apiClient from '../../httpRequest'
@@ -10,7 +10,6 @@ import { POSContext } from '../../AppContext'
 import './index.css'
 
 const NumFormat = data => {
-  console.log('NumFormat:', data)
   if (!data) {
     return ""
   }
@@ -29,6 +28,56 @@ const MyTypo = ({ value }) => {
   return <Typography sx={{ fontSize: '12px' }}>
     {value}
   </Typography>
+}
+
+const ReceiptHeaderPayment = ({headers, billInfo, empCode}) => {
+  return (
+    <>
+      <div align="center" style={{ fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
+      {headers && <div>
+        {headers && headers.map((header) => <MyTypo value={header} />)}
+        <div align="center">Table: {billInfo.B_Table}</div>
+      </div>
+      }
+      <div align="center">
+        <img src="/images/payment/com_logo.jpg" width={128} alt="" />
+      </div>
+      <div>
+        <div>Receipt No: {billInfo.B_Refno}</div>
+        <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
+        <div>Customer: {billInfo.B_Cust}</div>
+        <div>Cashier: {billInfo.B_Cashier} Employ: {empCode} Mac:{billInfo.B_MacNo}</div>
+      </div>
+    </>
+  )
+}
+
+const ReceiptHeaderRefund = ({headers, billInfo}) => {
+  return (
+    <>
+      {headers &&
+        <div>
+          {headers.map((header) =>
+            <div>
+              {header}
+            </div>
+          )}
+        </div>
+      }
+      <div align="center">
+        <img src="/images/payment/com_logo.jpg" width={128} alt="" />
+      </div>
+      <div align="center">REG ID : {billInfo.B_MacNo}</div>
+      <div align="center">------------------------------------------------------------</div>
+      <div align="center">*** บิลยกเลิกรายการขาย ***</div>
+      <div align="center">*** (Refund) ***</div>
+      <div>
+        <div>Void User: {billInfo.B_VoidUser}</div>
+        <div>Void Date/Time: {billInfo.B_VoidTime}</div>
+        <div>อ้างถึงใบเสร็จรับเงินเลขที่ {billInfo.B_Refno}</div>
+      </div>
+    </>
+  )
 }
 
 class ComponentToPrint extends Component {
@@ -58,20 +107,9 @@ class ComponentToPrint extends Component {
 
     return (
       <div id='content' style={{ margin: "5px" }} ref={this.props.innerRef}>
-        <div align="center" style={{ fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
-        <div>
-          {headers && headers.map((header) => <MyTypo value={header} />)}
-          <div align="center">Table: {B_Table}</div>
-        </div>
-        <div align="center">
-          <img src="/images/payment/com_logo.jpg" width={128} alt="" />
-        </div>
-        <div>
-          <div>Receipt No: {B_Refno}</div>
-          <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
-          <div>Customer: {B_Cust}</div>
-          <div>Cashier: {B_Cashier} Employ: {this.props.empCode} Mac:{B_MacNo}</div>
-        </div>
+        {billInfo.B_BillCopy>0 && <div align="right" style={{fontSize: "13px"}}>Bill Copy ({billInfo.B_BillCopy})</div>}
+        {billInfo.B_Void !== 'V' && <ReceiptHeaderPayment headers={headers} billInfo={billInfo} empCode={this.props.empCode} />}
+        {billInfo.B_Void === 'V' && <ReceiptHeaderRefund headers={headers} billInfo={billInfo} />}
         <Divider />
         <div>
           <table width="100%">
@@ -156,7 +194,6 @@ class ComponentToPrint extends Component {
 
 const ReceiptToPrint = () => {
   const { billNo } = useParams()
-  const navigate = useNavigate();
 
   const [isPrinting, setIsPrinting] = useState(false);
   const contentRef = useRef(null);
@@ -180,7 +217,7 @@ const ReceiptToPrint = () => {
     }, 5000);
   }
 
-  const handleLoadBillInfo = () => {
+  const handleLoadBillInfo = useCallback(() => {
     apiClient
       .get(`/api/billno/${billNo}`)
       .then((response) => {
@@ -191,9 +228,9 @@ const ReceiptToPrint = () => {
       .catch((error) => {
         alert(error.message)
       })
-  }
+  }, [])
 
-  const initLoadOrderTSale = () => {
+  const initLoadOrderTSale = useCallback(() => {
     apiClient
       .get(`/api/tsale/${billNo}`)
       .then((response) => {
@@ -205,9 +242,9 @@ const ReceiptToPrint = () => {
       .catch((error) => {
         alert(error.message)
       })
-  }
+  }, [])
 
-  const loadPosHwSetup = () => {
+  const loadPosHwSetup = useCallback(() => {
     apiClient
       .get(`/api/poshwsetup/${macno}`)
       .then((response) => {
@@ -218,9 +255,9 @@ const ReceiptToPrint = () => {
       .catch((error) => {
         alert(error.message)
       })
-  }
+  }, [])
 
-  const loadPosConfigSetup = () => {
+  const loadPosConfigSetup = useCallback(() => {
     apiClient
       .get(`/api/posconfigsetup`)
       .then((response) => {
@@ -231,35 +268,39 @@ const ReceiptToPrint = () => {
       .catch((error) => {
         alert(error.message)
       })
-  }
+  }, [])
 
   useEffect(() => {
     handleLoadBillInfo()
     initLoadOrderTSale()
     loadPosHwSetup()
     loadPosConfigSetup()
-  }, [])
+  }, [handleLoadBillInfo, initLoadOrderTSale, loadPosHwSetup, loadPosConfigSetup])
 
-  return (
-    <>
-      <ComponentToPrint
-        innerRef={contentRef}
-        billInfo={billInfo}
-        orderList={orderList}
-        poshwSetup={poshwSetup}
-        posConfigSetup={posConfigSetup}
-        empCode={empCode}
-        userLogin={userLogin}
-      />
-      {isPrinting === false &&
-        <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
-          <Grid2 container spacing={2} justifyContent="center" padding={3}>
-            <Button startIcon={<PrintIcon />} variant='contained' color='primary' onClick={printNative}>Print</Button>
-          </Grid2>
-        </Paper>
-      }
-    </>
-  );
+  if (billInfo && billInfo.B_Refno) {
+    return (
+      <>
+        <ComponentToPrint
+          innerRef={contentRef}
+          billInfo={billInfo}
+          orderList={orderList}
+          poshwSetup={poshwSetup}
+          posConfigSetup={posConfigSetup}
+          empCode={empCode}
+          userLogin={userLogin}
+        />
+        {isPrinting === false &&
+          <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
+            <Grid2 container spacing={2} justifyContent="center" padding={3}>
+              <Button startIcon={<PrintIcon />} variant='contained' color='primary' onClick={printNative}>Print</Button>
+            </Grid2>
+          </Paper>
+        }
+      </>
+    );
+  } else {
+    return <>ไม่พบข้อมูลเลขที่เอกสาร !!!</>
+  }
 }
 
 export default ReceiptToPrint

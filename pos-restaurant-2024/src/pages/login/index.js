@@ -62,6 +62,7 @@ const Login = () => {
           if (responseLogin) {
             setAppData({ ...appData, userLogin: user, posuser: response.data.data })
             localStorage.setItem("userLogin", user)
+            localStorage.setItem("posuser", JSON.stringify(response.data.data))
             navigate("/floorplan")
           } else {
             handleNotification("ข้อมูลผู้ใช้งาน Username/ Pasword ไม่ถูกต้อง !!!", "warning")

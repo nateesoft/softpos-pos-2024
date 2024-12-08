@@ -1,8 +1,13 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Box, Button, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
+import { useNavigate } from "react-router-dom";
+
+import apiClient from '../../httpRequest';
+import ShowNotification from "../utils/ShowNotification"
+import { POSContext } from "../../AppContext";
 
 const modalStyle = {
   position: "absolute",
@@ -16,11 +21,39 @@ const modalStyle = {
 }
 
 const RecieptCopyPrint = ({ setOpen }) => {
+  const navigate = useNavigate();
+
+  const { appData } = useContext(POSContext)
+  const { userLogin, macno } = appData
+
   const [receiptNo, setReceiptNo] = useState("")
-  const [copyCount, setCopyCount] = useState(0)
+  const [copyCount, setCopyCount] = useState(1)
+
+  const [showNoti, setShowNoti] = useState(false)
+  const [notiMessage, setNotiMessage] = useState("")
+  const [alertType, setAlertType] = useState("info")
+  const handleNotification = (message, type = "error") => {
+    setNotiMessage(message)
+    setAlertType(type)
+    setShowNoti(true)
+  }
 
   const handleConfirm = () => {
-    setOpen(false)
+    apiClient.post(`/api/billno/billCopy`, {
+      billNo: receiptNo,
+      Cashier: userLogin,
+      macno: macno,
+      copy: copyCount
+    })
+      .then(response => {
+        if(response.status === 200){
+          const billNo = response.data.data
+          navigate(`/payment/receipt/${billNo}`)
+        }else {
+          handleNotification("พบข้อผิดพลาดในการยกเลิกบิล!")
+        }
+      })
+      .catch(err => { handleNotification(err.message) })
   }
 
   return (
@@ -34,7 +67,7 @@ const RecieptCopyPrint = ({ setOpen }) => {
           <TextField label="เลขที่บิล (Receipt No)" value={receiptNo} onChange={e => setReceiptNo(e.target.value)} fullWidth />
         </Grid>
         <Grid size={12}>
-          <TextField label="จำนวน Copy" type="number" value={copyCount} onChange={e => setCopyCount(e.target.value)} fullWidth />
+          <TextField label="จำนวน Copy" type="number" disabled value={copyCount} onChange={e => setCopyCount(e.target.value)} fullWidth />
         </Grid>
       </Grid>
       <Box display="flex" justifyContent="center">
@@ -43,6 +76,7 @@ const RecieptCopyPrint = ({ setOpen }) => {
           <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
         </Grid>
       </Box>
+      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </Box>
   )
 }
