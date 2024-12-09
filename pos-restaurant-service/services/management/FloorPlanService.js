@@ -1,6 +1,6 @@
-const pool = require('../config/database')
+const pool = require('../../config/database')
 
-const { getAllTable } = require('../services/TableFileService')
+const { getAllTable } = require('../TableFileService')
 
 const getNewArray = (tables, nodes) => {
 

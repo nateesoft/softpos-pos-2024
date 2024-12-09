@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { getFloorPlanById, createSetupFloorPlan, updateFloorPlanSetup } = require('../../services/management/FloorPlanService');
+const { getTableInfo, createData, updateData } = require('../../services/management/TableCheckIn');
 
-router.get('/:id', function (req, res) {
-  const id = req.params.id
-  getFloorPlanById(id)
+router.get('/:tableNo', function (req, res, next) {
+  const { tableNo } = req.params
+  getTableInfo(tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -14,8 +14,9 @@ router.get('/:id', function (req, res) {
     })
 });
 
-router.post('/', function (req, res) {
-  createSetupFloorPlan(req.body)
+router.post('/:tableNo', function (req, res, next) {
+  const { tableNo } = req.params
+  createData(tableNo, req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -24,16 +25,15 @@ router.post('/', function (req, res) {
     })
 });
 
-router.put('/:id', function (req, res, next) {
-  const id = req.params.id
-
-  updateFloorPlanSetup(req.body, id)
+router.put('/:tableNo', function (req, res, next) {
+  const { tableNo } = req.params
+  updateData(tableNo, req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
     .catch(err => {
       res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
-})
+});
 
 module.exports = router;

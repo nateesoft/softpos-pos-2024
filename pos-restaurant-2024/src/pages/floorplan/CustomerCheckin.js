@@ -1,11 +1,13 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Alert, Box, Button, TextField, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import CloseButton from '@mui/icons-material/Close'
 import OpenTableButton from '@mui/icons-material/MobileFriendly';
 import Moment from 'react-moment';
+import moment from 'moment'
 
+import apiClient from '../../httpRequest'
 import CustomerDetail from './CustomerDetail';
 import { POSContext } from '../../AppContext';
 
@@ -14,12 +16,14 @@ const max = 10;
 
 const CustomerCheckin = (props) => {
     const { appData, setAppData } = useContext(POSContext)
+    const { macno, userLogin } = appData
     const { tableNo, tableStatus } = appData.tableInfo
 
-    const { setOpenPin } = props
+    const { setOpenPin, empCode } = props
     const navigate = useNavigate();
 
-    const [customerName, setCustomerName] = useState("")
+    const [tableInfo, setTableIno] = useState(null)
+
     const [custCount, setCustCount] = useState(1)
     const [orderType, setOrderType] = useState('E');
 
@@ -29,27 +33,54 @@ const CustomerCheckin = (props) => {
     const [kidCount, setKidCount] = useState(0)
     const [oldCount, setOldCount] = useState(0)
 
-    const [showError, setShowError] = useState(false)
-    const [showCustomerError, setShowCustomerError] = useState(false)
-
+    const [customerName, setCustomerName] = useState("")
     const [memberCode, setMemberCode] = useState("")
     const [reserveNo, setReserveNo] = useState("")
+    const [timeCheckIn, setTimeCheckIn] = useState(moment(new Date()).format('DD/MM/YYYY HH:mm:ss'))
 
+    const [showError, setShowError] = useState(false)
+    const [showCustomerError, setShowCustomerError] = useState(false)
     const handleChangeOrderType = (event, oType) => {
         setOrderType(oType);
     };
 
     const handleOpenTable = () => {
         if (tableStatus === "available") {
-            if (custCount >= 0) {
-                setShowError(false)
-                setShowCustomerError(false)
-                setAppData({...appData, tableInfo: {
-                    ...appData.tableInfo,
-                    customerCount: custCount,
-                    customerName: customerName
-                }})
-                navigate(`/sale/${tableNo}`)
+            if (custCount >= 0 && orderType !== "") {
+                // call api to update table checkin
+                apiClient.post(`/api/table_checkin/${tableNo}`, {
+                    empCode,
+                    macno,
+                    customer_count: custCount,
+                    cust_man_count: manCount,
+                    cust_woman_count: womanCount,
+                    cust_kid_count: kidCount,
+                    cust_old_count: oldCount,
+                    customer_name: customerName,
+                    member_code: memberCode,
+                    book_no: reserveNo,
+                    table_order_type_start: orderType
+                })
+                .then(response => {
+                    if (response.status === 200) {
+                        setShowError(false)
+                        setShowCustomerError(false)
+                        setAppData({
+                            ...appData, tableInfo: {
+                                ...appData.tableInfo,
+                                customerCount: custCount,
+                                customerName: customerName
+                            }
+                        })
+                        navigate(`/sale/${tableNo}`)
+                    } else {
+                        setShowCustomerError(true)
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    setShowCustomerError(true)
+                })
             } else {
                 setShowCustomerError(true)
             }
@@ -64,6 +95,29 @@ const CustomerCheckin = (props) => {
         setShowCustomerError(false)
         navigate('/floorplan')
     }
+
+    useEffect(() => {
+        apiClient.get(`/api/table_checkin/${tableNo}`)
+            .then(response => {
+                if (response.status === 200 && response.data.data != null) {
+                    const tableInfoData = response.data.data
+                    setTableIno(tableInfoData)
+                    setCustCount(tableInfoData.customer_count)
+                    setManCount(tableInfoData.cust_man_count)
+                    setWomanCount(tableInfoData.cust_woman_count)
+                    setKidCount(tableInfoData.cust_kid_count)
+                    setOldCount(tableInfoData.cust_old_count)
+                    setCustomerName(tableInfoData.customer_name)
+                    setMemberCode(tableInfoData.member_code)
+                    setReserveNo(tableInfoData.book_no)
+                    setTimeCheckIn(moment(tableInfoData.datetime_checkin).format('DD/MM/YYYY HH:mm:ss'))
+                    setOrderType(tableInfoData.table_order_type_start)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
 
     return (
         <div>
@@ -104,7 +158,7 @@ const CustomerCheckin = (props) => {
                 </Box>
                 <Grid container spacing={2}>
                     <Grid size={12} textAlign="center">
-                        <Typography variant='p'>เวลาเข้าใช้งาน: <Moment format="DD/MM/YYYY HH:mm" date={new Date()} /></Typography>
+                        <Typography variant='p'>เวลาเข้าใช้งาน: {timeCheckIn}</Typography>
                     </Grid>
                     <Grid size={12}>
                         <TextField

@@ -91,7 +91,7 @@ class ComponentToPrint extends Component {
       B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct,
       B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
       B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1,
-      B_Ton, B_NetVat, B_Table
+      B_Ton, B_NetVat, B_Table, B_Cash
     } = billInfo
 
     const posConfigSetup = this.props.posConfigSetup
@@ -152,7 +152,7 @@ class ComponentToPrint extends Component {
           <Divider />
           <Box display="flex" justifyContent="space-between">
             <Typography>ค่าบริการ {posConfigSetup.P_Service}%</Typography>
-            <Typography>{NumFormat(B_ServiceAmt)}</Typography>
+            <Typography>+ {NumFormat(B_ServiceAmt)}</Typography>
           </Box>
           <Box display="flex" justifyContent="space-between">
             <Typography>มูลค่าสินค้า/บริการ.....</Typography>
@@ -167,6 +167,10 @@ class ComponentToPrint extends Component {
             <Typography>{NumFormat(B_NetTotal)}</Typography>
           </Box>
           <Divider />
+          <Box display="flex" justifyContent="space-between">
+            <Typography>เงินสด</Typography>
+            <Typography>{B_Cash}</Typography>
+          </Box>
           <Box display="flex" justifyContent="space-between">
             <Typography>เงินทอน</Typography>
             <Typography>{B_Ton}</Typography>

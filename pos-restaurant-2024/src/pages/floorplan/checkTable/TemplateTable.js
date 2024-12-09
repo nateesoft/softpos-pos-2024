@@ -65,6 +65,7 @@ const TemplateReport = ({ columnTable, dataTable }) => {
                                     </TableRow>
                                 );
                             })}
+                            {dataTable && dataTable.length===0 && <TableCell colSpan={columnTable.length} align='center'>ไม่พบข้อมูล</TableCell>}
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -1,6 +1,7 @@
 const pool = require('../config/database/MySqlConnect');
 const { getMoment } = require('../utils/MomentUtil');
 const { getPOSConfigSetup } = require('./POSConfigSetupService');
+const { updateInActiveTable } = require('../services/management/TableCheckIn')
 
 const getAllTable = async () => {
     const sql = `select * FROM tablefile ORDER By Tcode`;
@@ -15,8 +16,13 @@ const getCheckTableStatus = async () => {
     return results
 }
 const updateTableAvailableStatus = async tableNo => {
-    const sql = `update tablefile set TOnact='N', Cashier=null where TCode='${tableNo}'`;
+    const sql = `update tablefile 
+    set TOnact='N', TItem=0, TAmount=0, TCustomer=0, Cashier=null 
+    where TCode='${tableNo}'`;
     const results = await pool.query(sql)
+
+    // update table_checkin
+    updateInActiveTable(tableNo)
     return results
 }
 
@@ -112,7 +118,7 @@ const updateTableFile = async (tablefile) => {
     const VoidMsg = tablefile.VoidMsg;
     const TPause = tablefile.TPause;
     const CCUseCode = tablefile.CCUseCode;
-    const TTableIsOn = tablefile.TTableIsOn;
+    const TTableIsOn = tablefile.TTableIsOn || '';
     const TActive = tablefile.TActive || '';
     const TAutoClose = tablefile.TAutoClose || ''
 

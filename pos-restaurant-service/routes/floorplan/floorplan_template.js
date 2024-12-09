@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getTemplateById, updateTemplate } = require('../../services/FloorPlanService');
+const { getTemplateById, updateTemplate } = require('../../services/management/FloorPlanService');
 
 router.get('/:id', function (req, res) {
   const id = req.params.id

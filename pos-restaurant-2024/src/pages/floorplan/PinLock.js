@@ -49,6 +49,7 @@ const PinLock = ({ setOpenPin }) => {
   const [pin2, setPin2] = useState("")
   const [pin3, setPin3] = useState("")
   const [pin4, setPin4] = useState("")
+  const [empCode, setEmpCode] = useState("")
 
   const [showError, setShowError] = useState(false)
 
@@ -64,6 +65,7 @@ const PinLock = ({ setOpenPin }) => {
   const handleSubmitPin = () => {
     if (pin1 || pin2 || pin3 || pin4) {
       const empCodeInput = pin1 + pin2 + pin3 + pin4
+      setEmpCode(empCodeInput)
       apiClient
         .post("/api/employ/getEmployeeByCode", { code: empCodeInput })
         .then(async (response) => {
@@ -402,6 +404,7 @@ const PinLock = ({ setOpenPin }) => {
           <CustomerCheckin
             setOpenPin={setOpenPin}
             openTable={openCustCheckIn}
+            empCode={empCode}
           />
         </Box>
       </Modal>

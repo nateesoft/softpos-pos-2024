@@ -28,6 +28,7 @@ const genQrCode = require('./routes/payment/qrcode_promptpay')
 const floorplanRouter = require('./routes/floorplan/floorplan');
 const floorplanTemplateRouter = require('./routes/floorplan/floorplan_template');
 const menuSetupRouter = require('./routes/pos/menu_setup');
+const tableCheckInRouter = require('./routes/pos/tableCheckIn');
 
 // for CRM POS
 const memmasterRouter = require('./routes/member/crm/Memmaster');
@@ -80,18 +81,20 @@ app.use('/api/billno', billNoRouter);
 app.use('/api/tsale', tSaleRouter);
 app.use('/api/qr-payment', genQrCode);
 
+// new posdb
 app.use('/api/menu_setup', menuSetupRouter);
+app.use('/api/table_checkin', tableCheckInRouter);
+
 app.use('/api/optionfile', optionFileRouter);
 app.use('/api/voidmsg', voidMsgRouter);
 app.use('/api/creditfile', creditFileRouter);
-
 app.use('/api/process-stock', processStockRouter);
 app.use('/api/stkfile', stkFileRouter);
 app.use('/api/stcard', stcardRouter);
-
 app.use('/api/posconfigsetup', posConfigSetup);
 app.use('/api/poshwsetup', posHwSetup);
 app.use('/api/company', company);
+app.use('/api/paidinout', paidInOutRouter)
 
 // support load all table
 app.use('/api/inventory', invenotryDbRouter)
@@ -102,7 +105,6 @@ app.use('/api/crm/member', memmasterRouter)
 // route for test printer
 app.use('/api/printer-thermal', printerThermalRouter)
 
-app.use('/api/paidinout', paidInOutRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

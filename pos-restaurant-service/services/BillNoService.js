@@ -406,6 +406,9 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
     // update refund tSale List
     await refundTSale(tSaleData, Cashier)
 
+    // update table available status
+    await updateTableAvailableStatus(billNoData.B_Table)
+
     return billNo
 }
 
