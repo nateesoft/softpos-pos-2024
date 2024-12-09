@@ -38,10 +38,17 @@ const getPSetByPCode = async (pluCode) => {
     return results
 }
 
+const getPCategoryByRLinkIndex = async (main_R_Index) => {
+    const sql = `select * from balance where R_LinkIndex='${main_R_Index}'`;
+    const results = await pool.query(sql)
+    return results
+}
+
 module.exports = {
     getProductByPCode,
     getProductActiveByPCode,
     listIngredeint,
     getPSetByPCode,
-    getAllProduct
+    getAllProduct,
+    getPCategoryByRLinkIndex
 }

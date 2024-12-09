@@ -1,18 +1,19 @@
 const pool = require('../config/database/MySqlConnect');
 const { getMoment } = require('../utils/MomentUtil');
-const { listIngredeint, getPSetByPCode } = require('./ProductService');
+const { Unicode2ASCII } = require('../utils/StringUtil');
+const { listIngredeint, getPSetByPCode, getPCategoryByRLinkIndex } = require('./ProductService');
 const { ProcessStockOut } = require('./STCardService');
 
 const getAllTSale = async () => {
     const sql = `select * from t_sale`
-  const results = await pool.query(sql)
-  return results
+    const results = await pool.query(sql)
+    return results
 }
 
 const getAllTSaleByRefno = async (refno) => {
     const sql = `select * from t_sale where R_Refno='${refno}'`
-  const results = await pool.query(sql)
-  return results
+    const results = await pool.query(sql)
+    return results
 }
 
 const createNewTSale = async (balance, BillRefNo) => {
@@ -95,8 +96,8 @@ const processAllPIngredent = async (S_No, PCode, R_Quan, Cashier) => {
             }
             let R_QuanIng = ingBean.PingQty * R_Quan;
 
-            const S_SubNo = "@"+ingBean.PCode
-            const S_Que = (index+1)
+            const S_SubNo = "@" + ingBean.PCode
+            const S_Que = (index + 1)
             const S_PCode = ingBean.PingCode
             const S_In = 0
             const S_Out = R_QuanIng
@@ -105,14 +106,14 @@ const processAllPIngredent = async (S_No, PCode, R_Quan, Cashier) => {
             const S_ACost = 0
             const S_Rem = "SAL"
             const S_User = Cashier
-            const S_Link = "@"+ingBean.PCode
-    
+            const S_Link = "@" + ingBean.PCode
+
             const PStock = "Y"
             const PSet = "N"
             const r_index = ""
             const SaleOrRefund = "SALE" // SALE or REFUND
 
-            await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, S_OutCost, 
+            await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, S_OutCost,
                 S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
         }
     })
@@ -128,8 +129,8 @@ const processAllPIngredentReturnStock = async (S_No, PCode, R_Quan, Cashier) => 
             }
             let R_QuanIng = ingBean.PingQty * R_Quan;
 
-            const S_SubNo = "@"+ingBean.PCode
-            const S_Que = (index+1)
+            const S_SubNo = "@" + ingBean.PCode
+            const S_Que = (index + 1)
             const S_PCode = ingBean.PingCode
             const S_In = R_QuanIng
             const S_Out = 0
@@ -138,14 +139,14 @@ const processAllPIngredentReturnStock = async (S_No, PCode, R_Quan, Cashier) => 
             const S_ACost = 0
             const S_Rem = "SAL"
             const S_User = Cashier
-            const S_Link = "@"+ingBean.PCode
-    
+            const S_Link = "@" + ingBean.PCode
+
             const PStock = "Y"
             const PSet = "N"
             const r_index = ""
             const SaleOrRefund = "VOID" // SALE or REFUND
 
-            await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, S_OutCost, 
+            await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, S_OutCost,
                 S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
         }
     })
@@ -171,14 +172,14 @@ const processAllPSet = async (S_No, PCode, R_Quan, Cashier) => {
         const r_index = ""
         const SaleOrRefund = "SALE" // SALE or REFUND
 
-        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, 
+        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost,
             S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
     })
 }
 
 const processAllPSetReturn = async (S_No, PCode, R_Quan, Cashier) => {
     let listPset = await getPSetByPCode(PCode);
-    listPset && listPset.forEach(async psetBean => {
+    listPset.forEach(async psetBean => {
         const S_SubNo = ""
         const S_Que = 0
         const S_PCode = psetBean.PSubCode
@@ -196,8 +197,51 @@ const processAllPSetReturn = async (S_No, PCode, R_Quan, Cashier) => {
         const r_index = ""
         const SaleOrRefund = "VOID" // SALE or REFUND
 
-        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost, 
+        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost,
             S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
+    })
+}
+
+const processAllGroupSetReturn = async (R_Index, R_Table, R_Quan, Cashier, empCode, voidMsg, macno) => {
+    let listGroupBalance = await getPCategoryByRLinkIndex(R_Index);
+    listGroupBalance.forEach(async balance => {
+        // update stock and process stockcard and stkfile
+        if (balance.R_Stock === 'Y' && balance.R_Void !== 'V') {
+            const S_No = R_Table + "-" + getMoment().format('HH:mm:ss')
+            const S_SubNo = ""
+            const S_Que = 0
+            const S_PCode = balance.R_PluCode
+            const S_In = R_Quan
+            const S_Out = 0
+            const S_InCost = balance.R_Total
+            const S_OutCost = 0
+            const S_ACost = 0
+            const S_Rem = "SAL"
+            const S_User = Cashier
+            const S_Link = ""
+
+            const PStock = balance.R_Stock
+            const PSet = balance.R_Set
+            const r_index = balance.R_Index
+            const SaleOrRefund = "VOID" // SALE or REFUND
+
+            await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost,
+                S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
+        }
+
+        let updBalance = `UPDATE balance 
+                SET r_void='V',
+                cashier='${Cashier}',
+                r_emp='${empCode}',
+                r_voiduser='${Cashier}',
+                r_voidtime=curtime(),
+                r_discbath='0',
+                macno='${macno}',
+                r_kicprint='',
+                r_opt9='${Unicode2ASCII(voidMsg)}',
+                voidmsg='${Unicode2ASCII(voidMsg)}' 
+                WHERE r_index='${balance.R_Index}' and r_table='${balance.R_Table}'`;
+        await pool.query(updBalance)
     })
 }
 
@@ -224,5 +268,6 @@ module.exports = {
     processAllPSetReturn,
     getTSaleByBillNo,
     getAllTSale,
-    getAllTSaleByRefno
+    getAllTSaleByRefno,
+    processAllGroupSetReturn
 }

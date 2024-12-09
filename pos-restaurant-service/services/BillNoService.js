@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat } = require('../utils/StringUtil');
 const { emptyTableBalance, getBalanceByTableNo } = require('./BalanceService');

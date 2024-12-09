@@ -3,7 +3,7 @@ const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/Str
 
 const { getProductByPCode } = require('./ProductService');
 const STCardService = require('./STCardService');
-const { processAllPIngredent, processAllPSet, processAllPIngredentReturnStock, processAllPSetReturn } = require('./TSaleService');
+const { processAllPIngredent, processAllPSet, processAllPIngredentReturnStock, processAllPSetReturn, processAllGroupSetReturn } = require('./TSaleService');
 const { summaryBalance } = require('./TableFileService');
 const { getMoment } = require('../utils/MomentUtil');
 
@@ -20,6 +20,9 @@ const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) =>
     // Update  Balance File For Void
     const balance = await getBalanceByRIndex(R_Index);
     if (balance) {
+        // process return stock
+        await returnStockIn(balance.R_Index, balance, empCode, voidMsg, macno)
+
         let updBalance = `UPDATE balance 
                 SET r_void='V',
                 cashier='${Cachier}',
@@ -33,9 +36,6 @@ const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) =>
                 voidmsg='${Unicode2ASCII(voidMsg)}' 
                 WHERE r_index='${balance.R_Index}' and r_table='${balance.R_Table}'`;
         const results = await pool.query(updBalance)
-
-        // process return stock
-        await returnStockIn(balance.R_Index)
 
         if (results.affectedRows > 0) {
             return `${R_Index} Updated.`
@@ -448,7 +448,7 @@ const inventoryStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Ca
     return null
 }
 
-const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index }) => {
+const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index, empCode, voidMsg, macno }) => {
     // update stock and process stockcard and stkfile
     if (R_Stock === 'Y') {
         const S_No = R_Table + "-" + getMoment().format('HH:mm:ss')
@@ -479,7 +479,9 @@ const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Tot
         // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
         await processAllPSetReturn(R_PluCode, R_Quan, Cashier)
     }
-    return null
+
+    // ตัดสต็อกสินค้าที่เป็นกลุ่มสินค้า Category Set
+    await processAllGroupSetReturn(R_Index, R_Table, R_Quan, Cashier, empCode, voidMsg, macno)
 }
 
 const orderStockOut = async (R_Index) => {
@@ -504,8 +506,7 @@ const orderStockOut = async (R_Index) => {
     }
 }
 
-const returnStockIn = async (R_Index) => {
-    const balance = await getBalanceByRIndex(R_Index)
+const returnStockIn = async (R_Index, balance, empCode, voidMsg, macno) => {
     if (balance) {
         // process stock into inventory
         const response = await inventoryReturnStock(
@@ -517,7 +518,8 @@ const returnStockIn = async (R_Index) => {
                 R_Total: balance.R_Total,
                 Cashier: balance.Cashier,
                 R_Set: balance.R_Set,
-                R_Index
+                R_Index, 
+                empCode, voidMsg, macno
             })
         return response
     } else {
