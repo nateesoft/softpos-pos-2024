@@ -218,6 +218,12 @@ const summaryBalance = async (tableNo) => {
     }
 }
 
+const tableMoveOrGroup = async (sourceTable, targetTable) => {
+    const sourceTableData = await getTableByCode(sourceTable)
+    const targetTableData = await getTableByCode(targetTable)
+
+}
+
 module.exports = {
     getTableByCode,
     updateTableAvailableStatus,
@@ -227,5 +233,6 @@ module.exports = {
     summaryBalance,
     updateTableFile,
     getAllTable,
-    getCheckTableStatus
+    getCheckTableStatus,
+    tableMoveOrGroup
 }

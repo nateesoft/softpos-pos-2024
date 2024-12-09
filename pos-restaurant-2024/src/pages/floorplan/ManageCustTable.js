@@ -18,6 +18,7 @@ const modalStyle = {
 const ManageCustTable = ({ setOpen }) => {
   const [mainTable, setMainTable] = useState("")
   const [subTable, setSubTable] = useState("")
+  const [empSupport, setEmpSupport] = useState("")
 
   const handleConfirm = () => {
     setOpen(false)
@@ -34,6 +35,9 @@ const ManageCustTable = ({ setOpen }) => {
         </Grid>
         <Grid size={12}>
           <TextField label="ไปยังโต๊ะ" value={subTable} onChange={e => setSubTable(e.target.value)} fullWidth />
+        </Grid>
+        <Grid size={12}>
+          <TextField label="ผู้ดูแล" value={empSupport} onChange={e => setEmpSupport(e.target.value)} fullWidth />
         </Grid>
       </Grid>
       <Box display="flex" justifyContent="center">

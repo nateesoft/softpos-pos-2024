@@ -6,10 +6,12 @@ const getNewArray = (tables, nodes) => {
 
     const getStatusBG = (tableNo) => {
         const getTcode = tables.filter(tb => tb.Tcode === tableNo)
-        if (getTcode[0].TOnAct === 'Y') {
-            return "purple"
-        } else {
-            return "black"
+        if(getTcode.length>0){
+            if (getTcode[0].TOnAct === 'Y') {
+                return "purple"
+            } else {
+                return "black"
+            }
         }
     }
 
