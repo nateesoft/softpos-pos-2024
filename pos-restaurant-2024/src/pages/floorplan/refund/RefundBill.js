@@ -47,7 +47,6 @@ const RefundBill = () => {
   const navigate = useNavigate();
   const { appData } = useContext(POSContext)
   const { userLogin, posuser, macno } = appData
-  const getPosUser = JSON.parse(posuser)
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
@@ -94,6 +93,7 @@ const RefundBill = () => {
       macno: B_MacNo
     })
       .then(response => {
+        console.log('response:', response)
         if(response.status === 200){
           const billNo = response.data.data
           navigate(`/payment/receipt/${billNo}`)
@@ -164,7 +164,7 @@ const RefundBill = () => {
                                   <Button
                                     variant='contained'
                                     color='error'
-                                    disabled={'Y' !== getPosUser.Sale2}
+                                    disabled={'Y' !== posuser.Sale2}
                                     onClick={() => handleShowConfirm(row, row.B_Refno, row.B_MacNo)} startIcon={<ReceiptIcon />}>
                                     Refund
                                   </Button>

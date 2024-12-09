@@ -1,10 +1,27 @@
 const express = require('express');
 const router = express.Router();
 
-const BalanceService = require('../../../services/BalanceService')
+const {
+  getAllBalance,
+  orderStockOut,
+  emptyTableBalance,
+  deleteBalanceOnly,
+  updatePrint2Kic,
+  updateBalanceQty,
+  getVoidMsgList,
+  getBalanceByTableNo,
+  getTotalBalance,
+  getBalanceMaxIndex,
+  addBalance,
+  voidMenuBalance,
+  getBalanceByRIndex,
+  addListBalance,
+  updateBalance
+
+} = require('../../../services/BalanceService')
 
 router.get('/', (req, res) => {
-  BalanceService.getAllBalance()
+  getAllBalance()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -16,19 +33,7 @@ router.get('/', (req, res) => {
 // order adjust stock
 router.post('/stock-out', (req, res) => {
   const { R_Index } = req.body
-  BalanceService.orderStockOut(R_Index)
-    .then(rows => {
-      res.status(200).json({ status: 2000, data: rows })
-    })
-    .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
-    })
-});
-
-// void
-router.post('/stock-in', (req, res) => {
-  const { R_Index } = req.body
-  BalanceService.voidStockIn(R_Index)
+  orderStockOut(R_Index)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -39,7 +44,7 @@ router.post('/stock-in', (req, res) => {
 
 router.delete('/empty/:tableNo', (req, res) => {
   const tableNo = req.params.tableNo
-  BalanceService.emptyTableBalance(tableNo)
+  emptyTableBalance(tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -50,7 +55,7 @@ router.delete('/empty/:tableNo', (req, res) => {
 
 router.post('/delete', (req, res) => {
   const { R_Index } = req.body
-  BalanceService.deleteBalanceOnly(R_Index)
+  deleteBalanceOnly(R_Index)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -61,7 +66,7 @@ router.post('/delete', (req, res) => {
 
 router.patch('/printToKic/:tableNo', (req, res) => {
   const tableNo = req.params.tableNo
-  BalanceService.updatePrint2Kic(tableNo)
+  updatePrint2Kic(tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -72,7 +77,7 @@ router.patch('/printToKic/:tableNo', (req, res) => {
 
 router.patch('/updateQty', (req, res) => {
   const { tableNo, rIndex, qty } = req.body
-  BalanceService.updateBalanceQty(tableNo, rIndex, qty)
+  updateBalanceQty(tableNo, rIndex, qty)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -82,7 +87,7 @@ router.patch('/updateQty', (req, res) => {
 });
 
 router.get('/void-msg-list', function (req, res) {
-  BalanceService.getVoidMsgList()
+  getVoidMsgList()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -93,7 +98,7 @@ router.get('/void-msg-list', function (req, res) {
 
 router.get('/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
-  BalanceService.getBalanceByTableNo(tableNo)
+  getBalanceByTableNo(tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -104,7 +109,7 @@ router.get('/:tableNo', function (req, res) {
 
 router.get('/totalBalance/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
-  BalanceService.getTotalBalance(tableNo)
+  getTotalBalance(tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -115,7 +120,7 @@ router.get('/totalBalance/:tableNo', function (req, res) {
 
 router.get('/getMaxIndex/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
-  BalanceService.getBalanceMaxIndex(tableNo)
+  getBalanceMaxIndex(tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -129,7 +134,7 @@ router.post('/', (req, res) => {
   if (Object.keys(req.body).length === 0) {
     throw new Error("Payload Information Notfound !!!")
   }
-  BalanceService.addBalance(req.body)
+  addBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -140,7 +145,7 @@ router.post('/', (req, res) => {
 
 // void or refund menu in balance
 router.post('/void', (req, res) => {
-  BalanceService.voidMenuBalance(req.body)
+  voidMenuBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -154,7 +159,7 @@ router.post('/getData', (req, res) => {
     throw new Error("Payload Information Notfound !!!")
   }
   const { R_Index } = req.body
-  BalanceService.getBalanceByRIndex(R_Index)
+  getBalanceByRIndex(R_Index)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -164,7 +169,7 @@ router.post('/getData', (req, res) => {
 });
 
 router.post('/addList', function (req, res, next) {
-  BalanceService.addListBalance(req.body)
+  addListBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -175,7 +180,7 @@ router.post('/addList', function (req, res, next) {
 
 router.put('/', function (req, res, next) {
   const id = req.params.id
-  BalanceService.updateBalance(req.body, id)
+  updateBalance(req.body, id)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
