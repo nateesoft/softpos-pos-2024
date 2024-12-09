@@ -8,6 +8,7 @@ import PrintIcon from "@mui/icons-material/Print"
 import RefundIcon from "@mui/icons-material/ReceiptLong"
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import TableBar from "@mui/icons-material/TableBar"
+import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
 
 const OtherMenuSelect = ({ handleChange, handleClose, handleClick, open, anchorEl }) => {
     return (
@@ -29,6 +30,16 @@ const OtherMenuSelect = ({ handleChange, handleClose, handleClick, open, anchorE
                     </Box>
                 </MenuItem>
                 <Divider />
+                <MenuItem onClick={() => handleChange('CheckTableStatus')}>
+                    <Box display="flex" justifyContent="center">
+                        <TableRestaurantIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>ตรวจสอบโต๊ะ</Typography>
+                    </Box>
+                </MenuItem>
+                <MenuItem onClick={() => handleChange('MgrTable')}>
+                    <Box display="flex" justifyContent="center">
+                        <Splitscreen sx={{ marginRight: "10px" }} /> <Typography variant='p'>แยกโต๊ะ / รวมโต๊ะ</Typography>
+                    </Box>
+                </MenuItem>
                 <MenuItem onClick={() => handleChange('RefundBill')}>
                     <Box display="flex" justifyContent="center">
                         <RefundIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>ยกเลิกบิล (Refund Bill)</Typography>
@@ -37,11 +48,6 @@ const OtherMenuSelect = ({ handleChange, handleClose, handleClick, open, anchorE
                 <MenuItem onClick={() => handleChange('CopyPrint')}>
                     <Box display="flex" justifyContent="center">
                         <PrintIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>พิมพ์สำเนาบิล</Typography>
-                    </Box>
-                </MenuItem>
-                <MenuItem onClick={() => handleChange('MgrTable')}>
-                    <Box display="flex" justifyContent="center">
-                        <Splitscreen sx={{ marginRight: "10px" }} /> <Typography variant='p'>แยกโต๊ะ / รวมโต๊ะ</Typography>
                     </Box>
                 </MenuItem>
                 <Divider />

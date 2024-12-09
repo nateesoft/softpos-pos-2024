@@ -24,6 +24,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import VipPeopleIcon from '@mui/icons-material/Hail';
 import RefundIcon from "@mui/icons-material/ReceiptLong"
+
+import CheckTableStatus from "./checkTable"
 import RecieptCopyPrint from "./RecieptCopyPrint"
 import RefundBill from "./refund/RefundBill"
 import ManageCashDrawer from './ManageCashDrawer';
@@ -87,6 +89,7 @@ function FloorPlanPage() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState([])
 
+  const [openTableStatus, setOpenTableStatus] = useState(false)
   const [openCopyPrint, setOpenCopyPrint] = useState(false)
   const [openRefundBill, setOpenRefundBill] = useState(false)
   const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
@@ -177,6 +180,8 @@ function FloorPlanPage() {
       setOpenPinMgrTable(true)
     } else if (data === 'SetupTableFlorPlan') {
       navigate("/table-setup")
+    } else if (data === 'CheckTableStatus') {
+      setOpenTableStatus(true)
     }
   };
 
@@ -324,6 +329,11 @@ function FloorPlanPage() {
       <Modal open={openCopyPrint} onClose={() => handleCloseModal(() => setOpenCopyPrint(false))}>
         <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
           <RecieptCopyPrint setOpen={setOpenCopyPrint} />
+        </Box>
+      </Modal>
+      <Modal open={openTableStatus} onClose={() => handleCloseModal(() => setOpenTableStatus(false))}>
+        <Box sx={{ ...modalPinStyle, padding: "10px" }}>
+          <CheckTableStatus setOpen={setOpenTableStatus} />
         </Box>
       </Modal>
       <Modal open={openRefundBill} onClose={() => handleCloseModal(() => setOpenRefundBill(false))}>

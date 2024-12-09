@@ -7,6 +7,13 @@ const getAllTable = async () => {
     const results = await pool.query(sql)
     return results
 }
+const getCheckTableStatus = async () => {
+    const sql = `SELECT * FROM tablefile 
+    where TOnAct='Y' or TAmount > 0 or TItem > 0 or TCustomer > 0 
+    order by Tcode`;
+    const results = await pool.query(sql)
+    return results
+}
 const updateTableAvailableStatus = async tableNo => {
     const sql = `update tablefile set TOnact='N', Cashier=null where TCode='${tableNo}'`;
     const results = await pool.query(sql)
@@ -219,5 +226,6 @@ module.exports = {
     updateMember,
     summaryBalance,
     updateTableFile,
-    getAllTable
+    getAllTable,
+    getCheckTableStatus
 }
