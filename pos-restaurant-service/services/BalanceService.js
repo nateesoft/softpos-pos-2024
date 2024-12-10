@@ -1,11 +1,22 @@
 const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
 
+const { getPOSConfigSetup } = require('./POSConfigSetupService');
 const { getProductByPCode } = require('./ProductService');
-const STCardService = require('./STCardService');
+const { ProcessStockOut } = require('./STCardService');
 const { processAllPIngredent, processAllPSet, processAllPIngredentReturnStock, processAllPSetReturn, processAllGroupSetReturn } = require('./TSaleService');
-const { summaryBalance } = require('./TableFileService');
 const { getMoment } = require('../utils/MomentUtil');
+const { updateTableFile } = require('./TableFileService');
+const { getBalanceByRIndex, getBalanceMaxIndex } = require('./CoreService')
+
+const getSummaryItem = async (tableNo) => {
+    const sql = `select sum(R_Quan) R_Quan from balance where R_Table='${tableNo}'`;
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        return results[0].R_Quan
+    }
+    return 0.00
+}
 
 const getTotalBalance = async (tableNo) => {
     const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
@@ -14,6 +25,95 @@ const getTotalBalance = async (tableNo) => {
         return results[0].R_Total
     }
     return 0.00
+}
+
+const getBalanceByTable = async tableNo => {
+    const sql = `select * from balance  where R_Table='${tableNo}' and R_Void <> 'V' order by r_index`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const getTableByCode = async tableNo => {
+    const sql = `select * from tablefile where TCode='${tableNo}' limit 1`;
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        return results[0]
+    }
+    return null
+}
+
+const summaryBalance = async (tableNo) => {
+    const tablefile = await getTableByCode(tableNo)
+    const configSetup = await getPOSConfigSetup()
+    const balanceList = await getBalanceByTable(tableNo)
+    const totalItem = await getSummaryItem(tableNo)
+
+    const summaryRType = (type, netTotal = 0) => {
+        balanceList.forEach(data => {
+            if (data.R_Type === type) {
+                netTotal = netTotal + data.R_Total
+            }
+            return netTotal
+        })
+        return netTotal
+    }
+
+    let Food = summaryRType("1")
+    let Drink = summaryRType("2")
+    let Product = summaryRType("3")
+
+    let subTotalAmount = 0;
+    let serviceAmount = 0;
+    let vatAmount = 0;
+    let netTotalAmount = 0;
+    let productAndService = 0;
+
+    const service = configSetup.P_Service
+    const serviceType = configSetup.P_ServiceType // Net(N), Gross(G)
+    const vatType = configSetup.P_VatType // Include(I) or Exclude(E)
+    const vat = configSetup.P_Vat
+
+    subTotalAmount = Food + Drink + Product;
+    if (serviceType === 'N') { // Net
+        serviceAmount = subTotalAmount * service / 100
+    } else if (serviceType === 'G') { // Gross
+        serviceAmount = subTotalAmount * service / 100
+    }
+
+    netTotalAmount = subTotalAmount + serviceAmount
+
+    if (vatType === 'I') {
+        vatAmount = netTotalAmount * vat / (100 + vat)
+        productAndService = netTotalAmount - vatAmount
+    } else if (vatType === 'E') {
+        vatAmount = netTotalAmount * vat / 100
+        productAndService = netTotalAmount + vatAmount
+        netTotalAmount = netTotalAmount + vatAmount
+    }
+
+    tablefile.TAmount = subTotalAmount
+    tablefile.ServiceAmt = serviceAmount
+    tablefile.NetTotal = netTotalAmount
+    tablefile.Food = Food
+    tablefile.Drink = Drink
+    tablefile.Product = Product
+    tablefile.TItem = totalItem
+
+    // update tablefile
+    await updateTableFile(tablefile)
+
+    return {
+        TItem: tablefile.TItem,
+        TAmount: tablefile.TAmount,
+        ServiceAmt: tablefile.ServiceAmt,
+        vatAmount,
+        NetTotal: tablefile.NetTotal,
+        productAndService,
+        Food: tablefile.Food,
+        Drink: tablefile.Drink,
+        Product: tablefile.Product,
+        printRecpMessage: configSetup.P_PrintRecpMessage
+    }
 }
 
 const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) => {
@@ -59,16 +159,6 @@ const getBalanceByTableNo = async tableNo => {
     return mappingResult
 }
 
-const getBalanceByRIndex = async R_Index => {
-    const sql = `select * from balance 
-    where R_Index='${R_Index}' order by R_Table, R_Index`;
-    const results = await pool.query(sql)
-    if (results.length > 0) {
-        return results[0]
-    }
-    return null
-}
-
 const getVoidMsgList = async () => {
     const sql = `select * from voidmsg order by VCode`;
     const results = await pool.query(sql)
@@ -76,27 +166,6 @@ const getVoidMsgList = async () => {
         return { ...item, VName: ASCII2Unicode(item.VName) }
     })
     return mappingResult
-}
-
-const getBalanceMaxIndex = async tableNo => {
-    const sql = `select max(R_Index) R_Index from balance 
-    where R_Table='${tableNo}' order by r_index`;
-    const results = await pool.query(sql)
-
-    let id = 1
-    let index = tableNo + "/001"; // default
-
-    if (results.length > 0) {
-        const R_Index = results[0].R_Index
-        if (R_Index) {
-            let data = R_Index.split("/");
-            id = parseInt(data[1]) + 1
-
-            index = tableNo + "/" + PrefixZeroFormat(id, 3)
-        }
-    }
-
-    return index
 }
 
 const emptyTableBalance = async tableNo => {
@@ -158,7 +227,8 @@ const addListBalance = async (payload) => {
         })
 
         // summary tablefile
-        await summaryBalance(tableNo)
+        const balanceList = await getBalanceByTable(tableNo)
+        await summaryBalance(tableNo, balanceList)
 
         // process stock out
         await orderStockOut(reponseR_Index)
@@ -191,7 +261,8 @@ const addBalance = async payload => {
     })
 
     // summary tablefile
-    await summaryBalance(tableNo)
+    const balanceList = await getBalanceByTable(tableNo)
+    await summaryBalance(tableNo, balanceList)
 
     // process stock out
     await orderStockOut(reponseR_Index)
@@ -434,7 +505,7 @@ const inventoryStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Ca
         const r_index = R_Index
         const SaleOrRefund = "SALE" // SALE or REFUND
 
-        await STCardService.ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out,
+        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out,
             S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link,
             PStock, PSet, r_index, SaleOrRefund)
 
@@ -469,7 +540,7 @@ const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Tot
         const r_index = R_Index
         const SaleOrRefund = "VOID" // SALE or REFUND
 
-        await STCardService.ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out,
+        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out,
             S_InCost, S_OutCost, S_ACost, S_Rem, S_User, S_Link,
             PStock, PSet, r_index, SaleOrRefund)
 
@@ -541,9 +612,9 @@ module.exports = {
     updateBalance,
     inventoryStock,
     getBalanceByTableNo,
-    getBalanceByRIndex,
     orderStockOut,
     returnStockIn,
     getVoidMsgList,
-    deleteBalanceOnly
+    deleteBalanceOnly,
+    summaryBalance
 }

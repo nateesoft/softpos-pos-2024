@@ -56,7 +56,7 @@ function PaymentPage() {
   }, [tableNo])
 
   const summaryTableFileBalance = useCallback(async () => {
-    const response = await apiClient.post('/api/tablefile/summaryBalance', {tableNo})
+    const response = await apiClient.post('/api/balance/summaryBalance', {tableNo})
     if(response.data.data){
       const data = response.data.data
       setSubTotalAmount(data.TAmount)

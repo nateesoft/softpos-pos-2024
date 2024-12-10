@@ -2,7 +2,7 @@ const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat } = require('../utils/StringUtil');
 const { emptyTableBalance, getBalanceByTableNo } = require('./BalanceService');
 
-const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService');
+const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService'); 
 const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock } = require('./TSaleService');
 
 const { getBranch } = require('./BranchService')
@@ -403,9 +403,6 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
 
     // update refund tSale List
     await refundTSale(tSaleData, Cashier)
-
-    // update table available status
-    await updateTableAvailableStatus(billNoData.B_Table)
 
     return billNo
 }

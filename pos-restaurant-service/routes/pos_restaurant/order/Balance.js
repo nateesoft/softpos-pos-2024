@@ -11,17 +11,27 @@ const {
   getVoidMsgList,
   getBalanceByTableNo,
   getTotalBalance,
-  getBalanceMaxIndex,
   addBalance,
   voidMenuBalance,
-  getBalanceByRIndex,
   addListBalance,
-  updateBalance
-
+  updateBalance,
+  summaryBalance
 } = require('../../../services/BalanceService')
+const { getBalanceByRIndex, getBalanceMaxIndex } = require('../../../services/CoreService')
 
 router.get('/', (req, res) => {
   getAllBalance()
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.post('/summaryBalance', (req, res) => {
+  const { tableNo } = req.body
+  summaryBalance(tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

@@ -10,7 +10,7 @@ const getNewArray = (tables, nodes) => {
             if (getTcode[0].TOnAct === 'Y') {
                 return "purple"
             } else {
-                return "black"
+                return "green"
             }
         }
     }

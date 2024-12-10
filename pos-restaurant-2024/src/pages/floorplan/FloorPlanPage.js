@@ -29,8 +29,7 @@ import CheckTableStatus from "./checkTable"
 import RecieptCopyPrint from "./RecieptCopyPrint"
 import RefundBill from "./refund/RefundBill"
 import ManageCashDrawer from './ManageCashDrawer';
-import NumberPadLock from '../utils/NumberPadLock';
-import ManageCustTable from './ManageCustTable';
+import ManageMoveTable from './ManageMoveTable';
 
 import apiClient from '../../httpRequest'
 import RoundNode from "./nodes/RoundNode"
@@ -93,7 +92,6 @@ function FloorPlanPage() {
   const [openCopyPrint, setOpenCopyPrint] = useState(false)
   const [openRefundBill, setOpenRefundBill] = useState(false)
   const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
-  const [openPinMgrTable, setOpenPinMgrTable] = useState(false)
   const [openMgrTable, setOpenMgrTable] = useState(false)
 
   const [showNoti, setShowNoti] = useState(false)
@@ -136,7 +134,6 @@ function FloorPlanPage() {
         if (response.data.status === 2000) {
           let tableStatus = response.data.data.tableStatus
           const Cashier = response.data.data.Cashier
-          // const Employ = response.data.data.Employ
           if (tableStatus === "cashierInUse" && Cashier !== userLogin) {
             setNotiMessage(`มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`)
             setAlertType("warning")
@@ -177,7 +174,7 @@ function FloorPlanPage() {
     } else if (data === 'CashDrawer') {
       setOpenMgrCashDrawer(true)
     } else if (data === 'MgrTable') {
-      setOpenPinMgrTable(true)
+      setOpenMgrTable(true)
     } else if (data === 'SetupTableFlorPlan') {
       navigate("/table-setup")
     } else if (data === 'CheckTableStatus') {
@@ -346,15 +343,9 @@ function FloorPlanPage() {
           <ManageCashDrawer setOpen={setOpenMgrCashDrawer} />
         </Box>
       </Modal>
-      <Modal open={openPinMgrTable} onClose={() => handleCloseModal(() => setOpenPinMgrTable(false))}>
-        <NumberPadLock
-          close={() => handleCloseModal(() => setOpenPinMgrTable(false))}
-          nextStep={() => setOpenMgrTable(true)}
-        />
-      </Modal>
-      <Modal open={openMgrTable} onClose={() => handleCloseModal(() => setOpenMgrTable(false))}>
+      <Modal open={openMgrTable}>
         <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
-          <ManageCustTable setOpen={setOpenMgrTable} />
+          <ManageMoveTable setOpen={setOpenMgrTable} onLoadFloorPlan={() => loadFloorPlan(selectFloor)} />
         </Box>
       </Modal>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />

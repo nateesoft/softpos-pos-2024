@@ -4,6 +4,17 @@ const router = express.Router();
 const pool = require('../../../config/database/MySqlConnect')
 const TableFileService = require('../../../services/TableFileService')
 
+router.post('/moveTable', function (req, res, next) {
+  const { sourceTable, targetTable, admin, Cashier } = req.body
+  TableFileService.tableMoveOrGroup(sourceTable, targetTable, admin, Cashier)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 router.get('/tableStatus', function (req, res, next) {
   const { tableNo } = req.body
   TableFileService.getCheckTableStatus(tableNo)
@@ -14,6 +25,7 @@ router.get('/tableStatus', function (req, res, next) {
       res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
+
 router.post('/checkTableOpen', function (req, res, next) {
   const { tableNo } = req.body
   TableFileService.checkTableOpen(tableNo)
@@ -92,16 +104,5 @@ router.put('/:id', function (req, res, next) {
     }
   )
 })
-
-router.post('/summaryBalance', (req, res) => {
-  const { tableNo } = req.body
-  TableFileService.summaryBalance(tableNo)
-    .then(rows => {
-      res.status(200).json({ status: 2000, data: rows })
-    })
-    .catch(err => {
-      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
-    })
-});
 
 module.exports = router;

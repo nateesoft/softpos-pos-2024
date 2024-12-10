@@ -9,12 +9,13 @@ import RefundIcon from "@mui/icons-material/ReceiptLong"
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import TableBar from "@mui/icons-material/TableBar"
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 const OtherMenuSelect = ({ handleChange, handleClose, handleClick, open, anchorEl }) => {
     return (
         <>
             <IconButton onClick={handleClick}>
-                <SettingsSuggestIcon fontSize='large' sx={{ color: 'white' }} />
+                <MenuOpenIcon fontSize='large' sx={{ color: 'white' }} />
             </IconButton>
             <Menu
                 id="basic-menu"

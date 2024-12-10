@@ -8,6 +8,7 @@ import LocalBarIcon from '@mui/icons-material/LocalBar';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import TableBarIcon from '@mui/icons-material/TableBar';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
 
 const FloorSelect = ({ setSelectFloor }) => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -28,7 +29,7 @@ const FloorSelect = ({ setSelectFloor }) => {
     return (
         <>
             <IconButton onClick={handleClick}>
-                <TableBarIcon fontSize='large' sx={{color: 'white'}} />
+                <ViewModuleIcon fontSize='large' sx={{color: 'white'}} />
             </IconButton>
             <Menu
                 id="basic-menu"

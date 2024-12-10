@@ -1,7 +1,7 @@
 const pool = require('../config/database/MySqlConnect')
 
 const { getProductByPCode, getProductActiveByPCode } = require('./ProductService');
-const BalanceService = require('./BalanceService');
+const { getBalanceByRIndex } = require('./CoreService');
 const { getMoment } = require('../utils/MomentUtil');
 
 const getSTCard = async () => {
@@ -250,7 +250,7 @@ const ProcessStockOut = async (S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InC
 }
 
 const executeProcess = async (R_Index) => {
-    const balance = await BalanceService.getBalanceByRIndex(R_Index)
+    const balance = await getBalanceByRIndex(R_Index)
     const S_No = balance.R_Table + "-" + getMoment().format('HH:mm:ss')
     const S_SubNo = ""
     const S_Que = 0

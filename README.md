@@ -5,3 +5,8 @@ SHOW VARIABLES LIKE 'old_passwords'
 
 SET PASSWORD FOR 'User'@'Host'=PASSWORD('yourpassword');
 FLUSH Privileges;
+
+
+# check service dependencies
+npm install -g madge
+madge --circular .

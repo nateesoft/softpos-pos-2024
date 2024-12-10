@@ -1,7 +1,7 @@
 const pool = require('../config/database/MySqlConnect');
 const { getMoment } = require('../utils/MomentUtil');
-const { getPOSConfigSetup } = require('./POSConfigSetupService');
-const { updateInActiveTable } = require('../services/management/TableCheckIn')
+const { updateInActiveTable } = require('../services/management/TableCheckIn');
+const { getBalanceMaxIndex, updateBalanceMove } = require('./CoreService');
 
 const getAllTable = async () => {
     const sql = `select * FROM tablefile ORDER By Tcode`;
@@ -17,12 +17,25 @@ const getCheckTableStatus = async () => {
 }
 const updateTableAvailableStatus = async tableNo => {
     const sql = `update tablefile 
-    set TOnact='N', TItem=0, TAmount=0, TCustomer=0, Cashier=null 
-    where TCode='${tableNo}'`;
+                set TOnact='N', 
+                TItem=0,TAmount=0,TCustomer=0, Cashier=null,
+                Service=0,ServiceAmt=0,
+                EmpDisc='',EmpDiscAmt=0,
+                FastDisc='',FastDiscAmt=0,
+                TrainDisc='',TrainDiscAmt=0,
+                MemDisc='',MemDiscAmt=0,
+                SubDisc='',SubDiscAmt=0,
+                DiscBath=0,ProDiscAmt=0,SpaDiscAmt=0,CuponDiscAmt=0,
+                ItemDiscAmt=0,MemCode='',MemCurAmt=0,MemName='',
+                Food=0,Drink=0,Product=0,NetTotal=0,PrintTotal=0,
+                PrintChkBill='N', PrintCnt=0, PrintTime1='', PrintTime2='',
+                ChkBill='N', StkCode1='', StkCode2='',TDesk=0,TUser='',VoidMsg='',
+                TPause='Y',TTableIsOn='Y',TActive='',TAutoClose='' 
+                where Tcode='${tableNo}'`;
     const results = await pool.query(sql)
 
     // update table_checkin
-    updateInActiveTable(tableNo)
+    await updateInActiveTable(tableNo)
     return results
 }
 
@@ -32,6 +45,11 @@ const updateTableOpenStatus = async (tableNo, Cashier, TUser) => {
     where TCode='${tableNo}'`;
     const results = await pool.query(sql)
     return results
+}
+
+const updateMoveTableStatus = async (sourceTable, targetTable, Cashier, TUser) => {
+    await updateTableAvailableStatus(sourceTable)
+    await updateTableOpenStatus(targetTable, Cashier, TUser)
 }
 
 const updateMember = async (memberInfo, tableNo) => {
@@ -47,17 +65,8 @@ const updateMember = async (memberInfo, tableNo) => {
     return results
 }
 
-const getTableByCode = async tableNo => {
-    const sql = `select * from tablefile where TCode='${tableNo}' limit 1`;
-    const results = await pool.query(sql)
-    if (results.length > 0) {
-        return results[0]
-    }
-    return null
-}
-
-const getBalanceByTable = async tableNo => {
-    const sql = `select * from balance  where R_Table='${tableNo}' and R_Void <> 'V' order by r_index`;
+const getBalanceAllByTable = async tableNo => {
+    const sql = `select * from balance  where R_Table='${tableNo}' order by r_index`;
     const results = await pool.query(sql)
     return results
 }
@@ -153,92 +162,52 @@ const updateTableFile = async (tablefile) => {
     return results
 }
 
-const summaryBalance = async (tableNo) => {
-    const tablefile = await getTableByCode(tableNo)
-    const configSetup = await getPOSConfigSetup()
-    const balanceList = await getBalanceByTable(tableNo)
-
-    const summaryRType = (type, netTotal = 0) => {
-        balanceList.forEach(data => {
-            if (data.R_Type === type) {
-                netTotal = netTotal + data.R_Total
-            }
-            return netTotal
-        })
-        return netTotal
+const getTableByCode = async tableNo => {
+    const sql = `select * from tablefile where TCode='${tableNo}' limit 1`;
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        return results[0]
     }
-
-    let Food = summaryRType("1")
-    let Drink = summaryRType("2")
-    let Product = summaryRType("3")
-
-    let subTotalAmount = 0;
-    let serviceAmount = 0;
-    let vatAmount = 0;
-    let netTotalAmount = 0;
-    let productAndService = 0;
-
-    const service = configSetup.P_Service
-    const serviceType = configSetup.P_ServiceType // Net(N), Gross(G)
-    const vatType = configSetup.P_VatType // Include(I) or Exclude(E)
-    const vat = configSetup.P_Vat
-
-    subTotalAmount = Food + Drink + Product;
-    if (serviceType === 'N') { // Net
-        serviceAmount = subTotalAmount * service / 100
-    } else if (serviceType === 'G') { // Gross
-        serviceAmount = subTotalAmount * service / 100
-    }
-
-    netTotalAmount = subTotalAmount + serviceAmount
-
-    if (vatType === 'I') {
-        vatAmount = netTotalAmount * vat / (100 + vat)
-        productAndService = netTotalAmount - vatAmount
-    } else if (vatType === 'E') {
-        vatAmount = netTotalAmount * vat / 100
-        productAndService = netTotalAmount + vatAmount
-        netTotalAmount = netTotalAmount + vatAmount
-    }
-
-    tablefile.TAmount = subTotalAmount
-    tablefile.ServiceAmt = serviceAmount
-    tablefile.NetTotal = netTotalAmount
-    tablefile.Food = Food
-    tablefile.Drink = Drink
-    tablefile.Product = Product
-
-    // update tablefile
-    await updateTableFile(tablefile)
-
-    return {
-        TAmount: tablefile.TAmount,
-        ServiceAmt: tablefile.ServiceAmt,
-        vatAmount,
-        NetTotal: tablefile.NetTotal,
-        productAndService,
-        Food: tablefile.Food,
-        Drink: tablefile.Drink,
-        Product: tablefile.Product,
-        printRecpMessage: configSetup.P_PrintRecpMessage
-    }
+    return null
 }
 
-const tableMoveOrGroup = async (sourceTable, targetTable) => {
+const tableMoveOrGroup = async (sourceTable, targetTable, admin, Cashier) => {
     const sourceTableData = await getTableByCode(sourceTable)
     const targetTableData = await getTableByCode(targetTable)
 
+    if (!sourceTableData || !targetTableData) {
+        throw new Error('ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!')
+    }
+    if (sourceTableData.Tcode === targetTableData.Tcode) {
+        throw new Error('ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!')
+    }
+
+    const balanceFrom = await getBalanceAllByTable(sourceTable)
+
+    // add source balance into target balance
+    for (let i = 0; i < balanceFrom.length; i++) {
+        const newBalance = {...balanceFrom[i]}
+        newBalance.R_Index = await getBalanceMaxIndex(targetTable)
+        newBalance.R_MoveFrom = balanceFrom[i].R_Index
+        newBalance.R_MoveUser = admin
+        newBalance.R_Table = targetTable
+
+        await updateBalanceMove(newBalance, balanceFrom[i].R_Table)
+    }
+
+    // update source table to available status
+    await updateMoveTableStatus(sourceTable, targetTable, Cashier, admin)
 }
 
 module.exports = {
-    getTableByCode,
     updateTableAvailableStatus,
     updateTableOpenStatus,
     checkTableOpen,
     updateMember,
-    summaryBalance,
     updateTableFile,
     getAllTable,
     getCheckTableStatus,
-    tableMoveOrGroup
+    tableMoveOrGroup,
+    getBalanceAllByTable,
+    getTableByCode
 }
