@@ -60,10 +60,10 @@ const Login = () => {
         if (response.data.status === 2000) {
           const responseLogin = response.data.data
           if (responseLogin) {
-            setAppData({ ...appData, userLogin: user, posuser: response.data.data })
             localStorage.setItem("userLogin", user)
             localStorage.setItem("posuser", JSON.stringify(response.data.data))
             navigate("/floorplan")
+            setAppData({ ...appData, userLogin: user, posuser: JSON.stringify(response.data.data) })
           } else {
             handleNotification("ข้อมูลผู้ใช้งาน Username/ Pasword ไม่ถูกต้อง !!!", "warning")
           }

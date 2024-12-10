@@ -19,7 +19,7 @@ const initContext = {
     orderDetails: []
   },
   productList: [],
-  posuser: localStorage.getItem('posuser') || "{}"
+  posuser: localStorage.getItem('posuser') || {}
 }
 
 function App() {

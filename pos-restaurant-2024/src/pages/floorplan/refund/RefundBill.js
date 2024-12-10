@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -47,6 +47,7 @@ const RefundBill = () => {
   const navigate = useNavigate();
   const { appData } = useContext(POSContext)
   const { userLogin, posuser, macno } = appData
+  const PosUser = posuser ? JSON.parse(posuser): {}
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
@@ -164,7 +165,7 @@ const RefundBill = () => {
                                   <Button
                                     variant='contained'
                                     color='error'
-                                    disabled={'Y' !== posuser.Sale2}
+                                    disabled={'Y' !== PosUser.Sale2}
                                     onClick={() => handleShowConfirm(row, row.B_Refno, row.B_MacNo)} startIcon={<ReceiptIcon />}>
                                     Refund
                                   </Button>

@@ -53,8 +53,8 @@ const paidInOutRouter = require('./routes/pos_restaurant/padinout')
 
 const app = express();
 app.use(cors())
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded( { extended: true }))
+app.use(bodyParser.json({limit: '50mb'}))
+app.use(bodyParser.urlencoded( { extended: true, limit: '50mb' }))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
