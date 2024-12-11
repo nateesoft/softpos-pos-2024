@@ -2,6 +2,7 @@ const pool = require('../config/database/MySqlConnect');
 const { getMoment } = require('../utils/MomentUtil');
 const { updateInActiveTable } = require('../services/management/TableCheckIn');
 const { getBalanceMaxIndex, updateBalanceMove } = require('./CoreService');
+const { Unicode2ASCII } = require('../utils/StringUtil');
 
 const getAllTable = async () => {
     const sql = `select * FROM tablefile ORDER By Tcode`;
@@ -57,7 +58,7 @@ const updateMember = async (memberInfo, tableNo) => {
     const memEnd = getMoment(memberInfo.Member_ExpiredDate).format('YYYY-MM-DD')
     const sql = `UPDATE tablefile SET 
     MemCode='${memberInfo.Member_Code}',
-    MemName='${memberInfo.Member_NameThai}',
+    MemName='${Unicode2ASCII(memberInfo.Member_NameThai)}',
     MemBegin='${memBegin}',
     MemEnd='${memEnd}' 
     WHERE Tcode='${tableNo}'`;
@@ -108,7 +109,7 @@ const updateTableFile = async (tablefile) => {
     const ItemDiscAmt = tablefile.ItemDiscAmt;
     const MemCode = tablefile.MemCode;
     const MemCurAmt = tablefile.MemCurAmt;
-    const MemName = tablefile.MemName;
+    const MemName = Unicode2ASCII(tablefile.MemName);
     const Food = tablefile.Food;
     const Drink = tablefile.Drink;
     const Product = tablefile.Product;
