@@ -222,7 +222,7 @@ const ReceiptToPrint = () => {
     onAfterPrint: () => {
       setTimeout(()=> {
         setShowFloorPlan(true)
-      }, 3000)
+      }, 5000)
     },
     onPrintError: (err) => {
       alert(JSON.stringify(err))
