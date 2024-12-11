@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Grid2, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from '@mui/material';
+import { AppBar, Button, Grid2, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Toolbar, Typography } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
-import Item from './Item';
 import './style.css';
-
 
 const NumFormat = data => {
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
-const MultiplePayment = ({ tableNo, orderList, tableFile }) => {
+const MultiplePayment = ({ onClose, tableNo, orderList, tableFile }) => {
   console.log(tableFile)
   const [categories, setCategories] = useState([
     { id: 1, tableNo: "T1", name: 'TABLE T1 (รายการอาหารโต๊ะหลัก)' },
@@ -18,16 +19,7 @@ const MultiplePayment = ({ tableNo, orderList, tableFile }) => {
     { id: 3, tableNo: "T1-2", name: 'TABLE T1-2 (รายการอาหารของโต๊ะที่ต้องการแยกชำระเงิน)' },
     { id: 4, tableNo: "T1-3", name: 'TABLE T1-3 (รายการอาหารของโต๊ะที่ต้องการแยกชำระเงิน)' },
   ]);
-
-  // const [items, setItems] = useState([
-  //   { id: 1, name: 'item1', category: 1 },
-  //   { id: 2, name: 'item2', category: 1 },
-  //   { id: 3, name: 'item3', category: 1 },
-  //   { id: 4, name: 'item4', category: 1 },
-  //   { id: 5, name: 'item5', category: 1 },
-  //   { id: 6, name: 'item6', category: 1 },
-  // ]);
-
+  
   const isEmptyRLinkIndex = (item) => {
     return (!item) ? true : false
   }
@@ -72,10 +64,33 @@ const MultiplePayment = ({ tableNo, orderList, tableFile }) => {
     }
   };
 
+  const handleConfirm = () => {
+    onClose()
+  }
+  const handleCacnel = () => {
+    onClose()
+  }
+
   return (
-    <div className="container py-5" style={{overflow: "auto" ,height: "750px"}}>
+    <div className="container py-5" style={{ overflow: "auto", height: "750px" }}>
+      <AppBar position="fixed">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <ReceiptIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            แยกชำระรายการสินค้า
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div>
+        <div style={{marginTop: "50px"}}>
           <Droppable droppableId="Categories" type="droppableItem">
             {(provided) => (
               <div ref={provided.innerRef}>
@@ -92,12 +107,12 @@ const MultiplePayment = ({ tableNo, orderList, tableFile }) => {
                       >
                         <Droppable droppableId={category.id.toString()}>
                           {(provided) => (
-                            <Paper elevation={3} ref={provided.innerRef} 
-                              sx={{margin: "5px"}}>
+                            <Paper elevation={3} ref={provided.innerRef}
+                              sx={{ margin: "5px" }}>
                               <TableContainer sx={{ overflow: "auto", padding: "5px" }}>
                                 <h6
                                   {...parentProvider.dragHandleProps}
-                                  style={{backgroundColor: "#eee", padding: "5px"}}
+                                  style={{ backgroundColor: "#eee", padding: "5px" }}
                                 >
                                   {category.name}
                                 </h6>
@@ -134,11 +149,11 @@ const MultiplePayment = ({ tableNo, orderList, tableFile }) => {
                                   {items
                                     .filter(
                                       (item) => item.category === category.id
-                                    ).length===0 && 
+                                    ).length === 0 &&
                                     <TableRow>
                                       <TableCell colSpan={7} align='center'>
-                                        <Typography sx={{backgroundColor: "snow", padding: "10px"}}>
-                                        ... ลากเมนูอาหารมาใส่ตรงนี้ได้เลย ...
+                                        <Typography sx={{ backgroundColor: "snow", padding: "10px" }}>
+                                          ... ลากเมนูอาหารมาใส่ตรงนี้ได้เลย ...
                                         </Typography>
                                       </TableCell>
                                     </TableRow>
@@ -159,6 +174,12 @@ const MultiplePayment = ({ tableNo, orderList, tableFile }) => {
           </Droppable>
         </div>
       </DragDropContext>
+      <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
+        <Grid2 container spacing={1} justifyContent="center" sx={{ margin: "20px" }}>
+          <Button startIcon={<CheckCircleIcon />} variant='contained' color='primary' onClick={handleConfirm}>Confirm</Button>
+          <Button startIcon={<CancelIcon />} variant='contained' color='error' onClick={handleCacnel}>Cancel</Button>
+        </Grid2>
+      </Paper>
     </div>
   );
 }

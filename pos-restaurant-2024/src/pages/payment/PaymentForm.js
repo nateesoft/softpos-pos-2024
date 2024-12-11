@@ -394,7 +394,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                 <Box sx={{ marginTop: "30px" }} textAlign="center">
                                     <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}>ย้อนกลับ</Button>
                                     <Button variant="contained" color="secondary"
-                                        onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled={balanceAmount < 0}>
+                                        onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled={R_NetTotal<=0}>
                                         แยกชำระ
                                     </Button>
                                     <Button variant="contained"

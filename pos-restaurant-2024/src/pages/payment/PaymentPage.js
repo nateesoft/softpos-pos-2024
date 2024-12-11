@@ -129,14 +129,18 @@ function PaymentPage() {
         <Box sx={{ ...modalStyle }}>
           <MultiplePayment 
             setOpenSplitBill={setOpenSplitBill}
-            onClose={() => setOpenSplitBill(false)} tableNo={tableNo} orderList={orderList} tableFile={{
-            subTotalAmount,
-            serviceAmount,
-            vatAmount,
-            netTotalAmount,
-            productAndService,
-            printRecpMessage
-          }} />
+            onClose={() => setOpenSplitBill(false)} 
+            tableNo={tableNo} 
+            orderList={orderList} 
+            tableFile={{
+              subTotalAmount,
+              serviceAmount,
+              vatAmount,
+              netTotalAmount,
+              productAndService,
+              printRecpMessage
+            }} 
+          />
         </Box>
       </Modal>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />

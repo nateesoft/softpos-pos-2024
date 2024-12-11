@@ -1,10 +1,11 @@
 import React, { Component, useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { Box, Button, Divider, Grid2, Paper, Typography } from '@mui/material'
+import { Box, Button, Divider, Grid2, Paper, Table, TableBody, TableCell, TableContainer, Typography } from '@mui/material'
 import { useReactToPrint } from 'react-to-print'
 import Moment from 'react-moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import PrintIcon from '@mui/icons-material/Print'
 import TableBarIcon from '@mui/icons-material/TableBar'
+import { tableCellClasses } from '@mui/material/TableCell'
 
 import apiClient from '../../httpRequest'
 import { POSContext } from '../../AppContext'
@@ -27,28 +28,40 @@ const formatBindCredit = (creditNumber) => {
 }
 
 const MyTypo = ({ value }) => {
-  return <Typography sx={{ fontSize: '12px' }}>
+  return <Typography sx={{ fontSize: '10px' }}>
     {value}
+  </Typography>
+}
+
+const MyTypo2 = ({ children }) => {
+  return <Typography sx={{ fontSize: '10px' }}>
+    {children}
+  </Typography>
+}
+
+const MyTypo3 = ({ children }) => {
+  return <Typography sx={{ fontSize: '10px', fontWeight: "bold" }}>
+    {children}
   </Typography>
 }
 
 const ReceiptHeaderPayment = ({ headers, billInfo, empCode }) => {
   return (
     <>
-      <div align="center" style={{ fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
+      <div align="center"><MyTypo3>*** ใบเสร็จรับเงิน ***</MyTypo3></div>
       {headers && <div>
         {headers && headers.map((header) => <MyTypo value={header} />)}
-        <div align="center">Table: {billInfo.B_Table}</div>
+        <MyTypo2>Table: {billInfo.B_Table}</MyTypo2>
       </div>
       }
       <div align="center">
         <img src="/images/payment/com_logo.jpg" width={128} alt="" />
       </div>
       <div>
-        <div>Receipt No: {billInfo.B_Refno}</div>
-        <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
-        <div>Customer: {billInfo.B_Cust}</div>
-        <div>Cashier: {billInfo.B_Cashier} Employ: {empCode} Mac:{billInfo.B_MacNo}</div>
+        <MyTypo2>Receipt No: {billInfo.B_Refno}</MyTypo2>
+        <MyTypo2>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></MyTypo2>
+        <MyTypo2>Customer: {billInfo.B_Cust}</MyTypo2>
+        <MyTypo2>Cashier: {billInfo.B_Cashier} Employ: {empCode} Mac:{billInfo.B_MacNo}</MyTypo2>
       </div>
     </>
   )
@@ -60,23 +73,23 @@ const ReceiptHeaderRefund = ({ headers, billInfo }) => {
       {headers &&
         <div>
           {headers.map((header) =>
-            <div>
+            <MyTypo2>
               {header}
-            </div>
+            </MyTypo2>
           )}
         </div>
       }
       <div align="center">
         <img src="/images/payment/com_logo.jpg" width={128} alt="" />
       </div>
-      <div align="center">REG ID : {billInfo.B_MacNo}</div>
-      <div align="center">------------------------------------------------------------</div>
-      <div align="center">*** บิลยกเลิกรายการขาย ***</div>
-      <div align="center">*** (Refund) ***</div>
+      <MyTypo2 align="center">REG ID : {billInfo.B_MacNo}</MyTypo2>
+      <MyTypo2 align="center">------------------------------------------------------------</MyTypo2>
+      <MyTypo2 align="center">*** บิลยกเลิกรายการขาย ***</MyTypo2>
+      <MyTypo2 align="center">*** (Refund) ***</MyTypo2>
       <div>
-        <div>Void User: {billInfo.B_VoidUser}</div>
-        <div>Void Date/Time: {billInfo.B_VoidTime}</div>
-        <div>อ้างถึงใบเสร็จรับเงินเลขที่ {billInfo.B_Refno}</div>
+        <MyTypo2>Void User: {billInfo.B_VoidUser}</MyTypo2>
+        <MyTypo2>Void Date/Time: {billInfo.B_VoidTime}</MyTypo2>
+        <MyTypo2>อ้างถึงใบเสร็จรับเงินเลขที่ {billInfo.B_Refno}</MyTypo2>
       </div>
     </>
   )
@@ -108,83 +121,89 @@ class ComponentToPrint extends Component {
     orderList = orderList.filter(o => o.R_Price > 0)
 
     return (
-      <div id='content'>
+      <Grid2 id='content' container justifyContent="center">
         <Paper elevation={0} sx={{ padding: "5px" }} ref={this.props.innerRef}>
-          {billInfo.B_BillCopy > 0 && <div align="right" style={{ fontSize: "13px" }}>Bill Copy ({billInfo.B_BillCopy})</div>}
+          {billInfo.B_BillCopy > 0 && <div align="right" style={{ fontSize: "12px" }}>Bill Copy ({billInfo.B_BillCopy})</div>}
           {billInfo.B_Void !== 'V' && <ReceiptHeaderPayment headers={headers} billInfo={billInfo} empCode={this.props.empCode} />}
           {billInfo.B_Void === 'V' && <ReceiptHeaderRefund headers={headers} billInfo={billInfo} />}
           <Divider />
-          <div>
-            <table width="100%">
-              <tr>
-                <th align="left"></th>
-                <th align="left">Description</th>
-                <th align="left"></th>
-                <th align="right">Amount</th>
-              </tr>
+          <TableContainer sx={{ padding: "0", margin: "0" }}>
+            <Table aria-label="spanning table" sx={{
+              [`& .${tableCellClasses.root}`]: {
+                borderBottom: "none",
+                padding: "0px",
+                fontSize: "10px"
+              }
+            }}>
+              <TableBody>
+                <TableCell align="left"></TableCell>
+                <TableCell align="left">Description</TableCell>
+                <TableCell align="left"></TableCell>
+                <TableCell align="right">Amount</TableCell>
+              </TableBody>
               {orderList && orderList.map((item) => (
-                <tr>
-                  <td>{item.R_ETD}</td>
-                  <td>{item.R_PName}</td>
-                  <td align="right">X {item.R_Quan}</td>
-                  <td align="right">{NumFormat(item.R_Price)}</td>
-                </tr>
+                <TableBody>
+                  <TableCell>{item.R_ETD}</TableCell>
+                  <TableCell>{item.R_PName}</TableCell>
+                  <TableCell align="right">X {item.R_Quan}</TableCell>
+                  <TableCell align="right">{NumFormat(item.R_Price)}</TableCell>
+                </TableBody>
               ))}
-            </table>
-          </div>
+            </Table>
+          </TableContainer>
           <Divider />
           <div>
             <Box display="flex" justifyContent="space-between">
-              <Typography>Sub-TOTAL....(Item {orderList.length})</Typography>
-              <Typography>{NumFormat(B_Total)}</Typography>
+              <MyTypo2>Sub-TOTAL....(Item {orderList.length})</MyTypo2>
+              <MyTypo2>{NumFormat(B_Total)}</MyTypo2>
             </Box>
             <Box padding={2}>
               <Box display="flex" justifyContent="space-between">
-                <Typography>อาหาร (Food)</Typography>
-                <Typography>{NumFormat(B_NetFood)}</Typography>
+                <MyTypo2>อาหาร (Food)</MyTypo2>
+                <MyTypo2>{NumFormat(B_NetFood)}</MyTypo2>
               </Box>
               <Box display="flex" justifyContent="space-between">
-                <Typography>เครื่องดื่ม (Drink)</Typography>
-                <Typography>{NumFormat(B_NetDrink)}</Typography>
+                <MyTypo2>เครื่องดื่ม (Drink)</MyTypo2>
+                <MyTypo2>{NumFormat(B_NetDrink)}</MyTypo2>
               </Box>
               <Box display="flex" justifyContent="space-between">
-                <Typography>สินค้าอื่นๆ (Other)</Typography>
-                <Typography>{NumFormat(B_NetProduct)}</Typography>
+                <MyTypo2>สินค้าอื่นๆ (Other)</MyTypo2>
+                <MyTypo2>{NumFormat(B_NetProduct)}</MyTypo2>
               </Box>
             </Box>
             <Divider />
             <Box display="flex" justifyContent="space-between">
-              <Typography>ค่าบริการ {posConfigSetup.P_Service}%</Typography>
-              <Typography>+ {NumFormat(B_ServiceAmt)}</Typography>
+              <MyTypo2>ค่าบริการ {posConfigSetup.P_Service}%</MyTypo2>
+              <MyTypo2>+{NumFormat(B_ServiceAmt)}</MyTypo2>
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Typography>มูลค่าสินค้า/บริการ.....</Typography>
-              <Typography>{NumFormat(B_NetVat - B_Vat)}</Typography>
+              <MyTypo2>มูลค่าสินค้า/บริการ.....</MyTypo2>
+              <MyTypo2>{NumFormat(B_NetVat - B_Vat)}</MyTypo2>
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Typography>Vat {posConfigSetup.P_Vat}%</Typography>
-              <Typography>{B_Vat}</Typography>
+              <MyTypo2>Vat {posConfigSetup.P_Vat}%</MyTypo2>
+              <MyTypo2>{B_Vat}</MyTypo2>
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Typography>Net Total</Typography>
-              <Typography>{NumFormat(B_NetTotal)}</Typography>
-            </Box>
-            <Divider />
-            <Box display="flex" justifyContent="space-between">
-              <Typography>เงินสด</Typography>
-              <Typography>{B_Cash}</Typography>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Typography>เงินทอน</Typography>
-              <Typography>{B_Ton}</Typography>
+              <MyTypo2>Net Total</MyTypo2>
+              <MyTypo2>{NumFormat(B_NetTotal)}</MyTypo2>
             </Box>
             <Divider />
             <Box display="flex" justifyContent="space-between">
-              <Typography>{B_CrCode1} {B_CrBank}</Typography>
-              <Typography>{formatBindCredit(B_CardNo1)}</Typography>
+              <MyTypo2>เงินสด</MyTypo2>
+              <MyTypo2>{B_Cash}</MyTypo2>
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Typography>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</Typography>
+              <MyTypo2>เงินทอน</MyTypo2>
+              <MyTypo2>{B_Ton}</MyTypo2>
+            </Box>
+            <Divider />
+            <Box display="flex" justifyContent="space-between">
+              <MyTypo2>{B_CrCode1} {B_CrBank}</MyTypo2>
+              <MyTypo2>{formatBindCredit(B_CardNo1)}</MyTypo2>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <MyTypo2>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</MyTypo2>
             </Box>
           </div>
           <Divider sx={{ marginTop: "10px" }} />
@@ -195,7 +214,7 @@ class ComponentToPrint extends Component {
             <div align="center"><MyTypo value={footer} /></div>
           )}
         </Paper>
-      </div>
+      </Grid2>
     )
   }
 }
@@ -220,7 +239,7 @@ const ReceiptToPrint = () => {
     contentRef,
     documentTitle: `Printing... Receipt No. #${billInfo.B_Refno}`,
     onAfterPrint: () => {
-      setTimeout(()=> {
+      setTimeout(() => {
         setShowFloorPlan(true)
       }, 5000)
     },
