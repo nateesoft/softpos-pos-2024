@@ -4,6 +4,7 @@ import { useReactToPrint } from 'react-to-print'
 import Moment from 'react-moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import PrintIcon from '@mui/icons-material/Print'
+import TableBarIcon from '@mui/icons-material/TableBar'
 
 import apiClient from '../../httpRequest'
 import { POSContext } from '../../AppContext'
@@ -208,6 +209,7 @@ const ReceiptToPrint = () => {
   const { empCode, macno, userLogin } = appData
 
   const [showPrintButton, setShowPrintButton] = useState(true)
+  const [showFloorPlan, setShowFloorPlan] = useState(false)
 
   const [billInfo, setBillInfo] = useState("")
   const [orderList, setOrderList] = useState([])
@@ -218,13 +220,18 @@ const ReceiptToPrint = () => {
     contentRef,
     documentTitle: `Printing... Receipt No. #${billInfo.B_Refno}`,
     onAfterPrint: () => {
-      setShowPrintButton(true)
-      navigate('/floorplan')
+      setTimeout(()=> {
+        setShowFloorPlan(true)
+      }, 3000)
     },
     onPrintError: (err) => {
       alert(JSON.stringify(err))
     }
   })
+
+  const backFloorPlanPage = () => {
+    navigate('/floorplan')
+  }
 
   const handlePrinter = useCallback(() => {
     setShowPrintButton(false)
@@ -307,6 +314,13 @@ const ReceiptToPrint = () => {
           <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
             <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
               <Button startIcon={<PrintIcon />} variant='contained' color='primary' onClick={handlePrinter}>Print</Button>
+            </Grid2>
+          </Paper>
+        }
+        {showFloorPlan &&
+          <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
+            <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
+              <Button startIcon={<TableBarIcon />} variant='contained' color='primary' onClick={backFloorPlanPage}>Floor Plan</Button>
             </Grid2>
           </Paper>
         }
