@@ -107,91 +107,93 @@ class ComponentToPrint extends Component {
     orderList = orderList.filter(o => o.R_Price > 0)
 
     return (
-      <div id='content' style={{ margin: "5px" }} ref={this.props.innerRef}>
-        {billInfo.B_BillCopy > 0 && <div align="right" style={{ fontSize: "13px" }}>Bill Copy ({billInfo.B_BillCopy})</div>}
-        {billInfo.B_Void !== 'V' && <ReceiptHeaderPayment headers={headers} billInfo={billInfo} empCode={this.props.empCode} />}
-        {billInfo.B_Void === 'V' && <ReceiptHeaderRefund headers={headers} billInfo={billInfo} />}
-        <Divider />
-        <div>
-          <table width="100%">
-            <tr>
-              <th align="left"></th>
-              <th align="left">Description</th>
-              <th align="left"></th>
-              <th align="right">Amount</th>
-            </tr>
-            {orderList && orderList.map((item) => (
+      <div id='content'>
+        <Paper elevation={0} sx={{ padding: "5px" }} ref={this.props.innerRef}>
+          {billInfo.B_BillCopy > 0 && <div align="right" style={{ fontSize: "13px" }}>Bill Copy ({billInfo.B_BillCopy})</div>}
+          {billInfo.B_Void !== 'V' && <ReceiptHeaderPayment headers={headers} billInfo={billInfo} empCode={this.props.empCode} />}
+          {billInfo.B_Void === 'V' && <ReceiptHeaderRefund headers={headers} billInfo={billInfo} />}
+          <Divider />
+          <div>
+            <table width="100%">
               <tr>
-                <td>{item.R_ETD}</td>
-                <td>{item.R_PName}</td>
-                <td align="right">X {item.R_Quan}</td>
-                <td align="right">{NumFormat(item.R_Price)}</td>
+                <th align="left"></th>
+                <th align="left">Description</th>
+                <th align="left"></th>
+                <th align="right">Amount</th>
               </tr>
-            ))}
-          </table>
-        </div>
-        <Divider />
-        <div>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>Sub-TOTAL....(Item {orderList.length})</Typography>
-            <Typography>{NumFormat(B_Total)}</Typography>
-          </Box>
-          <Box padding={2}>
+              {orderList && orderList.map((item) => (
+                <tr>
+                  <td>{item.R_ETD}</td>
+                  <td>{item.R_PName}</td>
+                  <td align="right">X {item.R_Quan}</td>
+                  <td align="right">{NumFormat(item.R_Price)}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+          <Divider />
+          <div>
             <Box display="flex" justifyContent="space-between">
-              <Typography>อาหาร (Food)</Typography>
-              <Typography>{NumFormat(B_NetFood)}</Typography>
+              <Typography>Sub-TOTAL....(Item {orderList.length})</Typography>
+              <Typography>{NumFormat(B_Total)}</Typography>
+            </Box>
+            <Box padding={2}>
+              <Box display="flex" justifyContent="space-between">
+                <Typography>อาหาร (Food)</Typography>
+                <Typography>{NumFormat(B_NetFood)}</Typography>
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                <Typography>เครื่องดื่ม (Drink)</Typography>
+                <Typography>{NumFormat(B_NetDrink)}</Typography>
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                <Typography>สินค้าอื่นๆ (Other)</Typography>
+                <Typography>{NumFormat(B_NetProduct)}</Typography>
+              </Box>
+            </Box>
+            <Divider />
+            <Box display="flex" justifyContent="space-between">
+              <Typography>ค่าบริการ {posConfigSetup.P_Service}%</Typography>
+              <Typography>+ {NumFormat(B_ServiceAmt)}</Typography>
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Typography>เครื่องดื่ม (Drink)</Typography>
-              <Typography>{NumFormat(B_NetDrink)}</Typography>
+              <Typography>มูลค่าสินค้า/บริการ.....</Typography>
+              <Typography>{NumFormat(B_NetVat - B_Vat)}</Typography>
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Typography>สินค้าอื่นๆ (Other)</Typography>
-              <Typography>{NumFormat(B_NetProduct)}</Typography>
+              <Typography>Vat {posConfigSetup.P_Vat}%</Typography>
+              <Typography>{B_Vat}</Typography>
             </Box>
-          </Box>
-          <Divider />
-          <Box display="flex" justifyContent="space-between">
-            <Typography>ค่าบริการ {posConfigSetup.P_Service}%</Typography>
-            <Typography>+ {NumFormat(B_ServiceAmt)}</Typography>
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>มูลค่าสินค้า/บริการ.....</Typography>
-            <Typography>{NumFormat(B_NetVat - B_Vat)}</Typography>
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>Vat {posConfigSetup.P_Vat}%</Typography>
-            <Typography>{B_Vat}</Typography>
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>Net Total</Typography>
-            <Typography>{NumFormat(B_NetTotal)}</Typography>
-          </Box>
-          <Divider />
-          <Box display="flex" justifyContent="space-between">
-            <Typography>เงินสด</Typography>
-            <Typography>{B_Cash}</Typography>
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>เงินทอน</Typography>
-            <Typography>{B_Ton}</Typography>
-          </Box>
-          <Divider />
-          <Box display="flex" justifyContent="space-between">
-            <Typography>{B_CrCode1} {B_CrBank}</Typography>
-            <Typography>{formatBindCredit(B_CardNo1)}</Typography>
-          </Box>
-          <Box display="flex" justifyContent="space-between">
-            <Typography>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</Typography>
-          </Box>
-        </div>
-        <Divider sx={{ marginTop: "10px" }} />
-        <div align="center">
-          <MyTypo value={posConfigSetup.P_PrintRecpMessage} />
-        </div>
-        {footers && footers.map((footer) =>
-          <div align="center"><MyTypo value={footer} /></div>
-        )}
+            <Box display="flex" justifyContent="space-between">
+              <Typography>Net Total</Typography>
+              <Typography>{NumFormat(B_NetTotal)}</Typography>
+            </Box>
+            <Divider />
+            <Box display="flex" justifyContent="space-between">
+              <Typography>เงินสด</Typography>
+              <Typography>{B_Cash}</Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>เงินทอน</Typography>
+              <Typography>{B_Ton}</Typography>
+            </Box>
+            <Divider />
+            <Box display="flex" justifyContent="space-between">
+              <Typography>{B_CrCode1} {B_CrBank}</Typography>
+              <Typography>{formatBindCredit(B_CardNo1)}</Typography>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <Typography>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</Typography>
+            </Box>
+          </div>
+          <Divider sx={{ marginTop: "10px" }} />
+          <div align="center">
+            <MyTypo value={posConfigSetup.P_PrintRecpMessage} />
+          </div>
+          {footers && footers.map((footer) =>
+            <div align="center"><MyTypo value={footer} /></div>
+          )}
+        </Paper>
       </div>
     )
   }
@@ -311,7 +313,7 @@ const ReceiptToPrint = () => {
       </>
     );
   } else {
-    return <>ไม่พบข้อมูลเลขที่เอกสาร !!!</>
+    return <div align="center">ไม่พบข้อมูลเลขที่เอกสาร !!!</div>
   }
 }
 
