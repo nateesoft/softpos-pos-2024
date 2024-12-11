@@ -122,12 +122,12 @@ class ComponentToPrint extends Component {
 
     return (
       <Grid2 id='content' container justifyContent="center">
-        <Paper elevation={0} sx={{ padding: "5px" }} ref={this.props.innerRef}>
+        <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
           {billInfo.B_BillCopy > 0 && <div align="right" style={{ fontSize: "12px" }}>Bill Copy ({billInfo.B_BillCopy})</div>}
           {billInfo.B_Void !== 'V' && <ReceiptHeaderPayment headers={headers} billInfo={billInfo} empCode={this.props.empCode} />}
           {billInfo.B_Void === 'V' && <ReceiptHeaderRefund headers={headers} billInfo={billInfo} />}
           <Divider />
-          <TableContainer sx={{ padding: "0", margin: "0" }}>
+          <TableContainer sx={{ padding: "0", margin: "0"}}>
             <Table aria-label="spanning table" sx={{
               [`& .${tableCellClasses.root}`]: {
                 borderBottom: "none",
