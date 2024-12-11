@@ -9,6 +9,15 @@ import OrderItem from './OrderItem'
 import PaymentForm from './PaymentForm'
 import MemberInfo from "./MemberInfo";
 import ShowNotification from "../utils/ShowNotification";
+import { Box, Modal } from "@mui/material";
+
+import MultiplePayment from "./split/MultiplePayment";
+// import SplitBiPayment from "./SplitBillPayment"
+
+const modalStyle = {
+  bgcolor: "background.paper",
+  border: "1px solid #eee"
+}
 
 const backgroundSpecial = {
   background: "snow",
@@ -30,13 +39,15 @@ function PaymentPage() {
 
   const matches = useMediaQuery('(min-width:1024px)');
 
+  const [openSplitBill, setOpenSplitBill] = useState(false)
+
   const [orderList, setOrderList] = useState([])
   const [memberInfo, setMemberInfo] = useState({})
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
   const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type="error") => {
+  const handleNotification = (message, type = "error") => {
     setNotiMessage(message)
     setAlertType(type)
     setShowNoti(true)
@@ -57,8 +68,8 @@ function PaymentPage() {
   }, [tableNo])
 
   const summaryTableFileBalance = useCallback(async () => {
-    const response = await apiClient.post('/api/balance/summaryBalance', {tableNo})
-    if(response.data.data){
+    const response = await apiClient.post('/api/balance/summaryBalance', { tableNo })
+    if (response.data.data) {
       const data = response.data.data
       setSubTotalAmount(data.TAmount)
       setServiceAmount(data.ServiceAmt)
@@ -92,10 +103,10 @@ function PaymentPage() {
           <MemberInfo tableNo={tableNo} memberInfo={memberInfo} setMemberInfo={setMemberInfo} />
         </Grid>}
         <Grid size={matches ? 8 : 12}>
-          <PaymentForm 
-            tableNo={tableNo} 
+          <PaymentForm
+            tableNo={tableNo}
             orderList={orderList}
-            handleNotification={handleNotification} 
+            handleNotification={handleNotification}
             tableFile={{
               subTotalAmount,
               serviceAmount,
@@ -105,9 +116,29 @@ function PaymentPage() {
               printRecpMessage
             }}
             memberInfo={memberInfo}
+            setOpenSplitBill={setOpenSplitBill}
           />
         </Grid>
       </Grid>
+      {/* <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
+                <Box sx={{ ...modalStyle }}>
+                    <SplitBiPayment onClose={() => setOpenSplitBill(false)} />
+                </Box>
+            </Modal> */}
+      <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
+        <Box sx={{ ...modalStyle }}>
+          <MultiplePayment 
+            setOpenSplitBill={setOpenSplitBill}
+            onClose={() => setOpenSplitBill(false)} tableNo={tableNo} orderList={orderList} tableFile={{
+            subTotalAmount,
+            serviceAmount,
+            vatAmount,
+            netTotalAmount,
+            productAndService,
+            printRecpMessage
+          }} />
+        </Box>
+      </Modal>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   );

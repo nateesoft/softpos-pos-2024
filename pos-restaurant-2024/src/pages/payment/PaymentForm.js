@@ -6,10 +6,9 @@ import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import Grid from '@mui/material/Grid2'
 import DiscountIcon from '@mui/icons-material/Discount';
 import CloseIcon from '@mui/icons-material/Close';
-import apiClient from '../../httpRequest'
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 
-import SplitBiPayment from "./SplitBillPayment"
+import apiClient from '../../httpRequest'
 import { POSContext } from "../../AppContext";
 import QrCodeGenerator from "./QRCodePayment";
 import CreditChargeModal from "./CreditChargeModal";
@@ -17,10 +16,6 @@ import CreditChargeModal from "./CreditChargeModal";
 const NumFormat = data => {
     return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
-
-// function subtotal(items) {
-//     return items.filter(item => item.R_Void !== 'V').map(({ R_Price }) => R_Price).reduce((sum, i) => sum + i, 0);
-// }
 
 const normalButton = { bgcolor: "#123456", color: "white", fontWeight: "bold", fontSize: "36px", borderRadius: "10px" }
 const modalStyle = {
@@ -34,7 +29,7 @@ const modalStyle = {
     boxShadow: 24
 }
 
-function PaymentForm({ orderList, tableNo, handleNotification, tableFile, memberInfo }) {
+function PaymentForm({ orderList, tableNo, handleNotification, tableFile, memberInfo, setOpenSplitBill }) {
     const { appData } = useContext(POSContext)
     const { macno, branchInfo, companyInfo, empCode } = appData
 
@@ -74,7 +69,6 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     const [transferToAccount, setTransferToAccount] = useState("0864108403")
     const [transferAccount, setTransferAccount] = useState("")
 
-    const [openSplitBill, setOpenSplitBill] = useState(false)
     const [openCreditFile, setOpenCreditFile] = useState(false)
 
     const navigate = useNavigate();
@@ -400,7 +394,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                 <Box sx={{ marginTop: "30px" }} textAlign="center">
                                     <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}>ย้อนกลับ</Button>
                                     <Button variant="contained" color="secondary"
-                                        onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled>
+                                        onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled={balanceAmount < 0}>
                                         แยกชำระ
                                     </Button>
                                     <Button variant="contained"
@@ -462,11 +456,6 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                         <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={cancelTransferAmount}>ยกเลิก</Button>
                         <Button variant="contained" sx={{ margin: "5px" }} onClick={() => setOpenTransferInfo(false)} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
                     </Box>
-                </Box>
-            </Modal>
-            <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
-                <Box sx={{ ...modalStyle, width: "80%" }}>
-                    <SplitBiPayment onClose={() => setOpenSplitBill(false)} />
                 </Box>
             </Modal>
             <Modal open={openCreditFile}>

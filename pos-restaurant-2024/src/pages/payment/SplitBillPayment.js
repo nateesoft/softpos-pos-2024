@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid2';
 import List from '@mui/material/List';
 import Card from '@mui/material/Card';
@@ -24,10 +24,10 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
-export default function SplitBillPayment({onClose}) {
-  const [checked, setChecked] = React.useState([]);
-  const [left, setLeft] = React.useState([0, 1, 2, 3]);
-  const [right, setRight] = React.useState([4, 5, 6, 7]);
+const SplitBillPayment = ({onClose}) => {
+  const [checked, setChecked] = useState([]);
+  const [left, setLeft] = useState([0, 1, 2, 3]);
+  const [right, setRight] = useState([4, 5, 6, 7]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -139,7 +139,7 @@ export default function SplitBillPayment({onClose}) {
   );
 
   return (
-    <Grid container sx={{ justifyContent: 'center', alignItems: 'center' }}>
+    <Grid container sx={{ justifyContent: 'center', alignItems: 'center',margin: "10px" }}>
       <Grid size={12}>{customList('Table A', '(รายการอาหารโต๊ะหลัก)', left)}</Grid>
       <Grid size={12} sx={{ backgroundColor: "snow" }}>
         <Grid container spacing={2} padding={2}>
@@ -175,3 +175,5 @@ export default function SplitBillPayment({onClose}) {
     </Grid>
   );
 }
+
+export default SplitBillPayment
