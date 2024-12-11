@@ -1,4 +1,4 @@
-import React, { Component, useRef, useState } from 'react'
+import React, { Component, useCallback, useRef, useState } from 'react'
 import { Box, Button, Divider, Grid2, Paper, Typography } from '@mui/material'
 import Moment from 'react-moment'
 import { useReactToPrint } from 'react-to-print'
@@ -104,8 +104,10 @@ const PrintDemo = () => {
     const contentRef = useRef(null);
     const [show, setShow] = useState(true)
     const handlePrint1 = useReactToPrint({ contentRef });
+
     const handlePrint2 = useReactToPrint({
         contentRef,
+        documentTitle: "Printer Demo Testing",
         onAfterPrint: () => {
             console.log('onAfterPrint')
             setShow(true)
@@ -125,10 +127,10 @@ const PrintDemo = () => {
         handlePrint1()
     }
 
-    const handlePrinter2 = () => {
+    const handlePrinter2 = useCallback(() => {
         setShow(false)
         handlePrint2()
-    }
+    }, [handlePrint2])
 
     return (
         <div>

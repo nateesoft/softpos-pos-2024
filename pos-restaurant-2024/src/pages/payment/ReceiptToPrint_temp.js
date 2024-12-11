@@ -1,14 +1,13 @@
 import React, { Component, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { Box, Button, Divider, Grid2, Paper, Typography } from '@mui/material'
 import Moment from 'react-moment'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import PrintIcon from '@mui/icons-material/Print'
 
 import apiClient from '../../httpRequest'
 import { POSContext } from '../../AppContext'
 
 import './index.css'
-import { useReactToPrint } from 'react-to-print'
 
 const NumFormat = data => {
   if (!data) {
@@ -31,7 +30,7 @@ const MyTypo = ({ value }) => {
   </Typography>
 }
 
-const ReceiptHeaderPayment = ({ headers, billInfo, empCode }) => {
+const ReceiptHeaderPayment = ({headers, billInfo, empCode}) => {
   return (
     <>
       <div align="center" style={{ fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
@@ -53,7 +52,7 @@ const ReceiptHeaderPayment = ({ headers, billInfo, empCode }) => {
   )
 }
 
-const ReceiptHeaderRefund = ({ headers, billInfo }) => {
+const ReceiptHeaderRefund = ({headers, billInfo}) => {
   return (
     <>
       {headers &&
@@ -108,7 +107,7 @@ class ComponentToPrint extends Component {
 
     return (
       <div id='content' style={{ margin: "5px" }} ref={this.props.innerRef}>
-        {billInfo.B_BillCopy > 0 && <div align="right" style={{ fontSize: "13px" }}>Bill Copy ({billInfo.B_BillCopy})</div>}
+        {billInfo.B_BillCopy>0 && <div align="right" style={{fontSize: "13px"}}>Bill Copy ({billInfo.B_BillCopy})</div>}
         {billInfo.B_Void !== 'V' && <ReceiptHeaderPayment headers={headers} billInfo={billInfo} empCode={this.props.empCode} />}
         {billInfo.B_Void === 'V' && <ReceiptHeaderRefund headers={headers} billInfo={billInfo} />}
         <Divider />
@@ -199,35 +198,28 @@ class ComponentToPrint extends Component {
 
 const ReceiptToPrint = () => {
   const { billNo } = useParams()
-  const navigate = useNavigate()
+
+  const [isPrinting, setIsPrinting] = useState(false);
   const contentRef = useRef(null);
 
   const { appData } = useContext(POSContext)
   const { empCode, macno, userLogin } = appData
-
-  const [showPrintButton, setShowPrintButton] = useState(true)
 
   const [billInfo, setBillInfo] = useState("")
   const [orderList, setOrderList] = useState([])
   const [poshwSetup, setPosHwSetup] = useState({})
   const [posConfigSetup, setPOSConfigSetup] = useState({})
 
-  const functionToPrint = useReactToPrint({
-    contentRef,
-    documentTitle: `Printing... Receipt No. #${billInfo.B_Refno}`,
-    onAfterPrint: () => {
-      setShowPrintButton(true)
-      navigate('/floorplan')
-    },
-    onPrintError: (err) => {
-      alert(JSON.stringify(err))
-    }
-  })
+  const printNative = () => {
+    setIsPrinting(true)
 
-  const handlePrinter = useCallback(() => {
-    setShowPrintButton(false)
-    functionToPrint()
-  }, [functionToPrint])
+    let printContents = document.getElementById('content').innerHTML
+    document.body.innerHTML = printContents
+    window.print()
+    setTimeout(function () {
+      window.location.replace('/floorplan')
+    }, 5000);
+  }
 
   const handleLoadBillInfo = useCallback(() => {
     apiClient
@@ -301,10 +293,10 @@ const ReceiptToPrint = () => {
           empCode={empCode}
           userLogin={userLogin}
         />
-        {showPrintButton &&
+        {isPrinting === false &&
           <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
-            <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
-              <Button startIcon={<PrintIcon />} variant='contained' color='primary' onClick={handlePrinter}>Print</Button>
+            <Grid2 container spacing={2} justifyContent="center" padding={3}>
+              <Button startIcon={<PrintIcon />} variant='contained' color='primary' onClick={printNative}>Print</Button>
             </Grid2>
           </Paper>
         }
