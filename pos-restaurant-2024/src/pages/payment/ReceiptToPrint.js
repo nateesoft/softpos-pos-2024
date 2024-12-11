@@ -13,9 +13,6 @@ import { POSContext } from '../../AppContext'
 import './index.css'
 
 const NumFormat = data => {
-  if (!data) {
-    return ""
-  }
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
@@ -106,7 +103,7 @@ class ComponentToPrint extends Component {
       B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct,
       B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
       B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1,
-      B_Ton, B_NetVat, B_Table, B_Cash
+      B_Ton=0, B_NetVat, B_Table, B_Cash=0
     } = billInfo
 
     const posConfigSetup = this.props.posConfigSetup
@@ -127,7 +124,7 @@ class ComponentToPrint extends Component {
           {billInfo.B_Void !== 'V' && <ReceiptHeaderPayment headers={headers} billInfo={billInfo} empCode={this.props.empCode} />}
           {billInfo.B_Void === 'V' && <ReceiptHeaderRefund headers={headers} billInfo={billInfo} />}
           <Divider />
-          <TableContainer sx={{ padding: "0", margin: "0"}}>
+          <TableContainer sx={{ padding: "0", margin: "0" }}>
             <Table aria-label="spanning table" sx={{
               [`& .${tableCellClasses.root}`]: {
                 borderBottom: "none",
@@ -191,20 +188,22 @@ class ComponentToPrint extends Component {
             <Divider />
             <Box display="flex" justifyContent="space-between">
               <MyTypo2>เงินสด</MyTypo2>
-              <MyTypo2>{B_Cash}</MyTypo2>
+              <MyTypo2>{NumFormat(B_Cash||0)}</MyTypo2>
             </Box>
             <Box display="flex" justifyContent="space-between">
               <MyTypo2>เงินทอน</MyTypo2>
-              <MyTypo2>{B_Ton}</MyTypo2>
+              <MyTypo2>{NumFormat(B_Ton||0)}</MyTypo2>
             </Box>
             <Divider />
-            <Box display="flex" justifyContent="space-between">
-              <MyTypo2>{B_CrCode1} {B_CrBank}</MyTypo2>
-              <MyTypo2>{formatBindCredit(B_CardNo1)}</MyTypo2>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <MyTypo2>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</MyTypo2>
-            </Box>
+            {B_CrCode1 && <div>
+              <Box display="flex" justifyContent="space-between">
+                <MyTypo2>{B_CrCode1} {B_CrBank}</MyTypo2>
+                <MyTypo2>{formatBindCredit(B_CardNo1)}</MyTypo2>
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                <MyTypo2>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</MyTypo2>
+              </Box>
+            </div>}
           </div>
           <Divider sx={{ marginTop: "10px" }} />
           <div align="center">

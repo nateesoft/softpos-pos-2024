@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid2'
 import DiscountIcon from '@mui/icons-material/Discount';
 import CloseIcon from '@mui/icons-material/Close';
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
+import PriceChangeIcon from '@mui/icons-material/PriceChange';
 
 import apiClient from '../../httpRequest'
 import { POSContext } from "../../AppContext";
@@ -33,7 +34,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     const { appData } = useContext(POSContext)
     const { macno, branchInfo, companyInfo, empCode } = appData
 
-    const { 
+    const {
         serviceAmount,
         vatAmount,
         netTotalAmount } = tableFile
@@ -89,24 +90,27 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     }
 
     const handleCreditEnabled = () => {
-        setCreditAmount(R_NetTotal - cashAmount - transferAmount)
-        setOpenCreditInfo(true)
+        if (balanceAmount <= 0) {
+            setOpenCreditInfo(true)
+        }
     }
 
     const handleTransferEnabled = () => {
-        setTransferAmount(R_NetTotal - cashAmount)
-        setOpenTransferInfo(true)
+        if (balanceAmount <= 0) {
+            setTransferAmount(R_NetTotal - cashAmount)
+            setOpenTransferInfo(true)
+        }
     }
 
     const handleAdd = (addMoney) => {
         if (cashEnable) {
-            setCashAmount(cash => cash + addMoney)
-            totalAmount()
+            handleCashAmountKeyIn(cashAmount + addMoney)
         }
     }
+
     const handleConcat = (addMoney) => {
         if (cashEnable) {
-            setCashAmount(cash => parseFloat("" + cash + addMoney))
+            handleCashAmountKeyIn(parseFloat("" + cashAmount + addMoney))
         }
     }
 
@@ -122,7 +126,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
         const cc = cashAmount ? parseFloat(cashAmount) : 0
         const cd = creditAmount ? parseFloat(creditAmount - creditChargeAmount) : 0
         const ta = transferAmount ? parseFloat(transferAmount) : 0
-        const toalNetAmt = parseFloat(Math.round(R_NetTotal)) + creditChargeAmount
+        const toalNetAmt = parseFloat(R_NetTotal) + creditChargeAmount
         const paymentAmt = parseFloat(cc + cd + ta)
         const discountAmt = 0
         const balanceAmt = parseFloat((paymentAmt - discountAmt) - toalNetAmt)
@@ -148,6 +152,56 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
 
     const handleClear = () => {
         setCashAmount(0)
+        totalAmount()
+    }
+
+    const handleCancelCredit = () => {
+        setCrCode("")
+        setCreditNumber("")
+        setCreditRef("")
+        setCreditChargePercent(0)
+        setCreditChargeAmount(0)
+        setCreditAmount(0)
+
+        setOpenCreditInfo(false)
+        totalAmount()
+    }
+
+    const handleCashAmountKeyIn = (cashAmt) => {
+        if (cashAmt > 100000) {
+            setCashAmount(0)
+            return;
+        }
+        if (cashAmt > R_NetTotal) {
+            setTransferAccount("")
+            setTransferAccountNo("")
+            setTransferToAccount("")
+            setTransferAmount(0)
+            setCreditChargeAmount(0)
+            setCreditChargePercent(0)
+            setCreditNumber("")
+            setCrCode("")
+            setCreditRef("")
+            setCreditAmount(0)
+        }
+
+        setCashAmount(cashAmt)
+        totalAmount()
+    }
+
+    const handleTransferKeyIn = (transferAmt) => {
+        if (transferAmt > R_NetTotal || transferAmt < 0) {
+            setTransferAmount(R_NetTotal)
+        } else {
+            setTransferAmount(transferAmt)
+        }
+    }
+
+    const handleConfirmTransferAmount = () => {
+        if (transferAccount === "" || transferAccountNo === "" || transferToAccount === "" || transferAmount <= 0) {
+            return;
+        }
+        setOpenTransferInfo(false)
         totalAmount()
     }
 
@@ -191,7 +245,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                 memberInfo,
                 tonAmount,
                 paymentAmount,
-                netTotal: (R_NetTotal+creditChargeAmount),
+                netTotal: (R_NetTotal + creditChargeAmount),
                 empCode,
             }
 
@@ -217,11 +271,19 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     }
 
     const cancelTransferAmount = () => {
+        setTransferAccount("")
+        setTransferAccountNo("")
+        setTransferToAccount("")
         setTransferAmount(0)
+
         setOpenTransferInfo(false)
+        totalAmount()
     }
 
-    const handleCloseCreditModal = () => {
+    const handleConfirmCreditModal = () => {
+        if (crCode === "" || creditNumber === "" || creditRef === "" || creditAmount === 0) {
+            return;
+        }
         totalAmount()
         setOpenCreditInfo(false)
     }
@@ -250,7 +312,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                     type="number"
                                     value={cashAmount}
                                     onFocus={() => setCashEnable(true)}
-                                    onChange={e => setCashAmount(e.target.value)}
+                                    onChange={e => handleCashAmountKeyIn(e.target.value)}
                                     onKeyUp={totalAmount}
                                     id="txtCashAmount"
                                     label="ชำระด้วยเงินสด"
@@ -267,7 +329,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         id="txtTransferAmount"
                                         label="เงินโอน"
                                         disabled
-                                        inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                                        inputProps={{ min: 0, style: { textAlign: "right", width: "100px" } }} />
                                     <Button variant="outlined" onClick={handleTransferEnabled}>...</Button>
                                 </Grid2>
                             </Box>
@@ -280,27 +342,27 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         id="txtCreditAmount"
                                         label="ชำระด้วยบัตรเครดิต"
                                         disabled
-                                        inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                                        inputProps={{ min: 0, style: { textAlign: "right", width: "100px" } }} />
                                     <Button variant="outlined" onClick={handleCreditEnabled}>...</Button>
                                 </Grid2>
                             </Box>
                             <Box display="flex" justifyContent="space-between" margin={2}>
                                 <Grid2 container spacing={1} justifyContent="space-between">
-                                    <img width={48} src={"/images/payment/credit-card.png"} alt="" />
+                                    <PriceChangeIcon fontSize="large" sx={{ width: "48px" }} />
                                     <TextField
                                         value={NumFormat(creditChargeAmount)}
                                         onKeyUp={totalAmount}
                                         id="txtCreditAmount"
                                         label="Credit Charge Amount"
                                         disabled
-                                        inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                                        inputProps={{ min: 0, style: { textAlign: "right", width: "100px" } }} />
                                 </Grid2>
                             </Box>
                             <Box display="flex" justifyContent="flex-end" margin={2}>
                                 <TextField
                                     variant="filled"
                                     label="ยอดรับชำระทั้งหมด"
-                                    value={NumFormat(paymentAmount+creditChargeAmount)}
+                                    value={NumFormat(paymentAmount + creditChargeAmount)}
                                     inputProps={{ min: 0, style: { textAlign: "right" } }}
                                     fullWidth
                                     disabled />
@@ -394,7 +456,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                 <Box sx={{ marginTop: "30px" }} textAlign="center">
                                     <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}>ย้อนกลับ</Button>
                                     <Button variant="contained" color="secondary"
-                                        onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled={R_NetTotal<=0}>
+                                        onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled={R_NetTotal <= 0}>
                                         แยกชำระ
                                     </Button>
                                     <Button variant="contained"
@@ -409,7 +471,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                     </Grid>
                 </Grid>
             </Grid>
-            <Modal open={openCreditInfo} onClose={() => setOpenCreditInfo(false)}
+            <Modal open={openCreditInfo}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle, width: "350px", padding: "5px" }}>
@@ -426,19 +488,19 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                         <TextField variant="outlined" type="number" disabled label="จำนวนเงินที่ใส่เครดิต" value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
                     </Grid>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
-                        <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={() => setOpenCreditInfo(false)}>ยกเลิก</Button>
-                        <Button variant="contained" sx={{ margin: "5px" }} onClick={handleCloseCreditModal} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
+                        <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={handleCancelCredit}>ยกเลิก</Button>
+                        <Button variant="contained" sx={{ margin: "5px" }} onClick={handleConfirmCreditModal} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
                     </Box>
                 </Box>
             </Modal>
-            <Modal open={openTransferInfo} onClose={() => setOpenTransferInfo(false)}
+            <Modal open={openTransferInfo}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle, width: "350px", padding: "5px" }}>
                     <Grid container spacing={2} padding={2} justifyContent="center" direction="column">
                         <TextField variant="outlined" label="เลขที่บัญชีที่โอน" value={transferAccountNo} onChange={e => setTransferAccountNo(e.target.value)} />
                         <TextField variant="outlined" label="ชื่อบัญชีที่โอน" value={transferAccount} onChange={e => setTransferAccount(e.target.value)} />
-                        <TextField variant="outlined" label="จำนวนเงิน" value={transferAmount} onChange={e => setTransferAmount(e.target.value)} />
+                        <TextField variant="outlined" type="number" label="จำนวนเงิน" value={transferAmount} onChange={e => handleTransferKeyIn(e.target.value)} />
                         <Box>
                             <TextField variant="filled"
                                 label="โอนเงินเข้าบัญขีนี้"
@@ -454,7 +516,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                     </Box>
                     <Box sx={{ marginTop: "30px" }} textAlign="center">
                         <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={cancelTransferAmount}>ยกเลิก</Button>
-                        <Button variant="contained" sx={{ margin: "5px" }} onClick={() => setOpenTransferInfo(false)} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
+                        <Button variant="contained" sx={{ margin: "5px" }} onClick={handleConfirmTransferAmount} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
                     </Box>
                 </Box>
             </Modal>
