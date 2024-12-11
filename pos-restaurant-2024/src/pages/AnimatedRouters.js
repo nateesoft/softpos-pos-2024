@@ -64,6 +64,7 @@ const AnimatedRoutes = () => {
                         <Route path="/inventory/db" element={<TemplateReport />} />
                     </Route>
                 </Route>
+                <Route path="/print-demo" element={<PrinterDemo />} />
                 <Route path="/test-print" element={<TestPrinter />} />
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/register-macno" element={<RegisterMacNo />} />

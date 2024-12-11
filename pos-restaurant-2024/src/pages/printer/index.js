@@ -1,4 +1,4 @@
-import React, { Component, useRef } from 'react'
+import React, { Component, useRef, useState } from 'react'
 import { Box, Button, Divider, Grid2, Paper, Typography } from '@mui/material'
 import Moment from 'react-moment'
 import { useReactToPrint } from 'react-to-print'
@@ -17,18 +17,18 @@ class ComponentToPrint extends Component {
         return (
             <div id="content">
                 <Paper elevation={0} sx={{ padding: "5px" }} ref={this.props.innerRef}>
-                    <div align="center" style={{ fontSize: "18px", fontWeight: "bold" }}>*** ใบเสร็จรับเงิน ***</div>
+                    <div align="center" style={{ fontSize: "18px", fontWeight: "bold" }}>*** ทดสอบปริ้นเตอร์ ***</div>
                     <Paper elevation={0} sx={{ padding: "10px" }}>
-                        <div align="center">Table: T2</div>
+                        <div align="center">Table: XX</div>
                     </Paper>
                     <div align="center">
                         <img src="/images/payment/com_logo.jpg" width={128} alt="" />
                     </div>
                     <Paper elevation={0} sx={{ padding: "10px" }}>
-                        <div>Receipt No: 000001</div>
+                        <div>Receipt No: XXXXXX</div>
                         <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
                         <div>Customer: 2</div>
-                        <div>Cashier: 1001 Employ: 1001 Mac:001</div>
+                        <div>Cashier: XXXX Employ: XXX Mac:001</div>
                     </Paper>
                     <Divider />
                     <Paper elevation={0} sx={{ padding: "10px" }}>
@@ -85,8 +85,14 @@ class ComponentToPrint extends Component {
                         </Box>
                     </Paper>
                     <Divider sx={{ marginTop: "10px" }} />
-                    <div>
-                        Welcome to Thailand
+                    <div align="center">
+                        Footer 1
+                    </div>
+                    <div align="center">
+                        Footer 2
+                    </div>
+                    <div align="center">
+                        Footer 3
                     </div>
                 </Paper>
             </div>
@@ -96,11 +102,13 @@ class ComponentToPrint extends Component {
 
 const PrintDemo = () => {
     const contentRef = useRef(null);
+    const [show, setShow] = useState(true)
     const handlePrint1 = useReactToPrint({ contentRef });
     const handlePrint2 = useReactToPrint({
         contentRef,
         onAfterPrint: () => {
             console.log('onAfterPrint')
+            setShow(true)
         },
         onPrintError: (err) => {
             console.log('error=>', err)
@@ -112,16 +120,26 @@ const PrintDemo = () => {
         window.print()
     }
 
+    const handlePrinter1 = () => {
+        setShow(false)
+        handlePrint1()
+    }
+
+    const handlePrinter2 = () => {
+        setShow(false)
+        handlePrint2()
+    }
+
     return (
         <div>
             <ComponentToPrint innerRef={contentRef} />
-            <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
-                <Grid2 container spacing={2} justifyContent="center" padding={3}>
-                    <Button variant='contained' color='primary' onClick={handlePrint1}>Print1</Button>
-                    <Button variant='contained' color='secondary' onClick={handlePrint2}>Print2</Button>
-                    <Button variant='contained' color='success' onClick={printNative}>Print Native</Button>
+            {show && <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
+                <Grid2 container spacing={1} justifyContent="center" sx={{marginBottom: "20px"}}>
+                    <Button variant='contained' color='primary' onClick={handlePrinter1}>Print Normal</Button>
+                    <Button variant='contained' color='secondary' onClick={handlePrinter2}>Print - handle</Button>
+                    <Button variant='contained' color='success' onClick={printNative}>window.print</Button>
                 </Grid2>
-            </Paper>
+            </Paper>}
         </div>
 
     );
