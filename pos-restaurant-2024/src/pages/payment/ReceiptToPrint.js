@@ -1,5 +1,6 @@
 import React, { Component, useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { Box, Button, Divider, Grid2, Paper, Typography } from '@mui/material'
+import { useReactToPrint } from 'react-to-print'
 import Moment from 'react-moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import PrintIcon from '@mui/icons-material/Print'
@@ -8,7 +9,6 @@ import apiClient from '../../httpRequest'
 import { POSContext } from '../../AppContext'
 
 import './index.css'
-import { useReactToPrint } from 'react-to-print'
 
 const NumFormat = data => {
   if (!data) {
