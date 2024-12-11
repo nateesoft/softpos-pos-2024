@@ -34,9 +34,9 @@ const modalStyle = {
     boxShadow: 24
 }
 
-function PaymentForm({ orderList, tableNo, handleNotification, tableFile }) {
+function PaymentForm({ orderList, tableNo, handleNotification, tableFile, memberInfo }) {
     const { appData } = useContext(POSContext)
-    const { macno } = appData
+    const { macno, branchInfo, companyInfo, empCode } = appData
 
     const { 
         serviceAmount,
@@ -162,6 +162,8 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile }) {
 
             // update billno
             const payload = {
+                branchInfo,
+                companyInfo,
                 macno,
                 tableNo,
                 billType: "E",
@@ -192,16 +194,11 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile }) {
                     discountEnable,
                     discountAmount,
                 },
-                memberInfo: {
-                    memberCode: "",
-                    memberName: "",
-                    memberBegin: "2024-01-01",
-                    memberEnd: "2024-01-01",
-                    memberCurSum: 0
-                },
+                memberInfo,
                 tonAmount,
                 paymentAmount,
-                netTotal: (R_NetTotal+creditChargeAmount)
+                netTotal: (R_NetTotal+creditChargeAmount),
+                empCode,
             }
 
             // update print2kic

@@ -176,17 +176,29 @@ const tableMoveOrGroup = async (sourceTable, targetTable, admin, Cashier) => {
     const targetTableData = await getTableByCode(targetTable)
 
     if (!sourceTableData || !targetTableData) {
-        throw new Error('ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!')
+        return {
+            invalid: true,
+            message: 'ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!'
+        }
     }
     if (sourceTableData.Tcode === targetTableData.Tcode) {
-        throw new Error('ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!')
+        return {
+            invalid: true,
+            message: 'ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!'
+        }
     }
 
     const balanceFrom = await getBalanceAllByTable(sourceTable)
+    if (balanceFrom.length === 0) {
+        return {
+            invalid: true,
+            message: 'ไม่พบข้อมูลที่ต้องการย้าย !!!'
+        }
+    }
 
     // add source balance into target balance
     for (let i = 0; i < balanceFrom.length; i++) {
-        const newBalance = {...balanceFrom[i]}
+        const newBalance = { ...balanceFrom[i] }
         newBalance.R_Index = await getBalanceMaxIndex(targetTable)
         newBalance.R_MoveFrom = balanceFrom[i].R_Index
         newBalance.R_MoveUser = admin

@@ -31,7 +31,8 @@ function PaymentPage() {
   const matches = useMediaQuery('(min-width:1024px)');
 
   const [orderList, setOrderList] = useState([])
-  
+  const [memberInfo, setMemberInfo] = useState({})
+
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
   const [alertType, setAlertType] = useState("info")
@@ -88,7 +89,7 @@ function PaymentPage() {
             productAndService,
             printRecpMessage
           }} />
-          <MemberInfo tableNo={tableNo} />
+          <MemberInfo tableNo={tableNo} memberInfo={memberInfo} setMemberInfo={setMemberInfo} />
         </Grid>}
         <Grid size={matches ? 8 : 12}>
           <PaymentForm 
@@ -103,6 +104,7 @@ function PaymentPage() {
               productAndService,
               printRecpMessage
             }}
+            memberInfo={memberInfo}
           />
         </Grid>
       </Grid>

@@ -8,6 +8,9 @@ const initContext = {
   macno: localStorage.getItem('macno') || "",
   userLogin: localStorage.getItem('userLogin') || "",
   empCode: "",
+  companyInfo: {
+    companyCode: "",
+  },
   tableInfo: {
     tableNo: "",
     tableStatus: "",
@@ -17,6 +20,9 @@ const initContext = {
       orderType: "E"
     },
     orderDetails: []
+  },
+  branchInfo: {
+    branchCode: "",
   },
   productList: [],
   posuser: localStorage.getItem('posuser') || {}

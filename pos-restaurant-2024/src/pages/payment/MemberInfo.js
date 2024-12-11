@@ -28,10 +28,8 @@ const NumFormat = data => {
     return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
-const MemberInfo = ({tableNo}) => {
+const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
     const [openMember, setOpenMember] = useState(false)
-    const [memberInfo, setMemberInfo] = useState({})
-
     return (
         <Paper elevation={20} sx={{ padding: "10px", margin: "10px", background: "#555" }}>
             <Grid container justifyContent="space-around" padding={2}>

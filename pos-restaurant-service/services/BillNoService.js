@@ -1,14 +1,14 @@
 const pool = require('../config/database/MySqlConnect')
-const { PrefixZeroFormat } = require('../utils/StringUtil');
+const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
 const { emptyTableBalance, getBalanceByTableNo } = require('./BalanceService');
 
-const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService'); 
+const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService');
 const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock } = require('./TSaleService');
 
 const { getBranch } = require('./BranchService')
 const { ProcessStockOut } = require('./STCardService');
 const { getPOSConfigSetup } = require('./POSConfigSetupService');
-const { updateRefundMember } = require('./member/crm/MemberMasterService');
+const { updateRefundMember, updateMemberData } = require('./member/crm/MemberMasterService');
 const { getMoment } = require('../utils/MomentUtil');
 
 const getAllBillNoToday = async () => {
@@ -45,6 +45,23 @@ const getBillNoByRefno = async billNo => {
     return null
 }
 
+const getBillNoByRefnoExist = async billNo => {
+    const sql = `select B_Refno from billno where B_Refno='${billNo}'`;
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        return results[0]
+    }
+    return null
+}
+
+const emptyBillNoTSale = async billNo => {
+    const sql1 = `delete from billno where B_Refno='${billNo}'`;
+    await pool.query(sql1)
+
+    const sql2 = `delete from t_sale where R_Refno='${billNo}'`;
+    await pool.query(sql2)
+}
+
 const updateNextBill = async (macno) => {
     const sql = `UPDATE poshwsetup SET receno1=receno1+1 WHERE terminal='${macno}' `;
     const results = await pool.query(sql)
@@ -57,7 +74,7 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
     B_Cashier='${Cashier}',
     B_BillCopy=B_BillCopy+${copy} WHERE B_Refno='${billNo}'`;
     await pool.query(sql)
-    
+
     return billNo
 }
 
@@ -134,9 +151,11 @@ const getBillIDCurrent = async (macno) => {
 const addNewBill = async (payload) => {
     const posConfigSetup = await getPOSConfigSetup()
     const {
-        macno, tableNo, billType, orderList, tonAmount, paymentAmount, netTotal,
+        macno, empCode, tableNo, billType, orderList, tonAmount, paymentAmount, netTotal,
         memberInfo, cashInfo, creditInfo, transferInfo, discountInfo, serviceInfo,
+        branchInfo
     } = payload
+    const { Code: branchCode } = branchInfo
     const tableFile = await getTableByCode(tableNo)
     const { serviceAmount, vatAmount } = serviceInfo
     const { Cashier, TCustomer, Food, Drink, Product } = tableFile
@@ -161,19 +180,19 @@ const addNewBill = async (payload) => {
         discountEnable,
         discountAmount,
     } = discountInfo
-    const {
-        memberCode,
-        memberName,
-        memberBegin,
-        memberEnd,
-        memberCurSum
-    } = memberInfo
 
     // summary before create billno
     const curdate = getMoment().format('YYYY-MM-DD')
     const curtime = getMoment().format('HH:mm:ss')
 
-    const B_Refno = await getBillIDCurrent(macno);
+    let B_Refno = await getBillIDCurrent(macno);
+
+    // *** if exist B_Refno , empty billno, t_sale ***
+    const BillNoData = await getBillNoByRefnoExist(B_Refno)
+    if (BillNoData) {
+        await emptyBillNoTSale(B_Refno)
+    }
+
     const B_CuponDiscAmt = 0;
     const B_Ontime = curtime;
     const B_LoginTime = curtime;
@@ -228,11 +247,11 @@ const addNewBill = async (payload) => {
     const B_AccrCode = "";
     const B_AccrAmt = 0;
     const B_AccrCr = 0;
-    const B_MemCode = memberCode;
-    const B_MemName = memberName;
-    const B_MemBegin = memberBegin
-    const B_MemEnd = memberEnd
-    const B_MemCurSum = memberCurSum;
+    const B_MemCode = memberInfo.Member_Code ? memberInfo.Member_Code : "";
+    const B_MemName = memberInfo.Member_NameThai ? Unicode2ASCII(memberInfo.Member_NameThai) : "";
+    const B_MemBegin = memberInfo.Member_AppliedDate ? getMoment(memberInfo.Member_AppliedDate).format('YYYY-MM-DD') : getMoment().format('YYYY-MM-DD')
+    const B_MemEnd = memberInfo.Member_ExpiredDate ? getMoment(memberInfo.Member_ExpiredDate).format('YYYY-MM-DD') : getMoment().format('YYYY-MM-DD')
+    const B_MemCurSum = 0;
     const B_Void = "-";
     const B_VoidUser = "";
     const B_VoidTime = "";
@@ -327,6 +346,13 @@ const addNewBill = async (payload) => {
 
             // await ThermalPrinterConnect("192.168.1.209", "", B_Table)
 
+            if (Object.keys(memberInfo).length > 0) {
+                // update member memmaster
+                updateMemberData(B_NetTotal, B_MemCode, B_MacNo, B_Refno, allBalance, branchCode,
+                    B_ETD, B_Total, B_ServiceAmt, B_MemDiscAmt, empCode, B_OnDate, B_Ontime, memberInfo
+                )
+            }
+
             // update next bill id
             await updateNextBill(macno)
 
@@ -340,7 +366,7 @@ const addNewBill = async (payload) => {
         }
         return null
     } catch (error) {
-        return null
+        throw new Error(error)
     }
 }
 

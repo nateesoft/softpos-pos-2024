@@ -1,4 +1,5 @@
 const mysql = require("mysql2")
+const {getMoment, getYesterday} = require('../utils/MomentUtil')
 
 const pool = mysql.createPool({
     host: "localhost",
@@ -82,25 +83,41 @@ const assignFieldWithDefautValue = (fields) => {
 }
 
 // const tableName = 'MyRestaurantJefferSakon.tablefile'
-const tableName = 'posdb.table_checkin'
+// const tableName = 'posdb.table_checkin'
+const tableName = 'mycrmbranch.mplu'
 const sqlAllTable = `desc ${tableName} `
-pool.query(sqlAllTable, (err, results) => {
-    if (err) throw err
+// pool.query(sqlAllTable, (err, results) => {
+//     if (err) throw err
 
-    const allFields = displayAllField(results)
-    const allFieldsAssign = displayAllFieldAssign(results)
-    const allFieldsDefault = assignFieldWithDefautValue(results)
-    const getQM = displayQuestionMark(results)
+//     const allFields = displayAllField(results)
+//     const allFieldsAssign = displayAllFieldAssign(results)
+//     const allFieldsDefault = assignFieldWithDefautValue(results)
+//     const getQM = displayQuestionMark(results)
 
-    const sqlQuery = `INSERT INTO ${tableName} (${allFields}) VALUES (${getQM})`;
-    const sqlQueryInsert = `INSERT INTO ${tableName} (${allFields}) \nVALUES (${displayQueryUpdateAssign(results)})`;
-    const sqlUpdate = `UPDATE ${tableName} SET ${displayAllFieldAssign(results)} WHERE id='xxxx'`;
-    const paramAssign = displayOldToNewAssign(results, "tablefile").join(';\n');
+//     const sqlQuery = `INSERT INTO ${tableName} (${allFields}) VALUES (${getQM})`;
+//     const sqlQueryInsert = `INSERT INTO ${tableName} (${allFields}) \nVALUES (${displayQueryUpdateAssign(results)})`;
+//     const sqlUpdate = `UPDATE ${tableName} SET ${displayAllFieldAssign(results)} WHERE id='xxxx'`;
+//     const paramAssign = displayOldToNewAssign(results, "mplu").join(';\n');
 
-    console.log(tableName + "=>", allFields.join(','))
-    console.log(tableName + "=>", allFieldsDefault.join('\n'))
-    console.log(tableName + "=>", sqlQuery)
-    console.log(tableName + "(insert)=>", sqlQueryInsert)
-    console.log(paramAssign)
-    console.log(tableName + "(update)=>", sqlUpdate)
-})
+//     console.log(tableName + "=>", allFields.join(','))
+//     console.log(tableName + "=>", allFieldsDefault.join('\n'))
+//     console.log(tableName + "=>", sqlQuery)
+//     console.log(tableName + "(insert)=>", sqlQueryInsert)
+//     console.log(paramAssign)
+//     console.log(tableName + "(update)=>", sqlUpdate)
+// })
+
+// console.log(getMoment().format('ddd'))
+
+// const currentDate = getMoment()
+
+// const startDate = getMoment("2024-12-01T17:50:00.000Z")
+// const endDate = getMoment("2024-12-10T18:55:00.000Z")
+
+// const activeDate = currentDate.isBetween(startDate, endDate)
+// console.log(activeDate)
+// console.log('currentDate:', currentDate.format('YYYY-MM-DD HH:mm:ss'))
+// console.log('startDate:', startDate.format('YYYY-MM-DD HH:mm:ss'))
+// console.log('endDate:', endDate.format('YYYY-MM-DD HH:mm:ss'))
+
+console.log(getYesterday().format('YYYY-MM-DD HH:mm:ss'))

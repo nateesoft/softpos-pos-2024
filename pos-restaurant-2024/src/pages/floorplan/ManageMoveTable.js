@@ -59,9 +59,12 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
       sourceTable, targetTable, admin, Cashier: userLogin
     })
       .then(response => {
-        if (response.status === 200) {
+        if (response.status === 200 && response.data.status === 2000) {
           onLoadFloorPlan()
           setOpen(false)
+        } else {
+          setMsgError(response.data.error)
+          setShowError(true)
         }
       })
       .catch(err => {

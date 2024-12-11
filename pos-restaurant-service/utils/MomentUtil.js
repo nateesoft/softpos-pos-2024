@@ -1,9 +1,18 @@
 const moment = require('moment')
 
-const getMoment = () => {
-    return moment().utc(true)
+const getMoment = (dateStr) => {
+    if (!dateStr) {
+        return moment().utc(true)
+    } else {
+        return moment(dateStr).utc(true)
+    }
+}
+
+const getYesterday = () => {
+    return moment().add(-1, 'day').utc(true)
 }
 
 module.exports = {
-    getMoment
+    getMoment,
+    getYesterday
 }

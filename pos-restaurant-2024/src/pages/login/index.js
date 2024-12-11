@@ -56,14 +56,27 @@ const Login = () => {
     event.preventDefault()
     apiClient
       .post("/api/posuser/login", { username: user, password, macno: macno })
-      .then((response) => {
+      .then(async (response) => {
         if (response.data.status === 2000) {
           const responseLogin = response.data.data
           if (responseLogin) {
+            // get branch info
+            const responseBranch = await apiClient.get(`/api/branch`)
+            const branchInfo = responseBranch.data.data
+
+            // get company info
+            const responseCompany = await apiClient.get(`/api/company`)
+            const companyInfo = responseCompany.data.data
+
             localStorage.setItem("userLogin", user)
             localStorage.setItem("posuser", JSON.stringify(response.data.data))
+            setAppData({ ...appData, 
+              userLogin: user, 
+              posuser: JSON.stringify(response.data.data),
+              branchInfo,
+              companyInfo
+            })
             navigate("/floorplan")
-            setAppData({ ...appData, userLogin: user, posuser: JSON.stringify(response.data.data) })
           } else {
             handleNotification("ข้อมูลผู้ใช้งาน Username/ Pasword ไม่ถูกต้อง !!!", "warning")
           }
