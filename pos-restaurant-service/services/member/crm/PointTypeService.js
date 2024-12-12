@@ -1,6 +1,9 @@
 const pool = require('../../../config/database/MyCrmDB')
 const { getMoment } = require('../../../utils/MomentUtil')
 
+const curdate = getMoment().format('YYYY-MM-DD')
+const curtime = getMoment().format('HH:mm:ss')
+
 const getDataBranchPoint = async () => {
     const EEE = getMoment().format('ddd')
     const sql = `SELECT * FROM pointtype 

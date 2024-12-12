@@ -19,6 +19,7 @@ import SearchMenu from './SearchMenu';
 import { POSContext } from '../../../AppContext';
 import { ModalConfirm } from '../../../util/AlertPopup';
 import ShowNotification from "../../utils/ShowNotification"
+import UserAuthen from '../../modal/UserAuthen';
 
 const columns = [
   { id: 'action', label: '', minWidth: 150 },
@@ -47,7 +48,7 @@ const RefundBill = () => {
   const navigate = useNavigate();
   const { appData } = useContext(POSContext)
   const { userLogin, posuser, macno } = appData
-  const PosUser = posuser ? JSON.parse(posuser): {}
+  const PosUser = posuser ? JSON.parse(posuser) : {}
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
@@ -63,10 +64,9 @@ const RefundBill = () => {
   const [billList, setBillList] = useState([])
   const [showConfirm, setShowConfirm] = useState(false)
   const [B_Refno, setBRefno] = useState("")
-  const [B_MacNo, setBMacno] = useState("")
 
-  // const [recieptNo, setRecieptNo] = useState("")
-  // const [macNo, setMacNo] = useState("")
+  const [showAuthen, setShowAuthen] = useState(false)
+  const [authenUser, setAuthenUser] = useState(null)
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -77,28 +77,31 @@ const RefundBill = () => {
     setPage(0);
   }
 
-  const handleShowConfirm = (billNo, B_Refno, B_MacNo) => {
-    setBRefno(B_Refno)
-    setBMacno(B_MacNo)
+  const checkAuthenValid = (BillRefNo) => {
+    setBRefno(BillRefNo)
+    if ('Y' !== PosUser.Sale2 && !authenUser) {
+      setShowAuthen(true)
+    } else {
+      handleShowConfirm()
+    }
+  }
 
-    billNo.B_VoidUser = userLogin
-    billNo.B_VoidTime = moment().format('HH:mm:ss')
-
+  const handleShowConfirm = () => {
     setShowConfirm(true)
   }
 
   const handleRefundBill = () => {
     apiClient.post(`/api/billno/refund`, {
       billNo: B_Refno,
-      Cashier: userLogin,
-      macno: B_MacNo
+      Cashier: authenUser ? authenUser.UserName : userLogin,
+      macno: macno
     })
       .then(response => {
         console.log('response:', response)
-        if(response.status === 200){
+        if (response.status === 200) {
           const billNo = response.data.data
           navigate(`/payment/receipt/${billNo}`)
-        }else {
+        } else {
           handleNotification("พบข้อผิดพลาดในการยกเลิกบิล!")
         }
       })
@@ -165,8 +168,7 @@ const RefundBill = () => {
                                   <Button
                                     variant='contained'
                                     color='error'
-                                    disabled={'Y' !== PosUser.Sale2}
-                                    onClick={() => handleShowConfirm(row, row.B_Refno, row.B_MacNo)} startIcon={<ReceiptIcon />}>
+                                    onClick={() => checkAuthenValid(row.B_Refno)} startIcon={<ReceiptIcon />}>
                                     Refund
                                   </Button>
                                 </TableCell>
@@ -205,6 +207,14 @@ const RefundBill = () => {
         header="Refund Bill"
         content="ยืนยันการทำรายการ ?"
       />
+      <Modal open={showAuthen}>
+        <Box sx={{ ...modalStyle, padding: "10px" }}>
+          <UserAuthen
+            onClose={() => setShowAuthen(false)}
+            setAuthenUser={setAuthenUser}
+            handleShowConfirm={handleShowConfirm} />
+        </Box>
+      </Modal>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </Box>
   )

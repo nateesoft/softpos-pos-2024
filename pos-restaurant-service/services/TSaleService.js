@@ -228,11 +228,11 @@ const processAllGroupSetReturn = async (R_Index, R_Table, R_Quan, Cashier, empCo
             await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost,
                 S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
 
-                // ตัดสต็อกสินค้าที่มี Ingredent
-                await processAllPIngredentReturnStock(S_No, balance.R_PluCode, balance.R_Quan, Cashier)
+            // ตัดสต็อกสินค้าที่มี Ingredent
+            await processAllPIngredentReturnStock(S_No, balance.R_PluCode, balance.R_Quan, Cashier)
 
-                // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
-                await processAllPSetReturn(balance.R_PluCode, balance.R_Quan, Cashier)
+            // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
+            await processAllPSetReturn(balance.R_PluCode, balance.R_Quan, Cashier)
         }
 
         let updBalance = `UPDATE balance 

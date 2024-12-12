@@ -31,6 +31,7 @@ import TemplateReport from './inventory'
 import TestPrinter from '../pages/thermal'
 import PrinterDemo from '../pages/printer'
 import ReceiptToPrint from './payment/ReceiptToPrint'
+import UserAuthen from './modal/UserAuthen'
 
 const AnimatedRoutes = () => {
     const location = useLocation()
@@ -64,6 +65,7 @@ const AnimatedRoutes = () => {
                         <Route path="/inventory/db" element={<TemplateReport />} />
                     </Route>
                 </Route>
+                <Route path="/modal" element={<UserAuthen />} />
                 <Route path="/print-demo" element={<PrinterDemo />} />
                 <Route path="/test-print" element={<TestPrinter />} />
                 <Route path="/" element={<LoginPage />} />

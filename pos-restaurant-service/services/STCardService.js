@@ -4,6 +4,9 @@ const { getProductByPCode, getProductActiveByPCode } = require('./ProductService
 const { getBalanceByRIndex } = require('./CoreService');
 const { getMoment } = require('../utils/MomentUtil');
 
+const curdate = getMoment().format('YYYY-MM-DD')
+const curtime = getMoment().format('HH:mm:ss')
+
 const getSTCard = async () => {
     const sql = `select * from stcard`;
     const results = await pool.query(sql)
@@ -87,7 +90,7 @@ const ProcessSetUpdateStockOut = async (DocNo, StkCode, XCode, StkRemark, XQty, 
             let sql = `insert into stcard 
                 (s_date,s_no,s_stk,s_pcode,s_que,s_in,s_incost,
                 s_out,s_outcost,s_rem,s_user,s_entrydate,s_entrytime) 
-                values (curdate(),?,?,?,?,?,?,?,?,?,?,curdate(),curtime())`;
+                values ('${curdate}',?,?,?,?,?,?,?,?,?,?,'${curdate}','${curtime}')`;
             const s_no = DocNo + "@" + XCode;
             const s_stk = StkCode;
             const s_pcode = psetBean.PSubCode;
@@ -130,7 +133,7 @@ const ProcessSelectSetUpdateStockOut = async (DocNo, StkCode, XCode, StkRemark, 
         if (proBean.PStock === "Y") {
             let InsertQuery = `insert into stcard (s_date,s_no,s_stk,s_pcode,s_que,s_in,s_incost,
                 s_out,s_outcost,s_rem,s_user,s_entrydate,s_entrytime) 
-                values (curdate(),?,?,?,?,?,?,?,?,?,?,curdate(),curtime())`;
+                values ('${curdate}',?,?,?,?,?,?,?,?,?,?,'${curdate}','${curtime}')`;
             const s_no = DocNo + "@" + XCode
             const s_stk = StkCode
             const s_pcode = TempCode
@@ -176,7 +179,7 @@ const ProcessSelectSetUpdateStockOutRefund = async (DocNo, StkCode, XCode, StkRe
             let InsertQuery = `insert into stcard 
                 (s_date,s_no,s_stk,s_pcode,s_que,s_in,s_incost,s_out,s_outcost,s_rem,
                 s_user,s_entrydate,s_entrytime) 
-                values (curdate(),?,?,?,?,?,?,?,?,?,?,curdate(),curtime())`;
+                values ('${curdate}',?,?,?,?,?,?,?,?,?,?,'${curdate}','${curtime}')`;
             const s_no = DocNo + "@" + XCode
             const s_stk = StkCode
             const s_pcode = TempCode

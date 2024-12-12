@@ -551,7 +551,7 @@ const inventoryReturnStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Tot
         await processAllPSetReturn(R_PluCode, R_Quan, Cashier)
     }
 
-    // ตัดสต็อกสินค้าที่เป็นกลุ่มสินค้า Category Set
+    // ตัดสต็อกสินค้าที่เป็นกลุ่มสินค้า Category Set เนื่องจากตอน void สินค้าสามารถ void ได้แค่ตัวหลัก
     await processAllGroupSetReturn(R_Index, R_Table, R_Quan, Cashier, empCode, voidMsg, macno)
 }
 

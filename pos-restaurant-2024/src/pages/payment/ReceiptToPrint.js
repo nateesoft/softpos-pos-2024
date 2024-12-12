@@ -81,8 +81,8 @@ const ReceiptHeaderRefund = ({ headers, billInfo }) => {
       </div>
       <MyTypo2 align="center">REG ID : {billInfo.B_MacNo}</MyTypo2>
       <MyTypo2 align="center">------------------------------------------------------------</MyTypo2>
-      <MyTypo2 align="center">*** บิลยกเลิกรายการขาย ***</MyTypo2>
-      <MyTypo2 align="center">*** (Refund) ***</MyTypo2>
+      <div align="center"><MyTypo2 align="center">*** บิลยกเลิกรายการขาย ***</MyTypo2></div>
+      <div align="center"><MyTypo2 align="center">*** (Refund) ***</MyTypo2></div>
       <div>
         <MyTypo2>Void User: {billInfo.B_VoidUser}</MyTypo2>
         <MyTypo2>Void Date/Time: {billInfo.B_VoidTime}</MyTypo2>

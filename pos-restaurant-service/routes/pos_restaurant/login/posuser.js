@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllData, getDataByUserName, checkLogin, processLogout } = require("../../../services/PosUserService");
+const { getAllData, getDataByUserName, checkLogin, processLogout, getLoginAuthen } = require("../../../services/PosUserService");
 
 router.get('/', (req, res, next) => {
   getAllData()
@@ -19,6 +19,22 @@ router.post('/login', function (req, res, next) {
   checkLogin(username, password, macno)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.post('/loginAuth', function (req, res, next) {
+  const { username, password } = req.body
+
+  getLoginAuthen(username, password)
+    .then(rows => {
+      if (rows) {
+        res.status(200).json({ status: 2000, data: rows })
+      } else {
+        res.status(200).json({ status: 4000, rows: rows })
+      }
     })
     .catch(err => {
       res.status(500).json({ status: 5000, data: null, errorMessage: err.message })

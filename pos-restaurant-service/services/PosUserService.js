@@ -14,6 +14,16 @@ const checkLogin = async (username, password, macno) => {
     return null
 }
 
+const getLoginAuthen = async (username, password) => {
+    const sql = `select * from posuser 
+        where username='${username}' and password='${password}' `
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        return results[0]
+    }
+    return null
+}
+
 const processLogout = async (username) => {
     const sqlUpdate = `update posuser set onact='N' where username='${username}'`
     const result = await pool.query(sqlUpdate)
@@ -40,5 +50,6 @@ module.exports = {
     getAllData,
     getDataByUserName,
     checkLogin,
-    processLogout
+    processLogout,
+    getLoginAuthen
 }

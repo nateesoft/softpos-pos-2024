@@ -3,7 +3,7 @@ const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
 const { emptyTableBalance, getBalanceByTableNo } = require('./BalanceService');
 
 const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService');
-const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock } = require('./TSaleService');
+const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock, processAllPSet } = require('./TSaleService');
 
 const { getBranch } = require('./BranchService')
 const { ProcessStockOut } = require('./STCardService');
@@ -12,7 +12,7 @@ const { updateRefundMember, updateMemberData } = require('./member/crm/MemberMas
 const { getMoment } = require('../utils/MomentUtil');
 
 const getAllBillNoToday = async () => {
-    const sql = `select * from billno where B_OnDate=curdate()`;
+    const sql = `select * from billno where B_OnDate='${getMoment().format('YYYY-MM-DD')}'`;
     const results = await pool.query(sql)
     return results
 }
@@ -397,6 +397,9 @@ const refundTSale = async (tSaleData, Cashier) => {
 
             // ตัดสต็อกสินค้าที่มี Ingredent
             await processAllPIngredentReturnStock(S_No, tSale.R_PluCode, tSale.R_Quan, tSale.Cashier)
+            
+            // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
+            await processAllPSet(tSale.R_PluCode, tSale.R_Quan, tSale.Cashier)
         }
     })
 }
