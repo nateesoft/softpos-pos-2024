@@ -1,8 +1,9 @@
 const pool = require('../config/database/MySqlConnect');
 const { getMoment } = require('../utils/MomentUtil');
 const { updateInActiveTable } = require('../services/management/TableCheckIn');
-const { getBalanceMaxIndex, updateBalanceMove } = require('./CoreService');
+const { getBalanceMaxIndex, updateBalanceMove, updateBalanceSplitBill, summaryBalance } = require('./CoreService');
 const { Unicode2ASCII } = require('../utils/StringUtil');
+const { invalid } = require('moment');
 
 const getAllTable = async () => {
     const sql = `select * FROM tablefile ORDER By Tcode`;
@@ -210,6 +211,87 @@ const tableMoveOrGroup = async (sourceTable, targetTable, admin, Cashier) => {
 
     // update source table to available status
     await updateMoveTableStatus(sourceTable, targetTable, Cashier, admin)
+    return {
+        status: 2000,
+        message: "ย้ายโต๊ะสำเร็จ"
+    }
+}
+
+const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
+    const curdate = getMoment().format('YYYY-MM-DD')
+    const MemBegin = getMoment(sourceTableData.MemBegin).format('YYYY-MM-DD')
+    const MemEnd = getMoment(sourceTableData.MemEnd).format('YYYY-MM-DD')
+    const { SoneCode, MacNo, Cashier, TLoginTime, TCurTime, TCustomer, TItem, TAmount,
+        TOnAct, Service, ServiceAmt, EmpDisc, EmpDiscAmt, FastDisc, FastDiscAmt, TrainDisc, TrainDiscAmt,
+        MemDisc, MemDiscAmt, SubDisc, SubDiscAmt, DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt,
+        MemCode, MemCurAmt, MemName, Food, Drink, Product, NetTotal, PrintTotal, PrintChkBill,
+        PrintCnt, PrintTime1, PrintTime2, ChkBill, ChkBillTime, StkCode1, StkCode2, TDesk, TUser, VoidMsg, TPause,
+        CCUseCode, CCUseAmt, TTableIsOn, TActive, TAutoClose } = sourceTableData
+    const newTable = { ...sourceTableData }
+    newTable.Tcode = targetTableNo
+    newTable.TTableIsOn = TTableIsOn || ''
+    newTable.TActive = TActive || ''
+    newTable.TAutoClose = TAutoClose || ''
+    newTable.CCUseAmt = CCUseAmt || 0
+    const sql = `INSERT INTO tablefile 
+            (Tcode,SoneCode,TLoginDate,MacNo,Cashier,TLoginTime,TCurTime,TCustomer,TItem,TAmount,TOnAct,Service,ServiceAmt,EmpDisc,EmpDiscAmt,
+            FastDisc,FastDiscAmt,TrainDisc,TrainDiscAmt,MemDisc,MemDiscAmt,SubDisc,SubDiscAmt,DiscBath,ProDiscAmt,SpaDiscAmt,CuponDiscAmt,
+            ItemDiscAmt,MemCode,MemCurAmt,MemName,MemBegin,MemEnd,Food,Drink,Product,NetTotal,PrintTotal,PrintChkBill,PrintCnt,
+            PrintTime1,PrintTime2,ChkBill,ChkBillTime,StkCode1,StkCode2,TDesk,TUser,VoidMsg,TPause,CCUseCode,CCUseAmt,TTableIsOn,TActive,TAutoClose) 
+            VALUES ('${targetTableNo}','${SoneCode}','${curdate}','${MacNo}','${Cashier}','${TLoginTime}','${TCurTime}','${TCustomer}','${TItem}','${TAmount}',
+            '${TOnAct}','${Service}','${ServiceAmt}','${EmpDisc}','${EmpDiscAmt}','${FastDisc}','${FastDiscAmt}','${TrainDisc}','${TrainDiscAmt}',
+            '${MemDisc}','${MemDiscAmt}','${SubDisc}','${SubDiscAmt}','${DiscBath}','${ProDiscAmt}','${SpaDiscAmt}','${CuponDiscAmt}','${ItemDiscAmt}',
+            '${MemCode}','${MemCurAmt}','${MemName}','${MemBegin}','${MemEnd}','${Food}','${Drink}','${Product}','${NetTotal}','${PrintTotal}',
+            '${PrintChkBill}','${PrintCnt}','${PrintTime1}','${PrintTime2}','${ChkBill}','${ChkBillTime}','${StkCode1}','${StkCode2}','${TDesk}',
+            '${TUser}','${VoidMsg}','${TPause}','${CCUseCode}','${newTable.CCUseAmt}','${newTable.TTableIsOn}','${newTable.TActive}','${newTable.TAutoClose}')`;
+    const checkExistTable = await getTableByCode(targetTableNo)
+    if (checkExistTable) {
+        await updateTableFile(checkExistTable)
+    } else {
+        await pool.query(sql)
+    }
+
+    return { ...newTable }
+}
+
+const splitTableToPayment = async (sourceTable, targetTable, orderListToMove) => {
+    const sourceTableData = await getTableByCode(sourceTable)
+    const targetTableData = await createTableForSplitPayment(sourceTableData, targetTable)
+
+    if (!sourceTableData || !targetTableData) {
+        return {
+            invalid: true,
+            message: 'ไม่สามารถสร้างบิลสำหรับแยกชำระได้ กรุณาตรวจสอบ !!!'
+        }
+    }
+
+    if (sourceTableData.Tcode === targetTableData.Tcode) {
+        return {
+            invalid: true,
+            message: 'ข้อมูลบิลสำหรับแยกชำระ ไม่ถูกต้อง กรุณาตรวจสอบ !!!'
+        }
+    }
+
+    const balanceFrom = await getBalanceAllByTable(sourceTable)
+    if (balanceFrom.length === 0) {
+        return {
+            invalid: true,
+            message: 'ไม่พบข้อมูลสินค้าที่ต้องการแยกชำระ !!!'
+        }
+    }
+
+    // add source balance into target balance only orderListToMove
+    for (let i = 0; i < orderListToMove.length; i++) {
+        const newBalance = { ...orderListToMove[i] }
+        newBalance.R_Index = orderListToMove[i].R_Index
+        newBalance.R_Table = targetTable
+
+        await updateBalanceSplitBill(newBalance, orderListToMove[i].R_Table)
+    }
+
+    // summary balance in table
+    await summaryBalance(sourceTable)
+    await summaryBalance(targetTable)
 }
 
 module.exports = {
@@ -222,5 +304,6 @@ module.exports = {
     getCheckTableStatus,
     tableMoveOrGroup,
     getBalanceAllByTable,
-    getTableByCode
+    getTableByCode,
+    splitTableToPayment
 }

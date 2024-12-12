@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { AppBar, Button, Grid2, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Toolbar, Typography } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -6,20 +7,23 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 
 import './style.css';
+import apiClient from '../../../httpRequest';
 
 const NumFormat = data => {
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
-const MultiplePayment = ({ onClose, tableNo, orderList, tableFile }) => {
-  console.log(tableFile)
-  const [categories, setCategories] = useState([
-    { id: 1, tableNo: "T1", name: 'TABLE T1 (รายการอาหารโต๊ะหลัก)' },
-    { id: 2, tableNo: "T1-1", name: 'TABLE T1-1 (รายการอาหารของโต๊ะที่ต้องการแยกชำระเงิน)' },
-    { id: 3, tableNo: "T1-2", name: 'TABLE T1-2 (รายการอาหารของโต๊ะที่ต้องการแยกชำระเงิน)' },
-    { id: 4, tableNo: "T1-3", name: 'TABLE T1-3 (รายการอาหารของโต๊ะที่ต้องการแยกชำระเงิน)' },
+const totalAmount = (orderList) => {
+  return orderList.reduce((totalQty, p) => totalQty + p.R_Price, 0);
+}
+
+const MultiplePayment = ({ onClose, tableNo, orderList, tableFile, initLoad }) => {
+  const navigate = useNavigate()
+  const [tables, setTables] = useState([
+    { id: 1, tableNo: `${tableNo}`, name: `TABLE ${tableNo} (รายการอาหารโต๊ะหลัก)`, bgColor: "pink" },
+    { id: 2, tableNo: `${tableNo}-1`, name: `TABLE ${tableNo}-1 (โต๊ะที่ต้องการแยกชำระเงิน)`, bgColor: "#98e5ea" }
   ]);
-  
+
   const isEmptyRLinkIndex = (item) => {
     return (!item) ? true : false
   }
@@ -28,7 +32,7 @@ const MultiplePayment = ({ onClose, tableNo, orderList, tableFile }) => {
       ...order,
       id: (index + 1),
       name: order.R_PName,
-      category: 1
+      table: 1
     }
   }));
 
@@ -46,15 +50,15 @@ const MultiplePayment = ({ onClose, tableNo, orderList, tableFile }) => {
       return;
     }
 
-    if (destination.droppableId === 'Categories') {
-      setCategories(rearangeArr(categories, source.index, destination.index));
+    if (destination.droppableId === 'Tables') {
+      setTables(rearangeArr(tables, source.index, destination.index));
     } else if (destination.droppableId !== source.droppableId) {
       setItems((items) =>
         items.map((item) =>
           item.id === parseInt(result.draggableId)
             ? {
               ...item,
-              category: parseInt(result.destination.droppableId),
+              table: parseInt(result.destination.droppableId),
             }
             : item
         )
@@ -65,7 +69,19 @@ const MultiplePayment = ({ onClose, tableNo, orderList, tableFile }) => {
   };
 
   const handleConfirm = () => {
-    onClose()
+    apiClient.post('/api/tablefile/splitBill', {
+      sourceTable: tableNo,
+      targetTable: tableNo + "-1",
+      orderListToMove: items.filter((item) => item.table === 2)
+    })
+      .then(response => {
+        if (response.status === 200) {
+          initLoad()
+          onClose()
+        }
+      })
+      .catch(err => console.log(err.message))
+
   }
   const handleCacnel = () => {
     onClose()
@@ -90,14 +106,14 @@ const MultiplePayment = ({ onClose, tableNo, orderList, tableFile }) => {
         </Toolbar>
       </AppBar>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div style={{marginTop: "50px"}}>
-          <Droppable droppableId="Categories" type="droppableItem">
+        <div style={{ marginTop: "50px" }}>
+          <Droppable droppableId="Tables" type="droppableItem">
             {(provided) => (
               <div ref={provided.innerRef}>
-                {categories.map((category, index) => (
+                {tables.map((table, index) => (
                   <Draggable
-                    draggableId={`category-${category.id}`}
-                    key={`category-${category.id}`}
+                    draggableId={`table-${table.id}`}
+                    key={`table-${table.id}`}
                     index={index}
                   >
                     {(parentProvider) => (
@@ -105,51 +121,49 @@ const MultiplePayment = ({ onClose, tableNo, orderList, tableFile }) => {
                         ref={parentProvider.innerRef}
                         {...parentProvider.draggableProps}
                       >
-                        <Droppable droppableId={category.id.toString()}>
+                        <Droppable droppableId={table.id.toString()}>
                           {(provided) => (
                             <Paper elevation={3} ref={provided.innerRef}
                               sx={{ margin: "5px" }}>
                               <TableContainer sx={{ overflow: "auto", padding: "5px" }}>
                                 <h6
                                   {...parentProvider.dragHandleProps}
-                                  style={{ backgroundColor: "#eee", padding: "5px" }}
+                                  style={{ backgroundColor: table.bgColor, padding: "15px" }}
                                 >
-                                  {category.name}
+                                  <ReceiptIcon /> {table.name}
                                 </h6>
                                 <Table aria-label="spanning table">
-                                  {items
-                                    .filter(
-                                      (item) => item.category === category.id
-                                    )
-                                    .map((item, index) => (
-                                      <Draggable
-                                        draggableId={item.id.toString()}
-                                        key={item.id}
-                                        index={index}
-                                      >
-                                        {(provided) => (
-                                          <TableBody
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                          >
-                                            <TableRow key={item.R_Index}>
-                                              <TableCell sx={{ whiteSpace: "nowrap" }}>{item.R_Table}</TableCell>
-                                              <TableCell sx={{ whiteSpace: "nowrap" }}>{item.R_Index}</TableCell>
-                                              <TableCell sx={{ width: "150px" }}>{item.R_PName}</TableCell>
-                                              <TableCell align="right">{item.R_Quan}</TableCell>
-                                              <TableCell align="right">{NumFormat(item.R_Price)}</TableCell>
-                                              <TableCell align="right">{NumFormat(item.R_Total)}</TableCell>
-                                              <TableCell align="right">{item.R_ETD}</TableCell>
-                                            </TableRow>
-                                          </TableBody>
-                                        )}
-                                      </Draggable>
-                                    ))}
-                                  {items
-                                    .filter(
-                                      (item) => item.category === category.id
-                                    ).length === 0 &&
+                                  {items.filter((item) => item.table === table.id).map((item, index) => (
+                                    <Draggable
+                                      draggableId={item.id.toString()}
+                                      key={item.id}
+                                      index={index}
+                                    >
+                                      {(provided) => (
+                                        <TableBody
+                                          ref={provided.innerRef}
+                                          {...provided.draggableProps}
+                                          {...provided.dragHandleProps}
+                                        >
+                                          <TableRow key={item.R_Index} sx={{ backgroundColor: "snow" }}>
+                                            <TableCell sx={{ whiteSpace: "nowrap" }}>{item.R_Table}</TableCell>
+                                            <TableCell sx={{ whiteSpace: "nowrap" }}>{item.R_Index}</TableCell>
+                                            <TableCell sx={{ width: "150px" }}>{item.R_PName}</TableCell>
+                                            <TableCell align="right">{item.R_Quan}</TableCell>
+                                            <TableCell align="right">{NumFormat(item.R_Price)}</TableCell>
+                                            <TableCell align="right">{NumFormat(item.R_Total)}</TableCell>
+                                          </TableRow>
+                                        </TableBody>
+                                      )}
+                                    </Draggable>
+                                  ))}
+                                  {items.filter((item) => item.table === table.id).length > 0 && <>
+                                    <TableRow>
+                                      <TableCell align="right" colSpan={5}>ยอดรวมสินค้าก่อนหักส่วนลด และค่าบริการ</TableCell>
+                                      <TableCell align="right">{NumFormat(totalAmount(items.filter((item) => item.table === table.id)))}</TableCell>
+                                    </TableRow>
+                                  </>}
+                                  {items.filter((item) => item.table === table.id).length === 0 &&
                                     <TableRow>
                                       <TableCell colSpan={7} align='center'>
                                         <Typography sx={{ backgroundColor: "snow", padding: "10px" }}>
@@ -176,8 +190,8 @@ const MultiplePayment = ({ onClose, tableNo, orderList, tableFile }) => {
       </DragDropContext>
       <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
         <Grid2 container spacing={1} justifyContent="center" sx={{ margin: "20px" }}>
-          <Button startIcon={<CheckCircleIcon />} variant='contained' color='primary' onClick={handleConfirm}>Confirm</Button>
           <Button startIcon={<CancelIcon />} variant='contained' color='error' onClick={handleCacnel}>Cancel</Button>
+          <Button startIcon={<CheckCircleIcon />} variant='contained' color='primary' onClick={handleConfirm}>Confirm</Button>
         </Grid2>
       </Paper>
     </div>

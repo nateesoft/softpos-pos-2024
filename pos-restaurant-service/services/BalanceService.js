@@ -1,22 +1,11 @@
 const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
 
-const { getPOSConfigSetup } = require('./POSConfigSetupService');
 const { getProductByPCode } = require('./ProductService');
 const { ProcessStockOut } = require('./STCardService');
 const { processAllPIngredent, processAllPSet, processAllPIngredentReturnStock, processAllPSetReturn, processAllGroupSetReturn } = require('./TSaleService');
 const { getMoment } = require('../utils/MomentUtil');
-const { updateTableFile } = require('./TableFileService');
-const { getBalanceByRIndex, getBalanceMaxIndex } = require('./CoreService')
-
-const getSummaryItem = async (tableNo) => {
-    const sql = `select sum(R_Quan) R_Quan from balance where R_Table='${tableNo}'`;
-    const results = await pool.query(sql)
-    if (results.length > 0) {
-        return results[0].R_Quan
-    }
-    return 0.00
-}
+const { getBalanceByRIndex, getBalanceMaxIndex, summaryBalance } = require('./CoreService')
 
 const getTotalBalance = async (tableNo) => {
     const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
@@ -31,89 +20,6 @@ const getBalanceByTable = async tableNo => {
     const sql = `select * from balance  where R_Table='${tableNo}' and R_Void <> 'V' order by r_index`;
     const results = await pool.query(sql)
     return results
-}
-
-const getTableByCode = async tableNo => {
-    const sql = `select * from tablefile where TCode='${tableNo}' limit 1`;
-    const results = await pool.query(sql)
-    if (results.length > 0) {
-        return results[0]
-    }
-    return null
-}
-
-const summaryBalance = async (tableNo) => {
-    const tablefile = await getTableByCode(tableNo)
-    const configSetup = await getPOSConfigSetup()
-    const balanceList = await getBalanceByTable(tableNo)
-    const totalItem = await getSummaryItem(tableNo)
-
-    const summaryRType = (type, netTotal = 0) => {
-        balanceList.forEach(data => {
-            if (data.R_Type === type) {
-                netTotal = netTotal + data.R_Total
-            }
-            return netTotal
-        })
-        return netTotal
-    }
-
-    let Food = summaryRType("1")
-    let Drink = summaryRType("2")
-    let Product = summaryRType("3")
-
-    let subTotalAmount = 0;
-    let serviceAmount = 0;
-    let vatAmount = 0;
-    let netTotalAmount = 0;
-    let productAndService = 0;
-
-    const service = configSetup.P_Service
-    const serviceType = configSetup.P_ServiceType // Net(N), Gross(G)
-    const vatType = configSetup.P_VatType // Include(I) or Exclude(E)
-    const vat = configSetup.P_Vat
-
-    subTotalAmount = Food + Drink + Product;
-    if (serviceType === 'N') { // Net
-        serviceAmount = subTotalAmount * service / 100
-    } else if (serviceType === 'G') { // Gross
-        serviceAmount = subTotalAmount * service / 100
-    }
-
-    netTotalAmount = subTotalAmount + serviceAmount
-
-    if (vatType === 'I') {
-        vatAmount = netTotalAmount * vat / (100 + vat)
-        productAndService = netTotalAmount - vatAmount
-    } else if (vatType === 'E') {
-        vatAmount = netTotalAmount * vat / 100
-        productAndService = netTotalAmount + vatAmount
-        netTotalAmount = netTotalAmount + vatAmount
-    }
-
-    tablefile.TAmount = subTotalAmount
-    tablefile.ServiceAmt = serviceAmount
-    tablefile.NetTotal = netTotalAmount
-    tablefile.Food = Food
-    tablefile.Drink = Drink
-    tablefile.Product = Product
-    tablefile.TItem = totalItem
-
-    // update tablefile
-    await updateTableFile(tablefile)
-
-    return {
-        TItem: tablefile.TItem,
-        TAmount: tablefile.TAmount,
-        ServiceAmt: tablefile.ServiceAmt,
-        vatAmount,
-        NetTotal: tablefile.NetTotal,
-        productAndService,
-        Food: tablefile.Food,
-        Drink: tablefile.Drink,
-        Product: tablefile.Product,
-        printRecpMessage: configSetup.P_PrintRecpMessage
-    }
 }
 
 const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) => {
@@ -615,6 +521,5 @@ module.exports = {
     orderStockOut,
     returnStockIn,
     getVoidMsgList,
-    deleteBalanceOnly,
-    summaryBalance
+    deleteBalanceOnly
 }

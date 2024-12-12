@@ -14,10 +14,9 @@ const {
   addBalance,
   voidMenuBalance,
   addListBalance,
-  updateBalance,
-  summaryBalance
+  updateBalance
 } = require('../../../services/BalanceService')
-const { getBalanceByRIndex, getBalanceMaxIndex } = require('../../../services/CoreService')
+const { getBalanceByRIndex, getBalanceMaxIndex, summaryBalance } = require('../../../services/CoreService')
 
 router.get('/', (req, res) => {
   getAllBalance()
