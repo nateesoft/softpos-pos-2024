@@ -44,7 +44,7 @@ const AnimatedRoutes = () => {
         }
     }
     useIdleTimer({
-        timeout: 10 * 1000,
+        timeout: 30 * 1000,
         onIdle: handleOnUserIdle,
         debounce: 500
     });
