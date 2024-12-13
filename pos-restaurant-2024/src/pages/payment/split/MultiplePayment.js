@@ -69,6 +69,10 @@ const MultiplePayment = ({ onClose, tableNo, orderList, tableFile, initLoad }) =
   };
 
   const handleConfirm = () => {
+    const newOrderToSplit = items.filter((item) => item.table === 2)
+    if (orderList.length <= 1 || newOrderToSplit.length == 0) {
+      return;
+    }
     apiClient.post('/api/tablefile/splitBill', {
       sourceTable: tableNo,
       targetTable: tableNo + "-1",
@@ -76,6 +80,7 @@ const MultiplePayment = ({ onClose, tableNo, orderList, tableFile, initLoad }) =
     })
       .then(response => {
         if (response.status === 200) {
+          navigate(`/payment/${tableNo}-1`)
           initLoad()
           onClose()
         }

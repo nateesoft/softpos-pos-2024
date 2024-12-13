@@ -1,19 +1,22 @@
 const pool = require('../config/database/MySqlConnect');
 const { getMoment } = require('../utils/MomentUtil');
-const { Unicode2ASCII } = require('../utils/StringUtil');
+const { Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
 const { listIngredeint, getPSetByPCode, getPCategoryByRLinkIndex } = require('./ProductService');
 const { ProcessStockOut } = require('./STCardService');
 
 const getAllTSale = async () => {
-    const sql = `select * from t_sale`
+    const sql = `select * from t_sale order by R_Index`
     const results = await pool.query(sql)
     return results
 }
 
 const getAllTSaleByRefno = async (refno) => {
-    const sql = `select * from t_sale where R_Refno='${refno}'`
+    const sql = `select * from t_sale where R_Refno='${refno}' order by R_Index`
     const results = await pool.query(sql)
-    return results
+    const mappingResult = results.map((item, index) => {
+        return { ...item, VoidMsg: ASCII2Unicode(item.VoidMsg) }
+    })
+    return mappingResult
 }
 
 const createNewTSale = async (balance, BillRefNo) => {
@@ -260,19 +263,12 @@ const addDataFromBalance = async (tableNo, BillRefNo, allBalance) => {
     })
 }
 
-const getTSaleByBillNo = async billNo => {
-    const sql = `select * from t_sale where R_Refno='${billNo}' order by R_Index`;
-    const results = await pool.query(sql)
-    return results
-}
-
 module.exports = {
     addDataFromBalance,
     processAllPIngredent,
     processAllPIngredentReturnStock,
     processAllPSet,
     processAllPSetReturn,
-    getTSaleByBillNo,
     getAllTSale,
     getAllTSaleByRefno,
     processAllGroupSetReturn

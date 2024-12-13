@@ -3,7 +3,7 @@ const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
 const { emptyTableBalance, getBalanceByTableNo } = require('./BalanceService');
 
 const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService');
-const { addDataFromBalance, getTSaleByBillNo, processAllPIngredentReturnStock, processAllPSet } = require('./TSaleService');
+const { addDataFromBalance, getAllTSaleByRefno, processAllPIngredentReturnStock, processAllPSet } = require('./TSaleService');
 
 const { getBranch } = require('./BranchService')
 const { ProcessStockOut } = require('./STCardService');
@@ -407,7 +407,7 @@ const refundTSale = async (tSaleData, Cashier) => {
 const billRefundStockIn = async (billNo, Cashier, macno) => {
     const branchData = await getBranch()
     const billNoData = await getBillNoByRefno(billNo)
-    const tSaleData = await getTSaleByBillNo(billNo)
+    const tSaleData = await getAllTSaleByRefno(billNo)
 
     // update table t_sale void
     await updateRefundTsale(billNo)

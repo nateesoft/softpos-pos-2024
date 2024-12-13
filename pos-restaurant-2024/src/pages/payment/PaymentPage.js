@@ -81,7 +81,12 @@ function PaymentPage() {
         }
       })
       .catch(err => handleNotification(err.message))
-  }, [])
+  }, [tableNo])
+
+  const splitBillAction = () => {
+    initLoadOrder()
+    summaryTableFileBalance()
+  }
 
   useEffect(() => {
     initLoadOrder()
@@ -135,6 +140,7 @@ function PaymentPage() {
             onClose={() => setOpenSplitBill(false)}
             tableNo={tableNo}
             orderList={orderList}
+            initLoad={splitBillAction}
             tableFile={{
               subTotalAmount,
               serviceAmount,

@@ -206,8 +206,11 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     }
 
     const handleConfirmPayment = async () => {
+        if(tonAmount > 1000){
+            handleNotification("กรุณาระบุจำนวนเงินสดให้ถูกต้อง !!!")
+            return;
+        }
         if (balanceAmount >= 0) {
-
             // update billno
             const payload = {
                 branchInfo,

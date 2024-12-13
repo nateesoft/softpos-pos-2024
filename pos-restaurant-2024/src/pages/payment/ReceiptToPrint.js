@@ -139,19 +139,34 @@ class ComponentToPrint extends Component {
                 <TableCell align="right">Amount</TableCell>
               </TableBody>
               {orderList && orderList.map((item) => (
-                <TableBody>
+                <>
+                {item.R_Void!=='V' && <TableBody>
                   <TableCell>{item.R_ETD}</TableCell>
-                  <TableCell>{item.R_PName}</TableCell>
-                  <TableCell align="right">X {item.R_Quan}</TableCell>
+                  <TableCell sx={{maxWidth: "150px", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden"}}>{item.R_PName}</TableCell>
+                  <TableCell align="right">{item.R_Quan}X</TableCell>
                   <TableCell align="right">{NumFormat(item.R_Price)}</TableCell>
-                </TableBody>
+                </TableBody>}
+                {item.R_Void==='V' && 
+                <>
+                  <TableBody>
+                    <TableCell sx={{textDecoration: "line-through", color: "red"}}>{item.R_ETD}</TableCell>
+                    <TableCell sx={{textDecoration: "line-through", color: "red"}}>{item.R_PName}</TableCell>
+                    <TableCell sx={{textDecoration: "line-through", color: "red"}} align="right">{item.R_Quan}X</TableCell>
+                    <TableCell align="right">{NumFormat(0)}</TableCell>
+                  </TableBody>
+                  <TableBody>
+                    <TableCell colSpan={4} align="right">** Void สินค้า: {item.VoidMsg}</TableCell>
+                  </TableBody>
+                </>
+                }
+                </>
               ))}
             </Table>
           </TableContainer>
           <Divider />
           <div>
             <Box display="flex" justifyContent="space-between">
-              <MyTypo2>Sub-TOTAL....(Item {orderList.length})</MyTypo2>
+              <MyTypo2>Sub-TOTAL....(Item {orderList.filter(item=>item.R_Void !== 'V').length})</MyTypo2>
               <MyTypo2>{NumFormat(B_Total)}</MyTypo2>
             </Box>
             <Box padding={2}>
