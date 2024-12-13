@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
 import CryptoJS from "crypto-js";
+import { CookiesProvider } from 'react-cookie'
 
 import { POSContext } from './AppContext'
 import AnimatedRoutes from "./pages/AnimatedRouters"
@@ -35,9 +36,11 @@ function App() {
   const [appData, setAppData] = useState(initContext)
   return (
     <Router>
-      <POSContext.Provider value={{ appData, setAppData }}>
-        <AnimatedRoutes />
-      </POSContext.Provider>
+      <CookiesProvider>
+        <POSContext.Provider value={{ appData, setAppData }}>
+          <AnimatedRoutes />
+        </POSContext.Provider>
+      </CookiesProvider>
     </Router>
   )
 }

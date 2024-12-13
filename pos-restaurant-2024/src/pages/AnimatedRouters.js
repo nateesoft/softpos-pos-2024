@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react'
 import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom"
 import { AnimatePresence } from 'framer-motion'
+import { useIdleTimer } from "react-idle-timer";
 
 import PinLock from "./PinLock"
 import LoginPage from './login'
@@ -35,7 +36,18 @@ import UserAuthen from './modal/UserAuthen'
 
 const AnimatedRoutes = () => {
     const location = useLocation()
-
+    const handleOnUserIdle = () => {
+        localStorage.setItem("userLogin", "")
+        localStorage.setItem("posuser", null)
+        if(window.location.pathname !== '/'){
+            window.location.href = '/'
+        }
+    }
+    useIdleTimer({
+        timeout: 10 * 1000,
+        onIdle: handleOnUserIdle,
+        debounce: 500
+    });
     return (
         <AnimatePresence>
             <Routes location={location}>
