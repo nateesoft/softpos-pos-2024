@@ -52,8 +52,8 @@ const updateTemplate = async (payload, id) => {
     const sqlQuery = `select * from floorplan_template where id='${id}'`
     const results = await pool.query(sqlQuery)
     if (results.length > 0) {
-        const sql = `UPDATE floorplan_template set template=? WHERE id = '${id}'`
-        await pool.query(sql, [template])
+        const sql = `UPDATE floorplan_template set template='${template}' WHERE id = '${id}'`
+        await pool.query(sql)
     } else {
         const sqlInsert = `INSERT INTO floorplan_template (id, template) 
                 values ('${id}', '${template}')`;
