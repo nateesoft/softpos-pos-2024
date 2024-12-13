@@ -4,7 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
 const logger = require('morgan');
-const cors = require('cors')
+// const cors = require('cors')
 
 // for Restaurant POS (old)
 // login
@@ -53,7 +53,7 @@ const invenotryDbRouter = require('./routes/inventory')
 const paidInOutRouter = require('./routes/pos_restaurant/padinout')
 
 const app = express();
-app.use(cors())
+// app.use(cors())
 app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded( { extended: true, limit: '50mb' }))
 
