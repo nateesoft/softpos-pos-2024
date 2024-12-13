@@ -1,8 +1,8 @@
+// electron.js
 const { app, BrowserWindow } = require('electron');
-const path = require('path')
-require('dotenv').config();
+const path = require('path');
+const isDev = false//require('electron-is-dev');
 
-const isDev = true
 let mainWindow;
 
 function createWindow() {
@@ -14,19 +14,17 @@ function createWindow() {
     },
   });
 
-  mainWindow.setMenu(null)
-  const DESKTOP_RUNNING = process.env.DESKTOP
-  const MACNO = process.env.MACNO
-  const WEB_HOSTING = process.env.WEB_HOSTING
-
-  const prodUrlPath = `file://${path.join(__dirname, 'build/index.html')}`
-  const startURL = isDev ? `${WEB_HOSTING}/register-macno?macno=${MACNO}` : prodUrlPath;
+  const startURL = isDev
+    ? 'http://localhost:3000'
+    : `file://${path.join(__dirname, '../build/index.html')}`;
 
   mainWindow.loadURL(startURL);
+
   mainWindow.on('closed', () => (mainWindow = null));
 }
 
 app.on('ready', createWindow);
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
