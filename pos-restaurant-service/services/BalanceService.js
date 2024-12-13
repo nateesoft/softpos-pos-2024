@@ -88,7 +88,8 @@ const deleteBalanceOnly = async R_Index => {
 
 const updatePrint2Kic = async tableNo => {
     const sql = `update balance 
-    set TranType='PDA', R_Pause='P' 
+    set TranType='PDA', 
+    R_Pause='P' 
     where R_Table='${tableNo}'`;
     const results = await pool.query(sql)
     return results

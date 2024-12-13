@@ -32,7 +32,7 @@ const modalStyle = {
   backgroundColor: "snow"
 }
 
-const TotalBill = ({ tableNo, orderList }) => {
+const getTotalAmount = (orderList) => {
   let totalBill = 0
   for (let i = 0; i < orderList.length; i++) {
     const balance = orderList[i]
@@ -40,7 +40,12 @@ const TotalBill = ({ tableNo, orderList }) => {
       totalBill = totalBill + parseInt(balance.R_Quan * balance.R_Price)
     }
   }
-  totalBill = totalBill.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+
+  return totalBill
+}
+
+const TotalBill = ({ orderList }) => {
+  const totalBill = getTotalAmount(orderList).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
   return (
     <div
       style={{
@@ -97,11 +102,29 @@ const OrderItem = ({
   }
 
   const handleClick = () => {
-    navigate(`/payment/${tableNo}`)
+    // update send to Kic
+    apiClient.patch(`/api/balance/printToKic/${tableNo}`)
+      .then((response) => {
+        if (response.status === 200) {
+          navigate(`/payment/${tableNo}`)
+        }
+      })
+      .catch(err => {
+        handleNotification(err.message)
+      })
   }
 
   const backFloorPlan = () => {
-    navigate("/floorplan")
+    // update send to Kic
+    apiClient.patch(`/api/balance/printToKic/${tableNo}`)
+      .then((response) => {
+        if (response.status === 200) {
+          navigate("/floorplan")
+        }
+      })
+      .catch(err => {
+        handleNotification(err.message)
+      })
   }
 
   const handleOpenMenu = (product) => {
@@ -244,7 +267,7 @@ const OrderItem = ({
           ส่งครัว/ พักโต๊ะ
         </Button>
       </Grid2>
-      <TotalBill tableNo={tableNo} orderList={OrderList} />
+      <TotalBill orderList={OrderList} />
       <Grid2 container spacing={1} justifyContent="center">
         <Button
           variant="contained"
@@ -258,7 +281,7 @@ const OrderItem = ({
           variant="contained"
           color="success"
           onClick={handleClick}
-          disabled={OrderList.length === 0}
+          disabled={OrderList.length === 0 || getTotalAmount(OrderList) <= 0}
           endIcon={<PointOfSaleIcon />}
         >
           ชำระเงิน

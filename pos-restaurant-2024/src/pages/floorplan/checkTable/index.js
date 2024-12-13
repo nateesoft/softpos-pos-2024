@@ -6,7 +6,7 @@ import TemplateReport from './TemplateTable'
 
 const columnTable = [
     "Tcode", "TLoginDate", "TCurTime",
-    "TCustomer", "TItem", "TAmount", "TOnAct", "ChkBill", "PrintChkBill"]
+    "TCustomer", "TItem", "TAmount", "TOnAct", "ChkBill", "PrintChkBill", "Action"]
 const InventoryReport = () => {
     const [search, setSearch] = useState("")
     const [dataTable, setDataTable] = useState([])

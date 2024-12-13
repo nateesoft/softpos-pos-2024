@@ -67,17 +67,20 @@ function PaymentPage() {
       })
   }, [tableNo])
 
-  const summaryTableFileBalance = useCallback(async () => {
-    const response = await apiClient.post('/api/balance/summaryBalance', { tableNo })
-    if (response.data.data) {
-      const data = response.data.data
-      setSubTotalAmount(data.TAmount)
-      setServiceAmount(data.ServiceAmt)
-      setVatAmount(data.vatAmount)
-      setNetTotalAmount(data.NetTotal)
-      setProductAndService(data.productAndService)
-      setPrintRecpMessage(data.printRecpMessage)
-    }
+  const summaryTableFileBalance = useCallback(() => {
+    apiClient.post('/api/balance/summaryBalance', { tableNo })
+      .then(response => {
+        if (response.status === 200) {
+          const data = response.data.data
+          setSubTotalAmount(data.TAmount)
+          setServiceAmount(data.ServiceAmt)
+          setVatAmount(data.vatAmount)
+          setNetTotalAmount(data.NetTotal)
+          setProductAndService(data.productAndService)
+          setPrintRecpMessage(data.printRecpMessage)
+        }
+      })
+      .catch(err => handleNotification(err.message))
   }, [])
 
   useEffect(() => {
@@ -127,11 +130,11 @@ function PaymentPage() {
             </Modal> */}
       <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
         <Box sx={{ ...modalStyle }}>
-          <MultiplePayment 
+          <MultiplePayment
             setOpenSplitBill={setOpenSplitBill}
-            onClose={() => setOpenSplitBill(false)} 
-            tableNo={tableNo} 
-            orderList={orderList} 
+            onClose={() => setOpenSplitBill(false)}
+            tableNo={tableNo}
+            orderList={orderList}
             tableFile={{
               subTotalAmount,
               serviceAmount,
@@ -139,7 +142,7 @@ function PaymentPage() {
               netTotalAmount,
               productAndService,
               printRecpMessage
-            }} 
+            }}
           />
         </Box>
       </Modal>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,8 +9,12 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Moment from 'react-moment';
+import { Button } from '@mui/material';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
 
 const TemplateReport = ({ columnTable, dataTable }) => {
+    const navigate = useNavigate()
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -21,6 +26,14 @@ const TemplateReport = ({ columnTable, dataTable }) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    const handlePayment = (tableNo) => {
+        navigate(`/payment/${tableNo}`)
+    }
+
+    const handleOpenTable = (tableNo) => {
+        navigate(`/sale/${tableNo}`)
+    }
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -44,7 +57,7 @@ const TemplateReport = ({ columnTable, dataTable }) => {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.BPCode}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.Tcode}>
                                         {columnTable && columnTable.map((column) => {
                                             let value = row[column]
                                             if (column.includes('Date')) {
@@ -55,6 +68,27 @@ const TemplateReport = ({ columnTable, dataTable }) => {
                                                     {value}
                                                 </TableCell>
                                             } else {
+                                                if (column === 'Action') {
+                                                    if (row["TAmount"] > 0) {
+                                                        return (
+                                                            <TableCell>
+                                                                <Button
+                                                                    variant='contained' color='secondary'
+                                                                    endIcon={<PointOfSaleIcon />}
+                                                                    onClick={() => handlePayment(row.Tcode)}>Bill</Button>
+                                                            </TableCell>
+                                                        )
+                                                    } else {
+                                                        return (
+                                                            <TableCell>
+                                                                <Button
+                                                                    variant='contained' color='success'
+                                                                    startIcon={<MenuBookIcon />}
+                                                                    onClick={() => handleOpenTable(row.Tcode)}>Open</Button>
+                                                            </TableCell>
+                                                        )
+                                                    }
+                                                }
                                                 return (
                                                     <TableCell key={column} align="center">
                                                         {value}
@@ -65,7 +99,7 @@ const TemplateReport = ({ columnTable, dataTable }) => {
                                     </TableRow>
                                 );
                             })}
-                            {dataTable && dataTable.length===0 && <TableCell colSpan={columnTable.length} align='center'>ไม่พบข้อมูล</TableCell>}
+                        {dataTable && dataTable.length === 0 && <TableCell colSpan={columnTable.length} align='center'>ไม่พบข้อมูล</TableCell>}
                     </TableBody>
                 </Table>
             </TableContainer>
