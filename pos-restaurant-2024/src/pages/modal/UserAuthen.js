@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Grid2, TextField, Typography } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login';
 
 import apiClient from '../../httpRequest'
 import ShowNotification from '../utils/ShowNotification';
+import { POSContext } from '../../AppContext';
 
 const UserAuthen = ({ setAuthenUser, handleShowConfirm, onClose }) => {
+    const { appData } = useContext(POSContext)
+    const { encryptData } = appData
+
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
 
@@ -26,7 +30,7 @@ const UserAuthen = ({ setAuthenUser, handleShowConfirm, onClose }) => {
 
     const handleConfirm = () => {
         if (username && password) {
-            apiClient.post(`/api/posuser/loginAuth`, { username, password })
+            apiClient.post(`/api/posuser/loginAuth`, { username, password: encryptData(password) })
                 .then(response => {
                     if (response.status === 200 && response.data.status === 2000) {
                         const posUser = response.data.data

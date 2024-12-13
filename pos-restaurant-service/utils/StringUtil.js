@@ -1,3 +1,31 @@
+const CryptoJS = require("crypto-js")
+
+const SECRET_PASS = process.env.API_SECRET_PASS;
+
+// Encrypt user input text
+const encryptData = (text) => {
+    try {
+      const data = CryptoJS.AES.encrypt(
+        JSON.stringify(text),
+        SECRET_PASS
+      ).toString();
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  // Decrypt user input text
+  const decryptData = (text) => {
+    try {
+      const bytes = CryptoJS.AES.decrypt(text, SECRET_PASS);
+      const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      return data
+    } catch (error) {
+        console.log(error)
+    }
+  };
+
 const Unicode2ASCII = unicode => {
     if (process.env.CONVERT_LATIN_UTF === "N") {
         return unicode
@@ -46,5 +74,7 @@ module.exports = {
     Unicode2ASCII,
     ASCII2Unicode,
     PrefixFormat,
-    PrefixZeroFormat
+    PrefixZeroFormat,
+    encryptData,
+    decryptData
 }

@@ -35,7 +35,7 @@ const boxstyle = {
 
 const Login = () => {
   const { appData, setAppData } = useContext(POSContext)
-  const { macno } = appData
+  const { macno, encryptData } = appData
 
   const iphonePro14max = useMediaQuery('(max-width:430px)');
   const [user, setUser] = useState("")
@@ -55,7 +55,7 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     apiClient
-      .post("/api/posuser/login", { username: user, password, macno: macno })
+      .post("/api/posuser/login", { username: user, password: encryptData(password), macno: macno })
       .then(async (response) => {
         if (response.data.status === 2000) {
           const responseLogin = response.data.data

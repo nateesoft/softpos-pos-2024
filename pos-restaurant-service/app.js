@@ -4,6 +4,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
 const logger = require('morgan');
+const basicAuth = require('express-basic-auth')
+
 // const cors = require('cors')
 
 // for Restaurant POS (old)
@@ -54,6 +56,9 @@ const paidInOutRouter = require('./routes/pos_restaurant/padinout')
 
 const app = express();
 // app.use(cors())
+const username = process.env.WEB_USER_AUTH
+const password = process.env.WEB_USER_PASS
+app.use(basicAuth({ users: { [username]: password }}))
 app.use(bodyParser.json({limit: '50mb'}))
 app.use(bodyParser.urlencoded( { extended: true, limit: '50mb' }))
 
