@@ -4,7 +4,6 @@ import { Alert, Box, Button, TextField, ToggleButton, ToggleButtonGroup, Typogra
 import Grid from '@mui/material/Grid2'
 import CloseButton from '@mui/icons-material/Close'
 import OpenTableButton from '@mui/icons-material/MobileFriendly';
-import Moment from 'react-moment';
 import moment from 'moment'
 
 import apiClient from '../../httpRequest'

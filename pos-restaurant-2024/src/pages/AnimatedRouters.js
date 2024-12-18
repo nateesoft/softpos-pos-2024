@@ -10,14 +10,6 @@ import TableManagement from "./floorplan/TableManagement"
 import MainSalePage from "./mainSale/MainSalePage"
 import PaymentPage from "./payment/PaymentPage"
 
-// report all page
-import SaleReport from "./reports/SaleReport"
-import SaleReport1 from "./reports/SaleReport1"
-import SaleReport2 from "./reports/SaleReport2"
-import SaleReport3 from "./reports/SaleReport3"
-import SaleReport4 from "./reports/SaleReport4"
-import SaleReport5 from "./reports/SaleReport5"
-
 import PageNotFound from './PageNotFound'
 
 import TrelloBoard from '../pages/monitor/kitchen'
@@ -34,6 +26,27 @@ import PrinterDemo from '../pages/printer'
 import ReceiptToPrint from './payment/ReceiptToPrint'
 import UserAuthen from './modal/UserAuthen'
 
+// daily report
+import TableOnAction from './reports/dailySale/TableOnAction';
+import TerminalReport from './reports/dailySale/TerminalReport';
+import DepartmentGroupReport from './reports/dailySale/DepartmentGroupReport';
+import PLUReport from './reports/dailySale/PLUReport';
+import CustomerPerHourReport from './reports/dailySale/CustomerPerHourReport';
+import RecieptReport from './reports/dailySale/RecieptReport';
+import VoidReport from './reports/dailySale/VoidReport';
+import CreditReport from './reports/dailySale/CreditReport';
+import TopSaleReport from './reports/dailySale/TopSaleReport';
+
+// monthly report
+import MTerminalReport from './reports/monthlySale/TerminalReport';
+import MDepartmentGroupReport from './reports/monthlySale/DepartmentGroupReport';
+import MPLUReport from './reports/monthlySale/PLUReport';
+import MCustomerPerHourReport from './reports/monthlySale/CustomerPerHourReport';
+import MRecieptReport from './reports/monthlySale/RecieptReport';
+import MVoidReport from './reports/monthlySale/VoidReport';
+import MCreditReport from './reports/monthlySale/CreditReport';
+import MTopSaleReport from './reports/monthlySale/TopSaleReport';
+
 const AnimatedRoutes = () => {
     const location = useLocation()
     const handleOnUserIdle = () => {
@@ -44,7 +57,7 @@ const AnimatedRoutes = () => {
         }
     }
     useIdleTimer({
-        timeout: 30 * 1000,
+        timeout: 60 * 1000,
         onIdle: handleOnUserIdle,
         debounce: 500
     });
@@ -68,12 +81,27 @@ const AnimatedRoutes = () => {
                         <Route path="/sale/:tableNo" element={<MainSalePage />} />
                         <Route path="/payment/:tableNo" element={<PaymentPage />} />
                         <Route path="/payment/receipt/:billNo" element={<ReceiptToPrint />} />
-                        <Route path="/sale-report" element={<SaleReport />} />
-                        <Route path="/sale-report1" element={<SaleReport1 />} />
-                        <Route path="/sale-report2" element={<SaleReport2 />} />
-                        <Route path="/sale-report3" element={<SaleReport3 />} />
-                        <Route path="/sale-report4" element={<SaleReport4 />} />
-                        <Route path="/sale-report5" element={<SaleReport5 />} />
+
+                        <Route path="/reportDaily/table-on-action" element={<TableOnAction />} />
+                        <Route path="/reportDaily/terminal-report" element={<TerminalReport />} />
+                        <Route path="/reportDaily/department-group-report" element={<DepartmentGroupReport />} />
+                        <Route path="/reportDaily/plu-report" element={<PLUReport />} />
+                        <Route path="/reportDaily/customer-per-hour-report" element={<CustomerPerHourReport />} />
+                        <Route path="/reportDaily/reciept-report" element={<RecieptReport />} />
+                        <Route path="/reportDaily/void-report" element={<VoidReport />} />
+                        <Route path="/reportDaily/credit-report" element={<CreditReport />} />
+                        <Route path="/reportDaily/top-sale-report" element={<TopSaleReport />} />
+
+                        <Route path="/reportMonthly/terminal-report" element={<MTerminalReport />} />
+                        <Route path="/reportMonthly/department-group-report" element={<MDepartmentGroupReport />} />
+                        <Route path="/reportMonthly/plu-report" element={<MPLUReport />} />
+                        <Route path="/reportMonthly/customer-per-hour-report" element={<MCustomerPerHourReport />} />
+                        <Route path="/reportMonthly/reciept-report" element={<MRecieptReport />} />
+                        <Route path="/reportMonthly/void-report" element={<MVoidReport />} />
+                        <Route path="/reportMonthly/credit-report" element={<MCreditReport />} />
+                        <Route path="/reportMonthly/top-sale-report" element={<MTopSaleReport />} />
+
+
                         <Route path="/inventory/db" element={<TemplateReport />} />
                     </Route>
                 </Route>

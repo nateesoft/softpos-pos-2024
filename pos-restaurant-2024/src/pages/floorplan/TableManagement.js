@@ -138,6 +138,7 @@ const TableManagement = () => {
 
   const onSave = () => {
     if (reactFlowInstance) {
+      console.log(reactFlowInstance)
       apiClient
         .patch(`/api/floorplan-template/${selectFloor}`, {
           template: JSON.stringify(reactFlowInstance.toObject())

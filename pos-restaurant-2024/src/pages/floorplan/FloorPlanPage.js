@@ -26,6 +26,7 @@ import VipPeopleIcon from '@mui/icons-material/Hail';
 import RefundIcon from "@mui/icons-material/ReceiptLong"
 
 import CheckTableStatus from "./checkTable"
+import CheckCashierStatus from "./cashierStatus"
 import RecieptCopyPrint from "./RecieptCopyPrint"
 import RefundBill from "./refund/RefundBill"
 import ManageCashDrawer from './ManageCashDrawer';
@@ -47,6 +48,8 @@ import OtherMenuSelect from "./OtherMenuSelect"
 import { POSContext } from "../../AppContext"
 import ShowNotification from "../utils/ShowNotification"
 import ReportSelect from "./ReportSelect"
+import ReportDaily from "./ReportDaily"
+import ReportMonthly from "./ReportMonthly"
 import Footer from '../Footer'
 
 const modalPinStyle = {
@@ -89,6 +92,7 @@ function FloorPlanPage() {
   const [nodes, setNodes, onNodesChange] = useNodesState([])
 
   const [openTableStatus, setOpenTableStatus] = useState(false)
+  const [openCashierStatus, setOpenCashierStatus] = useState(false)
   const [openCopyPrint, setOpenCopyPrint] = useState(false)
   const [openRefundBill, setOpenRefundBill] = useState(false)
   const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
@@ -179,6 +183,8 @@ function FloorPlanPage() {
       navigate("/table-setup")
     } else if (data === 'CheckTableStatus') {
       setOpenTableStatus(true)
+    } else if (data === 'CashierStatus') {
+      setOpenCashierStatus(true)
     }
   };
 
@@ -275,6 +281,12 @@ function FloorPlanPage() {
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <ReportSelect />
                 </IconButton>
+                <IconButton color="inherit" aria-label="open drawer" edge="start">
+                  <ReportDaily />
+                </IconButton>
+                <IconButton color="inherit" aria-label="open drawer" edge="start">
+                  <ReportMonthly />
+                </IconButton>
               </div>}
             </Grid2>
             <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{ flexGrow: 1 }}>
@@ -331,6 +343,11 @@ function FloorPlanPage() {
       <Modal open={openTableStatus} onClose={() => handleCloseModal(() => setOpenTableStatus(false))}>
         <Box sx={{ ...modalPinStyle, padding: "10px" }}>
           <CheckTableStatus setOpen={setOpenTableStatus} />
+        </Box>
+      </Modal>
+      <Modal open={openCashierStatus} onClose={() => handleCloseModal(() => setOpenCashierStatus(false))}>
+        <Box sx={{ ...modalPinStyle, padding: "10px" }}>
+          <CheckCashierStatus setOpen={setOpenCashierStatus} onClose={()=>setOpenCashierStatus(false)} />
         </Box>
       </Modal>
       <Modal open={openRefundBill} onClose={() => handleCloseModal(() => setOpenRefundBill(false))}>
