@@ -20,8 +20,8 @@ class ComponentToPrint extends Component {
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     <div style={{ marginTop: "20px" }}></div>
                     <div align="center">REG ID :{macno}</div>
-                    <div align="center">รายงานยอดการเงิน (Terminal Report)</div>
-                    <div align="center">หมายเลขเครื่อง : {macno}</div>
+                    <div align="center">รายงานพนักงานขาย (Cashier Report)</div>
+                    <div align="center">รหัสพนักงานขาย : {userLogin}</div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>

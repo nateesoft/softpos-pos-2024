@@ -49,7 +49,7 @@ import { POSContext } from "../../AppContext"
 import ShowNotification from "../utils/ShowNotification"
 import ReportSelect from "./ReportSelect"
 import ReportDaily from "./ReportDaily"
-import ReportMonthly from "./ReportMonthly"
+// import ReportMonthly from "./ReportMonthly"
 import Footer from '../Footer'
 
 const modalPinStyle = {
@@ -284,9 +284,9 @@ function FloorPlanPage() {
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <ReportDaily />
                 </IconButton>
-                <IconButton color="inherit" aria-label="open drawer" edge="start">
+                {/* <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <ReportMonthly />
-                </IconButton>
+                </IconButton> */}
               </div>}
             </Grid2>
             <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{ flexGrow: 1 }}>

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
-import { Divider, IconButton, Menu, Typography } from '@mui/material';
+import { IconButton, Menu, Typography } from '@mui/material';
 import MicrowaveIcon from '@mui/icons-material/Microwave';
 import AssessmentIcon from '@mui/icons-material/Assessment';
-import SummarizeIcon from '@mui/icons-material/Summarize';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
+
 import { useNavigate } from 'react-router-dom';
 
 const ReportSelect = (props) => {
@@ -23,12 +24,10 @@ const ReportSelect = (props) => {
     const handleChange = (data) => {
         if (data === 'print2kic') {
             navigate("/kitchen-monitor")
+        } else if(data==='overview-report'){
+            navigate('/reportDaily/overview')
         }
     };
-
-    const viewReport = (page) => {
-        navigate("/sale-report" + page)
-    }
 
     return (
         <>
@@ -44,6 +43,11 @@ const ReportSelect = (props) => {
                     'aria-labelledby': 'basic-button',
                 }}
             >
+                <MenuItem onClick={()=>handleChange('overview-report')}>
+                    <Box display="flex" justifyContent="center">
+                        <SpaceDashboardIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>Report Dashboard</Typography>
+                    </Box>
+                </MenuItem>
                 <MenuItem onClick={()=>handleChange('print2kic')}>
                     <Box display="flex" justifyContent="center">
                         <MicrowaveIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>รายงานส่งครัว</Typography>

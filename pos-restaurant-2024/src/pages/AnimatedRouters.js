@@ -26,16 +26,24 @@ import PrinterDemo from '../pages/printer'
 import ReceiptToPrint from './payment/ReceiptToPrint'
 import UserAuthen from './modal/UserAuthen'
 
+// all reports
+import OverviewReport from './reports/allReport/OverviewReport';
+import TableOnActionList from './reports/allReport/TableOnAction';
+
 // daily report
 import TableOnAction from './reports/dailySale/TableOnAction';
 import TerminalReport from './reports/dailySale/TerminalReport';
+import CashierReport from './reports/dailySale/CashierReport';
 import DepartmentGroupReport from './reports/dailySale/DepartmentGroupReport';
 import PLUReport from './reports/dailySale/PLUReport';
 import CustomerPerHourReport from './reports/dailySale/CustomerPerHourReport';
+import HourlyPluReport from './reports/dailySale/HourlyPluReport';
 import RecieptReport from './reports/dailySale/RecieptReport';
 import VoidReport from './reports/dailySale/VoidReport';
 import CreditReport from './reports/dailySale/CreditReport';
 import TopSaleReport from './reports/dailySale/TopSaleReport';
+import PromotionDiscount from './reports/dailySale/PromotionDiscount';
+import SpecialCuponDiscount from './reports/dailySale/SpecialCuponDiscount';
 
 // monthly report
 import MTerminalReport from './reports/monthlySale/TerminalReport';
@@ -57,7 +65,7 @@ const AnimatedRoutes = () => {
         }
     }
     useIdleTimer({
-        timeout: 60 * 1000,
+        timeout: 5 * 60 * 1000,
         onIdle: handleOnUserIdle,
         debounce: 500
     });
@@ -82,15 +90,22 @@ const AnimatedRoutes = () => {
                         <Route path="/payment/:tableNo" element={<PaymentPage />} />
                         <Route path="/payment/receipt/:billNo" element={<ReceiptToPrint />} />
 
+                        <Route path="/reportDaily/overview" element={<OverviewReport />} />
+                        <Route path="/reportDaily/table-on-action/list" element={<TableOnActionList />} />
+
                         <Route path="/reportDaily/table-on-action" element={<TableOnAction />} />
                         <Route path="/reportDaily/terminal-report" element={<TerminalReport />} />
+                        <Route path="/reportDaily/cashier-report" element={<CashierReport />} />
                         <Route path="/reportDaily/department-group-report" element={<DepartmentGroupReport />} />
                         <Route path="/reportDaily/plu-report" element={<PLUReport />} />
                         <Route path="/reportDaily/customer-per-hour-report" element={<CustomerPerHourReport />} />
+                        <Route path="/reportDaily/hourly-plu-report" element={<HourlyPluReport />} />
                         <Route path="/reportDaily/reciept-report" element={<RecieptReport />} />
                         <Route path="/reportDaily/void-report" element={<VoidReport />} />
                         <Route path="/reportDaily/credit-report" element={<CreditReport />} />
                         <Route path="/reportDaily/top-sale-report" element={<TopSaleReport />} />
+                        <Route path="/reportDaily/promotion-discount" element={<PromotionDiscount />} />
+                        <Route path="/reportDaily/special-cupon-discount" element={<SpecialCuponDiscount />} />
 
                         <Route path="/reportMonthly/terminal-report" element={<MTerminalReport />} />
                         <Route path="/reportMonthly/department-group-report" element={<MDepartmentGroupReport />} />

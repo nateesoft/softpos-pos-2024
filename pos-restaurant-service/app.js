@@ -37,6 +37,7 @@ const memmasterRouter = require('./routes/member/crm/Memmaster');
 
 // for printer thermal
 const printerThermalRouter = require('./routes/printer');
+const reportRouter = require('./routes/report');
 
 // process stock
 const processStockRouter = require('./routes/pos_restaurant/stock/processStock')
@@ -111,6 +112,7 @@ app.use('/api/crm/member', memmasterRouter)
 
 // route for test printer
 app.use('/api/printer-thermal', printerThermalRouter)
+app.use('/api/report', reportRouter)
 
 
 // catch 404 and forward to error handler

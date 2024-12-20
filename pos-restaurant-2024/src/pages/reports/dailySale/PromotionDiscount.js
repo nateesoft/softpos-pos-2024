@@ -16,37 +16,35 @@ class ComponentToPrint extends Component {
         const { userLogin, macno, reports, total } = this.props
 
         return (
-            <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
+            <Grid2 id='content' container justifyContent="center" sx={{ marginBottom: "100px" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     <div style={{ marginTop: "20px" }}></div>
-                    <div align="center">รายงานโต๊ะค้าง (ยังไม่ได้ชำระเงิน)</div>
-                    <div align="center" style={{margin: "10px"}}>Table Check</div>
+                    <div align="center">รายงานการให้ส่วนลดโปรโมชั่น</div>
+                    <div align="center">(Promotion Discount)</div>
+                    <div align="left" style={{margin: "20px"}}>หมายเลขเครื่อง : 001 .. 001</div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
                         <thead>
-                            <tr style={{borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed"}}>
-                                <td align='center'>Table</td>
-                                <td align='right'>Amount</td>
-                                <td align='center'>Open-Time</td>
-                                <td align='center'>Customer</td>
+                            <tr style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
+                                <td align='left'>โปรโมชั่น</td>
+                                <td align='right'>จำนวน</td>
+                                <td align='right'>ส่วนลด</td>
                             </tr>
                         </thead>
                         <tbody>
                             {reports && reports.map((row) => (
                                 <tr>
-                                    <td align='center'>{row.R_Table}</td>
+                                    <td align='left'>{row.R_Table}</td>
                                     <td align='right'>{row.R_Total}</td>
-                                    <td align='center'>{row.TCurTime}</td>
-                                    <td align='center'>{row.TCustomer}</td>
+                                    <td align='right'>{row.TCurTime}</td>
                                 </tr>
                             ))}
                         </tbody>
                         <tfoot>
-                            <tr style={{borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed"}}>
-                                <td></td>
-                                <td></td>
-                                <td>Total</td>
-                                <td>{total}</td>
+                            <tr style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
+                                <td align='left'>ยอดรวม (Total)....</td>
+                                <td align='right'>0</td>
+                                <td align='right'>0.00</td>
                             </tr>
                         </tfoot>
                     </table>

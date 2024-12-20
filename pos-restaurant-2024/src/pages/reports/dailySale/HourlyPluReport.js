@@ -13,73 +13,82 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno, reports, total } = this.props
+        const { userLogin, macno } = this.props
 
         return (
-            <Grid2 id='content' container justifyContent="center" sx={{ marginBottom: "100px" }}>
+            <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     <div style={{ marginTop: "20px" }}></div>
-                    <div align="center">รายงานการชำระด้วยบัตรเครดิต</div>
-                    <div align="center" style={{ marginBottom: "10px" }}>(Credit Card Report)</div>
-                    <div align="center">หมายเลขเครื่อง : 001 .. 001</div>
-                    <div align="center" style={{ marginBottom: "10px" }}>รหัสพนักงาน Cashier : 9999 .. 9999</div>
+                    <div align="center">รายงานการขายรายชั่วโมง</div>
+                    <div align="center">(Hourly By Plu Report)</div>
+                    <div style={{margin: "20px"}}></div>
+                    <div style={{margin: "20px"}}></div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
-                        <thead>
-                            <tr style={{ borderTop: "1px solid", borderStyle: "dashed" }}>
-                                <td align='center'>ประเภทบัตร</td>
-                                <td align='center'>ชื่อบัตรเครดิต</td>
+                        <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
+                            <tr>
+                                <td>เวลา...</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
-                            <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
-                                <td align='center'>ลำดับ</td>
-                                <td align='center'>หมายเลขบัตร</td>
-                                <td align='center'>รหัสอนุมัติ</td>
+                            <tr>
+                                <td align='left'>รหัสสินค้า</td>
+                                <td align='left'></td>
+                                <td align='center'>จำนวน</td>
                                 <td align='right'>จำนวนเงิน</td>
                             </tr>
-                        </thead>
-                        <tbody>
+                        </tbody>
+                        <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
                             <tr>
-                                <td align='center'>**VSA</td>
-                                <td align='center'>VISA</td>
-                            </tr>
-                            <tr>
-                                <td align='center'>1</td>
-                                <td align='center'>xxxx1</td>
-                                <td align='right'>1111</td>
-                                <td align='right'>4,305.40</td>
-                            </tr>
-                            <tr>
-                                <td align='center'>Tot-Slip</td>
-                                <td align='center'>1</td>
+                                <td>***09:00</td>
+                                <td align='left'></td>
+                                <td align='center'></td>
                                 <td align='right'></td>
-                                <td align='right'>4,305.40</td>
+                            </tr>
+                            <tr>
+                                <td align='left'>BEF0024</td>
+                                <td>เนื้อ 250g+ผักโขมผัดเน</td>
+                                <td align='center'>2</td>
+                                <td align='right'>550.00</td>
+                            </tr>
+                            <tr>
+                                <td align='left'>KID008</td>
+                                <td>KID ไส้กรอกหมูรมควัน</td>
+                                <td align='center'>1</td>
+                                <td align='right'>129.00</td>
+                            </tr>
+                            <tr>
+                                <td align='left'>KID012</td>
+                                <td>KID น้ำส้ม</td>
+                                <td align='center'>1</td>
+                                <td align='right'>0.00</td>
+                            </tr>
+                            <tr>
+                                <td>***10:00</td>
+                                <td align='left'></td>
+                                <td align='center'></td>
+                                <td align='right'></td>
+                            </tr>
+                            <tr>
+                                <td align='left'>BEF0024</td>
+                                <td>เนื้อ 250g+ผักโขมผัดเน</td>
+                                <td align='center'>2</td>
+                                <td align='right'>550.00</td>
+                            </tr>
+                            <tr>
+                                <td align='left'>KID008</td>
+                                <td>KID ไส้กรอกหมูรมควัน</td>
+                                <td align='center'>1</td>
+                                <td align='right'>129.00</td>
+                            </tr>
+                            <tr>
+                                <td align='left'>KID012</td>
+                                <td>KID น้ำส้ม</td>
+                                <td align='center'>1</td>
+                                <td align='right'>0.00</td>
                             </tr>
                         </tbody>
-                        <tbody>
-                            <tr>
-                                <td align='center'>**VSA</td>
-                                <td align='center'>VISA</td>
-                            </tr>
-                            <tr>
-                                <td align='center'>1</td>
-                                <td align='center'>xxxx1</td>
-                                <td align='right'>1111</td>
-                                <td align='right'>4,305.40</td>
-                            </tr>
-                            <tr>
-                                <td align='center'>Tot-Slip</td>
-                                <td align='center'>1</td>
-                                <td align='right'></td>
-                                <td align='right'>4,305.40</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table width="100%" cellPadding={5}>
-                        <tr style={{ borderBottom: "1px solid", borderTop: "1px solid", marginTop: "10px", borderStyle: "dashed" }}>
-                            <td>Sum-Total Slip</td>
-                            <td align='rigth'>1</td>
-                            <td align='right'>4,305.40</td>
-                        </tr>
                     </table>
                 </Paper>
             </Grid2>
