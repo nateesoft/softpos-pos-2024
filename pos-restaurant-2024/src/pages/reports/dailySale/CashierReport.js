@@ -152,21 +152,21 @@ class ComponentToPrint extends Component {
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>29,234.80</td>
+                                <td align='right'>{report.B_NetTotal}</td>
                             </tr>
                             <tr>
                                 <td>เงินสด Cash</td>
                                 <td align='right'>20</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>20,966.00</td>
+                                <td align='right'>{report.B_Cash}</td>
                             </tr>
                             <tr>
                                 <td>บัตรกำนัล Gift Voucher</td>
                                 <td align='right'>0</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0.00</td>
+                                <td align='right'>{report.B_GiftVoucher}</td>
                             </tr>
                             <tr>
                                 <td>ลูกหนี้การค้า</td>
@@ -210,40 +210,33 @@ class ComponentToPrint extends Component {
                                 <td align='right'></td>
                                 <td align='right'>0</td>
                             </tr>
-                            <tr style={{ borderTop: "1px solid", borderBottom: "1px solid", borderStyle: "dashed" }}>
-                                <td>ยอดเงินนำส่ง</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                                <td align='right'>29,234.80</td>
-                            </tr>
                             <tr>
                                 <td>ยอดขายสินค้า/บริการ คิดภาษี</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0</td>
+                                <td align='right'>{report.B_NetVat}</td>
                             </tr>
                             <tr>
                                 <td>ยอดขายไม่คิดภาษี</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0</td>
+                                <td align='right'>{report.B_NetNonVat}</td>
                             </tr>
                             <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
                                 <td>ภาษีมูลค่าเพิ่ม (Vat)</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0</td>
+                                <td align='right'>{report.B_Vat}</td>
                             </tr>
                             <tr>
                                 <td>จำนวนลูกค้าทั้งสิ้น</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0</td>
+                                <td align='right'>{report.B_Cust}</td>
                             </tr>
                             <tr>
                                 <td>จำนวนใบกำกับภาษีอย่างย่อ</td>
@@ -275,10 +268,7 @@ class ComponentToPrint extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    <table width="100%">
-                        <tbody>
-                            
-                        </tbody>
+                    {/* <table width="100%">
                         <tr>
                             <td>ประเภทการขาย</td>
                             <td align='right'>บิล</td>
@@ -303,7 +293,7 @@ class ComponentToPrint extends Component {
                             <td align='right'>0</td>
                             <td align='right'>0</td>
                         </tr>
-                    </table>
+                    </table> */}
                 </Paper>
             </Grid2>
         )

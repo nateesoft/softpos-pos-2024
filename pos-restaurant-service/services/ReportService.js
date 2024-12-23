@@ -217,10 +217,10 @@ const getTimeCurrentData = (fixTime, results) => {
     const newResults = []
     fixTime.forEach(item => {
         const newFindTime = results.filter(t => t.R_Time.substr(0, 2) === item)
-        if(newFindTime.length === 0){
+        if (newFindTime.length === 0) {
             return;
         }
-        newResults.push({time: item+':00'}, newFindTime)
+        newResults.push({ time: item + ':00' }, newFindTime)
     })
     return newResults
 }
@@ -240,6 +240,113 @@ const getHourlyReport = async () => {
     return newResults
 }
 
+const getReceipt = async () => {
+    const sql = `select B_Refno, B_Ontime, 
+        B_Cash, B_Ton, B_CrCode1, B_CrAmt1, B_NetTotal, B_Vat 
+        from billno b 
+        where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' 
+        and b.B_Void <> 'V';`;
+    const results = await pool.query(sql)
+    const newResults = []
+    results.map(item => {
+        newResults.push(item)
+        if (item.B_Cash > 0) {
+            newResults.push(
+                {
+                    paymentType: "Cash",
+                    paymentTime: "",
+                    paymentAmount: item.B_Cash - item.B_Ton,
+                    paymentVat: ""
+                }
+            )
+        }
+        if (item.B_CrCode1 !== '') {
+            newResults.push(
+                {
+                    paymentType: item.B_CrCode1,
+                    paymentTime: "",
+                    paymentAmount: item.B_CrAmt1,
+                    paymentVat: ""
+                }
+            )
+        }
+    })
+    return newResults
+}
+
+const getVoidBill = async () => {
+    const sql = `select B_MacNo, B_Cashier, B_Table, B_Ontime, B_VoidUser, B_VoidTime, 
+        B_Refno, ts.R_PluCode, ts.R_Quan, ts.R_Total 
+        from billno b inner join t_sale ts on b.B_Refno =ts.R_Refno 
+        where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' and b.B_Void = 'V'`;
+    const results = await pool.query(sql)
+    return {
+        data: results,
+        summary: {
+            voidCount: results.length,
+            voidAmount: results.reduce((partialSum, a) => partialSum + a.R_Total, 0)
+        }
+    }
+}
+
+const getCreditPayment = async () => {
+    const sql = `select c.CrCode, c.CrName, 
+        b.B_CardNo1, b.B_AppCode1, b.B_CrChargeAmt1, b.B_CrAmt1 
+        from billno b  left join creditfile c on b.B_CrCode1 =c.CrCode 
+        where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' 
+        and b.B_Void <> 'V' 
+        and (B_CrCode1 <> '' or B_CrCode1 <> null)`;
+    const results = await pool.query(sql)
+    const sql2 = `select c.CrCode, count(c.CrCode), 
+        sum(b.B_CrChargeAmt1) B_CrChargeAmt1, sum(b.B_CrAmt1) B_CrAmt1 
+        from billno b  left join creditfile c on b.B_CrCode1 =c.CrCode 
+        where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' and b.B_Void <> 'V' 
+        and (B_CrCode1 <> '' or B_CrCode1 <> null)
+        group by CrCode`;
+    const results2 = await pool.query(sql2)
+
+    const newResults = results.map((item, index) => {
+        return {
+            ...item, index: (index + 1)
+        }
+    })
+    return {
+        data: newResults,
+        summary: {
+            creditCount: newResults.length,
+            creditAmount: newResults.reduce((partialSum, a) => partialSum + a.B_CrAmt1, 0)
+        }
+    }
+}
+
+function compareNumbers(a, b) {
+    return b.R_Quan - a.R_Quan;
+}
+const getTopSale = async () => {
+    const sql = `select g.GroupCode, g.GroupName, t.R_PluCode, t.R_PName,
+        sum(t.R_Quan) R_Quan , sum(t.R_Total) R_Total 
+        from t_sale t 
+        left join groupfile g on t.R_Group=g.GroupCode 
+        where t.R_Date ='${getMoment().format('YYYY-MM-DD')}' 
+        group by t.R_PluCode, t.R_PName , g.GroupCode, g.GroupName 
+        limit 0, 10`;
+    const results = await pool.query(sql)
+    const newResults = results.sort(compareNumbers).map((item, index) => {
+        return {
+            ...item, index: (index + 1)
+        }
+    })
+    return newResults
+}
+
+const getPromotion = async () => {
+    return []
+}
+
+const getSpecialCupon = async () => {
+    return []
+}
+
 module.exports = {
     getTableOnAction,
     getTableOnActionList,
@@ -248,5 +355,11 @@ module.exports = {
     getGroupPlu,
     getPluCode,
     getCustomerPerHour,
-    getHourlyReport
+    getHourlyReport,
+    getReceipt,
+    getVoidBill,
+    getCreditPayment,
+    getTopSale,
+    getPromotion,
+    getSpecialCupon
 }

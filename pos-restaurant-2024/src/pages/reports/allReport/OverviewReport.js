@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const desktopOS = [
   {
-    label: 'ส้มตำปลาร้า',
+    label: 'xxxxxx',
     value: 72.72,
   },
   {
@@ -120,7 +120,7 @@ const SaleReportOverview = () => {
               <Typography sx={{ fontWeight: "bold" }}><u>รายการสินค้าขายดีประจำวัน</u></Typography>
               <Grid2 display="flex" justifyContent="space-between">
                 <MenuBook />
-                <Typography>ส้มตำปลาร้า</Typography>
+                <Typography>xxxxx</Typography>
               </Grid2>
               <Grid2 display="flex" justifyContent="space-between">
                 <MenuBook />
@@ -204,7 +204,7 @@ const SaleReportOverview = () => {
               series={[
                 {
                   data: [
-                    { id: 0, value: 80, label: 'ส้มตำปลาร้า' },
+                    { id: 0, value: 80, label: 'xxxxx' },
                     { id: 1, value: 45, label: 'ข้าวผัดอเมริกัน' },
                     { id: 2, value: 10, label: 'ผัดไทใส่ไข่' },
                   ],

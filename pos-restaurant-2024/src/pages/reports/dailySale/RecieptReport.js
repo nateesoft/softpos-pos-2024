@@ -18,7 +18,7 @@ class ComponentToPrint extends Component {
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
         return (
-            <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
+            <Grid2 id='content' container justifyContent="center" sx={{ marginBottom: "100px" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     {headers && headers.map((header) => <div>{header}</div>)}
                     <div style={{ marginTop: "30px" }}></div>
@@ -36,48 +36,24 @@ class ComponentToPrint extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td align='center'>0000129</td>
-                                <td align='right'>11:25:52</td>
-                                <td align='right'>149.00</td>
-                                <td align='right'>9.75</td>
-                            </tr>
-                            <tr>
-                                <td align='center'><div style={{marginLeft: "10px"}}>*** QR</div></td>
-                                <td align='right'>..........</td>
-                                <td align='right'>49.00</td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td align='center'><div style={{marginLeft: "10px"}}>Cash</div></td>
-                                <td align='right'>..........</td>
-                                <td align='right'>100.00</td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td align='center'>0000130</td>
-                                <td align='right'>11:25:52</td>
-                                <td align='right'>149.00</td>
-                                <td align='right'>9.75</td>
-                            </tr>
-                            <tr>
-                                <td align='center'><div style={{marginLeft: "10px"}}>Cash</div></td>
-                                <td align='right'>..........</td>
-                                <td align='right'>149.00</td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td align='center'>0000131</td>
-                                <td align='right'>11:25:52</td>
-                                <td align='right'>149.00</td>
-                                <td align='right'>9.75</td>
-                            </tr>
-                            <tr>
-                                <td align='center'><div style={{marginLeft: "10px"}}>*** QR</div></td>
-                                <td align='right'>..........</td>
-                                <td align='right'>49.00</td>
-                                <td align='right'></td>
-                            </tr>
+                            {reports && reports.map(item => {
+                                if (item.paymentType) {
+                                    return <tr>
+                                        <td align='right'>{item.paymentType}</td>
+                                        <td align='right'>{item.paymentTime}</td>
+                                        <td align='right'>{item.paymentAmount}</td>
+                                        <td align='right'>{item.paymentVat}</td>
+                                    </tr>
+                                } else {
+                                    return <tr>
+                                        <td>{item.B_Refno}</td>
+                                        <td align='right'>{item.B_Ontime}</td>
+                                        <td align='right'>{item.B_NetTotal}</td>
+                                        <td align='right'>{item.B_Vat}</td>
+                                    </tr>
+                                }
+                            }
+                            )}
                         </tbody>
                     </table>
                 </Paper>
@@ -104,16 +80,16 @@ const RecieptReport = () => {
 
     const loadPosHwSetup = useCallback(() => {
         apiClient
-          .get(`/api/poshwsetup/${macno}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setPosHwSetup(response.data.data)
-            }
-          })
-          .catch((error) => {
-            alert(error.message)
-          })
-      }, [])
+            .get(`/api/poshwsetup/${macno}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    setPosHwSetup(response.data.data)
+                }
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
+    }, [])
 
     const loadReport = useCallback(() => {
         apiClient

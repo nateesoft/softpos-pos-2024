@@ -13,7 +13,7 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno, reports } = this.props
+        const { userLogin, macno, reports, summary } = this.props
         const poshwSetup = this.props.poshwSetup
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
@@ -45,44 +45,30 @@ class ComponentToPrint extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td align='center'>001</td>
-                                <td align='center'>9999</td>
-                                <td align='center'>T1</td>
-                                <td align='center'>10:30:04</td>
-                                <td align='center'>9999</td>
-                                <td align='center'>10:30:30</td>
-                            </tr>
-                            <tr>
-                                <td align='center'>0000128</td>
-                                <td align='center'>1010</td>
-                                <td align='right'>1</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                        </tbody>
-                        <tbody>
-                            <tr>
-                                <td align='center'>001</td>
-                                <td align='center'>9999</td>
-                                <td align='center'>T1</td>
-                                <td align='center'>10:30:04</td>
-                                <td align='center'>9999</td>
-                                <td align='center'>10:30:30</td>
-                            </tr>
-                            <tr>
-                                <td align='center'>0000128</td>
-                                <td align='center'>1010</td>
-                                <td align='right'>1</td>
-                                <td align='right'>0.00</td>
-                            </tr>
+                            {reports && reports.map(item =><>
+                                <tr>
+                                    <td align='center'>{item.B_MacNo}</td>
+                                    <td align='center'>{item.B_Cashier}</td>
+                                    <td align='center'>{item.B_Table}</td>
+                                    <td align='center'>{item.B_Ontime}</td>
+                                    <td align='center'>{item.B_VoidUser}</td>
+                                    <td align='center'>{item.B_VoidTime}</td>
+                                </tr>
+                                <tr>
+                                    <td align='center'>{item.B_Refno}</td>
+                                    <td align='center'>{item.R_PluCode}</td>
+                                    <td align='right'>{item.R_Quan}</td>
+                                    <td align='right'>{item.R_Total}</td>
+                                </tr>
+                            </>)}
                         </tbody>
                     </table>
                     <table width="100%" cellPadding={5} style={{ borderBottom: "1px solid", borderTop: "1px solid", marginTop: "10px" }}>
                         <tr>
                             <td>จำนวน Void</td>
-                            <td align='rigth'>0</td>
+                            <td align='rigth'>{summary.voidCount}</td>
                             <td>จำนวนเงิน</td>
-                            <td align='right'>0.00</td>
+                            <td align='right'>{summary.voidAmount}</td>
                         </tr>
                     </table>
                 </Paper>
@@ -96,6 +82,7 @@ const VoidReport = () => {
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
+    const [summary, setSummary] =useState({})
     const [poshwSetup, setPosHwSetup] = useState({})
 
     const functionToPrint = useReactToPrint({
@@ -125,7 +112,8 @@ const VoidReport = () => {
             .post(`/api/report/void-report`)
             .then((response) => {
                 if (response.status === 200) {
-                    setReports(response.data.data)
+                    setReports(response.data.data.data)
+                    setSummary(response.data.data.summary)
                 }
             })
             .catch((error) => {
@@ -145,6 +133,7 @@ const VoidReport = () => {
                 userLogin={userLogin}
                 macno={macno}
                 reports={reports}
+                summary={summary}
                 poshwSetup={poshwSetup}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>

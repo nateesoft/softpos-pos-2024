@@ -13,7 +13,7 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno } = this.props
+        const { userLogin, macno, reports } = this.props
         const poshwSetup = this.props.poshwSetup
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
@@ -34,60 +34,22 @@ class ComponentToPrint extends Component {
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
                             <tr>
                                 <td>กลุ่มสินค้า...</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
                                 <td align='center'>ลำดับ</td>
-                                <td align='center'>รหัสสินค้า</td>
+                                <td align='left'>รหัสสินค้า</td>
                                 <td align='right'>จำนวน</td>
                                 <td align='right'>จำนวนเงิน</td>
                             </tr>
                         </tbody>
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
-                            <tr>
-                                <td>****03 Appitizer</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td align='center'>1</td>
-                                <td>Junsai</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td align='center'></td>
-                                <td>1001</td>
-                                <td align='right'>5</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td align='center'>2</td>
-                                <td>SET 3,800++(Served 14 Menu)</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td align='center'></td>
-                                <td>SET1001</td>
-                                <td align='right'>5</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td align='center'>3</td>
-                                <td>Hotate jelly</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td align='center'></td>
-                                <td>1003</td>
-                                <td align='right'>5</td>
-                                <td align='right'>0.00</td>
-                            </tr>
+                            {reports && reports.map(item =>
+                                <tr>
+                                    <td>{item.GroupCode} {item.GroupName}</td>
+                                    <td align='center'>{item.index}</td>
+                                    <td align='left'>{item.R_PluCode}</td>
+                                    <td align='right'>{item.R_Quan}</td>
+                                    <td align='right'>{item.R_Total}</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </Paper>

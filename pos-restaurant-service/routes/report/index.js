@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getTableOnAction, getTableOnActionList, getTerminalByMacno, getTerminalByCashier, getGroupPlu, getPluCode, getHourlyReport, getCustomerPerHour } = require('../../services/ReportService');
+const { getTableOnAction, getTableOnActionList, getTerminalByMacno, getTerminalByCashier, getGroupPlu, getPluCode, getHourlyReport, getCustomerPerHour, getReceipt, getVoidBill, getCreditPayment, getTopSale, getPromotion, getSpecialCupon } = require('../../services/ReportService');
 
 router.get('/', async (req, res, next) => {
   res.send('Success')
@@ -92,8 +92,7 @@ router.post('/hourly-report', async (req, res, next) => {
 });
 
 router.post('/receipt-report', async (req, res, next) => {
-  const { pluCode } = req.body
-  getPluCode(pluCode)
+  getReceipt()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -103,8 +102,7 @@ router.post('/receipt-report', async (req, res, next) => {
 });
 
 router.post('/void-report', async (req, res, next) => {
-  const { pluCode } = req.body
-  getPluCode(pluCode)
+  getVoidBill()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -114,8 +112,7 @@ router.post('/void-report', async (req, res, next) => {
 });
 
 router.post('/credit-report', async (req, res, next) => {
-  const { pluCode } = req.body
-  getPluCode(pluCode)
+  getCreditPayment()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -125,8 +122,7 @@ router.post('/credit-report', async (req, res, next) => {
 });
 
 router.post('/top-sale-report', async (req, res, next) => {
-  const { pluCode } = req.body
-  getPluCode(pluCode)
+  getTopSale()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -136,8 +132,7 @@ router.post('/top-sale-report', async (req, res, next) => {
 });
 
 router.post('/promotion-report', async (req, res, next) => {
-  const { pluCode } = req.body
-  getPluCode(pluCode)
+  getPromotion()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -147,8 +142,7 @@ router.post('/promotion-report', async (req, res, next) => {
 });
 
 router.post('/special-cupon-report', async (req, res, next) => {
-  const { pluCode } = req.body
-  getPluCode(pluCode)
+  getSpecialCupon()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
