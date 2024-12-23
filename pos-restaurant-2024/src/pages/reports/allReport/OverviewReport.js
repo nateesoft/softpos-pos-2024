@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
-import { AppBar, Box, Button, Grid2, IconButton, Paper, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Grid2, IconButton, Modal, Paper, Stack, Toolbar, Typography } from '@mui/material';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
 import { styled } from '@mui/material/styles';
 import Man from '@mui/icons-material/Man'
@@ -14,12 +14,11 @@ import LunchDiningIcon from '@mui/icons-material/LunchDining';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import DiningIcon from '@mui/icons-material/Dining';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import TableBar from "@mui/icons-material/TableBar"
+import { useNavigate } from 'react-router-dom';
 
 import { POSContext } from '../../../AppContext';
 import ReportDaily from "../../floorplan/ReportDaily"
-import { useNavigate } from 'react-router-dom';
 
 export const desktopOS = [
   {
@@ -63,7 +62,7 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
   padding: "10px"
 }));
 
-const SaleReportOverview = () => {
+const OverviewReport = () => {
   const navigate = useNavigate()
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
@@ -238,4 +237,4 @@ const SaleReportOverview = () => {
   );
 }
 
-export default SaleReportOverview
+export default OverviewReport
