@@ -13,12 +13,15 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno, reports, total } = this.props
-
+        const { userLogin, macno, reports } = this.props
+        const poshwSetup = this.props.poshwSetup
+        let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+        headers = headers.filter(h => h !== "")
         return (
             <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
-                    <div style={{ marginTop: "20px" }}></div>
+                    {headers && headers.map((header) => <div>{header}</div>)}
+                    <div style={{ marginTop: "30px" }}></div>
                     <div align="center">รายงานการพิมพ์ใบเสร็จรับเงิน</div>
                     <div align="center">(Receipt Report)</div>
                     <div align="center" style={{ margin: "10px" }}>หมายเลขเครื่อง : 001 .. 001</div>
@@ -83,12 +86,12 @@ class ComponentToPrint extends Component {
     }
 }
 
-const TableOnAction = () => {
+const RecieptReport = () => {
     const contentRef = useRef(null);
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
-    const [total, setTotal] = useState(0)
+    const [poshwSetup, setPosHwSetup] = useState({})
 
     const functionToPrint = useReactToPrint({
         contentRef,
@@ -99,13 +102,25 @@ const TableOnAction = () => {
         functionToPrint()
     }, [functionToPrint])
 
+    const loadPosHwSetup = useCallback(() => {
+        apiClient
+          .get(`/api/poshwsetup/${macno}`)
+          .then((response) => {
+            if (response.status === 200) {
+              setPosHwSetup(response.data.data)
+            }
+          })
+          .catch((error) => {
+            alert(error.message)
+          })
+      }, [])
+
     const loadReport = useCallback(() => {
         apiClient
-            .get(`/api/report/table-on-action`)
+            .post(`/api/report/receipt-report`)
             .then((response) => {
                 if (response.status === 200) {
-                    setReports(response.data.data.data)
-                    setTotal(response.data.data.footer.total)
+                    setReports(response.data.data)
                 }
             })
             .catch((error) => {
@@ -115,7 +130,8 @@ const TableOnAction = () => {
 
     useEffect(() => {
         loadReport()
-    }, [loadReport])
+        loadPosHwSetup()
+    }, [])
 
     return (
         <>
@@ -124,7 +140,7 @@ const TableOnAction = () => {
                 userLogin={userLogin}
                 macno={macno}
                 reports={reports}
-                total={total}
+                poshwSetup={poshwSetup}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
@@ -135,4 +151,4 @@ const TableOnAction = () => {
     );
 }
 
-export default TableOnAction
+export default RecieptReport

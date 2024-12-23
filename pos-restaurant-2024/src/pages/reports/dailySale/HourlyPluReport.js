@@ -13,81 +13,49 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno } = this.props
-
+        const { userLogin, macno, reports } = this.props
+        const poshwSetup = this.props.poshwSetup
+        let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+        headers = headers.filter(h => h !== "")
         return (
-            <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
+            <Grid2 id='content' container justifyContent="center" sx={{ marginBottom: "100px" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
-                    <div style={{ marginTop: "20px" }}></div>
+                    {headers && headers.map((header) => <div>{header}</div>)}
+                    <div style={{ marginTop: "30px" }}></div>
                     <div align="center">รายงานการขายรายชั่วโมง</div>
                     <div align="center">(Hourly By Plu Report)</div>
-                    <div style={{margin: "20px"}}></div>
-                    <div style={{margin: "20px"}}></div>
+                    <div style={{ margin: "20px" }}></div>
+                    <div style={{ margin: "20px" }}></div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
                             <tr>
-                                <td>เวลา...</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td align='left'>รหัสสินค้า</td>
-                                <td align='left'></td>
+                                <td>เวลา</td>
+                                <td>รหัสสินค้า</td>
                                 <td align='center'>จำนวน</td>
                                 <td align='right'>จำนวนเงิน</td>
                             </tr>
                         </tbody>
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
-                            <tr>
-                                <td>***09:00</td>
-                                <td align='left'></td>
-                                <td align='center'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td align='left'>BEF0024</td>
-                                <td>เนื้อ 250g+ผักโขมผัดเน</td>
-                                <td align='center'>2</td>
-                                <td align='right'>550.00</td>
-                            </tr>
-                            <tr>
-                                <td align='left'>KID008</td>
-                                <td>KID ไส้กรอกหมูรมควัน</td>
-                                <td align='center'>1</td>
-                                <td align='right'>129.00</td>
-                            </tr>
-                            <tr>
-                                <td align='left'>KID012</td>
-                                <td>KID น้ำส้ม</td>
-                                <td align='center'>1</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>***10:00</td>
-                                <td align='left'></td>
-                                <td align='center'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td align='left'>BEF0024</td>
-                                <td>เนื้อ 250g+ผักโขมผัดเน</td>
-                                <td align='center'>2</td>
-                                <td align='right'>550.00</td>
-                            </tr>
-                            <tr>
-                                <td align='left'>KID008</td>
-                                <td>KID ไส้กรอกหมูรมควัน</td>
-                                <td align='center'>1</td>
-                                <td align='right'>129.00</td>
-                            </tr>
-                            <tr>
-                                <td align='left'>KID012</td>
-                                <td>KID น้ำส้ม</td>
-                                <td align='center'>1</td>
-                                <td align='right'>0.00</td>
-                            </tr>
+                            {reports && reports.map(item => (
+                                <>
+                                    {item.time && <tr>
+                                        <td>{item.time}</td>
+                                        <td></td>
+                                        <td align='right'></td>
+                                        <td align='right'></td>
+                                    </tr>}
+                                    {item.length > 0 && item.map(ii => 
+                                    <tr>
+                                        <td></td>
+                                        <td>{ii.R_PluCode}</td>
+                                        <td align='right'>{ii.R_Quan}</td>
+                                        <td align='right'>{ii.R_Total}</td>
+                                    </tr>
+                                    )}
+                                </>
+                            )
+                            )}
                         </tbody>
                     </table>
                 </Paper>
@@ -96,12 +64,12 @@ class ComponentToPrint extends Component {
     }
 }
 
-const TableOnAction = () => {
+const HourlyPluReport = () => {
     const contentRef = useRef(null);
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
-    const [total, setTotal] = useState(0)
+    const [poshwSetup, setPosHwSetup] = useState({})
 
     const functionToPrint = useReactToPrint({
         contentRef,
@@ -112,13 +80,26 @@ const TableOnAction = () => {
         functionToPrint()
     }, [functionToPrint])
 
-    const loadReport = useCallback(() => {
+    const loadPosHwSetup = useCallback(() => {
         apiClient
-            .get(`/api/report/table-on-action`)
+            .get(`/api/poshwsetup/${macno}`)
             .then((response) => {
                 if (response.status === 200) {
-                    setReports(response.data.data.data)
-                    setTotal(response.data.data.footer.total)
+                    setPosHwSetup(response.data.data)
+                }
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
+    }, [])
+
+    const loadReport = useCallback(() => {
+        apiClient
+            .post(`/api/report/hourly-report`)
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log('response:', response.data.data)
+                    setReports(response.data.data)
                 }
             })
             .catch((error) => {
@@ -128,7 +109,8 @@ const TableOnAction = () => {
 
     useEffect(() => {
         loadReport()
-    }, [loadReport])
+        loadPosHwSetup()
+    }, [])
 
     return (
         <>
@@ -137,7 +119,7 @@ const TableOnAction = () => {
                 userLogin={userLogin}
                 macno={macno}
                 reports={reports}
-                total={total}
+                poshwSetup={poshwSetup}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
@@ -148,4 +130,4 @@ const TableOnAction = () => {
     );
 }
 
-export default TableOnAction
+export default HourlyPluReport

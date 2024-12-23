@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
-import { Box, Grid2, Paper, Stack, Typography } from '@mui/material';
+import { AppBar, Box, Button, Grid2, IconButton, Paper, Stack, Toolbar, Typography } from '@mui/material';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
 import { styled } from '@mui/material/styles';
 import Man from '@mui/icons-material/Man'
@@ -14,6 +14,12 @@ import LunchDiningIcon from '@mui/icons-material/LunchDining';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import DiningIcon from '@mui/icons-material/Dining';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import TableBar from "@mui/icons-material/TableBar"
+
+import { POSContext } from '../../../AppContext';
+import ReportDaily from "../../floorplan/ReportDaily"
+import { useNavigate } from 'react-router-dom';
 
 export const desktopOS = [
   {
@@ -58,14 +64,41 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
 }));
 
 const SaleReportOverview = () => {
+  const navigate = useNavigate()
+  const { appData } = useContext(POSContext)
+  const { userLogin } = appData
+
+  const backToFloorPlan = () => {
+    navigate('/floorplan')
+  }
+
   return (
     <Box sx={{ width: '100%', backgroundColor: "#123456", color: "white" }}>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar component="static" sx={{ backgroundColor: "#123456", boxShadow: "5px 3px #aaa" }}>
+          <Toolbar>
+            <Grid2 container justifyContent="flex-start">
+              <IconButton color="inherit" aria-label="open drawer" edge="start">
+                <ReportDaily />
+              </IconButton>
+              {/* <IconButton color="inherit" aria-label="open drawer" edge="start">
+                  <ReportMonthly />
+                </IconButton> */}
+            </Grid2>
+            <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{ flexGrow: 1 }}>
+              <Button variant="contained" color="primary" startIcon={<TableBar />} onClick={backToFloorPlan}>
+                กลับหน้าหลัก
+              </Button>
+            </Grid2>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <Box padding={2}>
-        <Typography variant='h4' sx={{textShadow: "1px 1px orange"}}>* รายงานการขาย (Sale Reports) *</Typography>
+        <Typography variant='h4' sx={{ textShadow: "1px 1px orange" }}>* รายงานการขาย (Sale Reports) *</Typography>
       </Box>
       <Paper sx={{ padding: "10px", margin: "10px" }}>
         <Stack direction="row" spacing={2} justifyContent="center">
-          <DemoPaper variant="elevation" sx={{backgroundColor: "chocolate", color: "white", borderRadius: "10px", border: "1px solid"}}>
+          <DemoPaper variant="elevation" sx={{ backgroundColor: "chocolate", color: "white", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
               <Typography sx={{ fontWeight: "bold" }}><u>จำนวนลูกค้าเข้าร้าน 45 คน</u></Typography>
               <Grid2 display="flex" justifyContent="space-between">
@@ -82,7 +115,7 @@ const SaleReportOverview = () => {
               </Grid2>
             </Box>
           </DemoPaper>
-          <DemoPaper variant="elevation" sx={{backgroundColor: "green", color: "white", borderRadius: "10px", border: "1px solid"}}>
+          <DemoPaper variant="elevation" sx={{ backgroundColor: "green", color: "white", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
               <Typography sx={{ fontWeight: "bold" }}><u>รายการสินค้าขายดีประจำวัน</u></Typography>
               <Grid2 display="flex" justifyContent="space-between">
@@ -99,7 +132,7 @@ const SaleReportOverview = () => {
               </Grid2>
             </Box>
           </DemoPaper>
-          <DemoPaper variant="elevation" sx={{backgroundColor: "purple", color: "white", borderRadius: "10px", border: "1px solid"}}>
+          <DemoPaper variant="elevation" sx={{ backgroundColor: "purple", color: "white", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
               <Typography sx={{ fontWeight: "bold" }}><u>ช่วงเวลาขายดี</u></Typography>
               <Grid2 display="flex" justifyContent="space-between">
@@ -116,7 +149,7 @@ const SaleReportOverview = () => {
               </Grid2>
             </Box>
           </DemoPaper>
-          <DemoPaper variant="elevation" sx={{backgroundColor: "blue", color: "white", borderRadius: "10px", border: "1px solid"}}>
+          <DemoPaper variant="elevation" sx={{ backgroundColor: "blue", color: "white", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
               <Typography sx={{ fontWeight: "bold" }}><u>ยอดขายประจำวัน</u></Typography>
               <Grid2 display="flex" justifyContent="space-between">
@@ -133,7 +166,7 @@ const SaleReportOverview = () => {
               </Grid2>
             </Box>
           </DemoPaper>
-          <DemoPaper variant="elevation" sx={{backgroundColor: "yellow", color: "black", borderRadius: "10px", border: "1px solid"}}>
+          <DemoPaper variant="elevation" sx={{ backgroundColor: "yellow", color: "black", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
               <Typography sx={{ fontWeight: "bold" }}><u>ยอดขายตามกลุ่มสินค้า</u></Typography>
               <Grid2 display="flex" justifyContent="space-between">
@@ -201,7 +234,6 @@ const SaleReportOverview = () => {
           </Grid2>
         </Grid2>
       </Paper>
-
     </Box>
   );
 }

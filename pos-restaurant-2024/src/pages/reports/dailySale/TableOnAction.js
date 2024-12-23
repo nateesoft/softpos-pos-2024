@@ -14,30 +14,36 @@ class ComponentToPrint extends Component {
 
     render() {
         const { userLogin, macno, reports, total } = this.props
+        const poshwSetup = this.props.poshwSetup
 
+        let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+        headers = headers.filter(h => h !== "")
         return (
             <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
-                    <div style={{ marginTop: "20px" }}></div>
+                    {headers && headers.map((header) => <div>{header}</div>)}
+                    <div style={{ marginTop: "30px" }}></div>
                     <div align="center">รายงานโต๊ะค้าง (ยังไม่ได้ชำระเงิน)</div>
                     <div align="center" style={{margin: "10px"}}>Table Check</div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
-                    <table width="100%">
+                    <table width="100%" cellPadding={2} cellSpacing={2}>
                         <thead>
                             <tr style={{borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed"}}>
+                                <td align='center'>Date</td>
                                 <td align='center'>Table</td>
-                                <td align='right'>Amount</td>
                                 <td align='center'>Open-Time</td>
-                                <td align='center'>Customer</td>
+                                <td align='right'>Customer</td>
+                                <td align='right'>Amount</td>
                             </tr>
                         </thead>
                         <tbody>
                             {reports && reports.map((row) => (
                                 <tr>
+                                    <td align='center'>{moment(row.R_Date).format('DD/MM/YYYY')}</td>
                                     <td align='center'>{row.R_Table}</td>
-                                    <td align='right'>{row.R_Total}</td>
                                     <td align='center'>{row.TCurTime}</td>
-                                    <td align='center'>{row.TCustomer}</td>
+                                    <td align='right'>{row.TCustomer}</td>
+                                    <td align='right'>{row.R_Total}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -45,8 +51,9 @@ class ComponentToPrint extends Component {
                             <tr style={{borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed"}}>
                                 <td></td>
                                 <td></td>
-                                <td>Total</td>
-                                <td>{total}</td>
+                                <td></td>
+                                <td align='right'>Total</td>
+                                <td align='right'>{total}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -62,6 +69,7 @@ const TableOnAction = () => {
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
     const [total, setTotal] = useState(0)
+    const [poshwSetup, setPosHwSetup] = useState({})
 
     const functionToPrint = useReactToPrint({
         contentRef,
@@ -86,9 +94,23 @@ const TableOnAction = () => {
             })
     }, [])
 
+    const loadPosHwSetup = useCallback(() => {
+        apiClient
+          .get(`/api/poshwsetup/${macno}`)
+          .then((response) => {
+            if (response.status === 200) {
+              setPosHwSetup(response.data.data)
+            }
+          })
+          .catch((error) => {
+            alert(error.message)
+          })
+      }, [])
+
     useEffect(() => {
         loadReport()
-    }, [loadReport])
+        loadPosHwSetup()
+    }, [])
 
     return (
         <>
@@ -96,6 +118,7 @@ const TableOnAction = () => {
                 innerRef={contentRef}
                 userLogin={userLogin}
                 macno={macno}
+                poshwSetup={poshwSetup}
                 reports={reports}
                 total={total}
             />

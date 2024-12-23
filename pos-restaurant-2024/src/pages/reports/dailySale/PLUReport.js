@@ -13,12 +13,15 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno } = this.props
-
+        const { userLogin, macno, reports, summary } = this.props
+        const poshwSetup = this.props.poshwSetup
+        let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+        headers = headers.filter(h => h !== "")
         return (
             <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
-                    <div style={{ marginTop: "20px" }}></div>
+                    {headers && headers.map((header) => <div>{header}</div>)}
+                    <div style={{ marginTop: "30px" }}></div>
                     <div align="center">รายงานการขายตามรหัสสินค้า</div>
                     <div align="center">(Plu-Code Report)</div>
                     <div style={{margin: "20px"}}></div>
@@ -30,147 +33,20 @@ class ComponentToPrint extends Component {
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
+                        {reports && reports.map(item => 
                             <tr>
-                                <td>****03 Appitizer</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
+                                <td>{item.GroupName}</td>
+                                <td>{item.R_PluCode}</td>
+                                <td align='right'>{item.R_Quan}</td>
+                                <td align='right'>{item.R_Total}</td>
                             </tr>
-                            <tr>
-                                <td>** 1001</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Junsai</div></td>
-                                <td align='right'>5</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1002</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1003</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1004</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1005</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1006</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1007</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1008</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1009</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1011</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1012</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>** 1013</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>Mehikari</div></td>
-                                <td align='right'>4</td>
-                                <td align='right'>0.00</td>
-                            </tr>
-                            <tr>
-                                <td>**SET1001</td>
-                                <td align='right'></td>
-                                <td align='right'></td>
-                            </tr>
-                            <tr>
-                                <td><div style={{marginLeft: "10px"}}>SET 3,800++(Served 14 Menu)</div></td>
-                                <td align='right'>5</td>
-                                <td align='right'>0.00</td>
-                            </tr>
+                        )}
                         </tbody>
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
                             <tr style={{height: "50px"}}>
-                                <td><div style={{marginLeft: "10px"}}>SUM-TOTAL.....</div></td>
-                                <td align='right'>54</td>
-                                <td align='right'>19,000.00</td>
+                                <td colSpan={2}>SUM-TOTAL.....</td>
+                                <td align='right'>{summary.qty}</td>
+                                <td align='right'>{summary.netTotal}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -180,12 +56,13 @@ class ComponentToPrint extends Component {
     }
 }
 
-const TableOnAction = () => {
+const PLUReport = () => {
     const contentRef = useRef(null);
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
-    const [total, setTotal] = useState(0)
+    const [summary, setSummary] = useState({})
+    const [poshwSetup, setPosHwSetup] = useState({})
 
     const functionToPrint = useReactToPrint({
         contentRef,
@@ -196,13 +73,31 @@ const TableOnAction = () => {
         functionToPrint()
     }, [functionToPrint])
 
+    const loadPosHwSetup = useCallback(() => {
+        apiClient
+          .get(`/api/poshwsetup/${macno}`)
+          .then((response) => {
+            if (response.status === 200) {
+              setPosHwSetup(response.data.data)
+            }
+          })
+          .catch((error) => {
+            alert(error.message)
+          })
+      }, [])
+
     const loadReport = useCallback(() => {
         apiClient
-            .get(`/api/report/table-on-action`)
+            .post(`/api/report/plu-report`, {
+                groupCode1: "01",
+                groupCode2: "99",
+                pluCode1: 'aaaa',
+                pluCode2: 'zzzz'
+            })
             .then((response) => {
                 if (response.status === 200) {
                     setReports(response.data.data.data)
-                    setTotal(response.data.data.footer.total)
+                    setSummary(response.data.data.summary)
                 }
             })
             .catch((error) => {
@@ -212,7 +107,8 @@ const TableOnAction = () => {
 
     useEffect(() => {
         loadReport()
-    }, [loadReport])
+        loadPosHwSetup()
+    }, [])
 
     return (
         <>
@@ -221,7 +117,8 @@ const TableOnAction = () => {
                 userLogin={userLogin}
                 macno={macno}
                 reports={reports}
-                total={total}
+                summary={summary}
+                poshwSetup={poshwSetup}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
@@ -232,4 +129,4 @@ const TableOnAction = () => {
     );
 }
 
-export default TableOnAction
+export default PLUReport

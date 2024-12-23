@@ -13,12 +13,15 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno } = this.props
-
+        const { userLogin, macno, report } = this.props
+        const poshwSetup = this.props.poshwSetup
+        let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+        headers = headers.filter(h => h !== "")
         return (
             <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
-                    <div style={{ marginTop: "20px" }}></div>
+                    {headers && headers.map((header) => <div>{header}</div>)}
+                    <div style={{ marginTop: "30px" }}></div>
                     <div align="center">REG ID :{macno}</div>
                     <div align="center">รายงานพนักงานขาย (Cashier Report)</div>
                     <div align="center">รหัสพนักงานขาย : {userLogin}</div>
@@ -30,105 +33,105 @@ class ComponentToPrint extends Component {
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>28,045.00</td>
+                                <td align='right'>{report.B_Food}</td>
                             </tr>
                             <tr>
                                 <td>ยอดรวมค่าเครื่องดื่ม</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>410.00</td>
+                                <td align='right'>{report.B_Drink}</td>
                             </tr>
                             <tr>
                                 <td>ยอดรวมค่าสินค้าทั่วไป</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>149.00</td>
+                                <td align='right'>{report.B_Product}</td>
                             </tr>
                             <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
                                 <td>ยอดขายตามป้าย (Dept-Sum)</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>28,604.00</td>
+                                <td align='right'>{report.Dept_Sum}</td>
                             </tr>
                             <tr>
                                 <td>ค่าบริการ Service</td>
                                 <td align='right'>1</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>380.00</td>
+                                <td align='right'>{report.B_ServiceAmt}</td>
                             </tr>
                             <tr>
                                 <td>Charge บัตรเครดิต</td>
                                 <td align='right'>1</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>125.40</td>
+                                <td align='right'>{report.B_CrChargeAmt1}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดสมาชิก VIP</td>
                                 <td align='right'>0</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0.00</td>
+                                <td align='right'>{report.B_MemDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดเทศกาล</td>
                                 <td align='right'>0</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0.00</td>
+                                <td align='right'>{report.B_FastDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดพนักงาน</td>
                                 <td align='right'>0</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0.00</td>
+                                <td align='right'>{report.B_EmpDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดพนักงาน Trainee</td>
                                 <td align='right'>0</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0.00</td>
+                                <td align='right'>{report.B_TrainDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดคูปอง</td>
                                 <td align='right'>0</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0.00</td>
+                                <td align='right'>{report.B_CuponDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดบาท</td>
                                 <td align='right'>0</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0.00</td>
+                                <td align='right'>{report.B_SubDiscBath}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลด Promotion</td>
                                 <td align='right'>0</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0.00</td>
+                                <td align='right'>{report.B_ProDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดพิเศษ (Special)</td>
                                 <td align='right'>0</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0.00</td>
+                                <td align='right'>{report.B_SpaDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดรายการ (Item)</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>0</td>
+                                <td align='right'>{report.B_ItemDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดบัตรคูปอง (Cupon)</td>
@@ -307,12 +310,12 @@ class ComponentToPrint extends Component {
     }
 }
 
-const TableOnAction = () => {
+const CashierReport = () => {
     const contentRef = useRef(null);
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
-    const [reports, setReports] = useState([])
-    const [total, setTotal] = useState(0)
+    const [report, setReport] = useState({})
+    const [poshwSetup, setPosHwSetup] = useState({})
 
     const functionToPrint = useReactToPrint({
         contentRef,
@@ -323,13 +326,25 @@ const TableOnAction = () => {
         functionToPrint()
     }, [functionToPrint])
 
+    const loadPosHwSetup = useCallback(() => {
+        apiClient
+          .get(`/api/poshwsetup/${macno}`)
+          .then((response) => {
+            if (response.status === 200) {
+              setPosHwSetup(response.data.data)
+            }
+          })
+          .catch((error) => {
+            alert(error.message)
+          })
+      }, [])
+
     const loadReport = useCallback(() => {
         apiClient
-            .get(`/api/report/table-on-action`)
+            .post(`/api/report/cashier-report`, {cashier: userLogin})
             .then((response) => {
                 if (response.status === 200) {
-                    setReports(response.data.data.data)
-                    setTotal(response.data.data.footer.total)
+                    setReport(response.data.data)
                 }
             })
             .catch((error) => {
@@ -339,7 +354,8 @@ const TableOnAction = () => {
 
     useEffect(() => {
         loadReport()
-    }, [loadReport])
+        loadPosHwSetup()
+    }, [])
 
     return (
         <>
@@ -347,8 +363,8 @@ const TableOnAction = () => {
                 innerRef={contentRef}
                 userLogin={userLogin}
                 macno={macno}
-                reports={reports}
-                total={total}
+                report={report}
+                poshwSetup={poshwSetup}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
@@ -359,4 +375,4 @@ const TableOnAction = () => {
     );
 }
 
-export default TableOnAction
+export default CashierReport
