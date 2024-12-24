@@ -333,7 +333,8 @@ const getTopSale = async () => {
     const results = await pool.query(sql)
     const newResults = results.sort(compareNumbers).map((item, index) => {
         return {
-            ...item, index: (index + 1)
+            ...item,
+            index: (index + 1)
         }
     })
     return newResults
@@ -345,6 +346,122 @@ const getPromotion = async () => {
 
 const getSpecialCupon = async () => {
     return []
+}
+
+const getTopSaleList = async () => {
+    const sql = `select sum(R_Quan) SUM_QTY, R_PluCode, R_PName 
+        from t_sale where R_Date = '${getMoment().format('YYYY-MM-DD')}' 
+        group by R_PluCode,R_PName 
+        order by SUM_QTY desc 
+        limit 0,3`
+    const results = await pool.query(sql)
+    const newResults = results.sort(compareNumbers).map((item, index) => {
+        return {
+            ...item,
+            index: (index + 1)
+        }
+    })
+    return newResults
+}
+
+const getSaleByType = async () => {
+    const sql = `select ts.R_ETD, sum(ts.R_Total) NetTotal 
+            from t_sale ts 
+            where ts.R_Date ='${getMoment().format('YYYY-MM-DD')}' 
+            group by ts.R_ETD`
+    const results = await pool.query(sql)
+    const total = results.reduce((partialSum, a) => partialSum + a.NetTotal, 0)
+    const newResults = results.map(item => {
+        if (item.R_ETD === 'E') {
+            return { ...item, label: 'Dine In', value: Math.round(item.NetTotal/total*100) }
+        } else if (item.R_ETD === 'T') {
+            return { ...item, label: 'Take Away', value: Math.round(item.NetTotal/total*100) }
+        } else if (item.R_ETD === 'D') {
+            return { ...item, label: 'Delivery', value: Math.round(item.NetTotal/total*100) }
+        }
+    })
+    return newResults
+}
+
+const getSaleByGroup = async () => {
+    const sql = `SELECT 
+        SUM(B_Food) Food, 
+        SUM(B_Drink) Drink, 
+        SUM(B_Product) Product 
+        FROM billno b 
+        WHERE b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}'`
+    const results = await pool.query(sql)
+    const newResults = Object.keys(results[0]).map((key) => {
+        return {
+            label: key,
+            NetTotal: results[0][key]
+        }
+    })
+    const total = newResults.reduce((partialSum, a) => partialSum + a.NetTotal, 0)
+    const newMapping = newResults.map(item => {
+        return {
+            ...item,
+            value: Math.round(item.NetTotal/total*100)
+        }
+    })
+    return newMapping
+}
+
+const getAllTime = async (time1, time2) => {
+    const sql = `select sum(R_Quan) R_Quan from t_sale t 
+                where t.R_Date='${getMoment().format('YYYY-MM-DD')}' 
+                and t.R_Time BETWEEN '${time1}' and '${time2}' 
+                order by R_Time 
+                limit 0, 10`
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        return {
+            time: `${time1.substr(0, 5)} - ${time2.substr(0, 5)}`,
+            qty: results[0].R_Quan ? results[0].R_Quan : 0
+        }
+    } else {
+        return {
+            time: `${time1.substr(0, 5)} - ${time2.substr(0, 5)}`,
+            qty: 0
+        }
+    }
+}
+
+const getSaleByTime = async () => {
+    const result1 = await getAllTime('06:00:00', '08:00:00')
+    const result2 = await getAllTime('08:00:00', '12:00:00')
+    const result3 = await getAllTime('12:00:00', '16:00:00')
+    const result4 = await getAllTime('16:00:00', '21:00:00')
+
+    const resultT11 = await getAllTime('06:00:00', '06:30:00')
+    const resultT12 = await getAllTime('06:30:00', '07:00:00')
+    const resultT13 = await getAllTime('07:00:00', '07:30:00')
+    const resultT14 = await getAllTime('07:30:00', '08:00:00')
+
+    const resultT21 = await getAllTime('08:00:00', '09:00:00')
+    const resultT22 = await getAllTime('09:00:00', '10:00:00')
+    const resultT23 = await getAllTime('10:00:00', '11:00:00')
+    const resultT24 = await getAllTime('11:00:00', '12:00:00')
+
+    const resultT31 = await getAllTime('12:00:00', '13:00:00')
+    const resultT32 = await getAllTime('13:00:00', '14:00:00')
+    const resultT33 = await getAllTime('14:00:00', '15:00:00')
+    const resultT34 = await getAllTime('15:00:00', '16:00:00')
+
+    const resultT41 = await getAllTime('16:00:00', '17:00:00')
+    const resultT42 = await getAllTime('17:00:00', '18:00:00')
+    const resultT43 = await getAllTime('18:00:00', '19:00:00')
+    const resultT44 = await getAllTime('19:00:00', '21:00:00')
+
+    return {
+        overview: [result1, result2, result3, result4],
+        allTime: [
+            { data: [resultT11.qty, resultT12.qty, resultT13.qty, resultT14.qty] },
+            { data: [resultT21.qty, resultT22.qty, resultT23.qty, resultT24.qty] },
+            { data: [resultT31.qty, resultT32.qty, resultT33.qty, resultT34.qty] },
+            { data: [resultT41.qty, resultT42.qty, resultT43.qty, resultT44.qty] }
+        ]
+    }
 }
 
 module.exports = {
@@ -361,5 +478,9 @@ module.exports = {
     getCreditPayment,
     getTopSale,
     getPromotion,
-    getSpecialCupon
+    getSpecialCupon,
+    getTopSaleList,
+    getSaleByType,
+    getSaleByGroup,
+    getSaleByTime
 }

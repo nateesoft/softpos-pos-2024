@@ -1,11 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BarChart } from '@mui/x-charts/BarChart';
-import { AppBar, Box, Button, Grid2, IconButton, Modal, Paper, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Grid2, IconButton, Paper, Stack, TableContainer, TableRow, Toolbar, Typography } from '@mui/material';
 import { PieChart, pieArcLabelClasses } from '@mui/x-charts';
 import { styled } from '@mui/material/styles';
 import Man from '@mui/icons-material/Man'
 import Woman from '@mui/icons-material/Woman'
 import ChildCare from '@mui/icons-material/ChildCare'
+import ElderlyIcon from '@mui/icons-material/Elderly';
 import MenuBook from '@mui/icons-material/MenuBook'
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import WineBarIcon from '@mui/icons-material/WineBar';
@@ -19,45 +20,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { POSContext } from '../../../AppContext';
 import ReportDaily from "../../floorplan/ReportDaily"
-
-export const desktopOS = [
-  {
-    label: 'xxxxxx',
-    value: 72.72,
-  },
-  {
-    label: 'ข้าวผัดอเมริกัน',
-    value: 16.38,
-  },
-  {
-    label: 'ผัดไทใส่ไข่',
-    value: 3.83,
-  },
-  {
-    label: 'กะเพราหมูกรอบ',
-    value: 2.42,
-  },
-  {
-    label: 'ข้าวไข่เจียว',
-    value: 4.65,
-  },
-];
+import apiClient from '../../../httpRequest'
 
 export const valueFormatter = (item) => `${item.value}%`;
 
-const size = {
-  width: 400,
-  height: 200,
-};
-
-const data = {
-  data: desktopOS,
-  valueFormatter,
-};
-
 const DemoPaper = styled(Paper)(({ theme }) => ({
-  width: 250,
-  height: 120,
+  width: 200,
+  height: 160,
   textAlign: 'center',
   padding: "10px"
 }));
@@ -67,14 +36,45 @@ const OverviewReport = () => {
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
 
+  const [overviewReport, setOverviewReport] = useState(null)
+  const [customers, setCustomers] = useState(null)
+  const [topSales, setTopSales] = useState([])
+  const [saleByGroup, setSaleByGroup] = useState([])
+  const [saleByType, setSaleByType] = useState([])
+  const [saleByTime, setSaleByTime] = useState([])
+  const [saleByAllTime, setSaleByAllTime] = useState([])
+
+  const initLoad = () => {
+    apiClient.get(`/api/overview-report/all`)
+      .then(response => {
+        setOverviewReport(response.data.data)
+
+        setCustomers(response.data.data.customers.data)
+        setTopSales(response.data.data.topSales.data)
+        setSaleByType(response.data.data.saleByType.data)
+        setSaleByGroup(response.data.data.saleByGroup.data)
+        setSaleByTime(response.data.data.saleByTime.data.overview)
+        setSaleByAllTime(response.data.data.saleByTime.data.allTime)
+      })
+      .catch(err => alert(err.message))
+  }
+
   const backToFloorPlan = () => {
     navigate('/floorplan')
+  }
+
+  useEffect(() => {
+    initLoad()
+  }, [])
+
+  if (!overviewReport) {
+    return <div>Loading...</div>
   }
 
   return (
     <Box sx={{ width: '100%', backgroundColor: "#123456", color: "white" }}>
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar component="static" sx={{ backgroundColor: "#123456", boxShadow: "5px 3px #aaa" }}>
+        <AppBar component="static" sx={{ backgroundColor: "#123456" }}>
           <Toolbar>
             <Grid2 container justifyContent="flex-start">
               <IconButton color="inherit" aria-label="open drawer" edge="start">
@@ -86,151 +86,173 @@ const OverviewReport = () => {
             </Grid2>
             <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{ flexGrow: 1 }}>
               <Button variant="contained" color="primary" startIcon={<TableBar />} onClick={backToFloorPlan}>
-                กลับหน้าหลัก
+                หน้าหลัก
               </Button>
             </Grid2>
           </Toolbar>
         </AppBar>
       </Box>
-      <Box padding={2}>
-        <Typography variant='h4' sx={{ textShadow: "1px 1px orange" }}>* รายงานการขาย (Sale Reports) *</Typography>
-      </Box>
-      <Paper sx={{ padding: "10px", margin: "10px" }}>
-        <Stack direction="row" spacing={2} justifyContent="center">
+      <Paper sx={{ padding: "10px", marginTop: "65px", background: 'none' }}>
+        <Grid2 container spacing={2} justifyContent="space-around">
           <DemoPaper variant="elevation" sx={{ backgroundColor: "chocolate", color: "white", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
-              <Typography sx={{ fontWeight: "bold" }}><u>จำนวนลูกค้าเข้าร้าน 45 คน</u></Typography>
-              <Grid2 display="flex" justifyContent="space-between">
-                <Man />
-                <Typography>ชาย 15 คน</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <Woman />
-                <Typography>หญิง 25 คน</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <ChildCare />
-                <Typography>เด็ก 5 คน</Typography>
-              </Grid2>
+              <Typography sx={{ fontWeight: "bold" }}><u>จำนวนลูกค้าเข้าร้าน {customers.customer_count} คน</u></Typography>
+              <table width="100%">
+                <tr>
+                  <td><Man /></td>
+                  <td><Typography>ชาย</Typography></td>
+                  <td>{customers.customer_man_count || 0} คน</td>
+                </tr>
+                <tr>
+                  <td><Woman /></td>
+                  <td><Typography>หญิง</Typography></td>
+                  <td>{customers.customer_woman_count || 0} คน</td>
+                </tr>
+                <tr>
+                  <td><ChildCare /></td>
+                  <td><Typography>เด็ก</Typography></td>
+                  <td>{customers.customer_kid_count || 0} คน</td>
+                </tr>
+                <tr>
+                  <td><ElderlyIcon /></td>
+                  <td><Typography>คนชรา</Typography></td>
+                  <td>{customers.customer_old_count || 0} คน</td>
+                </tr>
+              </table>
             </Box>
           </DemoPaper>
           <DemoPaper variant="elevation" sx={{ backgroundColor: "green", color: "white", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
-              <Typography sx={{ fontWeight: "bold" }}><u>รายการสินค้าขายดีประจำวัน</u></Typography>
-              <Grid2 display="flex" justifyContent="space-between">
-                <MenuBook />
-                <Typography>xxxxx</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <MenuBook />
-                <Typography>เข้าผัดอเมริกัน</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <MenuBook />
-                <Typography>ผัดไทใส่ไข่</Typography>
-              </Grid2>
+              <Typography sx={{ fontWeight: "bold" }}><u>รายการสินค้าขายดี</u></Typography>
+              <table width="100%">
+                {topSales && topSales.map(item => <tr>
+                  <td><MenuBook /></td>
+                  <td align='left'><Typography>{item.R_PName}</Typography></td>
+                  <td><Typography>{item.SUM_QTY}</Typography></td>
+                </tr>)}
+              </table>
+              {topSales.length === 0 && <div style={{ color: "orange" }}>ไม่พบข้อมูล</div>}
             </Box>
           </DemoPaper>
           <DemoPaper variant="elevation" sx={{ backgroundColor: "purple", color: "white", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
               <Typography sx={{ fontWeight: "bold" }}><u>ช่วงเวลาขายดี</u></Typography>
-              <Grid2 display="flex" justifyContent="space-between">
-                <ScheduleIcon />
-                <Typography>เช้า 07.30 - 08.15</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <ScheduleIcon />
-                <Typography>สาย 10.30 - 11.45</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <ScheduleIcon />
-                <Typography>บ่าย 14.20 - 16.00</Typography>
-              </Grid2>
+              <table width="100%">
+                {saleByTime && saleByTime.map(item => <tr>
+                  <td><ScheduleIcon /></td>
+                  <td align='left'><Typography>{item.time}</Typography></td>
+                  <td><Typography>{item.qty}</Typography></td>
+                </tr>)}
+              </table>
+              {saleByTime.length === 0 && <div style={{ color: "orange" }}>ไม่พบข้อมูล</div>}
             </Box>
           </DemoPaper>
           <DemoPaper variant="elevation" sx={{ backgroundColor: "blue", color: "white", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
-              <Typography sx={{ fontWeight: "bold" }}><u>ยอดขายประจำวัน</u></Typography>
-              <Grid2 display="flex" justifyContent="space-between">
-                <DiningIcon />
-                <Typography>DineIn - 7,650.00</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <ArchiveIcon />
-                <Typography>Take Away - 1,400.00</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <DeliveryDiningIcon />
-                <Typography>Delivery - 500.00</Typography>
-              </Grid2>
+              <Typography sx={{ fontWeight: "bold" }}><u>ตามประเภท</u></Typography>
+              <table width="100%">
+                {saleByType && saleByType.map(item => <tr>
+                  <td>
+                    {item.R_ETD === 'E' && <DiningIcon />}
+                    {item.R_ETD === 'T' && <ArchiveIcon />}
+                    {item.R_ETD === 'D' && <DeliveryDiningIcon />}
+                  </td>
+                  <td align='left'><Typography>{item.label}</Typography></td>
+                  <td align='right'><Typography>{item.NetTotal}</Typography></td>
+                </tr>)}
+              </table>
+              {saleByType.length === 0 && <div style={{ color: "orange" }}>ไม่พบข้อมูล</div>}
             </Box>
           </DemoPaper>
           <DemoPaper variant="elevation" sx={{ backgroundColor: "yellow", color: "black", borderRadius: "10px", border: "1px solid" }}>
             <Box display="flex" flexDirection="column">
-              <Typography sx={{ fontWeight: "bold" }}><u>ยอดขายตามกลุ่มสินค้า</u></Typography>
-              <Grid2 display="flex" justifyContent="space-between">
-                <DinnerDiningIcon />
-                <Typography>Food (5,500.00)</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <WineBarIcon />
-                <Typography>Drink (1,250.00)</Typography>
-              </Grid2>
-              <Grid2 display="flex" justifyContent="space-between">
-                <LunchDiningIcon />
-                <Typography>Other (800.00)</Typography>
-              </Grid2>
+              <Typography sx={{ fontWeight: "bold" }}><u>กลุ่มสินค้า</u></Typography>
+              <table width="100%">
+                {saleByGroup && saleByGroup.map((item, index) => <tr>
+                  <td>
+                    {item.label === 'Food' && <DinnerDiningIcon />}
+                    {item.label === 'Drink' && <WineBarIcon />}
+                    {item.label === 'Product' && <LunchDiningIcon />}
+                  </td>
+                  <td align='left'><Typography>{item.label}</Typography></td>
+                  <td align='right'><Typography>{item.NetTotal || 0}</Typography></td>
+                </tr>)}
+              </table>
+              {saleByGroup.length === 0 && <div style={{ color: "orange" }}>ไม่พบข้อมูล</div>}
             </Box>
           </DemoPaper>
-        </Stack>
+        </Grid2>
       </Paper>
       <Paper sx={{ padding: "10px", margin: "10px" }}>
-        <BarChart
-          series={[
-            { data: [35, 44, 24, 34] },
-            { data: [51, 6, 49, 30] },
-            { data: [15, 25, 30, 50] },
-            { data: [60, 50, 15, 25] },
-          ]}
-          height={290}
-          xAxis={[{ data: ['Q1', 'Q2', 'Q3', 'Q4'], scaleType: 'band' }]}
-          margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
-        />
-        )
         <Grid2 container spacing={2}>
-          <Grid2 size={6}>
-            <PieChart
-              series={[
-                {
-                  data: [
-                    { id: 0, value: 80, label: 'xxxxx' },
-                    { id: 1, value: 45, label: 'ข้าวผัดอเมริกัน' },
-                    { id: 2, value: 10, label: 'ผัดไทใส่ไข่' },
-                  ],
-                },
-              ]}
-              width={400}
-              height={200}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <PieChart
-              series={[
-                {
-                  arcLabel: (item) => `${item.value}%`,
-                  arcLabelMinAngle: 35,
-                  arcLabelRadius: '60%',
-                  ...data,
-                },
-              ]}
-              sx={{
-                [`& .${pieArcLabelClasses.root}`]: {
-                  fontWeight: 'bold',
-                },
-              }}
-              {...size}
-            />
-          </Grid2>
+          {saleByAllTime && <BarChart
+            series={saleByAllTime}
+            height={290}
+            xAxis={[{ data: ['06:00 - 08:00', '08:00 - 12:00', '12:00 - 16:00', '16:00 - 21:00'], scaleType: 'band' }]}
+            margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+          />}
+          {saleByType.length > 0 && <PieChart
+            colors={['lightcoral', 'slateblue', 'green']}
+            series={[
+              {
+                arcLabel: (item) => `${item.value}%`,
+                arcLabelMinAngle: 35,
+                arcLabelRadius: '60%',
+                highlightScope: { fade: 'global', highlight: 'item' },
+                faded: { innerRadius: 30, additionalRadius: -30, color: 'black' },
+                data: saleByType,
+                valueFormatter
+              }
+            ]}
+            sx={{
+              [`& .${pieArcLabelClasses.root}`]: {
+                fontWeight: 'bold'
+              },
+            }}
+            width={350}
+            height={200}
+          />}
+          {saleByGroup.length > 0 && <PieChart
+            colors={['slateblue', 'green', 'purple']}
+            series={[
+              {
+                arcLabel: (item) => `${item.value}%`,
+                arcLabelMinAngle: 35,
+                arcLabelRadius: '60%',
+                highlightScope: { fade: 'global', highlight: 'item' },
+                faded: { innerRadius: 30, additionalRadius: -30, color: 'black' },
+                data: saleByGroup,
+                valueFormatter
+              }
+            ]}
+            sx={{
+              [`& .${pieArcLabelClasses.root}`]: {
+                fontWeight: 'bold'
+              },
+            }}
+            width={350}
+            height={200}
+          />}
+          {topSales.length > 0 && <PieChart
+            series={[
+              {
+                arcLabel: (item) => `${item.value}%`,
+                arcLabelMinAngle: 35,
+                arcLabelRadius: '60%',
+                highlightScope: { fade: 'global', highlight: 'item' },
+                faded: { innerRadius: 30, additionalRadius: -30, color: 'black' },
+                data: topSales,
+                valueFormatter
+              }
+            ]}
+            sx={{
+              [`& .${pieArcLabelClasses.root}`]: {
+                fontWeight: 'bold'
+              },
+            }}
+            width={350}
+            height={200}
+          />}
         </Grid2>
       </Paper>
     </Box>

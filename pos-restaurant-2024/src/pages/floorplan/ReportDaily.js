@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Button, Divider, Menu, Modal, Typography } from '@mui/material';
 import SummarizeIcon from '@mui/icons-material/ReceiptLong';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment'
 
 // load all modal reports
 import TableOnAction from '../reports/dailySale/modal/TableOnAction'
@@ -88,7 +89,9 @@ const ReportDaily = (props) => {
     return (
         <>
             <Button startIcon={<SummarizeIcon />} onClick={handleClick} sx={{ color: "snow" }}>
-                รายงานการขายประจำวัน
+                <Typography variant='h6'>
+                    รายงานการขาย ( {moment().format('DD/MM/YYYY HH:mm:ss')} )
+                </Typography>
             </Button>
             <Menu
                 id="basic-menu"
