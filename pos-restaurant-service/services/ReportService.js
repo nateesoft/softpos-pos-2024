@@ -57,7 +57,10 @@ const getTerminalByMacno = async (macno) => {
             SUM(B_Vat) B_Vat,
             SUM(B_Cust) B_Cust 
             FROM billno 
-            WHERE B_OnDate='${getMoment().format('YYYY-MM-DD')}' and B_Void <> 'V' and B_MacNo ='${macno}'`;
+            WHERE B_OnDate='${getMoment().format('YYYY-MM-DD')}' 
+            and B_Void <> 'V' 
+            and B_MacNo ='${macno}' 
+            group by (B_MacNo)`;
     const results = await pool.query(sql)
     if (results.length > 0) {
         return results[0]
@@ -92,7 +95,9 @@ const getTerminalByCashier = async (cashier) => {
             SUM(B_Vat) B_Vat,
             SUM(B_Cust) B_Cust 
             FROM billno 
-            WHERE B_OnDate='${getMoment().format('YYYY-MM-DD')}' and B_Void <> 'V' and B_Cashier ='${cashier}'`;
+            WHERE B_OnDate='${getMoment().format('YYYY-MM-DD')}' 
+            and B_Void <> 'V' 
+            and B_Cashier ='${cashier}' group by (B_Cashier)`;
     const results = await pool.query(sql)
     if (results.length > 0) {
         return results[0]
