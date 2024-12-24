@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { Box, Button, TextField, Typography } from "@mui/material"
+import { Box, Button, FormControl, Grid2, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
@@ -22,7 +22,8 @@ const RecieptReportModal = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
-  const [date, setDate] = useState("")
+  const [macno1, setMacno1] = useState("")
+  const [macno2, setMacno2] = useState("")
 
   const handleConfirm = async () => {
     navigate('/reportDaily/reciept-report')
@@ -33,10 +34,39 @@ const RecieptReportModal = ({ setOpen }) => {
       <Grid container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>รายงานการพิมพ์ใบเสร็จรับเงิน</Typography>
       </Grid>
-      <Grid container spacing={2} padding={2} direction="column">
-        <Grid size={12}>
-          <TextField label="เลือกวันที่" value={date} onChange={e => setDate(e.target.value)} fullWidth />
-        </Grid>
+      <Grid container spacing={1} margin={1}>
+        <Grid2 size={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">หมายเลขเครื่อง</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={macno1}
+              label="หมายเลขเครื่อง"
+              onChange={e => setMacno1(e.target.value)}
+            >
+              <MenuItem value={10}>001</MenuItem>
+              <MenuItem value={20}>002</MenuItem>
+              <MenuItem value={30}>003</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid2>
+        <Grid2 size={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">หมายเลขเครื่อง</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={macno2}
+              label="หมายเลขเครื่อง"
+              onChange={e => setMacno2(e.target.value)}
+            >
+              <MenuItem value={10}>001</MenuItem>
+              <MenuItem value={20}>002</MenuItem>
+              <MenuItem value={30}>003</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid2>
       </Grid>
       <Box display="flex" justifyContent="center">
         <Grid container spacing={2} padding={2}>

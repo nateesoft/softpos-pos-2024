@@ -3,6 +3,11 @@ import { Box, Button, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import moment from 'moment'
 
 import { POSContext } from "../../../../AppContext";
 import { useNavigate } from "react-router-dom";
@@ -29,22 +34,32 @@ const TableOnActionModal = ({ setOpen }) => {
   }
 
   return (
-    <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
-      <Grid container spacing={2} padding={2} justifyContent="center">
-        <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>รายงานโต๊ะค้าง (ยังไม่ได้ชำระเงิน)</Typography>
-      </Grid>
-      <Grid container spacing={2} padding={2} direction="column">
-        <Grid size={12}>
-          <TextField label="เลือกวันที่" value={date} onChange={e => setDate(e.target.value)} fullWidth />
-        </Grid>
-      </Grid>
-      <Box display="flex" justifyContent="center">
-        <Grid container spacing={2} padding={2}>
-          <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
-        </Grid>
-      </Box>
-    </Box>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['DatePicker']}>    
+        <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
+          <Grid container spacing={2} padding={2} justifyContent="center">
+            <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>รายงานโต๊ะค้าง (ยังไม่ได้ชำระเงิน)</Typography>
+          </Grid>
+          <Grid container spacing={2} padding={2} direction="column">
+            <DatePicker 
+              label="เลือกวันที่" 
+              format="DD/MM/YYYY"
+              slotProps={{
+                textField: {
+                  helperText: 'DD/MM/YYYY'
+                }
+              }}
+            />
+          </Grid>
+          <Box display="flex" justifyContent="center">
+            <Grid container spacing={2} padding={2}>
+              <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
+              <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
+            </Grid>
+          </Box>
+        </Box>
+      </DemoContainer>
+    </LocalizationProvider>
   )
 }
 

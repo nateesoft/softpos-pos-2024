@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react"
-import { Box, Button, TextField, Typography } from "@mui/material"
-import Grid from "@mui/material/Grid2"
+import { Box, Button, FormControl, Grid2, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 
@@ -22,7 +21,11 @@ const CreditReportModal = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
-  const [date, setDate] = useState("")
+  const [macno1, setMacno1] = useState("")
+      const [macno2, setMacno2] = useState("")
+    
+      const [user1, setUser1] = useState("")
+      const [user2, setUser2] = useState("")
 
   const handleConfirm = async () => {
     navigate('/reportDaily/credit-report')
@@ -30,19 +33,60 @@ const CreditReportModal = ({ setOpen }) => {
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
-      <Grid container spacing={2} padding={2} justifyContent="center">
+      <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>รายงานการรับชำระเงินด้วยบัตรเครดิต</Typography>
-      </Grid>
-      <Grid container spacing={2} padding={2} direction="column">
-        <Grid size={12}>
-          <TextField label="เลือกวันที่" value={date} onChange={e => setDate(e.target.value)} fullWidth />
-        </Grid>
-      </Grid>
+      </Grid2>
+      <Grid2 container spacing={1} margin={1}>
+        <Grid2 size={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">หมายเลขเครื่อง</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={macno1}
+              label="หมายเลขเครื่อง"
+              onChange={e=>setMacno1(e.target.value)}
+            >
+              <MenuItem value={10}>001</MenuItem>
+              <MenuItem value={20}>002</MenuItem>
+              <MenuItem value={30}>003</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid2>
+        <Grid2 size={6}>
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">หมายเลขเครื่อง</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={macno2}
+              label="หมายเลขเครื่อง"
+              onChange={e=>setMacno2(e.target.value)}
+            >
+              <MenuItem value={10}>001</MenuItem>
+              <MenuItem value={20}>002</MenuItem>
+              <MenuItem value={30}>003</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid2>
+      </Grid2>
+      <Grid2 container spacing={1} margin={1}>
+        <Grid2 size={6}>
+          <FormControl fullWidth>
+            <TextField label="รหัสพนักงานขาย" value={user1} onChange={e => setUser1(e.target.value)} fullWidth />
+          </FormControl>
+        </Grid2>
+        <Grid2 size={6}>
+          <FormControl fullWidth>
+          <TextField label="รหัสพนักงานขาย" value={user2} onChange={e => setUser2(e.target.value)} fullWidth />
+          </FormControl>
+        </Grid2>
+      </Grid2>
       <Box display="flex" justifyContent="center">
-        <Grid container spacing={2} padding={2}>
+        <Grid2 container spacing={2} padding={2}>
           <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
           <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
-        </Grid>
+        </Grid2>
       </Box>
     </Box>
   )

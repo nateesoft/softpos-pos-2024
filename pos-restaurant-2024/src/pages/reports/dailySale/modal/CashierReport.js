@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react"
-import { Box, Button, TextField, Typography } from "@mui/material"
-import Grid from "@mui/material/Grid2"
+import { Box, Button, Grid2, TextField, Typography } from "@mui/material"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 
@@ -22,7 +21,7 @@ const CashierReportModal = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
-  const [date, setDate] = useState("")
+  const [user, setUser] = useState("")
 
   const handleConfirm = async () => {
     navigate('/reportDaily/cashier-report')
@@ -30,19 +29,19 @@ const CashierReportModal = ({ setOpen }) => {
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
-      <Grid container spacing={2} padding={2} justifyContent="center">
+      <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>รายงานพนักงานขาย (Cashier Report)</Typography>
-      </Grid>
-      <Grid container spacing={2} padding={2} direction="column">
-        <Grid size={12}>
-          <TextField label="เลือกวันที่" value={date} onChange={e => setDate(e.target.value)} fullWidth />
-        </Grid>
-      </Grid>
+      </Grid2>
+      <Grid2 container spacing={2} padding={2} direction="column">
+        <Grid2 size={12}>
+          <TextField label="รหัสพนักงานขาย" value={user} onChange={e => setUser(e.target.value)} fullWidth />
+        </Grid2>
+      </Grid2>
       <Box display="flex" justifyContent="center">
-        <Grid container spacing={2} padding={2}>
+        <Grid2 container spacing={2} padding={2}>
           <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
           <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
-        </Grid>
+        </Grid2>
       </Box>
     </Box>
   )
