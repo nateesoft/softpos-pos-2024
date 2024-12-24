@@ -65,7 +65,7 @@ const getTerminalByMacno = async (macno) => {
     if (results.length > 0) {
         return results[0]
     }
-    return null
+    return {}
 }
 
 const getTerminalByCashier = async (cashier) => {
@@ -102,7 +102,7 @@ const getTerminalByCashier = async (cashier) => {
     if (results.length > 0) {
         return results[0]
     }
-    return null
+    return {}
 }
 
 const summaryETD = (results, dataList) => {
