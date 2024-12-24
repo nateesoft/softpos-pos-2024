@@ -58,70 +58,70 @@ class ComponentToPrint extends Component {
                             </tr>
                             <tr>
                                 <td>ค่าบริการ Service</td>
-                                <td align='right'>1</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_ServiceAmt}</td>
                             </tr>
                             <tr>
                                 <td>Charge บัตรเครดิต</td>
-                                <td align='right'>1</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_CrChargeAmt1}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดสมาชิก VIP</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_MemDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดเทศกาล</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_FastDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดพนักงาน</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_EmpDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดพนักงาน Trainee</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_TrainDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดคูปอง</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_CuponDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดบาท</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_SubDiscBath}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลด Promotion</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_ProDiscAmt}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดพิเศษ (Special)</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_SpaDiscAmt}</td>
@@ -156,56 +156,56 @@ class ComponentToPrint extends Component {
                             </tr>
                             <tr>
                                 <td>เงินสด Cash</td>
-                                <td align='right'>20</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_Cash}</td>
                             </tr>
                             <tr>
                                 <td>บัตรกำนัล Gift Voucher</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>{report.B_GiftVoucher}</td>
                             </tr>
                             <tr>
                                 <td>ลูกหนี้การค้า</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>0.00</td>
                             </tr>
                             <tr>
                                 <td>QR CODE</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>0.00</td>
                             </tr>
                             <tr>
                                 <td>True wallet</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>0.00</td>
                             </tr>
                             <tr>
                                 <td>VISA</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>0.00</td>
                             </tr>
                             <tr style={{ borderTop: "1px solid", borderStyle: "dashed" }}>
                                 <td>PAID-IN</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>0.00</td>
                             </tr>
                             <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
                                 <td>PAID-OUT</td>
-                                <td align='right'>0</td>
+                                <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>0</td>
