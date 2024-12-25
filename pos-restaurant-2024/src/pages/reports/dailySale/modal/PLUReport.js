@@ -38,7 +38,10 @@ const PLUReportModal = ({ setOpen }) => {
   const [product, setProduct] = useState("")
 
   const handleConfirm = async () => {
-    navigate('/reportDaily/plu-report')
+    if (macno1 || macno2 || user1 || user2 || group1 || group2 || product) {
+      const query = `/?macno1=${macno1}&macno2=${macno2}&cashier1=${user1}&cashier2=${user2}&group1=${group1}&group2=${group2}&pluCode=${product}`
+      navigate(`/reportDaily/plu-report${query}`)
+    }
   }
 
   const loadTerminalList = () => {

@@ -6,6 +6,7 @@ import moment from 'moment'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
+import { useSearchParams } from 'react-router-dom'
 
 class ComponentToPrint extends Component {
     constructor(props) {
@@ -302,6 +303,8 @@ class ComponentToPrint extends Component {
 
 const CashierReport = () => {
     const contentRef = useRef(null);
+    const [query] = useSearchParams()
+
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [report, setReport] = useState({})
@@ -331,7 +334,7 @@ const CashierReport = () => {
 
     const loadReport = useCallback(() => {
         apiClient
-            .post(`/api/report/cashier-report`, { cashier: userLogin })
+            .post(`/api/report/cashier-report`, { cashier: query.get('cashier') })
             .then((response) => {
                 if (response.status === 200) {
                     setReport(response.data.data)

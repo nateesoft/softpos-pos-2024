@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 
-import { POSContext } from "../../../../AppContext";
 import apiClient from '../../../../httpRequest'
 
 const modalStyle = {
@@ -20,14 +19,15 @@ const modalStyle = {
 }
 
 const TerminalReportModal = ({ setOpen }) => {
-  const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
   const [macno, setMacno] = useState('');
   const [terminalList, setTerminalList] = useState([])
 
   const handleConfirm = async () => {
-    navigate('/reportDaily/terminal-report')
+    if (macno) {
+      navigate(`/reportDaily/terminal-report/?macno=${macno}`)
+    }
   }
 
   const loadTerminalList = () => {

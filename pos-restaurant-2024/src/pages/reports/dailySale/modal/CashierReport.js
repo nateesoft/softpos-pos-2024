@@ -24,7 +24,9 @@ const CashierReportModal = ({ setOpen }) => {
   const [user, setUser] = useState("")
 
   const handleConfirm = async () => {
-    navigate('/reportDaily/cashier-report')
+    if (user) {
+      navigate(`/reportDaily/cashier-report/?cashier=${user}`)
+    }
   }
 
   return (

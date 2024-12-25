@@ -6,6 +6,7 @@ import moment from 'moment'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
+import { useSearchParams } from 'react-router-dom'
 
 class ComponentToPrint extends Component {
     constructor(props) {
@@ -13,7 +14,7 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno, reports, summary } = this.props
+        const { userLogin, macno, reports, summary, filter } = this.props
         const poshwSetup = this.props.poshwSetup
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
@@ -25,10 +26,10 @@ class ComponentToPrint extends Component {
                     <div align="center">รายงานการขายตามรหัสสินค้า</div>
                     <div align="center">(Plu-Code Report)</div>
                     <div style={{ margin: "20px" }}></div>
-                    <div>หมายเลขเครื่อง : 001 ... 001</div>
-                    <div>รหัสพนักงานขาย : 9999 ... 9999</div>
-                    <div>รหัสกลุ่มสินค้า (Dept/Group) : 0000 ... ZZZZ</div>
-                    <div>รหัสสินค้า : ..ZZZZ</div>
+                    <div>หมายเลขเครื่อง : {filter.macno1} ... {filter.macno2}</div>
+                    <div>รหัสพนักงานขาย : {filter.cashier1} ... {filter.cashier2}</div>
+                    <div>รหัสกลุ่มสินค้า (Dept/Group) : {filter.groupCode1} ... {filter.groupCode2}</div>
+                    <div>รหัสสินค้า : {filter.pluCode}</div>
                     <div style={{ margin: "20px" }}></div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
@@ -58,6 +59,8 @@ class ComponentToPrint extends Component {
 
 const PLUReport = () => {
     const contentRef = useRef(null);
+    const [query] = useSearchParams()
+
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
@@ -89,10 +92,13 @@ const PLUReport = () => {
     const loadReport = useCallback(() => {
         apiClient
             .post(`/api/report/plu-report`, {
-                groupCode1: "01",
-                groupCode2: "99",
-                pluCode1: 'aaaa',
-                pluCode2: 'zzzz'
+                macno1: query.get('macno1'),
+                macno2: query.get('macno2'),
+                cashier1: query.get('cashier1'),
+                cashier2: query.get('cashier2'),
+                groupCode1: query.get('group1'),
+                groupCode2: query.get('group2'),
+                pluCode: query.get('pluCode')
             })
             .then((response) => {
                 if (response.status === 200) {
@@ -119,6 +125,15 @@ const PLUReport = () => {
                 reports={reports}
                 summary={summary}
                 poshwSetup={poshwSetup}
+                filter={{
+                    macno1: query.get('macno1'),
+                    macno2: query.get('macno2'),
+                    cashier1: query.get('cashier1'),
+                    cashier2: query.get('cashier2'),
+                    groupCode1: query.get('group1'),
+                    groupCode2: query.get('group2'),
+                    pluCode: query.get('pluCode')
+                }}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>

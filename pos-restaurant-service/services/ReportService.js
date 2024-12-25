@@ -134,15 +134,24 @@ const summaryETD = (results, dataList) => {
     return { sumE, sumT, sumD }
 }
 
-const getGroupPlu = async (groupCode) => {
-    const sql = `SELECT ts.R_ETD, ts.R_Group, g.GroupName, 
+const getGroupPlu = async (macno1, macno2, cashier1, cashier2, groupCode1, groupCode2) => {
+    let sql = `SELECT ts.R_ETD, ts.R_Group, g.GroupName, 
             SUM(ts.R_Total) R_Total 
             FROM billno b 
             INNER JOIN t_sale ts on b.B_Refno =ts.R_Refno 
             LEFT JOIN groupfile g on ts.R_Group = g.GroupCode 
-            WHERE ts.R_Date='${getMoment().format('YYYY-MM-DD')}' and ts.R_Void <> 'V' 
-            and ts.R_Group='${groupCode}' 
-            GROUP BY ts.R_ETD, ts.R_Group `;
+            WHERE ts.R_Date='${getMoment().format('YYYY-MM-DD')}' and ts.R_Void <> 'V' `;
+    if (macno1 && macno2) {
+        sql = sql + ` and ts.MacNo between '${macno1}' and '${macno2}' `;
+    }
+    if (cashier1 && cashier2) {
+        sql = sql + ` and ts.Cashier between '${cashier1}' and '${cashier2}' `;
+    }
+    if (groupCode1 && groupCode2) {
+        sql = sql + ` and ts.R_Group between '${groupCode1}' and '${groupCode2}' `;
+    }
+
+    sql = sql + ` GROUP BY ts.R_ETD, ts.R_Group`;
     const results = await pool.query(sql)
     const dataList = []
 
@@ -159,16 +168,26 @@ const getGroupPlu = async (groupCode) => {
     return dataList
 }
 
-const getPluCode = async (groupCode1, groupCode2, pluCode1 = 'aaaa', pluCode2 = 'zzzz') => {
-    const sql = `select ts.R_Group, g.GroupName, ts.R_PluCode, ts.R_PName,
+const getPluCode = async (macno1, macno2, cashier1, cashier2, groupCode1, groupCode2, pluCode) => {
+    let sql = `select ts.R_Group, g.GroupName, ts.R_PluCode, ts.R_PName,
         sum(ts.R_Quan) R_Quan, sum(R_Total) R_Total 
         from billno b 
         inner join t_sale ts on b.B_Refno =ts.R_Refno 
         left join groupfile g on ts.R_Group = g.GroupCode 
-        where ts.R_Date='${getMoment().format('YYYY-MM-DD')}' and ts.R_Void <> 'V' 
-        and ts.R_Group between '${groupCode1}' and '${groupCode2}' 
-        and ts.R_PluCode between '${pluCode1}' and 'zzzz' 
-        group by ts.R_Group, ts.R_PluCode, ts.R_PName`;
+        where ts.R_Date='${getMoment().format('YYYY-MM-DD')}' and ts.R_Void <> 'V' `;
+    if (macno1 && macno2) {
+        sql = sql + ` and ts.MacNo between '${macno1}' and '${macno2}' `;
+    }
+    if (cashier1 && cashier2) {
+        sql = sql + ` and ts.Cashier between '${cashier1}' and '${cashier2}' `;
+    }
+    if (groupCode1 && groupCode2) {
+        sql += ` and ts.R_Group between '${groupCode1}' and '${groupCode2}' `;
+    }
+    if (pluCode) {
+        sql += ` and ts.R_PluCode = '${pluCode}' `;
+    }
+    sql += ` group by ts.R_Group, ts.R_PluCode, ts.R_PName`;
     const results = await pool.query(sql)
     const sumQty = results.reduce((partialSum, a) => partialSum + a.R_Quan, 0)
     const sumNetTotal = results.reduce((partialSum, a) => partialSum + a.R_Total, 0)
@@ -378,11 +397,11 @@ const getSaleByType = async () => {
     const total = results.reduce((partialSum, a) => partialSum + a.NetTotal, 0)
     const newResults = results.map(item => {
         if (item.R_ETD === 'E') {
-            return { ...item, label: 'Dine In', value: Math.round(item.NetTotal/total*100) }
+            return { ...item, label: 'Dine In', value: Math.round(item.NetTotal / total * 100) }
         } else if (item.R_ETD === 'T') {
-            return { ...item, label: 'Take Away', value: Math.round(item.NetTotal/total*100) }
+            return { ...item, label: 'Take Away', value: Math.round(item.NetTotal / total * 100) }
         } else if (item.R_ETD === 'D') {
-            return { ...item, label: 'Delivery', value: Math.round(item.NetTotal/total*100) }
+            return { ...item, label: 'Delivery', value: Math.round(item.NetTotal / total * 100) }
         }
     })
     return newResults
@@ -406,7 +425,7 @@ const getSaleByGroup = async () => {
     const newMapping = newResults.map(item => {
         return {
             ...item,
-            value: Math.round(item.NetTotal/total*100)
+            value: Math.round(item.NetTotal / total * 100)
         }
     })
     return newMapping

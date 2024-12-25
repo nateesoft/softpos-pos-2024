@@ -35,7 +35,10 @@ const DepartmentGroupReportModal = ({ setOpen }) => {
   const [group2, setGroup2] = useState("")
 
   const handleConfirm = async () => {
-    navigate('/reportDaily/department-group-report')
+    if (macno1 || macno2 || user1 || user2 || group1 || group2) {
+      const query = `/?macno1=${macno1}&macno2=${macno2}&cashier1=${user1}&cashier2=${user2}&group1=${group1}&group2=${group2}`
+      navigate(`/reportDaily/department-group-report${query}`)
+    }
   }
 
   const loadTerminalList = () => {
