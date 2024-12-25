@@ -18,7 +18,7 @@ class ComponentToPrint extends Component {
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
         return (
-            <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
+            <Grid2 id='content' container justifyContent="center" sx={{ marginBottom: "100px" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     {headers && headers.map((header) => <div>{header}</div>)}
                     <div style={{ marginTop: "30px" }}></div>
@@ -318,20 +318,20 @@ const CashierReport = () => {
 
     const loadPosHwSetup = useCallback(() => {
         apiClient
-          .get(`/api/poshwsetup/${macno}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setPosHwSetup(response.data.data)
-            }
-          })
-          .catch((error) => {
-            alert(error.message)
-          })
-      }, [])
+            .get(`/api/poshwsetup/${macno}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    setPosHwSetup(response.data.data)
+                }
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
+    }, [])
 
     const loadReport = useCallback(() => {
         apiClient
-            .post(`/api/report/cashier-report`, {cashier: userLogin})
+            .post(`/api/report/cashier-report`, { cashier: userLogin })
             .then((response) => {
                 if (response.status === 200) {
                     setReport(response.data.data)

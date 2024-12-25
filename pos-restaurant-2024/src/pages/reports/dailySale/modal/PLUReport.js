@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import { Box, Button, FormControl, Grid2, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
+import { useNavigate } from "react-router-dom";
 
 import { POSContext } from "../../../../AppContext";
-import { useNavigate } from "react-router-dom";
+import apiClient from '../../../../httpRequest'
 
 const modalStyle = {
   position: "absolute",
@@ -22,20 +23,54 @@ const PLUReportModal = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
-  const [macno1, setMacno1] = useState("")
-    const [macno2, setMacno2] = useState("")
-  
-    const [user1, setUser1] = useState("")
-    const [user2, setUser2] = useState("")
-  
-    const [group1, setGroup1] = useState("")
-    const [group2, setGroup2] = useState("")
+  const [terminalList, setTerminalList] = useState([])
+  const [productGroupList, setProductGroupList] = useState([])
 
-    const [product, setProduct] = useState("")
+  const [macno1, setMacno1] = useState("")
+  const [macno2, setMacno2] = useState("")
+
+  const [user1, setUser1] = useState("")
+  const [user2, setUser2] = useState("")
+
+  const [group1, setGroup1] = useState("")
+  const [group2, setGroup2] = useState("")
+
+  const [product, setProduct] = useState("")
 
   const handleConfirm = async () => {
     navigate('/reportDaily/plu-report')
   }
+
+  const loadTerminalList = () => {
+    apiClient
+      .get(`/api/poshwsetup/all`)
+      .then((response) => {
+        if (response.status === 200) {
+          setTerminalList(response.data.data)
+        }
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
+  }
+
+  const loadProductGroupList = () => {
+    apiClient
+      .get(`/api/pos-groupfile/all`)
+      .then((response) => {
+        if (response.status === 200) {
+          setProductGroupList(response.data.data)
+        }
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
+  }
+
+  useEffect(() => {
+    loadTerminalList()
+    loadProductGroupList()
+  }, [])
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
@@ -51,11 +86,11 @@ const PLUReportModal = ({ setOpen }) => {
               id="demo-simple-select"
               value={macno1}
               label="หมายเลขเครื่อง"
-              onChange={e=>setMacno1(e.target.value)}
+              onChange={e => setMacno1(e.target.value)}
             >
-              <MenuItem value={10}>001</MenuItem>
-              <MenuItem value={20}>002</MenuItem>
-              <MenuItem value={30}>003</MenuItem>
+              {terminalList && terminalList.map(item => {
+                return <MenuItem value={item.Terminal}>{item.Terminal}</MenuItem>
+              })}
             </Select>
           </FormControl>
         </Grid2>
@@ -67,11 +102,11 @@ const PLUReportModal = ({ setOpen }) => {
               id="demo-simple-select"
               value={macno2}
               label="หมายเลขเครื่อง"
-              onChange={e=>setMacno2(e.target.value)}
+              onChange={e => setMacno2(e.target.value)}
             >
-              <MenuItem value={10}>001</MenuItem>
-              <MenuItem value={20}>002</MenuItem>
-              <MenuItem value={30}>003</MenuItem>
+              {terminalList && terminalList.map(item => {
+                return <MenuItem value={item.Terminal}>{item.Terminal}</MenuItem>
+              })}
             </Select>
           </FormControl>
         </Grid2>
@@ -84,7 +119,7 @@ const PLUReportModal = ({ setOpen }) => {
         </Grid2>
         <Grid2 size={6}>
           <FormControl fullWidth>
-          <TextField label="รหัสพนักงานขาย" value={user2} onChange={e => setUser2(e.target.value)} fullWidth />
+            <TextField label="รหัสพนักงานขาย" value={user2} onChange={e => setUser2(e.target.value)} fullWidth />
           </FormControl>
         </Grid2>
       </Grid>
@@ -96,12 +131,12 @@ const PLUReportModal = ({ setOpen }) => {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={group1}
-              label="หมายเลขเครื่อง"
-              onChange={e=>setGroup1(e.target.value)}
+              label="กลุ่มสินค้า"
+              onChange={e => setGroup1(e.target.value)}
             >
-              <MenuItem value={10}>001</MenuItem>
-              <MenuItem value={20}>002</MenuItem>
-              <MenuItem value={30}>003</MenuItem>
+              {productGroupList && productGroupList.map(item => {
+                return <MenuItem value={item.GroupCode}>{item.GroupName}</MenuItem>
+              })}
             </Select>
           </FormControl>
         </Grid2>
@@ -112,12 +147,12 @@ const PLUReportModal = ({ setOpen }) => {
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={group2}
-              label="หมายเลขเครื่อง"
-              onChange={e=>setGroup2(e.target.value)}
+              label="กลุ่มสินค้า"
+              onChange={e => setGroup2(e.target.value)}
             >
-              <MenuItem value={10}>001</MenuItem>
-              <MenuItem value={20}>002</MenuItem>
-              <MenuItem value={30}>003</MenuItem>
+              {productGroupList && productGroupList.map(item => {
+                return <MenuItem value={item.GroupCode}>{item.GroupName}</MenuItem>
+              })}
             </Select>
           </FormControl>
         </Grid2>

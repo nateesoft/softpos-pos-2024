@@ -1,10 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-const { updateNextBillNo, getAllData, getBillNoByMacno } = require('../../../services/PosHwSetup');
+const { updateNextBillNo, getAllData, getBillNoByMacno, getAllTerminal } = require('../../../services/PosHwSetup');
 
 router.get('/', (req, res, next) => {
   getAllData()
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.get('/all', (req, res, next) => {
+  getAllTerminal()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

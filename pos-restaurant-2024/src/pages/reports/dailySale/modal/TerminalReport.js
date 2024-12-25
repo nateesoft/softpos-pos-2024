@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react"
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
+import React, { useContext, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 
 import { POSContext } from "../../../../AppContext";
-import { useNavigate } from "react-router-dom";
+import apiClient from '../../../../httpRequest'
 
 const modalStyle = {
   position: "absolute",
@@ -22,15 +23,29 @@ const TerminalReportModal = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
-  const [macno, setMacno] = React.useState('');
-
-  const handleChange = (event) => {
-    setMacno(event.target.value);
-  };
+  const [macno, setMacno] = useState('');
+  const [terminalList, setTerminalList] = useState([])
 
   const handleConfirm = async () => {
     navigate('/reportDaily/terminal-report')
   }
+
+  const loadTerminalList = () => {
+    apiClient
+      .get(`/api/poshwsetup/all`)
+      .then((response) => {
+        if (response.status === 200) {
+          setTerminalList(response.data.data)
+        }
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
+  }
+
+  useEffect(() => {
+    loadTerminalList()
+  }, [])
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
@@ -45,11 +60,11 @@ const TerminalReportModal = ({ setOpen }) => {
             id="demo-simple-select"
             value={macno}
             label="หมายเลขเครื่อง (Macno)"
-            onChange={e=>setMacno(e.target.value)}
+            onChange={e => setMacno(e.target.value)}
           >
-            <MenuItem value={10}>001</MenuItem>
-            <MenuItem value={20}>002</MenuItem>
-            <MenuItem value={30}>003</MenuItem>
+            {terminalList && terminalList.map(item => {
+              return <MenuItem value={item.Terminal}>{item.Terminal}</MenuItem>
+            })}
           </Select>
         </FormControl>
       </Grid>

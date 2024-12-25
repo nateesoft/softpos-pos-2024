@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Box, Button, FormControl, Grid2, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
+import { useNavigate } from "react-router-dom";
 
 import { POSContext } from "../../../../AppContext";
-import { useNavigate } from "react-router-dom";
+import apiClient from '../../../../httpRequest'
 
 const modalStyle = {
   position: "absolute",
@@ -22,15 +23,34 @@ const VoidReportModal = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
+  const [terminalList, setTerminalList] = useState([])
+
   const [macno1, setMacno1] = useState("")
-    const [macno2, setMacno2] = useState("")
-  
-    const [user1, setUser1] = useState("")
-    const [user2, setUser2] = useState("")
+  const [macno2, setMacno2] = useState("")
+
+  const [user1, setUser1] = useState("")
+  const [user2, setUser2] = useState("")
 
   const handleConfirm = async () => {
     navigate('/reportDaily/void-report')
   }
+
+  const loadTerminalList = () => {
+    apiClient
+      .get(`/api/poshwsetup/all`)
+      .then((response) => {
+        if (response.status === 200) {
+          setTerminalList(response.data.data)
+        }
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
+  }
+
+  useEffect(() => {
+    loadTerminalList()
+  }, [])
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
@@ -46,11 +66,11 @@ const VoidReportModal = ({ setOpen }) => {
               id="demo-simple-select"
               value={macno1}
               label="หมายเลขเครื่อง"
-              onChange={e=>setMacno1(e.target.value)}
+              onChange={e => setMacno1(e.target.value)}
             >
-              <MenuItem value={10}>001</MenuItem>
-              <MenuItem value={20}>002</MenuItem>
-              <MenuItem value={30}>003</MenuItem>
+              {terminalList && terminalList.map(item => {
+                return <MenuItem value={item.Terminal}>{item.Terminal}</MenuItem>
+              })}
             </Select>
           </FormControl>
         </Grid2>
@@ -62,11 +82,11 @@ const VoidReportModal = ({ setOpen }) => {
               id="demo-simple-select"
               value={macno2}
               label="หมายเลขเครื่อง"
-              onChange={e=>setMacno2(e.target.value)}
+              onChange={e => setMacno2(e.target.value)}
             >
-              <MenuItem value={10}>001</MenuItem>
-              <MenuItem value={20}>002</MenuItem>
-              <MenuItem value={30}>003</MenuItem>
+              {terminalList && terminalList.map(item => {
+                return <MenuItem value={item.Terminal}>{item.Terminal}</MenuItem>
+              })}
             </Select>
           </FormControl>
         </Grid2>
@@ -79,7 +99,7 @@ const VoidReportModal = ({ setOpen }) => {
         </Grid2>
         <Grid2 size={6}>
           <FormControl fullWidth>
-          <TextField label="รหัสพนักงานขาย" value={user2} onChange={e => setUser2(e.target.value)} fullWidth />
+            <TextField label="รหัสพนักงานขาย" value={user2} onChange={e => setUser2(e.target.value)} fullWidth />
           </FormControl>
         </Grid2>
       </Grid>

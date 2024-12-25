@@ -18,7 +18,7 @@ class ComponentToPrint extends Component {
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
         return (
-            <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
+            <Grid2 id='content' container justifyContent="center" sx={{ marginBottom: "100px" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     {headers && headers.map((header) => <div>{header}</div>)}
                     <div style={{ marginTop: "30px" }}></div>
@@ -37,17 +37,17 @@ class ComponentToPrint extends Component {
                         </thead>
                         <tbody>
                             {reports && reports.map(item =>
-                            <tr>
-                                <td align='center'>{item.time}</td>
-                                <td align='right'>{item.countBill}</td>
-                                <td align='right'>{item.countCust}</td>
-                                <td align='right'>{item.sumNetTotal}</td>
-                            </tr>
+                                <tr>
+                                    <td align='center'>{item.time}</td>
+                                    <td align='right'>{item.countBill}</td>
+                                    <td align='right'>{item.countCust}</td>
+                                    <td align='right'>{item.sumNetTotal}</td>
+                                </tr>
                             )}
                         </tbody>
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
-                            <tr style={{height: "50px"}}>
-                                <td><div style={{marginLeft: "10px"}}>SUM...</div></td>
+                            <tr style={{ height: "50px" }}>
+                                <td><div style={{ marginLeft: "10px" }}>SUM...</div></td>
                                 <td align='right'>{summary.countBill}</td>
                                 <td align='right'>{summary.countCust}</td>
                                 <td align='right'>{summary.sumNetTotal}</td>
@@ -79,16 +79,16 @@ const CustomerPerHourReport = () => {
 
     const loadPosHwSetup = useCallback(() => {
         apiClient
-          .get(`/api/poshwsetup/${macno}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setPosHwSetup(response.data.data)
-            }
-          })
-          .catch((error) => {
-            alert(error.message)
-          })
-      }, [])
+            .get(`/api/poshwsetup/${macno}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    setPosHwSetup(response.data.data)
+                }
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
+    }, [])
 
     const loadReport = useCallback(() => {
         apiClient

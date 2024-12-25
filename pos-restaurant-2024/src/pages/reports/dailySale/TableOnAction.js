@@ -19,16 +19,16 @@ class ComponentToPrint extends Component {
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
         return (
-            <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
+            <Grid2 id='content' container justifyContent="center" sx={{ marginBottom: "100px" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     {headers && headers.map((header) => <div>{header}</div>)}
                     <div style={{ marginTop: "30px" }}></div>
                     <div align="center">รายงานโต๊ะค้าง (ยังไม่ได้ชำระเงิน)</div>
-                    <div align="center" style={{margin: "10px"}}>Table Check</div>
+                    <div align="center" style={{ margin: "10px" }}>Table Check</div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%" cellPadding={2} cellSpacing={2}>
                         <thead>
-                            <tr style={{borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed"}}>
+                            <tr style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
                                 <td align='center'>Date</td>
                                 <td align='center'>Table</td>
                                 <td align='center'>Open-Time</td>
@@ -48,7 +48,7 @@ class ComponentToPrint extends Component {
                             ))}
                         </tbody>
                         <tfoot>
-                            <tr style={{borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed"}}>
+                            <tr style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -96,16 +96,16 @@ const TableOnAction = () => {
 
     const loadPosHwSetup = useCallback(() => {
         apiClient
-          .get(`/api/poshwsetup/${macno}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setPosHwSetup(response.data.data)
-            }
-          })
-          .catch((error) => {
-            alert(error.message)
-          })
-      }, [])
+            .get(`/api/poshwsetup/${macno}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    setPosHwSetup(response.data.data)
+                }
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
+    }, [])
 
     useEffect(() => {
         loadReport()

@@ -19,7 +19,7 @@ class ComponentToPrint extends Component {
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
         return (
-            <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
+            <Grid2 id='content' container justifyContent="center" sx={{ marginBottom: "100px" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     {headers && headers.map((header) => <div>{header}</div>)}
                     <div style={{ marginTop: "30px" }}></div>
@@ -315,16 +315,16 @@ const TerminalReport = () => {
 
     const loadPosHwSetup = useCallback(() => {
         apiClient
-          .get(`/api/poshwsetup/${macno}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setPosHwSetup(response.data.data)
-            }
-          })
-          .catch((error) => {
-            alert(error.message)
-          })
-      }, [])
+            .get(`/api/poshwsetup/${macno}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    setPosHwSetup(response.data.data)
+                }
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
+    }, [])
 
     const handlePrinter = useCallback(() => {
         functionToPrint()
@@ -332,7 +332,7 @@ const TerminalReport = () => {
 
     const loadReport = useCallback(() => {
         apiClient
-            .post(`/api/report/terminal-report`, {macno})
+            .post(`/api/report/terminal-report`, { macno })
             .then((response) => {
                 if (response.status === 200) {
                     setReport(response.data.data)

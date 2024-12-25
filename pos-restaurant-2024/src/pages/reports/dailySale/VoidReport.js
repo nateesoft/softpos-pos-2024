@@ -45,7 +45,7 @@ class ComponentToPrint extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {reports && reports.map(item =><>
+                            {reports && reports.map(item => <>
                                 <tr>
                                     <td align='center'>{item.B_MacNo}</td>
                                     <td align='center'>{item.B_Cashier}</td>
@@ -82,7 +82,7 @@ const VoidReport = () => {
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
-    const [summary, setSummary] =useState({})
+    const [summary, setSummary] = useState({})
     const [poshwSetup, setPosHwSetup] = useState({})
 
     const functionToPrint = useReactToPrint({
@@ -96,16 +96,16 @@ const VoidReport = () => {
 
     const loadPosHwSetup = useCallback(() => {
         apiClient
-          .get(`/api/poshwsetup/${macno}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setPosHwSetup(response.data.data)
-            }
-          })
-          .catch((error) => {
-            alert(error.message)
-          })
-      }, [])
+            .get(`/api/poshwsetup/${macno}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    setPosHwSetup(response.data.data)
+                }
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
+    }, [])
 
     const loadReport = useCallback(() => {
         apiClient

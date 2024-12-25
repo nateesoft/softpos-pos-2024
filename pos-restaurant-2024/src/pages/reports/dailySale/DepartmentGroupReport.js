@@ -19,17 +19,17 @@ class ComponentToPrint extends Component {
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
         return (
-            <Grid2 id='content' container justifyContent="center" sx={{marginBottom: "100px"}}>
+            <Grid2 id='content' container justifyContent="center" sx={{ marginBottom: "100px" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     {headers && headers.map((header) => <div>{header}</div>)}
                     <div style={{ marginTop: "30px" }}></div>
                     <div align="center">รายงานการขายตามกลุ่มสินค้า</div>
                     <div align="center">(Dept/Group Report)</div>
-                    <div style={{margin: "20px"}}></div>
+                    <div style={{ margin: "20px" }}></div>
                     <div>หมายเลขเครื่อง : 001 ... 001</div>
                     <div>รหัสพนักงานขาย : 9999 ... 9999</div>
                     <div>รหัสกลุ่มสินค้า (Dept/Group) : 0000 ... ZZZZ</div>
-                    <div style={{margin: "20px"}}></div>
+                    <div style={{ margin: "20px" }}></div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
@@ -76,20 +76,20 @@ const DepartmentGroupReport = () => {
 
     const loadPosHwSetup = useCallback(() => {
         apiClient
-          .get(`/api/poshwsetup/${macno}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setPosHwSetup(response.data.data)
-            }
-          })
-          .catch((error) => {
-            alert(error.message)
-          })
-      }, [])
+            .get(`/api/poshwsetup/${macno}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    setPosHwSetup(response.data.data)
+                }
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
+    }, [])
 
     const loadReport = useCallback(() => {
         apiClient
-            .post(`/api/report/group-plu-report`, {groupCode: "01"})
+            .post(`/api/report/group-plu-report`, { groupCode: "01" })
             .then((response) => {
                 console.log(response.data.data)
                 if (response.status === 200) {

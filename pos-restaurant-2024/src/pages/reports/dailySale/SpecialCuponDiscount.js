@@ -24,7 +24,7 @@ class ComponentToPrint extends Component {
                     <div style={{ marginTop: "30px" }}></div>
                     <div align="center">รายงานคูปองส่วนลดพิเศษ</div>
                     <div align="center">(Special Cupon Discount)</div>
-                    <div align="left" style={{margin: "20px"}}>หมายเลขเครื่อง : 001 .. 001</div>
+                    <div align="left" style={{ margin: "20px" }}>หมายเลขเครื่อง : 001 .. 001</div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
                         <thead>
@@ -75,16 +75,16 @@ const SpecialCuponDiscount = () => {
 
     const loadPosHwSetup = useCallback(() => {
         apiClient
-          .get(`/api/poshwsetup/${macno}`)
-          .then((response) => {
-            if (response.status === 200) {
-              setPosHwSetup(response.data.data)
-            }
-          })
-          .catch((error) => {
-            alert(error.message)
-          })
-      }, [])
+            .get(`/api/poshwsetup/${macno}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    setPosHwSetup(response.data.data)
+                }
+            })
+            .catch((error) => {
+                alert(error.message)
+            })
+    }, [])
 
     const loadReport = useCallback(() => {
         apiClient

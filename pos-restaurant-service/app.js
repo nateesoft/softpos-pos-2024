@@ -21,6 +21,7 @@ const balanceRouter = require('./routes/pos_restaurant/order/Balance');
 const billNoRouter = require('./routes/pos_restaurant/order/BillNo');
 const tSaleRouter = require('./routes/pos_restaurant/order/TSale');
 const posProductRouter = require('./routes/pos_restaurant/product/Product');
+const posGroupFileRouter = require('./routes/pos_restaurant/product/GroupFile');
 const optionFileRouter = require('./routes/pos_restaurant/optionfile');
 const voidMsgRouter = require('./routes/pos_restaurant/order/VoidMsg');
 const creditFileRouter = require('./routes/pos_restaurant/order/CreditFile');
@@ -83,6 +84,7 @@ app.use('/api/employ', employRouter);
 app.use('/api/poshwsetup', poshwsetupRouter);
 
 app.use('/api/pos-product', posProductRouter);
+app.use('/api/pos-groupfile', posGroupFileRouter);
 app.use('/api/balance', balanceRouter);
 app.use('/api/tablefile', tableFileRouter);
 app.use('/api/billno', billNoRouter);

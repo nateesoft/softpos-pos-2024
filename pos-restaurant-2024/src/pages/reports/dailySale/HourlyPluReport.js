@@ -45,13 +45,13 @@ class ComponentToPrint extends Component {
                                         <td align='right'></td>
                                         <td align='right'></td>
                                     </tr>}
-                                    {item.length > 0 && item.map(ii => 
-                                    <tr>
-                                        <td></td>
-                                        <td>{ii.R_PluCode}</td>
-                                        <td align='right'>{ii.R_Quan}</td>
-                                        <td align='right'>{ii.R_Total}</td>
-                                    </tr>
+                                    {item.length > 0 && item.map(ii =>
+                                        <tr>
+                                            <td></td>
+                                            <td>{ii.R_PluCode}</td>
+                                            <td align='right'>{ii.R_Quan}</td>
+                                            <td align='right'>{ii.R_Total}</td>
+                                        </tr>
                                     )}
                                 </>
                             )

@@ -2,9 +2,9 @@ import React, { useContext, useState } from "react"
 import { Box, Button, Grid2, TextField, Typography } from "@mui/material"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
+import { useNavigate } from "react-router-dom";
 
 import { POSContext } from "../../../../AppContext";
-import { useNavigate } from "react-router-dom";
 
 const modalStyle = {
   position: "absolute",

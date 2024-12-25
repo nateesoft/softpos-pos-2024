@@ -1,6 +1,12 @@
 const pool = require('../config/database/MySqlConnect')
 const { ASCII2Unicode, PrefixZeroFormat } = require('../utils/StringUtil')
 
+const getAllTerminal = async () => {
+    const sql = `select * from poshwsetup`;
+    const results = await pool.query(sql)
+    return results
+}
+
 const getAllData = async () => {
     const sql = `select * from poshwsetup limit 1`;
     const results = await pool.query(sql)
@@ -43,5 +49,6 @@ module.exports = {
     getDataByMacno,
     getAllData,
     updateNextBillNo,
-    getBillNoByMacno
+    getBillNoByMacno,
+    getAllTerminal
 }
