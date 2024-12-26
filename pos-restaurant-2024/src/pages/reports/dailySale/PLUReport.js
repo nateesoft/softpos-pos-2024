@@ -3,10 +3,10 @@ import { Button, Grid2, Paper } from '@mui/material'
 import { useReactToPrint } from 'react-to-print'
 import PrintIcon from '@mui/icons-material/Print'
 import moment from 'moment'
+import { useSearchParams } from 'react-router-dom'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
-import { useSearchParams } from 'react-router-dom'
 
 class ComponentToPrint extends Component {
     constructor(props) {

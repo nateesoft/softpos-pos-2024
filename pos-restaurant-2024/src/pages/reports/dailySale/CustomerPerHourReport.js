@@ -3,6 +3,7 @@ import { Button, Grid2, Paper } from '@mui/material'
 import { useReactToPrint } from 'react-to-print'
 import PrintIcon from '@mui/icons-material/Print'
 import moment from 'moment'
+import { useSearchParams } from 'react-router-dom'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
@@ -13,7 +14,7 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno, reports, summary } = this.props
+        const { userLogin, macno, reports, summary, filter } = this.props
         const poshwSetup = this.props.poshwSetup
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
@@ -24,7 +25,7 @@ class ComponentToPrint extends Component {
                     <div style={{ marginTop: "30px" }}></div>
                     <div align="center">รายงานการขายตามช่วงเวลา</div>
                     <div align="center">(Hourly Report)</div>
-                    <div align="center" style={{ margin: "10px" }}>หมายเลขเครื่อง : 001 .. 001</div>
+                    <div align="center" style={{ margin: "10px" }}>หมายเลขเครื่อง : {filter.macno1} .. {filter.macno2}</div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
                         <thead>
@@ -62,6 +63,8 @@ class ComponentToPrint extends Component {
 
 const CustomerPerHourReport = () => {
     const contentRef = useRef(null);
+    const [query] = useSearchParams()
+
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
@@ -92,7 +95,10 @@ const CustomerPerHourReport = () => {
 
     const loadReport = useCallback(() => {
         apiClient
-            .post(`/api/report/customer-per-hour-report`)
+            .post(`/api/report/customer-per-hour-report`, {
+                macno1: query.get('macno1'),
+                macno2: query.get('macno2')
+            })
             .then((response) => {
                 console.log(response)
                 if (response.status === 200) {
@@ -119,6 +125,10 @@ const CustomerPerHourReport = () => {
                 reports={reports}
                 summary={summary}
                 poshwSetup={poshwSetup}
+                filter={{
+                    macno1: query.get('macno1'),
+                    macno2: query.get('macno2')
+                }}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>

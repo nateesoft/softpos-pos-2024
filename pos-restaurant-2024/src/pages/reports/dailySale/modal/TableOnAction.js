@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import { Box, Button, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
@@ -8,8 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { useNavigate } from "react-router-dom";
-
-import { POSContext } from "../../../../AppContext";
+import moment from 'moment'
 
 const modalStyle = {
   position: "absolute",
@@ -23,13 +22,13 @@ const modalStyle = {
 }
 
 const TableOnActionModal = ({ setOpen }) => {
-  const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
   const [date, setDate] = useState("")
 
   const handleConfirm = async () => {
-    navigate('/reportDaily/table-on-action')
+    const dateSelect = moment(date).format('YYYY-MM-DD')
+    navigate(`/reportDaily/table-on-action/?date=${dateSelect}`)
   }
 
   return (
@@ -48,6 +47,7 @@ const TableOnActionModal = ({ setOpen }) => {
                   helperText: 'DD/MM/YYYY'
                 }
               }}
+              onChange={(newValue)=>setDate(newValue)}
             />
           </Grid>
           <Box display="flex" justifyContent="center">

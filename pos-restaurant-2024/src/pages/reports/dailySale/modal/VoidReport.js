@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Box, Button, FormControl, Grid2, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 import { useNavigate } from "react-router-dom";
 
-import { POSContext } from "../../../../AppContext";
 import apiClient from '../../../../httpRequest'
 
 const modalStyle = {
@@ -20,7 +19,6 @@ const modalStyle = {
 }
 
 const VoidReportModal = ({ setOpen }) => {
-  const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])
@@ -32,7 +30,10 @@ const VoidReportModal = ({ setOpen }) => {
   const [user2, setUser2] = useState("")
 
   const handleConfirm = async () => {
-    navigate('/reportDaily/void-report')
+    if (macno1 || macno2 || user1 || user2) {
+      const query = `/?macno1=${macno1}&macno2=${macno2}&cashier1=${user1}&cashier2=${user2}`
+      navigate(`/reportDaily/void-report${query}`)
+    }
   }
 
   const loadTerminalList = () => {

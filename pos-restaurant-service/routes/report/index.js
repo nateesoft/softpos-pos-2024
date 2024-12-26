@@ -8,7 +8,8 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/table-on-action', async (req, res, next) => {
-  getTableOnAction()
+  const { date } = req.body
+  getTableOnAction(date)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -50,8 +51,8 @@ router.post('/cashier-report', async (req, res, next) => {
 });
 
 router.post('/group-plu-report', async (req, res, next) => {
-  const { groupCode } = req.body
-  getGroupPlu(groupCode)
+  const { macno1, macno2, cashier1, cashier2, group1, group2 } = req.body
+  getGroupPlu(macno1, macno2, cashier1, cashier2, group1, group2)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -61,8 +62,8 @@ router.post('/group-plu-report', async (req, res, next) => {
 });
 
 router.post('/plu-report', async (req, res, next) => {
-  const { groupCode1, groupCode2 } = req.body
-  getPluCode(groupCode1, groupCode2)
+  const { macno1, macno2, cashier1, cashier2, group1, group2, pluCode } = req.body
+  getPluCode(macno1, macno2, cashier1, cashier2, group1, group2, pluCode)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -72,7 +73,8 @@ router.post('/plu-report', async (req, res, next) => {
 });
 
 router.post('/customer-per-hour-report', async (req, res, next) => {
-  getCustomerPerHour()
+  const { macno1, macno2 } = req.body
+  getCustomerPerHour(macno1, macno2)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -82,7 +84,8 @@ router.post('/customer-per-hour-report', async (req, res, next) => {
 });
 
 router.post('/hourly-report', async (req, res, next) => {
-  getHourlyReport()
+  const { macno1, macno2 } = req.body
+  getHourlyReport(macno1, macno2)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -92,7 +95,8 @@ router.post('/hourly-report', async (req, res, next) => {
 });
 
 router.post('/receipt-report', async (req, res, next) => {
-  getReceipt()
+  const { macno1, macno2 } = req.body
+  getReceipt(macno1, macno2)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -102,7 +106,8 @@ router.post('/receipt-report', async (req, res, next) => {
 });
 
 router.post('/void-report', async (req, res, next) => {
-  getVoidBill()
+  const { macno1, macno2, cashier1, cashier2 } = req.body
+  getVoidBill(macno1, macno2, cashier1, cashier2)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -112,7 +117,8 @@ router.post('/void-report', async (req, res, next) => {
 });
 
 router.post('/credit-report', async (req, res, next) => {
-  getCreditPayment()
+  const { macno1, macno2, cashier1, cashier2 } = req.body
+  getCreditPayment(macno1, macno2, cashier1, cashier2)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -122,7 +128,8 @@ router.post('/credit-report', async (req, res, next) => {
 });
 
 router.post('/top-sale-report', async (req, res, next) => {
-  getTopSale()
+  const { macno1, macno2, cashier1, cashier2, group1, group2 } = req.body
+  getTopSale(macno1, macno2, cashier1, cashier2, group1, group2)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -132,7 +139,8 @@ router.post('/top-sale-report', async (req, res, next) => {
 });
 
 router.post('/promotion-report', async (req, res, next) => {
-  getPromotion()
+  const { macno } = req.body
+  getPromotion(macno)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -142,7 +150,8 @@ router.post('/promotion-report', async (req, res, next) => {
 });
 
 router.post('/special-cupon-report', async (req, res, next) => {
-  getSpecialCupon()
+  const { macno } = req.body
+  getSpecialCupon(macno)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

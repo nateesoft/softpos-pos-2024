@@ -1,11 +1,10 @@
-import React, { useContext, useState, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Box, Button, FormControl, Grid2, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 import { useNavigate } from "react-router-dom";
 
-import { POSContext } from "../../../../AppContext";
 import apiClient from '../../../../httpRequest'
 
 const modalStyle = {
@@ -20,7 +19,6 @@ const modalStyle = {
 }
 
 const PLUReportModal = ({ setOpen }) => {
-  const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])

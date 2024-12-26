@@ -1,14 +1,21 @@
 const pool = require('../config/database/MySqlConnect');
 const { getMoment } = require('../utils/MomentUtil');
 
-const getTableOnAction = async () => {
-    const sql = `select R_Date, R_Table,sum(R_Total) R_Total,R_Void,TCurTime,TCustomer 
-                from balance left join tablefile on balance.r_table=tablefile.tcode 
-                where r_void<>'V' 
-                group by r_date, r_table, r_void`;
+const getTableOnAction = async (date) => {
+    let sql = `select R_Date, R_Table,sum(R_Total) R_Total,R_Void,TCurTime,TCustomer 
+                from balance left join tablefile t on balance.r_table=t.tcode 
+                where r_void<>'V' `;
+    if (date) {
+        sql = sql + ` and R_Date ='${date}' `
+    }
+    sql = sql + ` group by r_date, r_table, r_void `;
     const results = await pool.query(sql)
-    const sql2 = `select sum(R_Total) R_Total 
-    from balance where r_void<>'V'`;
+    let sql2 = `select sum(R_Total) R_Total 
+        from balance 
+        where r_void<>'V' `;
+    if (date) {
+        sql2 = sql2 + ` and R_Date ='${date}' `
+    }
     const resultFooter = await pool.query(sql2)
     const reponse = {
         header: {},
@@ -214,11 +221,14 @@ const getTimeData = (fixTime, results) => {
     return newResults
 }
 
-const getCustomerPerHour = async () => {
-    const sql = `select B_Ontime, B_Cust, B_NetTotal 
-            from billno b 
-            where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' 
-            and b.B_Void <> 'V'`;
+const getCustomerPerHour = async (macno1, macno2) => {
+    let sql = `select B_Ontime, B_Cust, B_NetTotal 
+        from billno b 
+        where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' 
+        and b.B_Void <> 'V' `;
+    if (macno1 && macno2) {
+        sql = sql + ` and b.B_MacNo between '${macno1}' and '${macno2}' `;
+    }
     const results = await pool.query(sql)
     const fixTime = [
         '00', '01', '02', '03', '04', '05',
@@ -248,11 +258,15 @@ const getTimeCurrentData = (fixTime, results) => {
     })
     return newResults
 }
-const getHourlyReport = async () => {
-    const sql = `select R_Time, R_PluCode, R_Quan, R_Total 
+
+const getHourlyReport = async (macno1, macno2) => {
+    let sql = `select R_Time, R_PluCode, R_Quan, R_Total 
         from t_sale ts 
         where ts.R_Date = '${getMoment().format('YYYY-MM-DD')}' 
-        and ts.R_Void <> 'V'`;
+        and ts.R_Void <> 'V' `
+    if (macno1 && macno2) {
+        sql = sql + ` and ts.MacNo between '${macno1}' and '${macno2}' `;
+    }
     const results = await pool.query(sql)
     const fixTime = [
         '00', '01', '02', '03', '04', '05',
@@ -264,12 +278,15 @@ const getHourlyReport = async () => {
     return newResults
 }
 
-const getReceipt = async () => {
-    const sql = `select B_Refno, B_Ontime, 
+const getReceipt = async (macno1, macno2) => {
+    let sql = `select B_Refno, B_Ontime, 
         B_Cash, B_Ton, B_CrCode1, B_CrAmt1, B_NetTotal, B_Vat 
         from billno b 
         where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' 
-        and b.B_Void <> 'V';`;
+        and b.B_Void <> 'V' `;
+    if (macno1 && macno2) {
+        sql = sql + ` and b.B_MacNo between '${macno1}' and '${macno2}' `;
+    }
     const results = await pool.query(sql)
     const newResults = []
     results.map(item => {
@@ -298,11 +315,17 @@ const getReceipt = async () => {
     return newResults
 }
 
-const getVoidBill = async () => {
-    const sql = `select B_MacNo, B_Cashier, B_Table, B_Ontime, B_VoidUser, B_VoidTime, 
+const getVoidBill = async (macno1, macno2, cashier1, cashier2) => {
+    let sql = `select B_MacNo, B_Cashier, B_Table, B_Ontime, B_VoidUser, B_VoidTime, 
         B_Refno, ts.R_PluCode, ts.R_Quan, ts.R_Total 
         from billno b inner join t_sale ts on b.B_Refno =ts.R_Refno 
-        where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' and b.B_Void = 'V'`;
+        where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' and b.B_Void = 'V' `;
+    if (macno1 && macno2) {
+        sql = sql + ` and b.B_MacNo between '${macno1}' and '${macno2}' `;
+    }
+    if (cashier1 && cashier2) {
+        sql = sql + ` and b.B_Cashier between '${cashier1}' and '${cashier2}' `;
+    }
     const results = await pool.query(sql)
     return {
         data: results,
@@ -313,20 +336,31 @@ const getVoidBill = async () => {
     }
 }
 
-const getCreditPayment = async () => {
-    const sql = `select c.CrCode, c.CrName, 
-        b.B_CardNo1, b.B_AppCode1, b.B_CrChargeAmt1, b.B_CrAmt1 
-        from billno b  left join creditfile c on b.B_CrCode1 =c.CrCode 
-        where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' 
-        and b.B_Void <> 'V' 
-        and (B_CrCode1 <> '' or B_CrCode1 <> null)`;
-    const results = await pool.query(sql)
-    const sql2 = `select c.CrCode, count(c.CrCode), 
+const getCreditPayment = async (macno1, macno2, cashier1, cashier2) => {
+    let sql = `select c.CrCode, c.CrName, 
+            b.B_CardNo1, b.B_AppCode1, b.B_CrChargeAmt1, b.B_CrAmt1 
+            from billno b left join creditfile c on b.B_CrCode1 =c.CrCode 
+            where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' 
+            and b.B_Void <> 'V' 
+            and (B_CrCode1 <> '' or B_CrCode1 <> null) `;
+    let sql2 = `select c.CrCode, count(c.CrCode), 
         sum(b.B_CrChargeAmt1) B_CrChargeAmt1, sum(b.B_CrAmt1) B_CrAmt1 
         from billno b  left join creditfile c on b.B_CrCode1 =c.CrCode 
         where b.B_OnDate ='${getMoment().format('YYYY-MM-DD')}' and b.B_Void <> 'V' 
-        and (B_CrCode1 <> '' or B_CrCode1 <> null)
-        group by CrCode`;
+        and (B_CrCode1 <> '' or B_CrCode1 <> null) `;
+
+    if (macno1 && macno2) {
+        sql = sql + ` and b.B_MacNo between '${macno1}' and '${macno2}' `;
+        sql2 = sql2 + ` and b.B_MacNo between '${macno1}' and '${macno2}' `;
+    }
+    if (cashier1 && cashier2) {
+        sql = sql + ` and b.B_Cashier between '${cashier1}' and '${cashier2}' `;
+        sql2 = sql2 + ` and b.B_Cashier between '${cashier1}' and '${cashier2}' `;
+    }
+
+    sql2 = sql2 + ' group by CrCode '
+
+    const results = await pool.query(sql)
     const results2 = await pool.query(sql2)
 
     const newResults = results.map((item, index) => {
@@ -346,14 +380,23 @@ const getCreditPayment = async () => {
 function compareNumbers(a, b) {
     return b.R_Quan - a.R_Quan;
 }
-const getTopSale = async () => {
-    const sql = `select g.GroupCode, g.GroupName, t.R_PluCode, t.R_PName,
+
+const getTopSale = async (macno1, macno2, cashier1, cashier2, group1, group2) => {
+    let sql = `select g.GroupCode, g.GroupName, t.R_PluCode, t.R_PName,
         sum(t.R_Quan) R_Quan , sum(t.R_Total) R_Total 
         from t_sale t 
         left join groupfile g on t.R_Group=g.GroupCode 
-        where t.R_Date ='${getMoment().format('YYYY-MM-DD')}' 
-        group by t.R_PluCode, t.R_PName , g.GroupCode, g.GroupName 
-        limit 0, 10`;
+        where t.R_Date ='${getMoment().format('YYYY-MM-DD')}' `;
+    if (macno1 && macno2) {
+        sql = sql + ` and t.MacNo between '${macno1}' and '${macno2}' `;
+    }
+    if (cashier1 && cashier2) {
+        sql = sql + ` and t.Cashier between '${cashier1}' and '${cashier2}' `;
+    }
+    if (group1 && group2) {
+        sql = sql + ` and g.GroupCode between '${group1}' and '${group2}' `;
+    }
+    sql = sql + ` group by t.R_PluCode, t.R_PName , g.GroupCode, g.GroupName limit 0, 10 `
     const results = await pool.query(sql)
     const newResults = results.sort(compareNumbers).map((item, index) => {
         return {
@@ -364,11 +407,11 @@ const getTopSale = async () => {
     return newResults
 }
 
-const getPromotion = async () => {
+const getPromotion = async (macno) => {
     return []
 }
 
-const getSpecialCupon = async () => {
+const getSpecialCupon = async (macno) => {
     return []
 }
 

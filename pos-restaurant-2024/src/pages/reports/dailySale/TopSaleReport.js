@@ -3,6 +3,7 @@ import { Button, Grid2, Paper } from '@mui/material'
 import { useReactToPrint } from 'react-to-print'
 import PrintIcon from '@mui/icons-material/Print'
 import moment from 'moment'
+import { useSearchParams } from 'react-router-dom'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
@@ -13,7 +14,7 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno, reports } = this.props
+        const { userLogin, macno, reports, filter } = this.props
         const poshwSetup = this.props.poshwSetup
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
@@ -25,9 +26,9 @@ class ComponentToPrint extends Component {
                     <div align="center">รายงานอันดับสินค้าขายดี</div>
                     <div align="center">(Top Sales Report)</div>
                     <div style={{ margin: "20px" }}></div>
-                    <div>หมายเลขเครื่อง : 001 ... 001</div>
-                    <div>รหัสพนักงานขาย : 9999 ... 9999</div>
-                    <div>รหัสกลุ่มสินค้า (Dept/Group) : 0000 ... ZZZZ</div>
+                    <div>หมายเลขเครื่อง : {filter.macno1} ... {filter.macno2}</div>
+                    <div>รหัสพนักงานขาย : {filter.cashier1} ... {filter.cashier2}</div>
+                    <div>รหัสกลุ่มสินค้า (Dept/Group) : {filter.group1} ... {filter.group2}</div>
                     <div style={{ margin: "20px" }}></div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
@@ -60,6 +61,8 @@ class ComponentToPrint extends Component {
 
 const TopSaleReport = () => {
     const contentRef = useRef(null);
+    const [query] = useSearchParams()
+
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
@@ -89,7 +92,14 @@ const TopSaleReport = () => {
 
     const loadReport = useCallback(() => {
         apiClient
-            .post(`/api/report/top-sale-report`)
+            .post(`/api/report/top-sale-report`, {
+                macno1: query.get('macno1'),
+                macno2: query.get('macno2'),
+                cashier1: query.get('cashier1'),
+                cashier2: query.get('cashier2'),
+                group1: query.get('group1'),
+                group2: query.get('group2')
+            })
             .then((response) => {
                 if (response.status === 200) {
                     setReports(response.data.data)
@@ -113,6 +123,14 @@ const TopSaleReport = () => {
                 macno={macno}
                 reports={reports}
                 poshwSetup={poshwSetup}
+                filter={{
+                    macno1: query.get('macno1'),
+                    macno2: query.get('macno2'),
+                    cashier1: query.get('cashier1'),
+                    cashier2: query.get('cashier2'),
+                    group1: query.get('group1'),
+                    group2: query.get('group2')
+                }}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>

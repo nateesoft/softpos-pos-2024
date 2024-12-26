@@ -3,10 +3,10 @@ import { Button, Grid2, Paper } from '@mui/material'
 import { useReactToPrint } from 'react-to-print'
 import PrintIcon from '@mui/icons-material/Print'
 import moment from 'moment'
+import { useSearchParams } from 'react-router-dom'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
-import { useSearchParams } from 'react-router-dom'
 
 class ComponentToPrint extends Component {
     constructor(props) {
@@ -14,7 +14,7 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno, report } = this.props
+        const { userLogin, macno, report, filter } = this.props
         const poshwSetup = this.props.poshwSetup
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
@@ -25,7 +25,7 @@ class ComponentToPrint extends Component {
                     <div style={{ marginTop: "30px" }}></div>
                     <div align="center">REG ID :{macno}</div>
                     <div align="center">รายงานพนักงานขาย (Cashier Report)</div>
-                    <div align="center">รหัสพนักงานขาย : {userLogin}</div>
+                    <div align="center">รหัสพนักงานขาย : {filter.cashier}</div>
                     <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
                     <table width="100%">
                         <tbody style={{ borderBottom: "1px solid", borderTop: "1px solid", borderStyle: "dashed" }}>
@@ -334,7 +334,9 @@ const CashierReport = () => {
 
     const loadReport = useCallback(() => {
         apiClient
-            .post(`/api/report/cashier-report`, { cashier: query.get('cashier') })
+            .post(`/api/report/cashier-report`, { 
+                cashier: query.get('cashier') 
+            })
             .then((response) => {
                 if (response.status === 200) {
                     setReport(response.data.data)
@@ -358,6 +360,9 @@ const CashierReport = () => {
                 macno={macno}
                 report={report}
                 poshwSetup={poshwSetup}
+                filter={{ 
+                    cashier: query.get('cashier') 
+                }}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>

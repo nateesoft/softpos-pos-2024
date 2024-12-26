@@ -3,6 +3,7 @@ import { Button, Grid2, Paper } from '@mui/material'
 import { useReactToPrint } from 'react-to-print'
 import PrintIcon from '@mui/icons-material/Print'
 import moment from 'moment'
+import { useSearchParams } from 'react-router-dom'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
@@ -13,7 +14,7 @@ class ComponentToPrint extends Component {
     }
 
     render() {
-        const { userLogin, macno, reports } = this.props
+        const { userLogin, macno, reports, filter } = this.props
         const poshwSetup = this.props.poshwSetup
         let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
         headers = headers.filter(h => h !== "")
@@ -66,6 +67,8 @@ class ComponentToPrint extends Component {
 
 const HourlyPluReport = () => {
     const contentRef = useRef(null);
+    const [query] = useSearchParams()
+
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
     const [reports, setReports] = useState([])
@@ -95,7 +98,10 @@ const HourlyPluReport = () => {
 
     const loadReport = useCallback(() => {
         apiClient
-            .post(`/api/report/hourly-report`)
+            .post(`/api/report/hourly-report`, {
+                macno1: query.get('macno1'),
+                macno2: query.get('macno2')
+            })
             .then((response) => {
                 if (response.status === 200) {
                     console.log('response:', response.data.data)
@@ -120,6 +126,10 @@ const HourlyPluReport = () => {
                 macno={macno}
                 reports={reports}
                 poshwSetup={poshwSetup}
+                filter={{
+                    macno1: query.get('macno1'),
+                    macno2: query.get('macno2')
+                }}
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
