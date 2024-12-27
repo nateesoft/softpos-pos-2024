@@ -3,7 +3,6 @@ const { getMoment } = require('../utils/MomentUtil');
 const { updateInActiveTable } = require('../services/management/TableCheckIn');
 const { getBalanceMaxIndex, updateBalanceMove, updateBalanceSplitBill, summaryBalance } = require('./CoreService');
 const { Unicode2ASCII } = require('../utils/StringUtil');
-const { invalid } = require('moment');
 
 const getAllTable = async () => {
     const sql = `select * FROM tablefile ORDER By Tcode`;
@@ -165,7 +164,7 @@ const updateTableFile = async (tablefile) => {
 }
 
 const getTableByCode = async tableNo => {
-    const sql = `select * from tablefile where TCode='${tableNo}' limit 1`;
+    const sql = `select * from tablefile where Tcode='${tableNo}' limit 1`;
     const results = await pool.query(sql)
     if (results.length > 0) {
         return results[0]

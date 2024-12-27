@@ -24,6 +24,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import VipPeopleIcon from '@mui/icons-material/Hail';
 import RefundIcon from "@mui/icons-material/ReceiptLong"
+import LanguageIcon from '@mui/icons-material/Language';
 
 import CheckTableStatus from "./checkTable"
 import CheckCashierStatus from "./cashierStatus"
@@ -48,7 +49,9 @@ import OtherMenuSelect from "./OtherMenuSelect"
 import { POSContext } from "../../AppContext"
 import ShowNotification from "../utils/ShowNotification"
 import ReportSelect from "./ReportSelect"
+import LanguageSettings from "./LanguageSettings"
 import Footer from '../Footer'
+import { useTranslation } from "react-i18next"
 
 const modalPinStyle = {
   position: "absolute",
@@ -68,6 +71,7 @@ const nodeTypes = {
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 };
 
 function FloorPlanPage() {
+  const { t } = useTranslation('global')
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -224,13 +228,13 @@ function FloorPlanPage() {
 
   return (
     <motion.div
-      style={{ backgroundColor: "#123456", padding: "10px" }}
+      style={{ backgroundColor: "black", padding: "10px" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar component="static" sx={{ backgroundColor: "#123456", boxShadow: "5px 3px #aaa" }}>
+        <AppBar component="static" sx={{ backgroundColor: "black", boxShadow: "5px 3px #aaa" }}>
           <Toolbar>
             <Grid2 container justifyContent="flex-start">
               {iphonePro14max === true && <div>
@@ -282,12 +286,13 @@ function FloorPlanPage() {
               </div>}
             </Grid2>
             <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{ flexGrow: 1 }}>
+              <LanguageSettings />
               <IconButton>
                 <AccountCircleIcon sx={{ color: "snow" }} />
               </IconButton>
-              <Typography>User: {userLogin}</Typography>
+              <Typography>{userLogin}</Typography>
               <Button variant="contained" color="error" onClick={() => setOpenLogout(true)} endIcon={<ExitToApp />}>
-                Logout
+                {t("FloorPlanPage.logoutButton")}
               </Button>
             </Grid2>
           </Toolbar>

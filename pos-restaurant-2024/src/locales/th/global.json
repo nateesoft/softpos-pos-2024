@@ -13,5 +13,8 @@
         "italianFood": "อาหารอิตาเลียน",
         "drink": "เครื่องดื่ม",
         "dessert": "ของหวาน"
+    },
+    "FloorPlanPage": {
+        "logoutButton": "ออก"
     }
    }

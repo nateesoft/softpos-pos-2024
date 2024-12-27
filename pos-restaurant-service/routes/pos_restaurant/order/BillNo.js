@@ -71,4 +71,26 @@ router.post('/billCopy', (req, res) => {
     })
 });
 
+router.post('/toBalance', function (req, res) {
+  const { billRefNo, tableNo } = req.body
+  BillNoService.loadBillnoToBalance(billRefNo, tableNo)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.post('/printChkBill', function (req, res) {
+  const { tableNo } = req.body
+  BillNoService.updateStatusPrintChkBill(tableNo)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 module.exports = router;

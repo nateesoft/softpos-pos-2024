@@ -13,5 +13,8 @@
         "italianFood": "Italian Food",
         "drink": "Drink",
         "dessert": "Dessert"
+    },
+    "FloorPlanPage": {
+        "logoutButton": "Logout"
     }
    }

@@ -2,7 +2,7 @@ const pool = require('../config/database/MySqlConnect')
 const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
 const { emptyTableBalance, getBalanceByTableNo } = require('./BalanceService');
 
-const { getTableByCode, updateTableAvailableStatus } = require('./TableFileService');
+const { getTableByCode, updateTableAvailableStatus, checkTableOpen } = require('./TableFileService');
 const { addDataFromBalance, getAllTSaleByRefno, processAllPIngredentReturnStock, processAllPSet } = require('./TSaleService');
 
 const { getBranch } = require('./BranchService')
@@ -10,6 +10,7 @@ const { ProcessStockOut } = require('./STCardService');
 const { getPOSConfigSetup } = require('./POSConfigSetupService');
 const { updateRefundMember, updateMemberData } = require('./member/crm/MemberMasterService');
 const { getMoment } = require('../utils/MomentUtil');
+const { summaryBalance } = require('./CoreService');
 
 const getAllBillNoToday = async () => {
     const sql = `select * from billno where B_OnDate='${getMoment().format('YYYY-MM-DD')}'`;
@@ -233,8 +234,8 @@ const addNewBill = async (payload) => {
     const B_NetVat = netTotal - creditChargeAmount;
     const B_NetNonVat = 0;
     const B_Vat = vatAmount;
-    const B_PayAmt = (cashAmount+transferAmount);
-    const B_Cash = (cashAmount+transferAmount);
+    const B_PayAmt = (cashAmount + transferAmount);
+    const B_Cash = (cashAmount + transferAmount);
     const B_GiftVoucher = 0;
     const B_Earnest = 0;
     const B_Ton = tonAmount;
@@ -303,8 +304,7 @@ const addNewBill = async (payload) => {
     const B_UserEntertain = "";
     const B_SendOnline = "";
 
-    try {
-        const sql = `INSERT INTO billno 
+    const sql = `INSERT INTO billno 
         (B_Refno,B_CuponDiscAmt,B_Ontime,B_LoginTime,B_OnDate,B_PostDate,B_Table,B_MacNo,B_Cashier,B_Cust,B_ETD,
         B_Total,B_Food,B_Drink,B_Product,B_Service,B_ServiceAmt,B_ItemDiscAmt,B_FastDisc,B_FastDiscAmt,B_EmpDisc,
         B_EmpDiscAmt,B_TrainDisc,B_TrainDiscAmt,B_MemDisc,B_MemDiscAmt,B_SubDisc,B_SubDiscAmt,B_SubDiscBath,
@@ -333,41 +333,38 @@ const addNewBill = async (payload) => {
         '${B_SumSetDiscAmt}','${B_DetailFood}','${B_DetailDrink}','${B_DetailProduct}','${B_KicQue}','${B_ROUNDCLOSE}',
         '${R_Opt9}','${R_Opt1}','${R_Opt2}','${R_Opt3}','${R_Opt4}','${R_Opt5}','${R_Opt6}','${R_Opt7}','${R_Opt8}',
         '${VoidMsg}','${B_EarnDocNo}','${B_UseEarnNo}','${B_UserEntertain}','${B_SendOnline}')`;
-        const results = await pool.query(sql)
-        if (results) {
-            // list all balance
-            const allBalance = await getBalanceByTableNo(tableNo)
+    const results = await pool.query(sql)
+    if (results) {
+        // list all balance
+        const allBalance = await getBalanceByTableNo(tableNo)
 
-            // save t_sale list
-            await addDataFromBalance(B_Table, B_Refno, allBalance)
+        // save t_sale list
+        await addDataFromBalance(B_Table, B_Refno, allBalance)
 
-            // // update promotion
-            // await updateProSerTable(B_Table, allBalance);
+        // // update promotion
+        // await updateProSerTable(B_Table, allBalance);
 
-            // await ThermalPrinterConnect("192.168.1.209", "", B_Table)
+        // await ThermalPrinterConnect("192.168.1.209", "", B_Table)
 
-            if (Object.keys(memberInfo).length > 0) {
-                // update member memmaster
-                updateMemberData(B_NetTotal, B_MemCode, B_MacNo, B_Refno, allBalance, branchCode,
-                    B_ETD, B_Total, B_ServiceAmt, B_MemDiscAmt, empCode, B_OnDate, B_Ontime, memberInfo
-                )
-            }
-
-            // update next bill id
-            await updateNextBill(macno)
-
-            // clear balance
-            await emptyTableBalance(B_Table)
-
-            // update tablefile
-            await updateTableAvailableStatus(B_Table)
-
-            return B_Refno
+        if (Object.keys(memberInfo).length > 0) {
+            // update member memmaster
+            updateMemberData(B_NetTotal, B_MemCode, B_MacNo, B_Refno, allBalance, branchCode,
+                B_ETD, B_Total, B_ServiceAmt, B_MemDiscAmt, empCode, B_OnDate, B_Ontime, memberInfo
+            )
         }
-        return null
-    } catch (error) {
-        throw new Error(error)
+
+        // update next bill id
+        await updateNextBill(macno)
+
+        // clear balance
+        await emptyTableBalance(B_Table)
+
+        // update tablefile
+        await updateTableAvailableStatus(B_Table)
+
+        return B_Refno
     }
+    return null
 }
 
 const refundTSale = async (tSaleData, Cashier) => {
@@ -397,7 +394,7 @@ const refundTSale = async (tSaleData, Cashier) => {
 
             // ตัดสต็อกสินค้าที่มี Ingredent
             await processAllPIngredentReturnStock(S_No, tSale.R_PluCode, tSale.R_Quan, tSale.Cashier)
-            
+
             // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
             await processAllPSet(tSale.R_PluCode, tSale.R_Quan, tSale.Cashier)
         }
@@ -436,6 +433,85 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
     return billNo
 }
 
+const createNewBalanceFromTSale = async (tSale) => {
+    const newRDate = getMoment().format('YYYY-MM-DD')
+    const newRTime = getMoment().format('HH:mm:ss')
+    const { R_Index,R_Refno,R_Table,R_Date,R_Time,MacNo,Cashier,R_Emp,R_PluCode,R_PName,R_Unit,R_Group,R_Status,R_Normal,
+        R_Discount,R_Service,R_Stock,R_Set,R_Vat,R_Type,R_ETD,R_Quan,R_Price,R_Total,R_PrType,R_PrCode,R_PrDisc,R_PrBath,
+        R_PrAmt,R_PrCuType,R_PrCuCode,R_PrCuQuan,R_PrCuAmt,R_Redule,R_DiscBath,R_PrAdj,R_PreDisAmt,R_NetTotal,R_Kic,
+        R_KicPrint,R_Refund,VoidMsg,R_Void,R_VoidUser,R_VoidTime,StkCode,PosStk,R_ServiceAmt,R_PrChkType,R_PrQuan,
+        R_PrSubType,R_PrSubCode,R_PrSubQuan,R_PrSubDisc,R_PrSubBath,R_PrSubAmt,R_PrSubAdj,R_PrCuDisc,R_PrCuBath,
+        R_PrCuAdj,R_PrChkType2,R_PrQuan2,R_PrType2,R_PrCode2,R_PrDisc2,R_PrBath2,R_PrAmt2,R_PrAdj2,R_PItemNo,
+        R_PKicQue,R_PrVcType,R_PrVcCode,R_PrVcAmt,R_PrVcAdj,R_MoveFlag,R_Pause,R_SPIndex,R_LinkIndex,R_VoidPause,
+        R_SetPrice,R_SetDiscAmt,R_MoveItem,R_MoveFrom,R_MoveUser,R_Opt9,R_Opt1,R_Opt2,R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8,
+        R_PrintItemBill,R_CountTime,R_Return,R_Earn,R_EarnNo,R_NetDiff,R_SendOnline,R_BranchCode,R_CardPay } = tSale
+    const newBalance = {...tSale}
+    newBalance.FieldName = 0
+    newBalance.R_Serve = ''
+    newBalance.R_PrintOK = ''
+    newBalance.R_KicOK = ''
+    newBalance.R_QuanCanDisc = 0
+    newBalance.R_Order = ''
+    newBalance.R_MemSum = ''
+    newBalance.R_VoidQuan = 0
+    newBalance.R_MovePrint = ''
+    newBalance.SoneCode = ''
+    newBalance.PDAPrintCheck = ''
+    newBalance.PDAEMP = ''
+    newBalance.R_empName = ''
+    newBalance.R_PEName = ''
+    newBalance.R_Indulgent = ''
+    const sql = `INSERT INTO balance 
+    (R_Index,R_Table,R_Date,R_Time,Macno,Cashier,R_Emp,R_PluCode,R_PName,R_Unit,R_Group,R_Status,R_Normal,
+    R_Discount,R_Service,R_Stock,R_Set,R_Vat,R_Type,R_ETD,R_Quan,R_Price,R_Total,R_PrType,R_PrCode,R_PrDisc,
+    R_PrBath,R_PrAmt,R_DiscBath,R_PrCuType,R_PrCuQuan,R_PrCuAmt,R_Redule,R_Kic,R_KicPrint,R_Void,R_VoidUser,
+    R_VoidTime,FieldName,R_Opt1,R_Opt2,R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8,R_Opt9,R_PrCuCode,R_Serve,
+    R_PrintOK,R_KicOK,StkCode,PosStk,R_PrChkType,R_PrQuan,R_PrSubType,R_PrSubCode,R_PrSubQuan,R_PrSubDisc,
+    R_PrSubBath,R_PrSubAmt,R_PrSubAdj,R_PrCuDisc,R_PrCuBath,R_PrCuAdj,R_QuanCanDisc,R_Order,R_PItemNo,R_PKicQue,
+    R_MemSum,R_PrVcType,R_PrVcCode,R_PrVcAmt,R_PrVcAdj,R_VoidQuan,R_MoveFlag,R_MovePrint,R_Pause,R_SPIndex,
+    R_LinkIndex,R_VoidPause,R_MoveItem,R_MoveFrom,R_MoveUser,VoidMsg,R_PrintItemBill,R_CountTime,SoneCode,
+    R_Earn,R_EarnNo,TranType,PDAPrintCheck,PDAEMP,R_empName,R_ServiceAmt,R_PEName,R_Indulgent) 
+    VALUES ('${R_Index}','${R_Table}','${newRDate}','${newRTime}','${MacNo}','${Cashier}','${R_Emp}','${R_PluCode}','${R_PName}',
+    '${R_Unit}','${R_Group}','${R_Status}','${R_Normal}','${R_Discount}','${R_Service}','${R_Stock}','${R_Set}','${R_Vat}',
+    '${R_Type}','${R_ETD}','${R_Quan}','${R_Price}','${R_Total}','${R_PrType}','${R_PrCode}','${R_PrDisc}','${R_PrBath}',
+    '${R_PrAmt}','${R_DiscBath}','${R_PrCuType}','${R_PrCuQuan}','${R_PrCuAmt}','${R_Redule}','${R_Kic}','${R_KicPrint}',
+    '${R_Void}','${R_VoidUser}','${R_VoidTime}','${newBalance.FieldName}','${R_Opt1}','${R_Opt2}','${R_Opt3}','${R_Opt4}','${R_Opt5}',
+    '${R_Opt6}','${R_Opt7}','${R_Opt8}','${R_Opt9}','${R_PrCuCode}','${newBalance.R_Serve}','${newBalance.R_PrintOK}','${newBalance.R_KicOK}','${StkCode}',
+    '${PosStk}','${R_PrChkType}','${R_PrQuan}','${R_PrSubType}','${R_PrSubCode}','${R_PrSubQuan}','${R_PrSubDisc}','${R_PrSubBath}',
+    '${R_PrSubAmt}','${R_PrSubAdj}','${R_PrCuDisc}','${R_PrCuBath}','${R_PrCuAdj}','${newBalance.R_QuanCanDisc}','${newBalance.R_Order}','${R_PItemNo}',
+    '${R_PKicQue}','${newBalance.R_MemSum}','${R_PrVcType}','${R_PrVcCode}','${R_PrVcAmt}','${R_PrVcAdj}','${newBalance.R_VoidQuan}','${R_MoveFlag}',
+    '${newBalance.R_MovePrint}','${R_Pause}','${R_SPIndex}','${R_LinkIndex}','${R_VoidPause}','${R_MoveItem}','${R_MoveFrom}','${R_MoveUser}',
+    '${VoidMsg}','${R_PrintItemBill}','${R_CountTime}','${newBalance.SoneCode}','${R_Earn}','${R_EarnNo}','${newBalance.TranType}',
+    '${newBalance.PDAPrintCheck}','${newBalance.PDAEMP}','${newBalance.R_empName}','${R_ServiceAmt}','${newBalance.R_PEName}','${newBalance.R_Indulgent}')`
+    const result = await pool.query(sql)
+    return result
+}
+
+const loadBillnoToBalance = async (billRefNo, tableNo) => {
+    const billno = await getBillNoByRefno(billRefNo)
+    const tSaleList = await getAllTSaleByRefno(billRefNo)
+
+    const tableValid = await checkTableOpen(tableNo) === null
+    if (tableValid) {
+        tSaleList.map(async tSale => {
+            await createNewBalanceFromTSale(tSale)
+        })
+        await summaryBalance(tableNo)
+    } else {
+        // table not available
+    }
+
+    return {
+        billRefNo: billno.B_Refno
+    }
+}
+
+const updateStatusPrintChkBill = async (tableNo) => {
+    const sql = `update tablefile set PrintChkBill='Y' where Tcode='${tableNo}'`;
+    const results = await pool.query(sql)
+    return results
+}
+
 module.exports = {
     getBillNoByTableNo,
     addNewBill,
@@ -445,5 +521,7 @@ module.exports = {
     getAllBillNoToday,
     searchBillNoCondition,
     billRefundStockIn,
-    printCopyBill
+    printCopyBill,
+    loadBillnoToBalance,
+    updateStatusPrintChkBill
 }

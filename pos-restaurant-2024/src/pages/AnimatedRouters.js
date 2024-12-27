@@ -24,6 +24,7 @@ import TemplateReport from './inventory'
 import TestPrinter from '../pages/thermal'
 import PrinterDemo from '../pages/printer'
 import ReceiptToPrint from './payment/ReceiptToPrint'
+import PrintReceiptCheck from './payment/PrintReceiptCheck'
 import UserAuthen from './modal/UserAuthen'
 
 // all reports
@@ -89,6 +90,8 @@ const AnimatedRoutes = () => {
                         <Route path="/sale/:tableNo" element={<MainSalePage />} />
                         <Route path="/payment/:tableNo" element={<PaymentPage />} />
                         <Route path="/payment/receipt/:billNo" element={<ReceiptToPrint />} />
+
+                        <Route path="/payment/print-bill-check/:tableNo" element={<PrintReceiptCheck />} />
 
                         <Route path="/reportDaily/overview" element={<OverviewReport />} />
                         <Route path="/reportDaily/table-on-action/list" element={<TableOnActionList />} />

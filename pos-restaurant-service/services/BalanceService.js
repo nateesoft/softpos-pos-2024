@@ -292,8 +292,7 @@ const addNewBalance = async payload => {
     const R_PEName = "";
     const R_Indulgent = "";
 
-    try {
-        const sql = `INSERT INTO balance 
+    const sql = `INSERT INTO balance 
         (R_Index,R_Table,R_Date,R_Time,Macno,Cashier,R_Emp,R_PluCode,R_PName,R_Unit,R_Group,R_Status,R_Normal,
         R_Discount,R_Service,R_Stock,R_Set,R_Vat,R_Type,R_ETD,R_Quan,R_Price,R_Total,R_PrType,R_PrCode,R_PrDisc,
         R_PrBath,R_PrAmt,R_DiscBath,R_PrCuType,R_PrCuQuan,R_PrCuAmt,R_Redule,R_Kic,R_KicPrint,R_Void,R_VoidUser,
@@ -315,11 +314,8 @@ const addNewBalance = async payload => {
         '${R_MovePrint}','${R_Pause}','${R_SPIndex}','${R_LinkIndex}','${R_VoidPause}','${R_MoveItem}','${R_MoveFrom}','${R_MoveUser}',
         '${VoidMsg}','${R_PrintItemBill}','${R_CountTime}','${SoneCode}','${R_Earn}','${R_EarnNo}','${TranType}',
         '${PDAPrintCheck}','${PDAEMP}','${R_empName}','${R_ServiceAmt}','${R_PEName}','${R_Indulgent}')`
-        await pool.query(sql)
-        return R_Index
-    } catch (error) {
-        return null
-    }
+    await pool.query(sql)
+    return R_Index
 }
 
 const updateBalance = async payload => {
@@ -353,8 +349,7 @@ const updateBalance = async payload => {
     const Cashier = userLogin;
     const R_Emp = empCode;
 
-    try {
-        const sql = `UPDATE balance 
+    const sql = `UPDATE balance 
         SET R_Index='${R_Index}',R_Table='${R_Table}',R_Date='${R_Date}',R_Time='${R_Time}',
         Macno='${Macno}',Cashier='${Cashier}',R_Emp='${R_Emp}',R_PluCode='${R_PluCode}',
         R_PName='${R_PName}',R_Unit='${R_Unit}',R_Group='${R_Group}',R_Status='${R_Status}',
@@ -383,12 +378,9 @@ const updateBalance = async payload => {
         TranType='${TranType}',PDAPrintCheck='${PDAPrintCheck}',PDAEMP='${PDAEMP}',R_empName='${R_empName}',
         R_ServiceAmt='${R_ServiceAmt}',R_PEName='${R_PEName}',R_Indulgent='${R_Indulgent}' 
         WHERE R_Index='${R_Index}'`
-        await pool.query(sql)
+    await pool.query(sql)
 
-        return R_Index
-    } catch (error) {
-        return null
-    }
+    return R_Index
 }
 
 const inventoryStock = async ({ R_Stock, R_Table, R_PluCode, R_Quan, R_Total, Cashier, R_Set, R_Index }) => {
@@ -496,7 +488,7 @@ const returnStockIn = async (R_Index, balance, empCode, voidMsg, macno) => {
                 R_Total: balance.R_Total,
                 Cashier: balance.Cashier,
                 R_Set: balance.R_Set,
-                R_Index, 
+                R_Index,
                 empCode, voidMsg, macno
             })
         return response

@@ -8,6 +8,7 @@ import DiscountIcon from '@mui/icons-material/Discount';
 import CloseIcon from '@mui/icons-material/Close';
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 import PriceChangeIcon from '@mui/icons-material/PriceChange';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 
 import apiClient from '../../httpRequest'
 import { POSContext } from "../../AppContext";
@@ -206,7 +207,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     }
 
     const handleConfirmPayment = async () => {
-        if(tonAmount > 1000){
+        if (tonAmount > 1000) {
             handleNotification("กรุณาระบุจำนวนเงินสดให้ถูกต้อง !!!")
             return;
         }
@@ -271,6 +272,21 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
         } else {
             handleNotification("ข้อมูลรับชำระยังไม่ถูกต้อง!")
         }
+    }
+
+    const printBillCheck = async () => {
+        // send print bill check
+        apiClient.post(`/api/billno/printChkBill`, { tableNo })
+            .then(response => {
+                if (response.status === 200) {
+                    navigate(`/payment/print-bill-check/${tableNo}`)
+                } else {
+                    handleNotification("พบข้อผิดพลาดในการพิมพ์บิลตรวจสอบ !")
+                }
+            })
+            .catch(err => {
+                handleNotification(err.message)
+            })
     }
 
     const cancelTransferAmount = () => {
@@ -457,7 +473,10 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                             </Grid>
                             <Grid size={12}>
                                 <Box sx={{ marginTop: "30px" }} textAlign="center">
-                                    <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}>ย้อนกลับ</Button>
+                                    <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}></Button>
+                                    <Button variant="contained" sx={{ margin: "5px", backgroundColor: "#aaa", color: "black" }}
+                                        startIcon={<ReceiptIcon />}
+                                        onClick={printBillCheck}>ตรวจสอบ</Button>
                                     <Button variant="contained" color="secondary"
                                         onClick={() => setOpenSplitBill(true)} endIcon={<SplitBillIcon />} disabled={R_NetTotal <= 0}>
                                         แยกชำระ

@@ -36,7 +36,6 @@ const TopSaleReportModal = ({ setOpen }) => {
   const [group2, setGroup2] = useState("")
 
   const handleConfirm = async () => {
-    navigate('/reportDaily/top-sale-report')
     if (macno1 || macno2 || user1 || user2 || group1 || group2) {
       const query = `/?macno1=${macno1}&macno2=${macno2}&cashier1=${user1}&cashier2=${user2}&group1=${group1}&group2=${group2}`
       navigate(`/reportDaily/top-sale-report${query}`)

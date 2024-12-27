@@ -7,12 +7,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Box, Button, Modal, Typography } from '@mui/material';
+import { Box, Button, FormControl, Grid2, InputLabel, MenuItem, Modal, Select, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import RefundIcon from '@mui/icons-material/ReceiptLong';
 import ReceiptIcon from '@mui/icons-material/ReceiptLong';
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom';
+import ConfirmIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel'
 
 import apiClient from '../../../httpRequest';
 import SearchMenu from './SearchMenu';
@@ -67,6 +69,9 @@ const RefundBill = () => {
 
   const [showAuthen, setShowAuthen] = useState(false)
   const [authenUser, setAuthenUser] = useState(null)
+  const [openTableReturn, setOpenTableReturn] = useState(false)
+  const [tableNo, setTableNo] = useState("")
+  const [billRefNo, setBillRefNo] = useState("")
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -116,6 +121,21 @@ const RefundBill = () => {
       .catch(err => { handleNotification(err.message) })
   }, [])
 
+  const loadBillToBalance = () => {
+    apiClient.post('/api/billno/toBalance', { billRefNo, tableNo })
+      .then(response => {
+        if(response.data.status === 2000){
+          navigate(`/sale/${tableNo}`)
+        }
+      })
+      .catch(err => { handleNotification(err.message) })
+  }
+
+  const handleOpenTable = (billNo) => {
+    setBillRefNo(billNo)
+    setOpenTableReturn(true)
+  }
+
   useEffect(() => {
     loadBillNo()
   }, [loadBillNo])
@@ -160,7 +180,7 @@ const RefundBill = () => {
                           if (column.id === 'action') {
                             if (row.B_Void === 'V') {
                               return <TableCell>
-                                <Typography color='error'>( ยกเลิกรายการ )</Typography>
+                                <Button variant='outlined' color='success' onClick={() => handleOpenTable(row.B_Refno)}>ดึงรายการรับชำระใหม่</Button>
                               </TableCell>
                             } else {
                               return (
@@ -213,6 +233,26 @@ const RefundBill = () => {
             onClose={() => setShowAuthen(false)}
             setAuthenUser={setAuthenUser}
             handleShowConfirm={handleShowConfirm} />
+        </Box>
+      </Modal>
+      <Modal open={openTableReturn} onClose={()=>setOpenTableReturn(false)}>
+        <Box sx={{ ...modalStyle, padding: "10px", width: "450px" }}>
+        <Grid2 container spacing={2} padding={2} direction="column">
+          <FormControl fullWidth>
+            <InputLabel>เลือกหมายเลขโต๊ะ</InputLabel>
+            <Select 
+              label="เลือกหมายเลขโต๊ะ"
+              onChange={e=>setTableNo(e.target.value)}>
+              <MenuItem value="T1">T1</MenuItem>
+            </Select>
+          </FormControl>
+          </Grid2>
+          <Box display="flex" justifyContent="center">
+            <Grid2 container spacing={2} padding={2}>
+              <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpenTableReturn(false)}>Cancel</Button>
+              <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={loadBillToBalance}>Load Data</Button>
+            </Grid2>
+          </Box>
         </Box>
       </Modal>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
