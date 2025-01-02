@@ -136,7 +136,7 @@ class ComponentToPrint extends Component {
               <MyTypo2>Sub-TOTAL....(Item {balanceList.filter(item => item.R_Void !== 'V').length})</MyTypo2>
               <MyTypo2>{NumFormat(TAmount)}</MyTypo2>
             </Box>
-            <Box padding={2}>
+            <Box padding={1}>
               <Box display="flex" justifyContent="space-between">
                 <MyTypo2>อาหาร (Food)</MyTypo2>
                 <MyTypo2>{NumFormat(Food)}</MyTypo2>
@@ -170,7 +170,7 @@ class ComponentToPrint extends Component {
             <Divider />
           </div>
           <Divider />
-          <div align="center" style={{fontSize: "12px", marginTop: "20px"}}>Tips ……………………………</div>
+          <div align="center" style={{ fontSize: "12px", marginTop: "20px" }}>Tips ……………………………</div>
           <Divider sx={{ marginTop: "10px" }} />
           <div align="center">
             <MyTypo value={posConfigSetup.P_PrintRecpMessage} />

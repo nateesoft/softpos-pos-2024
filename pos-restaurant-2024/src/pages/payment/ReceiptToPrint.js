@@ -103,7 +103,7 @@ class ComponentToPrint extends Component {
       B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct,
       B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
       B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1,
-      B_Ton=0, B_NetVat, B_Table, B_Cash=0
+      B_Ton = 0, B_NetVat, B_Table, B_Cash = 0, B_Earnest, B_Entertain
     } = billInfo
 
     const posConfigSetup = this.props.posConfigSetup
@@ -140,25 +140,25 @@ class ComponentToPrint extends Component {
               </TableBody>
               {orderList && orderList.map((item) => (
                 <>
-                {item.R_Void!=='V' && <TableBody>
-                  <TableCell>{item.R_ETD}</TableCell>
-                  <TableCell sx={{maxWidth: "150px", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden"}}>{item.R_PName}</TableCell>
-                  <TableCell align="right">{item.R_Quan}X</TableCell>
-                  <TableCell align="right">{NumFormat(item.R_Price)}</TableCell>
-                </TableBody>}
-                {item.R_Void==='V' && 
-                <>
-                  <TableBody>
-                    <TableCell sx={{textDecoration: "line-through", color: "red"}}>{item.R_ETD}</TableCell>
-                    <TableCell sx={{textDecoration: "line-through", color: "red"}}>{item.R_PName}</TableCell>
-                    <TableCell sx={{textDecoration: "line-through", color: "red"}} align="right">{item.R_Quan}X</TableCell>
-                    <TableCell align="right">{NumFormat(0)}</TableCell>
-                  </TableBody>
-                  <TableBody>
-                    <TableCell colSpan={4} align="right">** Void สินค้า: {item.VoidMsg}</TableCell>
-                  </TableBody>
-                </>
-                }
+                  {item.R_Void !== 'V' && <TableBody>
+                    <TableCell>{item.R_ETD}</TableCell>
+                    <TableCell sx={{ maxWidth: "150px", textOverflow: "ellipsis", whiteSpace: "nowrap", overflow: "hidden" }}>{item.R_PName}</TableCell>
+                    <TableCell align="right">{item.R_Quan}X</TableCell>
+                    <TableCell align="right">{NumFormat(item.R_Price)}</TableCell>
+                  </TableBody>}
+                  {item.R_Void === 'V' &&
+                    <>
+                      <TableBody>
+                        <TableCell sx={{ textDecoration: "line-through", color: "red" }}>{item.R_ETD}</TableCell>
+                        <TableCell sx={{ textDecoration: "line-through", color: "red" }}>{item.R_PName}</TableCell>
+                        <TableCell sx={{ textDecoration: "line-through", color: "red" }} align="right">{item.R_Quan}X</TableCell>
+                        <TableCell align="right">{NumFormat(0)}</TableCell>
+                      </TableBody>
+                      <TableBody>
+                        <TableCell colSpan={4} align="right">** Void สินค้า: {item.VoidMsg}</TableCell>
+                      </TableBody>
+                    </>
+                  }
                 </>
               ))}
             </Table>
@@ -166,10 +166,10 @@ class ComponentToPrint extends Component {
           <Divider />
           <div>
             <Box display="flex" justifyContent="space-between">
-              <MyTypo2>Sub-TOTAL....(Item {orderList.filter(item=>item.R_Void !== 'V').length})</MyTypo2>
+              <MyTypo2>Sub-TOTAL....(Item {orderList.filter(item => item.R_Void !== 'V').length})</MyTypo2>
               <MyTypo2>{NumFormat(B_Total)}</MyTypo2>
             </Box>
-            <Box padding={2}>
+            <Box padding={1}>
               <Box display="flex" justifyContent="space-between">
                 <MyTypo2>อาหาร (Food)</MyTypo2>
                 <MyTypo2>{NumFormat(B_NetFood)}</MyTypo2>
@@ -202,12 +202,20 @@ class ComponentToPrint extends Component {
             </Box>
             <Divider />
             <Box display="flex" justifyContent="space-between">
+              <MyTypo2>ค่ามัดจำ</MyTypo2>
+              <MyTypo2>{NumFormat(B_Earnest || 0)}</MyTypo2>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
+              <MyTypo2>ค่า Entertain</MyTypo2>
+              <MyTypo2>{NumFormat(B_Entertain || 0)}</MyTypo2>
+            </Box>
+            <Box display="flex" justifyContent="space-between">
               <MyTypo2>เงินสด</MyTypo2>
-              <MyTypo2>{NumFormat(B_Cash||0)}</MyTypo2>
+              <MyTypo2>{NumFormat(B_Cash || 0)}</MyTypo2>
             </Box>
             <Box display="flex" justifyContent="space-between">
               <MyTypo2>เงินทอน</MyTypo2>
-              <MyTypo2>{NumFormat(B_Ton||0)}</MyTypo2>
+              <MyTypo2>{NumFormat(B_Ton || 0)}</MyTypo2>
             </Box>
             <Divider />
             {B_CrCode1 && <div>
