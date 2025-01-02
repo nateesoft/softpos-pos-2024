@@ -7,8 +7,9 @@ import OpenTableButton from '@mui/icons-material/MobileFriendly';
 import moment from 'moment'
 
 import apiClient from '../../httpRequest'
-import CustomerDetail from './CustomerDetail';
+// import CustomerDetail from './CustomerDetail';
 import { POSContext } from '../../AppContext';
+import CustomerNationDetail from './CustomerNationDetail';
 
 const min = 1;
 const max = 10;
@@ -32,6 +33,12 @@ const CustomerCheckin = (props) => {
     const [kidCount, setKidCount] = useState(0)
     const [oldCount, setOldCount] = useState(0)
 
+    // nation customer
+    const [thaiCount, setThaiCount] = useState(0)
+    const [europeCount, setEuropeCount] = useState(0)
+    const [americaCount, setAmericaCount] = useState(0)
+    const [asiaCount, setAsiaCount] = useState(0)
+
     const [customerName, setCustomerName] = useState("")
     const [memberCode, setMemberCode] = useState("")
     const [reserveNo, setReserveNo] = useState("")
@@ -39,12 +46,17 @@ const CustomerCheckin = (props) => {
 
     const [showError, setShowError] = useState(false)
     const [showCustomerError, setShowCustomerError] = useState(false)
+    const [showCustomerCountError, setShowCustomerCountError] = useState(false)
     const handleChangeOrderType = (event, oType) => {
         setOrderType(oType);
     };
 
     const handleOpenTable = () => {
         if (tableStatus === "available") {
+            if ((thaiCount + europeCount + americaCount + asiaCount) !== custCount) {
+                setShowCustomerCountError(true)
+                return;
+            }
             if (custCount >= 0 && orderType !== "") {
                 // call api to update table checkin
                 apiClient.post(`/api/table_checkin/${tableNo}`, {
@@ -55,31 +67,36 @@ const CustomerCheckin = (props) => {
                     cust_woman_count: womanCount,
                     cust_kid_count: kidCount,
                     cust_old_count: oldCount,
+                    cust_thai_count: thaiCount,
+                    cust_europe_count: europeCount,
+                    cust_america_count: americaCount,
+                    cust_asia_count: asiaCount,
                     customer_name: customerName,
                     member_code: memberCode,
                     book_no: reserveNo,
                     table_order_type_start: orderType
                 })
-                .then(response => {
-                    if (response.status === 200) {
-                        setShowError(false)
-                        setShowCustomerError(false)
-                        setAppData({
-                            ...appData, tableInfo: {
-                                ...appData.tableInfo,
-                                customerCount: custCount,
-                                customerName: customerName
-                            }
-                        })
-                        navigate(`/sale/${tableNo}`)
-                    } else {
+                    .then(response => {
+                        if (response.status === 200) {
+                            setShowError(false)
+                            setShowCustomerError(false)
+                            setShowCustomerCountError(false)
+                            setAppData({
+                                ...appData, tableInfo: {
+                                    ...appData.tableInfo,
+                                    customerCount: custCount,
+                                    customerName: customerName
+                                }
+                            })
+                            navigate(`/sale/${tableNo}`)
+                        } else {
+                            setShowCustomerError(true)
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
                         setShowCustomerError(true)
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                    setShowCustomerError(true)
-                })
+                    })
             } else {
                 setShowCustomerError(true)
             }
@@ -92,6 +109,8 @@ const CustomerCheckin = (props) => {
         setOpenPin(false)
         setShowError(false)
         setShowCustomerError(false)
+        setShowCustomerCountError(false)
+
         navigate('/floorplan')
     }
 
@@ -106,6 +125,10 @@ const CustomerCheckin = (props) => {
                     setWomanCount(tableInfoData.cust_woman_count)
                     setKidCount(tableInfoData.cust_kid_count)
                     setOldCount(tableInfoData.cust_old_count)
+                    setThaiCount(tableInfoData.cust_thai_count)
+                    setEuropeCount(tableInfoData.cust_europe_count)
+                    setAmericaCount(tableInfoData.cust_america_count)
+                    setAsiaCount(tableInfoData.cust_asia_count)
                     setCustomerName(tableInfoData.customer_name)
                     setMemberCode(tableInfoData.member_code)
                     setReserveNo(tableInfoData.book_no)
@@ -148,11 +171,17 @@ const CustomerCheckin = (props) => {
                             fullWidth
                         />
                     </Grid>
-                    <CustomerDetail
+                    {/* <CustomerDetail
                         man={manCount} setMan={setManCount}
                         woman={womanCount} setWoman={setWomanCount}
                         kid={kidCount} setKid={setKidCount}
                         old={oldCount} setOld={setOldCount}
+                    /> */}
+                    <CustomerNationDetail
+                        thaiPeople={thaiCount} setThaiCount={setThaiCount}
+                        europePeople={europeCount} setEuropeCount={setEuropeCount}
+                        americaPeople={americaCount} setAmericaCount={setAmericaCount}
+                        asiaPeople={asiaCount} setAsiaCount={setAsiaCount}
                     />
                 </Box>
                 <Grid container spacing={2}>
@@ -224,6 +253,7 @@ const CustomerCheckin = (props) => {
                     </Grid>
                     {showError && <Alert severity="error" sx={{ width: "100%" }}>สถานะโต๊ะไม่พร้อมใช้งาน</Alert>}
                     {showCustomerError && <Alert severity="error" sx={{ width: "100%" }}>ข้อมูลลูกค้าไม่ถูกต้อง</Alert>}
+                    {showCustomerCountError && <Alert severity="error" sx={{ width: "100%" }}>ข้อมูลจำนวนลูกค้าไม่ตรงกัน !</Alert>}
                     <Grid size={12} textAlign="center">
                         <Button variant='contained' sx={{ width: "120px", fontSize: "16px", marginRight: "10px" }} color='error' onClick={handleCancel} startIcon={<CloseButton />}>Cancel</Button>
                         <Button variant='contained' sx={{ width: "120px", fontSize: "16px" }} onClick={handleOpenTable} startIcon={<OpenTableButton />}>เปิดโต๊ะ</Button>

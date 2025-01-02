@@ -51,7 +51,7 @@ const ProductCard = memo(
           style={{
             border: "1px solid #eee",
             padding: "5px",
-            borderRadius: "8px 8px 0px 0px",
+            borderRadius: "3px 3px 0px 0px",
             boxShadow: "2px 1px #eee"
           }}
         >
@@ -61,7 +61,7 @@ const ProductCard = memo(
               alt=""
               height={150}
               width={160}
-              style={{ borderRadius: "8px 8px 0px 0px" }}
+              style={{ borderRadius: "3px 3px 0px 0px" }}
               onClick={product.show_list_menu === "N" ? openModal : () => setShowMenuSet(true)}
             />
             <br />

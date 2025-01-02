@@ -37,11 +37,10 @@ const Search = styled('div')(({ theme }) => ({
   '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginRight: theme.spacing(2),
   marginLeft: 0,
   width: '100%',
   [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
+    marginLeft: theme.spacing(1),
     width: 'auto',
   },
 }));
@@ -58,13 +57,16 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
+  width: '100%',
   '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '30ch',
+      },
     },
   },
 }));
@@ -84,7 +86,7 @@ export default function LeftMenu() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" sx={{ border: "1px solid gray", bgcolor: "#e59866", borderRadius: "5px" }}>
+      <AppBar position="fixed" sx={{ border: "1px solid gray", bgcolor: "chocolate", borderRadius: "5px" }}>
         <Toolbar>
           <PointOfSaleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
@@ -136,7 +138,7 @@ export default function LeftMenu() {
               color="inherit"
             >
               <AccountCircle />
-              <Typography sx={{fontSize: "12px"}}>{userLogin}</Typography>
+              <Typography sx={{fontSize: "14px"}}>{userLogin}</Typography>
             </IconButton>
             <IconButton
               size="large"
@@ -147,7 +149,7 @@ export default function LeftMenu() {
               color="inherit"
             >
               <AccessTimeIcon />
-              <Typography sx={{fontSize: "12px"}}><Moment format='DD/MM/YYYY HH:mm' /></Typography>
+              <Typography sx={{fontSize: "14px"}}><Moment format='DD/MM/YYYY HH:mm' /></Typography>
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex' } }}>

@@ -34,7 +34,7 @@ const fabStyle = {
     right: 16,
 };
 
-const tabStyle = { border: "1px solid black", borderRadius: "10px", margin: "2px", bgcolor: "chocolate", color: "white", fontSize: "16px" }
+const tabStyle = { border: "1px solid black", margin: "2px", bgcolor: "chocolate", color: "white", fontSize: "16px" }
 
 const NotfoundMenu = () => {
     return (
@@ -61,9 +61,9 @@ const TabPanel = props => {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
+                <>
                     {children}
-                </Box>
+                </>
             )}
         </div>
     );
@@ -179,13 +179,10 @@ const ProductMenu = ({
 
     return (
         <Box sx={{ flexGrow: 1, display: 'flex', alignContent: "flex-start", marginTop: "8vh" }}>
-            {matches && <Tabs
-                orientation="vertical"
-                variant="scrollable"
-                value={value}
+            {matches && 
+            <Tabs orientation="vertical" variant="scrollable" value={value} 
                 onChange={handleChange}
-                sx={{ borderColor: 'divider', minWidth: "150px", marginTop: "5px" }}
-            >
+                sx={{ borderColor: 'divider', minWidth: "150px", marginTop: "5px" }}>
                 <Tab sx={tabStyle} icon={<MenuBook sx={{ color: "white" }} />} label={t("productMenu.allGroup")} />
                 <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.breakfast")} />
                 <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.appetizer")} />
@@ -193,7 +190,8 @@ const ProductMenu = ({
                 <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.italianFood")} />
                 <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.drink")} />
                 <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.dessert")} />
-            </Tabs>}
+            </Tabs>
+            }
             <TabPanel value={value} index={0}>
                 <Grid container>
                     {ProductList.length === 0 && <NotfoundMenu />}

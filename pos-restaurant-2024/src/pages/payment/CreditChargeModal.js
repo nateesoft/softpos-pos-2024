@@ -26,13 +26,13 @@ const CreditFileList = ({ setClose, setCreditInfo }) => {
     const [creditFiles, setCreditFiles] = useState([])
 
     const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
+    const [notiMessage, setNotiMessage] = useState("")
+    const [alertType, setAlertType] = useState("info")
+    const handleNotification = (message, type = "error") => {
+        setNotiMessage(message)
+        setAlertType(type)
+        setShowNoti(true)
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);

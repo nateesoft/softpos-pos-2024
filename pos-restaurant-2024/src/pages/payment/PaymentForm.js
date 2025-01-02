@@ -14,6 +14,7 @@ import apiClient from '../../httpRequest'
 import { POSContext } from "../../AppContext";
 import QrCodeGenerator from "./QRCodePayment";
 import CreditChargeModal from "./CreditChargeModal";
+import MultipleCreditPayment from "./MultipleCreditPayment";
 
 const NumFormat = data => {
     return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
@@ -50,9 +51,13 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     const [balanceAmount, setBalanceAmount] = useState(0)
     const [tonAmount, setTonAmount] = useState(0)
 
+    // focus control
+    const [componentFocus, setComponentFocus] = useState("cash")
+
     // cash info
-    const [cashEnable, setCashEnable] = useState(true)
     const [cashAmount, setCashAmount] = useState(0)
+    const [depositAmount, setDepositAmount] = useState(0)
+    const [entertainAmount, setEntertainAmount] = useState(0)
 
     // credit info
     const [crCode, setCrCode] = useState("")
@@ -72,6 +77,9 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     const [transferAccount, setTransferAccount] = useState("")
 
     const [openCreditFile, setOpenCreditFile] = useState(false)
+
+    // display
+    const [netTotalDisplay, setNetTotalDisplay] = useState(0)
 
     const navigate = useNavigate();
     const handleBackPage = () => {
@@ -104,35 +112,45 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     }
 
     const handleAdd = (addMoney) => {
-        if (cashEnable) {
+        if (componentFocus === "cash") {
             handleCashAmountKeyIn(cashAmount + addMoney)
+        } else if (componentFocus === "deposit") {
+            handleDepositAmountKeyIn(depositAmount + addMoney)
+        } else if (componentFocus === "entertain") {
+            handleEntertainAmountKeyIn(entertainAmount + addMoney)
         }
     }
 
     const handleConcat = (addMoney) => {
-        if (cashEnable) {
+        if (componentFocus === "cash") {
             handleCashAmountKeyIn(parseFloat("" + cashAmount + addMoney))
+        } else if (componentFocus === "deposit") {
+            handleDepositAmountKeyIn(parseFloat("" + depositAmount + addMoney))
+        } else if (componentFocus === "entertain") {
+            handleEntertainAmountKeyIn(parseFloat("" + entertainAmount + addMoney))
         }
-    }
-
-    const handleShowOpenCreditFile = () => {
-        setCreditAmount(0)
-        setCrCode("")
-        setCreditChargeAmount(0)
-        setBalanceAmount(0)
-        setOpenCreditFile(true)
     }
 
     const totalAmount = useCallback(() => {
         const cc = cashAmount ? parseFloat(cashAmount) : 0
         const cd = creditAmount ? parseFloat(creditAmount - creditChargeAmount) : 0
         const ta = transferAmount ? parseFloat(transferAmount) : 0
-        const toalNetAmt = parseFloat(R_NetTotal) + creditChargeAmount
-        const paymentAmt = parseFloat(cc + cd + ta)
+        const totalNetAmt = parseFloat(R_NetTotal) + creditChargeAmount
+        const paymentAmt = parseFloat(cc + cd + ta + depositAmount + entertainAmount)
         const discountAmt = 0
-        const balanceAmt = parseFloat((paymentAmt - discountAmt) - toalNetAmt)
-        setPaymentAmount(paymentAmt)
-        setDiscountAmount(discountAmt)
+        let balanceAmt = parseFloat((paymentAmt - discountAmt) - totalNetAmt)
+        if (depositAmount > totalNetAmt) {
+            setDepositAmount(totalNetAmt)
+            setCashAmount(0)
+            setCreditAmount(0)
+            setCreditChargeAmount(0)
+        }
+        if (entertainAmount > totalNetAmt) {
+            setEntertainAmount(totalNetAmt)
+            setCashAmount(0)
+            setCreditAmount(0)
+            setCreditChargeAmount(0)
+        }
         if (balanceAmt < 0) {
             if (creditAmount > 0) {
                 setBalanceAmount(0)
@@ -149,23 +167,23 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                 setBalanceAmount(0)
             }
         }
-    }, [cashAmount, creditAmount, transferAmount, R_NetTotal])
+        setPaymentAmount(paymentAmt)
+        setDiscountAmount(discountAmt)
+        setNetTotalDisplay((R_NetTotal + creditChargeAmount) - paymentAmt)
+    }, [cashAmount, depositAmount, entertainAmount, creditAmount, transferAmount, R_NetTotal])
 
     const handleClear = () => {
         setCashAmount(0)
-        totalAmount()
+        setDepositAmount(0)
+        setEntertainAmount(0)
     }
 
-    const handleCancelCredit = () => {
-        setCrCode("")
-        setCreditNumber("")
-        setCreditRef("")
-        setCreditChargePercent(0)
-        setCreditChargeAmount(0)
-        setCreditAmount(0)
+    const handleDepositAmountKeyIn = depAmt => {
+        setDepositAmount(depAmt)
+    }
 
-        setOpenCreditInfo(false)
-        totalAmount()
+    const handleEntertainAmountKeyIn = entertainAmt => {
+        setEntertainAmount(entertainAmt)
     }
 
     const handleCashAmountKeyIn = (cashAmt) => {
@@ -187,7 +205,6 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
         }
 
         setCashAmount(cashAmt)
-        totalAmount()
     }
 
     const handleTransferKeyIn = (transferAmt) => {
@@ -203,7 +220,6 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
             return;
         }
         setOpenTransferInfo(false)
-        totalAmount()
     }
 
     const handleConfirmPayment = async () => {
@@ -226,7 +242,6 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
 
                 },
                 cashInfo: {
-                    cashEnable,
                     cashAmount
                 },
                 creditInfo: {
@@ -251,6 +266,9 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                 paymentAmount,
                 netTotal: (R_NetTotal + creditChargeAmount),
                 empCode,
+                B_Entertain: entertainAmount,
+                B_UserEntertain: empCode,
+                B_Earnest: depositAmount
             }
 
             // update print2kic
@@ -296,15 +314,6 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
         setTransferAmount(0)
 
         setOpenTransferInfo(false)
-        totalAmount()
-    }
-
-    const handleConfirmCreditModal = () => {
-        if (crCode === "" || creditNumber === "" || creditRef === "" || creditAmount === 0) {
-            return;
-        }
-        totalAmount()
-        setOpenCreditInfo(false)
     }
 
     useEffect(() => {
@@ -315,9 +324,10 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
         <Grid container spacing={2} display="flex" direction="column" sx={{ padding: "10px" }}>
             <Grid size={12}>
                 <Box display="flex" sx={{ padding: "20px", backgroundColor: "salmon", border: "2px solid gray", borderRadius: "10px" }} justifyContent="space-between">
-                    <Typography variant="h3" sx={{ fontWeight: "bold", color: "#444" }}>TOTAL</Typography>
+                    {netTotalDisplay > 0 && <Typography variant="h3" sx={{ fontWeight: "bold", color: "#444" }}>TOTAL</Typography>}
+                    {netTotalDisplay <= 0 && <Typography variant="h3" sx={{ fontWeight: "bold", color: "#444" }}>TON</Typography>}
                     <Typography variant="h3" sx={{ marginRight: "20px", fontSize: "72px", textShadow: "3px 3px snow", fontWeight: "bold" }}>
-                        {NumFormat(R_NetTotal + creditChargeAmount)}
+                        {NumFormat(netTotalDisplay > 0 ? netTotalDisplay : Math.abs(netTotalDisplay))}
                     </Typography>
                 </Box>
             </Grid>
@@ -326,15 +336,39 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                     <Grid size={6}>
                         <Paper elevation={3} sx={{ padding: "10px" }}>
                             <Box display="flex" justifyContent="space-between" margin={2}>
+                                <TextField
+                                    type="number"
+                                    value={depositAmount}
+                                    onFocus={() => setComponentFocus("deposit")}
+                                    onChange={e => handleDepositAmountKeyIn(e.target.value)}
+                                    id="txtDepositAmount"
+                                    label="หักคืนเงินมัดจำ"
+                                    sx={{ backgroundColor: componentFocus === "deposit" ? "#f5fff3" : "" }}
+                                    fullWidth
+                                    inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                            </Box>
+                            <Box display="flex" justifyContent="space-between" margin={2}>
+                                <TextField
+                                    type="number"
+                                    value={entertainAmount}
+                                    onFocus={() => setComponentFocus("entertain")}
+                                    onChange={e => handleEntertainAmountKeyIn(e.target.value)}
+                                    id="txtEntertainAmount"
+                                    label="ชำระแบบ Entertain"
+                                    sx={{ backgroundColor: componentFocus === "entertain" ? "#f5fff3" : "" }}
+                                    fullWidth
+                                    inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                            </Box>
+                            <Box display="flex" justifyContent="space-between" margin={2}>
                                 <img width={48} height={48} src={"/images/payment/cash.png"} alt="" style={{ marginRight: "8px" }} />
                                 <TextField
                                     type="number"
                                     value={cashAmount}
-                                    onFocus={() => setCashEnable(true)}
+                                    onFocus={() => setComponentFocus("cash")}
                                     onChange={e => handleCashAmountKeyIn(e.target.value)}
-                                    onKeyUp={totalAmount}
                                     id="txtCashAmount"
                                     label="ชำระด้วยเงินสด"
+                                    sx={{ backgroundColor: componentFocus === "cash" ? "#f5fff3" : "" }}
                                     fullWidth
                                     inputProps={{ min: 0, style: { textAlign: "right" } }} />
                             </Box>
@@ -357,7 +391,6 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                     <img width={48} src={"/images/payment/credit-card.png"} alt="" />
                                     <TextField
                                         value={NumFormat(creditAmount - creditChargeAmount)}
-                                        onKeyUp={totalAmount}
                                         id="txtCreditAmount"
                                         label="ชำระด้วยบัตรเครดิต"
                                         disabled
@@ -370,7 +403,6 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                     <PriceChangeIcon fontSize="large" sx={{ width: "48px" }} />
                                     <TextField
                                         value={NumFormat(creditChargeAmount)}
-                                        onKeyUp={totalAmount}
                                         id="txtCreditAmount"
                                         label="Credit Charge Amount"
                                         disabled
@@ -496,23 +528,12 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
             <Modal open={openCreditInfo}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
-                <Box sx={{ ...modalStyle, width: "350px", padding: "5px" }}>
-                    <Grid container spacing={2} padding={2} justifyContent="center" direction="column">
-                        <Grid2 container>
-                            <TextField variant="outlined" label="CrCode" value={crCode} onChange={e => setCrCode(e.target.value)} />
-                            <Button variant="contained" onClick={() => handleShowOpenCreditFile()}>...</Button>
-                        </Grid2>
-                        <TextField variant="outlined" label="เลขที่บัตรเครดิต" value={creditNumber} onChange={e => setCreditNumber(e.target.value)} />
-                        <TextField variant="outlined" label="approve code" value={creditRef} onChange={e => setCreditRef(e.target.value)} />
-                        <TextField variant="outlined" disabled type="number" label="Credit Charge" value={creditChargePercent} />
-                        <TextField variant="outlined" disabled type="number" label="Charge Amount" value={creditChargeAmount} />
-                        <TextField variant="outlined" type="number" label="ยอดค้างชำระ" value={0} disabled />
-                        <TextField variant="outlined" type="number" disabled label="จำนวนเงินที่ใส่เครดิต" value={creditAmount} onChange={e => setCreditAmount(e.target.value)} />
-                    </Grid>
-                    <Box sx={{ marginTop: "30px" }} textAlign="center">
-                        <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={handleCancelCredit}>ยกเลิก</Button>
-                        <Button variant="contained" sx={{ margin: "5px" }} onClick={handleConfirmCreditModal} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
-                    </Box>
+                <Box sx={{ ...modalStyle, width: "650px", padding: "5px" }}>
+                    <MultipleCreditPayment
+                        tableNo={tableNo}
+                        balanceAmount={balanceAmount}
+                        setTotalCreditAmount={setCreditAmount}
+                        onClose={() => setOpenCreditInfo(false)} />
                 </Box>
             </Modal>
             <Modal open={openTransferInfo}

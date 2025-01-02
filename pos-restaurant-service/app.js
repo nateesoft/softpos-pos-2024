@@ -118,7 +118,6 @@ app.use('/api/crm/member', memmasterRouter)
 app.use('/api/printer-thermal', printerThermalRouter)
 app.use('/api/report', reportRouter)
 
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

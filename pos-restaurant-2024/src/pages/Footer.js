@@ -16,7 +16,7 @@ export default function FixedBottomNavigation() {
           padding: "10px", 
           borderTop: "1px solid #4c696b" }} 
         justifyContent="center">
-        <Typography sx={{color: "snow", fontSize: "12px" }}>Copyright @SOFTPOS ( 2025-2026 )</Typography>
+        <Typography sx={{color: "snow", fontSize: "14px" }}>Copyright @SOFTPOS ( 2025-2026 )</Typography>
       </Grid2>
     </Box>
   );

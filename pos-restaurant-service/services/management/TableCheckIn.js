@@ -19,12 +19,13 @@ const updateInActiveTable = async (tableNo) => {
 const createData = async (tableNo, payload) => {
     const { empCode, macno,
         customer_count, cust_man_count, cust_woman_count, cust_kid_count, cust_old_count,
+        cust_thai_count, cust_europe_count, cust_america_count, cust_asia_count,
         customer_name, member_code, book_no, table_order_type_start = "E" } = payload
     const emp_code_first = empCode;
 
     const tableInfo = await getTableInfo(tableNo) // check exists data
     if (tableInfo) {
-        return updateData(tableNo, {...payload, })
+        return updateData(tableNo, { ...payload, })
     }
 
     const dateTimeCheckin = getMoment().format('YYYY-MM-DD HH:mm:ss')
@@ -32,10 +33,12 @@ const createData = async (tableNo, payload) => {
     const sql = `INSERT INTO table_checkin 
                 (Tcode,emp_code_first,emp_code_last,macno,
                 customer_count,cust_man_count,cust_woman_count,cust_kid_count,cust_old_count,
-                datetime_checkin,customer_name,member_code,book_no,table_order_type_start) 
+                datetime_checkin,customer_name,member_code,book_no,table_order_type_start,
+                cust_thai_count,cust_europe_count,cust_america_count,cust_asia_count) 
                 VALUES ('${tableNo}','${emp_code_first}','','${macno}',
                 '${customer_count}','${cust_man_count}','${cust_woman_count}','${cust_kid_count}','${cust_old_count}',
-                '${dateTimeCheckin}','${customer_name}','${member_code}','${book_no}','${table_order_type_start}')`;
+                '${dateTimeCheckin}','${customer_name}','${member_code}','${book_no}','${table_order_type_start}',
+                '${cust_thai_count}', '${cust_europe_count}', '${cust_america_count}', '${cust_asia_count}')`;
     const results = await pool.query(sql)
     return results
 }
@@ -43,7 +46,8 @@ const createData = async (tableNo, payload) => {
 const updateData = async (tableNo, payload) => {
     const { empCode, macno,
         customer_count, cust_man_count, cust_woman_count, cust_kid_count, cust_old_count,
-        customer_name, member_code, book_no, table_order_type_start } = payload
+        customer_name, member_code, book_no, table_order_type_start,
+        cust_thai_count, cust_europe_count, cust_america_count, cust_asia_count } = payload
     const emp_code_last = empCode;
 
     const sql = `UPDATE table_checkin 
@@ -54,6 +58,10 @@ const updateData = async (tableNo, payload) => {
                 cust_woman_count='${cust_woman_count}',
                 cust_kid_count='${cust_kid_count}',
                 cust_old_count='${cust_old_count}',
+                cust_thai_count='${cust_thai_count}',
+                cust_europe_count='${cust_europe_count}',
+                cust_america_count='${cust_america_count}',
+                cust_asia_count='${cust_asia_count}',
                 customer_name='${customer_name}',
                 member_code='${member_code}',
                 book_no='${book_no}',

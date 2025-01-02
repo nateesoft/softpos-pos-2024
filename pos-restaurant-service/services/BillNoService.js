@@ -152,18 +152,17 @@ const getBillIDCurrent = async (macno) => {
 const addNewBill = async (payload) => {
     const posConfigSetup = await getPOSConfigSetup()
     const {
-        macno, empCode, tableNo, billType, orderList, tonAmount, paymentAmount, netTotal,
+        macno, empCode, tableNo, billType, tonAmount, netTotal,
         memberInfo, cashInfo, creditInfo, transferInfo, discountInfo, serviceInfo,
-        branchInfo
+        branchInfo, B_Entertain, B_UserEntertain, B_Earnest
     } = payload
     const { Code: branchCode } = branchInfo
     const tableFile = await getTableByCode(tableNo)
     const { serviceAmount, vatAmount } = serviceInfo
     const { Cashier, TCustomer, Food, Drink, Product } = tableFile
 
-    const { cashEnable, cashAmount } = cashInfo
+    const { cashAmount } = cashInfo
     const {
-        creditEnable,
         crCode,
         creditNumber,
         creditRef,
@@ -172,15 +171,9 @@ const addNewBill = async (payload) => {
         creditAmount,
     } = creditInfo
     const {
-        transferEnable,
         transferAmount,
-        transferAccountNo,
-        transferAccount
     } = transferInfo
-    const {
-        discountEnable,
-        discountAmount,
-    } = discountInfo
+    const {} = discountInfo
 
     // summary before create billno
     const curdate = getMoment().format('YYYY-MM-DD')
@@ -237,7 +230,7 @@ const addNewBill = async (payload) => {
     const B_PayAmt = (cashAmount + transferAmount);
     const B_Cash = (cashAmount + transferAmount);
     const B_GiftVoucher = 0;
-    const B_Earnest = 0;
+    // const B_Earnest = 0;
     const B_Ton = tonAmount;
     const B_CrCode1 = crCode;
     const B_CardNo1 = creditNumber;
@@ -279,7 +272,7 @@ const addNewBill = async (payload) => {
     const B_CrCardAmt = creditAmount;
     const B_CrCurPoint = 0;
     const B_CrSumPoint = 0;
-    const B_Entertain = 0;
+    // const B_Entertain = 0;
     const B_VoucherDiscAmt = 0;
     const B_VoucherOver = 0;
     const B_NetDiff = 0;
@@ -301,7 +294,7 @@ const addNewBill = async (payload) => {
     const VoidMsg = "";
     const B_EarnDocNo = "";
     const B_UseEarnNo = "";
-    const B_UserEntertain = "";
+    // const B_UserEntertain = "";
     const B_SendOnline = "";
 
     const sql = `INSERT INTO billno 

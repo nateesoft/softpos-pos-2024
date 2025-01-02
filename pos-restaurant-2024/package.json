@@ -1,5 +1,6 @@
 {
   "name": "pos-restaurant-2024",
+  "homepage": "http://localhost:3000",
   "version": "0.1.0",
   "private": true,
   "main": "main.js",
@@ -19,6 +20,7 @@
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
+    "express": "^4.21.2",
     "framer-motion": "^11.11.11",
     "http-proxy-middleware": "^3.0.3",
     "i18next": "^23.16.4",
@@ -58,7 +60,8 @@
     "eject": "react-scripts eject",
     "electron": "electron .",
     "package": "electron-packager .",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "start:prod": "react-scripts build && nodemon server.js"
   },
   "eslintConfig": {
     "extends": [

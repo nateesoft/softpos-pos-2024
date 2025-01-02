@@ -169,6 +169,8 @@ class ComponentToPrint extends Component {
             </Box>
             <Divider />
           </div>
+          <Divider />
+          <div align="center" style={{fontSize: "12px", marginTop: "20px"}}>Tips ……………………………</div>
           <Divider sx={{ marginTop: "10px" }} />
           <div align="center">
             <MyTypo value={posConfigSetup.P_PrintRecpMessage} />
