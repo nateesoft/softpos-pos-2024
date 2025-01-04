@@ -1,32 +1,23 @@
-import React, { memo, useContext } from "react"
+import React, { memo } from "react"
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline"
 import SetMealIcon from "@mui/icons-material/MenuOpen"
 import Grid from "@mui/material/Grid2"
 import { Box, Button, Badge, Typography } from "@mui/material"
 
-import { POSContext } from "../../AppContext"
-import apiClient from '../../httpRequest'
-
 const ProductCard = memo(
-  ({ id, tableNo, product, openModal, initLoadMenu, initLoadOrder, setShowMenuSet, handleNotification, OrderList }) => {
-    const { appData } = useContext(POSContext)
-    const { empCode, macno, userLogin } = appData
+  ({ id, product, openModal, setShowMenuSet, OrderList, setShowManualPrice, addOrder }) => {
 
     const productList = OrderList.filter(p => p.R_PluCode === product.menu_code)
     const saleQty = productList.reduce((totalQty, p) => totalQty + p.R_Quan, 0);
 
-    const addOrder = async (qty = 1) => {
-      apiClient
-        .post(`/api/balance`, {
-          tableNo, menuInfo: product, qty, macno, userLogin, empCode
-        })
-        .then((response) => {
-          initLoadMenu()
-          initLoadOrder()
-        })
-        .catch((error2) => {
-          handleNotification(error2.message)
-        })
+    const handleShowDetailProduct = (product) => {
+      if (product.show_list_menu === 'Y') {
+        setShowMenuSet(true)
+      } else if (product.manual_price === 'Y') {
+        setShowManualPrice(true)
+      } else {
+        openModal()
+      }
     }
 
     return (
@@ -62,7 +53,7 @@ const ProductCard = memo(
               height={150}
               width={160}
               style={{ borderRadius: "3px 3px 0px 0px" }}
-              onClick={product.show_list_menu === "N" ? openModal : () => setShowMenuSet(true)}
+              onClick={() => handleShowDetailProduct(product)}
             />
             <br />
           </Box>
@@ -114,16 +105,28 @@ const ProductCard = memo(
                 Menu Set
               </Button>
             )}
-            {product.show_list_menu !== "Y" && (
+            {product.manual_price !== "Y" && (
               <Button
                 color="success"
                 fullWidth
                 variant="contained"
                 sx={{ marginTop: "5px" }}
-                onClick={() => addOrder(1)}
+                onClick={() => addOrder(1, product)}
                 startIcon={<AddCircleOutline />}
               >
                 Order
+              </Button>
+            )}
+            {product.manual_price === "Y" && (
+              <Button
+                color="secondary"
+                fullWidth
+                variant="contained"
+                sx={{ marginTop: "5px" }}
+                onClick={() => setShowManualPrice(true)}
+                startIcon={<AddCircleOutline />}
+              >
+                Manual Price
               </Button>
             )}
           </Grid>

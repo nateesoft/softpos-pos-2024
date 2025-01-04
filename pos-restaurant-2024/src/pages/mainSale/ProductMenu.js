@@ -8,7 +8,6 @@ import CloseModalIcon from '@mui/icons-material/Cancel';
 import CheckIcon from '@mui/icons-material/Check';
 import NoFoodIcon from '@mui/icons-material/NoFood';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Grid from '@mui/material/Grid2'
 
 import apiClient from '../../httpRequest'
 import OrderItem from './addOrderItem/OrderItem'
@@ -16,6 +15,7 @@ import ProductCard from "./ProductCard";
 import ProductDetailCard from "./ProductDetailCard";
 import MenuSetModal from "./MenuSetModal";
 import { POSContext } from "../../AppContext";
+import ManualPriceInput from "./ManualPriceInput";
 
 const modalStyle = {
     position: "absolute",
@@ -91,7 +91,7 @@ const ProductMenu = ({
     const [productInfo, setProductInfo] = useState({})
     const [showMenu, setShowMenu] = useState(false)
     const [showMenuSet, setShowMenuSet] = useState(false)
-    const [R_LinkIndex, setRLinkIndex] = useState("")
+    const [showManualPrice, setShowManualPrice] = useState(false)
 
     const [subMenuSelected, setSubMenuSelected] = useState([])
     const [msgWarning, setMsgWarning] = useState(false)
@@ -113,6 +113,25 @@ const ProductMenu = ({
         setShowMenuSet(true)
     }
 
+    const handleShowManualPrice = product => {
+        setProductInfo(product)
+        setShowManualPrice(true)
+    }
+
+    const addOrder = async (qty, product) => {
+        apiClient
+          .post(`/api/balance`, {
+            tableNo, menuInfo: product, qty, macno, userLogin, empCode
+          })
+          .then((response) => {
+            initLoadMenu()
+            initLoadOrder()
+          })
+          .catch((error2) => {
+            handleNotification(error2.message)
+          })
+      }
+
     const addOrderMain = async (product) => {
         apiClient
             .post(`/api/balance`, {
@@ -127,7 +146,6 @@ const ProductMenu = ({
                 initLoadMenu()
                 initLoadOrder()
                 const R_LinkIndex = response.data.data
-                setRLinkIndex(R_LinkIndex)
 
                 // add sub menu in set
                 let allListToAdd = optionalList.filter(item => item.checked === true)
@@ -193,24 +211,26 @@ const ProductMenu = ({
             </Tabs>
             }
             <TabPanel value={value} index={0}>
-                <Grid container>
+                <Grid2 container>
                     {ProductList.length === 0 && <NotfoundMenu />}
                     {ProductList && ProductList.map(product =>
-                        <Grid id={`productList_${product.id}`}>
+                        <Grid2 id={`productList_${product.id}`}>
                             <ProductCard
                                 id={"all" + product.id}
                                 OrderList={OrderList}
                                 tableNo={tableNo}
                                 product={product}
-                                openModal={() => handleOpenMenu(product)}
                                 initLoadOrder={initLoadOrder}
                                 initLoadMenu={initLoadMenu}
+                                addOrder={addOrder}
+                                openModal={() => handleOpenMenu(product)}
                                 setShowMenuSet={() => handleShowMenuSet(product)}
+                                setShowManualPrice={() => handleShowManualPrice(product)}
                                 handleNotification={handleNotification}
                             />
-                        </Grid>
+                        </Grid2>
                     )}
-                </Grid>
+                </Grid2>
             </TabPanel>
             <TabPanel value={value} index={1}>
                 {ProductA && ProductA.map(product =>
@@ -308,6 +328,7 @@ const ProductMenu = ({
                 )}
                 {ProductF.length === 0 && <NotfoundMenu />}
             </TabPanel>
+
             <Modal open={open} onClose={() => setOpen(false)}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
@@ -348,20 +369,21 @@ const ProductMenu = ({
                     handleNotification={handleNotification}
                 />
             </Dialog>
+
             <Modal open={showMenuSet} onClose={handleCloseMenuSet}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle }}>
-                    <Grid container justifyContent="center" display="flex" direction="column" padding={2}>
-                        <Grid display="flex" justifyContent="space-between">
+                    <Grid2 container justifyContent="center" display="flex" direction="column" padding={2}>
+                        <Grid2 display="flex" justifyContent="space-between">
                             <Typography variant="h4" color="secondary" sx={{ fontWeight: "bold", textShadow: "1px 1px orange" }}>{productInfo.menu_name}</Typography>
                             <CloseModalIcon fontSize="large" color="error" onClick={handleCloseMenuSet} />
-                        </Grid>
+                        </Grid2>
                         <Typography color="error" variant="h5" sx={{ fontWeight: "bold" }}>( ราคา {productInfo.menu_price} )</Typography>
                         {msgWarning && <Box display="flex" justifyContent="center" sx={{ backgroundColor: "gold", padding: "10px", marginTop: "10px" }}>
                             <Typography>!!! ไม่ตรงตามเงื่อนไขในการสั่งอาหาร !!!</Typography>
                         </Box>}
-                    </Grid>
+                    </Grid2>
                     <Grid2 container spacing={2} padding={1} justifyContent="space-between">
                             <Typography sx={{color: "green", fontWeight: "bold"}}>รายการที่เลือก: {subMenuSelected.filter(item => item === true).length}</Typography>
                             <Typography sx={{color: "blue"}}>สั่งขั้นต่ำ: {productInfo.min_count_set}</Typography>
@@ -378,6 +400,18 @@ const ProductMenu = ({
                         <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={handleCloseMenuSet}>Cancel</Button>
                         <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={() => handleConfirmSelectedSubMenu(productInfo)}>Confirm</Button>
                     </Box>
+                </Box>
+            </Modal>
+
+            <Modal open={showManualPrice} onClose={()=>setShowManualPrice(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description">
+                <Box sx={{ ...modalStyle }}>
+                    <ManualPriceInput 
+                        productInfo={productInfo}
+                        setShowManualPrice={setShowManualPrice}
+                        addOrder={addOrder}
+                    />
                 </Box>
             </Modal>
         </Box>
