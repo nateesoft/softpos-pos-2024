@@ -114,7 +114,7 @@ const updateBalanceQty = async (tableNo, rIndex, qty) => {
 }
 
 const addListBalance = async (payload) => {
-    const { listBalance, tableNo, macno, userLogin, empCode, R_LinkIndex } = payload
+    const { listBalance, tableNo, macno, userLogin, empCode, R_LinkIndex, etdType } = payload
     const Main_Index = await getBalanceMaxIndex(tableNo)
     listBalance.forEach(async (product, index) => {
         const posProduct = await getProductByPCode(product.menu_code)
@@ -130,7 +130,8 @@ const addListBalance = async (payload) => {
             empCode,
             R_Index: R_Index,
             R_LinkIndex,
-            posProduct
+            posProduct,
+            R_ETD: etdType
         })
 
         // summary tablefile
@@ -144,7 +145,7 @@ const addListBalance = async (payload) => {
 
 const addBalance = async payload => {
     const { tableNo, menuInfo, qty, optList = [], specialText = "",
-        macno, userLogin, empCode } = payload
+        macno, userLogin, empCode, etdType } = payload
     const R_Index = await getBalanceMaxIndex(tableNo)
     if (!R_Index) {
         throw new Error('Not found Max R_Index !!!')
@@ -164,7 +165,8 @@ const addBalance = async payload => {
         empCode,
         R_Index,
         R_LinkIndex: "",
-        posProduct
+        posProduct,
+        R_ETD: etdType
     })
 
     // summary tablefile
@@ -189,7 +191,7 @@ const mappingOpt = (optList, specialText) => {
 
 const addNewBalance = async payload => {
     const { tableNo, menuInfo, qty, optList = [], specialText = "",
-        macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct } = payload
+        macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct, R_ETD } = payload
     const R_Table = tableNo
     const R_PluCode = menuInfo.menu_code
     const R_PName = Unicode2ASCII(menuInfo.menu_name)
@@ -222,7 +224,6 @@ const addNewBalance = async payload => {
     const Macno = macno
     const Cashier = userLogin
     const R_Emp = empCode
-    const R_ETD = "E"
     const TranType = ""
     const R_KicPrint = ""
     const R_Void = ""

@@ -1,4 +1,6 @@
 const pool = require('../../config/database');
+const mysqlPool = require('../../config/database/MySqlConnect');
+
 const { getMoment } = require('../../utils/MomentUtil');
 
 const getTableInfo = async (tableNo) => {
@@ -8,6 +10,14 @@ const getTableInfo = async (tableNo) => {
         return results[0]
     }
     return null
+}
+
+const updateTableCustomer = async (tableNo, customerCount) => {
+    const sql = `update tablefile 
+    set TCustomer='${customerCount}' 
+    where TCode='${tableNo}'`;
+    const results = await mysqlPool.query(sql)
+    return results
 }
 
 const updateInActiveTable = async (tableNo) => {
@@ -40,6 +50,10 @@ const createData = async (tableNo, payload) => {
                 '${dateTimeCheckin}','${customer_name}','${member_code}','${book_no}','${table_order_type_start}',
                 '${cust_thai_count}', '${cust_europe_count}', '${cust_america_count}', '${cust_asia_count}')`;
     const results = await pool.query(sql)
+
+    // update tablefile
+    updateTableCustomer(tableNo, customer_count)
+
     return results
 }
 
@@ -68,6 +82,10 @@ const updateData = async (tableNo, payload) => {
                 table_order_type_start='${table_order_type_start}' 
                 WHERE Tcode='${tableNo}'`;
     const results = await pool.query(sql)
+
+    // update tablefile
+    await updateTableCustomer(tableNo, customer_count)
+
     return results
 }
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import Grid from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
@@ -10,9 +10,12 @@ import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
 import ShowNotification from "../utils/ShowNotification"
 import Footer from '../Footer'
+import { POSContext } from "../../AppContext"
 
 function MainSalePage() {
   const { tableNo } = useParams();
+  const { appData } = useContext(POSContext)
+  const { tableInfo } = appData
 
   const matches = useMediaQuery("(min-width:1024px)")
   const [ProductList, setProductList] = useState([])
@@ -146,6 +149,7 @@ function MainSalePage() {
         <Grid size={matches ? 8 : 12}>
           <ProductMenu
             tableNo={tableNo}
+            orderType={tableInfo.orderType}
             ProductList={ProductList}
             ProductA={ProductA}
             ProductB={ProductB}
@@ -169,6 +173,7 @@ function MainSalePage() {
           >
             <OrderItem
               tableNo={tableNo}
+              orderType={tableInfo.orderType}
               OrderList={orderList}
               OrderEList={orderEList}
               OrderTList={orderTList}

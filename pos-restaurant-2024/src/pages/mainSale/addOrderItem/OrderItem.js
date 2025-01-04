@@ -68,6 +68,7 @@ const TotalBill = ({ orderList }) => {
 
 const OrderItem = ({
   tableNo,
+  orderType,
   OrderList,
   OrderEList,
   OrderTList,
@@ -78,7 +79,7 @@ const OrderItem = ({
   handleNotification
 }) => {
   const navigate = useNavigate()
-  const [value, setValue] = React.useState("1")
+  const [value, setValue] = React.useState(orderType || "E")
   const [open, setOpen] = useState(false)
 
   const [productInfo, setProductInfo] = useState({})
@@ -150,9 +151,9 @@ const OrderItem = ({
     <Box sx={typePopup ? stylePopup : styleMain}>
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
-          <Tab label="Dine In" value="1" sx={{ boxShadow: "2px 2px #eee" }} />
-          <Tab label="Take Away" value="2" sx={{ boxShadow: "2px 2px #eee" }} />
-          <Tab label="Delivery" value="3" sx={{ boxShadow: "2px 2px #eee" }} />
+          <Tab label="Dine In" value="E" sx={{ boxShadow: "2px 2px #eee" }} />
+          <Tab label="Take Away" value="T" sx={{ boxShadow: "2px 2px #eee" }} />
+          <Tab label="Delivery" value="D" sx={{ boxShadow: "2px 2px #eee" }} />
         </TabList>
         <Box textAlign="center" sx={{ marginTop: "10px" }}>
           <Typography variant="h5">รายการอาหารที่สั่ง</Typography>
@@ -173,7 +174,7 @@ const OrderItem = ({
           </Typography>
         </Box>
         <TabPanel
-          value="1"
+          value="E"
           sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
         >
           {OrderEList && OrderEList.map((product) => {
@@ -203,7 +204,7 @@ const OrderItem = ({
           )}
         </TabPanel>
         <TabPanel
-          value="2"
+          value="T"
           sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
         >
           {OrderTList && OrderTList.map((product) => {
@@ -230,7 +231,7 @@ const OrderItem = ({
           )}
         </TabPanel>
         <TabPanel
-          value="3"
+          value="D"
           sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
         >
           {OrderDList && OrderDList.map((product) => {

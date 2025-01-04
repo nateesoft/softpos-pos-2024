@@ -85,7 +85,8 @@ const CustomerCheckin = (props) => {
                                 ...appData, tableInfo: {
                                     ...appData.tableInfo,
                                     customerCount: custCount,
-                                    customerName: customerName
+                                    customerName: customerName,
+                                    orderType: orderType
                                 }
                             })
                             navigate(`/sale/${tableNo}`)

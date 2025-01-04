@@ -75,6 +75,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const ProductMenu = ({
     tableNo,
+    orderType,
     ProductList,
     ProductA, ProductB, ProductC, ProductD, ProductE, ProductF,
     OrderList, OrderEList, OrderTList, OrderDList,
@@ -84,7 +85,7 @@ const ProductMenu = ({
     const { t } = useTranslation("global")
     const matches = useMediaQuery('(min-width:1024px)');
     const { appData } = useContext(POSContext)
-    const { empCode, macno, userLogin } = appData
+    const { empCode, macno, userLogin, tableInfo } = appData
 
     const [value, setValue] = useState(0)
     const [open, setOpen] = useState(false)
@@ -121,7 +122,13 @@ const ProductMenu = ({
     const addOrder = async (qty, product) => {
         apiClient
           .post(`/api/balance`, {
-            tableNo, menuInfo: product, qty, macno, userLogin, empCode
+            tableNo, 
+            menuInfo: product,
+            etdType: orderType, 
+            qty, 
+            macno, 
+            userLogin, 
+            empCode
           })
           .then((response) => {
             initLoadMenu()
@@ -137,6 +144,7 @@ const ProductMenu = ({
             .post(`/api/balance`, {
                 tableNo,
                 menuInfo: product,
+                etdType: orderType,
                 qty: 1,
                 macno,
                 userLogin,
@@ -169,6 +177,7 @@ const ProductMenu = ({
         await apiClient.post(`/api/balance/addList`, {
             listBalance: optionalList,
             tableNo,
+            etdType: orderType,
             macno,
             userLogin,
             empCode,
