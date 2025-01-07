@@ -62,6 +62,7 @@ const AnimatedRoutes = () => {
         localStorage.setItem("userLogin", "")
         localStorage.setItem("posuser", null)
         if(window.location.pathname !== '/'){
+            localStorage.setItem('backLink', window.location.pathname)
             window.location.href = '/'
         }
     }

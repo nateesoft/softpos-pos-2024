@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const CreditFileService = require('../../../services/CreditFileService');
-const { getTempCredit, createListTempCredit } = require('../../../services/TCreditService');
+const { getTempCredit, createListTempCredit, deleteTempCredit, emptyTempCredit, createTempCredit } = require('../../../services/TCreditService');
 
 router.get('/', function (req, res) {
   CreditFileService.getData()
@@ -25,9 +25,9 @@ router.get('/:CrCode', function (req, res) {
     })
 });
 
-router.get('/temp/:macno', function (req, res) {
-  const { macno } = req.params
-  getTempCredit(macno)
+router.get('/temp/:macno/:tableNo', function (req, res) {
+  const { macno, tableNo } = req.params
+  getTempCredit(macno, tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -37,8 +37,39 @@ router.get('/temp/:macno', function (req, res) {
 });
 
 router.post('/temp', function (req, res) {
+  createTempCredit(req.body)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.post('/temp/list', function (req, res) {
   const { payload } = req.body
   createListTempCredit(payload)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.post('/temp/delete', function (req, res) {
+  deleteTempCredit(req.body)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.post('/temp/empty', function (req, res) {
+  const { Mac_No } = req.body
+  emptyTempCredit(Mac_No)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

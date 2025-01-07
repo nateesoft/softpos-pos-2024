@@ -11,6 +11,7 @@ const { getPOSConfigSetup } = require('./POSConfigSetupService');
 const { updateRefundMember, updateMemberData } = require('./member/crm/MemberMasterService');
 const { getMoment } = require('../utils/MomentUtil');
 const { summaryBalance } = require('./CoreService');
+const { createListCredit, deleteTempCredit, deleteListTempCredit } = require('./TCreditService');
 
 const getAllBillNoToday = async () => {
     const sql = `select * from billno where B_OnDate='${getMoment().format('YYYY-MM-DD')}'`;
@@ -154,7 +155,7 @@ const addNewBill = async (payload) => {
     const {
         macno, empCode, tableNo, billType, tonAmount, netTotal,
         memberInfo, cashInfo, creditInfo, transferInfo, discountInfo, serviceInfo,
-        branchInfo, B_Entertain, B_UserEntertain, B_Earnest
+        branchInfo, B_Entertain, B_UserEntertain, B_Earnest, creditList
     } = payload
     const { Code: branchCode } = branchInfo
     const tableFile = await getTableByCode(tableNo)
@@ -173,7 +174,7 @@ const addNewBill = async (payload) => {
     const {
         transferAmount,
     } = transferInfo
-    const {} = discountInfo
+    const { } = discountInfo
 
     // summary before create billno
     const curdate = getMoment().format('YYYY-MM-DD')
@@ -334,6 +335,12 @@ const addNewBill = async (payload) => {
         // save t_sale list
         await addDataFromBalance(B_Table, B_Refno, allBalance)
 
+        if (creditAmount > 0) {
+            // update credit file
+            await createListCredit(creditList, B_Refno, B_Cashier)
+            await deleteListTempCredit(creditList, tableNo)
+        }
+
         // // update promotion
         // await updateProSerTable(B_Table, allBalance);
 
@@ -429,16 +436,16 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
 const createNewBalanceFromTSale = async (tSale) => {
     const newRDate = getMoment().format('YYYY-MM-DD')
     const newRTime = getMoment().format('HH:mm:ss')
-    const { R_Index,R_Refno,R_Table,R_Date,R_Time,MacNo,Cashier,R_Emp,R_PluCode,R_PName,R_Unit,R_Group,R_Status,R_Normal,
-        R_Discount,R_Service,R_Stock,R_Set,R_Vat,R_Type,R_ETD,R_Quan,R_Price,R_Total,R_PrType,R_PrCode,R_PrDisc,R_PrBath,
-        R_PrAmt,R_PrCuType,R_PrCuCode,R_PrCuQuan,R_PrCuAmt,R_Redule,R_DiscBath,R_PrAdj,R_PreDisAmt,R_NetTotal,R_Kic,
-        R_KicPrint,R_Refund,VoidMsg,R_Void,R_VoidUser,R_VoidTime,StkCode,PosStk,R_ServiceAmt,R_PrChkType,R_PrQuan,
-        R_PrSubType,R_PrSubCode,R_PrSubQuan,R_PrSubDisc,R_PrSubBath,R_PrSubAmt,R_PrSubAdj,R_PrCuDisc,R_PrCuBath,
-        R_PrCuAdj,R_PrChkType2,R_PrQuan2,R_PrType2,R_PrCode2,R_PrDisc2,R_PrBath2,R_PrAmt2,R_PrAdj2,R_PItemNo,
-        R_PKicQue,R_PrVcType,R_PrVcCode,R_PrVcAmt,R_PrVcAdj,R_MoveFlag,R_Pause,R_SPIndex,R_LinkIndex,R_VoidPause,
-        R_SetPrice,R_SetDiscAmt,R_MoveItem,R_MoveFrom,R_MoveUser,R_Opt9,R_Opt1,R_Opt2,R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8,
-        R_PrintItemBill,R_CountTime,R_Return,R_Earn,R_EarnNo,R_NetDiff,R_SendOnline,R_BranchCode,R_CardPay } = tSale
-    const newBalance = {...tSale}
+    const { R_Index, R_Refno, R_Table, R_Date, R_Time, MacNo, Cashier, R_Emp, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal,
+        R_Discount, R_Service, R_Stock, R_Set, R_Vat, R_Type, R_ETD, R_Quan, R_Price, R_Total, R_PrType, R_PrCode, R_PrDisc, R_PrBath,
+        R_PrAmt, R_PrCuType, R_PrCuCode, R_PrCuQuan, R_PrCuAmt, R_Redule, R_DiscBath, R_PrAdj, R_PreDisAmt, R_NetTotal, R_Kic,
+        R_KicPrint, R_Refund, VoidMsg, R_Void, R_VoidUser, R_VoidTime, StkCode, PosStk, R_ServiceAmt, R_PrChkType, R_PrQuan,
+        R_PrSubType, R_PrSubCode, R_PrSubQuan, R_PrSubDisc, R_PrSubBath, R_PrSubAmt, R_PrSubAdj, R_PrCuDisc, R_PrCuBath,
+        R_PrCuAdj, R_PrChkType2, R_PrQuan2, R_PrType2, R_PrCode2, R_PrDisc2, R_PrBath2, R_PrAmt2, R_PrAdj2, R_PItemNo,
+        R_PKicQue, R_PrVcType, R_PrVcCode, R_PrVcAmt, R_PrVcAdj, R_MoveFlag, R_Pause, R_SPIndex, R_LinkIndex, R_VoidPause,
+        R_SetPrice, R_SetDiscAmt, R_MoveItem, R_MoveFrom, R_MoveUser, R_Opt9, R_Opt1, R_Opt2, R_Opt3, R_Opt4, R_Opt5, R_Opt6, R_Opt7, R_Opt8,
+        R_PrintItemBill, R_CountTime, R_Return, R_Earn, R_EarnNo, R_NetDiff, R_SendOnline, R_BranchCode, R_CardPay } = tSale
+    const newBalance = { ...tSale }
     newBalance.FieldName = 0
     newBalance.R_Serve = ''
     newBalance.R_PrintOK = ''

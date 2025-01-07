@@ -70,13 +70,20 @@ const Login = () => {
 
             localStorage.setItem("userLogin", user)
             localStorage.setItem("posuser", JSON.stringify(response.data.data))
-            setAppData({ ...appData, 
-              userLogin: user, 
+            setAppData({
+              ...appData,
+              userLogin: user,
               posuser: JSON.stringify(response.data.data),
               branchInfo,
               companyInfo
             })
-            navigate("/floorplan")
+            const backLink = localStorage.getItem('backLink')
+            if (backLink) {
+              localStorage.removeItem('backLink')
+              navigate(backLink)
+            } else {
+              navigate("/floorplan")
+            }
           } else {
             handleNotification("ข้อมูลผู้ใช้งาน Username/ Pasword ไม่ถูกต้อง !!!", "warning")
           }

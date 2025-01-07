@@ -1,14 +1,15 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Grid2, Modal, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid2, IconButton, InputBase, Modal, Paper, TextField, Typography } from "@mui/material";
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
-import Grid from '@mui/material/Grid2'
 import DiscountIcon from '@mui/icons-material/Discount';
 import CloseIcon from '@mui/icons-material/Close';
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 
 import apiClient from '../../httpRequest'
 import { POSContext } from "../../AppContext";
@@ -20,7 +21,17 @@ const NumFormat = data => {
     return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
-const normalButton = { bgcolor: "#123456", color: "white", fontWeight: "bold", fontSize: "36px", borderRadius: "10px" }
+const normalButton = { 
+    background: "radial-gradient(circle, #123456, #000)", 
+    color: "white", 
+    fontWeight: "bold", 
+    fontSize: "36px", 
+    borderRadius: "10px",
+    '&:hover': {
+        background: "radial-gradient(circle, orange, #000)"
+    }
+
+}
 const modalStyle = {
     position: "absolute",
     top: "50%",
@@ -81,6 +92,9 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     // display
     const [netTotalDisplay, setNetTotalDisplay] = useState(0)
 
+    // credit list
+    const [creditTempList, setCreditTempList] = useState([])
+
     const navigate = useNavigate();
     const handleBackPage = () => {
         navigate(`/sale/${tableNo}`);
@@ -133,9 +147,9 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
 
     const totalAmount = useCallback(() => {
         const cc = cashAmount ? parseFloat(cashAmount) : 0
-        const cd = creditAmount ? parseFloat(creditAmount - creditChargeAmount) : 0
+        const cd = creditAmount ? parseFloat(creditAmount) : 0
         const ta = transferAmount ? parseFloat(transferAmount) : 0
-        const totalNetAmt = parseFloat(R_NetTotal) + creditChargeAmount
+        const totalNetAmt = parseFloat(R_NetTotal) + parseFloat(creditChargeAmount)
         const paymentAmt = parseFloat(cc + cd + ta + depositAmount + entertainAmount)
         const discountAmt = 0
         let balanceAmt = parseFloat((paymentAmt - discountAmt) - totalNetAmt)
@@ -169,7 +183,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
         }
         setPaymentAmount(paymentAmt)
         setDiscountAmount(discountAmt)
-        setNetTotalDisplay((R_NetTotal + creditChargeAmount) - paymentAmt)
+        setNetTotalDisplay(R_NetTotal - paymentAmt)
     }, [cashAmount, depositAmount, entertainAmount, creditAmount, transferAmount, R_NetTotal])
 
     const handleClear = () => {
@@ -252,6 +266,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                     creditChargeAmount,
                     creditAmount
                 },
+                creditList: creditTempList,
                 transferInfo: {
                     transferAmount,
                     transferAccountNo,
@@ -321,8 +336,8 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
     }, [totalAmount])
 
     return (
-        <Grid container spacing={2} display="flex" direction="column" sx={{ padding: "10px" }}>
-            <Grid size={12}>
+        <Grid2 container spacing={2} display="flex" direction="column" sx={{ padding: "10px" }}>
+            <Grid2 size={12}>
                 <Box display="flex" sx={{ padding: "20px", backgroundColor: "salmon", border: "2px solid gray", borderRadius: "10px" }} justifyContent="space-between">
                     {netTotalDisplay > 0 && <Typography variant="h3" sx={{ fontWeight: "bold", color: "#444" }}>TOTAL</Typography>}
                     {netTotalDisplay <= 0 && <Typography variant="h3" sx={{ fontWeight: "bold", color: "#444" }}>TON</Typography>}
@@ -330,37 +345,45 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                         {NumFormat(netTotalDisplay > 0 ? netTotalDisplay : Math.abs(netTotalDisplay))}
                     </Typography>
                 </Box>
-            </Grid>
-            <Grid size={12}>
-                <Grid container spacing={2} display="flex" direction="row">
-                    <Grid size={6}>
-                        <Paper elevation={3} sx={{ padding: "10px" }}>
-                            <Box display="flex" justifyContent="space-between" margin={2}>
-                                <TextField
-                                    type="number"
-                                    value={depositAmount}
-                                    onFocus={() => setComponentFocus("deposit")}
-                                    onChange={e => handleDepositAmountKeyIn(e.target.value)}
-                                    id="txtDepositAmount"
-                                    label="หักคืนเงินมัดจำ"
-                                    sx={{ backgroundColor: componentFocus === "deposit" ? "#f5fff3" : "" }}
-                                    fullWidth
-                                    inputProps={{ min: 0, style: { textAlign: "right" } }} />
-                            </Box>
-                            <Box display="flex" justifyContent="space-between" margin={2}>
-                                <TextField
-                                    type="number"
-                                    value={entertainAmount}
-                                    onFocus={() => setComponentFocus("entertain")}
-                                    onChange={e => handleEntertainAmountKeyIn(e.target.value)}
-                                    id="txtEntertainAmount"
-                                    label="ชำระแบบ Entertain"
-                                    sx={{ backgroundColor: componentFocus === "entertain" ? "#f5fff3" : "" }}
-                                    fullWidth
-                                    inputProps={{ min: 0, style: { textAlign: "right" } }} />
-                            </Box>
-                            <Box display="flex" justifyContent="space-between" margin={2}>
-                                <img width={48} height={48} src={"/images/payment/cash.png"} alt="" style={{ marginRight: "8px" }} />
+            </Grid2>
+            <Grid2 size={12}>
+                <Grid2 container spacing={2} display="flex" direction="row">
+                    <Grid2 size={6}>
+                        <Paper elevation={3} sx={{ padding: "3px" }}>
+                            <Grid2 container spacing={2} padding={2} justifyContent="s">
+                                <Grid2 container>
+                                    <IconButton sx={{ border: "1px solid" }}>
+                                        <KeyboardReturnIcon fontSize="medium" />
+                                    </IconButton>
+                                    <TextField
+                                        type="number"
+                                        variant="filled"
+                                        value={depositAmount}
+                                        onFocus={() => setComponentFocus("deposit")}
+                                        onChange={e => handleDepositAmountKeyIn(e.target.value)}
+                                        id="txtDepositAmount"
+                                        label="หักคืนเงินมัดจำ"
+                                        sx={{ backgroundColor: componentFocus === "deposit" ? "#f5fff3" : "", width: "140px" }}
+                                        inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                                    <TextField
+                                        type="number"
+                                        variant="filled"
+                                        value={entertainAmount}
+                                        onFocus={() => setComponentFocus("entertain")}
+                                        onChange={e => handleEntertainAmountKeyIn(e.target.value)}
+                                        id="txtEntertainAmount"
+                                        label="ชำระแบบ Entertain"
+                                        sx={{ backgroundColor: componentFocus === "entertain" ? "#f5fff3" : "", width: "140px" }}
+                                        inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                                    <IconButton sx={{ border: "1px solid" }}>
+                                        <VideogameAssetIcon fontSize="large" />
+                                    </IconButton>
+                                </Grid2>
+                            </Grid2>
+                            <Grid2 container spacing={1} padding={1}>
+                                <IconButton>
+                                    <img width={48} height={48} src={"/images/payment/cash.png"} alt="" />
+                                </IconButton>
                                 <TextField
                                     type="number"
                                     value={cashAmount}
@@ -369,46 +392,40 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                     id="txtCashAmount"
                                     label="ชำระด้วยเงินสด"
                                     sx={{ backgroundColor: componentFocus === "cash" ? "#f5fff3" : "" }}
-                                    fullWidth
                                     inputProps={{ min: 0, style: { textAlign: "right" } }} />
-                            </Box>
-                            <Box display="flex" justifyContent="space-between" margin={2}>
-                                <Grid2 container spacing={1}>
+                            </Grid2>
+                            <Grid2 container spacing={1} padding={1}>
+                                <IconButton>
                                     <img width={48} src={"/images/payment/banking_money.png"} alt="" />
-                                    <TextField
-                                        type="number"
-                                        value={transferAmount}
-                                        onChange={e => setTransferAmount(e.target.value)}
-                                        id="txtTransferAmount"
-                                        label="เงินโอน"
-                                        disabled
-                                        inputProps={{ min: 0, style: { textAlign: "right", width: "100px" } }} />
-                                    <Button variant="outlined" onClick={handleTransferEnabled}>...</Button>
-                                </Grid2>
-                            </Box>
-                            <Box display="flex" justifyContent="space-between" margin={2}>
-                                <Grid2 container spacing={1} justifyContent="space-between">
+                                </IconButton>
+                                <TextField
+                                    type="number"
+                                    value={transferAmount}
+                                    onChange={e => setTransferAmount(e.target.value)}
+                                    id="txtTransferAmount"
+                                    label="เงินโอน"
+                                    disabled
+                                    inputProps={{ min: 0, style: { textAlign: "right", width: "100px" } }} />
+                                <Button variant="outlined" onClick={handleTransferEnabled} sx={{ height: "55px" }}>...</Button>
+                            </Grid2>
+                            <Grid2 container spacing={1} padding={1}>
+                                <IconButton>
                                     <img width={48} src={"/images/payment/credit-card.png"} alt="" />
-                                    <TextField
-                                        value={NumFormat(creditAmount - creditChargeAmount)}
-                                        id="txtCreditAmount"
-                                        label="ชำระด้วยบัตรเครดิต"
-                                        disabled
-                                        inputProps={{ min: 0, style: { textAlign: "right", width: "100px" } }} />
-                                    <Button variant="outlined" onClick={handleCreditEnabled}>...</Button>
-                                </Grid2>
-                            </Box>
-                            <Box display="flex" justifyContent="space-between" margin={2}>
-                                <Grid2 container spacing={1} justifyContent="space-between">
-                                    <PriceChangeIcon fontSize="large" sx={{ width: "48px" }} />
-                                    <TextField
-                                        value={NumFormat(creditChargeAmount)}
-                                        id="txtCreditAmount"
-                                        label="Credit Charge Amount"
-                                        disabled
-                                        inputProps={{ min: 0, style: { textAlign: "right", width: "100px" } }} />
-                                </Grid2>
-                            </Box>
+                                </IconButton>
+                                <TextField
+                                    value={NumFormat(creditAmount)}
+                                    id="txtCreditAmount"
+                                    label="ชำระด้วยบัตรเครดิต"
+                                    disabled
+                                    inputProps={{ min: 0, style: { textAlign: "right", width: "100px" } }} />
+                                <TextField
+                                    value={NumFormat(creditChargeAmount)}
+                                    id="txtCreditAmount"
+                                    label="Credit Charge"
+                                    disabled
+                                    inputProps={{ min: 0, style: { textAlign: "right", width: "100px" } }} />
+                                <Button variant="outlined" onClick={handleCreditEnabled} sx={{ height: "55px" }}>...</Button>
+                            </Grid2>
                             <Box display="flex" justifyContent="flex-end" margin={2}>
                                 <TextField
                                     variant="filled"
@@ -418,9 +435,9 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                     fullWidth
                                     disabled />
                             </Box>
-                            <Grid container spacing={2} margin={2} display="flex" justifyContent="center">
+                            <Grid2 container spacing={2} margin={2} display="flex" justifyContent="center">
                                 <Button variant="outlined" fullWidth startIcon={<DiscountIcon />} disabled>ให้ส่วนลดเพิ่ม</Button>
-                            </Grid>
+                            </Grid2>
                             <Box display="flex" justifyContent="flex-end" margin={2}>
                                 <TextField
                                     variant="filled"
@@ -440,27 +457,17 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                     fullWidth
                                     disabled />
                             </Box>
-                            <Box display="flex" justifyContent="flex-end" margin={2}>
-                                <TextField
-                                    variant="filled"
-                                    label="เงินทอน"
-                                    type="number"
-                                    value={tonAmount}
-                                    inputProps={{ min: 0, style: { textAlign: "right", fontSize: "22px", fontWeight: "bold" } }}
-                                    fullWidth
-                                    disabled />
-                            </Box>
                         </Paper>
-                    </Grid>
-                    <Grid size={6}>
-                        <Grid container spacing={2}>
-                            <Grid size={12}>
+                    </Grid2>
+                    <Grid2 size={6}>
+                        <Grid2 container spacing={2}>
+                            <Grid2 size={12}>
                                 <table width="100%">
                                     <tr>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(7)}>7</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(8)}>8</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(9)}>9</Button></td>
-                                        <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "yellow", color: "black" }} fullWidth>+</Button></td>
+                                        <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "yellow", color: "white" }} fullWidth>+</Button></td>
                                     </tr>
                                 </table>
                                 <table width="100%">
@@ -468,7 +475,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(4)}>4</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(5)}>5</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(6)}>6</Button></td>
-                                        <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "red", color: "black" }} fullWidth>-</Button></td>
+                                        <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "red", color: "white" }} fullWidth>-</Button></td>
                                     </tr>
                                 </table>
                                 <table width="100%">
@@ -476,7 +483,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(1)}>1</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(2)}>2</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(3)}>3</Button></td>
-                                        <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "orange", color: "black" }} fullWidth>x</Button></td>
+                                        <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "orange", color: "white" }} fullWidth>x</Button></td>
                                     </tr>
                                 </table>
                                 <table width="100%">
@@ -486,25 +493,19 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         <td colSpan={2}><Button variant="contained" sx={{ ...normalButton, bgcolor: "green", color: "white" }} fullWidth onClick={handleClear}>clear</Button></td>
                                     </tr>
                                 </table>
-                            </Grid>
-                            <Grid size={12}>
-                                <Grid container spacing={2}>
-                                    <Grid size={6}>
-                                        <img src="/images/payment/m1000.png" width={160} style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} onClick={() => handleAdd(1000)} alt="" />
-                                    </Grid>
-                                    <Grid size={6}>
-                                        <img src="/images/payment/m500.png" width={160} style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} onClick={() => handleAdd(500)} alt="" />
-                                    </Grid>
-                                    <Grid size={6}>
-                                        <img src="/images/payment/m100.png" width={160} style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} onClick={() => handleAdd(100)} alt="" />
-                                    </Grid>
-                                    <Grid size={6}>
-                                        <img src="/images/payment/m50.png" width={160} style={{ border: "1px solid gray", borderRadius: "2px", boxShadow: "1px 2px" }} onClick={() => handleAdd(50)} alt="" />
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid size={12}>
-                                <Box sx={{ marginTop: "30px" }} textAlign="center">
+                            </Grid2>
+                            <Grid2 size={12}>
+                                <Grid2 container spacing={2} justifyContent="space-evenly">
+                                    <Grid2 size={6}>
+                                        <img src="/images/payment/m1000.png" width="100%" style={{ border: "1px solid gray" }} onClick={() => handleAdd(1000)} alt="" />
+                                    </Grid2>
+                                    <Grid2 size={6}><img src="/images/payment/m500.png" width="100%" style={{ border: "1px solid gray" }} onClick={() => handleAdd(500)} alt="" /></Grid2>
+                                    <Grid2 size={6}><img src="/images/payment/m100.png" width="100%" style={{ border: "1px solid gray" }} onClick={() => handleAdd(100)} alt="" /></Grid2>
+                                    <Grid2 size={6}><img src="/images/payment/m50.png" width="100%" style={{ border: "1px solid gray" }} onClick={() => handleAdd(50)} alt="" /></Grid2>
+                                </Grid2>
+                            </Grid2>
+                            <Grid2 size={12}>
+                                <Box textAlign="center">
                                     <Button variant="contained" sx={{ margin: "5px" }} color="primary" startIcon={<ArrowBack />} onClick={handleBackPage}></Button>
                                     <Button variant="contained" sx={{ margin: "5px", backgroundColor: "#aaa", color: "black" }}
                                         startIcon={<ReceiptIcon />}
@@ -520,27 +521,30 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         disabled={balanceAmount < 0}
                                         endIcon={<ConfirmIcon />}>ชำระเงิน</Button>
                                 </Box>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
+                            </Grid2>
+                        </Grid2>
+                    </Grid2>
+                </Grid2>
+            </Grid2>
             <Modal open={openCreditInfo}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle, width: "650px", padding: "5px" }}>
                     <MultipleCreditPayment
                         tableNo={tableNo}
-                        balanceAmount={balanceAmount}
-                        setTotalCreditAmount={setCreditAmount}
-                        onClose={() => setOpenCreditInfo(false)} />
+                        balanceAmount={R_NetTotal + creditChargeAmount}
+                        setCreditAmt={setCreditAmount}
+                        setCreditChargeAmt={setCreditChargeAmount}
+                        totalAmount={totalAmount}
+                        onClose={() => setOpenCreditInfo(false)}
+                        setCreditTempList={setCreditTempList} />
                 </Box>
             </Modal>
             <Modal open={openTransferInfo}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description">
                 <Box sx={{ ...modalStyle, width: "350px", padding: "5px" }}>
-                    <Grid container spacing={2} padding={2} justifyContent="center" direction="column">
+                    <Grid2 container spacing={2} padding={2} justifyContent="center" direction="column">
                         <TextField variant="outlined" label="เลขที่บัญชีที่โอน" value={transferAccountNo} onChange={e => setTransferAccountNo(e.target.value)} />
                         <TextField variant="outlined" label="ชื่อบัญชีที่โอน" value={transferAccount} onChange={e => setTransferAccount(e.target.value)} />
                         <TextField variant="outlined" type="number" label="จำนวนเงิน" value={transferAmount} onChange={e => handleTransferKeyIn(e.target.value)} />
@@ -551,7 +555,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                 onChange={e => setTransferToAccount(e.target.value)} fullWidth
                             />
                         </Box>
-                    </Grid>
+                    </Grid2>
                     <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center">
                         <QrCodeGenerator mobileNumber={transferToAccount} amount={transferAmount} />
                         <Typography>ยอดเงินโอน {transferAmount}</Typography>
@@ -571,7 +575,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                     />
                 </Box>
             </Modal>
-        </Grid>
+        </Grid2>
     );
 }
 

@@ -32,15 +32,17 @@ const modalStyle = {
 
 const floatFormat = data => data.toFixed(2)
 
-const MultipleCreditPayment = ({ balanceAmount, onClose, setTotalCreditAmount, tableNo }) => {
+const MultipleCreditPayment = props => {
+    const { balanceAmount, onClose, setCreditAmt, setCreditChargeAmt, 
+        tableNo, totalAmount, setCreditTempList } = props
     const { appData } = useContext(POSContext)
     const { macno } = appData
-
-    const [balanceAmountForm, setBalanceAmountForm] = useState(Math.abs(balanceAmount))
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [creditList, setCreditList] = useState([])
+
+    const [balanceForm, setBalanceForm] = useState(Math.abs(balanceAmount))
 
     // credit info
     const [crCode, setCrCode] = useState("")
@@ -59,9 +61,16 @@ const MultipleCreditPayment = ({ balanceAmount, onClose, setTotalCreditAmount, t
     const [openCreditFile, setOpenCreditFile] = useState(false)
 
     const handleShowOpenCreditFile = () => {
-        setCreditAmount(0)
+        // clear form
+        setCrCodeError("")
+        setCreditNumberError("")
         setCrCode("")
+        setCreditNumber("")
+        setCreditRef("")
+
+        setCreditAmount(0)
         setCreditChargeAmount(0)
+
         setOpenCreditFile(true)
     }
 
@@ -69,27 +78,18 @@ const MultipleCreditPayment = ({ balanceAmount, onClose, setTotalCreditAmount, t
         setCrCodeError("")
         setCreditNumberError("")
 
-        onClose()
+        handleConfirmCreditModal()
     }
 
     const handleConfirmCreditModal = () => {
-        if (creditList.length > 0) {
-            // create temp creditfile
-            apiClient.post(`/api/creditfile/temp`, { payload: creditList })
-                .then(response => {
-                    if (response.status === 200) {
-                        const summaryCreditAmt = creditList.reduce((n, {CrCreditAmount}) => n + parseFloat(CrCreditAmount), 0)
-                        setTotalCreditAmount(summaryCreditAmt)
-                        onClose()
-                    } else {
-                        // handleNotification("พบข้อผิดพลาดในการบันทึกข้อมูลบัตรเดรดิต!")
-                    }
-                })
-                .catch(err => {
-                    // handleNotification(err.message)
-                })
-            
-        }
+        const summaryCreditAmt = creditList.reduce((n, { CrCreditAmount }) => n + parseFloat(CrCreditAmount), 0)
+        const summaryChargeAmt = creditList.reduce((n, { CrChargeAmount }) => n + parseFloat(CrChargeAmount), 0)
+        setCreditAmt(summaryCreditAmt-summaryChargeAmt)
+        setCreditChargeAmt(summaryChargeAmt)
+        setCreditTempList(creditList)
+
+        totalAmount()
+        onClose()
     }
 
     const handleCreditInfoSelect = (cInfo) => {
@@ -98,10 +98,9 @@ const MultipleCreditPayment = ({ balanceAmount, onClose, setTotalCreditAmount, t
         setCreditRef("")
         setCreditChargePercent(cInfo.crCharge)
 
-        const chargeAmt = cInfo.crCharge * Math.abs(balanceAmountForm) / 100
-        const creditAmt = chargeAmt + Math.abs(balanceAmountForm)
+        const chargeAmt = cInfo.crCharge * Math.abs(balanceForm) / 100
+        const creditAmt = chargeAmt + Math.abs(balanceForm)
         setCreditChargeAmount(chargeAmt)
-        setBalanceAmountForm(d => d + chargeAmt)
         setCreditAmount(creditAmt)
     }
 
@@ -123,75 +122,101 @@ const MultipleCreditPayment = ({ balanceAmount, onClose, setTotalCreditAmount, t
             return;
         }
 
-        if (crCode && creditNumber && creditRef && creditAmount && creditAmount > 0) {
-            const newCreditList = [...creditList];
-            newCreditList.push({
-                MacNo: macno,
-                RefNo: tableNo,
-                Terminal: macno,
-                CrCode: crCode,
-                CrNumber: creditNumber,
-                CrApprove: creditRef,
-                CrChargePercent: creditChargePercent,
-                CrChargeAmount: creditChargeAmount,
-                CrCreditAmount: creditAmount,
-            })
-
-            // clear form
-            setCrCode("")
-            setCreditNumber("")
-            setCreditRef("")
-            setCreditChargePercent(0)
-            setCreditChargeAmount(0)
-            setCreditAmount(0)
-            setCreditList(newCreditList)
-            setBalanceAmountForm(d => d - creditAmount)
-
-            // clear validate
-            setCrCodeError('')
-            setCreditNumberError('')
-            setCreditRefError('')
-            setCreditAmountError('')
+        const checkExistCredit = creditList.filter(item => item.CrCode === crCode)
+        if (checkExistCredit.length > 0) {
+            setCrCodeError('บันทึกข้อมูลบัตรเครดิตซ้ำ !')
+            return;
         }
+
+        apiClient.post(`/api/creditfile/temp`, {
+            MacNo: macno,
+            RefNo: tableNo,
+            Terminal: macno,
+            CrCode: crCode,
+            CrNumber: creditNumber,
+            CrApprove: creditRef,
+            CrChargePercent: creditChargePercent,
+            CrChargeAmount: creditChargeAmount,
+            CrCreditAmount: creditAmount,
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    // clear form
+                    setCrCode("")
+                    setCreditNumber("")
+                    setCreditRef("")
+                    setCreditChargePercent(0)
+                    setCreditChargeAmount(0)
+                    setCreditAmount(0)
+
+                    // clear validate
+                    setCrCodeError('')
+                    setCreditNumberError('')
+                    setCreditRefError('')
+                    setCreditAmountError('')
+
+                    loadCreditListData()
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     const handleCreditAmountBalance = (amt) => {
         setCreditAmount(amt)
     }
 
-    const removeCreditRow = (CrCode, amt) => {
-        const newCreditList = creditList.filter(i => i.CrCode !== CrCode)
-        setCreditList(newCreditList)
-        const newBalanceAmount = newCreditList.reduce((n, {CrCreditAmount}) => n + parseFloat(CrCreditAmount), 0)
-        setBalanceAmountForm(newBalanceAmount)
+    const removeCreditRow = ({ CrCode }) => {
+        apiClient.post(`/api/creditfile/temp/delete`, {
+            Terminal: macno,
+            Ref_No: tableNo,
+            CrCode: CrCode
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    loadCreditListData()
+                }
+            })
+            .catch(err => {
+
+            })
     }
 
     const loadCreditListData = () => {
-        apiClient.get(`/api/creditfile/temp/${macno}`)
-        .then(response => {
-            if (response.status === 200) {
-                const arrList = response.data.data
-                setCreditList(arrList.map(item => {
-                    return {
-                        MacNo: item.Mac_No,
-                        RefNo: item.RefNo,
-                        Terminal: item.Ref_No,
-                        CrCode: item.CrCode,
-                        CrNumber: item.CrId,
-                        CrApprove: item.CrApp,
-                        CrChargePercent: item.CrCharge,
-                        CrChargeAmount: item.CrChargeAmount,
-                        CrCreditAmount: item.CrAmt,
+        apiClient.get(`/api/creditfile/temp/${macno}/${tableNo}`)
+            .then(response => {
+                if (response.status === 200) {
+                    const arrList = response.data.data
+                    const summaryCreditAmt = arrList.reduce((n, { CrAmt }) => n + parseFloat(CrAmt), 0)
+                    const summaryChargeAmt = arrList.reduce((n, { CrChargeAmount }) => n + parseFloat(CrChargeAmount), 0)
+                    if (summaryCreditAmt + summaryChargeAmt === 0) {
+                        setBalanceForm(balanceAmount)
+                    } else {
+                        setBalanceForm(Math.abs(balanceAmount) - (summaryCreditAmt - summaryChargeAmt))
                     }
-                }))
-            }
-        })
-        .catch(err => {
-            // handleNotification(err.message)
-        })
+
+                    setCreditList(arrList.map(item => {
+                        return {
+                            MacNo: item.Mac_No,
+                            RefNo: item.RefNo,
+                            Terminal: item.Ref_No,
+                            CrCode: item.CrCode,
+                            CrNumber: item.CrId,
+                            CrApprove: item.CrApp,
+                            CrChargePercent: item.CrCharge,
+                            CrChargeAmount: item.CrChargeAmount,
+                            CrCreditAmount: item.CrAmt,
+                        }
+                    }))
+                }
+            })
+            .catch(err => {
+                // handleNotification(err.message)
+            })
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         loadCreditListData()
     }, [])
 
@@ -201,54 +226,53 @@ const MultipleCreditPayment = ({ balanceAmount, onClose, setTotalCreditAmount, t
                 <Grid2>
                     <Grid2 container spacing={1} padding={1} justifyContent="space-between">
                         <div>
-                            <TextField 
+                            <TextField
                                 required
                                 error
                                 disabled
-                                sx={{ marginRight: "5px" }} 
-                                variant="outlined" 
-                                label="CrCode" 
-                                value={crCode} 
+                                sx={{ marginRight: "5px" }}
+                                variant="outlined"
+                                label="CrCode"
+                                value={crCode}
                                 helperText={crCodeError}
                                 onChange={e => setCrCode(e.target.value)} />
                             <Button variant="contained" onClick={() => handleShowOpenCreditFile()}>...</Button>
                         </div>
-                        <Typography sx={{color: "orange"}}>จำนวนเงินก่อนใส่ยอดเงินเดรดิต: {floatFormat(Math.abs(balanceAmount))}</Typography>
                     </Grid2>
                     <Grid2 container spacing={1} padding={1}>
-                        <TextField 
+                        <TextField
                             required
                             error
-                            variant="outlined" 
-                            label="เลขที่บัตรเครดิต" 
-                            value={creditNumber} 
-                            onChange={e => setCreditNumber(e.target.value)} 
+                            variant="outlined"
+                            label="เลขที่บัตรเครดิต"
+                            value={creditNumber}
+                            onChange={e => setCreditNumber(e.target.value)}
                             helperText={creditNumberError} />
-                        <TextField 
+                        <TextField
                             required
                             error
-                            variant="outlined" 
-                            label="approve code" 
-                            value={creditRef} 
-                            onChange={e => setCreditRef(e.target.value)} 
+                            variant="outlined"
+                            label="approve code"
+                            value={creditRef}
+                            onChange={e => setCreditRef(e.target.value)}
                             helperText={creditRefError} />
                         <TextField variant="outlined" disabled type="number" label="Credit Charge (%)" value={creditChargePercent.toFixed(2)} />
                         <TextField variant="outlined" disabled type="number" label="Charge Amount" value={creditChargeAmount.toFixed(2)} />
-                        <TextField variant="outlined" type="number" label="ยอดค้างชำระ" value={balanceAmountForm.toFixed(2)} disabled />
-                        <TextField 
+                        <TextField variant="outlined" type="number" label="ยอดค้างชำระ" value={floatFormat(Math.abs(balanceForm.toFixed(2)))} disabled />
+                        <TextField
                             required
                             error
-                            variant="outlined" 
-                            type="number" 
-                            label="จำนวนเงินที่ใส่เครดิต" 
-                            value={creditAmount} 
-                            onChange={e => handleCreditAmountBalance(e.target.value)} 
+                            variant="outlined"
+                            type="number"
+                            label="จำนวนเงินที่ใส่เครดิต"
+                            value={creditAmount}
+                            onChange={e => handleCreditAmountBalance(e.target.value)}
                             helperText={creditAmountError} />
                     </Grid2>
                 </Grid2>
                 <Grid2 container size={12} spacing={1} padding={1} justifyContent="space-between">
                     <Button variant='contained' color='success' onClick={addCreditListFile}>Add Credit</Button>
-                    <Typography sx={{color: "green"}}>คงเหลือ: {floatFormat(balanceAmountForm)}</Typography>
+                    <Typography sx={{ color: "green" }}>คงเหลือ: {floatFormat(Math.abs(balanceForm))}</Typography>
                 </Grid2>
                 <Grid2>
                     <TableContainer sx={{ maxHeight: 440 }}>
@@ -277,7 +301,7 @@ const MultipleCreditPayment = ({ balanceAmount, onClose, setTotalCreditAmount, t
                                                     if (column.id === 'action') {
                                                         return (
                                                             <TableCell>
-                                                                <IconButton onClick={() => removeCreditRow(row.CrCode, (row.CrCreditAmount+row.CrChargeAmount))}>
+                                                                <IconButton onClick={() => removeCreditRow(row)}>
                                                                     <DeleteOutlineIcon color='error' />
                                                                 </IconButton>
                                                             </TableCell>
@@ -299,7 +323,7 @@ const MultipleCreditPayment = ({ balanceAmount, onClose, setTotalCreditAmount, t
             </Grid2>
             <Box sx={{ marginTop: "30px" }} textAlign="center">
                 <Button variant="contained" sx={{ margin: "5px" }} color="error" startIcon={<CloseIcon />} onClick={handleCancelCredit}>ยกเลิก</Button>
-                <Button variant="contained" sx={{ margin: "5px" }} disabled={creditList.length === 0} onClick={handleConfirmCreditModal} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
+                <Button variant="contained" sx={{ margin: "5px" }} onClick={handleConfirmCreditModal} endIcon={<ConfirmIcon />}>ยืนยันข้อมูล</Button>
             </Box>
             <Modal open={openCreditFile} onClose={() => setOpenCreditFile(false)}>
                 <Box sx={{ ...modalStyle }}>

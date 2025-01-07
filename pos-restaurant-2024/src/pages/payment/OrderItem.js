@@ -14,23 +14,25 @@ const OrderItem = ({ tableNo, orderList, tableFile }) => {
   return (
     <Paper elevation={3} sx={{ padding: "10px", margin: "10px" }}>
       <Box sx={{ padding: "10px", borderRadius: "5px", backgroundColor: "#123456" }}>
-        <Button variant='text' sx={{ fontWeight: "bold", fontSize: "18px", color: "white" }}>Table No: {tableNo}</Button>
+        <Typography sx={{ fontWeight: "bold", fontSize: "18px", color: "white" }}>Table No: {tableNo}</Typography>
       </Box>
-      <TableContainer sx={{ width: "420px", height: "300px", overflow: "auto" }}>
-        <Table aria-label="spanning table">
-          <TableBody>
-            {orderList && orderList.map((order) => (
-              <TableRow key={order.R_Index}>
-                <TableCell sx={{ whiteSpace: "nowrap" }}>{order.R_PName}</TableCell>
-                <TableCell align="right">{order.R_Quan}</TableCell>
-                <TableCell align="right">{NumFormat(order.R_Price)}</TableCell>
-                <TableCell align="right">{NumFormat(order.R_Total)}</TableCell>
-                <TableCell align="right">{order.R_ETD}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Grid2>
+        <TableContainer sx={{overflow: 'auto', height: '368px'}}>
+          <Table aria-label="spanning table">
+            <TableBody>
+              {orderList && orderList.map((order) => (
+                <TableRow key={order.R_Index}>
+                  <TableCell sx={{ whiteSpace: "nowrap" }}>{order.R_PName}</TableCell>
+                  <TableCell align="right">{order.R_Quan}</TableCell>
+                  <TableCell align="right">{NumFormat(order.R_Price)}</TableCell>
+                  <TableCell align="right">{NumFormat(order.R_Total)}</TableCell>
+                  <TableCell align="right">{order.R_ETD}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid2>
       <Divider />
       <Box padding={2}>
         <Grid2 display="flex" justifyContent="space-between">
