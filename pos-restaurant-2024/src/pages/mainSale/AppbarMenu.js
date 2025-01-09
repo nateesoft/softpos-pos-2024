@@ -6,20 +6,19 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-// import Badge from '@mui/material/Badge';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-// import PrintIcon from '@mui/icons-material/Print';
-// import MenuOpenIcon from '@mui/icons-material/MenuBook';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import TableBarIcon from '@mui/icons-material/TableBar';
-import { Modal } from '@mui/material';
+import { Button, Menu, MenuItem, Modal } from '@mui/material';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
-import { POSContext } from '../../AppContext';
 import Moment from 'react-moment';
 import { useNavigate } from 'react-router-dom';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+
+import { POSContext } from '../../AppContext';
+import MenuSetupPage from './setupMenu/MenuSetupPage';
 
 const modalStyle = {
   position: "absolute",
@@ -75,9 +74,23 @@ export default function LeftMenu() {
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
   const menuId = 'primary-search-account-menu';
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const [open, setOpen] = useState(false)
+  const [openMenuSetup, setOpenMenuSetup] = useState(false)
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const setupMenuPage = () => {
+    setAnchorEl(null);
+    setOpenMenuSetup(true)
+  }
 
   const navigate = useNavigate()
   const backFloorPlan = () => {
@@ -86,19 +99,26 @@ export default function LeftMenu() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
+      <Menu id="basic-menu"
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}>
+        <MenuItem onClick={() => setupMenuPage()}>
+          <Box display="flex" justifyContent="center">
+            <MenuBookIcon sx={{ marginRight: "10px" }} />
+            <Typography variant='p'>Menu Setup</Typography>
+          </Box>
+        </MenuItem>
+      </Menu>
       <AppBar position="fixed" sx={{ border: "1px solid gray", bgcolor: "chocolate", borderRadius: "5px" }}>
         <Toolbar>
           <PointOfSaleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            sx={{
-              mr: 2,
-              fontWeight: 700
-            }}
-          >
+          <Button variant='text' sx={{ fontSize: "28px", color: "white" }} onClick={handleClick}>
             POS RESTUARANT
-          </Typography>
+          </Button>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -138,7 +158,7 @@ export default function LeftMenu() {
               color="inherit"
             >
               <AccountCircle />
-              <Typography sx={{fontSize: "14px"}}>{userLogin}</Typography>
+              <Typography sx={{ fontSize: "14px" }}>{userLogin}</Typography>
             </IconButton>
             <IconButton
               size="large"
@@ -149,7 +169,7 @@ export default function LeftMenu() {
               color="inherit"
             >
               <AccessTimeIcon />
-              <Typography sx={{fontSize: "14px"}}><Moment format='DD/MM/YYYY HH:mm' /></Typography>
+              <Typography sx={{ fontSize: "14px" }}><Moment format='DD/MM/YYYY HH:mm' /></Typography>
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex' } }}>
@@ -177,11 +197,12 @@ export default function LeftMenu() {
       </AppBar>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box sx={{ ...modalStyle, width: "80%", borderRadius: "10px" }}>
-          <div align="center" style={{backgroundColor: "yellow", padding: "20px", borderRadius: "10px", color: "gray", fontSize: "22px"}}>
+          <div align="center" style={{ backgroundColor: "yellow", padding: "20px", borderRadius: "10px", color: "gray", fontSize: "22px" }}>
             Special Menu 2024 ... Comming soon...
           </div>
         </Box>
       </Modal>
+      <MenuSetupPage open={openMenuSetup} setOpen={setOpenMenuSetup} />
     </Box>
   );
 }

@@ -52,7 +52,7 @@ const TotalBill = ({ orderList }) => {
         padding: "5px",
         backgroundColor: "salmon",
         border: "2px solid #eee",
-        borderRadius: "10px",
+        borderRadius: "5px",
         margin: "5px"
       }}
     >

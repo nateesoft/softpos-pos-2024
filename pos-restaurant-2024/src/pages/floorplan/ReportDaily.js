@@ -90,9 +90,12 @@ const ReportDaily = (props) => {
         <>
             <Button startIcon={<SummarizeIcon />} onClick={handleClick} sx={{ color: "snow" }}>
                 <Typography variant='h6'>
-                    รายงานการขาย ( {moment().format('DD/MM/YYYY HH:mm:ss')} )
+                    รายงานการขาย
                 </Typography>
             </Button>
+            <Typography variant='h6'>
+                    ( {moment().format('DD/MM/YYYY HH:mm:ss')} )
+                </Typography>
             <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
