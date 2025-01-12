@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useContext } from "react";
+import React, { forwardRef, useState, useCallback, useContext, useEffect } from "react";
 import { Box, Tabs, Tab, Badge, Modal, Typography, Fab, Slide, Dialog, Button, Grid2 } from "@mui/material";
 import MenuBook from '@mui/icons-material/ShoppingCartOutlined';
 import { useTranslation } from "react-i18next"
@@ -93,6 +93,8 @@ const ProductMenu = ({
     const [showMenu, setShowMenu] = useState(false)
     const [showMenuSet, setShowMenuSet] = useState(false)
     const [showManualPrice, setShowManualPrice] = useState(false)
+
+    const [menuTabs, setMenuTabs] = useState([])
 
     const [subMenuSelected, setSubMenuSelected] = useState([])
     const [msgWarning, setMsgWarning] = useState(false)
@@ -204,6 +206,19 @@ const ProductMenu = ({
         setMsgWarning(false)
     }
 
+    const initLoadMenuTab = useCallback(()=> {
+        apiClient.get(`/api/menu_tabs`)
+            .then(response => {
+                if(response.status === 200){
+                    setMenuTabs(response.data.data)
+                }
+            })
+    }, [])
+
+    useEffect(()=> {
+        initLoadMenuTab()
+    }, [])
+
     return (
         <Box sx={{ flexGrow: 1, display: 'flex', alignContent: "flex-start", marginTop: "8vh" }}>
             {matches && 
@@ -211,12 +226,7 @@ const ProductMenu = ({
                 onChange={handleChange}
                 sx={{ borderColor: 'divider', minWidth: "150px", marginTop: "5px" }}>
                 <Tab sx={tabStyle} icon={<MenuBook sx={{ color: "white" }} />} label={t("productMenu.allGroup")} />
-                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.breakfast")} />
-                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.appetizer")} />
-                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.chineseFood")} />
-                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.italianFood")} />
-                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.drink")} />
-                <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={t("productMenu.dessert")} />
+                {menuTabs && menuTabs.map(item => <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={item.tab_name_title} />)}
             </Tabs>
             }
             <TabPanel value={value} index={0}>
