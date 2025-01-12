@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getMenuSetup, getMenuSetupAll, getOptionalByMenuCode, getMenuSetupByMenuCode } = require('../../services/management/MenuSetupService');
+const { getMenuSetup, getMenuSetupAll, getOptionalByMenuCode, getMenuSetupByMenuCode, createMenuSetup, createMenuSetupRef } = require('../../services/management/MenuSetupService');
 
 router.get('/', function (req, res, next) {
   getMenuSetup()
@@ -45,5 +45,26 @@ router.get('/:menuCode', function (req, res, next) {
   })
 });
 
+router.post('/', function (req, res, next) {
+  const payload = req.body
+  createMenuSetup(payload)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.post('/list', function (req, res, next) {
+  const payload = req.body
+  createMenuSetupRef(payload)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
 
 module.exports = router;

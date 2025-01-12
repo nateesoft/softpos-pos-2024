@@ -46,10 +46,11 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
             .get(`/api/menu_setup/optional/${product.menu_code}`)
             .then((response) => {
                 if (response.status === 200) {
-                    setOptionalList(response.data.data)
-                    setSubMenuSelected(new Array(response.data.data.length)
+                    const dataResponse = response.data.data
+                    setOptionalList(dataResponse)
+                    setSubMenuSelected(new Array(dataResponse.length)
                         .fill(false)
-                        .map((data, index) => response.data.data[index].auto_select === 'Y'))
+                        .map((data, index) => dataResponse[index].auto_select === 'Y'))
                 }
             })
             .catch((error) => {
@@ -75,7 +76,6 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
                             <Checkbox
                                 id={`subProduct${item.menu_code}`}
                                 checked={subMenuSelected[index]}
-                                disabled={item.can_change !== 'Y'}
                                 checkedIcon={<LibraryAddCheckIcon />} sx={{ margin: "5px", color: "white" }}
                                 onChange={(e) => handleOnChange(index)}
                             />
@@ -87,7 +87,7 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
                             <img src={item.image_url} alt={item.menu_name} width={200} height={150} />
                         </Grid2>
                         <Typography style={{ color: "white" }}>{item.menu_name}</Typography>
-                        {!subMenuSelected[index] && <Button variant='contained' startIcon={<ChangeCircleIcon />} onClick={() => handleChangeMenuItem(item.menu_code)}>เปลี่ยนเมนู</Button>}
+                        {!subMenuSelected[index] && <Button variant='contained' startIcon={<ChangeCircleIcon />} disabled={item.can_change!=='Y'} onClick={() => handleChangeMenuItem(item.menu_code)}>เปลี่ยนเมนู</Button>}
                     </div>
                 ))}
             </Grid2>

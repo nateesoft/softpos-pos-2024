@@ -1,5 +1,5 @@
 const CryptoJS = require("crypto-js")
-
+const crypto = require('crypto')
 const SECRET_PASS = process.env.API_SECRET_PASS;
 
 // Encrypt user input text
@@ -70,11 +70,16 @@ const PrefixZeroFormat = (str, length) => {
     return str;
 }
 
+const generateUUID = () => {
+    return crypto.randomUUID()
+}
+
 module.exports = {
     Unicode2ASCII,
     ASCII2Unicode,
     PrefixFormat,
     PrefixZeroFormat,
     encryptData,
-    decryptData
+    decryptData,
+    generateUUID
 }

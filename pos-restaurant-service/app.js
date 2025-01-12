@@ -31,6 +31,7 @@ const genQrCode = require('./routes/payment/qrcode_promptpay')
 const floorplanRouter = require('./routes/floorplan/floorplan');
 const floorplanTemplateRouter = require('./routes/floorplan/floorplan_template');
 const menuSetupRouter = require('./routes/pos/menu_setup');
+const menuTabsRouter = require('./routes/pos/menu_tabs');
 const tableCheckInRouter = require('./routes/pos/tableCheckIn');
 const overviewReportRouter = require('./routes/pos/report');
 
@@ -93,6 +94,7 @@ app.use('/api/qr-payment', genQrCode);
 
 // new posdb
 app.use('/api/menu_setup', menuSetupRouter);
+app.use('/api/menu_tabs', menuTabsRouter);
 app.use('/api/table_checkin', tableCheckInRouter);
 app.use('/api/overview-report', overviewReportRouter);
 
