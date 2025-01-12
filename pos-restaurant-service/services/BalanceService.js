@@ -191,7 +191,7 @@ const mappingOpt = (optList, specialText) => {
 
 const addNewBalance = async payload => {
     const { tableNo, menuInfo, qty, optList = [], specialText = "",
-        macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct, R_ETD } = payload
+        macno, userLogin, empCode, R_Index, R_LinkIndex = "", posProduct, R_ETD = 'E' } = payload
     const R_Table = tableNo
     const R_PluCode = menuInfo.menu_code
     const R_PName = Unicode2ASCII(menuInfo.menu_name)

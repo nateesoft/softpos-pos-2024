@@ -12,6 +12,18 @@ const getTableInfo = async (tableNo) => {
     return null
 }
 
+const getLastTableCheckIn = async (tableNo) => {
+    const sql = `select * from table_checkin tc 
+        where tc.Tcode='${tableNo}' 
+        order by datetime_checkin 
+        desc limit 1`;
+    const results = await pool.query(sql)
+    if (results.length > 0) {
+        return results[0]
+    }
+    return null
+}
+
 const updateTableCustomer = async (tableNo, customerCount) => {
     const sql = `update tablefile 
     set TCustomer='${customerCount}' 
@@ -93,5 +105,6 @@ module.exports = {
     getTableInfo,
     createData,
     updateData,
-    updateInActiveTable
+    updateInActiveTable,
+    getLastTableCheckIn
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Tab from "@mui/material/Tab"
 import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
@@ -78,8 +78,9 @@ const OrderItem = ({
   typePopup = false,
   handleNotification
 }) => {
+  console.log('OrderItem:', orderType)
   const navigate = useNavigate()
-  const [value, setValue] = React.useState(orderType || "E")
+  const [value, setValue] = useState(orderType || 'E')
   const [open, setOpen] = useState(false)
 
   const [productInfo, setProductInfo] = useState({})
@@ -99,6 +100,7 @@ const OrderItem = ({
   }
 
   const handleChange = (event, newValue) => {
+    console.log('handleChange:', newValue)
     setValue(newValue)
   }
 

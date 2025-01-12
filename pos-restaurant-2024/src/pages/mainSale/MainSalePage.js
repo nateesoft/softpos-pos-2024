@@ -10,14 +10,13 @@ import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
 import ShowNotification from "../utils/ShowNotification"
 import Footer from '../Footer'
-import { POSContext } from "../../AppContext"
 
 function MainSalePage() {
   const { tableNo } = useParams();
-  const { appData } = useContext(POSContext)
-  const { tableInfo } = appData
 
   const matches = useMediaQuery("(min-width:1024px)")
+  
+  const [orderType, setOrderType] = useState("E")
   const [ProductList, setProductList] = useState([])
   const [ProductA, setProductA] = useState([])
   const [ProductB, setProductB] = useState([])
@@ -68,6 +67,20 @@ function MainSalePage() {
           setProductF(
             productList.filter((product) => product.tab_group === "F")
           )
+        }
+      })
+      .catch((error) => {
+        handleNotification(error.message)
+      })
+  }, [])
+
+  const initLoadTableCheckIn = useCallback(() => {
+    apiClient
+      .get(`/api/table_checkin/${tableNo}/lastCheckIn`)
+      .then((response) => {
+        if (response.status === 200) {
+          const tableCheckInData = response.data.data
+          setOrderType(tableCheckInData.table_order_type_start)
         }
       })
       .catch((error) => {
@@ -136,7 +149,8 @@ function MainSalePage() {
   useEffect(() => {
     initLoadMenu()
     initLoadOrder()
-  }, [initLoadMenu, initLoadOrder])
+    initLoadTableCheckIn()
+  }, [initLoadMenu, initLoadOrder, initLoadTableCheckIn])
 
   return (
     <motion.div
@@ -149,7 +163,7 @@ function MainSalePage() {
         <Grid size={matches ? 8 : 12}>
           <ProductMenu
             tableNo={tableNo}
-            orderType={tableInfo.orderType}
+            orderType={orderType}
             ProductList={ProductList}
             ProductA={ProductA}
             ProductB={ProductB}
@@ -167,13 +181,10 @@ function MainSalePage() {
           />
         </Grid>
         {matches && (
-          <Grid
-            size={4}
-            sx={{ backgroundColor: "white", border: "2px solid #ddd" }}
-          >
+          <Grid size={4} sx={{ backgroundColor: "white", border: "2px solid #ddd" }}>
             <OrderItem
               tableNo={tableNo}
-              orderType={tableInfo.orderType}
+              orderType={orderType}
               OrderList={orderList}
               OrderEList={orderEList}
               OrderTList={orderTList}
