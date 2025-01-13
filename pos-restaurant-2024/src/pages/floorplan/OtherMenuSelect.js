@@ -9,13 +9,13 @@ import RefundIcon from "@mui/icons-material/ReceiptLong"
 import TableBar from "@mui/icons-material/TableBar"
 import EmplyIcon from "@mui/icons-material/People"
 import TableRestaurantIcon from '@mui/icons-material/TableRestaurant';
-import WebAsset from '@mui/icons-material/WebAsset';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 
 const OtherMenuSelect = ({ handleChange, handleClose, handleClick, open, anchorEl }) => {
     return (
         <>
             <IconButton onClick={handleClick}>
-                <WebAsset fontSize='large' sx={{ color: 'snow' }} />
+                <PointOfSaleIcon fontSize='large' sx={{ color: 'snow' }} />
             </IconButton>
             <Menu
                 id="basic-menu"

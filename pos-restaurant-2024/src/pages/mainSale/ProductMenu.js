@@ -34,7 +34,7 @@ const fabStyle = {
     right: 16,
 };
 
-const tabStyle = { border: "1px solid black", margin: "2px", bgcolor: "chocolate", color: "white", fontSize: "16px" }
+const tabStyle = { border: "1px solid black", margin: "2px", bgcolor: "black", color: "white", fontSize: "16px" }
 
 const NotfoundMenu = () => {
     return (

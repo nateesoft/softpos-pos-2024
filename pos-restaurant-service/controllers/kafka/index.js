@@ -1,10 +1,11 @@
-const KafkaProducer = require("./producer.js");
 const { TOPIC_NAME } = require("../../config/kafka/constants.js");
+const KafkaProducer = require("./producer.js");
+const kafkaProducer = new KafkaProducer();
 
 const sendMessageToKafka = async (req, res) => {
+    console.log('sendMessageToKafka')
     try {
         const { message } = req.body;
-        const kafkaProducer = new KafkaProducer();
         const messages = [{ key: "key1", value: message }];
         kafkaProducer.produce(TOPIC_NAME, messages);
 

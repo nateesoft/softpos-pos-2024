@@ -1,6 +1,9 @@
 const pool = require('../config/database/MySqlConnect')
 const { decryptData } = require('../utils/StringUtil')
 
+const { TOPIC_NAME } = require('../config/kafka/constants');
+const kafka = require('../config/kafka/config');
+
 const checkLogin = async (username, password, macno) => {
     const sql = `select * from posuser 
         where username='${username}' and password='${decryptData(password)}' `
@@ -9,6 +12,20 @@ const checkLogin = async (username, password, macno) => {
         const sqlUpdate = `update posuser 
         set onact='Y', macno='${macno}' where username='${username}'`
         await pool.query(sqlUpdate)
+
+        const producer = kafka.producer()
+        const messages = [{ key: "key1", value: `User: ${username} loggedIn.` }];
+        try {
+            await producer.connect();
+            await producer.send({
+                topic: TOPIC_NAME,
+                messages: messages,
+            });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            await producer.disconnect();
+        }
 
         return {...results[0], Password: ""}
     }

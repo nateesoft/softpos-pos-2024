@@ -1,18 +1,38 @@
 const express = require('express');
 const router = express.Router();
 
-const { ThermalPrinterConnect } = require("../../services/ThermalPrinter");
-const controllers = require('../../controllers/kafka')
+const { TOPIC_NAME } = require('../../config/kafka/constants');
+const kafka = require('../../config/kafka/config');
 
-router.post('/', async (req, res, next) => {
-  const { printerIp, printerPort, message} = req.body
+module.exports = args => {
+  const producer = kafka.producer()
 
-  await ThermalPrinterConnect(printerIp, printerPort, message)
-  res.status(200).json({
-    printerIp, printerPort
-  })
-});
+  router.post('/send', async (req, res) => {
+    try {
+      const { message } = req.body;
+      const messages = [{ key: "key1", value: message }];
 
-router.post('/send', controllers.sendMessageToKafka);
+      try {
+        await producer.connect();
+        await producer.send({
+          topic: TOPIC_NAME,
+          messages: messages,
+        });
+      } catch (error) {
+        console.error(error);
+      } finally {
+        await producer.disconnect();
+      }
 
-module.exports = router;
+      res.status(200).json({
+        status: "Ok!",
+        message: "Message successfully send!",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  return router
+
+}

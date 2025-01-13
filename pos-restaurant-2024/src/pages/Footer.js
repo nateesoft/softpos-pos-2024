@@ -12,7 +12,7 @@ export default function FixedBottomNavigation() {
           bottom: 0, 
           left: 0, 
           right: 0, 
-          backgroundColor: "chocolate", 
+          backgroundColor: "black", 
           padding: "10px", 
           borderTop: "1px solid #4c696b" }} 
         justifyContent="center">

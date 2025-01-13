@@ -39,7 +39,7 @@ const overviewReportRouter = require('./routes/pos/report');
 const memmasterRouter = require('./routes/member/crm/Memmaster');
 
 // for printer thermal
-const printerThermalRouter = require('./routes/printer');
+const printerThermalRouter = require('./routes/printer')();
 const reportRouter = require('./routes/report');
 
 // process stock
@@ -62,9 +62,9 @@ const app = express();
 // app.use(cors())
 const username = process.env.WEB_USER_AUTH
 const password = process.env.WEB_USER_PASS
-app.use(basicAuth({ users: { [username]: password }}))
-app.use(bodyParser.json({limit: '50mb'}))
-app.use(bodyParser.urlencoded( { extended: true, limit: '50mb' }))
+app.use(basicAuth({ users: { [username]: password } }))
+app.use(bodyParser.json({ limit: '50mb' }))
+app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -121,12 +121,12 @@ app.use('/api/printer-thermal', printerThermalRouter)
 app.use('/api/report', reportRouter)
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

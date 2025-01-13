@@ -24,7 +24,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import VipPeopleIcon from '@mui/icons-material/Hail';
 import RefundIcon from "@mui/icons-material/ReceiptLong"
-import LanguageIcon from '@mui/icons-material/Language';
+import StoreIcon from '@mui/icons-material/Store';
+import { useTranslation } from "react-i18next"
+import moment from 'moment'
 
 import CheckTableStatus from "./checkTable"
 import CheckCashierStatus from "./cashierStatus"
@@ -51,7 +53,6 @@ import ShowNotification from "../utils/ShowNotification"
 import ReportSelect from "./ReportSelect"
 import LanguageSettings from "./LanguageSettings"
 import Footer from '../Footer'
-import { useTranslation } from "react-i18next"
 
 const modalPinStyle = {
   position: "absolute",
@@ -114,6 +115,8 @@ function FloorPlanPage() {
 
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
   const keyPressed = useKeyPress("Escape")
+
+  const [currentDate, setCurrentDate] = useState(new Date())
 
   const confirmLogoutAlert = useCallback(() => {
     apiClient
@@ -226,6 +229,12 @@ function FloorPlanPage() {
     }
   }, [keyPressed])
 
+  useEffect(()=> {
+    setInterval(()=> {
+      setCurrentDate(new Date())
+    }, 1000)
+  }, [])
+
   return (
     <motion.div
       style={{ backgroundColor: "black", padding: "10px" }}
@@ -270,6 +279,9 @@ function FloorPlanPage() {
               </div>}
               {iphonePro14max === false && <div>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
+                  <StoreIcon fontSize="large" sx={{background: "chocolate", borderRadius: "15px" }} />
+                </IconButton>
+                <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
                 </IconButton>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
@@ -286,6 +298,7 @@ function FloorPlanPage() {
               </div>}
             </Grid2>
             <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{ flexGrow: 1 }}>
+              <Typography sx={{color: "yellow"}}>{moment(currentDate).format('DD/MM/YYYY HH:mm:ss')}</Typography>
               <LanguageSettings />
               <IconButton>
                 <AccountCircleIcon sx={{ color: "snow" }} />

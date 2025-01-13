@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start:printer": "node printer-service/index.js"
+    "start:printer": "node printer-service/index.js",
+    "test:printer": "node printer-service/test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "kafka-node": "^5.0.0"
+    "dotenv": "^16.4.7",
+    "kafka-node": "^5.0.0",
+    "node-thermal-printer": "^4.4.3"
   }
 }

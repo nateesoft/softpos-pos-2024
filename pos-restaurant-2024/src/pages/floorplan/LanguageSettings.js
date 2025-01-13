@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
-import { Grid2, IconButton, Menu, Typography } from '@mui/material';
+import { Box, Grid2, IconButton, Menu, Typography } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 
@@ -32,8 +32,8 @@ const LanguageSettings = () => {
     return (
         <>
             <IconButton onClick={handleClick}>
-                <LanguageIcon sx={{ color: 'white', marginRight: "5px" }} />
-                <Typography sx={{color: "white"}}>{language}</Typography>
+                {language === 'en' && <img src='/images/en.png' alt="United Kingdom" width={32} height={32} />}
+                {language === 'th' && <img src='/images/th.png' alt="Thailand" width={32} height={32} />}
             </IconButton>
             <Menu
                 id="basic-menu"
@@ -45,14 +45,16 @@ const LanguageSettings = () => {
                 }}
             >
                 <MenuItem onClick={()=>handleChange('en')}>
-                    <Grid2 container justifyContent="center">
-                        <img src='/images/en.png' alt="United Kingdom" width={32} height={32} style={{marginRight: "5px"}} />
+                    <Grid2 spacing={1} container alignItems="center">
+                        <Box>
+                            <img src='/images/en.png' alt="United Kingdom" width={32} height={32} />
+                        </Box>
                         <Typography variant='p'>English</Typography>
                     </Grid2>
                 </MenuItem>
                 <MenuItem onClick={()=>handleChange('th')}>
-                    <Grid2 container justifyContent="center">
-                        <img src='/images/th.png' alt="United Kingdom" width={32} height={32} style={{marginRight: "5px"}} />
+                    <Grid2 spacing={1} container alignItems="center">
+                        <img src='/images/th.png' alt="Thailand" width={32} height={32} />
                         <Typography variant='p'>Thai</Typography>
                     </Grid2>
                 </MenuItem>
