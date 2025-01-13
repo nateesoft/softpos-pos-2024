@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import Grid from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
@@ -86,7 +86,7 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [])
+  }, [tableNo])
 
   const initLoadOrder = useCallback(async () => {
     const responseMenuSetup = await apiClient.get(`/api/menu_setup/all`)

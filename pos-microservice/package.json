@@ -1,0 +1,15 @@
+{
+  "name": "printer-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start:printer": "node printer-service/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "kafka-node": "^5.0.0"
+  }
+}
