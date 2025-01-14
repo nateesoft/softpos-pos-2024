@@ -50,7 +50,7 @@ const TotalBill = ({ orderList }) => {
     <div
       style={{
         padding: "5px",
-        backgroundColor: "salmon",
+        background: "salmon",
         border: "2px solid #eee",
         borderRadius: "5px",
         margin: "5px"

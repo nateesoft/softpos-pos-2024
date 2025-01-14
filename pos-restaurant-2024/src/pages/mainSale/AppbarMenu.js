@@ -29,6 +29,12 @@ const modalStyle = {
   backgroundColor: "snow"
 }
 
+const appbarStyle = { 
+  border: "1px solid gray", 
+  background: "radial-gradient(circle, #123456, #000)", 
+  borderRadius: "5px" 
+}
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -113,7 +119,7 @@ export default function LeftMenu() {
           </Box>
         </MenuItem>
       </Menu>
-      <AppBar position="fixed" sx={{ border: "1px solid gray", bgcolor: "black", borderRadius: "5px" }}>
+      <AppBar position="fixed" sx={appbarStyle}>
         <Toolbar>
           <PointOfSaleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Button variant='text' sx={{ fontSize: "28px", color: "white" }} onClick={handleClick}>

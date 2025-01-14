@@ -98,7 +98,7 @@ class ComponentToPrint extends Component {
   }
 
   render() {
-    const billInfo = this.props.billInfo
+    const { billInfo, tCreditList, posConfigSetup, poshwSetup, orderList } = this.props
     const {
       B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct,
       B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
@@ -106,16 +106,11 @@ class ComponentToPrint extends Component {
       B_Ton = 0, B_NetVat, B_Table, B_Cash = 0, B_Earnest, B_Entertain
     } = billInfo
 
-    const posConfigSetup = this.props.posConfigSetup
-    const poshwSetup = this.props.poshwSetup
-
     let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
     headers = headers.filter(h => h !== "")
 
     let footers = [poshwSetup.Footting1, poshwSetup.Footting2, poshwSetup.Footting3]
-
-    let orderList = this.props.orderList
-    orderList = orderList.filter(o => o.R_Price > 0)
+    const orderListFilter = orderList.filter(o => o.R_Price > 0)
 
     return (
       <Grid2 id='content' container justifyContent="center">
@@ -138,7 +133,7 @@ class ComponentToPrint extends Component {
                 <TableCell align="left"></TableCell>
                 <TableCell align="right">Amount</TableCell>
               </TableBody>
-              {orderList && orderList.map((item) => (
+              {orderListFilter && orderListFilter.map((item) => (
                 <>
                   {item.R_Void !== 'V' && <TableBody>
                     <TableCell>{item.R_ETD}</TableCell>
@@ -209,6 +204,17 @@ class ComponentToPrint extends Component {
               <MyTypo2>ค่า Entertain</MyTypo2>
               <MyTypo2>{NumFormat(B_Entertain || 0)}</MyTypo2>
             </Box>
+            <Divider />
+            {tCreditList && tCreditList.length > 0 && <Typography variant='span' fontSize="10px">ชำระด้วยบัตรเครดิต</Typography>}
+            {tCreditList && tCreditList.map(item => <div>
+              <Box display="flex" justifyContent="space-between">
+                <MyTypo2>{item.CrCode}</MyTypo2>
+                <MyTypo2>{formatBindCredit(item.CardNo)}</MyTypo2>
+              </Box>
+              <Box display="flex" justifyContent="space-between">
+                <MyTypo2>CR-Charge {NumFormat(item.CrCharge)}% ({NumFormat(item.CrChargeAmount)}) {NumFormat(item.CrAmt)}</MyTypo2>
+              </Box>
+            </div>)}
             <Box display="flex" justifyContent="space-between">
               <MyTypo2>เงินสด</MyTypo2>
               <MyTypo2>{NumFormat(B_Cash || 0)}</MyTypo2>
@@ -217,16 +223,6 @@ class ComponentToPrint extends Component {
               <MyTypo2>เงินทอน</MyTypo2>
               <MyTypo2>{NumFormat(B_Ton || 0)}</MyTypo2>
             </Box>
-            <Divider />
-            {B_CrCode1 && <div>
-              <Box display="flex" justifyContent="space-between">
-                <MyTypo2>{B_CrCode1} {B_CrBank}</MyTypo2>
-                <MyTypo2>{formatBindCredit(B_CardNo1)}</MyTypo2>
-              </Box>
-              <Box display="flex" justifyContent="space-between">
-                <MyTypo2>CR-Charge {NumFormat(B_CrCharge1)}% ({NumFormat(B_CrChargeAmt1)}) {NumFormat(B_CrAmt1)}</MyTypo2>
-              </Box>
-            </div>}
           </div>
           <Divider sx={{ marginTop: "10px" }} />
           <div align="center">
@@ -254,6 +250,7 @@ const ReceiptToPrint = () => {
 
   const [billInfo, setBillInfo] = useState("")
   const [orderList, setOrderList] = useState([])
+  const [tCreditList, setTCreditList] = useState([])
   const [poshwSetup, setPosHwSetup] = useState({})
   const [posConfigSetup, setPOSConfigSetup] = useState({})
 
@@ -332,11 +329,25 @@ const ReceiptToPrint = () => {
       })
   }, [])
 
+  const loadTCreditList = useCallback(() => {
+    apiClient
+      .get(`/api/creditfile/tcredit/${billNo}`)
+      .then((response) => {
+        if (response.status === 200) {
+          setTCreditList(response.data.data)
+        }
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
+  }, [])
+
   useEffect(() => {
     handleLoadBillInfo()
     initLoadOrderTSale()
     loadPosHwSetup()
     loadPosConfigSetup()
+    loadTCreditList()
   }, [handleLoadBillInfo, initLoadOrderTSale, loadPosHwSetup, loadPosConfigSetup])
 
   if (billInfo && billInfo.B_Refno) {
@@ -350,6 +361,7 @@ const ReceiptToPrint = () => {
           posConfigSetup={posConfigSetup}
           empCode={empCode}
           userLogin={userLogin}
+          tCreditList={tCreditList}
         />
         {showPrintButton &&
           <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>

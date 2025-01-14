@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { motion } from "framer-motion"
+import LoginIcon from '@mui/icons-material/Login';
 import { Divider, Grid2, useMediaQuery } from "@mui/material"
 
 import apiClient from '../../httpRequest'
@@ -127,7 +128,7 @@ const Login = () => {
                   backgroundSize: "cover",
                   height: "70vh",
                   minHeight: "500px",
-                  backgroundColor: "#123456",
+                  background: "radial-gradient(circle at center, #123456, #000)",
                   borderRadius: "0px 0px 10px 0px"
                 }}
               >
@@ -187,15 +188,21 @@ const Login = () => {
                             autoComplete="new-password"
                           />
                         </Grid>
-                        <Grid item xs={12} sx={{ ml: "5em", mr: "5em" }}>
+                        <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
                           <Button
                             type="submit"
                             variant="contained"
                             fullWidth
                             sx={{
                               color: "#ffffff",
-                              backgroundColor: "chocolate"
+                              background: "radial-gradient(circle, #123456, #000)",
+                              height: "100px",
+                              fontSize: "28px",
+                              '&:hover': {
+                                background: "radial-gradient(circle, green, #000)"
+                              }
                             }}
+                            endIcon={<LoginIcon />}
                           >
                             Login
                           </Button>

@@ -6,10 +6,13 @@ import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import DiscountIcon from '@mui/icons-material/Discount';
 import CloseIcon from '@mui/icons-material/Close';
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
-import PriceChangeIcon from '@mui/icons-material/PriceChange';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import SendToMobileIcon from '@mui/icons-material/SendToMobile';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import CreditCardOffIcon from '@mui/icons-material/CreditCardOff';
 
 import apiClient from '../../httpRequest'
 import { POSContext } from "../../AppContext";
@@ -347,13 +350,13 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                 </Box>
             </Grid2>
             <Grid2 size={12}>
-                <Grid2 container spacing={2} display="flex" direction="row">
+                <Grid2 container spacing={1} display="flex" direction="row">
                     <Grid2 size={6}>
-                        <Paper elevation={3} sx={{ padding: "3px" }}>
-                            <Grid2 container spacing={2} padding={2} justifyContent="s">
+                        <Paper elevation={3} sx={{ padding: "1px" }}>
+                            <Grid2 container spacing={1} padding={1}>
                                 <Grid2 container>
-                                    <IconButton sx={{ border: "1px solid" }}>
-                                        <KeyboardReturnIcon fontSize="medium" />
+                                    <IconButton>
+                                        <CreditCardOffIcon fontSize="large" />
                                     </IconButton>
                                     <TextField
                                         type="number"
@@ -365,6 +368,9 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         label="หักคืนเงินมัดจำ"
                                         sx={{ backgroundColor: componentFocus === "deposit" ? "#f5fff3" : "", width: "140px" }}
                                         inputProps={{ min: 0, style: { textAlign: "right" } }} />
+                                    <IconButton>
+                                        <VideogameAssetIcon fontSize="large" />
+                                    </IconButton>
                                     <TextField
                                         type="number"
                                         variant="filled"
@@ -375,14 +381,12 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         label="ชำระแบบ Entertain"
                                         sx={{ backgroundColor: componentFocus === "entertain" ? "#f5fff3" : "", width: "140px" }}
                                         inputProps={{ min: 0, style: { textAlign: "right" } }} />
-                                    <IconButton sx={{ border: "1px solid" }}>
-                                        <VideogameAssetIcon fontSize="large" />
-                                    </IconButton>
+                                    
                                 </Grid2>
                             </Grid2>
                             <Grid2 container spacing={1} padding={1}>
                                 <IconButton>
-                                    <img width={48} height={48} src={"/images/payment/cash.png"} alt="" />
+                                    <AccountBalanceWalletIcon fontSize="large" />
                                 </IconButton>
                                 <TextField
                                     type="number"
@@ -396,7 +400,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                             </Grid2>
                             <Grid2 container spacing={1} padding={1}>
                                 <IconButton>
-                                    <img width={48} src={"/images/payment/banking_money.png"} alt="" />
+                                    <SendToMobileIcon fontSize="large" />
                                 </IconButton>
                                 <TextField
                                     type="number"
@@ -410,7 +414,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                             </Grid2>
                             <Grid2 container spacing={1} padding={1}>
                                 <IconButton>
-                                    <img width={48} src={"/images/payment/credit-card.png"} alt="" />
+                                    <CreditCardIcon fontSize="large" />
                                 </IconButton>
                                 <TextField
                                     value={NumFormat(creditAmount)}

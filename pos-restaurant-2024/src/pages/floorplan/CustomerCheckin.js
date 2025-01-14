@@ -53,8 +53,10 @@ const CustomerCheckin = (props) => {
         setOrderType(oType);
     };
 
-    const handleOpenTable = () => {
-        if (tableStatus === "available") {
+    const handleOpenTable = async () => {
+        const checkTableActive = await apiClient.get(`/api/tablefile/${tableNo}`)
+        const tableResponse = checkTableActive.data.data
+        if (tableResponse != null) {
             if ((thaiCount + europeCount + americaCount + asiaCount) !== custCount) {
                 setShowCustomerCountError(true)
                 return;
@@ -151,9 +153,6 @@ const CustomerCheckin = (props) => {
             </Grid2>
             <Grid2 textAlign="center">
                 <Typography variant='h5' sx={{ fontWeight: "bold", color: "#0030bb", textShadow: "2px 2px #eee" }}>Table: {tableNo}</Typography>
-            </Grid2>
-            <Grid2 textAlign="center">
-                <Typography variant='p' sx={{ fontWeight: "bold", color: "green" }}>Status: ({tableStatus})</Typography>
             </Grid2>
             <Divider sx={{ margin: "10px" }} />
             <Box sx={{ '& > :not(style)': { m: 1 } }}>

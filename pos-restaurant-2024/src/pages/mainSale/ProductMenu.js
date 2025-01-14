@@ -34,7 +34,16 @@ const fabStyle = {
     right: 16,
 };
 
-const tabStyle = { border: "1px solid black", margin: "2px", bgcolor: "black", color: "white", fontSize: "16px" }
+const tabStyle = {
+    border: "1px solid black", 
+    margin: "2px", 
+    background: "radial-gradient(circle, #123456, #000)",
+    color: "white", 
+    fontSize: "16px",
+    '&:hover': {
+        background: "radial-gradient(circle, orange, #000)"
+    }
+}
 
 const NotfoundMenu = () => {
     return (

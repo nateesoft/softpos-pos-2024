@@ -31,14 +31,14 @@ const NumFormat = data => {
 const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
     const [openMember, setOpenMember] = useState(false)
     return (
-        <Paper elevation={20} sx={{ padding: "10px", margin: "10px", background: "#555" }}>
+        <Paper elevation={3} sx={{ padding: "5px", margin: "5px", background: "#555" }}>
             <Grid container justifyContent="space-around" padding={2}>
                 <img src="/images/profile_crm.png" alt="" />
                 <Button variant='contained' onClick={()=>setOpenMember(true)} endIcon={<PersonSearchIcon fontSize='large' />}>เลือกสมาชิก</Button>
             </Grid>
             {memberInfo.Member_Code && <Grid container spacing={1} padding={1} justifyContent="center" sx={{border: "1px solid snow", boxShadow: "3px 4px black"}}>
                 <Grid padding={1}>
-                    <Typography variant='p' sx={{ color: "white", background: "purple", padding: "10px" }}>
+                    <Typography variant='p' sx={{ color: "white", background: "purple", padding: "5px" }}>
                         ( ข้อมูลส่วนตัว )
                     </Typography>
                     <Box padding={1} sx={{borderBlock: "2px solid white"}}>
@@ -51,7 +51,7 @@ const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
                     </Box>
                 </Grid>
                 <Grid padding={1}>
-                    <Typography variant='p' sx={{ color: "white", background: "green", padding: "10px" }}>
+                    <Typography variant='p' sx={{ color: "white", background: "green", padding: "5px" }}>
                         <u>คะแนนสะสม</u>
                     </Typography>
                     <Box padding={1} sx={{borderBlock: "2px solid yellow"}}>

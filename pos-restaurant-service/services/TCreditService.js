@@ -7,6 +7,12 @@ const getTempCredit = async (macno, tableNo) => {
     return results
 }
 
+const getTCreditList = async (refNo) => {
+    const sql = `select * from t_credit where refno='${refNo}'`;
+    const results = await pool.query(sql)
+    return results
+}
+
 const deleteTempCredit = async ({ Terminal, Ref_No, CrCode }) => {
     const sql = `delete from tempcredit 
         where Mac_No='${Terminal}' 
@@ -83,5 +89,6 @@ module.exports = {
     deleteTempCredit,
     emptyTempCredit,
     createListCredit,
-    deleteListTempCredit
+    deleteListTempCredit,
+    getTCreditList
 }
