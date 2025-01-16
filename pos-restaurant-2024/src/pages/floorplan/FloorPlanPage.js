@@ -34,6 +34,7 @@ import RecieptCopyPrint from "./RecieptCopyPrint"
 import RefundBill from "./refund/RefundBill"
 import ManageCashDrawer from './ManageCashDrawer';
 import ManageMoveTable from './ManageMoveTable';
+import DashboardSetting from './DashboardSetting';
 
 import apiClient from '../../httpRequest'
 import RoundNode from "./nodes/RoundNode"
@@ -59,6 +60,12 @@ const modalPinStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)"
+}
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%"
 }
 
 const nodeTypes = {
@@ -100,6 +107,7 @@ function FloorPlanPage() {
   const [openRefundBill, setOpenRefundBill] = useState(false)
   const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
   const [openMgrTable, setOpenMgrTable] = useState(false)
+  const [openDashboard, setOpenDashboard] = useState(false)
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
@@ -278,7 +286,7 @@ function FloorPlanPage() {
                 </Menu>
               </div>}
               {iphonePro14max === false && <div>
-                <IconButton color="inherit" aria-label="open drawer" edge="start">
+                <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={()=>setOpenDashboard(true)}>
                   <StoreIcon fontSize="large" sx={{background: "chocolate", borderRadius: "15px" }} />
                 </IconButton>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
@@ -373,6 +381,11 @@ function FloorPlanPage() {
       <Modal open={openMgrTable}>
         <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
           <ManageMoveTable setOpen={setOpenMgrTable} onLoadFloorPlan={() => loadFloorPlan(selectFloor)} />
+        </Box>
+      </Modal>
+      <Modal open={openDashboard} onClose={() => handleCloseModal(() => setOpenDashboard(false))}>
+        <Box sx={{ ...modalStyle }}>
+          <DashboardSetting setOpen={setOpenDashboard} />
         </Box>
       </Modal>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />

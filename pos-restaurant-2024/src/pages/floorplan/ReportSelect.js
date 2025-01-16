@@ -48,11 +48,11 @@ const ReportSelect = (props) => {
                         <SpaceDashboardIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>Report Dashboard</Typography>
                     </Box>
                 </MenuItem>
-                <MenuItem onClick={()=>handleChange('print2kic')}>
+                {/* <MenuItem onClick={()=>handleChange('print2kic')}>
                     <Box display="flex" justifyContent="center">
                         <MicrowaveIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>รายงานส่งครัว</Typography>
                     </Box>
-                </MenuItem>
+                </MenuItem> */}
             </Menu>
         </>
 

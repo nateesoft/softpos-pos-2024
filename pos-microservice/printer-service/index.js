@@ -9,8 +9,9 @@ const PrinterTypes = require("node-thermal-printer").types;
 
 const Consumer = kafka.Consumer;
 const client = new kafka.KafkaClient({ kafkaHost: BROKERS });
+
 const consumer = new Consumer(client, [{ topic: TOPIC_NAME, partition: 0 }], {
-  autoCommit: false,
+  autoCommit: true,
 });
 
 consumer.on('message', function (message) {
