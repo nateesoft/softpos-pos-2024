@@ -199,7 +199,7 @@ const Login = () => {
                               height: "100px",
                               fontSize: "28px",
                               '&:hover': {
-                                background: "radial-gradient(circle, green, #000)"
+                                background: "radial-gradient(circle, #44449a, #000)"
                               }
                             }}
                             endIcon={<LoginIcon />}
