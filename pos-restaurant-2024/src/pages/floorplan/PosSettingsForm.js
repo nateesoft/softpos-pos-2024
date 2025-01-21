@@ -73,22 +73,26 @@ const PosSettingsForm = ({ setOpen, onLoadFloorPlan }) => {
           </FormControl>
           <Grid2 container spacing={1}>
             <TextField 
-              label="Baht Rate" 
+              label="ค่าเงินบาท (Baht)" 
               value={currencyBaht} 
               onChange={e => setCurrencyBaht(e.target.value)} 
               sx={{ width: "120px" }} />
             <TextField 
-              label={`${currency} Rate`} 
+              label={`ค่าเงินในระบบ (${currency})`} 
               value={currencyRate} 
               onChange={e => setCurrencyRate(e.target.value)} 
-              sx={{ width: "120px" }} />
+              sx={{ width: "200px" }} />
           </Grid2>
         </Grid2>
 
         <Divider />
         <Grid2 container>
-          <TextField label="Printer IP" />
-          <Button variant="contained" startIcon={<PrintIcon />}>Test Printer</Button>
+          <TextField label="Receipt Printer IP" />
+          <Button variant="contained" startIcon={<PrintIcon />}>Test</Button>
+        </Grid2>
+        <Grid2 container>
+          <TextField label="Kichen Printer IP" />
+          <Button variant="contained" startIcon={<PrintIcon />}>Test</Button>
         </Grid2>
       </Grid2>
       <Box display="flex" justifyContent="center">

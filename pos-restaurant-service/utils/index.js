@@ -1,5 +1,5 @@
 const mysql = require("mysql2")
-const {getMoment, getYesterday} = require('../utils/MomentUtil')
+const {getMoment} = require('../utils/MomentUtil')
 
 const pool = mysql.createPool({
     host: "localhost",
@@ -82,8 +82,8 @@ const assignFieldWithDefautValue = (fields) => {
     return myField
 }
 
-const tableName = 'MyRestaurantJefferSakon.tablefile'
-// const tableName = 'posdb.table_checkin'
+// const tableName = 'MyRestaurantJefferSakon.tablefile'
+const tableName = 'posdb.pos_setting'
 // const tableName = 'mycrmbranch.mplu'
 const sqlAllTable = `desc ${tableName} `
 pool.query(sqlAllTable, (err, results) => {

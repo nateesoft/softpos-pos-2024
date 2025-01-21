@@ -33,6 +33,7 @@ const floorplanTemplateRouter = require('./routes/floorplan/floorplan_template')
 const menuSetupRouter = require('./routes/pos/menu_setup');
 const menuTabsRouter = require('./routes/pos/menu_tabs');
 const tableCheckInRouter = require('./routes/pos/tableCheckIn');
+const posSettingRouter = require('./routes/pos/pos_setting');
 const overviewReportRouter = require('./routes/pos/report');
 
 // for CRM POS
@@ -96,6 +97,7 @@ app.use('/api/qr-payment', genQrCode);
 app.use('/api/menu_setup', menuSetupRouter);
 app.use('/api/menu_tabs', menuTabsRouter);
 app.use('/api/table_checkin', tableCheckInRouter);
+app.use('/api/pos_setting', posSettingRouter);
 app.use('/api/overview-report', overviewReportRouter);
 
 app.use('/api/optionfile', optionFileRouter);

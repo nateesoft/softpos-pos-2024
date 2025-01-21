@@ -130,7 +130,7 @@ const updateTableFile = async (tablefile) => {
     const TDesk = tablefile.TDesk;
     const TUser = tablefile.TUser;
     const VoidMsg = tablefile.VoidMsg;
-    const TPause = tablefile.TPause;
+    const TPause = tablefile.TPause || '';
     const CCUseCode = tablefile.CCUseCode;
     const TTableIsOn = tablefile.TTableIsOn || '';
     const TActive = tablefile.TActive || '';

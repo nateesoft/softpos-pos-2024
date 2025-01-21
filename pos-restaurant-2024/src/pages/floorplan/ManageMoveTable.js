@@ -80,14 +80,21 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>กรุณาระบุข้อมูลโต๊ะหลัก และโต๊ะที่ต้องการย้าย</Typography>
       </Grid>
       <Grid container spacing={2} padding={2} direction="column">
-        <Grid size={12}>
+        <Grid container size={12}>
           <TextField label="ย้ายข้อมูลจากโต๊ะ" value={sourceTable} onChange={e => setSourceTable(e.target.value)} fullWidth />
-        </Grid>
-        <Grid size={12}>
-          <TextField label="ไปยังโต๊ะ" value={targetTable} onChange={e => setTargetTable(e.target.value)} fullWidth />
-        </Grid>
-        <Grid size={12}>
-          <TextField type="password" label="ผู้ดูแล" value={admin} onChange={e => setAdmin(e.target.value)} fullWidth />
+          <TextField 
+            label="ไปยังโต๊ะ" 
+            value={targetTable} 
+            onChange={e => setTargetTable(e.target.value)} 
+            fullWidth
+            autoComplete="off" />
+          <TextField 
+            type="password" 
+            label="ผู้ดูแล" 
+            value={admin} 
+            onChange={e => setAdmin(e.target.value)} 
+            autoComplete="new-password"
+            fullWidth />
         </Grid>
       </Grid>
       {showError && <Alert severity="error">{msgError}</Alert>}
