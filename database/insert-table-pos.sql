@@ -1,6 +1,9 @@
 INSERT INTO MyRestaurantJefferSakon.posuser
 (UserName, Password, Name, UserGroup, OnACT, MacNo, Sale1, Sale2, Sale3, Sale4, Sale5, Sale6, Sale7, Sale8, Sale9, Sale10, Sale11, Sale12, Sale13, Sale14, Sale15, Sale16, Sale17, Sale18, Sale19, Sale20, Sale21, Sale22, Sale23, Sale24, Sale25, Sale26, Sale27, Sale28, Sale29, Sale30, Sale31, Sale32, Sale33, Sale34, Sale35, Sale36, Cont0, Cont1, Cont2, Cont3, Cont4, Cont5, Cont6, Cont7, Cont8, Cont9, Cont10, Cont11, Cont12, Cont13, Cont14, Cont15, Stock0, Stock0_1, Stock1, Stock2, Stock3, Stock4, Stock5, Stock6, Stock7, Stock8, Stock9, Stock10, Stock11, Stock12, Stock13, Stock14, Stock15, Stock16, Stock17, Stock18, Stock19, Stock20, Stock21, Stock22, Stock23, Stock24, Stock25, Stock26, Stock27, Stock28, Stock29, Stock30, Stock31, Stock32, Stock33, Stock34, Stock35, Stock36, Stock37, Stock38, Stock39, Stock40, Stock41, Stock42, Stock43, Stock44, Stock45, Stock46, Stock47, Stock48, Stock49, Stock50, Stock51, Stock52, Stock53, Stock54, Stock55, Stock56, Stock57, Stock58, Stock59, Stock60, Stock61, Stock62, Stock63, Stock64, Stock65, Stock66, Stock67, Stock68, Stock69, Stock70, Stock71, Stock72, Stock73, Stock74, Cont16, Cont17, Cont18, Cont19, Cont20, Cont21, Cont22, Cont23, Cont24, Cont25, Cont26, Cont27, Cont28, Cont29, Cont30, Cont31, Cont32, Cont33, Cont34, Cont35, Cont36, Cont37, Cont38, Cont39, Cont40, Cont41, Cont42, Cont43, Cont44, Cont45, Cont46, Cont47, Sale37, Sale38)
-VALUES('9999', '9999', 'SOFTPOS', 'IT Admin', 'N', '555', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y');
+VALUES('1001', '1001', 'SOFTPOS', 'IT Admin', 'Y', '001', 'Y', 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y');
+INSERT INTO MyRestaurantJefferSakon.posuser
+(UserName, Password, Name, UserGroup, OnACT, MacNo, Sale1, Sale2, Sale3, Sale4, Sale5, Sale6, Sale7, Sale8, Sale9, Sale10, Sale11, Sale12, Sale13, Sale14, Sale15, Sale16, Sale17, Sale18, Sale19, Sale20, Sale21, Sale22, Sale23, Sale24, Sale25, Sale26, Sale27, Sale28, Sale29, Sale30, Sale31, Sale32, Sale33, Sale34, Sale35, Sale36, Cont0, Cont1, Cont2, Cont3, Cont4, Cont5, Cont6, Cont7, Cont8, Cont9, Cont10, Cont11, Cont12, Cont13, Cont14, Cont15, Stock0, Stock0_1, Stock1, Stock2, Stock3, Stock4, Stock5, Stock6, Stock7, Stock8, Stock9, Stock10, Stock11, Stock12, Stock13, Stock14, Stock15, Stock16, Stock17, Stock18, Stock19, Stock20, Stock21, Stock22, Stock23, Stock24, Stock25, Stock26, Stock27, Stock28, Stock29, Stock30, Stock31, Stock32, Stock33, Stock34, Stock35, Stock36, Stock37, Stock38, Stock39, Stock40, Stock41, Stock42, Stock43, Stock44, Stock45, Stock46, Stock47, Stock48, Stock49, Stock50, Stock51, Stock52, Stock53, Stock54, Stock55, Stock56, Stock57, Stock58, Stock59, Stock60, Stock61, Stock62, Stock63, Stock64, Stock65, Stock66, Stock67, Stock68, Stock69, Stock70, Stock71, Stock72, Stock73, Stock74, Cont16, Cont17, Cont18, Cont19, Cont20, Cont21, Cont22, Cont23, Cont24, Cont25, Cont26, Cont27, Cont28, Cont29, Cont30, Cont31, Cont32, Cont33, Cont34, Cont35, Cont36, Cont37, Cont38, Cont39, Cont40, Cont41, Cont42, Cont43, Cont44, Cont45, Cont46, Cont47, Sale37, Sale38)
+VALUES('9999', '9999', 'Super Admin', 'IT Admin', 'N', '001', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y');
 
 INSERT INTO MyRestaurantJefferSakon.employ
 (Code, Name, Salary, `Position`)
@@ -51,6 +54,99 @@ INSERT INTO MyRestaurantJefferSakon.employ
 (Code, Name, Salary, `Position`)
 VALUES('E', 'E', 0.0, '');
 
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1001', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Junsai', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '15:40:39', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1002', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Mehikari', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '15:40:57', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1003', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Hotate jelly', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '20:50:09', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1004', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Shima-Aji', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1005', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Kuromatsu', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1006', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Sawara Sashimi', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1007', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Same Karei Sushi', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1008', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Ama Ebi', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1009', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Chawanmushi', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1010', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Chawanmushi', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '19:17:35', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1011', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Toto Taku Temaki', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1012', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Toto Aburi', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1013', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Uni Temaki', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1014', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Kuro Baigai', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1015', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Same Karei Uzukuri', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1016', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Ankimo Toast', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1017', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Kinmedai', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1018', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Botan Ebi', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1019', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Ezo Awabi', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1020', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Tomato', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1021', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Amaki Suke', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1022', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Ototo Aburi', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1023', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Uni Temaki', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1024', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Wagyu Don', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1025', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Soup', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('1026', 'F', '', '', '03', '', '3', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Desert', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-27', '00:00:00', '9999', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('2001', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', '5,800++(Served 16 Menu)', '', 0, '', '1', 5800.0, 5800.0, 5800.0, 5800.0, 5800.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('2002', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Kuro Baigai', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('2003', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Same Karei Uzukuri', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('2004', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Ankimo Toast', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
+INSERT INTO MyRestaurantJefferSakon.product
+(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
+VALUES('2005', 'F', '', '', '03', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', 'Shima-Aji', '', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, '', 1.0, 0.0, 0.0, 0.0, '', '', '2024-11-20', '00:00:00', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, NULL, NULL, 'N', 100.0, 'Y', NULL, 'N', 'N', 'N', 'N', 'Y', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, '');
 INSERT INTO MyRestaurantJefferSakon.product
 (PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
 VALUES('APT001', 'F', '', '', '03', '', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '�ѡ��ͺ���', 'Dish', 0, '', '3', 79.0, 79.0, 79.0, 79.0, 79.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 25.6497, '', '', '2016-03-16', '18:54:19', 'Center', NULL, '', 'Y', 'N', 0.0, '0', '0', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
@@ -558,96 +654,1020 @@ VALUES('CF020', 'F', '', '', '10', '', '2', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V
 INSERT INTO MyRestaurantJefferSakon.product
 (PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
 VALUES('CF021', 'F', '', '', '10', '', '2', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', 'Ice Cocoa', 'Glass', 0, '', '5', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, 'Glass', 1.0, 0.0, 0.0, 0.0942, '', '', '2016-03-16', '18:54:18', 'Center', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK001', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '�躴', 'Dish', 0, '', '1', 99.0, 99.0, 99.0, 99.0, 99.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 24.9887, '', '', '2016-03-16', '18:54:19', 'Center', NULL, '', 'Y', 'N', 0.0, '0', '0', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0011', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�躴+�ù�������', 'DISH', 0, '', '1', 109.0, 109.0, 109.0, 109.0, 109.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 27.2559, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0012', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�躴+���ǼѴ', 'DISH', 0, '', '1', 129.0, 129.0, 129.0, 129.0, 129.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 29.3332, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0013', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�躴+�ѹ��', 'DISH', 0, '', '1', 129.0, 129.0, 129.0, 129.0, 129.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 29.3979, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0014', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�躴+�ѡ���Ѵ�¡������', 'DISH', 0, '', '1', 129.0, 129.0, 129.0, 129.0, 129.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 31.2702, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0015', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�躴+�ѹͺ', 'DISH', 0, '', '1', 129.0, 129.0, 129.0, 129.0, 129.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 44.2705, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0016', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�躴+�����', 'DISH', 0, '', '1', 129.0, 129.0, 129.0, 129.0, 129.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 34.8182, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0017', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�躴+����ͺਿ����', 'DISH', 0, '', '1', 119.0, 119.0, 119.0, 119.0, 119.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 39.9732, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK002', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '��⾡������ѹ', 'Dish', 0, '', '1', 159.0, 159.0, 159.0, 159.0, 159.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 26.0586, '', '', '2016-03-16', '18:54:19', 'Center', NULL, '', 'Y', 'N', 0.0, '0', '0', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK003', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '����ҧͺ�����������ͧ', 'Dish', 0, '', '1', 149.0, 149.0, 149.0, 149.0, 149.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 54.7706, '', '', '2016-03-16', '18:54:19', 'Center', NULL, '', 'Y', 'N', 0.0, '0', '0', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK004', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '͡���ԡ�´�', 'Dish', 0, '', '1', 129.0, 129.0, 129.0, 129.0, 129.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 38.3992, '', '', '2016-03-16', '18:54:19', 'Center', NULL, '', 'Y', 'N', 0.0, '0', '0', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0041', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '͡��+�ù�������', 'DISH', 0, '', '1', 129.0, 129.0, 129.0, 129.0, 129.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 30.1362, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0042', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '͡��+���ǼѴ', 'DISH', 0, '', '1', 149.0, 149.0, 149.0, 149.0, 149.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 32.2136, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0043', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '͡��+�ѹ��', 'DISH', 0, '', '1', 149.0, 149.0, 149.0, 149.0, 149.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 32.4681, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0044', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '͡��+�ѡ���Ѵ�¡������', 'DISH', 0, '', '1', 149.0, 149.0, 149.0, 149.0, 149.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 34.1505, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0045', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '͡��+�ѹͺ', 'DISH', 0, '', '1', 149.0, 149.0, 149.0, 149.0, 149.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 47.1509, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0046', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '͡��+�����', 'DISH', 0, '', '1', 149.0, 149.0, 149.0, 149.0, 149.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 37.6986, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0047', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '͡��+����ͺਿ����', 'DISH', 0, '', '1', 149.0, 149.0, 149.0, 149.0, 149.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 39.9773, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK005', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '��ਿ����', 'Dish', 0, '', '1', 99.0, 99.0, 99.0, 99.0, 99.0, '006', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 32.4673, '', '', '2016-03-16', '18:54:19', 'Center', NULL, '', 'Y', 'N', 0.0, '0', '0', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0051', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�� JF+�ù�������', 'DISH', 0, '', '1', 119.0, 119.0, 119.0, 119.0, 119.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 34.7345, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0052', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�� JF+���ǼѴ', 'DISH', 0, '', '1', 139.0, 139.0, 139.0, 139.0, 139.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 36.8118, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0053', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�� JF+�ѹ��', 'DISH', 0, '', '1', 139.0, 139.0, 139.0, 139.0, 139.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 36.8765, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0054', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�� JF+�ѡ���Ѵ�¡������', 'DISH', 0, '', '1', 139.0, 139.0, 139.0, 139.0, 139.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 38.7488, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0055', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�� JF+�ѹͺ', 'DISH', 0, '', '1', 139.0, 139.0, 139.0, 139.0, 139.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 51.7491, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0056', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�� JF+�����', 'DISH', 0, '', '1', 139.0, 139.0, 139.0, 139.0, 139.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 42.2968, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK0057', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'Y', 'N', 'V', '�� JF+����ͺਿ����', 'DISH', 0, '', '1', 119.0, 119.0, 119.0, 119.0, 119.0, '', '', '', 0.0, 0.0, 'DISH', 1.0, 0.0, 0.0, 47.4518, '', '', '2016-03-16', '18:54:19', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK006', 'F', '', '', '01', '', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '�� JF+�����+���ǼѴ��', 'Dish', 0, '', '3', 149.0, 149.0, 149.0, 149.0, 149.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 46.532, '', '', '2016-03-18', '14:29:38', '', NULL, '', 'Y', 'N', 0.0, '0', '0', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK007', 'F', '', '', '06', '001', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '���ͺਿ���� 4 ���', 'Dish', 0, '', '1', 119.0, 119.0, 119.0, 119.0, 119.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 18.5642, '', '', '2016-03-21', '13:25:51', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK008', 'F', '', '', '06', '001', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '���ͺਿ���� 10 ���', 'Dish', 0, '', '1', 259.0, 259.0, 259.0, 259.0, 259.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 28.9119, '', '', '2016-03-16', '18:54:18', 'Center', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK009', 'F', '', '', '01', '001', '1', 'N', '', 'Y', 'Y', 'P', 'N', 'N', 'V', '���ͺਿ���� 4 ���', 'Dish', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 6.8812, '', '', '2016-03-21', '13:25:51', '', NULL, '', 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, NULL, 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
-INSERT INTO MyRestaurantJefferSakon.product
-(PCode, PFix, PReferent, PAccNo, PGroup, PVender, PType, PNormal, PRemark, PDiscount, PService, PStatus, PStock, PSet, PVat, PDesc, PUnit1, PPack1, PArea, PKic, PPrice11, PPrice12, PPrice13, PPrice14, PPrice15, PPromotion1, PPromotion2, PPromotion3, PMax, PMin, PBUnit, PBPack, PLCost, PSCost, PACost, PLink1, PLink2, PLastUpdate, PLastTime, PUserUpdate, PLastSale, PBarCode, PActive, PSPVat, PSPVatAmt, POSStk, MSStk, PTimeCharge, POrder, PFoodType, PChkDate, PPackOld, PselectItem, PSelectNum, PSelectShow, PYield, PShowOption, PDesc2, PSelectAllProduct, PAddOptionName, PAutoShowOption, PPrintOption, PPrintItemBill, PCountTime, PCCActive, PCCTopupAmt, PCCActiveDay, PCCStartTime, PCCEndTime, PCCDateSelect, PCCStartDate, PCCEndDate, PEDesc)
-VALUES('CK010', 'F', '', '', '01', '', '1', 'N', NULL, 'Y', 'Y', 'P', 'Y', 'N', 'V', '͡����ҧ��ʾ�ԡ�´�', 'Dish', 0, '', '1', 0.0, 0.0, 0.0, 0.0, 0.0, '', '', '', 0.0, 0.0, 'Dish', 1.0, 0.0, 0.0, 38.819, '', '', '2017-08-22', '17:55:05', '', NULL, NULL, 'Y', 'N', 0.0, '0', '', 0.0, '0', '0', NULL, 0, 'N', 0.0, 'N', 100.0, NULL, '', 'N', 'Y', 'Y', 'Y', 'Y', 'Y', 'N', 0.0, 0, '00:00:00', '00:00:00', 0, NULL, NULL, NULL);
+
+INSERT INTO MyRestaurantJefferSakon.posconfigsetup
+(P_Terminal, P_Vat, P_Service, P_ServiceType, P_VatPrn, P_VatType, P_BillCopy, P_BillCopyOne, P_DefaultSaleType, P_EmpUse, P_CodePrn, P_CheckBillBeforCash, P_PrintDetailOnRecp, P_PrintSum, P_PrintRecpMessage, P_MemDisc, P_MemDiscChk, P_MemDiscGet, P_MemDiscMax, P_FastDisc, P_FastDiscChk, P_FastDiscGet, P_FastDiscMax, P_EmpDisc, P_EmpDiscChk, P_EmpDiscGet, P_EmpDiscMax, P_TrainDisc, P_TrainDiscChk, P_TrainDiscGet, P_TrainDiscMax, P_SubDisc, P_SubDiscChk, P_SubDiscGet, P_SubDiscMax, P_DiscBathChk, P_DiscBathMax, P_PromotionChk, P_SpacialChk, P_DiscRound, P_ServiceRound, P_SerChkBySaleType, P_DiscChkBySaleType, P_MemberSystem, KicSum, KicCopy, P_PrintByItemType, P_PrintTotalSumItemType, P_PrintTotalSumNormalType, P_PrintTotalSumGroup, WTime, LTime, P_PrintProductValue, P_LimitTime, P_RefreshTime, P_SaleDecimal, P_PayBahtRound, P_ShowKicQue, P_BillLang, P_KaraokeOn, P_PrintAdjust, P_PrintNetAdj, P_ItemDiscChk, P_ItemDiscMax, P_PrintDiscountService, P_BuffetTime, P_BuffetOverTime, P_BuffetFeeAmt, P_BuffetScrap, P_PrintEnglish)
+VALUES('XXX', 7.0, 10.0, 'N', 'Y', 'I', 1, 'N', 'E', 'Y', 'N', 'N', 'Y', 'Y', '            (VAT INCLUDED)', '10/00/00', 'Y/Y/Y', 'N', '99/99/99', '10/00/00', 'Y/Y/Y', 'N', '99/99/99', '50/50/50', 'Y/Y/Y', 'N', '99/99/99', '10/00/00', 'Y/Y/Y', 'N', '99/99/99', '10/00/00', 'Y/Y/Y', 'N', '99/99/99', 'Y', 100, 'Y/Y/Y', 'Y/Y/Y', 'O', 'O', 'Y/Y/Y/Y/Y', 'Y/Y/Y/Y/Y', 'Y', 'N', 'N', 'N', 'Y', 'N', 'N', '00:04', '00:08', 'N', 5, 25, 'N', 'N', 'N', NULL, 'N', NULL, NULL, NULL, NULL, 'N', 0.0, 0.0, 0.0, 0.0, NULL);
+
+INSERT INTO MyRestaurantJefferSakon.poshwsetup
+(Terminal, OnAct, MacNo, ReceNo1, SaleType, TStock, TSone, Heading1, Heading2, Heading3, Heading4, Footting1, Footting2, DRPort, DRType, DRCOM, DISPort, DISType, DISCOM, PRNPort, PRNTYPE, PRNCOM, PRNThaiLevel, KIC1Port, KIC1Type, KIC1Com, KIC1ThaiLevel, KIC2Port, KIC2Type, KIC2Com, KIC2ThaiLevel, KIC3Port, KIC3Type, KIC3Com, KIC3ThaiLevel, KIC4Port, KIC4Type, KIC4Com, KIC4ThaiLevel, EJounal, EJDailyPath, EJBackupPath, PrnRate, DrRate, DisRate, EDCPort, SMPBank, MenuItemList, UseFloorPlan, TakeOrderChk, PosGroupCode, EnableMSR, Footting3, CustDisplayActive, InfoText, MediaPath, LogoPath, MediaVolume)
+VALUES('001', 'N', 'Exxxxxxxxxxxx', 454.0, 'E', 'A1', 'A1,A2,A3,N,A,B,C,D,E,T,DL', 'HENG GETSU', 'Tax Invoice (ABB.)_Tax ID xxxxxxxxxx', '', '', 'E-mail GM@.com', 'Facebook Restaurant', 'COM1', '1', '', 'NONE', '1', '', 'COM1', '4', ' (4) EPSON TM-2XXF+ ', 'Y', '', '', '', 'Y', '', '', '', '', '', '', '', '', '', '', '', 'Y', 'N', 'D:/CPS_Restaurant650/Present_Day', 'D:/CPS_Restaurant650/EJPath', 9600, 9600, 9600, 'NONE', NULL, 'N', 'N', 'N', '', 'N', 'มีอะไรก็ติดต่อมาได้ตลอด  / Feedback', NULL, NULL, NULL, NULL, NULL);
+
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('1001', 'RM1001', 250.0);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('1001', 'RM1002', 100.0);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '04-0401', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '04-6007', 0.015);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '04-7118', 0.05);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '05-0001', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '05-0305', 0.2);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '06-0550', 0.02);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '06-0704', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '06-0910', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '09-0010', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '09-0016', 0.002);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '09-0022', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '09-0026', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT032', '09-0030', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT033', '04-7118', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT033', '05-0103', 0.222);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT033', '06-0711', 0.04);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT033', '09-0016', 0.002);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT034', '04-5016', 0.1);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT034', '04-6007', 0.004);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT034', '04-7015', 0.024);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT034', '05-0118', 0.1);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT034', '06-0711', 0.04);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT034', '09-0016', 0.002);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '04-3012', 0.033);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '04-3013', 0.167);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '04-4017', 0.015);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '04-5016', 0.05);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '04-6007', 0.004);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '04-7015', 0.013);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '04-7112', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '05-0118', 0.15);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '09-0008', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '09-0010', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT035', '09-0011', 0.05);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '04-7002', 0.02);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '04-7003', 0.02);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '04-7006', 0.012);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '04-7115', 0.017);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '05-0503', 0.001);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '05-0709', 0.054);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '06-0302', 0.001);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '06-0707', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '06-0711', 0.004);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '09-0016', 0.002);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('APT036', '09-0029', 0.115);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('BF001', '05-0103', 0.06);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('BF001', '06-0208', 0.0);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('BF001', '06-0412', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('BF001', '06-0711', 0.015);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('BF002', '05-0103', 0.06);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('BF002', '06-0209', 0.0);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('BF002', '06-0412', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('BF002', '06-0711', 0.015);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '04-7110', 0.02);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '04-7112', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '05-0103', 0.06);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '06-0216', 0.0);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '06-0412', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '06-0711', 0.015);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '09-0008', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '09-0009', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '09-0012', 0.005);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB001', '09-0032', 0.001);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB002', '04-7110', 0.02);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB002', '05-0103', 0.06);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB002', '06-0217', 0.0);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB002', '06-0402', 0.02);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB002', '06-0412', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB002', '06-0711', 0.015);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB002', '09-0008', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB002', '09-0009', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB002', '09-0012', 0.005);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '', 0.001);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '04-7006', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '04-7110', 0.02);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '04-7115', 0.004);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '05-0103', 0.06);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '05-0709', 0.017);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '06-0107', 0.002);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '06-0205', 0.001);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '06-0218', 0.0);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '06-0412', 0.03);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '06-0711', 0.015);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '09-0008', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '09-0009', 0.01);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '09-0012', 0.005);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CB003', '09-0024', 0.001);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CF019', '03-0017', 0.001);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CF020', '03-0017', 0.001);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('CF021', '03-0017', 0.001);
+INSERT INTO MyRestaurantJefferSakon.pingredent
+(PCode, PingCode, PingQty)
+VALUES('TG015', '04-3013', 0.167);
+
+INSERT INTO MyRestaurantJefferSakon.branch
+(Code, Name, AddressNo, Locality, SubProvince, Province, Post, Tel_No, Fax_No, E_Mail, Manager, Location_Area, Ser_Area, Cou_Area, Kic_Area, Tot_Area, Cost, Charge, FlageCost, Gp, FlageGp, Remark, ArBillNo, EarneatBillNo, ReturnBillNo, PrintAutoSumDate, SaveOrder, SaveOrderCopy, SaveOrderChk, KIC1, KIC2, KIC3, KIC4, KIC5, KIC6, KIC7, KIC8, KIC9, SmartCard, GetFile, RetFile, PointFile, CntLoop, InvNo, InvCashNo, InvCash, InvActive, CreditAct, PromotionGP, LockTime, KicItemNo, PT1, PT2, PT3, PT4, PT5, PONO, PrintKicForm, PrintInvForm, PSelectStk, PStkChk, PMinStkChk, RoundUpTime, GiftStatusChk, KICCopy1, KICCopy2, KICCopy3, KICCopy4, KICCopy5, KICCopy6, KICCopy7, KICCopy8, KICCopy9, KICChk1, KICChk2, KICChk3, KICChk4, KICChk5, KICChk6, KICChk7, KICChk8, KICChk9, UpdateBranchPoint, KicName1, KicName2, KicName3, KicName4, KicName5, KicName6, KicName7, KicName8, KicName9, KicPrintOnReceipt1, KicPrintOnReceipt2, KicPrintOnReceipt3, KicPrintOnReceipt4, KicPrintOnReceipt5, KicPrintOnReceipt6, KicPrintOnReceipt7, KicPrintOnReceipt8, KicPrintOnReceipt9, KicQue, KIC10, KICChk10, KicName10, KicPrintOnReceipt10, Kic11, Kic12, Kic13, Kic14, Kic15, Kic16, Kic17, Kic18, Kic19, Kic20, KicCopy11, KicCopy12, KicCopy13, KicCopy14, KicCopy15, KicCopy16, KicCopy17, KicCopy18, KicCopy19, KicCopy20, KicChk11, KicChk12, KicChk13, KicChk14, KicChk15, KicChk16, KicChk17, KicChk18, KicChk19, KicChk20, KicCopy10, IMG_HOME_PATH, INVHead, INVCheckAuto, AS400BranchCode, SendLostToBor)
+VALUES('001', 'HENG GETSU', '', '', '', '', '', '', '', '', '', '01', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 'N', 0.0, 'N', NULL, 5.0, 0.0, 5.0, '2010-06-04', 'N', '1', 'N', 'T', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'T', 'N', NULL, NULL, NULL, 1, 1.0, 0.0, 1.0, 'Y', NULL, NULL, 0, 38, '1001', '', '', '', '', 484, '4', '1', 'P', 'N', 'N', 0.0, 'N', '3', '3', '3', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', 'N', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 'N', 179, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'D:/NetbeansProjects/SOFTSET/img/small_avt.jpg', NULL, NULL, NULL, NULL);
+
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('AIRPAY', '', 'Air-Pay', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('ALIPAY', '', 'Alipay', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('AMEX', '', 'AMEX', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('CCC', '', 'Chim Shop Chai', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('CR', '', 'Cr.Customet', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('DINER', '', 'DINER', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('FPD', '', 'Food Panda', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('G-WALLET', '', 'G-Wallet', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('GRAB', '', 'Grab', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('JCB', '', 'JCB', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('KRUNGSRI', '', 'Krungsri', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('LINEMAN', '', 'Line Man', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('MAT', '', 'MASTER', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('QR', '', 'QR CODE', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('RLP', '', 'Rabbit Line Pay', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('SHOPEE', '', 'Shopee Food', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('THAI QR', '', 'Thai QR Pay', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('TMB', '', 'TMB/TBANK', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('TREU FOOD', '', 'True Food Delivery', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('TRUE', '', 'True wallet', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('UNION', '', 'UNION', 'N', 0.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('VSA', '', 'VISA', 'N', 3.0, 0.0, NULL, 1.0);
+INSERT INTO MyRestaurantJefferSakon.creditfile
+(CrCode, CrBank, CrName, CrGetCardNo, CrCharge, CrRedule, CrList, CrMemScore)
+VALUES('WECHAT', '', 'Wechat', 'N', 0.0, 0.0, NULL, 1.0);
+
+INSERT INTO MyRestaurantJefferSakon.protab
+(ProCode, Prodesc, PDate1, PDate2, PStrDay, PTime1S, PTime1E, PDisc1, PSPDisc1, PTS1, PTime2S, PTime2E, PDisc2, PSPDisc2, PTS2, PTime3S, PTime3E, PDisc3, PSPDisc3, PTS3, PType, PSale1, PFree1, PSum1, PDiscFree1, PSale2, PFree2, PSum2, PDiscFree2, PSale3, PFree3, PSum3, PDiscFree3, PSale41, PFree41, PSale42, PFree42, PSale43, PFree43, PQty11, PQty12, PQty13, PQty14, PQDisc11, PQDisc12, PQDisc13, PQDisc14, PQBath11, PQBath12, PQBath13, PQBath14, PQty21, PQty22, PQty23, PQty24, PQDisc21, PQDisc22, PQDisc23, PQDisc24, PQBath21, PQBath22, PQBath23, PQBath24, PQty31, PQty32, PQty33, PQty34, PQDisc31, PQDisc32, PQDisc33, PQDisc34, PQBath31, PQBath32, PQBath33, PQBath34, PCheckBran, PBranList)
+VALUES('001', 'สปาเกตตี้ขี้เมาทะเล+ส้มตำ99', '2017-10-20', '2018-01-15', ',Sun,Mon,Tue,Wed,Thu,Fri,Sat', '00:59', '23:59', 0, 49.0, ',E', '  :  ', '  :  ', 0, 0.0, '', '  :  ', '  :  ', 0, 0.0, '', '1', 0, 0, 0, 0.0, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 'N', '');
+INSERT INTO MyRestaurantJefferSakon.protab
+(ProCode, Prodesc, PDate1, PDate2, PStrDay, PTime1S, PTime1E, PDisc1, PSPDisc1, PTS1, PTime2S, PTime2E, PDisc2, PSPDisc2, PTS2, PTime3S, PTime3E, PDisc3, PSPDisc3, PTS3, PType, PSale1, PFree1, PSum1, PDiscFree1, PSale2, PFree2, PSum2, PDiscFree2, PSale3, PFree3, PSum3, PDiscFree3, PSale41, PFree41, PSale42, PFree42, PSale43, PFree43, PQty11, PQty12, PQty13, PQty14, PQDisc11, PQDisc12, PQDisc13, PQDisc14, PQBath11, PQBath12, PQBath13, PQBath14, PQty21, PQty22, PQty23, PQty24, PQDisc21, PQDisc22, PQDisc23, PQDisc24, PQBath21, PQBath22, PQBath23, PQBath24, PQty31, PQty32, PQty33, PQty34, PQDisc31, PQDisc32, PQDisc33, PQDisc34, PQBath31, PQBath32, PQBath33, PQBath34, PCheckBran, PBranList)
+VALUES('002', 'ชามะนาว(NonRefill)+มันบด', '2017-11-09', '2018-01-17', ',Sun,Mon,Tue,Wed,Thu,Fri,Sat', '00:59', '23:59', 0, 39.0, ',E', '  :  ', '  :  ', 0, 0.0, '', '  :  ', '  :  ', 0, 0.0, '', '1', 0, 0, 0, 0.0, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 'N', '');
+INSERT INTO MyRestaurantJefferSakon.protab
+(ProCode, Prodesc, PDate1, PDate2, PStrDay, PTime1S, PTime1E, PDisc1, PSPDisc1, PTS1, PTime2S, PTime2E, PDisc2, PSPDisc2, PTS2, PTime3S, PTime3E, PDisc3, PSPDisc3, PTS3, PType, PSale1, PFree1, PSum1, PDiscFree1, PSale2, PFree2, PSum2, PDiscFree2, PSale3, PFree3, PSum3, PDiscFree3, PSale41, PFree41, PSale42, PFree42, PSale43, PFree43, PQty11, PQty12, PQty13, PQty14, PQDisc11, PQDisc12, PQDisc13, PQDisc14, PQBath11, PQBath12, PQBath13, PQBath14, PQty21, PQty22, PQty23, PQty24, PQDisc21, PQDisc22, PQDisc23, PQDisc24, PQBath21, PQBath22, PQBath23, PQBath24, PQty31, PQty32, PQty33, PQty34, PQDisc31, PQDisc32, PQDisc33, PQDisc34, PQBath31, PQBath32, PQBath33, PQBath34, PCheckBran, PBranList)
+VALUES('003', 'ข้าวอกไก่ย่างเทอริยากิ79', '2017-11-15', '2018-01-15', ',Sun,Mon,Tue,Wed,Thu,Fri,Sat', '00:59', '23:59', 0, 79.0, ',E', '  :  ', '  :  ', 0, 0.0, '', '  :  ', '  :  ', 0, 0.0, '', '1', 0, 0, 0, 0.0, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 'N', '');
+INSERT INTO MyRestaurantJefferSakon.protab
+(ProCode, Prodesc, PDate1, PDate2, PStrDay, PTime1S, PTime1E, PDisc1, PSPDisc1, PTS1, PTime2S, PTime2E, PDisc2, PSPDisc2, PTS2, PTime3S, PTime3E, PDisc3, PSPDisc3, PTS3, PType, PSale1, PFree1, PSum1, PDiscFree1, PSale2, PFree2, PSum2, PDiscFree2, PSale3, PFree3, PSum3, PDiscFree3, PSale41, PFree41, PSale42, PFree42, PSale43, PFree43, PQty11, PQty12, PQty13, PQty14, PQDisc11, PQDisc12, PQDisc13, PQDisc14, PQBath11, PQBath12, PQBath13, PQBath14, PQty21, PQty22, PQty23, PQty24, PQDisc21, PQDisc22, PQDisc23, PQDisc24, PQBath21, PQBath22, PQBath23, PQBath24, PQty31, PQty32, PQty33, PQty34, PQDisc31, PQDisc32, PQDisc33, PQDisc34, PQBath31, PQBath32, PQBath33, PQBath34, PCheckBran, PBranList)
+VALUES('408', 'TEST', '2016-02-01', '2016-11-30', ',Sun,Mon,Tue,Wed,Thu,Fri,Sat', '00:01', '23:59', 0, 20.0, ',E,T,D,P,W', '  :  ', '  :  ', 0, 0.0, '', '  :  ', '  :  ', 0, 0.0, '', '4', 2, 1, 2, 10.0, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 1, 1, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 'N', '');
+INSERT INTO MyRestaurantJefferSakon.protab
+(ProCode, Prodesc, PDate1, PDate2, PStrDay, PTime1S, PTime1E, PDisc1, PSPDisc1, PTS1, PTime2S, PTime2E, PDisc2, PSPDisc2, PTS2, PTime3S, PTime3E, PDisc3, PSPDisc3, PTS3, PType, PSale1, PFree1, PSum1, PDiscFree1, PSale2, PFree2, PSum2, PDiscFree2, PSale3, PFree3, PSum3, PDiscFree3, PSale41, PFree41, PSale42, PFree42, PSale43, PFree43, PQty11, PQty12, PQty13, PQty14, PQDisc11, PQDisc12, PQDisc13, PQDisc14, PQBath11, PQBath12, PQBath13, PQBath14, PQty21, PQty22, PQty23, PQty24, PQDisc21, PQDisc22, PQDisc23, PQDisc24, PQBath21, PQBath22, PQBath23, PQBath24, PQty31, PQty32, PQty33, PQty34, PQDisc31, PQDisc32, PQDisc33, PQDisc34, PQBath31, PQBath32, PQBath33, PQBath34, PCheckBran, PBranList)
+VALUES('888', 'ลดบาท', '2016-01-13', '2016-01-31', ',Sun,Mon,Tue,Wed,Thu,Fri,Sat', '00:59', '23:59', 0, 20.0, ',E,T,D,P,W', '  :  ', '  :  ', 0, 0.0, '', '  :  ', '  :  ', 0, 0.0, '', '4', 0, 0, 2, 10.0, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 2, 1, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 'N', '');
+INSERT INTO MyRestaurantJefferSakon.protab
+(ProCode, Prodesc, PDate1, PDate2, PStrDay, PTime1S, PTime1E, PDisc1, PSPDisc1, PTS1, PTime2S, PTime2E, PDisc2, PSPDisc2, PTS2, PTime3S, PTime3E, PDisc3, PSPDisc3, PTS3, PType, PSale1, PFree1, PSum1, PDiscFree1, PSale2, PFree2, PSum2, PDiscFree2, PSale3, PFree3, PSum3, PDiscFree3, PSale41, PFree41, PSale42, PFree42, PSale43, PFree43, PQty11, PQty12, PQty13, PQty14, PQDisc11, PQDisc12, PQDisc13, PQDisc14, PQBath11, PQBath12, PQBath13, PQBath14, PQty21, PQty22, PQty23, PQty24, PQDisc21, PQDisc22, PQDisc23, PQDisc24, PQBath21, PQBath22, PQBath23, PQBath24, PQty31, PQty32, PQty33, PQty34, PQDisc31, PQDisc32, PQDisc33, PQDisc34, PQBath31, PQBath32, PQBath33, PQBath34, PCheckBran, PBranList)
+VALUES('999', 'PromotionTest', '2016-01-03', '2017-01-31', ',Sun,Mon,Tue,Wed,Thu,Fri,Sat', '00:01', '23:59', 10, 0.0, ',E,T,D,P,W', '  :  ', '  :  ', 0, 0.0, '', '  :  ', '  :  ', 0, 0.0, '', '1', 2, 1, 10, 0.0, 0, 0, 0, 0.0, 0, 0, 0, 0.0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 'N', '');
+
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('BEF002', '', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('BEF002', 'APT011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('c', 'c', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST001', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', '9999', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST002', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'ST006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST003', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST004', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST005', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST006', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST007', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'APT011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'APT012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'ST008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST008', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST009', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST010', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST011', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'FRE2001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'FRE2002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG001', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG002', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG003', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG004', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST012', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST013', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST013', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST013', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST013', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST013', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST013', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST013', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST013', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST014', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST014', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST014', 'TG007', 10.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST014', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST014', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST014', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST014', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST014', 'TG012', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST015', 'TG005', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST015', 'TG006', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST015', 'TG007', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST015', 'TG008', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST015', 'TG009', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST015', 'TG010', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST015', 'TG011', 1.0);
+INSERT INTO MyRestaurantJefferSakon.pset
+(PCode, PSubCode, PSubQty)
+VALUES('ST015', 'TG012', 1.0);
+
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('10', 'พนักงานคีย์รายการอาหารผิด');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('20', 'ระบบออกรายการอาหารซ้ำ');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('30', 'ใบตรวจสอบไม่แสดงส่วนลดอาหาร');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('40', 'อาหารหมด');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('50', 'ลูกค้ายกเลิกรออาหารนาน15นาที');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('60', 'ลูกค้ายกเลิกไม่พอใจคุณภาพอาหาร');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('70', 'ลูกค้ายกเลิกขอเปลี่ยนรายการ');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('80', 'ลูกค้ายกเลิกพนักงานลงอาหารผิด');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('90', 'ลูกค้าขอคืนสินค้า');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('91', 'IT ทดสอบระบบ');
+INSERT INTO MyRestaurantJefferSakon.voidmsg
+(VCode, VName)
+VALUES('92', 'สาขาอบรมพนักงาน');
+

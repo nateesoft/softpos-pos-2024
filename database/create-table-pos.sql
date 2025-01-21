@@ -184,7 +184,7 @@ CREATE TABLE `aruser` (
 -- MyRestaurantJefferSakon.balance definition
 
 CREATE TABLE `balance` (
-  `R_Index` varchar(10) DEFAULT NULL,
+  `R_Index` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `R_Table` varchar(15) NOT NULL DEFAULT '',
   `R_Date` date DEFAULT NULL,
   `R_Time` varchar(10) DEFAULT NULL,
@@ -203,7 +203,7 @@ CREATE TABLE `balance` (
   `R_Set` char(1) DEFAULT NULL,
   `R_Vat` char(1) DEFAULT NULL,
   `R_Type` char(1) DEFAULT NULL,
-  `R_ETD` char(1) DEFAULT NULL,
+  `R_ETD` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `R_Quan` float(10,3) NOT NULL DEFAULT '0.000',
   `R_Price` float(10,2) NOT NULL DEFAULT '0.00',
   `R_Total` float(10,2) NOT NULL DEFAULT '0.00',
@@ -275,15 +275,13 @@ CREATE TABLE `balance` (
   `SoneCode` varchar(100) DEFAULT NULL,
   `R_Earn` char(1) NOT NULL DEFAULT 'N',
   `R_EarnNo` varchar(15) DEFAULT NULL,
-  `R_SeparateFrom` char(20) NOT NULL DEFAULT '-',
   `TranType` varchar(10) DEFAULT NULL,
   `PDAPrintCheck` char(1) DEFAULT NULL,
   `PDAEMP` char(15) DEFAULT NULL,
   `R_empName` varchar(50) DEFAULT NULL,
   `R_ServiceAmt` float(13,2) DEFAULT NULL,
   `R_PEName` varchar(150) DEFAULT NULL,
-  `R_Indulgent` char(1) DEFAULT NULL,
-  `R_CardPay` char(1) DEFAULT NULL
+  `R_Indulgent` char(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -4002,7 +4000,12 @@ CREATE TABLE `t_credit` (
   `CrCode` varchar(8) DEFAULT NULL,
   `CardNo` varchar(20) DEFAULT NULL,
   `CrApp` varchar(10) DEFAULT NULL,
-  `CrAmt` float(10,2) DEFAULT NULL
+  `CrAmt` float(10,2) DEFAULT NULL,
+  `ondate` date DEFAULT NULL,
+  `refno` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `cashier` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `CrCharge` float(5,2) DEFAULT '0.00',
+  `CrChargeAmount` float(8,2) DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -5122,7 +5125,9 @@ CREATE TABLE `tempcredit` (
   `CrCode` varchar(8) NOT NULL DEFAULT '',
   `CrId` varchar(20) DEFAULT NULL,
   `CrApp` varchar(10) DEFAULT NULL,
-  `CrAmt` float(10,2) NOT NULL DEFAULT '0.00'
+  `CrAmt` float(10,2) NOT NULL DEFAULT '0.00',
+  `CrCharge` float(5,2) DEFAULT '0.00',
+  `CrChargeAmount` float(8,2) DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 

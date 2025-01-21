@@ -1,3 +1,17 @@
+-- posdb.branch definition
+
+CREATE TABLE `branch` (
+  `id` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- posdb.company definition
+
+CREATE TABLE `company` (
+  `id` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
 -- posdb.floorplan_setup definition
 
 CREATE TABLE `floorplan_setup` (
@@ -15,98 +29,41 @@ CREATE TABLE `floorplan_setup` (
 
 CREATE TABLE `floorplan_template` (
   `id` varchar(50) NOT NULL,
-  `template` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `template` json NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
--- posdb.order_details definition
-
-CREATE TABLE `order_details` (
-  `id` varchar(255) NOT NULL,
-  `order_no` varchar(10) DEFAULT NULL,
-  `menu_code` varchar(30) DEFAULT NULL,
-  `menu_price` decimal(10,2) DEFAULT NULL,
-  `menu_qty` int DEFAULT NULL,
-  `discount_amount` decimal(10,2) DEFAULT NULL,
-  `total_amount` decimal(10,2) DEFAULT NULL,
-  `net_amount` decimal(10,2) DEFAULT NULL,
-  `order_type` varchar(10) DEFAULT NULL,
-  `employe_order` varchar(50) DEFAULT NULL,
-  `print_toKic` char(1) DEFAULT NULL,
-  `take_order` char(1) DEFAULT NULL,
-  `take_order_time` datetime DEFAULT NULL,
-  `create_date` datetime DEFAULT NULL,
-  `create_by` varchar(50) DEFAULT NULL,
-  `update_date` datetime DEFAULT NULL,
-  `update_by` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- posdb.orders definition
-
-CREATE TABLE `orders` (
-  `id` varchar(255) NOT NULL,
-  `order_no` varchar(13) DEFAULT NULL,
-  `table_no` varchar(250) DEFAULT NULL,
-  `customer_count` varchar(250) DEFAULT NULL,
-  `member_code` varchar(250) DEFAULT NULL,
-  `member_name` varchar(250) DEFAULT NULL,
-  `discount_amount_dinein` decimal(10,2) DEFAULT NULL,
-  `discount_amount_takeaway` decimal(10,2) DEFAULT NULL,
-  `discount_amount_delivery` decimal(10,2) DEFAULT NULL,
-  `discount_amount` decimal(10,2) DEFAULT NULL,
-  `total_amount_dinein` decimal(10,2) DEFAULT NULL,
-  `total_amount_takeaway` decimal(10,2) DEFAULT NULL,
-  `total_amount_delivery` decimal(10,2) DEFAULT NULL,
-  `vat_percent` decimal(5,2) DEFAULT NULL,
-  `vat_amount_dinein` decimal(10,2) DEFAULT NULL,
-  `vat_amount_takeaway` decimal(10,2) DEFAULT NULL,
-  `vat_amount_delivery` decimal(10,2) DEFAULT NULL,
-  `vat_amount` decimal(10,2) DEFAULT NULL,
-  `net_total_amount_dinein` decimal(10,2) DEFAULT NULL,
-  `net_total_amount_takeaway` decimal(10,2) DEFAULT NULL,
-  `net_total_amount_delivery` decimal(10,2) DEFAULT NULL,
-  `net_total_amount` decimal(10,2) DEFAULT NULL,
-  `employee_checkin` varchar(50) DEFAULT NULL,
-  `create_date` datetime DEFAULT NULL,
-  `create_by` varchar(50) DEFAULT NULL,
-  `update_date` datetime DEFAULT NULL,
-  `update_by` varchar(50) DEFAULT NULL,
-  `bill_status` char(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- posdb.product definition
-
-CREATE TABLE `product` (
-  `id` varchar(255) NOT NULL,
-  `name` varchar(150) DEFAULT NULL,
-  `url` varchar(100) DEFAULT NULL,
-  `qty` int DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `group` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- posdb.product_order definition
-
-CREATE TABLE `product_order` (
-  `id` varchar(255) NOT NULL,
-  `name` varchar(150) DEFAULT NULL,
-  `url` varchar(100) DEFAULT NULL,
-  `qty` int DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `totalAmount` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- posdb.menu_setup definition
 
 CREATE TABLE `menu_setup` (
+  `id` varchar(255) NOT NULL,
+  `menu_code` varchar(20) DEFAULT NULL,
+  `menu_name` varchar(250) DEFAULT NULL,
+  `menu_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `menu_type` varchar(50) DEFAULT NULL,
+  `menu_status` varchar(50) DEFAULT NULL,
+  `show_list_menu` char(1) DEFAULT NULL,
+  `ref_menu` varchar(20) DEFAULT NULL,
+  `auto_select` char(1) DEFAULT NULL,
+  `can_change` char(1) DEFAULT NULL,
+  `min_count_set` int DEFAULT NULL,
+  `max_count_set` int DEFAULT NULL,
+  `free` char(1) DEFAULT NULL,
+  `percent_discount` double(4,2) DEFAULT NULL,
+  `manual_discount` double(5,2) DEFAULT NULL,
+  `image_url` varchar(250) DEFAULT NULL,
+  `tab_group` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `menu_price` double(7,2) DEFAULT NULL,
+  `product_group` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `manual_price` char(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- posdb.menu_setup_temp definition
+
+CREATE TABLE `menu_setup_temp` (
   `id` varchar(255) NOT NULL,
   `menu_code` varchar(20) DEFAULT NULL,
   `menu_name` varchar(250) DEFAULT NULL,
@@ -123,7 +80,66 @@ CREATE TABLE `menu_setup` (
   `percent_discount` double(4,2) DEFAULT NULL,
   `manual_discount` double(5,2) DEFAULT NULL,
   `image_url` varchar(250) DEFAULT NULL,
-  `tab_group` varchar(10) DEFAULT NULL,
+  `tab_group` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `menu_price` double(7,2) DEFAULT NULL,
+  `product_group` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `manual_price` char(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- posdb.menu_tabs definition
+
+CREATE TABLE `menu_tabs` (
+  `tab_key` varchar(10) DEFAULT NULL,
+  `tab_name_title` varchar(100) DEFAULT NULL,
+  `tab_name_title_en` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `image_url` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- posdb.pos_setting definition
+
+CREATE TABLE `pos_setting` (
+  `id` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- posdb.shop definition
+
+CREATE TABLE `shop` (
+  `id` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- posdb.table_checkin definition
+
+CREATE TABLE `table_checkin` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `Tcode` varchar(10) DEFAULT '',
+  `emp_code_first` varchar(20) DEFAULT '',
+  `emp_code_last` varchar(20) DEFAULT '',
+  `macno` varchar(5) DEFAULT '',
+  `customer_count` int DEFAULT '0',
+  `cust_man_count` int DEFAULT '0',
+  `cust_woman_count` int DEFAULT '0',
+  `cust_kid_count` int DEFAULT '0',
+  `cust_old_count` int DEFAULT '0',
+  `datetime_checkin` datetime DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT '',
+  `member_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
+  `book_no` varchar(20) DEFAULT '',
+  `table_order_type_start` char(1) DEFAULT 'E',
+  `active` varchar(1) DEFAULT 'Y',
+  `cust_thai_count` int DEFAULT '0',
+  `cust_europe_count` int DEFAULT '0',
+  `cust_america_count` int DEFAULT '0',
+  `cust_asia_count` int DEFAULT '0',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=176 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- posdb.terminal definition
+
+CREATE TABLE `terminal` (
+  `id` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
