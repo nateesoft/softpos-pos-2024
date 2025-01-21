@@ -40,8 +40,8 @@ const ProductCard = memo(
       >
         <div
           style={{
-            border: "1px solid #eee",
-            padding: "5px",
+            margin: "2px",
+            padding: "3px",
             borderRadius: "3px 3px 0px 0px",
             boxShadow: "2px 1px #eee"
           }}
