@@ -1,13 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Grid2, IconButton, InputBase, Modal, Paper, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid2, IconButton, Modal, Paper, TextField, Typography } from "@mui/material";
 import ArrowBack from '@mui/icons-material/ArrowBack'
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import DiscountIcon from '@mui/icons-material/Discount';
 import CloseIcon from '@mui/icons-material/Close';
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 import ReceiptIcon from '@mui/icons-material/Receipt';
-import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import SendToMobileIcon from '@mui/icons-material/SendToMobile';
@@ -19,6 +18,8 @@ import { POSContext } from "../../AppContext";
 import QrCodeGenerator from "./QRCodePayment";
 import CreditChargeModal from "./CreditChargeModal";
 import MultipleCreditPayment from "./MultipleCreditPayment";
+import { ModalConfirm } from '../ui-utils/AlertPopup'
+import { PRINTER_TYPE } from "../../AppConstants";
 
 const NumFormat = data => {
     return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
@@ -33,7 +34,6 @@ const normalButton = {
     '&:hover': {
         background: "radial-gradient(circle, orange, #000)"
     }
-
 }
 const modalStyle = {
     position: "absolute",
@@ -97,6 +97,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
 
     // credit list
     const [creditTempList, setCreditTempList] = useState([])
+    const [openConfirmPayment, setOpenConfirmPayment] = useState(false)
 
     const navigate = useNavigate();
     const handleBackPage = () => {
@@ -191,6 +192,12 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
 
     const handleClear = () => {
         setCashAmount(0)
+        setDepositAmount(0)
+        setEntertainAmount(0)
+    }
+
+    const handleFit = () => {
+        setCashAmount(R_NetTotal)
         setDepositAmount(0)
         setEntertainAmount(0)
     }
@@ -297,7 +304,18 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                 .then(response => {
                     if (response.status === 200) {
                         const billNo = response.data.data
-                        navigate(`/payment/receipt/${billNo}`)
+                        // navigate(`/payment/receipt/${billNo}`)
+                        apiClient.post(`/api/printer-thermal/print-receipt`, {
+                            config: { printerIp: '192.168.1.27' },
+                            macno,
+                            billNo,
+                            printType: PRINTER_TYPE.RECEIPT
+                        })
+                        .then(response2 => {
+                            if(response2.status === 200){
+                                navigate('/floorplan')
+                            }
+                        })
                     } else {
                         handleNotification("พบข้อผิดพลาดในการรับชำระเงิน!")
                     }
@@ -471,7 +489,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(7)}>7</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(8)}>8</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(9)}>9</Button></td>
-                                        <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "yellow", color: "white" }} fullWidth>+</Button></td>
+                                        <td><Button variant="contained" sx={{ ...normalButton }} fullWidth onClick={handleClear}>C</Button></td>
                                     </tr>
                                 </table>
                                 <table width="100%">
@@ -479,7 +497,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(4)}>4</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(5)}>5</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(6)}>6</Button></td>
-                                        <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "red", color: "white" }} fullWidth>-</Button></td>
+                                        <td><Button variant="contained" sx={{ ...normalButton }} fullWidth>-</Button></td>
                                     </tr>
                                 </table>
                                 <table width="100%">
@@ -487,14 +505,15 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(1)}>1</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(2)}>2</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(3)}>3</Button></td>
-                                        <td><Button variant="contained" sx={{ ...normalButton, bgcolor: "orange", color: "white" }} fullWidth>x</Button></td>
+                                        <td><Button variant="contained" sx={{ ...normalButton }} fullWidth>x</Button></td>
                                     </tr>
                                 </table>
                                 <table width="100%">
                                     <tr>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat(0)}>0</Button></td>
                                         <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat('00')}>00</Button></td>
-                                        <td colSpan={2}><Button variant="contained" sx={{ ...normalButton, bgcolor: "green", color: "white" }} fullWidth onClick={handleClear}>clear</Button></td>
+                                        <td><Button variant="contained" sx={normalButton} fullWidth onClick={() => handleConcat('000')}>000</Button></td>
+                                        <td><Button variant="contained" sx={{ ...normalButton }} fullWidth onClick={handleFit}>F</Button></td>
                                     </tr>
                                 </table>
                             </Grid2>
@@ -521,7 +540,7 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                                     <Button variant="contained"
                                         sx={{ margin: "5px" }}
                                         color="success"
-                                        onClick={handleConfirmPayment}
+                                        onClick={()=>setOpenConfirmPayment(true)}
                                         disabled={balanceAmount < 0}
                                         endIcon={<ConfirmIcon />}>ชำระเงิน</Button>
                                 </Box>
@@ -579,6 +598,12 @@ function PaymentForm({ orderList, tableNo, handleNotification, tableFile, member
                     />
                 </Box>
             </Modal>
+            <ModalConfirm
+                open={openConfirmPayment}
+                setOpen={() => setOpenConfirmPayment(false)}
+                onSubmit={handleConfirmPayment}
+                header="Confirm Payment"
+                content="ยืนยันการชำระเงิน ?" />
         </Grid2>
     );
 }

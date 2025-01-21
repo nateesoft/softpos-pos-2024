@@ -1,8 +1,6 @@
 const pool = require('../config/database/MySqlConnect')
 const { decryptData } = require('../utils/StringUtil')
-
-// const { TOPIC_NAME } = require('../config/kafka/constants');
-// const kafka = require('../config/kafka/config');
+const { sendToDirectPrinter } = require('./PrinterService')
 
 const checkLogin = async (username, password, macno) => {
     const sql = `select * from posuser 
@@ -13,20 +11,10 @@ const checkLogin = async (username, password, macno) => {
         set onact='Y', macno='${macno}' where username='${username}'`
         await pool.query(sqlUpdate)
 
-        // const producer = kafka.producer()
-        // const messages = [{ key: "key1", value: `User: ${username} loggedIn.` }];
-        // try {
-        //     await producer.connect();
-        //     await producer.send({
-        //         topic: TOPIC_NAME,
-        //         messages: messages,
-        //     });
-        // } catch (error) {
-        //     console.error(error);
-        // } finally {
-        //     await producer.disconnect();
-        // }
-
+        sendToDirectPrinter({
+            "type": "login",
+            "message": "Print logged in."
+        })
         return {...results[0], Password: ""}
     }
     return null
@@ -45,6 +33,11 @@ const getLoginAuthen = async (username, password) => {
 const processLogout = async (username) => {
     const sqlUpdate = `update posuser set onact='N' where username='${username}'`
     const result = await pool.query(sqlUpdate)
+
+    sendToDirectPrinter({
+        "type": "logout",
+        "message": "Print logged out."
+    })
 
     return result
 }

@@ -6,7 +6,7 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import { useNavigate } from "react-router-dom";
 
 import apiClient from '../../httpRequest';
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 import { POSContext } from "../../AppContext";
 
 const modalStyle = {

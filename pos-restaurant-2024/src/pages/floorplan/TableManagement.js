@@ -24,7 +24,7 @@ import "./index.css"
 import ResizeNode from "./nodes/ResizeNode"
 import AppbarMenu from "./AppbarMenu"
 import TableSetup from "./modal/TableSetup"
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 
 const nodeTypes = {
   round: RoundNode,

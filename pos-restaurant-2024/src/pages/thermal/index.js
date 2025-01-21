@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Button, Grid2, TextField } from '@mui/material'
 
 import apiClient from '../../httpRequest';
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 
 const ConnectThermalPrinter = () => {
     const [printerIp, setPrinterIp] = useState("192.168.1.209")

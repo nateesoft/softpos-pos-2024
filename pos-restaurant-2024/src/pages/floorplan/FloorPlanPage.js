@@ -34,6 +34,7 @@ import RecieptCopyPrint from "./RecieptCopyPrint"
 import RefundBill from "./refund/RefundBill"
 import ManageCashDrawer from './ManageCashDrawer';
 import ManageMoveTable from './ManageMoveTable';
+import PosSettingsForm from './PosSettingsForm';
 import DashboardSetting from './DashboardSetting';
 
 import apiClient from '../../httpRequest'
@@ -42,15 +43,15 @@ import SquareNode from "./nodes/SquareNode"
 import LongNode from "./nodes/LongBarNode"
 import TallNode from "./nodes/TallBarNode"
 
-import { useKeyPress } from "../../util/PageListener"
-import { ModalConfirm } from "../../util/AlertPopup"
+import { useKeyPress } from "../ui-utils/PageListener"
+import { ModalConfirm } from "../ui-utils/AlertPopup"
 import PinLock from "./PinLock"
 
 import ResizeNode from "./nodes/ResizeNode"
 import FloorSelect from "./FloorSelect"
 import OtherMenuSelect from "./OtherMenuSelect"
 import { POSContext } from "../../AppContext"
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 import ReportSelect from "./ReportSelect"
 import LanguageSettings from "./LanguageSettings"
 import Footer from '../Footer'
@@ -107,6 +108,7 @@ function FloorPlanPage() {
   const [openRefundBill, setOpenRefundBill] = useState(false)
   const [openMgrCashDrawer, setOpenMgrCashDrawer] = useState(false)
   const [openMgrTable, setOpenMgrTable] = useState(false)
+  const [openPosSetting, setPosSetting] = useState(false)
   const [openDashboard, setOpenDashboard] = useState(false)
 
   const [showNoti, setShowNoti] = useState(false)
@@ -237,21 +239,21 @@ function FloorPlanPage() {
     }
   }, [keyPressed])
 
-  useEffect(()=> {
-    setInterval(()=> {
+  useEffect(() => {
+    setInterval(() => {
       setCurrentDate(new Date())
     }, 1000)
   }, [])
 
   return (
     <motion.div
-      style={{ backgroundColor: "black", padding: "10px" }}
+      style={{ background: "radial-gradient(circle at top, #003, #000)", padding: "10px" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar component="static" sx={{ backgroundColor: "black", boxShadow: "5px 3px #aaa" }}>
+        <AppBar component="static" sx={{ background: "radial-gradient(circle at center, #003, #000)", boxShadow: "5px 3px #aaa" }}>
           <Toolbar>
             <Grid2 container justifyContent="flex-start">
               {iphonePro14max === true && <div>
@@ -286,8 +288,8 @@ function FloorPlanPage() {
                 </Menu>
               </div>}
               {iphonePro14max === false && <div>
-                <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={()=>setOpenDashboard(true)}>
-                  <StoreIcon fontSize="large" sx={{background: "chocolate", borderRadius: "15px" }} />
+                <IconButton color="inherit" aria-label="open drawer" edge="start" onClick={() => setOpenDashboard(true)}>
+                  <StoreIcon fontSize="large" sx={{ background: "chocolate", borderRadius: "15px" }} />
                 </IconButton>
                 <IconButton color="inherit" aria-label="open drawer" edge="start">
                   <FloorSelect selectFloor={selectFloor} setSelectFloor={handleSelect} />
@@ -306,7 +308,7 @@ function FloorPlanPage() {
               </div>}
             </Grid2>
             <Grid2 container spacing={1} justifyContent="flex-end" alignItems="center" sx={{ flexGrow: 1 }}>
-              <Typography sx={{color: "yellow"}}>{moment(currentDate).format('DD/MM/YYYY HH:mm:ss')}</Typography>
+              <Typography sx={{ color: "yellow" }}>{moment(currentDate).format('DD/MM/YYYY HH:mm:ss')}</Typography>
               <LanguageSettings />
               <IconButton>
                 <AccountCircleIcon sx={{ color: "snow" }} />
@@ -365,7 +367,7 @@ function FloorPlanPage() {
       </Modal>
       <Modal open={openCashierStatus} onClose={() => handleCloseModal(() => setOpenCashierStatus(false))}>
         <Box sx={{ ...modalPinStyle, padding: "10px" }}>
-          <CheckCashierStatus setOpen={setOpenCashierStatus} onClose={()=>setOpenCashierStatus(false)} />
+          <CheckCashierStatus setOpen={setOpenCashierStatus} onClose={() => setOpenCashierStatus(false)} />
         </Box>
       </Modal>
       <Modal open={openRefundBill} onClose={() => handleCloseModal(() => setOpenRefundBill(false))}>
@@ -385,7 +387,12 @@ function FloorPlanPage() {
       </Modal>
       <Modal open={openDashboard} onClose={() => handleCloseModal(() => setOpenDashboard(false))}>
         <Box sx={{ ...modalStyle }}>
-          <DashboardSetting setOpen={setOpenDashboard} />
+          <DashboardSetting setOpen={setOpenDashboard} openSetting={setPosSetting} />
+        </Box>
+      </Modal>
+      <Modal open={openPosSetting} onClose={() => setPosSetting(false)}>
+        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
+          <PosSettingsForm setOpen={setPosSetting} onLoadFloorPlan={() => loadFloorPlan(selectFloor)} />
         </Box>
       </Modal>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />

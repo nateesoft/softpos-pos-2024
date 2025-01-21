@@ -12,7 +12,7 @@ import SelectIcon from '@mui/icons-material/CheckCircle';
 
 import apiClient from '../../httpRequest';
 import SearchAppBar from './member/SearchMember';
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 
 const columns = [
     { id: 'action', label: '', minWidth: 50 },

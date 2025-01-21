@@ -4,7 +4,7 @@ import { Alert, Box, Button, Modal, Typography } from "@mui/material"
 import apiClient from '../../httpRequest'
 import CustomerCheckin from "./CustomerCheckin"
 import { POSContext } from "../../AppContext"
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 
 const bgText = {
   backgroundColor: "rgba(0, 0, 0, 0.8)",
@@ -38,6 +38,17 @@ const inputPin = {
   textAlign: "center",
   backgroundColor: "black",
   color: "white"
+}
+
+const numberStyle = {
+  borderRadius: "50%",
+  height: "65px",
+  fontSize: "30px",
+  bgcolor: "black",
+  border: "1px solid gray",
+  '&:hover': {
+        background: "radial-gradient(circle, chocolate, #000)"
+    }
 }
 
 const PinLock = ({ setOpenPin }) => {
@@ -157,13 +168,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("1")}
             >
               1
@@ -172,13 +177,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("2")}
             >
               2
@@ -187,13 +186,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("3")}
             >
               3
@@ -202,13 +195,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("<")}
             >{`<`}</Button>
           </td>
@@ -217,13 +204,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("4")}
             >
               4
@@ -232,13 +213,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("5")}
             >
               5
@@ -247,13 +222,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("6")}
             >
               6
@@ -262,13 +231,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("+")}
             >
               +
@@ -279,13 +242,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("7")}
             >
               7
@@ -294,13 +251,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("8")}
             >
               8
@@ -309,13 +260,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("9")}
             >
               9
@@ -356,13 +301,7 @@ const PinLock = ({ setOpenPin }) => {
           <td>
             <Button
               variant="contained"
-              sx={{
-                borderRadius: "50%",
-                height: "65px",
-                fontSize: "30px",
-                bgcolor: "black",
-                border: "1px solid gray"
-              }}
+              sx={numberStyle}
               onClick={() => handlePin("0")}
             >
               0

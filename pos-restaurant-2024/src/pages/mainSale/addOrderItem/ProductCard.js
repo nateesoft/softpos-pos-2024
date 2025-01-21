@@ -8,7 +8,7 @@ import GppGoodIcon from '@mui/icons-material/GppGood';
 
 import apiClient from '../../../httpRequest';
 import { POSContext } from '../../../AppContext';
-import ShowNotification from "../../utils/ShowNotification"
+import ShowNotification from "../../ui-utils/ShowNotification"
 
 const modalStyle = {
   position: "absolute",

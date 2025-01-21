@@ -13,10 +13,10 @@ import { Divider, Grid2, useMediaQuery } from "@mui/material"
 
 import apiClient from '../../httpRequest'
 import { POSContext } from "../../AppContext"
-import { handleEnter } from "../../util/EventLisener"
+import { handleEnter } from "../ui-utils/EventLisener"
 import bg from "./bg/welcome.jpg"
 import bgimg from "./bg/bgbg.jpg"
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 import Footer from '../Footer'
 
 const darkTheme = createTheme({
@@ -56,7 +56,7 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     apiClient
-      .post("/api/posuser/login", { username: user, password: encryptData(password), macno: macno })
+      .post("/api/posuser/login", { username: user, password: encryptData(password), macno: macno, timeout: 3000 })
       .then(async (response) => {
         if (response.data.status === 2000) {
           const responseLogin = response.data.data

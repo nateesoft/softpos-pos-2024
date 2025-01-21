@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Cancel';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 
 import ChangeProductList from './ChangeProductList'
-import ShowNotification from '../utils/ShowNotification';
+import ShowNotification from '../ui-utils/ShowNotification';
 import apiClient from '../../httpRequest';
 
 const Transition = forwardRef(function Transition(props, ref) {

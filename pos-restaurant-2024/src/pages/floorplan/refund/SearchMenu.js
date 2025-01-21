@@ -12,7 +12,7 @@ import FindInPageIcon from '@mui/icons-material/FindInPage';
 
 import apiClient from '../../../httpRequest';
 import CalendarMonth from '@mui/icons-material/CalendarMonth'
-import ShowNotification from "../../utils/ShowNotification"
+import ShowNotification from "../../ui-utils/ShowNotification"
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',

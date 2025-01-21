@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import apiClient from '../../httpRequest'
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 
 function QrCodeGenerator({ mobileNumber, amount }) {
     const [image, setImage] = useState();

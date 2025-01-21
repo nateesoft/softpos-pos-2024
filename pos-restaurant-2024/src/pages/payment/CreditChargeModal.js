@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import { Button } from '@mui/material';
 
 import apiClient from '../../httpRequest';
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 
 const columns = [
     { id: 'CrCode', label: 'CrCode', minWidth: 50 },

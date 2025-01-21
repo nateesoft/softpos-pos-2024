@@ -3,7 +3,7 @@ import { Button, Grid2, TextField, Typography } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login';
 
 import apiClient from '../../httpRequest'
-import ShowNotification from '../utils/ShowNotification';
+import ShowNotification from '../ui-utils/ShowNotification';
 import { POSContext } from '../../AppContext';
 
 const UserAuthen = ({ setAuthenUser, handleShowConfirm, onClose }) => {

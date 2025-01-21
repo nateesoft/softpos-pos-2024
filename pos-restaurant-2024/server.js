@@ -29,4 +29,7 @@ app.use((req, res, next) => {
     }
 });
 
-app.listen(80);
+const port = process.env.WEB_PORT || 80
+console.log(`Website running port ${port}`)
+
+app.listen(port);

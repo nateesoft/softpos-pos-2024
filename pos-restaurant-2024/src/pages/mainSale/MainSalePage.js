@@ -8,7 +8,7 @@ import apiClient from '../../httpRequest'
 import AppbarMenu from "./AppbarMenu"
 import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 import Footer from '../Footer'
 
 function MainSalePage() {

@@ -6,7 +6,7 @@ import { Button, Divider, TextField, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import MoneyIcon from '@mui/icons-material/MonetizationOn'
 
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 import apiClient from '../../httpRequest';
 import { POSContext } from '../../AppContext';
 

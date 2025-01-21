@@ -28,7 +28,7 @@ const modalStyle = {
     boxShadow: 24
 }
 
-export default function DashboardSetting({ setOpen }) {
+export default function DashboardSetting({ setOpen, openSetting }) {
     const { appData } = useContext(POSContext)
     const { userLogin, macno } = appData
 
@@ -66,7 +66,7 @@ export default function DashboardSetting({ setOpen }) {
                 </Grid2>
                 <Grid2 size={4} container direction="column" alignItems="center" sx={panelStyle}>
                     <SettingsSuggestIcon sx={{ color: "white" }} fontSize='large' />
-                    <Button variant='text' sx={{ color: "white" }}>Settings</Button>
+                    <Button variant='text' sx={{ color: "white" }} onClick={()=>openSetting(true)}>Settings</Button>
                 </Grid2>
             </Grid2>
         </Box>

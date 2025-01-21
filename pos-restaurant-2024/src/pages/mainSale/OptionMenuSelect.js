@@ -9,7 +9,7 @@ import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import { Checkbox, ListItemText, TextField } from '@mui/material';
 
-import ShowNotification from "../utils/ShowNotification"
+import ShowNotification from "../ui-utils/ShowNotification"
 import apiClient from '../../httpRequest';
 
 const ITEM_HEIGHT = 48;

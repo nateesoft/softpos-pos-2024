@@ -11,7 +11,7 @@ const { getPOSConfigSetup } = require('./POSConfigSetupService');
 const { updateRefundMember, updateMemberData } = require('./member/crm/MemberMasterService');
 const { getMoment } = require('../utils/MomentUtil');
 const { summaryBalance } = require('./CoreService');
-const { createListCredit, deleteTempCredit, deleteListTempCredit } = require('./TCreditService');
+const { createListCredit, deleteListTempCredit } = require('./TCreditService');
 
 const getAllBillNoToday = async () => {
     const sql = `select * from billno where B_OnDate='${getMoment().format('YYYY-MM-DD')}'`;

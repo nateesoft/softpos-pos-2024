@@ -8,7 +8,7 @@ import apiClient from '../../httpRequest'
 import OrderItem from './OrderItem'
 import PaymentForm from './PaymentForm'
 import MemberInfo from "./MemberInfo";
-import ShowNotification from "../utils/ShowNotification";
+import ShowNotification from "../ui-utils/ShowNotification";
 import { Box, Modal } from "@mui/material";
 
 import MultiplePayment from "./split/MultiplePayment";

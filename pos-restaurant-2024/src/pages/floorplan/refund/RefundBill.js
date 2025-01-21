@@ -19,8 +19,8 @@ import CancelIcon from '@mui/icons-material/Cancel'
 import apiClient from '../../../httpRequest';
 import SearchMenu from './SearchMenu';
 import { POSContext } from '../../../AppContext';
-import { ModalConfirm } from '../../../util/AlertPopup';
-import ShowNotification from "../../utils/ShowNotification"
+import { ModalConfirm } from '../../ui-utils/AlertPopup';
+import ShowNotification from "../../ui-utils/ShowNotification"
 import UserAuthen from '../../modal/UserAuthen';
 
 const columns = [

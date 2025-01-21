@@ -62,6 +62,7 @@
     "electron": "electron .",
     "package": "electron-packager .",
     "dist": "electron-builder",
+    "start:local": "nodemon server.js",
     "start:prod": "react-scripts build && nodemon server.js"
   },
   "eslintConfig": {

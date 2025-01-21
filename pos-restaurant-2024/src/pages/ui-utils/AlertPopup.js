@@ -43,9 +43,9 @@ export const ModalConfirm = ({ open, setOpen, onSubmit, header = "Header", conte
     return <Modal open={open} onClose={() => setOpen(false)}
         aria-labelledby="modal-title"
         aria-describedby="modal-description" disableEscapeKeyDown>
-        <Box sx={{ ...modalStyle, width: 450, borderRadius: "0px 0px 10px 10px" }}>
-            <Box display="flex" justifyContent="space-between" sx={{ backgroundColor: "#ffa48c" }}>
-                <Button variant='text' sx={{ color: "#555", fontWeight: "bold", marginLeft: "10px" }} startIcon={<HelpIcon sx={{color: "#555"}} />}>POS Restuarant</Button>
+        <Box sx={{ ...modalStyle, width: 450, borderRadius: "5px" }}>
+            <Box display="flex" justifyContent="space-between" sx={{ background: "radial-gradient(circle, #123456, #000)", borderRadius: "5px" }}>
+                <Button variant='text' sx={{ color: "snow", fontWeight: "bold", marginLeft: "10px" }} startIcon={<HelpIcon sx={{color: "snow"}} />}>POS Restuarant</Button>
                 <Button variant='text' color="error" onClick={() => setOpen(false)}>
                     <CloseIcon fontSize="large" />
                 </Button>
@@ -58,7 +58,7 @@ export const ModalConfirm = ({ open, setOpen, onSubmit, header = "Header", conte
                     {content}
                 </Box>
             </Box>
-            <Box sx={{ backgroundColor: "#eee", padding: "10px", borderRadius: "10px" }}>
+            <Box sx={{ backgroundColor: "#eee", padding: "10px", borderRadius: "5px" }}>
                 <Box display="flex" justifyContent="center">
                     <Button variant='contained' color='error' startIcon={<CloseIcon />} onClick={() => setOpen(false)} sx={{ marginRight: "10px" }}>Cancel</Button>
                     <Button variant='contained' color='primary' onClick={() => onSubmit()} startIcon={<OkIcon />}>OK</Button>
