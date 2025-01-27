@@ -18,13 +18,11 @@ const max = 10;
 
 const CustomerCheckin = (props) => {
     const { appData, setAppData } = useContext(POSContext)
-    const { macno, userLogin } = appData
-    const { tableNo, tableStatus } = appData.tableInfo
+    const { macno } = appData
+    const { tableNo } = appData.tableInfo
 
     const { setOpenPin, empCode } = props
     const navigate = useNavigate();
-
-    const [tableInfo, setTableIno] = useState(null)
 
     const [custCount, setCustCount] = useState(1)
     const [orderType, setOrderType] = useState('E');
@@ -124,7 +122,6 @@ const CustomerCheckin = (props) => {
             .then(response => {
                 if (response.status === 200 && response.data.data != null) {
                     const tableInfoData = response.data.data
-                    setTableIno(tableInfoData)
                     setCustCount(tableInfoData.customer_count)
                     setManCount(tableInfoData.cust_man_count)
                     setWomanCount(tableInfoData.cust_woman_count)

@@ -27,6 +27,7 @@ import RefundIcon from "@mui/icons-material/ReceiptLong"
 import StoreIcon from '@mui/icons-material/Store';
 import { useTranslation } from "react-i18next"
 import moment from 'moment'
+import { io } from 'socket.io-client'
 
 import CheckTableStatus from "./checkTable"
 import CheckCashierStatus from "./cashierStatus"
@@ -79,7 +80,10 @@ const nodeTypes = {
 
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 };
 
+const SOCKET_SERVER_URL = "http://localhost:9090"; // URL ของ Socket.IO server
+
 function FloorPlanPage() {
+  const socket = useRef(null);
   const { t } = useTranslation('global')
   const navigate = useNavigate()
 
@@ -135,6 +139,14 @@ function FloorPlanPage() {
         if (response.data.status === 2000) {
           setAppData({ ...appData, userLogin: "", posuser: null })
           localStorage.setItem("userLogin", "")
+
+          // send to printer
+          socket.current.emit("printerMessage",
+            JSON.stringify({
+              id: 1,
+              message: "ออกจากระบบเรียบร้อย"
+            }))
+
           navigate("/")
         } else {
           setOpenLogout(false)
@@ -244,6 +256,25 @@ function FloorPlanPage() {
       setCurrentDate(new Date())
     }, 1000)
   }, [])
+
+  useEffect(()=> {
+      // เชื่อมต่อกับ Socket.IO server
+      socket.current = io(SOCKET_SERVER_URL);
+  
+      // รับข้อความจาก server
+      socket.current.on("message", (newMessage) => {
+        console.log(newMessage)
+      });
+  
+      socket.current.on("reply", (newMessage) => {
+        console.log(newMessage)
+      });
+  
+      // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
+      return () => {
+        socket.current.disconnect();
+      };
+    }, [])
 
   return (
     <motion.div

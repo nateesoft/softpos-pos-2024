@@ -46,10 +46,6 @@ const TableSetup = (props) => {
     closeModal()
   }
 
-  const PreviewImage = (url, alt = "") => {
-    return <img src={url} alt={alt} width={64} height={64} />
-  }
-
   if (!tableInfo.id) {
     return <></>
   }

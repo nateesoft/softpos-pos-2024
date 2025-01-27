@@ -7,9 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import { Button, Grid2 } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Grid2 } from '@mui/material';
 import TableBarIcon from '@mui/icons-material/TableRestaurant';
 
 const Search = styled('div')(({ theme }) => ({

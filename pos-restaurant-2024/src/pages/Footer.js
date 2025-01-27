@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { Divider, Grid2, Typography } from '@mui/material';
+import { Grid2, Typography } from '@mui/material';
 
 export default function FixedBottomNavigation() {
 
