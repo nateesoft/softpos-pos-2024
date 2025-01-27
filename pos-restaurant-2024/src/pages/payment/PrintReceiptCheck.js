@@ -4,7 +4,6 @@ import { useReactToPrint } from 'react-to-print'
 import Moment from 'react-moment'
 import { useNavigate, useParams } from 'react-router-dom'
 import PrintIcon from '@mui/icons-material/Print'
-import TableBarIcon from '@mui/icons-material/TableBar'
 import { tableCellClasses } from '@mui/material/TableCell'
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 

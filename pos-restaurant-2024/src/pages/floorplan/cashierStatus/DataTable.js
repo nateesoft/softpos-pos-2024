@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,7 +14,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import apiClient from '../../../httpRequest'
 
 const TemplateReport = ({ columnTable, dataTable, initLoad }) => {
-    const navigate = useNavigate()
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 

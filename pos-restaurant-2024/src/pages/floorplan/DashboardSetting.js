@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import { Button, Grid2 } from '@mui/material';
 import StoreIcon from '@mui/icons-material/Store';
@@ -6,8 +6,6 @@ import BusinessIcon from '@mui/icons-material/Business';
 import GroupIcon from '@mui/icons-material/Group';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
-
-import { POSContext } from '../../AppContext';
 
 const panelStyle = {
     background: "radial-gradient(circle, #123456, #000)", 
@@ -29,18 +27,6 @@ const modalStyle = {
 }
 
 export default function DashboardSetting({ setOpen, openSetting }) {
-    const { appData } = useContext(POSContext)
-    const { userLogin, macno } = appData
-
-    const [showNoti, setShowNoti] = useState(false)
-    const [notiMessage, setNotiMessage] = useState("")
-    const [alertType, setAlertType] = useState("info")
-    const handleNotification = (message, type = "error") => {
-        setNotiMessage(message)
-        setAlertType(type)
-        setShowNoti(true)
-    }
-
     return (
         <Box sx={{ ...modalStyle, padding: "10px", width: "450px", background: "none" }}>
             <Grid2 container spacing={1} justifyContent="space-between">

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
@@ -8,16 +8,17 @@ import Typography from "@mui/material/Typography"
 import Container from "@mui/material/Container"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { motion } from "framer-motion"
-import LoginIcon from '@mui/icons-material/Login';
+import LoginIcon from "@mui/icons-material/Login"
 import { Divider, Grid2, useMediaQuery } from "@mui/material"
+import { io } from "socket.io-client"
 
-import apiClient from '../../httpRequest'
+import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import { handleEnter } from "../ui-utils/EventLisener"
 import bg from "./bg/welcome.jpg"
 import bgimg from "./bg/bgbg.jpg"
 import ShowNotification from "../ui-utils/ShowNotification"
-import Footer from '../Footer'
+import Footer from "../Footer"
 
 const darkTheme = createTheme({
   palette: {
@@ -34,11 +35,14 @@ const boxstyle = {
   boxShadow: 24
 }
 
+const SOCKET_SERVER_URL = "http://localhost:9090" // URL ของ Socket.IO server
+
 const Login = () => {
+  const socket = useRef(null)
   const { appData, setAppData } = useContext(POSContext)
   const { macno, encryptData } = appData
 
-  const iphonePro14max = useMediaQuery('(max-width:430px)');
+  const iphonePro14max = useMediaQuery("(max-width:430px)")
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
 
@@ -56,7 +60,12 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     apiClient
-      .post("/api/posuser/login", { username: user, password: encryptData(password), macno: macno, timeout: 3000 })
+      .post("/api/posuser/login", {
+        username: user,
+        password: encryptData(password),
+        macno: macno,
+        timeout: 3000
+      })
       .then(async (response) => {
         if (response.data.status === 2000) {
           const responseLogin = response.data.data
@@ -71,6 +80,16 @@ const Login = () => {
 
             localStorage.setItem("userLogin", user)
             localStorage.setItem("posuser", JSON.stringify(response.data.data))
+
+            // send to printer
+            socket.current.emit(
+              "printerMessage",
+              JSON.stringify({
+                id: 1,
+                message: "เข้าสู่ระบบสำเร็จ"
+              })
+            )
+
             setAppData({
               ...appData,
               userLogin: user,
@@ -78,24 +97,46 @@ const Login = () => {
               branchInfo,
               companyInfo
             })
-            const backLink = localStorage.getItem('backLink')
+            const backLink = localStorage.getItem("backLink")
             if (backLink) {
-              localStorage.removeItem('backLink')
+              localStorage.removeItem("backLink")
               navigate(backLink)
             } else {
               navigate("/floorplan")
             }
           } else {
-            handleNotification("ข้อมูลผู้ใช้งาน Username/ Pasword ไม่ถูกต้อง !!!", "warning")
+            handleNotification(
+              "ข้อมูลผู้ใช้งาน Username/ Pasword ไม่ถูกต้อง !!!",
+              "warning"
+            )
           }
         } else {
           handleNotification("ไม่สามารถ Login เข้าระบบได้ !", "error")
         }
       })
-      .catch(error => {
+      .catch((error) => {
         handleNotification(error.message)
       })
   }
+
+  useEffect(() => {
+    // เชื่อมต่อกับ Socket.IO server
+    socket.current = io(SOCKET_SERVER_URL)
+
+    // รับข้อความจาก server
+    socket.current.on("message", (newMessage) => {
+      console.log(newMessage)
+    })
+
+    socket.current.on("reply", (newMessage) => {
+      console.log(newMessage)
+    })
+
+    // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
+    return () => {
+      socket.current.disconnect()
+    }
+  }, [])
 
   return (
     <motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -128,7 +169,8 @@ const Login = () => {
                   backgroundSize: "cover",
                   height: "70vh",
                   minHeight: "500px",
-                  background: "radial-gradient(circle at center, #123456, #000)",
+                  background:
+                    "radial-gradient(circle at center, #123456, #000)",
                   borderRadius: "0px 0px 10px 0px"
                 }}
               >
@@ -140,9 +182,11 @@ const Login = () => {
                         POS Restaurant
                       </Typography>
                     </Box>
-                    {iphonePro14max === true && <Grid2 container justifyContent="center">
-                      <img src={bg} width={220} alt='' />
-                    </Grid2>}
+                    {iphonePro14max === true && (
+                      <Grid2 container justifyContent="center">
+                        <img src={bg} width={220} alt="" />
+                      </Grid2>
+                    )}
                     <Divider sx={{ marginBottom: "20px" }} />
                     <Box display="flex" justifyContent="center">
                       {macno && (
@@ -195,11 +239,13 @@ const Login = () => {
                             fullWidth
                             sx={{
                               color: "#ffffff",
-                              background: "radial-gradient(circle, #123456, #000)",
+                              background:
+                                "radial-gradient(circle, #123456, #000)",
                               height: "100px",
                               fontSize: "28px",
-                              '&:hover': {
-                                background: "radial-gradient(circle, #44449a, #000)"
+                              "&:hover": {
+                                background:
+                                  "radial-gradient(circle, #44449a, #000)"
                               }
                             }}
                             endIcon={<LoginIcon />}
@@ -216,7 +262,12 @@ const Login = () => {
           </Grid>
         </Box>
         <Footer />
-        <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
+        <ShowNotification
+          showNoti={showNoti}
+          setShowNoti={setShowNoti}
+          message={notiMessage}
+          alertType={alertType}
+        />
       </div>
     </motion.div>
   )

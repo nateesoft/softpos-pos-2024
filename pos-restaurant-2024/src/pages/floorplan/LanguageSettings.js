@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import { Box, Grid2, IconButton, Menu, Typography } from '@mui/material';
-import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 
 const LanguageSettings = () => {
