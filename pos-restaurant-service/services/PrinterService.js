@@ -1,10 +1,16 @@
 const ThermalPrinter = require("node-thermal-printer").printer;
 const PrinterTypes = require("node-thermal-printer").types;
+const { CharacterSet, BreakLine } = require("node-thermal-printer");
 const moment = require('moment')
+const iconv = require("iconv-lite");
+const fs = require('fs')
+
+const { createCanvas } = require('canvas');
+
+const { ASCII2Unicode, Unicode2ASCII } = require('../utils/StringUtil')
 
 const { TOPIC_NAME } = require('../config/kafka/constants');
 const kafka = require('../config/kafka/config');
-const { CharacterSet } = require("node-thermal-printer");
 
 const PRINTER_TYPE = {
     RECEIPT: "receipt",
@@ -68,7 +74,7 @@ const printTest = (config) => {
         const pointAfter =
             data.pointBefore - data.item.reduce((a, b) => a + b.quantity * b.price, 0);
         const totalPoint = data.pointBefore - pointAfter;
-        printer.setCharacterSet('HK_TW');
+        printer.setCharacterSet(CharacterSet.SLOVENIA);
         printer.alignCenter();
         printer.bold(true);
         printer.println('結帳單');
@@ -118,7 +124,6 @@ const printReceipt = (billData, printType, posConfigSetup, poshwSetup, creditLis
         let footers = [poshwSetup.Footting1, poshwSetup.Footting2, poshwSetup.Footting3]
         const orderListFilter = tSale.filter(o => o.R_Price > 0)
 
-        printLineData.push({ type: 'charset', value: CharacterSet.HK_TW });
         printLineData.push({ type: 'align', value: 'center' });
         printLineData.push({ type: 'fontWeight', value: 'bold' });
 
@@ -218,7 +223,7 @@ const getExecutePrinter = (printer, printData) => {
         const printWidth = printer.getWidth();
         console.log('printWidth:', printWidth);
 
-        printData.forEach(item => {
+        printData.forEach(async item => {
             if (item.type === 'text') {
                 printer.println(item.value);
             }
@@ -232,9 +237,6 @@ const getExecutePrinter = (printer, printData) => {
                 if (item.value === 'left') {
                     printer.alignLeft();
                 }
-            }
-            if (item.type === 'charset') {
-                printer.setCharacterSet(item.value)
             }
             if (item.type === 'qrcode') {
                 printer.printQR(item.value)
@@ -250,10 +252,60 @@ const getExecutePrinter = (printer, printData) => {
                     printer.bold(false)
                 }
             }
+            if (item.type === 'printer') {
+              if(item.value === 'cut'){
+                printer.cut()
+              }
+            }
         })
 
         resolve(printer)
     })
+}
+
+const demoPrint = (printer) => {
+  printer.tableCustom([                                       // Prints table with custom settings (text, align, width, cols, bold)
+    { text:"Left", align:"LEFT", width:0.5 },
+    { text:"Center", align:"CENTER", width:0.25, bold:true },
+    { text:"Right", align:"RIGHT", cols:8 }
+  ]);
+  printer.println("Test Printer 01")
+  printer.raw("ทดสอบภาษาไทย:1")
+  printer.raw(Unicode2ASCII("ทดสอบภาษาไทย:2"))
+  printer.raw(ASCII2Unicode("ทดสอบภาษาไทย:3"))
+  printer.raw(iconv.encode("ทดสอบภาษาไทย:4", 'TIS-620'))
+  printer.raw(iconv.encode("ทดสอบภาษาไทย:5", 'UTF-8'))
+  printer.raw(iconv.encode("ทดสอบภาษาไทย:6", 'windows-874'))
+  printer.raw("Test Printer 02")
+  printer.cut()
+  printer.execute()
+}
+
+async function printThaiWithBitmap(printer) {
+  try {
+      // สร้าง Canvas และพิมพ์ข้อความภาษาไทย
+      const canvas = createCanvas(300, 80);  // ขนาด Canvas
+      const ctx = canvas.getContext('2d');
+      
+      // เลือกฟอนต์ที่รองรับภาษาไทย (ฟอนต์ที่มีในระบบหรือที่ติดตั้ง)
+      ctx.font = '16px "Arial"';  // ใช้ฟอนต์ Arial หรือฟอนต์ที่คุณต้องการ
+      ctx.fillText("Test Printing Text IMage", 10, 40);  // พิมพ์ข้อความที่ต้องการ
+
+      // แปลงภาพเป็น Buffer (Bitmap)
+      const buffer = canvas.toBuffer('image/png');  // เปลี่ยนเป็น Buffer ในรูปแบบ PNG
+      const imageBuffer = fs.writeFileSync('example.png', buffer);
+
+      // สั่งให้พรินเตอร์พิมพ์ภาพ
+      await printer.printImage('example.png');
+      
+      // พิมพ์การตัดกระดาษ
+      printer.cut();
+      await printer.execute();
+
+      console.log("พิมพ์เสร็จสิ้น");
+  } catch (error) {
+      console.error("เกิดข้อผิดพลาดในการพิมพ์:", error);
+  }
 }
 
 const printReceiptProcess = (config, billData, printType, posConfigSetup, poshwSetup, creditList, tSale, memberInfo) => {
@@ -262,13 +314,17 @@ const printReceiptProcess = (config, billData, printType, posConfigSetup, poshwS
     return new Promise(async (resolve, reject) => {
         let printer = new ThermalPrinter({
             type: PrinterTypes.EPSON,
-            interface: `tcp://${printerIp}`, // IP address
-            width: 42 // max width of text
+            interface: `tcp://${printerIp}`,
+            width: 42,
+            removeSpecialCharacters: false,
+            lineCharacter: "=",
+            breakLine: BreakLine.WORD,
+            characterSet: CharacterSet.PC852_LATIN2
         });
 
         try {
             // generate data
-            const printData = printReceipt(billData, printType, posConfigSetup, poshwSetup, creditList, tSale, memberInfo)
+            const printData = await printReceipt(billData, printType, posConfigSetup, poshwSetup, creditList, tSale, memberInfo)
 
             console.log('Print receipt start')
             const isConnected = await printer.isPrinterConnected();
@@ -276,6 +332,8 @@ const printReceiptProcess = (config, billData, printType, posConfigSetup, poshwS
             if (!isConnected) return reject('unConnected!');
 
             // send to printer
+            // demoPrint(printer)
+            // await printThaiWithBitmap(printer)
             getExecutePrinter(printer, printData)
                 .then(printer => {
                     printer.execute()

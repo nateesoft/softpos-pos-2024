@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import { IconButton, Menu, Typography } from '@mui/material';
-import MicrowaveIcon from '@mui/icons-material/Microwave';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 

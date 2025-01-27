@@ -12,7 +12,9 @@
   "description": "",
   "dependencies": {
     "dotenv": "^16.4.7",
+    "express": "^4.21.2",
     "kafka-node": "^5.0.0",
-    "node-thermal-printer": "^4.4.3"
+    "node-thermal-printer": "^4.4.3",
+    "socket.io": "^4.8.1"
   }
 }

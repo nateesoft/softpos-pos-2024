@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import { Button, Divider, Menu, Modal, Typography } from '@mui/material';
 import SummarizeIcon from '@mui/icons-material/ReceiptLong';
-import { useNavigate } from 'react-router-dom';
 import moment from 'moment'
 
 // load all modal reports
@@ -29,8 +28,6 @@ const modalStyle = {
 }
 
 const ReportDaily = (props) => {
-    const navigate = useNavigate()
-
     // report modal
     const [openTableOnAction, setOpenTableOnAction] = useState(false)
     const [cashierReport, setCashierReport] = useState(false)
