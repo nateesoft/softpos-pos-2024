@@ -86,7 +86,13 @@ const Login = () => {
               "printerMessage",
               JSON.stringify({
                 id: 1,
-                message: "เข้าสู่ระบบสำเร็จ"
+                printerType: "message",
+                printerName: "",
+                message: "เข้าสู่ระบบสำเร็จ",
+                terminal: "",
+                tableNo: "",
+                billNo: "",
+                title: ""
               })
             )
 

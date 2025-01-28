@@ -144,7 +144,13 @@ function FloorPlanPage() {
           socket.current.emit("printerMessage",
             JSON.stringify({
               id: 1,
-              message: "ออกจากระบบเรียบร้อย"
+              printerType: "message",
+              printerName: "",
+              message: "ออกจากระบบเรียบร้อย",
+              terminal: "",
+              tableNo: "",
+              billNo: "",
+              title: ""
             }))
 
           navigate("/")
