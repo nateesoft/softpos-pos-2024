@@ -61,7 +61,7 @@ const UserAuthen = ({ setAuthenUser, handleShowConfirm, onClose }) => {
                 </Grid2>
                 <Grid2 container spacing={1} padding={1} direction="column">
                     <TextField variant='filled' label="Username" value={username} onChange={e => setUsername(e.target.value)} />
-                    <TextField variant='filled' label="Password" value={password} onChange={e => setPassword(e.target.value)} type='password' />
+                    <TextField variant='filled' label="Password" value={password} onChange={e => setPassword(e.target.value)} type='password' autoComplete="new-password" />
                 </Grid2>
                 <Grid2 container spacing={1} padding={1}>
                     <Button variant='contained' color='error' onClick={handleCancel}>Cancel</Button>

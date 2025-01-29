@@ -217,6 +217,7 @@ const summaryBalance = async (tableNo) => {
     }
 
     tablefile.TAmount = subTotalAmount
+    tablefile.Service = service
     tablefile.ServiceAmt = serviceAmount
     tablefile.NetTotal = netTotalAmount
     tablefile.Food = Food
