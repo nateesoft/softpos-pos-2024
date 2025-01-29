@@ -353,7 +353,8 @@ function PaymentForm({
                 terminal: macno,
                 tableNo: "",
                 billNo: billNo,
-                title: "ใบเสร็จรับเงิน"
+                title: "ใบเสร็จรับเงิน",
+                billType: ''
               })
             )
             navigate('/floorplan')
@@ -387,7 +388,8 @@ function PaymentForm({
               terminal: macno,
               billNo: "",
               tableNo: tableNo,
-              title: "ใบตรวจสอบรายการ ไม่ใช่ใบเสร็จรับเงิน"
+              title: "ใบตรวจสอบรายการ ไม่ใช่ใบเสร็จรับเงิน",
+              billType: ''
             })
           )
         } else {

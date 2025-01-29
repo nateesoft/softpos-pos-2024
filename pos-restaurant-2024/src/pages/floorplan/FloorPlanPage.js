@@ -150,7 +150,8 @@ function FloorPlanPage() {
               terminal: "",
               tableNo: "",
               billNo: "",
-              title: ""
+              title: "",
+              billType: ""
             }))
 
           navigate("/")
@@ -394,7 +395,7 @@ function FloorPlanPage() {
       />
       <Modal open={openCopyPrint} onClose={() => handleCloseModal(() => setOpenCopyPrint(false))}>
         <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
-          <RecieptCopyPrint setOpen={setOpenCopyPrint} />
+          <RecieptCopyPrint setOpen={setOpenCopyPrint} socket={socket} />
         </Box>
       </Modal>
       <Modal open={openTableStatus} onClose={() => handleCloseModal(() => setOpenTableStatus(false))}>
@@ -409,7 +410,7 @@ function FloorPlanPage() {
       </Modal>
       <Modal open={openRefundBill} onClose={() => handleCloseModal(() => setOpenRefundBill(false))}>
         <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
-          <RefundBill setOpen={setOpenRefundBill} />
+          <RefundBill setOpen={setOpenRefundBill} socket={socket} />
         </Box>
       </Modal>
       <Modal open={openMgrCashDrawer} onClose={() => handleCloseModal(() => setOpenMgrCashDrawer(false))}>

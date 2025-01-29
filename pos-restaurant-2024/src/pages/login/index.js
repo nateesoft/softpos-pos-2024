@@ -92,7 +92,8 @@ const Login = () => {
                 terminal: "",
                 tableNo: "",
                 billNo: "",
-                title: ""
+                title: "",
+                billType: ''
               })
             )
 
