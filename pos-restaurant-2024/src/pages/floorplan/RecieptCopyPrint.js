@@ -20,7 +20,7 @@ const modalStyle = {
   boxShadow: 24
 }
 
-const RecieptCopyPrint = ({ setOpen }) => {
+const RecieptCopyPrint = ({ setOpen, socket }) => {
   const navigate = useNavigate();
 
   const { appData } = useContext(POSContext)
@@ -48,9 +48,23 @@ const RecieptCopyPrint = ({ setOpen }) => {
       .then(response => {
         if(response.status === 200){
           const billNo = response.data.data
-          navigate(`/payment/receipt/${billNo}`)
+          // send to printer
+          socket.current.emit(
+            "printerMessage",
+            JSON.stringify({
+              id: 1,
+              printerType: "receipt",
+              printerName: "",
+              message: `พิมพ์สำเนาเอกสารเลขที่: ${billNo}`,
+              terminal: macno,
+              tableNo: "",
+              billNo: billNo,
+              billType: 'copy',
+              title: "(สำเนา) ใบเสร็จรับเงิน"
+            })
+          )
         }else {
-          handleNotification("พบข้อผิดพลาดในการยกเลิกบิล!")
+          handleNotification("พบข้อผิดพลาดในการพิมพ์สำเนา!")
         }
       })
       .catch(err => { handleNotification(err.message) })
@@ -59,8 +73,9 @@ const RecieptCopyPrint = ({ setOpen }) => {
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
       <Grid container spacing={2} padding={2} justifyContent="center">
-      <Typography variant="p" sx={{fontWeight: "bold", fontSize: "16px"}}>กรุณาระบุเลขที่บิล และจำนวน Copy ที่ต้องการพิมพ์สำเนา</Typography>
-
+        <Typography variant="p" sx={{fontWeight: "bold", fontSize: "16px"}}>
+          กรุณาระบุเลขที่บิล และจำนวน Copy ที่ต้องการพิมพ์สำเนา
+        </Typography>
       </Grid>
       <Grid container spacing={2} padding={2} direction="column">
         <Grid size={12}>

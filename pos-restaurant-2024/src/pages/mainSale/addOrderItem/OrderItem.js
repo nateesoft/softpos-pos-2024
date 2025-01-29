@@ -4,9 +4,9 @@ import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
 import TabPanel from "@mui/lab/TabPanel"
 import { useNavigate } from "react-router-dom"
-import Moment from 'react-moment'
+import Moment from "react-moment"
 import NoFoodIcon from "@mui/icons-material/NoFood"
-import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
 import {
   Box,
   Button,
@@ -14,14 +14,14 @@ import {
   Typography,
   Paper,
   Grid2,
-  Divider,
+  Divider
 } from "@mui/material"
 
-import apiClient from '../../../httpRequest'
+import apiClient from "../../../httpRequest"
 import ArrowBack from "@mui/icons-material/TableBar"
 import PrintIcon from "@mui/icons-material/Print"
-import ProductCard from './ProductCard'
-import ProductDetailCard from './ProductDetailCard'
+import ProductCard from "./ProductCard"
+import ProductDetailCard from "./ProductDetailCard"
 
 const modalStyle = {
   position: "absolute",
@@ -36,7 +36,7 @@ const getTotalAmount = (orderList) => {
   let totalBill = 0
   for (let i = 0; i < orderList.length; i++) {
     const balance = orderList[i]
-    if (balance.R_Void !== 'V') {
+    if (balance.R_Void !== "V") {
       totalBill = totalBill + parseInt(balance.R_Quan * balance.R_Price)
     }
   }
@@ -45,7 +45,9 @@ const getTotalAmount = (orderList) => {
 }
 
 const TotalBill = ({ orderList }) => {
-  const totalBill = getTotalAmount(orderList).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
+  const totalBill = getTotalAmount(orderList)
+    .toFixed(2)
+    .replace(/\d(?=(\d{3})+\.)/g, "$&,")
   return (
     <div
       style={{
@@ -57,10 +59,17 @@ const TotalBill = ({ orderList }) => {
       }}
     >
       <Grid2 container spacing={2}>
-        <Typography variant="p" sx={{ fontWeight: "bold", margin: "4px" }}>Total Amount</Typography>
+        <Typography variant="p" sx={{ fontWeight: "bold", margin: "4px" }}>
+          Total Amount
+        </Typography>
       </Grid2>
       <Grid2 container display="flex" justifyContent="flex-end">
-        <Typography variant="h2" sx={{ fontWeight: "bold", textShadow: "2px 2px white" }}>{totalBill}</Typography>
+        <Typography
+          variant="h2"
+          sx={{ fontWeight: "bold", textShadow: "2px 2px white" }}
+        >
+          {totalBill}
+        </Typography>
       </Grid2>
     </div>
   )
@@ -78,9 +87,9 @@ const OrderItem = ({
   typePopup = false,
   handleNotification
 }) => {
-  console.log('OrderItem:', orderType)
+  console.log("OrderItem:", orderType)
   const navigate = useNavigate()
-  const [value, setValue] = useState(orderType || 'E')
+  const [value, setValue] = useState(orderType || "E")
   const [open, setOpen] = useState(false)
 
   const [productInfo, setProductInfo] = useState({})
@@ -100,32 +109,34 @@ const OrderItem = ({
   }
 
   const handleChange = (event, newValue) => {
-    console.log('handleChange:', newValue)
+    console.log("handleChange:", newValue)
     setValue(newValue)
   }
 
   const handleClick = () => {
     // update send to Kic
-    apiClient.patch(`/api/balance/printToKic/${tableNo}`)
+    apiClient
+      .patch(`/api/balance/printToKic/${tableNo}`)
       .then((response) => {
         if (response.status === 200) {
           navigate(`/payment/${tableNo}`)
         }
       })
-      .catch(err => {
+      .catch((err) => {
         handleNotification(err.message)
       })
   }
 
   const backFloorPlan = () => {
     // update send to Kic
-    apiClient.patch(`/api/balance/printToKic/${tableNo}`)
+    apiClient
+      .patch(`/api/balance/printToKic/${tableNo}`)
       .then((response) => {
         if (response.status === 200) {
           navigate("/floorplan")
         }
       })
-      .catch(err => {
+      .catch((err) => {
         handleNotification(err.message)
       })
   }
@@ -137,14 +148,15 @@ const OrderItem = ({
 
   function handlePrint() {
     // update send to Kic
-    apiClient.patch(`/api/balance/printToKic/${tableNo}`)
+    apiClient
+      .patch(`/api/balance/printToKic/${tableNo}`)
       .then((response) => {
         if (response.status === 200) {
           setShowKicPrint(false)
           navigate("/floorplan")
         }
       })
-      .catch(err => {
+      .catch((err) => {
         handleNotification(err.message)
       })
   }
@@ -179,21 +191,22 @@ const OrderItem = ({
           value="E"
           sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
         >
-          {OrderEList && OrderEList.map((product) => {
-            return (
-              <div style={{ margin: "5px" }}>
-                <ProductCard
-                  tableNo={tableNo}
-                  product={product}
-                  handleNotification={handleNotification}
-                  initLoadMenu={initLoadMenu}
-                  initLoadOrder={initLoadOrder}
-                  openModal={() => handleOpenMenu(product)}
-                />
-                <Divider />
-              </div>
-            )
-          })}
+          {OrderEList &&
+            OrderEList.map((product) => {
+              return (
+                <div style={{ margin: "5px" }}>
+                  <ProductCard
+                    tableNo={tableNo}
+                    product={product}
+                    handleNotification={handleNotification}
+                    initLoadMenu={initLoadMenu}
+                    initLoadOrder={initLoadOrder}
+                    openModal={() => handleOpenMenu(product)}
+                  />
+                  <Divider />
+                </div>
+              )
+            })}
           {OrderEList && OrderEList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -209,18 +222,19 @@ const OrderItem = ({
           value="T"
           sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
         >
-          {OrderTList && OrderTList.map((product) => {
-            return (
-              <ProductCard
-                tableNo={tableNo}
-                product={product}
-                handleNotification={handleNotification}
-                initLoadMenu={initLoadMenu}
-                initLoadOrder={initLoadOrder}
-                openModal={() => handleOpenMenu(product)}
-              />
-            )
-          })}
+          {OrderTList &&
+            OrderTList.map((product) => {
+              return (
+                <ProductCard
+                  tableNo={tableNo}
+                  product={product}
+                  handleNotification={handleNotification}
+                  initLoadMenu={initLoadMenu}
+                  initLoadOrder={initLoadOrder}
+                  openModal={() => handleOpenMenu(product)}
+                />
+              )
+            })}
           {OrderTList && OrderTList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -236,18 +250,19 @@ const OrderItem = ({
           value="D"
           sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
         >
-          {OrderDList && OrderDList.map((product) => {
-            return (
-              <ProductCard
-                tableNo={tableNo}
-                product={product}
-                handleNotification={handleNotification}
-                initLoadMenu={initLoadMenu}
-                initLoadOrder={initLoadOrder}
-                openModal={() => handleOpenMenu(product)}
-              />
-            )
-          })}
+          {OrderDList &&
+            OrderDList.map((product) => {
+              return (
+                <ProductCard
+                  tableNo={tableNo}
+                  product={product}
+                  handleNotification={handleNotification}
+                  initLoadMenu={initLoadMenu}
+                  initLoadOrder={initLoadOrder}
+                  openModal={() => handleOpenMenu(product)}
+                />
+              )
+            })}
           {OrderDList && OrderDList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -316,20 +331,33 @@ const OrderItem = ({
         aria-describedby="modal-modal-description"
       >
         <Box sx={{ ...modalStyle, width: 450 }} id="paperPrint">
-          <Paper elevation={3} sx={{ padding: "10px", height: '450px', overflow: 'auto' }}>
-            <div align="center">*** รายการส่งครัว ***</div>
-            <div>Table No: {tableNo}</div>
-            <div>Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} /></div>
-            <hr />
-            {OrderEList && OrderEList.length > 0 &&
-              (<div>
-                <div>Dine in</div>
-                <hr />
-                <table width="100%">
+          <div
+            align="center"
+            style={{
+              background: "radial-gradient(circle, #123456, #000)",
+              fontSize: "22px",
+              color: "snow",
+              padding: "5px",
+              fontWeight: "bold"
+            }}
+          >
+            *** รายการส่งครัว ***
+          </div>
+          <div style={{ background: "radial-gradient(circle, chocolate, white)", padding: "10px" }}>
+            <div style={{fontWeight: "bold", fontSize: "22px"}}>Table No: {tableNo}</div>
+            <div>
+              Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} />
+            </div>
+          </div>
+          <Paper elevation={3} sx={{ overflow: "auto", padding: "5px" }}>
+            {OrderEList && OrderEList.length > 0 && (
+              <div style={{ maxHeight: "400px", overflow: "auto" }}>
+                <div align="right" style={{fontWeight: "bold", color: "chocolate", textDecoration: "underline"}}>ประเภท Dine In</div>
+                <table width="100%" cellPadding={3}>
                   {OrderEList.map((product) => {
                     return (
                       <tr>
-                        <di>{product.R_ETD}</di>
+                        <td>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
                         <td>{product.R_Quan}</td>
@@ -337,18 +365,16 @@ const OrderItem = ({
                     )
                   })}
                 </table>
-                <hr />
-              </div>)
-            }
-            {OrderTList && OrderTList.length > 0 &&
-              (<div>
-                <div>Take Away</div>
-                <hr />
+              </div>
+            )}
+            {OrderTList && OrderTList.length > 0 && (
+              <div>
+                <div align="right" style={{fontWeight: "bold", color: "chocolate", textDecoration: "underline"}}>ประเภท Take Away</div>
                 <table width="100%">
                   {OrderTList.map((product) => {
                     return (
                       <tr>
-                        <di>{product.R_ETD}</di>
+                        <td>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
                         <td>{product.R_Quan}</td>
@@ -356,18 +382,16 @@ const OrderItem = ({
                     )
                   })}
                 </table>
-                <hr />
-              </div>)
-            }
-            {OrderDList && OrderDList.length > 0 &&
-              (<div>
-                <div>Deliver</div>
-                <hr />
+              </div>
+            )}
+            {OrderDList && OrderDList.length > 0 && (
+              <div>
+                <div align="right" style={{fontWeight: "bold", color: "chocolate", textDecoration: "underline"}}>ประเภท Deliver</div>
                 <table width="100%">
                   {OrderDList.map((product) => {
                     return (
                       <tr>
-                        <di>{product.R_ETD}</di>
+                        <td>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
                         <td>{product.R_Quan}</td>
@@ -375,18 +399,17 @@ const OrderItem = ({
                     )
                   })}
                 </table>
-                <hr />
-              </div>)
-            }
-            <Box display="flex" justifyContent="center">
+              </div>
+            )}
+            <Grid2 container justifyContent="center" padding={1} marginTop={2} sx={{background: "#eee"}}>
               <Button
-                variant="outlined"
+                variant="contained"
                 startIcon={<PrintIcon />}
                 onClick={handlePrint}
               >
                 Print
               </Button>
-            </Box>
+            </Grid2>
           </Paper>
         </Box>
       </Modal>

@@ -128,58 +128,61 @@ const MultiplePayment = ({ onClose, tableNo, orderList, tableFile, initLoad }) =
                       >
                         <Droppable droppableId={table.id.toString()}>
                           {(provided) => (
-                            <Paper elevation={3} ref={provided.innerRef}
-                              sx={{ margin: "5px" }}>
-                              <TableContainer sx={{ overflow: "auto", padding: "5px" }}>
-                                <h6
-                                  {...parentProvider.dragHandleProps}
-                                  style={{ backgroundColor: table.bgColor, padding: "15px" }}
-                                >
-                                  <ReceiptIcon /> {table.name}
-                                </h6>
-                                <Table aria-label="spanning table">
-                                  {items.filter((item) => item.table === table.id).map((item, index) => (
-                                    <Draggable
-                                      draggableId={item.id.toString()}
-                                      key={item.id}
-                                      index={index}
-                                    >
-                                      {(provided) => (
-                                        <TableBody
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          {...provided.dragHandleProps}
-                                        >
-                                          <TableRow key={item.R_Index} sx={{ backgroundColor: "snow" }}>
-                                            <TableCell sx={{ whiteSpace: "nowrap" }}>{item.R_Table}</TableCell>
-                                            <TableCell sx={{ whiteSpace: "nowrap" }}>{item.R_Index}</TableCell>
-                                            <TableCell sx={{ width: "150px" }}>{item.R_PName}</TableCell>
-                                            <TableCell align="right">{item.R_Quan}</TableCell>
-                                            <TableCell align="right">{NumFormat(item.R_Price)}</TableCell>
-                                            <TableCell align="right">{NumFormat(item.R_Total)}</TableCell>
-                                          </TableRow>
-                                        </TableBody>
-                                      )}
-                                    </Draggable>
-                                  ))}
-                                  {items.filter((item) => item.table === table.id).length > 0 && <>
-                                    <TableRow>
-                                      <TableCell align="right" colSpan={5}>ยอดรวมสินค้าก่อนหักส่วนลด และค่าบริการ</TableCell>
-                                      <TableCell align="right">{NumFormat(totalAmount(items.filter((item) => item.table === table.id)))}</TableCell>
-                                    </TableRow>
-                                  </>}
-                                  {items.filter((item) => item.table === table.id).length === 0 &&
-                                    <TableRow>
-                                      <TableCell colSpan={7} align='center'>
-                                        <Typography sx={{ backgroundColor: "snow", padding: "10px" }}>
-                                          ... ลากเมนูอาหารมาใส่ตรงนี้ได้เลย ...
-                                        </Typography>
-                                      </TableCell>
-                                    </TableRow>
-                                  }
-                                </Table>
-                              </TableContainer>
-                            </Paper>
+                            <>
+                              <Paper elevation={3} ref={provided.innerRef}
+                                sx={{ margin: "5px" }}>
+                                <TableContainer sx={{ overflow: "auto", padding: "5px" }}>
+                                  <h6
+                                    {...parentProvider.dragHandleProps}
+                                    style={{ backgroundColor: table.bgColor, padding: "15px" }}
+                                  >
+                                    <ReceiptIcon /> {table.name}
+                                  </h6>
+                                  <Table aria-label="spanning table">
+                                    {items.filter((item) => item.table === table.id).map((item, index) => (
+                                      <Draggable
+                                        draggableId={item.id.toString()}
+                                        key={item.id}
+                                        index={index}
+                                      >
+                                        {(provided) => (
+                                          <TableBody
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                          >
+                                            <TableRow key={item.R_Index} sx={{ backgroundColor: "snow" }}>
+                                              <TableCell sx={{ whiteSpace: "nowrap" }}>{item.R_Table}</TableCell>
+                                              <TableCell sx={{ whiteSpace: "nowrap" }}>{item.R_Index}</TableCell>
+                                              <TableCell sx={{ width: "150px" }}>{item.R_PName}</TableCell>
+                                              <TableCell align="right">{item.R_Quan}</TableCell>
+                                              <TableCell align="right">{NumFormat(item.R_Price)}</TableCell>
+                                              <TableCell align="right">{NumFormat(item.R_Total)}</TableCell>
+                                            </TableRow>
+                                          </TableBody>
+                                        )}
+                                      </Draggable>
+                                    ))}
+                                    {items.filter((item) => item.table === table.id).length > 0 && <>
+                                      <TableRow>
+                                        <TableCell align="right" colSpan={5}>ยอดรวมสินค้าก่อนหักส่วนลด และค่าบริการ</TableCell>
+                                        <TableCell align="right">{NumFormat(totalAmount(items.filter((item) => item.table === table.id)))}</TableCell>
+                                      </TableRow>
+                                    </>}
+                                    {items.filter((item) => item.table === table.id).length === 0 &&
+                                      <TableRow>
+                                        <TableCell colSpan={7} align='center'>
+                                          <Typography sx={{ backgroundColor: "snow", padding: "10px" }}>
+                                            ... ลากเมนูอาหารมาใส่ตรงนี้ได้เลย ...
+                                          </Typography>
+                                        </TableCell>
+                                      </TableRow>
+                                    }
+                                  </Table>
+                                </TableContainer>
+                              </Paper>
+                              {provided.placeholder}
+                            </>
                           )}
                         </Droppable>
                       </Grid2>
