@@ -64,7 +64,7 @@ const modalStyle = {
   boxShadow: 24
 }
 
-const SOCKET_SERVER_URL = "http://localhost:9090" // URL ของ Socket.IO server
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
 
 function PaymentForm({
   orderList,
@@ -815,7 +815,7 @@ function PaymentForm({
                         fullWidth
                         onClick={handleFit}
                       >
-                        F
+                        BL
                       </Button>
                     </td>
                   </tr>
