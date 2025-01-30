@@ -80,7 +80,7 @@ const nodeTypes = {
 
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 };
 
-const SOCKET_SERVER_URL = "http://localhost:9090"; // URL ของ Socket.IO server
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
 
 function FloorPlanPage() {
   const socket = useRef(null);

@@ -35,9 +35,10 @@ const boxstyle = {
   boxShadow: 24
 }
 
-const SOCKET_SERVER_URL = "http://localhost:9090" // URL ของ Socket.IO server
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
 
 const Login = () => {
+  console.log('SOCKET_SERVER_URL:' + SOCKET_SERVER_URL)
   const socket = useRef(null)
   const { appData, setAppData } = useContext(POSContext)
   const { macno, encryptData } = appData

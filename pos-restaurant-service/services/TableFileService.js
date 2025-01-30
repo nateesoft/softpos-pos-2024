@@ -244,6 +244,7 @@ const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
             '${PrintChkBill}','${PrintCnt}','${PrintTime1}','${PrintTime2}','${ChkBill}','${ChkBillTime}','${StkCode1}','${StkCode2}','${TDesk}',
             '${TUser}','${VoidMsg}','${TPause}','${CCUseCode}','${newTable.CCUseAmt}','${newTable.TTableIsOn}','${newTable.TActive}','${newTable.TAutoClose}')`;
     const checkExistTable = await getTableByCode(targetTableNo)
+    checkExistTable.MacNo = MacNo
     if (checkExistTable) {
         await updateTableFile(checkExistTable)
     } else {
