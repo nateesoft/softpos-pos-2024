@@ -106,15 +106,17 @@ const PosSettingsForm = ({ setOpen }, data) => {
     apiClient
       .get(`/api/pos_setting/${terminal_id}`)
       .then((response) => {
-        if(response.status === 200) {
+        if(response.data.status === '2000') {
           const data = response.data.data
-          setLanguage(data.language_use)
-          setTimeZone(data.timezone_use)
-          setCurrency(data.currency_use)
-          setCurrencyRate(data.currency_use_rate)
-          setCurrencyBahtRate(data.currency_baht_rate)
-          setReceiptPrinterIp(data.receipt_printer_ip)
-          setKichenPrinterIp(data.kichen_printer_ip)
+          if(data!=null){
+            setLanguage(data.language_use)
+            setTimeZone(data.timezone_use)
+            setCurrency(data.currency_use)
+            setCurrencyRate(data.currency_use_rate)
+            setCurrencyBahtRate(data.currency_baht_rate)
+            setReceiptPrinterIp(data.receipt_printer_ip)
+            setKichenPrinterIp(data.kichen_printer_ip)
+          }
         }
       })
       .catch((err) => {
@@ -146,7 +148,7 @@ const PosSettingsForm = ({ setOpen }, data) => {
             >
               {languageList &&
                 languageList.map((item) => (
-                  <MenuItem value={item.value}>{item.title}</MenuItem>
+                  <MenuItem key={item.value} value={item.value}>{item.title}</MenuItem>
                 ))}
             </Select>
           </FormControl>

@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState
 } from "react"
 import { useNavigate } from "react-router-dom"
@@ -28,16 +27,13 @@ import SendToMobileIcon from "@mui/icons-material/SendToMobile"
 import CreditCardIcon from "@mui/icons-material/CreditCard"
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff"
 import { io } from "socket.io-client"
-import { createRoot } from 'react-dom/client'
 
-import { ReceiptPrint } from '../paper-print/ReceiptPrint'
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import QrCodeGenerator from "./QRCodePayment"
 import CreditChargeModal from "./CreditChargeModal"
 import MultipleCreditPayment from "./MultipleCreditPayment"
 import { ModalConfirm } from "../ui-utils/AlertPopup"
-import { PRINTER_TYPE } from "../../AppConstants"
 
 const NumFormat = (data) => {
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
@@ -65,6 +61,8 @@ const modalStyle = {
 }
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
+// เชื่อมต่อกับ Socket.IO server
+const socket = io(SOCKET_SERVER_URL);
 
 function PaymentForm({
   orderList,
@@ -74,7 +72,6 @@ function PaymentForm({
   memberInfo,
   setOpenSplitBill
 }) {
-  const socket = useRef(null)
   const { appData } = useContext(POSContext)
   const { macno, branchInfo, companyInfo, empCode } = appData
 
@@ -343,7 +340,7 @@ function PaymentForm({
         .then((response) => {
           if (response.status === 200) {
             const billNo = response.data.data
-            socket.current.emit(
+            socket.emit(
               "printerMessage",
               JSON.stringify({
                 id: 1,
@@ -378,7 +375,7 @@ function PaymentForm({
         if (response.status === 200) {
           // navigate(`/payment/print-bill-check/${tableNo}`)
           // send to printer
-          socket.current.emit(
+          socket.emit(
             "printerMessage",
             JSON.stringify({
               id: 1,

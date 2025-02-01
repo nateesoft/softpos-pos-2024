@@ -71,7 +71,7 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
         <div style={{ height: '350px', overflow: 'auto' }}>
             <Grid2 container spacing={1} justifyContent="center">
                 {optionalList && optionalList.map((item, index) => (
-                    <div style={{ border: "1px solid #eee", padding: "10px", borderRadius: "15px", backgroundColor: "black" }}>
+                    <div key={`${item.menu_code}_${index}`} style={{ border: "1px solid #eee", padding: "10px", borderRadius: "15px", backgroundColor: "black" }}>
                         <Grid2 container alignItems="center">
                             <Checkbox
                                 id={`subProduct${item.menu_code}`}

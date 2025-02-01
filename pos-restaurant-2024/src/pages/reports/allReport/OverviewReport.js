@@ -125,7 +125,8 @@ const OverviewReport = () => {
             <Box display="flex" flexDirection="column">
               <Typography sx={{ fontWeight: "bold" }}><u>รายการสินค้าขายดี</u></Typography>
               <table width="100%">
-                {topSales && topSales.map(item => <tr>
+                {topSales && topSales.map(item => 
+                <tr key={item.R_PluCode}>
                   <td><MenuBook /></td>
                   <td align='left'><Typography>{item.R_PName}</Typography></td>
                   <td><Typography>{item.SUM_QTY}</Typography></td>

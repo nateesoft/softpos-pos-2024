@@ -37,9 +37,10 @@ const boxstyle = {
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
 
+// เชื่อมต่อกับ Socket.IO server
+const socket = io(SOCKET_SERVER_URL)
+
 const Login = () => {
-  console.log('SOCKET_SERVER_URL:' + SOCKET_SERVER_URL)
-  const socket = useRef(null)
   const { appData, setAppData } = useContext(POSContext)
   const { macno, encryptData } = appData
 
@@ -83,7 +84,7 @@ const Login = () => {
             localStorage.setItem("posuser", JSON.stringify(response.data.data))
 
             // send to printer
-            socket.current.emit(
+            socket.emit(
               "printerMessage",
               JSON.stringify({
                 id: 1,
@@ -128,21 +129,21 @@ const Login = () => {
   }
 
   useEffect(() => {
-    // เชื่อมต่อกับ Socket.IO server
-    socket.current = io(SOCKET_SERVER_URL)
+    // send to printer
+    socket.emit("message", "hello, world")
 
     // รับข้อความจาก server
-    socket.current.on("message", (newMessage) => {
+    socket.on("message", (newMessage) => {
       console.log(newMessage)
     })
 
-    socket.current.on("reply", (newMessage) => {
+    socket.on("reply", (newMessage) => {
       console.log(newMessage)
     })
 
     // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
     return () => {
-      socket.current.disconnect()
+      socket.off('message')
     }
   }, [])
 

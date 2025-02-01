@@ -49,7 +49,7 @@ const RecieptCopyPrint = ({ setOpen, socket }) => {
         if(response.status === 200){
           const billNo = response.data.data
           // send to printer
-          socket.current.emit(
+          socket.emit(
             "printerMessage",
             JSON.stringify({
               id: 1,

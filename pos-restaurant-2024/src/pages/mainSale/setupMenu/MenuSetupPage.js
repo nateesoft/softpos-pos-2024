@@ -256,18 +256,18 @@ const MenuSetupPage = ({ open, setOpen }) => {
         </AppBar>
         {/* Form main */}
         <Grid2 container spacing={1} padding={1}>
-          <Grid2 size={6} spacing={1}>
+          <Grid2 size={6}>
             <Grid2 container spacing={1} sx={{ border: "1px solid #eee", padding: "20px", background: "#def7ff" }}>
               <FormControl sx={{ width: "150px" }}>
-                <InputLabel id="demo-simple-select-label">Tab ชื่อเมนู</InputLabel>
+                <InputLabel key="" id="selectMenuTab">Tab ชื่อเมนู</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
+                  labelId="selectMenuTab"
+                  id="selectTab"
                   value={tabGroup}
                   label="Tab ชื่อเมนู"
                   onChange={e => handleSetTabGroup(e.target.value)}
                 >
-                  {menuTabs && menuTabs.map(item => <MenuItem value={item.tab_key}>{item.tab_key}</MenuItem>)}
+                  {menuTabs && menuTabs.map(item => <MenuItem key={item.tab_key} value={item.tab_key}>{item.tab_key}</MenuItem>)}
                 </Select>
               </FormControl>
               <TextField label="ชื่อแท็บสินค้า" value={tabTitleName} onChange={e => setTabTitleName(e.target.value)} sx={{ minWidth: "300px" }} />
@@ -329,7 +329,7 @@ const MenuSetupPage = ({ open, setOpen }) => {
               <TextField label="กำหนดสูงสุดใน SET" type='number' value={maxCountSet} onChange={e => setMaxCountSet(e.target.value)} />
             </Grid2>
           </Grid2>
-          <Grid2 size={6} spacing={1} padding={1}>
+          <Grid2 size={6} padding={1}>
             <Grid2 container spacing={1}>
               <TextField label='URL ที่อยู่ภาพ' value={menuUrl} onChange={e => setMenuUrl(e.target.value)} fullWidth />
               <img src={menuUrl} width={100} alt="" />

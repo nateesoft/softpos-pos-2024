@@ -194,7 +194,7 @@ const OrderItem = ({
           {OrderEList &&
             OrderEList.map((product) => {
               return (
-                <div style={{ margin: "5px" }}>
+                <div style={{ margin: "5px" }} key={product.R_PluCode}>
                   <ProductCard
                     tableNo={tableNo}
                     product={product}
@@ -356,7 +356,7 @@ const OrderItem = ({
                 <table width="100%" cellPadding={3}>
                   {OrderEList.map((product) => {
                     return (
-                      <tr>
+                      <tr key={product.R_PluCode}>
                         <td>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
@@ -373,7 +373,7 @@ const OrderItem = ({
                 <table width="100%">
                   {OrderTList.map((product) => {
                     return (
-                      <tr>
+                      <tr key={product.R_PluCode}>
                         <td>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
@@ -390,7 +390,7 @@ const OrderItem = ({
                 <table width="100%">
                   {OrderDList.map((product) => {
                     return (
-                      <tr>
+                      <tr key={product.R_PluCode}>
                         <td>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
