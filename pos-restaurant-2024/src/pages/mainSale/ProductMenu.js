@@ -235,14 +235,14 @@ const ProductMenu = ({
                 onChange={handleChange}
                 sx={{ borderColor: 'divider', minWidth: "150px", marginTop: "5px" }}>
                 <Tab sx={tabStyle} icon={<MenuBook sx={{ color: "white" }} />} label={t("productMenu.allGroup")} />
-                {menuTabs && menuTabs.map(item => <Tab sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={item.tab_name_title} />)}
+                {menuTabs && menuTabs.map(item => <Tab key={item.tab_name_title} sx={tabStyle} icon={<RestaurantMenuIcon sx={{ color: "white" }} />} label={item.tab_name_title} />)}
             </Tabs>
             }
             <TabPanel value={value} index={0}>
                 <Grid2 container>
                     {ProductList.length === 0 && <NotfoundMenu />}
                     {ProductList && ProductList.map(product =>
-                        <Grid2 id={`productList_${product.id}`}>
+                        <Grid2 id={`productList_${product.id}`} key={product.id}>
                             <ProductCard
                                 id={"all" + product.id}
                                 OrderList={OrderList}
@@ -264,6 +264,7 @@ const ProductMenu = ({
                 {ProductA && ProductA.map(product =>
                     <ProductCard
                         id={"a" + product.id}
+                        key={product.id}
                         OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
@@ -280,6 +281,7 @@ const ProductMenu = ({
                 {ProductB && ProductB.map(product =>
                     <ProductCard
                         id={"b" + product.id}
+                        key={product.id}
                         OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
@@ -296,6 +298,7 @@ const ProductMenu = ({
                 {ProductC && ProductC.map(product =>
                     <ProductCard
                         id={"c" + product.id}
+                        key={product.id}
                         OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
@@ -312,6 +315,7 @@ const ProductMenu = ({
                 {ProductD && ProductD.map(product =>
                     <ProductCard
                         id={"d" + product.id}
+                        key={product.id}
                         OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
@@ -328,6 +332,7 @@ const ProductMenu = ({
                 {ProductE && ProductE.map(product =>
                     <ProductCard
                         id={"e" + product.id}
+                        key={product.id}
                         OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}
@@ -344,6 +349,7 @@ const ProductMenu = ({
                 {ProductF && ProductF.map(product =>
                     <ProductCard
                         id={"f" + product.id}
+                        key={product.id}
                         OrderList={OrderList}
                         tableNo={tableNo}
                         product={product}

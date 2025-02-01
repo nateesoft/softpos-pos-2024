@@ -21,10 +21,6 @@
         <group name="ProjectCAT"/>
         <group name="CBMart"/>
         <group name="Jeffer_Group"/>
-        <group>
-            <file>file:/Users/nateesun/Documents/softpos-project/sync-thermal-service/src/ics/client/printer/service/DatabaseConfig.java</file>
-            <file>file:/Users/nateesun/Documents/softpos-project/sync-thermal-service/src/ics/utils/MultiMySQLConnection.java</file>
-            <file>file:/Users/nateesun/Documents/softpos-project/sync-thermal-service/src/ics/client/printer/service/ClientSocket.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

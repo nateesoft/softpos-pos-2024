@@ -45,7 +45,8 @@ io.on("connection", (socket) => {
       console.log("Received from client:", data);
 
       // ส่งข้อความกลับไปยัง client เฉพาะ client นั้นๆ
-      socket.emit("reply", `Server: ${data}`);
+      // socket.emit("reply", `Server: ${data}`);
+      io.emit("message", "message from server")
   });
 
   socket.on("printerMessage", (data) => {

@@ -81,9 +81,10 @@ const nodeTypes = {
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 };
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
+// เชื่อมต่อกับ Socket.IO server
+const socket = io(SOCKET_SERVER_URL);
 
 function FloorPlanPage() {
-  const socket = useRef(null);
   const { t } = useTranslation('global')
   const navigate = useNavigate()
 
@@ -141,7 +142,7 @@ function FloorPlanPage() {
           localStorage.setItem("userLogin", "")
 
           // send to printer
-          socket.current.emit("printerMessage",
+          socket.emit("printerMessage",
             JSON.stringify({
               id: 1,
               printerType: "message",
@@ -265,21 +266,20 @@ function FloorPlanPage() {
   }, [])
 
   useEffect(()=> {
-      // เชื่อมต่อกับ Socket.IO server
-      socket.current = io(SOCKET_SERVER_URL);
-  
       // รับข้อความจาก server
-      socket.current.on("message", (newMessage) => {
+      socket.on("message", (newMessage) => {
         console.log(newMessage)
       });
   
-      socket.current.on("reply", (newMessage) => {
+      socket.on("reply", (newMessage) => {
         console.log(newMessage)
       });
+
+      socket.emit("message", "floor plan")
   
       // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
       return () => {
-        socket.current.disconnect();
+        socket.off('message');
       };
     }, [])
 

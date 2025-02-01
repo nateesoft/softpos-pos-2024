@@ -172,7 +172,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
                 label="เหตุผลในการ VOID"
                 onChange={(e) => setVoidMsg(e.target.value)}
               >
-                {voidMsgList && voidMsgList.map(item => <MenuItem value={item.VName}>{item.VName}</MenuItem>)}
+                {voidMsgList && voidMsgList.map(item => <MenuItem key={item.VName} value={item.VName}>{item.VName}</MenuItem>)}
               </Select>
             </FormControl>
             <Button variant='contained' color='error' startIcon={<BlockIcon />} onClick={() => handleVoidItem(currRIndex)}>ยืนยันการ Void</Button>
