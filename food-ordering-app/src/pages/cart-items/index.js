@@ -3,6 +3,7 @@ import { Box, Button, Divider, Grid2, Typography } from "@mui/material"
 import AddCircle from "@mui/icons-material/AddCircle"
 import RemoveCircle from "@mui/icons-material/RemoveCircle"
 import MenuDetailModal from "../modal/MenuDetailModal"
+import SendIcon from '@mui/icons-material/Send';
 
 const CartItems = ({ items, onClose, setOpenAlert }) => {
   const [openOptional, setOpenOptional] = useState(false)
@@ -32,7 +33,7 @@ const CartItems = ({ items, onClose, setOpenAlert }) => {
                 <tbody>
                   <tr>
                     <td>
-                      <img src={item.img} width="auto" height={80} />
+                      <img src={item.img} alt="" width="auto" height={80} />
                     </td>
                     <td align="left">
                       <div>{item.menuName}</div>
@@ -87,6 +88,7 @@ const CartItems = ({ items, onClose, setOpenAlert }) => {
           color="warning"
           fullWidth
           onClick={handleSendKitchen}
+          endIcon={<SendIcon />}
         >
           สั่ง {items.length} รายการ
         </Button>

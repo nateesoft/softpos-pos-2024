@@ -1,14 +1,11 @@
 import React, { useState } from "react"
-import { Routes, Route } from "react-router-dom"
 import Box from "@mui/material/Box"
 import Modal from "@mui/material/Modal"
 
-import GroupMenu from "./pages/GroupMenu"
-import MenuDetail from "./pages/MenuDetail"
-import NotFound from "./pages/NotFound"
-
 import "./App.css"
 
+import GroupMenu from "./pages/GroupMenu"
+import MenuDetail from "./pages/MenuDetail"
 import BottomAppBar from "./pages/BottomAppBar"
 import DashboardSetting from "./pages/DashboardSetting"
 import HeaderAppBar from "./pages/HeaderAppBar"
@@ -34,7 +31,7 @@ const modalStyle2 = {
   padding: "10px"
 }
 
-const App = () => {
+const MainApp = ({ page }) => {
   const [openDashboard, setOpenDashboard] = useState(false)
   const [openBill, setOpenBill] = useState(false)
   const [openItemProgress, setOpenItemProgress] = useState(false)
@@ -47,11 +44,8 @@ const App = () => {
         setOpenBill={setOpenBill}
       />
       <header className="App-header">
-        <Routes>
-          <Route path="/" element={<GroupMenu />} />
-          <Route path="/detail" element={<MenuDetail />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        {page && page === "home" && <GroupMenu />}
+        {page && page === "detail" && <MenuDetail />}
       </header>
       <BottomAppBar setOpenItemProgress={setOpenItemProgress} />
       <Modal open={openDashboard} onClose={() => setOpenDashboard(false)}>
@@ -167,4 +161,4 @@ const App = () => {
   )
 }
 
-export default App
+export default MainApp

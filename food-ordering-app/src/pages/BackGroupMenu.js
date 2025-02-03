@@ -12,11 +12,11 @@ const StyledFab = styled(Fab)({
   background: "green"
 })
 
-const BackGroupMenu = () => {
+const BackGroupMenu = ({ id }) => {
   const navigate = useNavigate()
 
   const handleBack = () => {
-    navigate('/')
+    navigate(`/${id}`)
   }
 
   return (
