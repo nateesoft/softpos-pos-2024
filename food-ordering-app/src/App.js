@@ -1,25 +1,166 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react"
+import { Routes, Route } from "react-router-dom"
+import Box from "@mui/material/Box"
+import Modal from "@mui/material/Modal"
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import GroupMenu from "./pages/GroupMenu"
+import MenuDetail from "./pages/MenuDetail"
+import NotFound from "./pages/NotFound"
+
+import "./App.css"
+
+import BottomAppBar from "./pages/BottomAppBar"
+import DashboardSetting from "./pages/DashboardSetting"
+import HeaderAppBar from "./pages/HeaderAppBar"
+import CartItems from "./pages/cart-items"
+import BillItems from "./pages/bill-items"
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%"
 }
 
-export default App;
+const modalStyle2 = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  background: "white",
+  textAlign: "center",
+  minWidth: "380px",
+  height: "600px",
+  padding: "10px"
+}
+
+const App = () => {
+  const [openDashboard, setOpenDashboard] = useState(false)
+  const [openBill, setOpenBill] = useState(false)
+  const [openItemProgress, setOpenItemProgress] = useState(false)
+
+  return (
+    <div className="App">
+      <HeaderAppBar
+        setOpenDashboard={setOpenDashboard}
+        setOpenBill={setOpenBill}
+      />
+      <header className="App-header">
+        <Routes>
+          <Route path="/" element={<GroupMenu />} />
+          <Route path="/detail" element={<MenuDetail />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </header>
+      <BottomAppBar setOpenItemProgress={setOpenItemProgress} />
+      <Modal open={openDashboard} onClose={() => setOpenDashboard(false)}>
+        <Box sx={{ ...modalStyle }}>
+          <DashboardSetting setOpen={setOpenDashboard} />
+        </Box>
+      </Modal>
+      <Modal open={openBill} onClose={() => setOpenBill(false)}>
+        <Box sx={{ ...modalStyle2, overflow: "auto" }}>
+          <BillItems
+            onClose={() => setOpenBill(false)}
+            items={[
+              {
+                id: 1,
+                img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+                menuName: "ก๋วยเตี๋ยวหมู",
+                options: [
+                  { id: "101", label: "ใหญ่", price: 0 },
+                  { id: "102", label: "น้ำ", price: 0 },
+                  { id: "103", label: "เผ็ดปกติ", price: 0 }
+                ],
+                menuPrice: 60,
+                qty: 1,
+                orderBy: "นาย A",
+                orderStatus: "ส่งครัวแล้ว",
+                orderTime: "11:34"
+              },
+              {
+                id: 2,
+                img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+                menuName: "มาม่าผัดขี้เมา",
+                options: [{ id: "101", label: "เผ็ดมาก", price: 0 }],
+                menuPrice: 120,
+                qty: 1,
+                orderBy: "นาย B",
+                orderStatus: "เซิร์ฟแล้ว",
+                orderTime: "11:34"
+              },
+              {
+                id: 3,
+                img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+                menuName: "มาม่าผัดขี้เมา",
+                options: [{ id: "101", label: "เผ็ดมาก", price: 0 }],
+                menuPrice: 120,
+                qty: 1,
+                orderBy: "นาย B",
+                orderStatus: "กำลังทำ",
+                orderTime: "11:34"
+              },
+              {
+                id: 4,
+                img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+                menuName: "มาม่าผัดขี้เมา",
+                options: [{ id: "101", label: "เผ็ดมาก", price: 0 }],
+                menuPrice: 120,
+                qty: 1,
+                orderBy: "นาย C",
+                orderStatus: "ส่งครัวแล้ว",
+                orderTime: "11:34"
+              }
+            ]}
+          />
+        </Box>
+      </Modal>
+      <Modal open={openItemProgress} onClose={() => setOpenItemProgress(false)}>
+        <Box sx={{ ...modalStyle2, overflow: "auto" }}>
+          <CartItems
+            onClose={() => setOpenItemProgress(false)}
+            items={[
+              {
+                id: 1,
+                img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+                menuName: "ก๋วยเตี๋ยวหมู",
+                options: [
+                  { id: "101", label: "ใหญ่", price: 0 },
+                  { id: "102", label: "น้ำ", price: 0 },
+                  { id: "103", label: "เผ็ดปกติ", price: 0 }
+                ],
+                menuPrice: 60,
+                qty: 1
+              },
+              {
+                id: 2,
+                img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+                menuName: "มาม่าผัดขี้เมา",
+                options: [{ id: "101", label: "เผ็ดมาก", price: 0 }],
+                menuPrice: 120,
+                qty: 1
+              },
+              {
+                id: 3,
+                img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+                menuName: "มาม่าผัดขี้เมา",
+                options: [{ id: "101", label: "เผ็ดมาก", price: 0 }],
+                menuPrice: 120,
+                qty: 1
+              },
+              {
+                id: 4,
+                img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+                menuName: "มาม่าผัดขี้เมา",
+                options: [{ id: "101", label: "เผ็ดมาก", price: 0 }],
+                menuPrice: 120,
+                qty: 1
+              }
+            ]}
+          />
+        </Box>
+      </Modal>
+    </div>
+  )
+}
+
+export default App

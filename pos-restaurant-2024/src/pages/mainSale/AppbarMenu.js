@@ -122,7 +122,7 @@ export default function LeftMenu() {
       <AppBar position="fixed" sx={appbarStyle}>
         <Toolbar>
           <PointOfSaleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Button variant='text' sx={{ fontSize: "28px", color: "white" }} onClick={handleClick}>
+          <Button variant='text' sx={{ fontSize: "18px", color: "white" }} onClick={handleClick}>
             POS RESTUARANT
           </Button>
           <Search>
