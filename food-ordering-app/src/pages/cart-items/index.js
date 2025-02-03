@@ -1,9 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Button, Divider, Grid2, Typography } from "@mui/material"
 import AddCircle from "@mui/icons-material/AddCircle"
 import RemoveCircle from "@mui/icons-material/RemoveCircle"
+import MenuDetailModal from '../modal/MenuDetailModal'
 
 const CartItems = ({ items, onClose }) => {
+  const [openOptional, setOpenOptional] = useState(false)
+
+  const handleOpenOptional = () => {
+    setOpenOptional(true)
+  }
+
   return (
     <>
       <Box padding={1}>
@@ -35,7 +42,7 @@ const CartItems = ({ items, onClose }) => {
                   <tr>
                     <td></td>
                     <td align="left">
-                      <Button variant="outlined" color="warning">
+                      <Button variant="outlined" color="warning" onClick={handleOpenOptional}>
                         แก้ไข
                       </Button>
                     </td>
@@ -66,6 +73,8 @@ const CartItems = ({ items, onClose }) => {
             สั่ง {items.length} รายการ
           </Button>
         </Box>
+
+        <MenuDetailModal openOptional={openOptional} setOpenOptional={setOpenOptional} />
     </>
   )
 }
