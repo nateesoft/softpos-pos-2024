@@ -10,8 +10,10 @@ import Badge from "@mui/material/Badge"
 
 import BackGroupMenu from "./BackGroupMenu"
 import MenuDetailModal from "./modal/MenuDetailModal"
+import { useParams } from "react-router-dom"
 
 const MenuDetail = () => {
+  const { id } = useParams()
   const [openOptional, setOpenOptional] = useState(false)
 
   const handleOpenOptional = () => {
@@ -20,7 +22,7 @@ const MenuDetail = () => {
 
   return (
     <div style={{ marginTop: "60px" }}>
-      <BackGroupMenu />
+      <BackGroupMenu id={id} />
       <Grid2 textAlign="left" margin={1}>
         <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>
           โปรโมชั่นต่างๆ
