@@ -21,6 +21,7 @@ const modalStyle = {
 }
 
 const MenuDetailModal = ({ openOptional, setOpenOptional }) => {
+
   const handleConfirm = () => {
     setOpenOptional(false)
   }
@@ -28,7 +29,7 @@ const MenuDetailModal = ({ openOptional, setOpenOptional }) => {
   const handleCancel = () => {
     setOpenOptional(false)
   }
-  
+
   return (
     <Modal open={openOptional} onClose={() => setOpenOptional(false)}>
       <Box sx={{ ...modalStyle, overflow: "auto" }}>

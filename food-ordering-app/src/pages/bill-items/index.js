@@ -6,7 +6,7 @@ const BillItems = ({ items, onClose }) => {
   return (
     <>
       <Box padding={1}>
-        <Typography fontSize={20} color="#123456">
+        <Typography fontSize={20} fontWeight="bold" color="#123456">
           บิลอาหาร
         </Typography>
       </Box>
