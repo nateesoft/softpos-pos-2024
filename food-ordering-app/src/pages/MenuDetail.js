@@ -6,6 +6,7 @@ import ListItemText from "@mui/material/ListItemText"
 import ListItemAvatar from "@mui/material/ListItemAvatar"
 import Typography from "@mui/material/Typography"
 import { Button, Grid2 } from "@mui/material"
+import Badge from "@mui/material/Badge"
 
 import BackGroupMenu from "./BackGroupMenu"
 import MenuDetailModal from "./modal/MenuDetailModal"
@@ -32,19 +33,29 @@ const MenuDetail = () => {
               <ListItem
                 alignItems="flex-start"
                 secondaryAction={
-                  <Button variant="contained" color="success">
-                    ฿ 199.00 +
+                  <Button
+                    variant="text"
+                    sx={{
+                      background: "#777",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      color: "snow"
+                    }}
+                  >
+                    ฿{item.price}
                   </Button>
                 }
               >
                 <ListItemAvatar>
-                  <img
-                    src={item.img}
-                    alt=""
-                    width="auto"
-                    height={80}
-                    style={{ borderRadius: "5px", marginRight: "10px" }}
-                  />
+                  <Badge badgeContent={item.qty} color="info">
+                    <img
+                      src={item.img}
+                      alt=""
+                      width="auto"
+                      height={80}
+                      style={{ borderRadius: "5px", marginRight: "10px" }}
+                    />
+                  </Badge>
                 </ListItemAvatar>
                 <ListItemText
                   secondary={
@@ -66,7 +77,10 @@ const MenuDetail = () => {
           ))}
       </List>
 
-      <MenuDetailModal openOptional={openOptional} setOpenOptional={setOpenOptional} />
+      <MenuDetailModal
+        openOptional={openOptional}
+        setOpenOptional={setOpenOptional}
+      />
     </div>
   )
 }
@@ -74,103 +88,153 @@ const MenuDetail = () => {
 const itemData = [
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 199.0,
+    qty: 2
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 109.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 1
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 79.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 99.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 189.0,
+    qty: 1
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 199.0,
+    qty: 0
   }
 ]
 

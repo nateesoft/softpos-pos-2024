@@ -14,6 +14,7 @@ import DashboardSetting from "./pages/DashboardSetting"
 import HeaderAppBar from "./pages/HeaderAppBar"
 import CartItems from "./pages/cart-items"
 import BillItems from "./pages/bill-items"
+import MessageAlert from "./pages/modal/MessageAlert"
 
 const modalStyle = {
   position: "absolute",
@@ -37,6 +38,7 @@ const App = () => {
   const [openDashboard, setOpenDashboard] = useState(false)
   const [openBill, setOpenBill] = useState(false)
   const [openItemProgress, setOpenItemProgress] = useState(false)
+  const [openAlert, setOpenAlert] = useState(false)
 
   return (
     <div className="App">
@@ -117,6 +119,7 @@ const App = () => {
       <Modal open={openItemProgress} onClose={() => setOpenItemProgress(false)}>
         <Box sx={{ ...modalStyle2, overflow: "auto" }}>
           <CartItems
+            setOpenAlert={setOpenAlert}
             onClose={() => setOpenItemProgress(false)}
             items={[
               {
@@ -159,6 +162,7 @@ const App = () => {
           />
         </Box>
       </Modal>
+      <MessageAlert open={openAlert} onClose={() => setOpenAlert(false)} />
     </div>
   )
 }
