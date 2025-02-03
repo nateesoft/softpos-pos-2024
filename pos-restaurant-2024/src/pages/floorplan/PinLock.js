@@ -1,7 +1,14 @@
 import React, { useContext, useState } from "react"
-import { Alert, Box, Button, Modal, Typography } from "@mui/material"
+import {
+  Alert,
+  Box,
+  Button,
+  Grid2,
+  Modal,
+  Typography
+} from "@mui/material"
 
-import apiClient from '../../httpRequest'
+import apiClient from "../../httpRequest"
 import CustomerCheckin from "./CustomerCheckin"
 import { POSContext } from "../../AppContext"
 import ShowNotification from "../ui-utils/ShowNotification"
@@ -29,26 +36,23 @@ const modalStyle = {
   boxShadow: 24
 }
 
-const inputPin = {
-  width: "48px",
-  height: "48px",
-  borderRadius: "50%",
-  fontSize: "48px",
-  marginBottom: "30px",
-  textAlign: "center",
-  backgroundColor: "black",
-  color: "white"
-}
-
 const numberStyle = {
   borderRadius: "50%",
   height: "65px",
   fontSize: "30px",
   bgcolor: "black",
   border: "1px solid gray",
-  '&:hover': {
-        background: "radial-gradient(circle, chocolate, #000)"
-    }
+  "&:hover": {
+    background: "radial-gradient(circle, chocolate, #000)"
+  }
+}
+
+const buttonRadius = {
+  borderRadius: "50%",
+  height: "65px",
+  background: "black",
+  border: "2px solid #aaa",
+  fontSize: "36px"
 }
 
 const PinLock = ({ setOpenPin }) => {
@@ -82,7 +86,10 @@ const PinLock = ({ setOpenPin }) => {
         .then(async (response) => {
           const { pinValid } = response.data.data
           if (pinValid === true) {
-            await apiClient.patch(`/api/tablefile/updateOpenTable/${tableInfo.tableNo}`, { Cashier: userLogin, TUser: empCodeInput })
+            await apiClient.patch(
+              `/api/tablefile/updateOpenTable/${tableInfo.tableNo}`,
+              { Cashier: userLogin, TUser: empCodeInput }
+            )
             setAppData({ ...appData, empCode: empCodeInput })
             setShowError(false)
             setOpenCustCheckIn(true)
@@ -130,7 +137,7 @@ const PinLock = ({ setOpenPin }) => {
     }
   }
 
-  if (tableInfo.tableNo === '') {
+  if (tableInfo.tableNo === "") {
     setOpenPin(false)
   }
 
@@ -149,21 +156,21 @@ const PinLock = ({ setOpenPin }) => {
           </Box>
         </Alert>
       )}
+      <Grid2 container marginBottom={1}>
+        <Button variant="contained" sx={buttonRadius}>
+          {pin1 ? "#" : ""}
+        </Button>
+        <Button variant="contained" sx={buttonRadius}>
+          {pin2 ? "#" : ""}
+        </Button>
+        <Button variant="contained" sx={buttonRadius}>
+          {pin3 ? "#" : ""}
+        </Button>
+        <Button variant="contained" sx={buttonRadius}>
+          {pin4 ? "#" : ""}
+        </Button>
+      </Grid2>
       <table>
-        <tr>
-          <td>
-            <input style={inputPin} type="password" value={pin1} readOnly />
-          </td>
-          <td>
-            <input style={inputPin} type="password" value={pin2} readOnly />
-          </td>
-          <td>
-            <input style={inputPin} type="password" value={pin3} readOnly />
-          </td>
-          <td>
-            <input style={inputPin} type="password" value={pin4} readOnly />
-          </td>
-        </tr>
         <tr>
           <td>
             <Button
@@ -347,7 +354,12 @@ const PinLock = ({ setOpenPin }) => {
           />
         </Box>
       </Modal>
-      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
+      <ShowNotification
+        showNoti={showNoti}
+        setShowNoti={setShowNoti}
+        message={notiMessage}
+        alertType={alertType}
+      />
     </div>
   )
 }
