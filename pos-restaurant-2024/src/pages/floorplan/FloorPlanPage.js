@@ -374,6 +374,8 @@ function FloorPlanPage() {
             nodeTypes={nodeTypes}
             nodesDraggable={false}
             defaultViewport={defaultViewport}
+            fitView
+            minZoom={0.1}
           >
             <Controls />
             <Background variant={BackgroundVariant.Dots} />

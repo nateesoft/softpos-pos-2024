@@ -185,8 +185,7 @@ const CustomerCheckin = (props) => {
                     asiaPeople={asiaCount} setAsiaCount={setAsiaCount}
                 />
             </Box>
-
-            <Grid2 container padding={1}>
+            {/* <Grid2 container padding={1}>
                 <TextField
                     id="outlined-number"
                     label="ชื่อลูกค้า"
@@ -194,8 +193,8 @@ const CustomerCheckin = (props) => {
                     onChange={e => setCustomerName(e.target.value)}
                     fullWidth
                 />
-            </Grid2>
-            <Grid2 container padding={1} spacing={1}>
+            </Grid2> */}
+            {/* <Grid2 container padding={1} spacing={1}>
                 <TextField
                     id="outlined-number"
                     label="เลขที่สมาชิก"
@@ -203,7 +202,7 @@ const CustomerCheckin = (props) => {
                     onChange={e => setMemberCode(e.target.value)}
                 />
                 <Button variant='contained' startIcon={<PersonSearchIcon />}>ค้นหา</Button>
-            </Grid2>
+            </Grid2> */}
             <Grid2 container padding={1} spacing={1}>
                 <TextField
                     id="outlined-number"

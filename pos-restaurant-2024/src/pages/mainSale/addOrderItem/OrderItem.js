@@ -225,14 +225,17 @@ const OrderItem = ({
           {OrderTList &&
             OrderTList.map((product) => {
               return (
-                <ProductCard
-                  tableNo={tableNo}
-                  product={product}
-                  handleNotification={handleNotification}
-                  initLoadMenu={initLoadMenu}
-                  initLoadOrder={initLoadOrder}
-                  openModal={() => handleOpenMenu(product)}
-                />
+                <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                  <ProductCard
+                    tableNo={tableNo}
+                    product={product}
+                    handleNotification={handleNotification}
+                    initLoadMenu={initLoadMenu}
+                    initLoadOrder={initLoadOrder}
+                    openModal={() => handleOpenMenu(product)}
+                  />
+                  <Divider />
+                </div>
               )
             })}
           {OrderTList && OrderTList.length === 0 && (
@@ -253,14 +256,17 @@ const OrderItem = ({
           {OrderDList &&
             OrderDList.map((product) => {
               return (
-                <ProductCard
-                  tableNo={tableNo}
-                  product={product}
-                  handleNotification={handleNotification}
-                  initLoadMenu={initLoadMenu}
-                  initLoadOrder={initLoadOrder}
-                  openModal={() => handleOpenMenu(product)}
-                />
+                <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                  <ProductCard
+                    tableNo={tableNo}
+                    product={product}
+                    handleNotification={handleNotification}
+                    initLoadMenu={initLoadMenu}
+                    initLoadOrder={initLoadOrder}
+                    openModal={() => handleOpenMenu(product)}
+                  />
+                  <Divider />
+                </div>
               )
             })}
           {OrderDList && OrderDList.length === 0 && (

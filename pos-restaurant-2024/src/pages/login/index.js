@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
@@ -187,7 +187,7 @@ const Login = () => {
                   <Container>
                     <Box height={35} />
                     <Box display="flex" justifyContent="center">
-                      <Typography component="h1" variant="h4">
+                      <Typography sx={{fontSize: "36px", fontBold: "bold", padding: "10px"}}>
                         POS Restaurant
                       </Typography>
                     </Box>
@@ -250,7 +250,7 @@ const Login = () => {
                               color: "#ffffff",
                               background:
                                 "radial-gradient(circle, #123456, #000)",
-                              height: "100px",
+                              height: "70px",
                               fontSize: "28px",
                               "&:hover": {
                                 background:
