@@ -5,44 +5,24 @@ import Divider from "@mui/material/Divider"
 import ListItemText from "@mui/material/ListItemText"
 import ListItemAvatar from "@mui/material/ListItemAvatar"
 import Typography from "@mui/material/Typography"
-import { Box, Button, Grid2, Modal, TextField } from "@mui/material"
-import CancelItem from '@mui/icons-material/Cancel'
-import AddItem from '@mui/icons-material/AddCircleOutline';
+import { Button, Grid2 } from "@mui/material"
+import Badge from "@mui/material/Badge"
 
 import BackGroupMenu from "./BackGroupMenu"
-import RadioButtonsGroup from "./optional-modal/RadioButtonGroup"
-import CheckboxLabels from "./optional-modal/CheckboxLabels"
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  background: "white",
-  textAlign: "center",
-  minWidth: "380px",
-  height: "450px",
-  padding: "10px"
-}
+import MenuDetailModal from "./modal/MenuDetailModal"
+import { useParams } from "react-router-dom"
 
 const MenuDetail = () => {
+  const { id } = useParams()
   const [openOptional, setOpenOptional] = useState(false)
 
   const handleOpenOptional = () => {
     setOpenOptional(true)
   }
 
-  const handleConfirm = () => {
-    setOpenOptional(false)
-  }
-
-  const handleCancel = () => {
-    setOpenOptional(false)
-  }
-
   return (
     <div style={{ marginTop: "60px" }}>
-      <BackGroupMenu />
+      <BackGroupMenu id={id} />
       <Grid2 textAlign="left" margin={1}>
         <Typography sx={{ fontSize: "18px", fontWeight: "bold" }}>
           โปรโมชั่นต่างๆ
@@ -55,19 +35,29 @@ const MenuDetail = () => {
               <ListItem
                 alignItems="flex-start"
                 secondaryAction={
-                  <Button variant="contained" color="success">
-                    ฿ 199.00 +
+                  <Button
+                    variant="text"
+                    sx={{
+                      background: "#777",
+                      fontSize: "14px",
+                      fontWeight: "bold",
+                      color: "snow"
+                    }}
+                  >
+                    ฿{item.price}
                   </Button>
                 }
               >
                 <ListItemAvatar>
-                  <img
-                    src={item.img}
-                    alt=""
-                    width="auto"
-                    height={80}
-                    style={{ borderRadius: "5px", marginRight: "10px" }}
-                  />
+                  <Badge badgeContent={item.qty} color="info">
+                    <img
+                      src={item.img}
+                      alt=""
+                      width="auto"
+                      height={80}
+                      style={{ borderRadius: "5px", marginRight: "10px" }}
+                    />
+                  </Badge>
                 </ListItemAvatar>
                 <ListItemText
                   secondary={
@@ -89,94 +79,10 @@ const MenuDetail = () => {
           ))}
       </List>
 
-      <Modal open={openOptional} onClose={() => setOpenOptional(false)}>
-        <Box sx={{ ...modalStyle, overflow: "auto" }}>
-          <Grid2 container direction="column">
-            <Box>
-              <img
-                src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
-                width="auto"
-                height={250}
-                alt=""
-              />
-            </Box>
-            <Box>
-              <Typography fontSize={20} fontWeight={500}>++ กะเพราหมูสับ ++</Typography>
-            </Box>
-            <Divider />
-            <Box padding={1}>
-              <RadioButtonsGroup
-                title="เพิ่มเติม"
-                subTitle="(ต้องเลือก 1 รายการ)"
-                required={true}
-                items={[
-                  { id: 1, value: "1", label: "ไข่ดาว" },
-                  { id: 2, value: "2", label: "ไข่เจียว" },
-                  { id: 3, value: "3", label: "ไข่ต้ม" }
-                ]}
-              />
-            </Box>
-            <Divider />
-            <Box padding={1}>
-              <RadioButtonsGroup
-                title="ทานเสริมจากเมนูหลัก"
-                subTitle="(เลือกได้ 1 รายการ)"
-                required={false}
-                items={[
-                  { id: 1, value: "1", label: "ไข่ดาว" },
-                  { id: 2, value: "2", label: "ไข่เจียว" },
-                  { id: 3, value: "3", label: "ไข่ต้ม" }
-                ]}
-              />
-            </Box>
-            <Divider />
-            <Box padding={1}>
-              <CheckboxLabels
-                title="ข้อความพิเศษ"
-                subTitle="(เลือกเพิ่มได้มากกว่า 1 รายการ)"
-                items={[
-                  { id: 1, value: "1", label: "ไข่ดาว" },
-                  { id: 2, value: "2", label: "ไข่เจียว" },
-                  { id: 3, value: "3", label: "ไข่ต้ม" }
-                ]}
-              />
-            </Box>
-            <Divider />
-            <Box padding={1}>
-              <CheckboxLabels
-                title="คิดราคาเพิ่ม"
-                subTitle="(เลือกได้มากกว่า 1 รายการ)"
-                items={[
-                  { id: 1, value: "1", label: "ไข่ดาว", price: 0 },
-                  { id: 2, value: "2", label: "ไข่เจียว", price: 15 },
-                  { id: 3, value: "3", label: "ไข่ต้ม", price: 20 }
-                ]}
-              />
-            </Box>
-            <Divider />
-            <Box padding={1}>
-              <CheckboxLabels
-                title="ไม่คิดราคาเพิ่ม"
-                subTitle="(เลือกเพิ่มได้มากกว่า 1 รายการ)"
-                items={[
-                  { id: 1, value: "1", label: "ไข่ดาว" },
-                  { id: 2, value: "2", label: "ไข่เจียว" },
-                  { id: 3, value: "3", label: "ไข่ต้ม" }
-                ]}
-              />
-            </Box>
-            <Divider />
-            <Box padding={1}>
-              <Typography>ข้อความพิเศษ (บางรายการอาจเพิ่มราคา)</Typography>
-              <TextField multiline rows={3} fullWidth />
-            </Box>
-              <Grid2 container padding={1} spacing={1} justifyContent="center">
-                <Button variant="outlined" color="error" onClick={handleCancel} startIcon={<CancelItem />}>ยกเลิก</Button>
-                <Button variant="contained" color="success" onClick={handleConfirm} startIcon={<AddItem fontSize="large" />}>ยืนยันรายการ</Button>
-              </Grid2>
-          </Grid2>
-        </Box>
-      </Modal>
+      <MenuDetailModal
+        openOptional={openOptional}
+        setOpenOptional={setOpenOptional}
+      />
     </div>
   )
 }
@@ -184,103 +90,153 @@ const MenuDetail = () => {
 const itemData = [
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 199.0,
+    qty: 2
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 109.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 1
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 79.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 99.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 189.0,
+    qty: 1
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    title: "Breakfast"
+    title: "Breakfast",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-    title: "Burger"
+    title: "Burger",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-    title: "Coffee"
+    title: "Coffee",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62",
-    title: "Honey"
+    title: "Honey",
+    price: 199.0,
+    qty: 0
   },
   {
     img: "https://images.unsplash.com/photo-1567306301408-9b74779a11af",
-    title: "Tomato basil"
+    title: "Tomato basil",
+    price: 199.0,
+    qty: 0
   }
 ]
 

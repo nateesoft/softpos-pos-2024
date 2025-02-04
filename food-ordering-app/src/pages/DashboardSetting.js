@@ -2,6 +2,7 @@ import React from "react"
 import Box from "@mui/material/Box"
 import { Button, Grid2 } from "@mui/material"
 import FlatwareIcon from "@mui/icons-material/Flatware"
+import { useParams } from 'react-router-dom'
 
 const panelStyle = {
   background: "radial-gradient(circle, #123456, #000)",
@@ -22,21 +23,27 @@ const modalStyle = {
   boxShadow: 24
 }
 
-const DashboardSetting = ({ setOpen, openSetting }) => {
+const DashboardSetting = ({ tableNo, setOpen, openSetting, socket }) => {
+  const { id } = useParams()
+
   const handleCallFlatware = () => {
     console.log('handleCallFlatware')
+    socket.emit("customerMessage", id + " ขออุปกรณ์เพิ่ม")
     setOpen(false)
   }
   const handleCallCondiment = () => {
     console.log('handleCallCondiment')
+    socket.emit("customerMessage", id + " ขอเครื่องปรุง")
     setOpen(false)
   }
   const handleCallPayment = () => {
     console.log('handleCallPayment')
+    socket.emit("customerMessage", id + " เรียกรับชำระเงิน")
     setOpen(false)
   }
   const handleCallWaiter = () => {
     console.log('handleCallWaiter')
+    socket.emit("customerMessage", id + " เรียกพนักงาน")
     setOpen(false)
   }
   return (

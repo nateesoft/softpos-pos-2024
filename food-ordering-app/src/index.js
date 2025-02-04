@@ -2,7 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import { I18nextProvider } from "react-i18next"
 import i18next from "i18next"
-import { BrowserRouter } from "react-router-dom"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { CssBaseline } from "@mui/material"
 
@@ -10,9 +10,10 @@ import "./index.css"
 
 import global_th from "./locales/th/global.json"
 import global_en from "./locales/en/global.json"
-
-import App from "./App"
 import reportWebVitals from "./reportWebVitals"
+import NotFound from "./pages/NotFound"
+import MainApp from "./MainApp"
+import TaskFinish from "./pages/TaskFinish"
 
 const theme = createTheme({
   palette: {
@@ -45,7 +46,12 @@ root.render(
     <CssBaseline />
     <ThemeProvider theme={theme}>
       <I18nextProvider i18n={i18next}>
-        <App />
+        <Routes>
+          <Route path="/:id" element={<MainApp page="home" />} />
+          <Route path="/:id/detail" element={<MainApp page="detail" />} />
+          <Route path="/:id/task-finish" element={<TaskFinish />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </I18nextProvider>
     </ThemeProvider>
   </BrowserRouter>
