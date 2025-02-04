@@ -80,6 +80,13 @@ public class ClientSocket {
             socket.on("createQRCode", (Object... args1) -> {
                 System.out.println("Create qr code: " + args1[0]);
                 QRCodeGenerator.CreateQRCode(args1[0].toString());
+                PaperPrint paperPrint = new PaperPrint();
+                String htmlContent = paperPrint.getQrCodePrint();
+                
+                String prtName = printerName;
+                int prtWidth = printerWidth;
+                int prtHeight = printerHeight;
+                printerService.printMessage(prtName, htmlContent, prtWidth, prtHeight);
             });
 
             socket.on("printerMessage", (Object... args1) -> {

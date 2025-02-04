@@ -370,6 +370,14 @@ public class PaperPrint {
 
         return html;
     }
+    
+    public String getQrCodePrint() {
+        String html = ""
+                + "<div align=\"center\">"
+                + "     <img src=\"file:qrcode.png\" width=\"100\" height=\"100\">"
+                + "</div>";
+        return html;
+    }
 
     public String exampleReceiptPrint() {
         return "<div style=\"padding: 5px;\">"
