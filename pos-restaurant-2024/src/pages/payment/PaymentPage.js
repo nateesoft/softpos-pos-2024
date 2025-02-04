@@ -27,6 +27,7 @@ const backgroundSpecial = {
 }
 
 function PaymentPage() {
+  console.log('PaymentPage')
   const { tableNo } = useParams();
 
   // Load summary tablefile

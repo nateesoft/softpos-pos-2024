@@ -9,6 +9,7 @@
     "start:watch": "nodemon ./bin/www"
   },
   "dependencies": {
+    "axios": "^1.7.9",
     "body-parser": "^1.20.3",
     "canvas": "^3.1.0",
     "cookie-parser": "~1.4.4",

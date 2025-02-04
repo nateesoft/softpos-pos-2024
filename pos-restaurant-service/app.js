@@ -6,7 +6,7 @@ const bodyParser = require('body-parser')
 const logger = require('morgan');
 const basicAuth = require('express-basic-auth')
 
-// const cors = require('cors')
+const cors = require('cors')
 
 // for Restaurant POS (old)
 // login
@@ -59,8 +59,11 @@ const invenotryDbRouter = require('./routes/inventory')
 // paid-in, paid-out
 const paidInOutRouter = require('./routes/pos_restaurant/padinout')
 
+// booking interation
+const bookingRouter = require('./routes/api_integration')
+
 const app = express();
-// app.use(cors())
+app.use(cors())
 const username = process.env.WEB_USER_AUTH
 const password = process.env.WEB_USER_PASS
 app.use(basicAuth({ users: { [username]: password } }))
@@ -121,6 +124,9 @@ app.use('/api/crm/member', memmasterRouter)
 // route for test printer
 app.use('/api/printer-thermal', printerThermalRouter)
 app.use('/api/report', reportRouter)
+
+// booking integration
+app.use('/api/integration', bookingRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
