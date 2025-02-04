@@ -12,6 +12,7 @@ import ShowNotification from "../ui-utils/ShowNotification"
 import Footer from '../Footer'
 
 function MainSalePage() {
+  console.log('MainSalePage')
   const { tableNo } = useParams();
 
   const matches = useMediaQuery("(min-width:1024px)")
