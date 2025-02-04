@@ -1,6 +1,7 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import Modal from "@mui/material/Modal"
+import { io } from "socket.io-client"
 
 import "./App.css"
 
@@ -31,11 +32,30 @@ const modalStyle2 = {
   padding: "10px"
 }
 
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
+
+// เชื่อมต่อกับ Socket.IO server
+const socket = io(SOCKET_SERVER_URL, {
+  autoConnect: false
+})
+
 const MainApp = ({ page }) => {
   const [openDashboard, setOpenDashboard] = useState(false)
   const [openBill, setOpenBill] = useState(false)
   const [openItemProgress, setOpenItemProgress] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
+
+  useEffect(() => {
+    socket.connect()
+
+    socket.on("message", (data) => {
+      console.log(data)
+    })
+
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
 
   return (
     <div className="App">
@@ -50,7 +70,7 @@ const MainApp = ({ page }) => {
       <BottomAppBar setOpenItemProgress={setOpenItemProgress} />
       <Modal open={openDashboard} onClose={() => setOpenDashboard(false)}>
         <Box sx={{ ...modalStyle }}>
-          <DashboardSetting setOpen={setOpenDashboard} />
+          <DashboardSetting tableNo="T9" setOpen={setOpenDashboard} socket={socket} />
         </Box>
       </Modal>
       <Modal open={openBill} onClose={() => setOpenBill(false)}>
