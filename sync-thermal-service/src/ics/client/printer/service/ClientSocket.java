@@ -2,6 +2,7 @@ package ics.client.printer.service;
 
 import ics.client.printer.mapping.ClientPrinter;
 import com.google.gson.Gson;
+import ics.utils.QRCodeGenerator;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import java.io.FileInputStream;
@@ -74,6 +75,11 @@ public class ClientSocket {
             // Event เมื่อเซิร์ฟเวอร์ตอบกลับ
             socket.on("reply", (Object... args1) -> {
                 System.out.println("Server reply: " + args1[0]);
+            });
+            
+            socket.on("createQRCode", (Object... args1) -> {
+                System.out.println("Create qr code: " + args1[0]);
+                QRCodeGenerator.CreateQRCode(args1[0].toString());
             });
 
             socket.on("printerMessage", (Object... args1) -> {

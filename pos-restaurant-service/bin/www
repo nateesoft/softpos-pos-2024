@@ -56,6 +56,14 @@ io.on("connection", (socket) => {
       io.emit("customerMessage", data)
   });
 
+  socket.on("createQRCode", (data) => {
+      console.log("Create qrcode from client:", data);
+
+      // ส่งข้อความกลับไปยัง client เฉพาะ client นั้นๆ
+      // socket.emit("reply", `Server: ${data}`);
+      io.emit("createQRCode", data)
+  });
+
   socket.on("printerMessage", (data) => {
     io.emit("printerMessage", data) // send to every one all client
   })
