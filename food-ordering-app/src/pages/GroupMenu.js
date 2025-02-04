@@ -2,14 +2,18 @@ import React from "react"
 import ImageList from "@mui/material/ImageList"
 import ImageListItem from "@mui/material/ImageListItem"
 import { Typography } from "@mui/material"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Box from "@mui/material/Box"
 
 const GroupMenu = () => {
   const navigate = useNavigate()
+  const { id } = useParams()
+  if (!id) {
+    return navigate("/notfound")
+  }
 
   const handleShowDetail = () => {
-    navigate("/detail")
+    navigate(`/${id}/detail`)
   }
 
   return (
@@ -21,7 +25,9 @@ const GroupMenu = () => {
           width: "100%"
         }}
       >
-        <Typography fontSize={20} fontWeight={500}>หมวดเมนูอาหารทั้งหมด</Typography>
+        <Typography fontSize={20} fontWeight={500}>
+          หมวดเมนูอาหารทั้งหมด
+        </Typography>
       </Box>
       <ImageList
         cols={2}

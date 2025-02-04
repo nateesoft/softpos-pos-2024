@@ -6,11 +6,13 @@ import IconButton from "@mui/material/IconButton"
 import Typography from "@mui/material/Typography"
 import MenuIcon from "@mui/icons-material/Menu"
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong"
+import { useParams } from 'react-router-dom'
 
 import LanguageSettings from "./LanguageSettings"
 
 const HeaderAppBar = ({ setOpenDashboard, setOpenBill }) => {
   const menuId = "primary-search-account-menu"
+  const { id } = useParams()
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -36,7 +38,7 @@ const HeaderAppBar = ({ setOpenDashboard, setOpenBill }) => {
             component="div"
             sx={{ display: { sm: "block" } }}
           >
-            โต๊ะ T1 | คุณนที
+            โต๊ะ {id} | คุณนที
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { md: "flex" } }}>

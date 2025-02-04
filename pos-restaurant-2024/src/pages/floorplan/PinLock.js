@@ -56,6 +56,7 @@ const buttonRadius = {
 }
 
 const PinLock = ({ setOpenPin }) => {
+  console.log('PinLock')
   const { appData, setAppData } = useContext(POSContext)
   const { userLogin, tableInfo } = appData
   const [openCustCheckIn, setOpenCustCheckIn] = useState(false)

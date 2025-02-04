@@ -1,12 +1,21 @@
 import React from 'react'
 import { Box, Button, Divider, Grid2, Typography } from "@mui/material"
 import Timelapse from "@mui/icons-material/Timelapse"
+import { useNavigate, useParams } from 'react-router-dom'
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 
 const BillItems = ({ items, onClose }) => {
+  const navigate = useNavigate()
+  const { id } = useParams()
+
+  const handleFinishTask = () => {
+    navigate(`/${id}/task-finish`)
+    onClose()
+  }
   return (
     <>
       <Box padding={1}>
-        <Typography fontSize={20} color="#123456">
+        <Typography fontSize={20} fontWeight="bold" color="#123456">
           บิลอาหาร
         </Typography>
       </Box>
@@ -19,7 +28,7 @@ const BillItems = ({ items, onClose }) => {
                 <tbody>
                   <tr>
                     <td>
-                      <img src={item.img} width="auto" height={80} />
+                      <img src={item.img} alt="" width="auto" height={80} />
                     </td>
                     <td align="left">
                       <div>{item.menuName}</div>
@@ -55,8 +64,8 @@ const BillItems = ({ items, onClose }) => {
             <Typography fontWeight="bold" fontSize={16}>รวมทั้งหมด</Typography>
             <Typography fontWeight="bold" fontSize={16}>฿85.00</Typography>
           </Grid2>
-          <Button variant="contained" color="warning" fullWidth onClick={()=>onClose()}>
-            ดำเนินการต่อ
+          <Button variant="contained" color="warning" fullWidth startIcon={<PointOfSaleIcon />} onClick={handleFinishTask}>
+            แจ้งชำระเงิน
           </Button>
         </Box>
     </>
