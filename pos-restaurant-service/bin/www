@@ -23,7 +23,7 @@ app.set('port', port);
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.SOCKETIO_CLIENT_ACCEPT,
+    origin: '*',
     methods: ['GET', 'POST']
   }
 });
@@ -36,7 +36,6 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-console.log("Socket Accept Host:", process.env.SOCKETIO_CLIENT_ACCEPT);
 io.on("connection", (socket) => {
   console.log("A client connected:", socket.id);
 
@@ -46,7 +45,15 @@ io.on("connection", (socket) => {
 
       // ส่งข้อความกลับไปยัง client เฉพาะ client นั้นๆ
       // socket.emit("reply", `Server: ${data}`);
-      io.emit("message", "message from server")
+      io.emit("message", data)
+  });
+
+  socket.on("customerMessage", (data) => {
+      console.log("Received from client:", data);
+
+      // ส่งข้อความกลับไปยัง client เฉพาะ client นั้นๆ
+      // socket.emit("reply", `Server: ${data}`);
+      io.emit("customerMessage", data)
   });
 
   socket.on("printerMessage", (data) => {

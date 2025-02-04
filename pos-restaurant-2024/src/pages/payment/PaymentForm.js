@@ -62,7 +62,9 @@ const modalStyle = {
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
 // เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL);
+const socket = io(SOCKET_SERVER_URL, {
+  autoConnect: false
+});
 
 function PaymentForm({
   orderList,
@@ -176,18 +178,20 @@ function PaymentForm({
     const cd = creditAmount ? parseFloat(creditAmount) : 0
     const ta = transferAmount ? parseFloat(transferAmount) : 0
     const totalNetAmt = parseFloat(R_NetTotal) + parseFloat(creditChargeAmount)
+    const _depositAmount = parseFloat(depositAmount)
+    const _entertainAmount = parseFloat(entertainAmount)
     const paymentAmt = parseFloat(
-      cc + cd + ta + depositAmount + entertainAmount
+      cc + cd + ta + _depositAmount + _entertainAmount
     )
     const discountAmt = 0
     let balanceAmt = parseFloat(paymentAmt - discountAmt - totalNetAmt)
-    if (depositAmount > totalNetAmt) {
+    if (_depositAmount > totalNetAmt) {
       setDepositAmount(totalNetAmt)
       setCashAmount(0)
       setCreditAmount(0)
       setCreditChargeAmount(0)
     }
-    if (entertainAmount > totalNetAmt) {
+    if (_entertainAmount > totalNetAmt) {
       setEntertainAmount(totalNetAmt)
       setCashAmount(0)
       setCreditAmount(0)
@@ -412,21 +416,20 @@ function PaymentForm({
   }, [totalAmount])
 
   useEffect(() => {
-    // เชื่อมต่อกับ Socket.IO server
-    socket.current = io(SOCKET_SERVER_URL)
+    socket.connect()
 
     // รับข้อความจาก server
-    socket.current.on("message", (newMessage) => {
+    socket.on("message", (newMessage) => {
       console.log(newMessage)
     })
 
-    socket.current.on("reply", (newMessage) => {
+    socket.on("reply", (newMessage) => {
       console.log(newMessage)
     })
 
     // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
     return () => {
-      socket.current.disconnect()
+      socket.disconnect()
     }
   }, [])
 
@@ -912,7 +915,7 @@ function PaymentForm({
         <Box sx={{ ...modalStyle, width: "650px", padding: "5px" }}>
           <MultipleCreditPayment
             tableNo={tableNo}
-            balanceAmount={R_NetTotal + creditChargeAmount}
+            balanceAmount={R_NetTotal + creditChargeAmount - depositAmount - entertainAmount}
             setCreditAmt={setCreditAmount}
             setCreditChargeAmt={setCreditChargeAmount}
             totalAmount={totalAmount}
