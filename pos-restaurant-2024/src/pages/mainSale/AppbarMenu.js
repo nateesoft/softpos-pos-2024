@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,6 +16,8 @@ import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import Moment from 'react-moment';
 import { useNavigate } from 'react-router-dom';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
+import QrCodeIcon from '@mui/icons-material/QrCode';
+import { io } from "socket.io-client"
 
 import { POSContext } from '../../AppContext';
 import MenuSetupPage from './setupMenu/MenuSetupPage';
@@ -76,7 +78,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function LeftMenu() {
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
+// เชื่อมต่อกับ Socket.IO server
+const socket = io(SOCKET_SERVER_URL, {
+  autoConnect: false
+})
+
+export default function AppbarMenu({ tableNo }) {
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
 
@@ -98,10 +106,26 @@ export default function LeftMenu() {
     setOpenMenuSetup(true)
   }
 
+  const createQRCode = () => {
+    const customerUrl = process.env.REACT_APP_CUSTOMER_HOSTING
+    console.log('prepare create qrcode:', customerUrl+"/"+tableNo)
+    socket.emit("createQRCode", customerUrl + "/" +tableNo)
+    setAnchorEl(null);
+  }
+
   const navigate = useNavigate()
   const backFloorPlan = () => {
     navigate('/floorplan')
   }
+
+  useEffect(()=> {
+    socket.connect()
+
+    // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -118,12 +142,18 @@ export default function LeftMenu() {
             <Typography variant='p'>Menu Setup</Typography>
           </Box>
         </MenuItem>
+        <MenuItem onClick={createQRCode}>
+          <Box display="flex" justifyContent="center">
+            <QrCodeIcon sx={{ marginRight: "10px" }} />
+            <Typography variant='p'>QR สั่งอาหาร</Typography>
+          </Box>
+        </MenuItem>
       </Menu>
       <AppBar position="fixed" sx={appbarStyle}>
         <Toolbar>
           <PointOfSaleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Button variant='text' sx={{ fontSize: "18px", color: "white" }} onClick={handleClick}>
-            POS RESTUARANT
+            POS RESTUARANT ({tableNo})
           </Button>
           <Search>
             <SearchIconWrapper>
