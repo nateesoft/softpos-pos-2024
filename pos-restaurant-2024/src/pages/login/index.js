@@ -38,7 +38,9 @@ const boxstyle = {
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
 
 // เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL)
+const socket = io(SOCKET_SERVER_URL, {
+  autoConnect: false
+})
 
 const Login = () => {
   const { appData, setAppData } = useContext(POSContext)
@@ -129,6 +131,8 @@ const Login = () => {
   }
 
   useEffect(() => {
+    socket.connect()
+
     // send to printer
     socket.emit("message", "hello, world")
 
@@ -143,7 +147,7 @@ const Login = () => {
 
     // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
     return () => {
-      socket.off('message')
+      socket.disconnect()
     }
   }, [])
 

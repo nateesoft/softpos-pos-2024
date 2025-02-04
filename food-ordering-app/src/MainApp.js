@@ -1,19 +1,18 @@
-import React, { useState } from "react"
-import { Routes, Route } from "react-router-dom"
+import React, { useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import Modal from "@mui/material/Modal"
-
-import GroupMenu from "./pages/GroupMenu"
-import MenuDetail from "./pages/MenuDetail"
-import NotFound from "./pages/NotFound"
+import { io } from "socket.io-client"
 
 import "./App.css"
 
+import GroupMenu from "./pages/GroupMenu"
+import MenuDetail from "./pages/MenuDetail"
 import BottomAppBar from "./pages/BottomAppBar"
 import DashboardSetting from "./pages/DashboardSetting"
 import HeaderAppBar from "./pages/HeaderAppBar"
 import CartItems from "./pages/cart-items"
 import BillItems from "./pages/bill-items"
+import MessageAlert from "./pages/modal/MessageAlert"
 
 const modalStyle = {
   position: "absolute",
@@ -33,10 +32,30 @@ const modalStyle2 = {
   padding: "10px"
 }
 
-const App = () => {
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
+
+// เชื่อมต่อกับ Socket.IO server
+const socket = io(SOCKET_SERVER_URL, {
+  autoConnect: false
+})
+
+const MainApp = ({ page }) => {
   const [openDashboard, setOpenDashboard] = useState(false)
   const [openBill, setOpenBill] = useState(false)
   const [openItemProgress, setOpenItemProgress] = useState(false)
+  const [openAlert, setOpenAlert] = useState(false)
+
+  useEffect(() => {
+    socket.connect()
+
+    socket.on("message", (data) => {
+      console.log(data)
+    })
+
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
 
   return (
     <div className="App">
@@ -45,16 +64,13 @@ const App = () => {
         setOpenBill={setOpenBill}
       />
       <header className="App-header">
-        <Routes>
-          <Route path="/" element={<GroupMenu />} />
-          <Route path="/detail" element={<MenuDetail />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        {page && page === "home" && <GroupMenu />}
+        {page && page === "detail" && <MenuDetail />}
       </header>
       <BottomAppBar setOpenItemProgress={setOpenItemProgress} />
       <Modal open={openDashboard} onClose={() => setOpenDashboard(false)}>
         <Box sx={{ ...modalStyle }}>
-          <DashboardSetting setOpen={setOpenDashboard} />
+          <DashboardSetting tableNo="T9" setOpen={setOpenDashboard} socket={socket} />
         </Box>
       </Modal>
       <Modal open={openBill} onClose={() => setOpenBill(false)}>
@@ -117,6 +133,7 @@ const App = () => {
       <Modal open={openItemProgress} onClose={() => setOpenItemProgress(false)}>
         <Box sx={{ ...modalStyle2, overflow: "auto" }}>
           <CartItems
+            setOpenAlert={setOpenAlert}
             onClose={() => setOpenItemProgress(false)}
             items={[
               {
@@ -159,8 +176,9 @@ const App = () => {
           />
         </Box>
       </Modal>
+      <MessageAlert open={openAlert} onClose={() => setOpenAlert(false)} />
     </div>
   )
 }
 
-export default App
+export default MainApp
