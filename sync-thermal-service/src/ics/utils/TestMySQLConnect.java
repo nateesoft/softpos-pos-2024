@@ -9,7 +9,7 @@ import ics.client.printer.controller.POSConfigSetup;
 public class TestMySQLConnect {
     
     public static void main(String[] args) {
-        POSConfigSetup p = new POSConfigSetup();
+        POSConfigSetup p = new POSConfigSetup("MyRestaurant");
         p.getData("001");
 //        try (Connection connection = MySQLConnectionUtil.getConnection(); Statement statement = connection.createStatement()) {
 //

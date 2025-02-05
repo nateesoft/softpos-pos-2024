@@ -43,3 +43,10 @@ let menuDailyList = [
     --"รายงานการรับชำระลูกหนี้ภายนอก(Ar Payment Report)", 
     --"รายงานอัตโนมัติเฉพาะเครื่อง(Automatic X)"
 ]
+
+
+pm2 concept production
+npm install -g pm2
+pm2 start src/index.js --name my-express-app
+pm2 save
+pm2 startup

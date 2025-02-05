@@ -15,7 +15,6 @@ import PageNotFound from './PageNotFound'
 import TrelloBoard from '../pages/monitor/kitchen'
 import Protected from "../routes/ProtectedRoute"
 import DashboardLayout from "../layouts"
-import RegisterMacNo from './RegisterMacno'
 
 // inventory stock
 import TemplateReport from './inventory'
@@ -121,8 +120,6 @@ const AnimatedRoutes = () => {
                         <Route path="/reportMonthly/void-report" element={<MVoidReport />} />
                         <Route path="/reportMonthly/credit-report" element={<MCreditReport />} />
                         <Route path="/reportMonthly/top-sale-report" element={<MTopSaleReport />} />
-
-
                         <Route path="/inventory/db" element={<TemplateReport />} />
                     </Route>
                 </Route>
@@ -130,7 +127,6 @@ const AnimatedRoutes = () => {
                 <Route path="/print-demo" element={<PrinterDemo />} />
                 <Route path="/test-print" element={<TestPrinter />} />
                 <Route path="/" element={<LoginPage />} />
-                <Route path="/register-macno" element={<RegisterMacNo />} />
                 <Route path="404" element={<PageNotFound />} />
                 <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>

@@ -12,9 +12,9 @@ import javax.swing.JEditorPane;
  * @author nateesun
  */
 public class PrinterControlService {
-    
+
     private final PrintService[] allPrinter = PrinterJob.lookupPrintServices();
-    
+
     public PrintService[] getAllPrinterService() {
         return allPrinter;
     }
@@ -45,9 +45,13 @@ public class PrinterControlService {
             System.err.println(ex.getMessage());
         }
     }
-    
+
     // send to printer
     public void printMessage(String printerName, String content, int width, int height) {
+        if (printerName == null) {
+            System.out.println("printMessage:" + content);
+            return;
+        }
         try {
             JEditorPane editor = new JEditorPane();
             editor.setContentType("text/html");
@@ -64,5 +68,5 @@ public class PrinterControlService {
             System.err.println(ex.getMessage());
         }
     }
-    
+
 }

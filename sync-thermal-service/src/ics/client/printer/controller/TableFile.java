@@ -2,7 +2,7 @@ package ics.client.printer.controller;
 
 import ics.client.printer.model.TableFileBean;
 import ics.utils.ErrorDialog;
-import ics.utils.MySQLLegacy;
+import ics.utils.MySQLConnect;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -13,9 +13,15 @@ import java.sql.Statement;
  */
 public class TableFile {
     
+    private final String dbName;
+    
+    public TableFile(String dbName) {
+        this.dbName = dbName;
+    }
+    
     public TableFileBean getData(String tableNo) {
         TableFileBean bean = new TableFileBean();
-        try (Connection connection = MySQLLegacy.getConnection(); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
 
             // ตัวอย่างการ Query
             String query = "SELECT * FROM tablefile where Tcode='" + tableNo + "'";

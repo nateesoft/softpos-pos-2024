@@ -6,16 +6,34 @@ package ics.client.printer.mapping;
  */
 public class ClientPrinter {
 
-    private int id;
-    private String printerName;
-    private String printerType; // receipt or kitchen
-    private String message;
-    private String terminal;
-    private String tableNo;
-    private String billNo;
-    private String title;
-    private String billType;
+    private int id = 0;
+    private String printerName = "";
+    private String printerType = ""; // receipt or kitchen
+    private String message = "";
+    private String terminal = "";
+    private String tableNo = "";
+    private String billNo = "";
+    private String title = "";
+    private String billType = "";
     private String sendTokic = "N";
+    private String qrCode = "";
+    private String database = "";
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
 
     public String getSendTokic() {
         return sendTokic;

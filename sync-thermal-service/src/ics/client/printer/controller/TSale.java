@@ -2,7 +2,7 @@ package ics.client.printer.controller;
 
 import ics.client.printer.model.TSaleBean;
 import ics.utils.ErrorDialog;
-import ics.utils.MySQLLegacy;
+import ics.utils.MySQLConnect;
 import ics.utils.ThaiUtil;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,10 +15,16 @@ import java.util.List;
  * @author nateesun
  */
 public class TSale {
+    
+    private final String dbName;
+    
+    public TSale(String dbName) {
+        this.dbName = dbName;
+    }
 
     public List<TSaleBean> getListData(String R_Refno) {
         List<TSaleBean> tSaleListBean = new ArrayList<>();
-        try (Connection connection = MySQLLegacy.getConnection(); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
             String sql = "SELECT "
                     + "    R_PluCode, "
                     + "    R_PName, "

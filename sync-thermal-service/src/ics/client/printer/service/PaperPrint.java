@@ -23,13 +23,19 @@ import java.util.stream.Collectors;
  * @author nateesun
  */
 public class PaperPrint {
+    
+    private String dbName;
+    
+    public PaperPrint(String dbName) {
+        this.dbName = dbName;
+    }
 
-    private final POSHWSetup poshwSetupControl = new POSHWSetup();
-    private final POSConfigSetup posConfigSetup = new POSConfigSetup();
-    private final TSale tSaleControl = new TSale();
-    private final BillNo billNoControl = new BillNo();
-    private final Balance balanceControl = new Balance();
-    private final TableFile tableFileControl = new TableFile();
+    private final POSHWSetup poshwSetupControl = new POSHWSetup(this.dbName);
+    private final POSConfigSetup posConfigSetup = new POSConfigSetup(this.dbName);
+    private final TSale tSaleControl = new TSale(this.dbName);
+    private final BillNo billNoControl = new BillNo(this.dbName);
+    private final Balance balanceControl = new Balance(this.dbName);
+    private final TableFile tableFileControl = new TableFile(this.dbName);
 
     public String getMoneyFormat(double number) {
         NumberFormat decimalFormat = NumberFormat.getNumberInstance();

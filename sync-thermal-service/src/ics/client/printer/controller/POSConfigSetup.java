@@ -2,7 +2,7 @@ package ics.client.printer.controller;
 
 import ics.client.printer.model.POSConfigSetupBean;
 import ics.utils.ErrorDialog;
-import ics.utils.MySQLLegacy;
+import ics.utils.MySQLConnect;
 import ics.utils.ThaiUtil;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,10 +13,16 @@ import java.sql.Statement;
  * @author nateesun
  */
 public class POSConfigSetup {
+    
+    private final String dbName;
+    
+    public POSConfigSetup(String dbName) {
+        this.dbName = dbName;
+    }
 
     public POSConfigSetupBean getData(String Terminal) {
         POSConfigSetupBean bean = new POSConfigSetupBean();
-        try (Connection connection = MySQLLegacy.getConnection(); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
 
             // ตัวอย่างการ Query
             String query = "SELECT P_Terminal,P_Vat,P_VatType,P_Service,P_PrintRecpMessage "

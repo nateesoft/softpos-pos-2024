@@ -1,0 +1,11 @@
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./app01.icspos.com/build:/usr/share/nginx/html/app01.icspos.com
+      - ./app02.icspos.com/build:/usr/share/nginx/html/app02.icspos.com
+      - ./app03.icspos.com/build:/usr/share/nginx/html/app03.icspos.com
+    restart: always

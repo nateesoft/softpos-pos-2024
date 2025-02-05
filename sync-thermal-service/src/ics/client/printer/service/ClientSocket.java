@@ -2,10 +2,12 @@ package ics.client.printer.service;
 
 import ics.client.printer.mapping.ClientPrinter;
 import com.google.gson.Gson;
+import ics.client.printer.model.PrinterConfigBean;
 import ics.utils.QRCodeGenerator;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Properties;
@@ -17,39 +19,16 @@ import java.util.Properties;
 public class ClientSocket {
 
     private static final PrinterControlService printerService = new PrinterControlService();
-    private static String printerHost;
-
-    // cashier printer
-    private static String printerName;
-    private static int printerWidth = 75;
-    private static int printerHeight = 72;
-
-    // kitchen printer
-    private static String kicPrinterName;
-    private static int kicPrinterWidth = 75;
-    private static int kicPrinterHeight = 72;
+    private static String SOCKET_HOT;
 
     static {
-        try (InputStream fis = new FileInputStream("cashier_config.properties")) {
+        try (InputStream fis = new FileInputStream("socket_config.properties")) {
             Properties properties = new Properties();
             properties.load(fis);
 
-            printerHost = properties.getProperty("printer.host").replaceAll("\"", "");
-
-            printerName = properties.getProperty("printer.name").replaceAll("\"", "");
-            printerWidth = Integer.parseInt(properties.getProperty("printer.width"));
-            printerHeight = Integer.parseInt(properties.getProperty("printer.height"));
-        } catch (Exception e) {
-            System.err.println("Error loading database configuration: " + e.getMessage());
-        }
-
-        try (InputStream fis = new FileInputStream("kitchen_config.properties")) {
-            Properties properties = new Properties();
-            properties.load(fis);
-
-            kicPrinterName = properties.getProperty("printer.name").replaceAll("\"", "");
-            kicPrinterWidth = Integer.parseInt(properties.getProperty("printer.width"));
-            kicPrinterHeight = Integer.parseInt(properties.getProperty("printer.height"));
+            String host = properties.getProperty("socket.host").replaceAll("\"", "");
+            String port = properties.getProperty("socket.port");
+            SOCKET_HOT = host + ":" + port;
         } catch (Exception e) {
             System.err.println("Error loading database configuration: " + e.getMessage());
         }
@@ -61,10 +40,32 @@ public class ClientSocket {
         return printerMessage;
     }
 
+    private static PrinterConfigBean loadConfig(String printerName) {
+        PrinterConfigBean printerConfig = new PrinterConfigBean();
+        if (null == printerName || printerName.equals("")) {
+            return printerConfig;
+        }
+        Properties properties = new Properties();
+        try (InputStream input = new FileInputStream(printerName + ".properties")) {
+            properties.load(input);
+            String pName = properties.getProperty("printer.name").replaceAll("\"", "");
+            int width = Integer.parseInt(properties.getProperty("printer.width"));
+            int height = Integer.parseInt(properties.getProperty("printer.height"));
+
+            printerConfig.setPrinterName(pName);
+            printerConfig.setWidth(width);
+            printerConfig.setHeight(height);
+        } catch (IOException ex) {
+            System.err.println(ex.getMessage());
+        }
+
+        return printerConfig;
+    }
+
     public static void connection() {
         try {
             // เชื่อมต่อกับเซิร์ฟเวอร์
-            Socket socket = IO.socket(printerHost);
+            Socket socket = IO.socket(SOCKET_HOT);
 
             // Event เมื่อเชื่อมต่อสำเร็จ
             socket.on(Socket.EVENT_CONNECT, (Object... args1) -> {
@@ -76,16 +77,22 @@ public class ClientSocket {
             socket.on("reply", (Object... args1) -> {
                 System.out.println("Server reply: " + args1[0]);
             });
-            
+
             socket.on("createQRCode", (Object... args1) -> {
-                System.out.println("Create qr code: " + args1[0]);
+                ClientPrinter printerMessage = mappingObject(args1[0].toString());
+                System.out.println("Create qr code: " + printerMessage);
+
                 QRCodeGenerator.CreateQRCode(args1[0].toString());
-                PaperPrint paperPrint = new PaperPrint();
+                PaperPrint paperPrint = new PaperPrint(printerMessage.getDatabase());
                 String htmlContent = paperPrint.getQrCodePrint();
-                
-                String prtName = printerName;
-                int prtWidth = printerWidth;
-                int prtHeight = printerHeight;
+
+                //  load printer config
+                PrinterConfigBean bean = loadConfig(printerMessage.getPrinterName());
+                String prtName = bean.getPrinterName();
+                int prtWidth = bean.getWidth();
+                int prtHeight = bean.getHeight();
+
+                // send to printer
                 printerService.printMessage(prtName, htmlContent, prtWidth, prtHeight);
             });
 
@@ -93,17 +100,13 @@ public class ClientSocket {
                 ClientPrinter printerMessage = mappingObject(args1[0].toString());
                 System.out.println(printerMessage);
 
-                String prtName = printerName;
-                int prtWidth = printerWidth;
-                int prtHeight = printerHeight;
+                //  load printer config
+                PrinterConfigBean bean = loadConfig(printerMessage.getPrinterName());
+                String prtName = bean.getPrinterName();
+                int prtWidth = bean.getWidth();
+                int prtHeight = bean.getHeight();
 
-                if ("Y".equals(printerMessage.getSendTokic())) {
-                    prtName = kicPrinterName;
-                    prtWidth = kicPrinterWidth;
-                    prtHeight = kicPrinterHeight;
-                }
-
-                PaperPrint paperPrint = new PaperPrint();
+                PaperPrint paperPrint = new PaperPrint(printerMessage.getDatabase());
                 switch (printerMessage.getPrinterType()) {
                     case "receipt": {
                         String htmlContent = paperPrint.getReceiptPrint(printerMessage.getTitle(), printerMessage.getTerminal(), printerMessage.getBillNo(), printerMessage.getBillType());
