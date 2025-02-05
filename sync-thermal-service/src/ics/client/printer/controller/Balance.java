@@ -2,7 +2,7 @@ package ics.client.printer.controller;
 
 import ics.client.printer.model.BalanceBean;
 import ics.utils.ErrorDialog;
-import ics.utils.MySQLLegacy;
+import ics.utils.MySQLConnect;
 import ics.utils.ThaiUtil;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,10 +15,16 @@ import java.util.List;
  * @author nateesun
  */
 public class Balance {
+    
+    private final String dbName;
+    
+    public Balance(String dbName) {
+        this.dbName = dbName;
+    }
 
     public List<BalanceBean> getListData(String tableNo) {
         List<BalanceBean> listBalanceBean = new ArrayList<>();
-        try (Connection connection = MySQLLegacy.getConnection(); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
             String sql = "SELECT p.PBarCode,"
                     + "    R_PluCode, R_PName, "
                     + "    MAX(R_Void) AS R_Void, MAX(R_ETD) AS R_ETD, "

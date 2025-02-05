@@ -8,7 +8,7 @@ import AnimatedRoutes from "./pages/AnimatedRouters"
 
 const SECRET_PASS = process.env.REACT_APP_API_SECRET_PASS
 const initContext = {
-  macno: localStorage.getItem('macno') || "",
+  macno: process.env.REACT_APP_MACNO || "",
   userLogin: localStorage.getItem('userLogin') || "",
   empCode: "",
   companyInfo: {

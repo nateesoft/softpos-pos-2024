@@ -349,13 +349,14 @@ function PaymentForm({
               JSON.stringify({
                 id: 1,
                 printerType: "receipt",
-                printerName: "",
+                printerName: "kic1",
                 message: `พิมพ์เลขที่เอกสาร: ${billNo}`,
                 terminal: macno,
                 tableNo: "",
                 billNo: billNo,
                 title: "ใบเสร็จรับเงิน",
-                billType: ''
+                billType: '',
+
               })
             )
             navigate('/floorplan')

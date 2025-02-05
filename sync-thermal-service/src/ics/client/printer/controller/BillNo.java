@@ -2,7 +2,7 @@ package ics.client.printer.controller;
 
 import ics.client.printer.model.BillNoBean;
 import ics.utils.ErrorDialog;
-import ics.utils.MySQLLegacy;
+import ics.utils.MySQLConnect;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -12,10 +12,16 @@ import java.sql.Statement;
  * @author nateesun
  */
 public class BillNo {
+    
+    private final String dbName;
+    
+    public BillNo(String dbName) {
+        this.dbName = dbName;
+    }
 
     public BillNoBean getData(String B_Refno) {
         BillNoBean bean = new BillNoBean();
-        try (Connection connection = MySQLLegacy.getConnection(); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
 
             // ตัวอย่างการ Query
             String query = "SELECT * FROM billno "

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
@@ -35,7 +35,7 @@ const boxstyle = {
   boxShadow: 24
 }
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
 
 // เชื่อมต่อกับ Socket.IO server
 const socket = io(SOCKET_SERVER_URL, {
@@ -43,8 +43,11 @@ const socket = io(SOCKET_SERVER_URL, {
 })
 
 const Login = () => {
+  console.log('Login Page')
   const { appData, setAppData } = useContext(POSContext)
   const { macno, encryptData } = appData
+
+  const [branchInfo, setBranchInfo] = useState({})
 
   const iphonePro14max = useMediaQuery("(max-width:430px)")
   const [user, setUser] = useState("")
@@ -97,7 +100,7 @@ const Login = () => {
                 tableNo: "",
                 billNo: "",
                 title: "",
-                billType: ''
+                billType: ""
               })
             )
 
@@ -129,6 +132,28 @@ const Login = () => {
         handleNotification(error.message)
       })
   }
+
+  const getBranch = useCallback(() => {
+    apiClient
+      .get("/api/branch")
+      .then((response) => {
+        if(response.data.status === 2000){
+          const newData = response.data.data
+          setBranchInfo(prevState => ({
+            ...prevState,
+            ...newData
+          }))
+          console.log(branchInfo)
+        }
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }, [])
+
+  useEffect(() => {
+    getBranch()
+  }, [getBranch])
 
   useEffect(() => {
     socket.connect()
@@ -190,8 +215,26 @@ const Login = () => {
                 <ThemeProvider theme={darkTheme}>
                   <Container>
                     <Box height={35} />
+                    <Grid2 textAlign="right">
+                      <Typography
+                        sx={{
+                          fontSize: "12px",
+                          color: "lightgreen",
+                          fontWeight: "bold",
+                          fontStyle: "italic"
+                        }}
+                      >
+                        สาขา {branchInfo.Code} {branchInfo.Name} ➲
+                      </Typography>
+                    </Grid2>
                     <Box display="flex" justifyContent="center">
-                      <Typography sx={{fontSize: "36px", fontBold: "bold", padding: "10px"}}>
+                      <Typography
+                        sx={{
+                          fontSize: "28px",
+                          fontBold: "bold",
+                          padding: "10px"
+                        }}
+                      >
                         POS Restaurant
                       </Typography>
                     </Box>

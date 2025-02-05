@@ -3,6 +3,7 @@ package ics.client.printer.main;
 import ics.client.printer.service.ClientSocket;
 import ics.client.printer.service.DatabaseConfig;
 import ics.client.printer.service.PrinterConfig;
+import ics.client.printer.service.SocketConfig;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -35,7 +36,13 @@ public class ICSPrinterServiceMain {
 
         // สร้าง PopupMenu สำหรับ SystemTray
         PopupMenu popupMenu = new PopupMenu();
-        
+         MenuItem SocketItem = new MenuItem("Socket Settings...");
+        SocketItem.addActionListener((ActionEvent e) -> {
+            SocketConfig socketConfig = new SocketConfig(null, true);
+            socketConfig.setVisible(true);
+        });
+        popupMenu.add(SocketItem);
+        popupMenu.addSeparator();
         MenuItem testPrinterItem = new MenuItem("Printer Settings...");
         testPrinterItem.addActionListener((ActionEvent e) -> {
             PrinterConfig mc = new PrinterConfig(null, true);

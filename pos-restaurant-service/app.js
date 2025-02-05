@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser')
 const logger = require('morgan');
 const basicAuth = require('express-basic-auth')
+const compression = require("compression");
+const helmet = require("helmet");
 
 const cors = require('cors')
 
@@ -62,8 +64,11 @@ const paidInOutRouter = require('./routes/pos_restaurant/padinout')
 // booking interation
 const bookingRouter = require('./routes/api_integration')
 
-const app = express();
+const app = express()
 app.use(cors())
+app.use(compression())
+app.use(helmet());
+
 const username = process.env.WEB_USER_AUTH
 const password = process.env.WEB_USER_PASS
 app.use(basicAuth({ users: { [username]: password } }))

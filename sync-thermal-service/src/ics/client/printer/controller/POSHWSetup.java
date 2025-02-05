@@ -2,7 +2,7 @@ package ics.client.printer.controller;
 
 import ics.client.printer.model.POSHWSetupBean;
 import ics.utils.ErrorDialog;
-import ics.utils.MySQLLegacy;
+import ics.utils.MySQLConnect;
 import ics.utils.ThaiUtil;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -13,10 +13,16 @@ import java.sql.Statement;
  * @author nateesun
  */
 public class POSHWSetup {
+    
+    private final String dbName;
+    
+    public POSHWSetup(String dbName) {
+        this.dbName = dbName;
+    }
 
     public POSHWSetupBean getData(String Terminal) {
         POSHWSetupBean bean = new POSHWSetupBean();
-        try (Connection connection = MySQLLegacy.getConnection(); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
 
             // ตัวอย่างการ Query
             String query = "SELECT Terminal, Heading1, Heading2, Heading3, Heading4, Footting1, Footting2, Footting3 "
