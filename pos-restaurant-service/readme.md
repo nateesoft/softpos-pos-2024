@@ -5,3 +5,7 @@ https://www.npmjs.com/package/node-thermal-printer
 CREATE USER 'root'@'%' IDENTIFIED BY 'nathee2024';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
 
+# start server
+node --env-file=.env.app01 server.js
+node --env-file=.env.app02 server.js
+node --env-file=.env.app03 server.js

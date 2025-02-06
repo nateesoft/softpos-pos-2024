@@ -1,6 +1,7 @@
 require("dotenv").config()
 
 const express = require('express');
+const { createProxyMiddleware } = require("http-proxy-middleware");
 const path = require('path');
 const app = express();
 
@@ -8,11 +9,11 @@ app.use(express.static(path.join(__dirname, process.env.WEB_FOLDER)));
 
 const proxy = require('http-proxy').createProxyServer();
 
-app.use('/api', function (req, res, next) {
-    proxy.web(req, res, {
-        target: `${process.env.BFF_API_HOST}`
-    }, next);
-});
+app.use("/api", createProxyMiddleware({
+      target: process.env.SERVICE_HOST,
+      changeOrigin: true,
+    })
+  );
 
 app.use((req, res, next) => {
     if (/(.ico|.js|.css|.jpg|.png|.map)$/i.test(req.path)) {
@@ -31,7 +32,7 @@ app.get("*", (req, res) => {
   });
   
 
-const port = process.env.WEB_PORT || 80
+const port = process.env.WEB_PORT || 3000
 console.log(`Website running port ${port}`)
 
 app.listen(port);
