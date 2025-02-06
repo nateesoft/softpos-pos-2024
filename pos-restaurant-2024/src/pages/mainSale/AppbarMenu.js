@@ -107,7 +107,7 @@ export default function AppbarMenu({ tableNo }) {
   }
 
   const createQRCode = () => {
-    const customerUrl = process.env.REACT_APP_CUSTOMER_HOSTING
+    const customerUrl = process.env.REACT_APP_FOOD_ORDING_APP
     console.log('prepare create qrcode:', customerUrl+"/"+tableNo)
     socket.emit("createQRCode", customerUrl + "/" +tableNo)
     setAnchorEl(null);

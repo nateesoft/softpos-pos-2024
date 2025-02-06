@@ -1,9 +1,7 @@
 {
   "name": "pos-restaurant-2024",
-  "homepage": "http://localhost:3000",
   "version": "0.1.0",
   "private": true,
-  "main": "main.js",
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
@@ -59,6 +57,9 @@
     "start": "env-cmd -f ./.env react-scripts start",
     "local": "env-cmd -f ./.env.local react-scripts start",
     "build": "react-scripts build",
+    "build:server1": "env-cmd -f ./.env.server1 react-scripts build && mv build app01",
+    "build:server2": "env-cmd -f ./.env.server2 react-scripts build && mv build app02",
+    "build:server3": "env-cmd -f ./.env.server3 react-scripts build && mv build app03",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
