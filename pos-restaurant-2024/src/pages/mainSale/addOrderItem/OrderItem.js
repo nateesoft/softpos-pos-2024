@@ -51,15 +51,14 @@ const TotalBill = ({ orderList }) => {
   return (
     <div
       style={{
-        padding: "5px",
+        padding: "3px",
         background: "salmon",
         border: "2px solid #eee",
-        borderRadius: "5px",
-        margin: "5px"
+        borderRadius: "5px"
       }}
     >
-      <Grid2 container spacing={2}>
-        <Typography variant="p" sx={{ fontWeight: "bold", margin: "4px" }}>
+      <Grid2 container spacing={1} padding={1}>
+        <Typography variant="p" sx={{ fontWeight: "bold" }}>
           Total Amount
         </Typography>
       </Grid2>
@@ -94,19 +93,6 @@ const OrderItem = ({
 
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
-
-  // const matches = useMediaQuery('(min-width:600px)');
-
-  const styleMain = {
-    typography: "body1",
-    marginTop: "8vh"
-  }
-
-  const stylePopup = {
-    width: "350x",
-    height: "85vh",
-    typography: "body1"
-  }
 
   const handleChange = (event, newValue) => {
     console.log("handleChange:", newValue)
@@ -162,7 +148,7 @@ const OrderItem = ({
   }
 
   return (
-    <Box sx={typePopup ? stylePopup : styleMain}>
+    <>
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
           <Tab label="Dine In" value="E" sx={{ boxShadow: "2px 2px #eee" }} />
@@ -292,7 +278,7 @@ const OrderItem = ({
         </Button>
       </Grid2>
       <TotalBill orderList={OrderList} />
-      <Grid2 container spacing={1} justifyContent="center">
+      <Grid2 container spacing={2} justifyContent="center" padding={2}>
         <Button
           variant="contained"
           color="primary"
@@ -419,7 +405,7 @@ const OrderItem = ({
           </Paper>
         </Box>
       </Modal>
-    </Box>
+    </>
   )
 }
 

@@ -55,6 +55,9 @@ import MRecieptReport from './reports/monthlySale/RecieptReport';
 import MVoidReport from './reports/monthlySale/VoidReport';
 import MCreditReport from './reports/monthlySale/CreditReport';
 import MTopSaleReport from './reports/monthlySale/TopSaleReport';
+import Character from '../agi/Character';
+import VoiceCommand from '../agi/VoiceCommand';
+import AICharacter from '../agi/AICharacter';
 
 const AnimatedRoutes = () => {
     const location = useLocation()
@@ -127,6 +130,9 @@ const AnimatedRoutes = () => {
                 <Route path="/print-demo" element={<PrinterDemo />} />
                 <Route path="/test-print" element={<TestPrinter />} />
                 <Route path="/" element={<LoginPage />} />
+                <Route path="/agi" element={<Character />} />
+                <Route path="/ai" element={<AICharacter />} />
+                <Route path="/voice" element={<VoiceCommand />} />
                 <Route path="404" element={<PageNotFound />} />
                 <Route path="*" element={<Navigate to="/404" replace />} />
             </Routes>

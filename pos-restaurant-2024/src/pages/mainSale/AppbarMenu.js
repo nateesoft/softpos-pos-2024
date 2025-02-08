@@ -151,8 +151,10 @@ export default function AppbarMenu({ tableNo }) {
       </Menu>
       <AppBar position="fixed" sx={appbarStyle}>
         <Toolbar>
-          <PointOfSaleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Button variant='text' sx={{ fontSize: "18px", color: "white" }} onClick={handleClick}>
+          <div onClick={handleClick}>
+            <PointOfSaleIcon sx={{ display: { md: 'flex' }, mr: 1 }} />
+          </div>
+          <Button variant='text' sx={{ display: {xs: 'none', md: 'flex'}, fontSize: "18px", color: "white" }} onClick={handleClick}>
             POS RESTUARANT ({tableNo})
           </Button>
           <Search>
@@ -166,25 +168,6 @@ export default function AppbarMenu({ tableNo }) {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={36} color="error">
-                <MenuOpenIcon />
-              </Badge>
-            </IconButton> */}
-            {/* <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <PrintIcon />
-              </Badge>
-            </IconButton> */}
-            {/* <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
             <IconButton
               size="large"
               edge="end"

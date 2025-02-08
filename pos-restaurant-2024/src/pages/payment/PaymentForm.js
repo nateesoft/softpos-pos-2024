@@ -484,7 +484,7 @@ function PaymentForm({
             <Paper elevation={3} sx={{ padding: "1px" }}>
               <Grid2 container spacing={1} padding={1}>
                 <Grid2 container>
-                  <IconButton>
+                  <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
                     <CreditCardOffIcon fontSize="large" />
                   </IconButton>
                   <TextField
@@ -502,7 +502,7 @@ function PaymentForm({
                     }}
                     inputProps={{ min: 0, style: { textAlign: "right" } }}
                   />
-                  <IconButton>
+                  <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
                     <VideogameAssetIcon fontSize="large" />
                   </IconButton>
                   <TextField
@@ -523,7 +523,7 @@ function PaymentForm({
                 </Grid2>
               </Grid2>
               <Grid2 container spacing={1} padding={1}>
-                <IconButton>
+                <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
                   <AccountBalanceWalletIcon fontSize="large" />
                 </IconButton>
                 <TextField
@@ -540,7 +540,7 @@ function PaymentForm({
                 />
               </Grid2>
               <Grid2 container spacing={1} padding={1}>
-                <IconButton>
+                <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
                   <SendToMobileIcon fontSize="large" />
                 </IconButton>
                 <TextField
@@ -564,7 +564,7 @@ function PaymentForm({
                 </Button>
               </Grid2>
               <Grid2 container spacing={1} padding={1}>
-                <IconButton>
+                <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
                   <CreditCardIcon fontSize="large" />
                 </IconButton>
                 <TextField
