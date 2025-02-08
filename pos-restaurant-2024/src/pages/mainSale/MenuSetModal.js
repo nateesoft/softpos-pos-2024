@@ -68,10 +68,10 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
     }, [loadOptionalList])
 
     return (
-        <div style={{ height: '350px', overflow: 'auto' }}>
+        <div style={{height: "500px", overflow: "auto"}}>
             <Grid2 container spacing={1} justifyContent="center">
                 {optionalList && optionalList.map((item, index) => (
-                    <div key={`${item.menu_code}_${index}`} style={{ border: "1px solid #eee", padding: "10px", borderRadius: "15px", backgroundColor: "black" }}>
+                    <Grid2 xs="auto" padding={1} sx={{background: "black", width: "200px"}}>
                         <Grid2 container alignItems="center">
                             <Checkbox
                                 id={`subProduct${item.menu_code}`}
@@ -84,11 +84,11 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
                                 <Typography color='orange'>ไม่สามารถเปลี่ยนได้</Typography>}
                         </Grid2>
                         <Grid2 container spacing={2} display="flex" direction="column" justifyContent="flex-start">
-                            <img src={item.image_url} alt={item.menu_name} width={200} height={150} />
+                            <img src={item.image_url} alt={item.menu_name} width={180} height={150} />
                         </Grid2>
                         <Typography style={{ color: "white" }}>{item.menu_name}</Typography>
                         {!subMenuSelected[index] && <Button variant='contained' startIcon={<ChangeCircleIcon />} disabled={item.can_change!=='Y'} onClick={() => handleChangeMenuItem(item.menu_code)}>เปลี่ยนเมนู</Button>}
-                    </div>
+                    </Grid2>
                 ))}
             </Grid2>
             <Dialog

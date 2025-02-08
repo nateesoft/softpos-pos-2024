@@ -2,11 +2,10 @@ import React, { memo } from "react"
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline"
 import SetMealIcon from "@mui/icons-material/MenuOpen"
 import Grid from "@mui/material/Grid2"
-import { Box, Button, Badge, Typography } from "@mui/material"
+import { Box, Button, Badge, Typography, Grid2 } from "@mui/material"
 
-const ProductCard = memo(
-  ({ id, product, openModal, setShowMenuSet, OrderList, setShowManualPrice, addOrder }) => {
-
+const ProductCard = memo(props => {
+  const { id, product, openModal, setShowMenuSet, OrderList, setShowManualPrice, addOrder } = props
     const productList = OrderList.filter(p => p.R_PluCode === product.menu_code)
     const saleQty = productList.reduce((totalQty, p) => totalQty + p.R_Quan, 0);
 
@@ -38,14 +37,7 @@ const ProductCard = memo(
           }
         }}
       >
-        <div
-          style={{
-            margin: "2px",
-            padding: "3px",
-            borderRadius: "3px 3px 0px 0px",
-            boxShadow: "2px 1px #eee"
-          }}
-        >
+        <Grid2 xs="auto" padding={1}>
           <Box textAlign="center">
             <img
               src={product.image_url}
@@ -61,7 +53,6 @@ const ProductCard = memo(
             container
             justifyContent="center"
             textAlign="center"
-            sx={{ backgroundColor: "#eee", padding: "2px" }}
           >
             <Typography
               variant="p"
@@ -69,68 +60,62 @@ const ProductCard = memo(
                 overflow: "auto",
                 width: "130px",
                 whiteSpace: "nowrap",
-                textOverflow: "ellipsis"
+                textOverflow: "ellipsis",
+                color: "white"
               }}
             >
               {product.menu_name}
             </Typography>
           </Grid>
-          <Grid container justifyContent="space-between" padding={1} sx={{ border: "1px solid #bbb", borderRadius: "5px" }}>
+          <Grid2 container spacing={1} justifyContent="space-around">
             <Typography
               sx={{
-                backgroundColor: "white",
                 fontWeight: product.show_list_menu === "Y" ? "bold" : "none",
-                color: product.show_list_menu === "Y" ? "green" : "black"
+                color: product.show_list_menu === "Y" ? "snow" : "yellow"
               }}
             >
               ราคา {product.menu_price}
             </Typography>
-            <Typography>
+            <Typography sx={{color: "white"}}>
               {product.tab_group}
             </Typography>
-          </Grid>
-          <Grid container>
-            {product.show_list_menu === "Y" && (
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{
-                  backgroundColor: "salmon",
-                  color: "black",
-                  marginTop: "5px"
-                }}
-                startIcon={<SetMealIcon />}
-                onClick={() => setShowMenuSet(true)}
-              >
-                Menu Set
-              </Button>
-            )}
-            {product.manual_price !== "Y" && (
-              <Button
-                color="success"
-                fullWidth
-                variant="contained"
-                sx={{ marginTop: "5px" }}
-                onClick={() => addOrder(1, product)}
-                startIcon={<AddCircleOutline />}
-              >
-                Order
-              </Button>
-            )}
-            {product.manual_price === "Y" && (
-              <Button
-                color="secondary"
-                fullWidth
-                variant="contained"
-                sx={{ marginTop: "5px" }}
-                onClick={() => setShowManualPrice(true)}
-                startIcon={<AddCircleOutline />}
-              >
-                Manual Price
-              </Button>
-            )}
-          </Grid>
-        </div>
+          </Grid2>
+          <Grid2 container spacing={1} justifyContent="space-evenly">
+          {product.show_list_menu === "Y" && (
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "salmon",
+                color: "black"
+              }}
+              startIcon={<SetMealIcon />}
+              onClick={() => setShowMenuSet(true)}
+            >
+              SET
+            </Button>
+          )}
+          {product.manual_price !== "Y" && (
+            <Button
+              color="success"
+              variant="contained"
+              onClick={() => addOrder(1, product)}
+              startIcon={<AddCircleOutline />}
+            >
+              Add
+            </Button>
+          )}
+          {product.manual_price === "Y" && (
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={() => setShowManualPrice(true)}
+              startIcon={<AddCircleOutline />}
+            >
+              Manual Price
+            </Button>
+          )}
+          </Grid2>
+        </Grid2>
       </Badge>
     )
   }

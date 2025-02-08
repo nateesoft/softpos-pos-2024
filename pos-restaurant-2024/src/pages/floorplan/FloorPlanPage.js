@@ -337,94 +337,49 @@ function FloorPlanPage() {
         >
           <Toolbar>
             <Grid2 container justifyContent="flex-start">
-              {iphonePro14max === true && (
-                <div>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                    onClick={handleClick}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
+              <div>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={() => setOpenDashboard(true)}
+                >
+                  <StoreIcon
+                    fontSize="large"
+                    sx={{ background: "chocolate", borderRadius: "15px" }}
+                  />
+                </IconButton>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                >
+                  <FloorSelect
+                    selectFloor={selectFloor}
+                    setSelectFloor={handleSelect}
+                  />
+                </IconButton>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                >
+                  <OtherMenuSelect
+                    handleChange={handleChange}
+                    handleClick={handleClick}
                     handleClose={handleClose}
-                    MenuListProps={{
-                      "aria-labelledby": "basic-button"
-                    }}
-                  >
-                    <MenuItem onClick={() => handleSelect("STAND_ROOM")}>
-                      <Box display="flex" justifyContent="center">
-                        <RestaurantIcon sx={{ marginRight: "10px" }} />{" "}
-                        <Typography variant="p">Normal Room</Typography>
-                      </Box>
-                    </MenuItem>
-                    <MenuItem onClick={() => handleSelect("VIP_ROOM")}>
-                      <Box display="flex" justifyContent="center">
-                        <VipPeopleIcon sx={{ marginRight: "10px" }} />{" "}
-                        <Typography variant="p">VIP Room</Typography>
-                      </Box>
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem onClick={() => handleChange("RefundBill")}>
-                      <Box display="flex" justifyContent="center">
-                        <RefundIcon sx={{ marginRight: "10px" }} />{" "}
-                        <Typography variant="p">
-                          ยกเลิกบิล (Refund Bill)
-                        </Typography>
-                      </Box>
-                    </MenuItem>
-                  </Menu>
-                </div>
-              )}
-              {iphonePro14max === false && (
-                <div>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                    onClick={() => setOpenDashboard(true)}
-                  >
-                    <StoreIcon
-                      fontSize="large"
-                      sx={{ background: "chocolate", borderRadius: "15px" }}
-                    />
-                  </IconButton>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                  >
-                    <FloorSelect
-                      selectFloor={selectFloor}
-                      setSelectFloor={handleSelect}
-                    />
-                  </IconButton>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                  >
-                    <OtherMenuSelect
-                      handleChange={handleChange}
-                      handleClick={handleClick}
-                      handleClose={handleClose}
-                      open={open}
-                      anchorEl={anchorEl}
-                    />
-                  </IconButton>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                  >
-                    <ReportSelect />
-                  </IconButton>
-                </div>
-              )}
+                    open={open}
+                    anchorEl={anchorEl}
+                  />
+                </IconButton>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                >
+                  <ReportSelect />
+                </IconButton>
+              </div>
             </Grid2>
             <Grid2
               container
@@ -433,7 +388,7 @@ function FloorPlanPage() {
               alignItems="center"
               sx={{ flexGrow: 1 }}
             >
-              <Typography sx={{ color: "yellow" }}>
+              <Typography sx={{ color: "yellow", display: {xs: 'none', md: 'flex'} }}>
                 {moment(currentDate).format("DD/MM/YYYY HH:mm:ss")}
               </Typography>
               <LanguageSettings />
@@ -446,6 +401,7 @@ function FloorPlanPage() {
                 color="error"
                 onClick={() => setOpenLogout(true)}
                 endIcon={<ExitToApp />}
+                sx={{display: {xs: 'none', md: 'flex'}}}
               >
                 {t("FloorPlanPage.logoutButton")}
               </Button>

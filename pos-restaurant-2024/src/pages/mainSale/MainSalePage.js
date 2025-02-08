@@ -160,7 +160,7 @@ function MainSalePage() {
       exit={{ opacity: 0 }}
     >
       <AppbarMenu tableNo={tableNo} />
-      <Grid container>
+      <Grid container sx={{background: "radial-gradient(circle, #001, #000)"}}>
         <Grid size={matches ? 8 : 12}>
           <ProductMenu
             tableNo={tableNo}
