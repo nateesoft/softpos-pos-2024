@@ -31,8 +31,8 @@ const LanguageSettings = () => {
     return (
         <>
             <IconButton onClick={handleClick}>
-                {language === 'en' && <img src='/images/en.png' alt="United Kingdom" width={32} height={32} />}
-                {language === 'th' && <img src='/images/th.png' alt="Thailand" width={32} height={32} />}
+                {language === 'en' && <img src='/images/en.png' alt="United Kingdom" width={24} height={24} />}
+                {language === 'th' && <img src='/images/th.png' alt="Thailand" width={24} height={24} />}
             </IconButton>
             <Menu
                 id="basic-menu"

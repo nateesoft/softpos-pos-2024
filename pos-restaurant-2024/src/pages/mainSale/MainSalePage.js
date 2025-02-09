@@ -181,22 +181,20 @@ function MainSalePage() {
             handleNotification={handleNotification}
           />
         </Grid>
-        {matches && (
-          <Grid size={4} sx={{ backgroundColor: "white", border: "2px solid #ddd" }}>
-            <OrderItem
-              tableNo={tableNo}
-              orderType={orderType}
-              OrderList={orderList}
-              OrderEList={orderEList}
-              OrderTList={orderTList}
-              OrderDList={orderDList}
-              initLoadMenu={initLoadMenu}
-              initLoadOrder={initLoadOrder}
-              typePopup={false}
-              handleNotification={handleNotification}
-            />
-          </Grid>
-        )}
+        <Grid size={4} sx={{ backgroundColor: "white", border: "2px solid #ddd", display: {xs: 'none', md: 'flex'}, marginTop: "65px" }}>
+          <OrderItem
+            tableNo={tableNo}
+            orderType={orderType}
+            OrderList={orderList}
+            OrderEList={orderEList}
+            OrderTList={orderTList}
+            OrderDList={orderDList}
+            initLoadMenu={initLoadMenu}
+            initLoadOrder={initLoadOrder}
+            typePopup={false}
+            handleNotification={handleNotification}
+          />
+        </Grid>
       </Grid>
       <Footer />
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />

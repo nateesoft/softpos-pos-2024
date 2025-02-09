@@ -58,15 +58,12 @@ const TotalBill = ({ orderList }) => {
       }}
     >
       <Grid2 container spacing={1} padding={1}>
-        <Typography variant="p" sx={{ fontWeight: "bold" }}>
+        <Typography variant="span" fontSize={14}>
           Total Amount
         </Typography>
       </Grid2>
-      <Grid2 container display="flex" justifyContent="flex-end">
-        <Typography
-          variant="h2"
-          sx={{ fontWeight: "bold", textShadow: "2px 2px white" }}
-        >
+      <Grid2 container justifyContent="flex-end">
+        <Typography fontSize={28} fontWeight="bold">
           {totalBill}
         </Typography>
       </Grid2>
@@ -148,15 +145,15 @@ const OrderItem = ({
   }
 
   return (
-    <>
+    <div style={{overflow: "auto"}}>
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
           <Tab label="Dine In" value="E" sx={{ boxShadow: "2px 2px #eee" }} />
           <Tab label="Take Away" value="T" sx={{ boxShadow: "2px 2px #eee" }} />
           <Tab label="Delivery" value="D" sx={{ boxShadow: "2px 2px #eee" }} />
         </TabList>
-        <Box textAlign="center" sx={{ marginTop: "10px" }}>
-          <Typography variant="h5">รายการอาหารที่สั่ง</Typography>
+        <Box textAlign="center">
+          <Typography fontSize={16}>รายการอาหารที่สั่ง</Typography>
         </Box>
         <Box textAlign="center" sx={{ marginTop: "10px" }}>
           <Typography
@@ -267,7 +264,7 @@ const OrderItem = ({
           )}
         </TabPanel>
       </TabContext>
-      <Grid2 container spacing={2} margin={3} justifyContent="center">
+      <Grid2 container spacing={1} margin={1} justifyContent="center">
         <Button
           variant="outlined"
           startIcon={<PrintIcon />}
@@ -278,7 +275,7 @@ const OrderItem = ({
         </Button>
       </Grid2>
       <TotalBill orderList={OrderList} />
-      <Grid2 container spacing={2} justifyContent="center" padding={2}>
+      <Grid2 container spacing={1} justifyContent="center" padding={1}>
         <Button
           variant="contained"
           color="primary"
@@ -405,7 +402,7 @@ const OrderItem = ({
           </Paper>
         </Box>
       </Modal>
-    </>
+    </div>
   )
 }
 

@@ -32,6 +32,7 @@ import {
 } from "@mui/material"
 import ExitToApp from "@mui/icons-material/ExitToApp"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+import LogoutIcon from "@mui/icons-material/LogoutOutlined"
 import { motion } from "framer-motion"
 import "@xyflow/react/dist/style.css"
 import MenuIcon from "@mui/icons-material/Menu"
@@ -388,20 +389,27 @@ function FloorPlanPage() {
               alignItems="center"
               sx={{ flexGrow: 1 }}
             >
-              <Typography sx={{ color: "yellow", display: {xs: 'none', md: 'flex'} }}>
+              <Typography
+                sx={{ color: "yellow", display: { xs: "none", md: "flex" } }}
+              >
                 {moment(currentDate).format("DD/MM/YYYY HH:mm:ss")}
               </Typography>
               <LanguageSettings />
-              <IconButton>
-                <AccountCircleIcon sx={{ color: "snow" }} />
-              </IconButton>
-              <Typography>{userLogin}</Typography>
+              <Button
+                variant="text"
+                sx={{ color: "snow", fontWeight: "bold" }}
+                onClick={() => setOpenLogout(true)}
+                startIcon={<AccountCircleIcon />}
+                endIcon={<LogoutIcon sx={{color: "snow", background: "red", display: {xs: 'flex', md: 'none'}, borderRadius: "5px", padding: "2px"}} />}
+              >
+                {userLogin}
+              </Button>
               <Button
                 variant="contained"
                 color="error"
                 onClick={() => setOpenLogout(true)}
                 endIcon={<ExitToApp />}
-                sx={{display: {xs: 'none', md: 'flex'}}}
+                sx={{ display: { xs: "none", md: "flex" } }}
               >
                 {t("FloorPlanPage.logoutButton")}
               </Button>
@@ -526,7 +534,7 @@ function FloorPlanPage() {
           open={showClient}
           autoHideDuration={10000}
           onClose={() => setShowClient(false)}
-          anchorOrigin={{ vertical: 'center', horizontal: 'right' }}
+          anchorOrigin={{ vertical: "center", horizontal: "right" }}
         >
           <Alert
             sx={{ background: "orange" }}
