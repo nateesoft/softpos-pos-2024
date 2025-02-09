@@ -290,7 +290,7 @@ const ProductMenu = ({
         </Tabs>
       )}
       <TabPanel value={value} index={0}>
-        <Grid2 container justifyContent="space-between">
+        <Grid2 container justifyContent="space-evenly">
           {ProductList.length === 0 && <NotfoundMenu />}
           {ProductList &&
             ProductList.map((product) => (
@@ -576,7 +576,7 @@ const ProductMenu = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ ...modalStyle }}>
+        <Box sx={{ ...modalStyle, width: 400 }}>
           <ManualPriceInput
             productInfo={productInfo}
             setShowManualPrice={setShowManualPrice}

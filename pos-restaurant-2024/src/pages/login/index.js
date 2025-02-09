@@ -43,7 +43,7 @@ const socket = io(SOCKET_SERVER_URL, {
 })
 
 const Login = () => {
-  console.log('Login Page')
+  console.log("Login Page")
   const { appData, setAppData } = useContext(POSContext)
   const { macno, encryptData } = appData
 
@@ -137,9 +137,9 @@ const Login = () => {
     apiClient
       .get("/api/branch")
       .then((response) => {
-        if(response.data.status === 2000){
+        if (response.data.status === 2000) {
           const newData = response.data.data
-          setBranchInfo(prevState => ({
+          setBranchInfo((prevState) => ({
             ...prevState,
             ...newData
           }))
@@ -258,58 +258,53 @@ const Login = () => {
                     </Box>
                     <Box
                       component="form"
-                      noValidate
                       onSubmit={handleSubmit}
-                      sx={{ mt: 2 }}
                     >
-                      <Grid container spacing={1}>
-                        <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
-                          <TextField
-                            required
-                            fullWidth
-                            id="username"
-                            label="Username"
-                            value={user}
-                            onChange={(e) => setUser(e.target.value)}
-                            autoComplete="email"
-                            autoFocus
-                            onKeyDown={(e) => handleEnter(e)}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
-                          <TextField
-                            required
-                            fullWidth
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="new-password"
-                          />
-                        </Grid>
-                        <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
-                          <Button
-                            type="submit"
-                            variant="contained"
-                            fullWidth
-                            sx={{
-                              color: "#ffffff",
+                      <Grid2 container spacing={1}>
+                        <TextField
+                          required
+                          aria-label="txtUser"
+                          fullWidth
+                          id="txUser"
+                          label="Username"
+                          value={user}
+                          onChange={(e) => setUser(e.target.value)}
+                          autoComplete="email"
+                          autoFocus
+                          onKeyDown={(e) => handleEnter(e)}
+                        />
+                        <TextField
+                          required
+                          fullWidth
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          label="Password"
+                          type="password"
+                          id="txPassword"
+                          autoComplete="new-password"
+                        />
+                        <Button
+                          id="btnLogin"
+                          type="submit"
+                          aria-label="buttonLogin"
+                          variant="contained"
+                          fullWidth
+                          sx={{
+                            color: "#ffffff",
+                            background:
+                              "radial-gradient(circle, #123456, #000)",
+                            height: "70px",
+                            fontSize: "28px",
+                            "&:hover": {
                               background:
-                                "radial-gradient(circle, #123456, #000)",
-                              height: "70px",
-                              fontSize: "28px",
-                              "&:hover": {
-                                background:
-                                  "radial-gradient(circle, #44449a, #000)"
-                              }
-                            }}
-                            endIcon={<LoginIcon />}
-                          >
-                            Login
-                          </Button>
-                        </Grid>
-                      </Grid>
+                                "radial-gradient(circle, #44449a, #000)"
+                            }
+                          }}
+                          endIcon={<LoginIcon />}
+                        >
+                          Login
+                        </Button>
+                      </Grid2>
                     </Box>
                   </Container>
                 </ThemeProvider>
