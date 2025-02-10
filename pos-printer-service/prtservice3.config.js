@@ -1,9 +1,10 @@
 module.exports = {
     apps: [{
-      name: "printer-service",
+      name: "prtservice3",
       script: "./bin/www",
       env: {
-        NODE_ENV: "production"
+        PORT:8083,
+        NODE_ENV:"production"
       }
     }]
   }
