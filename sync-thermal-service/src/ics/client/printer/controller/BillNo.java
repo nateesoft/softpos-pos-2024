@@ -1,5 +1,6 @@
 package ics.client.printer.controller;
 
+import ics.client.database.model.DatabaseConfigBean;
 import ics.client.printer.model.BillNoBean;
 import ics.utils.ErrorDialog;
 import ics.utils.MySQLConnect;
@@ -13,15 +14,15 @@ import java.sql.Statement;
  */
 public class BillNo {
     
-    private final String dbName;
+    private final DatabaseConfigBean dbConfig;
     
-    public BillNo(String dbName) {
-        this.dbName = dbName;
+    public BillNo(DatabaseConfigBean dbConfig) {
+        this.dbConfig = dbConfig;
     }
 
     public BillNoBean getData(String B_Refno) {
         BillNoBean bean = new BillNoBean();
-        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnectionLegacy(this.dbConfig); Statement statement = connection.createStatement()) {
 
             // ตัวอย่างการ Query
             String query = "SELECT * FROM billno "

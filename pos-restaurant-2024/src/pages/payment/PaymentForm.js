@@ -351,7 +351,8 @@ function PaymentForm({
                 tableNo: "",
                 billNo: billNo,
                 title: "ใบเสร็จรับเงิน",
-                billType: ""
+                billType: "",
+                database: "pos"
               })
             )
             navigate("/floorplan")

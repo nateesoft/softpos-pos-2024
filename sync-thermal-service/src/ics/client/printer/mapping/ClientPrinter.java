@@ -17,16 +17,7 @@ public class ClientPrinter {
     private String billType = "";
     private String sendTokic = "N";
     private String qrCode = "";
-    private String database = "";
-
-    public String getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(String database) {
-        this.database = database;
-    }
-
+    
     public String getQrCode() {
         return qrCode;
     }
@@ -117,7 +108,7 @@ public class ClientPrinter {
 
     @Override
     public String toString() {
-        return "ClientPrinter{" + "id=" + id + ", printerName=" + printerName + ", printerType=" + printerType + ", message=" + message + ", terminal=" + terminal + ", tableNo=" + tableNo + ", billNo=" + billNo + ", title=" + title + ", billType=" + billType + '}';
+        return "ClientPrinter{" + "id=" + id + ", printerName=" + printerName + ", printerType=" + printerType + ", message=" + message + ", terminal=" + terminal + ", tableNo=" + tableNo + ", billNo=" + billNo + ", title=" + title + ", billType=" + billType + ", sendTokic=" + sendTokic + ", qrCode=" + qrCode + '}';
     }
 
 }

@@ -2,6 +2,8 @@ package ics.client.printer.service;
 
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.print.PrintService;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.standard.MediaPrintableArea;
@@ -50,6 +52,7 @@ public class PrinterControlService {
     public void printMessage(String printerName, String content, int width, int height) {
         if (printerName == null) {
             System.out.println("printMessage:" + content);
+            createHtmlFile(content);
             return;
         }
         try {
@@ -66,6 +69,18 @@ public class PrinterControlService {
             }
         } catch (PrinterException ex) {
             System.err.println(ex.getMessage());
+        }
+    }
+
+    int printerCount = 0;
+    private void createHtmlFile(String htmlContent) {
+        printerCount ++;
+        String filePath = "printer_"+printerCount+".html";
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            fileWriter.write(htmlContent);
+            System.out.println("HTML file created successfully at: " + filePath);
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing the file: " + e.getMessage());
         }
     }
 

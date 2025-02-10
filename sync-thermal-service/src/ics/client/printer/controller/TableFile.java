@@ -1,5 +1,6 @@
 package ics.client.printer.controller;
 
+import ics.client.database.model.DatabaseConfigBean;
 import ics.client.printer.model.TableFileBean;
 import ics.utils.ErrorDialog;
 import ics.utils.MySQLConnect;
@@ -13,15 +14,15 @@ import java.sql.Statement;
  */
 public class TableFile {
     
-    private final String dbName;
+    private final DatabaseConfigBean dbConfig;
     
-    public TableFile(String dbName) {
-        this.dbName = dbName;
+    public TableFile(DatabaseConfigBean dbConfig) {
+        this.dbConfig = dbConfig;
     }
     
     public TableFileBean getData(String tableNo) {
         TableFileBean bean = new TableFileBean();
-        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnectionLegacy(this.dbConfig); Statement statement = connection.createStatement()) {
 
             // ตัวอย่างการ Query
             String query = "SELECT * FROM tablefile where Tcode='" + tableNo + "'";
