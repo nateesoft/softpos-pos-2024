@@ -123,7 +123,7 @@ const RefundBill = ({ socket }) => {
             JSON.stringify({
               id: 1,
               printerType: "receipt",
-              printerName: "",
+              printerName: "cashier",
               message: `บิลยกเลิกรายการขายเลขที่: ${billNo}`,
               terminal: macno,
               tableNo: "",

@@ -12,7 +12,6 @@ import ShowNotification from "../ui-utils/ShowNotification";
 import { Box, Modal } from "@mui/material";
 
 import MultiplePayment from "./split/MultiplePayment";
-// import SplitBiPayment from "./SplitBillPayment"
 
 const modalStyle = {
   bgcolor: "background.paper",

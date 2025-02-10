@@ -6,6 +6,7 @@ import ics.client.printer.model.PrinterConfigBean;
 import ics.utils.QRCodeGenerator;
 import io.socket.client.IO;
 import io.socket.client.Socket;
+import java.awt.TrayIcon;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,7 +63,7 @@ public class ClientSocket {
         return printerConfig;
     }
 
-    public static void connection() {
+    public static void connection(TrayIcon trayIcon) {
         try {
             // เชื่อมต่อกับเซิร์ฟเวอร์
             Socket socket = IO.socket(SOCKET_HOT);
@@ -70,6 +71,7 @@ public class ClientSocket {
             // Event เมื่อเชื่อมต่อสำเร็จ
             socket.on(Socket.EVENT_CONNECT, (Object... args1) -> {
                 // ส่งข้อความไปยังเซิร์ฟเวอร์
+                trayIcon.displayMessage("Service Connnected.", "ระบบ Printer Service กำลังเชื่อมต่อ", TrayIcon.MessageType.INFO);
                 socket.emit("message", "Printer service connected.");
             });
 

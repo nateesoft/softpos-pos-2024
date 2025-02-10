@@ -24,6 +24,7 @@ public class PrinterConfig extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         btnSave = new javax.swing.JButton();
@@ -35,6 +36,8 @@ public class PrinterConfig extends javax.swing.JDialog {
         txtContent1 = new javax.swing.JTextArea();
         txtWidth = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        chkCashier = new javax.swing.JRadioButton();
+        chkKitchen = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Printer Configuration");
@@ -80,6 +83,13 @@ public class PrinterConfig extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("Printer Name:");
 
+        buttonGroup1.add(chkCashier);
+        chkCashier.setSelected(true);
+        chkCashier.setText("Cashier Printer");
+
+        buttonGroup1.add(chkKitchen);
+        chkKitchen.setText("Kitchen Printer");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -87,22 +97,26 @@ public class PrinterConfig extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtContent1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cbPrinterName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtWidth)
-                            .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnPrintTest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(txtContent1))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkCashier)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cbPrinterName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtWidth)
+                                    .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnPrintTest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)))
+                            .addComponent(chkKitchen))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -123,7 +137,11 @@ public class PrinterConfig extends javax.swing.JDialog {
                     .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtContent1)
+                .addComponent(chkCashier)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(chkKitchen)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtContent1, javax.swing.GroupLayout.PREFERRED_SIZE, 509, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -166,7 +184,10 @@ public class PrinterConfig extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPrintTest;
     private javax.swing.JButton btnSave;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbPrinterName;
+    private javax.swing.JRadioButton chkCashier;
+    private javax.swing.JRadioButton chkKitchen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -195,7 +216,21 @@ public class PrinterConfig extends javax.swing.JDialog {
             properties.setProperty("printer.width", txtWidth.getText());
             properties.setProperty("printer.height", txtHeight.getText());
 
-            try (FileOutputStream outputStream = new FileOutputStream(cbPrinterName.getSelectedItem().toString() + ".properties")) {
+            String printerFileName;
+            boolean isCashier = chkCashier.isSelected();
+            boolean isKitchen = chkKitchen.isSelected();
+            if (isCashier) {
+                properties.setProperty("printer.type", "cashier");
+                printerFileName = "cashier";
+            } else if (isKitchen) {
+                properties.setProperty("printer.type", "kitchen");
+                printerFileName = "kitchen";
+            } else {
+                properties.setProperty("printer.type", "other");
+                printerFileName = "other";
+            }
+
+            try (FileOutputStream outputStream = new FileOutputStream(printerFileName + ".properties")) {
                 // เขียนค่าลงในไฟล์
                 properties.store(outputStream, "Cashier Printer Configuration");
                 System.out.println("Config file written successfully!");

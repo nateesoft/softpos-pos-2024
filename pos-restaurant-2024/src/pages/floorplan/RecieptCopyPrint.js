@@ -54,7 +54,7 @@ const RecieptCopyPrint = ({ setOpen, socket }) => {
             JSON.stringify({
               id: 1,
               printerType: "receipt",
-              printerName: "",
+              printerName: "cashier",
               message: `พิมพ์สำเนาเอกสารเลขที่: ${billNo}`,
               terminal: macno,
               tableNo: "",

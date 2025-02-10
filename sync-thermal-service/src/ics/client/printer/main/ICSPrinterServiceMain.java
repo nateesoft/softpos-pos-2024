@@ -30,8 +30,8 @@ public class ICSPrinterServiceMain {
         SystemTray systemTray = SystemTray.getSystemTray();
 
         // สร้างไอคอนสำหรับ SystemTray
-        Image trayIconImage = Toolkit.getDefaultToolkit().getImage("cp-gtp-1.png"); // ใส่ path ไฟล์รูปภาพ
-        TrayIcon trayIcon = new TrayIcon(trayIconImage, "ICS Printer Service");
+        Image trayIconImage = Toolkit.getDefaultToolkit().getImage("printer.png"); // ใส่ path ไฟล์รูปภาพ
+        TrayIcon trayIcon = new TrayIcon(trayIconImage, "ICS Service");
         trayIcon.setImageAutoSize(true);
 
         // สร้าง PopupMenu สำหรับ SystemTray
@@ -70,7 +70,7 @@ public class ICSPrinterServiceMain {
         // เพิ่ม TrayIcon ลงใน SystemTray
         try {
             systemTray.add(trayIcon);
-            ClientSocket.connection();
+            ClientSocket.connection(trayIcon);
         } catch (AWTException e) {
             System.out.println("ไม่สามารถเพิ่ม TrayIcon: " + e.getMessage());
         }

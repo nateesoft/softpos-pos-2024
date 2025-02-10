@@ -1,11 +1,7 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState
-} from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import {
+  AppBar,
   Box,
   Button,
   Grid2,
@@ -60,11 +56,11 @@ const modalStyle = {
   boxShadow: 24
 }
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER;
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
 // เชื่อมต่อกับ Socket.IO server
 const socket = io(SOCKET_SERVER_URL, {
   autoConnect: false
-});
+})
 
 function PaymentForm({
   orderList,
@@ -111,7 +107,7 @@ function PaymentForm({
   // transfer info
   const [transferAmount, setTransferAmount] = useState(0)
   const [transferAccountNo, setTransferAccountNo] = useState("")
-  const [transferToAccount, setTransferToAccount] = useState("0864108403")
+  const [transferToAccount, setTransferToAccount] = useState("0000000000")
   const [transferAccount, setTransferAccount] = useState("")
 
   const [openCreditFile, setOpenCreditFile] = useState(false)
@@ -349,17 +345,16 @@ function PaymentForm({
               JSON.stringify({
                 id: 1,
                 printerType: "receipt",
-                printerName: "kic1",
+                printerName: "cashier",
                 message: `พิมพ์เลขที่เอกสาร: ${billNo}`,
                 terminal: macno,
                 tableNo: "",
                 billNo: billNo,
                 title: "ใบเสร็จรับเงิน",
-                billType: '',
-
+                billType: ""
               })
             )
-            navigate('/floorplan')
+            navigate("/floorplan")
           } else {
             handleNotification("พบข้อผิดพลาดในการรับชำระเงิน!")
           }
@@ -385,13 +380,13 @@ function PaymentForm({
             JSON.stringify({
               id: 1,
               printerType: "review-bill",
-              printerName: "",
+              printerName: "cashier",
               message: `ใบตรวจสอบรายการ ไม่ใช่ใบเสร็จรับเงิน: ${tableNo}`,
               terminal: macno,
               billNo: "",
               tableNo: tableNo,
               title: "ใบตรวจสอบรายการ ไม่ใช่ใบเสร็จรับเงิน",
-              billType: ''
+              billType: ""
             })
           )
         } else {
@@ -454,21 +449,20 @@ function PaymentForm({
           justifyContent="space-between"
         >
           {netTotalDisplay > 0 && (
-            <Typography variant="h3" sx={{ fontWeight: "bold", color: "#444" }}>
+            <Typography fontSize={28} sx={{ fontWeight: "bold", color: "#444" }}>
               TOTAL
             </Typography>
           )}
           {netTotalDisplay <= 0 && (
-            <Typography variant="h3" sx={{ fontWeight: "bold", color: "#444" }}>
+            <Typography fontSize={28} sx={{ fontWeight: "bold", color: "#444" }}>
               TON
             </Typography>
           )}
           <Typography
-            variant="h3"
             sx={{
               marginRight: "20px",
-              fontSize: "72px",
-              textShadow: "3px 3px snow",
+              fontSize: {xs: "32px", md: "72px"},
+              textShadow: "3px 1px white",
               fontWeight: "bold"
             }}
           >
@@ -480,11 +474,11 @@ function PaymentForm({
       </Grid2>
       <Grid2 size={12}>
         <Grid2 container spacing={1} display="flex" direction="row">
-          <Grid2 size={6}>
+          <Grid2 size={{xs: 12, md: 6}}>
             <Paper elevation={3} sx={{ padding: "1px" }}>
               <Grid2 container spacing={1} padding={1}>
                 <Grid2 container>
-                  <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
+                  <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                     <CreditCardOffIcon fontSize="large" />
                   </IconButton>
                   <TextField
@@ -502,7 +496,7 @@ function PaymentForm({
                     }}
                     inputProps={{ min: 0, style: { textAlign: "right" } }}
                   />
-                  <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
+                  <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                     <VideogameAssetIcon fontSize="large" />
                   </IconButton>
                   <TextField
@@ -523,7 +517,7 @@ function PaymentForm({
                 </Grid2>
               </Grid2>
               <Grid2 container spacing={1} padding={1}>
-                <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
+                <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                   <AccountBalanceWalletIcon fontSize="large" />
                 </IconButton>
                 <TextField
@@ -540,7 +534,7 @@ function PaymentForm({
                 />
               </Grid2>
               <Grid2 container spacing={1} padding={1}>
-                <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
+                <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                   <SendToMobileIcon fontSize="large" />
                 </IconButton>
                 <TextField
@@ -564,7 +558,7 @@ function PaymentForm({
                 </Button>
               </Grid2>
               <Grid2 container spacing={1} padding={1}>
-                <IconButton sx={{display: {xs: 'none', md: 'flex'}}}>
+                <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                   <CreditCardIcon fontSize="large" />
                 </IconButton>
                 <TextField
@@ -646,7 +640,7 @@ function PaymentForm({
           </Grid2>
           <Grid2 size={6}>
             <Grid2 container spacing={2}>
-              <Grid2 size={12}>
+              <Grid2 size={12} sx={{display: {xs: 'none', md: 'block'}}}>
                 <table width="100%">
                   <tr>
                     <td>
@@ -822,7 +816,7 @@ function PaymentForm({
                   </tr>
                 </table>
               </Grid2>
-              <Grid2 size={12}>
+              <Grid2 size={12} sx={{display: {xs: 'none', md: 'block'}}}>
                 <Grid2 container spacing={2} justifyContent="space-evenly">
                   <Grid2 size={6}>
                     <img
@@ -862,61 +856,66 @@ function PaymentForm({
                   </Grid2>
                 </Grid2>
               </Grid2>
-              <Grid2 size={12}>
-                <Box textAlign="center">
-                  <Button
-                    variant="contained"
-                    sx={{ margin: "5px" }}
-                    color="primary"
-                    startIcon={<ArrowBack />}
-                    onClick={handleBackPage}
-                  ></Button>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      margin: "5px",
-                      backgroundColor: "#aaa",
-                      color: "black"
-                    }}
-                    startIcon={<ReceiptIcon />}
-                    onClick={printBillCheck}
-                  >
-                    ตรวจสอบ
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setOpenSplitBill(true)}
-                    endIcon={<SplitBillIcon />}
-                    disabled={R_NetTotal <= 0}
-                  >
-                    แยกชำระ
-                  </Button>
-                  <Button
-                    variant="contained"
-                    sx={{ margin: "5px" }}
-                    color="success"
-                    onClick={() => setOpenConfirmPayment(true)}
-                    disabled={balanceAmount < 0}
-                    endIcon={<ConfirmIcon />}
-                  >
-                    ชำระเงิน
-                  </Button>
-                </Box>
-              </Grid2>
             </Grid2>
           </Grid2>
         </Grid2>
+        <AppBar position="fixed" sx={{top: "auto", bottom: 0, background: "none"}}>
+          <Grid2 size={12}>
+            <Box textAlign="center">
+              <Button
+                variant="contained"
+                sx={{ margin: "5px" }}
+                color="primary"
+                startIcon={<ArrowBack />}
+                onClick={handleBackPage}
+              >Floor Plan</Button>
+              <Button
+                variant="contained"
+                sx={{
+                  margin: "5px",
+                  backgroundColor: "#aaa",
+                  color: "black"
+                }}
+                startIcon={<ReceiptIcon />}
+                onClick={printBillCheck}
+              >
+                ตรวจสอบ
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => setOpenSplitBill(true)}
+                endIcon={<SplitBillIcon />}
+                disabled={R_NetTotal <= 0}
+              >
+                แยกชำระ
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ margin: "5px" }}
+                color="success"
+                onClick={() => setOpenConfirmPayment(true)}
+                disabled={balanceAmount < 0}
+                endIcon={<ConfirmIcon />}
+              >
+                ชำระเงิน
+              </Button>
+            </Box>
+          </Grid2>
+        </AppBar>
       </Grid2>
       <Modal
         open={openCreditInfo}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ ...modalStyle, width: "650px", padding: "5px" }}>
+        <div>
+        <Box sx={{ ...modalStyle, width: "650px", padding: "5px", display: {xs: 'none', md: 'block'} }}>
           <MultipleCreditPayment
             tableNo={tableNo}
-            balanceAmount={R_NetTotal + creditChargeAmount - depositAmount - entertainAmount}
+            balanceAmount={
+              R_NetTotal + creditChargeAmount - depositAmount - entertainAmount
+            }
             setCreditAmt={setCreditAmount}
             setCreditChargeAmt={setCreditChargeAmount}
             totalAmount={totalAmount}
@@ -924,6 +923,20 @@ function PaymentForm({
             setCreditTempList={setCreditTempList}
           />
         </Box>
+        <Box sx={{ ...modalStyle, width: "400px", padding: "5px", display: {xs: 'block', md: 'none'} }}>
+          <MultipleCreditPayment
+            tableNo={tableNo}
+            balanceAmount={
+              R_NetTotal + creditChargeAmount - depositAmount - entertainAmount
+            }
+            setCreditAmt={setCreditAmount}
+            setCreditChargeAmt={setCreditChargeAmount}
+            totalAmount={totalAmount}
+            onClose={() => setOpenCreditInfo(false)}
+            setCreditTempList={setCreditTempList}
+          />
+        </Box>
+        </div>
       </Modal>
       <Modal
         open={openTransferInfo}

@@ -5,9 +5,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "start:web1": "node --env-file=.env.app01 server.js",
-    "start:web2": "node --env-file=.env.app02 server.js",
-    "start:web3": "node --env-file=.env.app03 server.js"
+    "start:webapp1": "node --env-file=.env.webapp1 server.js",
+    "start:webapp2": "node --env-file=.env.webapp2 server.js",
+    "start:webapp3": "node --env-file=.env.webapp3 server.js",
+    "start:orderapp1": "node --env-file=.env.orderapp1 server.js",
+    "start:orderapp2": "node --env-file=.env.orderapp2 server.js",
+    "start:orderapp3": "node --env-file=.env.orderpp3 server.js"
   },
   "keywords": [],
   "author": "",
