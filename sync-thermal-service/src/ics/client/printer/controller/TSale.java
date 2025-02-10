@@ -1,5 +1,6 @@
 package ics.client.printer.controller;
 
+import ics.client.database.model.DatabaseConfigBean;
 import ics.client.printer.model.TSaleBean;
 import ics.utils.ErrorDialog;
 import ics.utils.MySQLConnect;
@@ -16,15 +17,15 @@ import java.util.List;
  */
 public class TSale {
     
-    private final String dbName;
+    private final DatabaseConfigBean dbConfig;
     
-    public TSale(String dbName) {
-        this.dbName = dbName;
+    public TSale(DatabaseConfigBean dbConfig) {
+        this.dbConfig = dbConfig;
     }
 
     public List<TSaleBean> getListData(String R_Refno) {
         List<TSaleBean> tSaleListBean = new ArrayList<>();
-        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnectionLegacy(this.dbConfig); Statement statement = connection.createStatement()) {
             String sql = "SELECT "
                     + "    R_PluCode, "
                     + "    R_PName, "

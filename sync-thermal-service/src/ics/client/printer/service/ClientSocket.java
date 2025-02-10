@@ -2,7 +2,9 @@ package ics.client.printer.service;
 
 import ics.client.printer.mapping.ClientPrinter;
 import com.google.gson.Gson;
+import ics.client.database.model.DatabaseConfigBean;
 import ics.client.printer.model.PrinterConfigBean;
+import ics.utils.AESSecret;
 import ics.utils.QRCodeGenerator;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -41,7 +43,7 @@ public class ClientSocket {
         return printerMessage;
     }
 
-    private static PrinterConfigBean loadConfig(String printerName) {
+    private static PrinterConfigBean loadPrinterConfig(String printerName) {
         PrinterConfigBean printerConfig = new PrinterConfigBean();
         if (null == printerName || printerName.equals("")) {
             return printerConfig;
@@ -85,14 +87,17 @@ public class ClientSocket {
                 System.out.println("Create qr code: " + printerMessage);
 
                 QRCodeGenerator.CreateQRCode(args1[0].toString());
-                PaperPrint paperPrint = new PaperPrint(printerMessage.getDatabase());
+                
+                // load database config
+                DatabaseConfigBean dbConfigBean = loadDatabaseConfig("databases");
+                PaperPrint paperPrint = new PaperPrint(dbConfigBean);
                 String htmlContent = paperPrint.getQrCodePrint();
 
                 //  load printer config
-                PrinterConfigBean bean = loadConfig(printerMessage.getPrinterName());
-                String prtName = bean.getPrinterName();
-                int prtWidth = bean.getWidth();
-                int prtHeight = bean.getHeight();
+                PrinterConfigBean printerConfigBean = loadPrinterConfig(printerMessage.getPrinterName());
+                String prtName = printerConfigBean.getPrinterName();
+                int prtWidth = printerConfigBean.getWidth();
+                int prtHeight = printerConfigBean.getHeight();
 
                 // send to printer
                 printerService.printMessage(prtName, htmlContent, prtWidth, prtHeight);
@@ -101,14 +106,17 @@ public class ClientSocket {
             socket.on("printerMessage", (Object... args1) -> {
                 ClientPrinter printerMessage = mappingObject(args1[0].toString());
                 System.out.println(printerMessage);
+                
+                // load database config
+                DatabaseConfigBean dbConfigBean = loadDatabaseConfig("databases");
 
                 //  load printer config
-                PrinterConfigBean bean = loadConfig(printerMessage.getPrinterName());
+                PrinterConfigBean bean = loadPrinterConfig(printerMessage.getPrinterName());
                 String prtName = bean.getPrinterName();
                 int prtWidth = bean.getWidth();
                 int prtHeight = bean.getHeight();
 
-                PaperPrint paperPrint = new PaperPrint(printerMessage.getDatabase());
+                PaperPrint paperPrint = new PaperPrint(dbConfigBean);
                 switch (printerMessage.getPrinterType()) {
                     case "receipt": {
                         String htmlContent = paperPrint.getReceiptPrint(printerMessage.getTitle(), printerMessage.getTerminal(), printerMessage.getBillNo(), printerMessage.getBillType());
@@ -138,5 +146,47 @@ public class ClientSocket {
         } catch (URISyntaxException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private static DatabaseConfigBean loadDatabaseConfig(String databaseName) {
+        DatabaseConfigBean dbConfig = new DatabaseConfigBean();
+        if (null == databaseName || databaseName.equals("")) {
+            return dbConfig;
+        }
+        Properties properties = new Properties();
+        try (InputStream input = new FileInputStream(databaseName + ".properties")) {
+            properties.load(input);
+            
+            // load legacy database
+            dbConfig.setLegacyDbHost(properties.getProperty("legacy.db.host"));
+            dbConfig.setLegacyDbName(properties.getProperty("legacy.db.name").replaceAll("\"", ""));
+            dbConfig.setLegacyDbPort(properties.getProperty("legacy.db.port"));
+            dbConfig.setLegacyDbUser(properties.getProperty("legacy.db.user"));
+            String decryptPass = AESSecret.decrypt(properties.getProperty("legacy.db.pass"), AESSecret.CHECK_PASS);
+            dbConfig.setLegacyDbPass(decryptPass);
+            dbConfig.setLegacyDbVersion(properties.getProperty("legacy.db.version"));
+            
+            // load new database
+            dbConfig.setNewDbHost(properties.getProperty("new.db.host"));
+            dbConfig.setNewDbName(properties.getProperty("new.db.name").replaceAll("\"", ""));
+            dbConfig.setNewDbPort(properties.getProperty("new.db.port"));
+            dbConfig.setNewDbUser(properties.getProperty("new.db.user"));
+            String decryptPass1 = AESSecret.decrypt(properties.getProperty("new.db.pass"), AESSecret.CHECK_PASS);
+            dbConfig.setNewDbPass(decryptPass1);
+            dbConfig.setNewDbVersion(properties.getProperty("new.db.version"));
+            
+            // load crm database
+            dbConfig.setCrmDbHost(properties.getProperty("crm.db.host"));
+            dbConfig.setCrmDbName(properties.getProperty("crm.db.name").replaceAll("\"", ""));
+            dbConfig.setCrmDbPort(properties.getProperty("crm.db.port"));
+            dbConfig.setCrmDbUser(properties.getProperty("crm.db.user"));
+            String decryptPass2 = AESSecret.decrypt(properties.getProperty("crm.db.pass"), AESSecret.CHECK_PASS);
+            dbConfig.setCrmDbPass(decryptPass2);
+            dbConfig.setCrmDbVersion(properties.getProperty("crm.db.version"));
+        } catch (Exception ex) {
+            System.err.println(ex.getMessage());
+        }
+
+        return dbConfig;
     }
 }

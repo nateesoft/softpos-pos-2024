@@ -1,5 +1,7 @@
 package ics.utils;
 
+import ics.client.database.model.DatabaseConfigBean;
+import ics.client.printer.service.DatabaseConfig;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -22,7 +24,7 @@ public class MySQLConnect {
     private static final MultiMySQLConnection msyqlVersion = new MultiMySQLConnection();
 
     // โหลดการตั้งค่าจาก properties ไฟล์
-    public static void loadConfig(String databaseName) {
+    private static void loadConfig(String databaseName) {
         try (InputStream fis = new FileInputStream(databaseName + ".properties")) {
             Properties properties = new Properties();
             properties.load(fis);
@@ -42,6 +44,18 @@ public class MySQLConnect {
 
     public static Connection getConnection(String dbVersion, String dbHost, String dbPort, String dbUser, String dbPass, String dbName) throws ClassNotFoundException, SQLException {
         return msyqlVersion.getMySQLVersion(dbVersion, dbHost, dbPort, dbUser, dbPass, dbName).getConnection();
+    }
+    
+    public static Connection getConnectionLegacy(DatabaseConfigBean dbConfig) throws ClassNotFoundException, SQLException {
+        return msyqlVersion.getMySQLVersion(dbConfig.getLegacyDbVersion(), dbConfig.getLegacyDbHost(), dbConfig.getLegacyDbPort(), dbConfig.getLegacyDbUser(), dbConfig.getLegacyDbPass(), dbConfig.getLegacyDbName()).getConnection();
+    }
+    
+    public static Connection getConnectionNew(DatabaseConfigBean dbConfig) throws ClassNotFoundException, SQLException {
+        return msyqlVersion.getMySQLVersion(dbConfig.getNewDbVersion(), dbConfig.getNewDbHost(), dbConfig.getNewDbPort(), dbConfig.getNewDbUser(), dbConfig.getNewDbPass(), dbConfig.getNewDbName()).getConnection();
+    }
+    
+    public static Connection getConnectionCrm(DatabaseConfigBean dbConfig) throws ClassNotFoundException, SQLException {
+        return msyqlVersion.getMySQLVersion(dbConfig.getCrmDbVersion(), dbConfig.getCrmDbHost(), dbConfig.getCrmDbPort(), dbConfig.getCrmDbUser(), dbConfig.getCrmDbPass(), dbConfig.getCrmDbName()).getConnection();
     }
 
     // ฟังก์ชันสำหรับสร้าง Connection

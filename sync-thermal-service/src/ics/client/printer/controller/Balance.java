@@ -1,5 +1,6 @@
 package ics.client.printer.controller;
 
+import ics.client.database.model.DatabaseConfigBean;
 import ics.client.printer.model.BalanceBean;
 import ics.utils.ErrorDialog;
 import ics.utils.MySQLConnect;
@@ -16,15 +17,15 @@ import java.util.List;
  */
 public class Balance {
     
-    private final String dbName;
+    private final DatabaseConfigBean dbConfig;
     
-    public Balance(String dbName) {
-        this.dbName = dbName;
+    public Balance(DatabaseConfigBean dbConfig) {
+        this.dbConfig = dbConfig;
     }
 
     public List<BalanceBean> getListData(String tableNo) {
         List<BalanceBean> listBalanceBean = new ArrayList<>();
-        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnectionLegacy(this.dbConfig); Statement statement = connection.createStatement()) {
             String sql = "SELECT p.PBarCode,"
                     + "    R_PluCode, R_PName, "
                     + "    MAX(R_Void) AS R_Void, MAX(R_ETD) AS R_ETD, "

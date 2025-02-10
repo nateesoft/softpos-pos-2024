@@ -1,5 +1,6 @@
 package ics.client.printer.controller;
 
+import ics.client.database.model.DatabaseConfigBean;
 import ics.client.printer.model.POSConfigSetupBean;
 import ics.utils.ErrorDialog;
 import ics.utils.MySQLConnect;
@@ -14,15 +15,15 @@ import java.sql.Statement;
  */
 public class POSConfigSetup {
     
-    private final String dbName;
+    private final DatabaseConfigBean dbConfig;
     
-    public POSConfigSetup(String dbName) {
-        this.dbName = dbName;
+    public POSConfigSetup(DatabaseConfigBean dbConfig) {
+        this.dbConfig = dbConfig;
     }
 
     public POSConfigSetupBean getData(String Terminal) {
         POSConfigSetupBean bean = new POSConfigSetupBean();
-        try (Connection connection = MySQLConnect.getConnection(this.dbName); Statement statement = connection.createStatement()) {
+        try (Connection connection = MySQLConnect.getConnectionLegacy(this.dbConfig); Statement statement = connection.createStatement()) {
 
             // ตัวอย่างการ Query
             String query = "SELECT P_Terminal,P_Vat,P_VatType,P_Service,P_PrintRecpMessage "

@@ -1,5 +1,6 @@
 package ics.client.printer.service;
 
+import ics.client.database.model.DatabaseConfigBean;
 import ics.client.printer.controller.Balance;
 import ics.client.printer.controller.BillNo;
 import ics.client.printer.controller.POSConfigSetup;
@@ -24,19 +25,26 @@ import java.util.stream.Collectors;
  */
 public class PaperPrint {
     
-    private String dbName;
+    private final DatabaseConfigBean dbConfig;
     
-    public PaperPrint(String dbName) {
-        this.dbName = dbName;
+    private POSHWSetup poshwSetupControl = null;
+    private POSConfigSetup posConfigSetup = null;
+    private TSale tSaleControl = null;
+    private BillNo billNoControl = null;
+    private Balance balanceControl = null;
+    private TableFile tableFileControl = null;
+    
+    public PaperPrint(DatabaseConfigBean dbConfig) {
+        this.dbConfig = dbConfig;
+        
+        poshwSetupControl = new POSHWSetup(this.dbConfig);
+        posConfigSetup = new POSConfigSetup(this.dbConfig);
+        tSaleControl = new TSale(this.dbConfig);
+        billNoControl = new BillNo(this.dbConfig);
+        balanceControl = new Balance(this.dbConfig);
+        tableFileControl = new TableFile(this.dbConfig);
     }
-
-    private final POSHWSetup poshwSetupControl = new POSHWSetup(this.dbName);
-    private final POSConfigSetup posConfigSetup = new POSConfigSetup(this.dbName);
-    private final TSale tSaleControl = new TSale(this.dbName);
-    private final BillNo billNoControl = new BillNo(this.dbName);
-    private final Balance balanceControl = new Balance(this.dbName);
-    private final TableFile tableFileControl = new TableFile(this.dbName);
-
+    
     public String getMoneyFormat(double number) {
         NumberFormat decimalFormat = NumberFormat.getNumberInstance();
         decimalFormat.setMaximumFractionDigits(2);
