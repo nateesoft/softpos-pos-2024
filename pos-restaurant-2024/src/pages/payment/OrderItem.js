@@ -13,7 +13,7 @@ const NumFormat = data => {
 const OrderItem = ({ tableNo, orderList, tableFile }) => {
   return (
     <Paper elevation={3} sx={{ padding: "10px", margin: "10px" }}>
-      <Box sx={{ padding: "10px", borderRadius: "5px", backgroundColor: "#123456" }}>
+      <Box sx={{ padding: "10px", borderRadius: "5px", background: "radial-gradient(circle, salmon, #005)" }}>
         <Typography sx={{ fontWeight: "bold", fontSize: "18px", color: "white" }}>Table No: {tableNo}</Typography>
       </Box>
       <Grid2>

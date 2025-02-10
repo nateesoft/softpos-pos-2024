@@ -31,7 +31,7 @@ const NumFormat = data => {
 const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
     const [openMember, setOpenMember] = useState(false)
     return (
-        <Paper elevation={3} sx={{ padding: "5px", margin: "5px", background: "#555" }}>
+        <Paper elevation={3} sx={{ padding: "5px", margin: "5px", background: "#123456" }}>
             <Grid container justifyContent="space-around" padding={2}>
                 <img src="/images/profile_crm.png" alt="" />
                 <Button variant='contained' onClick={()=>setOpenMember(true)} endIcon={<PersonSearchIcon fontSize='large' />}>เลือกสมาชิก</Button>

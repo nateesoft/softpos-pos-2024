@@ -40,7 +40,7 @@ public class SocketConfig extends javax.swing.JDialog {
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtPort.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtPort.setText("9090");
+        txtPort.setText("8080");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("PORT:");

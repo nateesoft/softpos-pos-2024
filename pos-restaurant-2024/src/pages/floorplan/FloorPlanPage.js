@@ -169,7 +169,7 @@ function FloorPlanPage() {
             JSON.stringify({
               id: 1,
               printerType: "message",
-              printerName: "",
+              printerName: "cashier",
               message: "ออกจากระบบเรียบร้อย",
               terminal: "",
               tableNo: "",
@@ -377,6 +377,7 @@ function FloorPlanPage() {
                   color="inherit"
                   aria-label="open drawer"
                   edge="start"
+                  sx={{display: {xs: 'none', md: 'inline'}}}
                 >
                   <ReportSelect />
                 </IconButton>

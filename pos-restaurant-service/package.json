@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start:server1": "node --env-file=.env.server1 ./bin/www",
-    "start:server2": "node --env-file=.env.server2 ./bin/www",
-    "start:server3": "node --env-file=.env.server3 ./bin/www",
+    "start:service1": "node --env-file=.env.service1 ./bin/www",
+    "start:service2": "node --env-file=.env.service2 ./bin/www",
+    "start:service3": "node --env-file=.env.service3 ./bin/www",
     "local": "nodemon --env-file=.env.local ./bin/www",
     "local:watch": "node --trace-warnings --env-file=.env.local ./bin/www",
     "start:watch": "nodemon ./bin/www",

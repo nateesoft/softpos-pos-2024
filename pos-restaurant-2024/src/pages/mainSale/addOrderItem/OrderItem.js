@@ -319,7 +319,7 @@ const OrderItem = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ ...modalStyle, width: 450 }} id="paperPrint">
+        <Box sx={{ ...modalStyle, width: 400 }} id="paperPrint">
           <div
             align="center"
             style={{

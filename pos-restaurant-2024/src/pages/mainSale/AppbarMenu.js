@@ -136,7 +136,7 @@ export default function AppbarMenu({ tableNo }) {
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}>
-        <MenuItem onClick={() => setupMenuPage()}>
+        <MenuItem onClick={() => setupMenuPage()} sx={{display: {xs: 'none', md: 'flex'}}}>
           <Box display="flex" justifyContent="center">
             <MenuBookIcon sx={{ marginRight: "10px" }} />
             <Typography variant='p'>Menu Setup</Typography>

@@ -23,6 +23,9 @@
     "start": "env-cmd -f ./.env react-scripts start",
     "local": "env-cmd -f ./.env.local react-scripts start",
     "build": "react-scripts build",
+    "build:orderapp1": "env-cmd -f ./.env.orderapp1 react-scripts build && mv build orderapp1",
+    "build:orderapp2": "env-cmd -f ./.env.orderapp2 react-scripts build && mv build orderapp2",
+    "build:orderapp3": "env-cmd -f ./.env.orderapp3 react-scripts build && mv build orderapp3",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

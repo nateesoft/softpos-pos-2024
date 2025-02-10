@@ -41,7 +41,7 @@ const OtherMenuSelect = ({ handleChange, handleClose, handleClick, open, anchorE
                         <Splitscreen sx={{ marginRight: "10px" }} /> <Typography variant='p'>แยกโต๊ะ / รวมโต๊ะ</Typography>
                     </Box>
                 </MenuItem>
-                <MenuItem onClick={() => handleChange('RefundBill')}>
+                <MenuItem onClick={() => handleChange('RefundBill')} sx={{display: {xs: 'none', md: 'block'}}}>
                     <Box display="flex" justifyContent="center">
                         <RefundIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>ยกเลิกบิล (Refund Bill)</Typography>
                     </Box>
@@ -57,8 +57,8 @@ const OtherMenuSelect = ({ handleChange, handleClose, handleClick, open, anchorE
                         <EmplyIcon sx={{ marginRight: "10px" }} /> <Typography variant='p'>ตรวจสอบพนักงาน</Typography>
                     </Box>
                 </MenuItem>
-                <Divider />
-                <MenuItem onClick={() => handleChange('SetupTableFlorPlan')}>
+                <Divider sx={{display: {xs: 'none', md: 'block'}}} />
+                <MenuItem onClick={() => handleChange('SetupTableFlorPlan')} sx={{display: {xs: 'none', md: 'flex'}}}>
                     <Box display="flex" justifyContent="center">
                         <TableBar sx={{ marginRight: "10px" }} /> <Typography variant='p'>จัดการโต๊ะ</Typography>
                     </Box>
