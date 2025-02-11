@@ -15,6 +15,25 @@
         "dessert": "Dessert"
     },
     "FloorPlanPage": {
-        "logoutButton": "Logout"
+        "logoutButton": "Logout",
+        "systemLogin": "System Login",
+        "customerCount": "Customer Count",
+        "customerTypeDetail": "Details of customers of each nationality",
+        "thaiPerson": "Thai",
+        "europeanPerson": "European",
+        "americanPerson": "American",
+        "asianPerson": "Asian",
+        "findButton": "Find",
+        "foodType": "Order Type",
+        "notFoundBooking": "Not found booking!",
+        "foundBooking": "Found booking no",
+        "bookingNo": "Booking No.",
+        "openTableButton": "Open",
+        "tableStatusUnavailable": "Table status unavailable",
+        "customerInfoIncorrect": "Customer information is incorrect",
+        "NumberCustomersNotMatch": "The number of customers doesn't match !",
+        "dineIn": "Dine In",
+        "takeAway": "Take Away",
+        "delivery": "Delivery"
     }
    }

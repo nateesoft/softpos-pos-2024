@@ -87,7 +87,11 @@ const MenuSetModal = ({ product, subMenuSelected, setSubMenuSelected, optionalLi
                             <img src={item.image_url} alt={item.menu_name} width={180} height={150} />
                         </Grid2>
                         <Typography style={{ color: "white" }}>{item.menu_name}</Typography>
-                        {!subMenuSelected[index] && <Button variant='contained' startIcon={<ChangeCircleIcon />} disabled={item.can_change!=='Y'} onClick={() => handleChangeMenuItem(item.menu_code)}>เปลี่ยนเมนู</Button>}
+                        {!subMenuSelected[index] && 
+                        <Button variant='outlined' color="warning"
+                        startIcon={<ChangeCircleIcon />} 
+                        disabled={item.can_change!=='Y'} 
+                        onClick={() => handleChangeMenuItem(item.menu_code)}>เปลี่ยนเมนู</Button>}
                     </Grid2>
                 ))}
             </Grid2>

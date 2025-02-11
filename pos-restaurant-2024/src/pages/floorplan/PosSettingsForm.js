@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import {
   Box,
   Button,
@@ -18,6 +18,7 @@ import moment from "moment"
 import { v4 as uuid } from "uuid"
 
 import apiClient from "../../httpRequest"
+import { CurrencyContext } from "../../contexts/CurrencyContext"
 
 const modalStyle = {
   position: "absolute",
@@ -39,16 +40,22 @@ const timeZoneList = [
   { value: "Europe/London", title: "London" }
 ]
 const currencyList = [
-  { value: "THB", title: "Thai Baht" },
-  { value: "GBP", title: "British Pound" }
+  { value: "THB", title: "THB" },
+  { value: "USD", title: "USD" },
+  { value: "EUR", title: "EUR" },
+  { value: "JPY", title: "JPY" },
+  { value: "VND", title: "VND" },
+  { value: "HKD", title: "HKD" }
 ]
 
 const PosSettingsForm = ({ setOpen }, data) => {
   const { user_update, terminal_id } = data
   const [language, setLanguage] = useState("th")
   const [timezone, setTimeZone] = useState("Asia/Bangkok")
-  const [currency, setCurrency] = useState("THB")
+  const { currency, setCurrency, convertCurrency } = useContext(CurrencyContext)
   const [currencyRate, setCurrencyRate] = useState(1)
+
+  const convertedTotal = convertCurrency(1000, currency)
 
   // fix baht main rate
   const [currencyBahtRate, setCurrencyBahtRate] = useState(1)
@@ -57,17 +64,18 @@ const PosSettingsForm = ({ setOpen }, data) => {
   const [kichenPrinterIp, setKichenPrinterIp] = useState("")
 
   const testPrinterThermal = () => {
-    apiClient.post(`/api/printer-thermal/print-test`, {
-      printerIp: receiptPrinterIp
-    })
-    .then(response => {
-      if(response.status === 200){
-        console.log('Printer done')
-      }
-    })
-    .catch(err => {
-      console.log(err)
-    })
+    apiClient
+      .post(`/api/printer-thermal/print-test`, {
+        printerIp: receiptPrinterIp
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log("Printer done")
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   const saveData = () => {
@@ -106,9 +114,9 @@ const PosSettingsForm = ({ setOpen }, data) => {
     apiClient
       .get(`/api/pos_setting/${terminal_id}`)
       .then((response) => {
-        if(response.data.status === '2000') {
+        if (response.data.status === "2000") {
           const data = response.data.data
-          if(data!=null){
+          if (data != null) {
             setLanguage(data.language_use)
             setTimeZone(data.timezone_use)
             setCurrency(data.currency_use)
@@ -129,126 +137,83 @@ const PosSettingsForm = ({ setOpen }, data) => {
   }, [])
 
   return (
-    <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
+    <Box sx={{ ...modalStyle, width: "430px", overflow: "auto", padding: "10px" }}>
       <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>
           POS Terminal Setting
         </Typography>
       </Grid2>
-      <Grid2 container spacing={1} padding={1} direction="column">
-        <Grid2 container size={12}>
-          <FormControl sx={{ width: "150px" }}>
-            <InputLabel id="demo-simple-select-label">Language</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={language}
-              label="Language"
-              onChange={(e) => setLanguage(e.target.value)}
-            >
-              {languageList &&
-                languageList.map((item) => (
-                  <MenuItem key={item.value} value={item.value}>{item.title}</MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-          <FormControl sx={{ width: "150px" }}>
-            <InputLabel id="demo-simple-select-label">Time Zone</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={timezone}
-              label="Currency"
-              onChange={(e) => setTimeZone(e.target.value)}
-            >
-              {timeZoneList &&
-                timeZoneList.map((item) => (
-                  <MenuItem value={item.value}>{item.title}</MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-        </Grid2>
-        <Grid2
-          container
-          spacing={1}
-          padding={2}
-          sx={{ border: "2px solid orange" }}
-        >
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Use Currency</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={currency}
-              label="Use Currency"
-              onChange={(e) => setCurrency(e.target.value)}
-            >
-              {currencyList &&
-                currencyList.map((item) => (
-                  <MenuItem value={item.value}>
-                    {item.title} ({item.value})
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-          <Grid2 container spacing={1}>
-            <TextField
-              label="ค่าเงินบาท (Baht)"
-              value={currencyBahtRate}
-              onChange={(e) => setCurrencyBahtRate(e.target.value)}
-              sx={{ width: "120px" }}
-            />
-            <TextField
-              label={`ค่าเงินในระบบ (${currency})`}
-              value={currencyRate}
-              onChange={(e) => setCurrencyRate(e.target.value)}
-              sx={{ width: "200px" }}
-            />
-          </Grid2>
-        </Grid2>
-
-        <Divider />
-        <Grid2 container>
-          <TextField
-            label="Receipt Printer IP"
-            value={receiptPrinterIp}
-            onChange={(e) => setReceiptPrinterIp(e.target.value)}
-          />
-          <Button variant="contained" startIcon={<PrintIcon />} onClick={testPrinterThermal}>
-            Test
-          </Button>
-        </Grid2>
-        <Grid2 container>
-          <TextField
-            label="Kichen Printer IP"
-            value={kichenPrinterIp}
-            onChange={(e) => setKichenPrinterIp(e.target.value)}
-          />
-          <Button variant="contained" startIcon={<PrintIcon />}>
-            Test
-          </Button>
-        </Grid2>
+      <Grid2 container spacing={1} padding={1} margin={1} justifyContent="space-evenly">
+        {/* <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Language</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={language}
+            label="Language"
+            onChange={(e) => setLanguage(e.target.value)}
+          >
+            {languageList &&
+              languageList.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                  {item.title}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl> */}
+        {/* <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Time Zone</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={timezone}
+            label="Currency"
+            onChange={(e) => setTimeZone(e.target.value)}
+          >
+            {timeZoneList &&
+              timeZoneList.map((item) => (
+                <MenuItem value={item.value}>{item.title}</MenuItem>
+              ))}
+          </Select>
+        </FormControl> */}
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Use Currency</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={currency}
+            label="Use Currency"
+            onChange={(e) => setCurrency(e.target.value)}
+          >
+            {currencyList &&
+              currencyList.map((item) => (
+                <MenuItem value={item.value}>
+                  {item.title} ({item.value})
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
       </Grid2>
-      <Box display="flex" justifyContent="center">
-        <Grid2 container spacing={2} padding={2}>
-          <Button
-            variant="contained"
-            color="error"
-            endIcon={<CancelIcon />}
-            onClick={() => setOpen(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="info"
-            endIcon={<SaveIcon />}
-            onClick={() => saveData()}
-          >
-            Save
-          </Button>
-        </Grid2>
-      </Box>
+      <Divider />
+      <Grid2 spacing={1} padding={1} container justifyContent="center" sx={{background: "#eee"}}>
+        <Typography>ทดสอบ (฿1000):</Typography>
+        <Typography fontSize={18} fontWeight="bold">
+          {new Intl.NumberFormat("th-TH", {
+            style: "currency",
+            currency
+          }).format(convertedTotal)}
+        </Typography>
+      </Grid2>
+      <Grid2 container spacing={1} padding={2} justifyContent="center">
+        <Button
+          variant="contained"
+          color="error"
+          endIcon={<CancelIcon />}
+          onClick={() => setOpen(false)}
+        >
+          Close
+        </Button>
+      </Grid2>
     </Box>
   )
 }

@@ -1,13 +1,17 @@
-import React, { memo } from "react"
+import React, { memo, useContext, useEffect, useState } from "react"
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline"
 import SetMealIcon from "@mui/icons-material/MenuOpen"
 import Grid from "@mui/material/Grid2"
 import { Box, Button, Badge, Typography, Grid2 } from "@mui/material"
+import { CurrencyContext } from "../../contexts/CurrencyContext"
 
 const ProductCard = memo(props => {
+  const { currency, convertCurrency } = useContext(CurrencyContext)
   const { id, product, openModal, setShowMenuSet, OrderList, setShowManualPrice, addOrder } = props
     const productList = OrderList.filter(p => p.R_PluCode === product.menu_code)
     const saleQty = productList.reduce((totalQty, p) => totalQty + p.R_Quan, 0);
+
+    const convertedTotal = convertCurrency(product.menu_price, currency)
 
     const handleShowDetailProduct = (product) => {
       if (product.show_list_menu === 'Y') {
@@ -74,7 +78,7 @@ const ProductCard = memo(props => {
                 color: product.show_list_menu === "Y" ? "snow" : "yellow"
               }}
             >
-              ราคา {product.menu_price}
+              ราคา {new Intl.NumberFormat("th-TH", { style: "currency", currency }).format(convertedTotal)}
             </Typography>
             <Typography sx={{color: "white"}}>
               {product.tab_group}
@@ -90,18 +94,20 @@ const ProductCard = memo(props => {
               }}
               startIcon={<SetMealIcon />}
               onClick={() => setShowMenuSet(true)}
+              fullWidth
             >
-              SET
+              SET MENU
             </Button>
           )}
-          {product.manual_price !== "Y" && (
+          {(product.manual_price !== "Y"&&product.show_list_menu !== "Y") && (
             <Button
               color="success"
               variant="contained"
               onClick={() => addOrder(1, product)}
               startIcon={<AddCircleOutline />}
+              fullWidth
             >
-              Add
+              ADD ORDER
             </Button>
           )}
           {product.manual_price === "Y" && (

@@ -31,17 +31,18 @@ const NumFormat = data => {
 const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
     const [openMember, setOpenMember] = useState(false)
     return (
-        <Paper elevation={3} sx={{ padding: "5px", margin: "5px", background: "#123456" }}>
-            <Grid container justifyContent="space-around" padding={2}>
+        <Paper elevation={3} sx={{ margin: "5px", background: "#123456", boxShadow: "3px 4px black" }}>
+            <Grid container justifyContent="center" spacing={1} padding={1}>
                 <img src="/images/profile_crm.png" alt="" />
-                <Button variant='contained' onClick={()=>setOpenMember(true)} endIcon={<PersonSearchIcon fontSize='large' />}>เลือกสมาชิก</Button>
+                <Button variant='outlined' sx={{color: "snow"}} onClick={()=>setOpenMember(true)} endIcon={<PersonSearchIcon fontSize='large' />}>เลือกสมาชิก</Button>
             </Grid>
-            {memberInfo.Member_Code && <Grid container spacing={1} padding={1} justifyContent="center" sx={{border: "1px solid snow", boxShadow: "3px 4px black"}}>
+            {memberInfo.Member_Code && 
+            <Grid container spacing={1} justifyContent="center" sx={{border: "1px solid snow", boxShadow: "3px 4px black"}}>
                 <Grid padding={1}>
                     <Typography variant='p' sx={{ color: "white", background: "purple", padding: "5px" }}>
                         ( ข้อมูลส่วนตัว )
                     </Typography>
-                    <Box padding={1} sx={{borderBlock: "2px solid white"}}>
+                    <Box sx={{borderBlock: "2px solid white"}}>
                         <Typography style={{ color: "white" }}>{memberInfo.Member_NameThai}</Typography>
                         <Typography style={{ color: "white" }}>วันเกิด <Moment format="DD/MM/YYYY" date={memberInfo.Member_Brithday} /></Typography>
                         <Grid container spacing={1}>
@@ -54,7 +55,7 @@ const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
                     <Typography variant='p' sx={{ color: "white", background: "green", padding: "5px" }}>
                         <u>คะแนนสะสม</u>
                     </Typography>
-                    <Box padding={1} sx={{borderBlock: "2px solid yellow"}}>
+                    <Box sx={{borderBlock: "2px solid yellow"}}>
                         <Typography style={{ color: "white" }}>วันที่สมัคร: <Moment format="DD/MM/YYYY" date={memberInfo.Member_AppliedDate} /></Typography>
                         <Typography style={{ color: "white" }}>คะแนน {PointFormat(memberInfo.Member_TotalScore)}</Typography>
                         <Typography style={{ color: "white" }}>ยอดซื้อ {NumFormat(memberInfo.Member_TotalPurchase)} บาท</Typography>
