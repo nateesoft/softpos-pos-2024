@@ -91,6 +91,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/api/version', (req, res) => {
+  res.json({
+    version: "0.0.0"
+  })
+})
+
 app.use('/api/floorplan', floorplanRouter);
 app.use('/api/floorplan-template', floorplanTemplateRouter);
 
