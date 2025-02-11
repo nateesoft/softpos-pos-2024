@@ -5,6 +5,7 @@ import { CookiesProvider } from 'react-cookie'
 
 import { POSContext } from './AppContext'
 import AnimatedRoutes from "./pages/AnimatedRouters"
+import { CurrencyProvider } from "./contexts/CurrencyContext";
 
 const SECRET_PASS = process.env.REACT_APP_API_SECRET_PASS
 const initContext = {
@@ -38,7 +39,9 @@ function App() {
     <Router>
       <CookiesProvider>
         <POSContext.Provider value={{ appData, setAppData }}>
-          <AnimatedRoutes />
+          <CurrencyProvider>
+            <AnimatedRoutes />
+          </CurrencyProvider>
         </POSContext.Provider>
       </CookiesProvider>
     </Router>

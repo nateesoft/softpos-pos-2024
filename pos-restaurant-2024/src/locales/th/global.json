@@ -15,6 +15,25 @@
         "dessert": "ของหวาน"
     },
     "FloorPlanPage": {
-        "logoutButton": "ออก"
+        "logoutButton": "ออก",
+        "systemLogin": "เวลาเข้าใช้งาน",
+        "customerCount": "จำนวนลูกค้า",
+        "customerTypeDetail": "รายละเอียดลูกค้าแต่ละสัญชาติ",
+        "thaiPerson": "คนไทย",
+        "europeanPerson": "คนยุโรป",
+        "americanPerson": "คนอเมริกา",
+        "asianPerson": "คนเอเชีย",
+        "findButton": "ค้นหา",
+        "foodType": "ประเภทอาหาร",
+        "notFoundBooking": "ไม่พบเลขที่จอง!",
+        "foundBooking": "พบข้อมูลการจอง เลขที่",
+        "bookingNo": "เลขที่จอง (Booking no.)",
+        "openTableButton": "เปิดโต๊ะ",
+        "tableStatusUnavailable": "สถานะโต๊ะไม่พร้อมใช้งาน",
+        "customerInfoIncorrect": "ข้อมูลลูกค้าไม่ถูกต้อง",
+        "NumberCustomersNotMatch": "ข้อมูลจำนวนลูกค้าไม่ตรงกัน !",
+        "dineIn": "ทานในร้าน",
+        "takeAway": "รับกลับบ้าน",
+        "delivery": "เดลิเวอรี่"
     }
    }

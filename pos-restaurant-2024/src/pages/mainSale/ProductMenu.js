@@ -34,6 +34,7 @@ import ProductDetailCard from "./ProductDetailCard"
 import MenuSetModal from "./MenuSetModal"
 import { POSContext } from "../../AppContext"
 import ManualPriceInput from "./ManualPriceInput"
+import { CurrencyContext } from "../../contexts/CurrencyContext"
 
 const modalStyle = {
   position: "absolute",
@@ -123,6 +124,7 @@ const ProductMenu = ({
   const { t } = useTranslation("global")
   const matches = useMediaQuery("(min-width:1024px)")
   const { appData } = useContext(POSContext)
+  const { currency, convertCurrency } = useContext(CurrencyContext)
   const { empCode, macno, userLogin, tableInfo } = appData
 
   const [value, setValue] = useState(0)
@@ -487,7 +489,7 @@ const ProductMenu = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ ...modalStyle, width: "100%", height: "80vh" }}>
+        <Box sx={{ ...modalStyle, width: "100%", height: "80vh", background: "black" }}>
           <Grid2
             container
             justifyContent="center"
@@ -509,7 +511,10 @@ const ProductMenu = ({
               />
             </Grid2>
             <Typography color="error" variant="h5" sx={{ fontWeight: "bold" }}>
-              ( ราคา {productInfo.menu_price} )
+              ( ราคา {new Intl.NumberFormat("th-TH", {
+            style: "currency",
+            currency
+          }).format(convertCurrency(productInfo.menu_price, currency))} )
             </Typography>
             {msgWarning && (
               <Box
@@ -529,13 +534,13 @@ const ProductMenu = ({
             container
             spacing={1}
             padding={1}
-            justifyContent="center"
+            justifyContent="center" sx={{border: "1px solid orange"}}
           >
             <Typography sx={{ color: "green", fontWeight: "bold" }}>
               รายการที่เลือก:{" "}
               {subMenuSelected.filter((item) => item === true).length}
             </Typography>
-            <Typography sx={{ color: "blue" }}>
+            <Typography sx={{ color: "yellow" }}>
               สั่งขั้นต่ำ: {productInfo.min_count_set}
             </Typography>
             <Typography sx={{ color: "red" }}>

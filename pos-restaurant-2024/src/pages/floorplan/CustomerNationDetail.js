@@ -5,11 +5,14 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2'
+import { useTranslation } from 'react-i18next';
 
 const min = 0;
 const max = 10;
 
 const CustomerNationDetail = props => {
+    const { t } = useTranslation("global")
+
     const {thaiPeople, europePeople, americaPeople, asiaPeople, 
         setThaiCount, setEuropeCount, setAmericaCount, setAsiaCount} = props
     return (
@@ -20,14 +23,14 @@ const CustomerNationDetail = props => {
                     aria-controls="panel1-content"
                     id="panel1-header"
                 >
-                    รายละเอียดลูกค้าแต่ละสัญชาติ
+                    {t("FloorPlanPage.customerTypeDetail")}
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container spacing={2}>
                         <Grid size={6}>
                             <TextField
                                 id="outlined-number"
-                                label="คนไทย (ท่าน)"
+                                label={t("FloorPlanPage.thaiPerson")}
                                 type="number"
                                 slotProps={{
                                     inputLabel: {
@@ -46,7 +49,7 @@ const CustomerNationDetail = props => {
                         <Grid size={6}>
                             <TextField
                                 id="outlined-number"
-                                label="คนยุโรป (ท่าน)"
+                                label={t("FloorPlanPage.europeanPerson")}
                                 type="number"
                                 slotProps={{
                                     inputLabel: {
@@ -65,7 +68,7 @@ const CustomerNationDetail = props => {
                         <Grid size={6}>
                             <TextField
                                 id="outlined-number"
-                                label="คนอเมริกา (ท่าน)"
+                                label={t("FloorPlanPage.americanPerson")}
                                 type="number"
                                 slotProps={{
                                     inputLabel: {
@@ -84,7 +87,7 @@ const CustomerNationDetail = props => {
                         <Grid size={6}>
                             <TextField
                                 id="outlined-number"
-                                label="คนเอเชีย (ท่าน)"
+                                label={t("FloorPlanPage.asianPerson")}
                                 type="number"
                                 slotProps={{
                                     inputLabel: {

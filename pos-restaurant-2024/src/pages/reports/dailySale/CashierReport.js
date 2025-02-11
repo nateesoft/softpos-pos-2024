@@ -2,11 +2,16 @@ import React, { Component, useCallback, useContext, useEffect, useRef, useState 
 import { Button, Grid2, Paper } from '@mui/material'
 import { useReactToPrint } from 'react-to-print'
 import PrintIcon from '@mui/icons-material/Print'
+import BackIcon from '@mui/icons-material/ReplyAll';
 import moment from 'moment'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
+
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("th-TH", { style: "currency", currency: "THB" }).format(amount);
+};
 
 class ComponentToPrint extends Component {
     constructor(props) {
@@ -34,107 +39,107 @@ class ComponentToPrint extends Component {
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_Food}</td>
+                                <td align='right'>{formatCurrency(report.B_Food)}</td>
                             </tr>
                             <tr>
                                 <td>ยอดรวมค่าเครื่องดื่ม</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_Drink}</td>
+                                <td align='right'>{formatCurrency(report.B_Drink)}</td>
                             </tr>
                             <tr>
                                 <td>ยอดรวมค่าสินค้าทั่วไป</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_Product}</td>
+                                <td align='right'>{formatCurrency(report.B_Product)}</td>
                             </tr>
                             <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
                                 <td>ยอดขายตามป้าย (Dept-Sum)</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.Dept_Sum}</td>
+                                <td align='right'>{formatCurrency(report.Dept_Sum)}</td>
                             </tr>
                             <tr>
                                 <td>ค่าบริการ Service</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_ServiceAmt}</td>
+                                <td align='right'>{formatCurrency(report.B_ServiceAmt)}</td>
                             </tr>
                             <tr>
                                 <td>Charge บัตรเครดิต</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_CrChargeAmt1}</td>
+                                <td align='right'>{formatCurrency(report.B_CrChargeAmt1)}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดสมาชิก VIP</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_MemDiscAmt}</td>
+                                <td align='right'>{formatCurrency(report.B_MemDiscAmt)}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดเทศกาล</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_FastDiscAmt}</td>
+                                <td align='right'>{formatCurrency(report.B_FastDiscAmt)}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดพนักงาน</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_EmpDiscAmt}</td>
+                                <td align='right'>{formatCurrency(report.B_EmpDiscAmt)}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดพนักงาน Trainee</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_TrainDiscAmt}</td>
+                                <td align='right'>{formatCurrency(report.B_TrainDiscAmt)}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดคูปอง</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_CuponDiscAmt}</td>
+                                <td align='right'>{formatCurrency(report.B_CuponDiscAmt)}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดบาท</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_SubDiscBath}</td>
+                                <td align='right'>{formatCurrency(report.B_SubDiscBath)}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลด Promotion</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_ProDiscAmt}</td>
+                                <td align='right'>{formatCurrency(report.B_ProDiscAmt)}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดพิเศษ (Special)</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_SpaDiscAmt}</td>
+                                <td align='right'>{formatCurrency(report.B_SpaDiscAmt)}</td>
                             </tr>
                             <tr>
                                 <td>ส่วนลดรายการ (Item)</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_ItemDiscAmt}</td>
+                                <td align='right'>{formatCurrency(report.B_ItemDiscAmt)}</td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                                 <td>ส่วนลดบัตรคูปอง (Cupon)</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
@@ -147,29 +152,29 @@ class ComponentToPrint extends Component {
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>0</td>
-                            </tr>
+                            </tr> */}
                             <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
                                 <td>ยอดขายสุทธิ (Net-Sales)</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_NetTotal}</td>
+                                <td align='right'>{formatCurrency(report.B_NetTotal)}</td>
                             </tr>
                             <tr>
                                 <td>เงินสด Cash</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_Cash}</td>
+                                <td align='right'>{formatCurrency(report.B_Cash)}</td>
                             </tr>
                             <tr>
                                 <td>บัตรกำนัล Gift Voucher</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_GiftVoucher}</td>
+                                <td align='right'>{formatCurrency(report.B_GiftVoucher)}</td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                                 <td>ลูกหนี้การค้า</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
@@ -210,27 +215,27 @@ class ComponentToPrint extends Component {
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>0</td>
-                            </tr>
+                            </tr> */}
                             <tr>
                                 <td>ยอดขายสินค้า/บริการ คิดภาษี</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_NetVat}</td>
+                                <td align='right'>{formatCurrency(report.B_NetVat)}</td>
                             </tr>
                             <tr>
                                 <td>ยอดขายไม่คิดภาษี</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_NetNonVat}</td>
+                                <td align='right'>{formatCurrency(report.B_NetNonVat)}</td>
                             </tr>
                             <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
                                 <td>ภาษีมูลค่าเพิ่ม (Vat)</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                                <td align='right'>{report.B_Vat}</td>
+                                <td align='right'>{formatCurrency(report.B_Vat)}</td>
                             </tr>
                             <tr>
                                 <td>จำนวนลูกค้าทั้งสิ้น</td>
@@ -239,7 +244,7 @@ class ComponentToPrint extends Component {
                                 <td align='right'></td>
                                 <td align='right'>{report.B_Cust}</td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                                 <td>จำนวนใบกำกับภาษีอย่างย่อ</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
@@ -252,8 +257,8 @@ class ComponentToPrint extends Component {
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'></td>
-                            </tr>
-                            <tr>
+                            </tr> */}
+                            {/* <tr>
                                 <td>ใบกำกับภาษีที่ยกเลิก</td>
                                 <td align='right'></td>
                                 <td align='right'></td>
@@ -266,7 +271,7 @@ class ComponentToPrint extends Component {
                                 <td align='right'></td>
                                 <td align='right'></td>
                                 <td align='right'>0</td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
                     {/* <table width="100%">
@@ -302,6 +307,7 @@ class ComponentToPrint extends Component {
 }
 
 const CashierReport = () => {
+    const navigate = useNavigate()
     const contentRef = useRef(null);
     const [query] = useSearchParams()
 
@@ -314,6 +320,10 @@ const CashierReport = () => {
         contentRef,
         documentTitle: `Printing...`
     })
+
+    const backPage = () => {
+        navigate('/reportDaily/overview')
+    }
 
     const handlePrinter = useCallback(() => {
         functionToPrint()
@@ -366,6 +376,7 @@ const CashierReport = () => {
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
+                    <Button startIcon={<BackIcon />} variant='contained' color='error' onClick={backPage}>Back</Button>
                     <Button startIcon={<PrintIcon />} variant='contained' color='primary' onClick={handlePrinter}>Print</Button>
                 </Grid2>
             </Paper>

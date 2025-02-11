@@ -2,11 +2,16 @@ import React, { Component, useCallback, useContext, useEffect, useRef, useState 
 import { Button, Grid2, Paper } from '@mui/material'
 import { useReactToPrint } from 'react-to-print'
 import PrintIcon from '@mui/icons-material/Print'
+import BackIcon from '@mui/icons-material/ReplyAll';
 import moment from 'moment'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
+
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("th-TH", { style: "currency", currency: "THB" }).format(amount);
+};
 
 class ComponentToPrint extends Component {
     constructor(props) {
@@ -59,7 +64,7 @@ class ComponentToPrint extends Component {
                                     <td align='center'>{item.B_Refno}</td>
                                     <td align='center'>{item.R_PluCode}</td>
                                     <td align='right'>{item.R_Quan}</td>
-                                    <td align='right'>{item.R_Total}</td>
+                                    <td align='right'>{formatCurrency(item.R_Total)}</td>
                                 </tr>
                             </>)}
                         </tbody>
@@ -69,7 +74,7 @@ class ComponentToPrint extends Component {
                             <td>จำนวน Void</td>
                             <td align='rigth'>{summary.voidCount}</td>
                             <td>จำนวนเงิน</td>
-                            <td align='right'>{summary.voidAmount}</td>
+                            <td align='right'>{formatCurrency(summary.voidAmount)}</td>
                         </tr>
                     </table>
                 </Paper>
@@ -79,6 +84,7 @@ class ComponentToPrint extends Component {
 }
 
 const VoidReport = () => {
+    const navigate = useNavigate()
     const contentRef = useRef(null);
     const [query] = useSearchParams()
 
@@ -92,6 +98,10 @@ const VoidReport = () => {
         contentRef,
         documentTitle: `Printing...`
     })
+
+    const backPage = () => {
+        navigate('/reportDaily/overview')
+    }
 
     const handlePrinter = useCallback(() => {
         functionToPrint()
@@ -152,6 +162,7 @@ const VoidReport = () => {
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
+                    <Button startIcon={<BackIcon />} variant='contained' color='error' onClick={backPage}>Back</Button>
                     <Button startIcon={<PrintIcon />} variant='contained' color='primary' onClick={handlePrinter}>Print</Button>
                 </Grid2>
             </Paper>

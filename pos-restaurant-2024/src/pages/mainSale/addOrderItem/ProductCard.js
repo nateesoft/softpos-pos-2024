@@ -9,6 +9,7 @@ import GppGoodIcon from '@mui/icons-material/GppGood';
 import apiClient from '../../../httpRequest';
 import { POSContext } from '../../../AppContext';
 import ShowNotification from "../../ui-utils/ShowNotification"
+import { CurrencyContext } from '../../../contexts/CurrencyContext';
 
 const modalStyle = {
   position: "absolute",
@@ -22,6 +23,8 @@ const modalStyle = {
 const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder }) => {
   console.log('ProductCard:', product)
   const { appData } = useContext(POSContext)
+  const { currency, convertCurrency } = useContext(CurrencyContext)
+
   const { macno, userLogin, empCode } = appData
   const [voidMsgList, setVoidMsgList] = useState([])
   const [voidMsg, setVoidMsg] = useState([])
@@ -33,6 +36,9 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
   const voidStatus = product.R_Void === 'V'
   const pauseStatus = product.R_Pause === 'P'
   // const backgroundItem = product.R_Void === 'V' ? "yellow" : pauseStatus ? "#eee" : "snow"
+
+  const RPrice = convertCurrency(product.R_Price, currency);
+  const RPriceQty = convertCurrency(product.R_Price*product.R_Quan, currency);
 
   const [showNoti, setShowNoti] = useState(false)
   const [notiMessage, setNotiMessage] = useState("")
@@ -142,10 +148,12 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
             </Grid2>}
           <Grid2 container>
             <Typography>
-              ราคา {product.R_Price} x {product.R_Quan}{" "}
+              ราคา {
+                new Intl.NumberFormat("th-TH", { style: "currency", currency}).format(convertCurrency(RPrice))
+              } x {product.R_Quan}{" "}
             </Typography>
             <Typography>&nbsp;=&nbsp;</Typography>
-            <Typography>{product.R_Price * product.R_Quan}</Typography>
+            <Typography>{new Intl.NumberFormat("th-TH", { style: "currency", currency}).format(convertCurrency(RPriceQty))}</Typography>
           </Grid2>
           {!voidStatus &&
             <Box display="flex" flexDirection="row">

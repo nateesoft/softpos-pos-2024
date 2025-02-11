@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import Tab from "@mui/material/Tab"
 import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
@@ -22,6 +22,7 @@ import ArrowBack from "@mui/icons-material/TableBar"
 import PrintIcon from "@mui/icons-material/Print"
 import ProductCard from "./ProductCard"
 import ProductDetailCard from "./ProductDetailCard"
+import { CurrencyContext } from "../../../contexts/CurrencyContext"
 
 const modalStyle = {
   position: "absolute",
@@ -45,9 +46,9 @@ const getTotalAmount = (orderList) => {
 }
 
 const TotalBill = ({ orderList }) => {
+  const { currency, convertCurrency } = useContext(CurrencyContext)
   const totalBill = getTotalAmount(orderList)
-    .toFixed(2)
-    .replace(/\d(?=(\d{3})+\.)/g, "$&,")
+  const convertedTotal = convertCurrency(totalBill, currency)
   return (
     <div
       style={{
@@ -64,7 +65,7 @@ const TotalBill = ({ orderList }) => {
       </Grid2>
       <Grid2 container justifyContent="flex-end">
         <Typography fontSize={28} fontWeight="bold">
-          {totalBill}
+        {new Intl.NumberFormat("th-TH", { style: "currency", currency}).format(convertCurrency(convertedTotal))}
         </Typography>
       </Grid2>
     </div>

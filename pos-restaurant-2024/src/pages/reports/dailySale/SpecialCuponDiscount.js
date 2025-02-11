@@ -2,10 +2,12 @@ import React, { Component, useCallback, useContext, useEffect, useRef, useState 
 import { Button, Grid2, Paper } from '@mui/material'
 import { useReactToPrint } from 'react-to-print'
 import PrintIcon from '@mui/icons-material/Print'
+import BackIcon from '@mui/icons-material/ReplyAll';
 import moment from 'moment'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
+import { useNavigate } from 'react-router-dom';
 
 class ComponentToPrint extends Component {
     constructor(props) {
@@ -58,6 +60,7 @@ class ComponentToPrint extends Component {
 }
 
 const SpecialCuponDiscount = () => {
+    const navigate = useNavigate()
     const contentRef = useRef(null);
     const { appData } = useContext(POSContext)
     const { macno, userLogin } = appData
@@ -68,6 +71,10 @@ const SpecialCuponDiscount = () => {
         contentRef,
         documentTitle: `Printing...`
     })
+
+    const backPage = () => {
+        navigate('/reportDaily/overview')
+    }
 
     const handlePrinter = useCallback(() => {
         functionToPrint()
@@ -115,6 +122,7 @@ const SpecialCuponDiscount = () => {
             />
             <Paper elevation={3} sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
                 <Grid2 container spacing={1} justifyContent="center" sx={{ marginBottom: "20px" }}>
+                    <Button startIcon={<BackIcon />} variant='contained' color='error' onClick={backPage}>Back</Button>
                     <Button startIcon={<PrintIcon />} variant='contained' color='primary' onClick={handlePrinter}>Print</Button>
                 </Grid2>
             </Paper>

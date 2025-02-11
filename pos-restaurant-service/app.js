@@ -79,6 +79,12 @@ app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// handle error mysql disconnect
+app.use((req, res, next) => {
+  res.setHeader('Connection', 'keep-alive')
+  next()
+})
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

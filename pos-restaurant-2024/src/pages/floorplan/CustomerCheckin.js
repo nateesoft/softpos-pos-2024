@@ -24,6 +24,7 @@ import { POSContext } from "../../AppContext"
 import CustomerNationDetail from "./CustomerNationDetail"
 
 import CartItems from "../floorplan/modal/CartItems"
+import { useTranslation } from "react-i18next"
 
 const min = 1
 const max = 10
@@ -41,6 +42,7 @@ const modalStyle = {
 
 const CustomerCheckin = (props) => {
   console.log('CustomerCheckin')
+  const { t } = useTranslation("global")
   const { appData, setAppData } = useContext(POSContext)
   const { macno } = appData
   const { tableNo } = appData.tableInfo
@@ -230,7 +232,7 @@ const CustomerCheckin = (props) => {
         marginBottom="10px"
       >
         <Typography variant="p" sx={{ fontSize: "18px", fontWeight: "bold" }}>
-          เวลาเข้าใช้งาน: {timeCheckIn}
+          {t("FloorPlanPage.systemLogin")}: {timeCheckIn}
         </Typography>
       </Grid2>
       <Grid2 textAlign="center">
@@ -250,7 +252,7 @@ const CustomerCheckin = (props) => {
         <Grid2 container spacing={2}>
           <TextField
             id="outlined-number"
-            label="ระบุจำนวนลูกค้า"
+            label={t("FloorPlanPage.customerCount")}
             value={custCount}
             required
             onChange={(e) => {
@@ -281,7 +283,7 @@ const CustomerCheckin = (props) => {
       <Grid2 container padding={1} spacing={1}>
         <TextField
           id="txt-reserve-no"
-          label="เลขที่จอง (Booking no.)"
+          label={t("FloorPlanPage.bookingNo")}
           value={reserveNo}
           onChange={handleInputReserveNo}
         />
@@ -290,7 +292,7 @@ const CustomerCheckin = (props) => {
           startIcon={<ContentPasteSearchIcon />}
           onClick={searchBookNumber}
         >
-          ค้นหา
+          {t("FloorPlanPage.findButton")}
         </Button>
       </Grid2>
       {foundBooking === "Y" && (
@@ -300,13 +302,13 @@ const CustomerCheckin = (props) => {
           onClick={() => setOpenBookingModal(true)}
         >
           <Typography color="primary">
-            <u>พบข้อมูลการจอง เลขที่ Order: {orderId}</u>
+            <u>{t("FloorPlanPage.foundBooking")} Order: {orderId}</u>
           </Typography>
         </Alert>
       )}
       {foundBooking === "N" && (
         <Alert icon={<SearchOffIcon fontSize="inherit" />} severity="error">
-          ไม่พบเลขที่จอง
+          {t("FloorPlanPage.notFoundBooking")}
         </Alert>
       )}
       <Grid2
@@ -317,7 +319,7 @@ const CustomerCheckin = (props) => {
         direction="column"
       >
         <Grid2 container>
-          <Typography variant="p">ประเภทอาหาร</Typography>
+          <Typography variant="p">{t("FloorPlanPage.foodType")}</Typography>
         </Grid2>
         <ToggleButtonGroup
           color="primary"
@@ -327,24 +329,24 @@ const CustomerCheckin = (props) => {
           aria-label="Platform"
           fullWidth
         >
-          <ToggleButton value="E">Dine In</ToggleButton>
-          <ToggleButton value="T">Take Away</ToggleButton>
-          <ToggleButton value="D">Delivery</ToggleButton>
+          <ToggleButton value="E">{t("FloorPlanPage.dineIn")}</ToggleButton>
+          <ToggleButton value="T">{t("FloorPlanPage.takeAway")}</ToggleButton>
+          <ToggleButton value="D">{t("FloorPlanPage.delivery")}</ToggleButton>
         </ToggleButtonGroup>
       </Grid2>
       {showError && (
         <Alert severity="error" sx={{ width: "100%" }}>
-          สถานะโต๊ะไม่พร้อมใช้งาน
+          {t("FloorPlanPage.tableStatusUnavailable")}
         </Alert>
       )}
       {showCustomerError && (
         <Alert severity="error" sx={{ width: "100%" }}>
-          ข้อมูลลูกค้าไม่ถูกต้อง
+          {t("FloorPlanPage.customerInfoIncorrect")}
         </Alert>
       )}
       {showCustomerCountError && (
         <Alert severity="error" sx={{ width: "100%" }}>
-          ข้อมูลจำนวนลูกค้าไม่ตรงกัน !
+          {t("FloorPlanPage.NumberCustomersNotMatch")}
         </Alert>
       )}
       <Grid2 textAlign="center" padding={1}>
@@ -363,7 +365,7 @@ const CustomerCheckin = (props) => {
           onClick={handleOpenTable}
           startIcon={<OpenTableButton />}
         >
-          เปิดโต๊ะ
+          {t("FloorPlanPage.openTableButton")}
         </Button>
       </Grid2>
 
