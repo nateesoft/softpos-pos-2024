@@ -56,6 +56,9 @@
   },
   "scripts": {
     "start": "env-cmd -f ./.env react-scripts start",
+    "start:webapp1": "env-cmd -f ./.env.webapp1 react-scripts start",
+    "start:webapp2": "env-cmd -f ./.env.webapp2 react-scripts start",
+    "start:webapp3": "env-cmd -f ./.env.webapp3 react-scripts start",
     "local": "env-cmd -f ./.env.local react-scripts start",
     "build": "react-scripts build",
     "build:webapp1": "env-cmd -f ./.env.webapp1 react-scripts build && mv build webapp1",
