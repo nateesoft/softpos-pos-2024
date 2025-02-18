@@ -91,7 +91,7 @@ public class DatabaseConfig extends javax.swing.JDialog {
             }
         });
 
-        txtDbHost.setText("localhost");
+        txtDbHost.setText("127.0.0.1");
 
         cbMysqlVersionList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "5", "8" }));
 
@@ -182,7 +182,7 @@ public class DatabaseConfig extends javax.swing.JDialog {
             }
         });
 
-        txtDbHost1.setText("localhost");
+        txtDbHost1.setText("127.0.0.1");
 
         cbMysqlVersionList1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "5", "8" }));
         cbMysqlVersionList1.setSelectedIndex(1);
@@ -272,7 +272,7 @@ public class DatabaseConfig extends javax.swing.JDialog {
             }
         });
 
-        txtDbHost2.setText("localhost");
+        txtDbHost2.setText("127.0.0.1");
 
         cbMysqlVersionList2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "5", "8" }));
 

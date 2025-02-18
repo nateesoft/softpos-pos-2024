@@ -46,7 +46,7 @@ public class SocketConfig extends javax.swing.JDialog {
         jLabel2.setText("PORT:");
 
         txtHost.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtHost.setText("http://localhost");
+        txtHost.setText("http://127.0.0.1");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("Service Host:");
