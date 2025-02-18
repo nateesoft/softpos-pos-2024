@@ -9,7 +9,11 @@ const LeftMenu = memo(() => {
   }
 
   return (
-    <aside style={{maxWidth: "200px", marginTop: "80px"}}>
+    <aside style={{
+      maxWidth: "200px", 
+      marginTop: "66px",
+      background: "radial-gradient(circle at top, snow, yellow)"
+    }}>
       <div className="description" style={{ color: "#aaa" }}>TABLE LAYOUT</div>
       <Grid container spacing={1}>
         <Grid size={12}>

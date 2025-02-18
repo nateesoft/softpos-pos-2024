@@ -20,11 +20,8 @@ import {
   AppBar,
   Box,
   Button,
-  Divider,
   Grid2,
   IconButton,
-  Menu,
-  MenuItem,
   Snackbar,
   Toolbar,
   Typography,
@@ -35,10 +32,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import LogoutIcon from "@mui/icons-material/LogoutOutlined"
 import { motion } from "framer-motion"
 import "@xyflow/react/dist/style.css"
-import MenuIcon from "@mui/icons-material/Menu"
-import RestaurantIcon from "@mui/icons-material/Restaurant"
-import VipPeopleIcon from "@mui/icons-material/Hail"
-import RefundIcon from "@mui/icons-material/ReceiptLong"
 import StoreIcon from "@mui/icons-material/Store"
 import { useTranslation } from "react-i18next"
 import moment from "moment"

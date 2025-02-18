@@ -241,7 +241,8 @@ const TableManagement = () => {
     <motion.div
       className="dndflow"
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      exit={{ opacity: 0 }} 
+      style={{background: "radial-gradient(circle at top, #003, #000)"}}
     >
       <AppbarMenu
         onSave={onSave}
@@ -267,6 +268,8 @@ const TableManagement = () => {
             onNodeClick={onNodeClick}
             nodeTypes={nodeTypes}
             defaultViewport={defaultViewport}
+            fitView
+            minZoom={0.1}
           >
             <Controls />
             <Background variant={BackgroundVariant.Dots} />
