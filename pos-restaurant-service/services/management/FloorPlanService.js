@@ -15,6 +15,13 @@ const getNewArray = (tables, nodes) => {
         }
     }
 
+    const getCustomer = (tableNo) => {
+        const getTcode = tables.filter(tb => tb.Tcode === tableNo)
+        if(getTcode.length>0){
+            return getTcode[0].TCustomer
+        }
+    }
+
     const newNodes = nodes.filter(item => item.data.label !== "")
     return newNodes.map(item => {
         const backgroundColor = getStatusBG(item.data.label)
@@ -22,7 +29,8 @@ const getNewArray = (tables, nodes) => {
             ...item,
             data: {
                 ...item.data,
-                bgColor: backgroundColor
+                bgColor: backgroundColor,
+                customer: getCustomer(item.data.label)
             }
         }
     })

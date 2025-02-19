@@ -42,7 +42,7 @@ class ComponentToPrint extends Component {
                             {reports && reports.map(item =>
                                 <tr>
                                     <td>{item.GroupName}</td>
-                                    <td>{item.R_PluCode}</td>
+                                    <td>{item.R_PluCode} {item.R_PName.substr(0, 15)}</td>
                                     <td align='right'>{item.R_Quan}</td>
                                     <td align='right'>{formatCurrency(item.R_Total)}</td>
                                 </tr>

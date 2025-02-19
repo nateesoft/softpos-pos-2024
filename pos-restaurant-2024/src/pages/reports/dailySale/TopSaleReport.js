@@ -51,7 +51,7 @@ class ComponentToPrint extends Component {
                                 <tr>
                                     <td>{item.GroupCode} {item.GroupName}</td>
                                     <td align='center'>{item.index}</td>
-                                    <td align='left'>{item.R_PluCode}</td>
+                                    <td align='left'>{item.R_PluCode} {item.R_PName.substr(0,15)}</td>
                                     <td align='right'>{item.R_Quan}</td>
                                     <td align='right'>{formatCurrency(item.R_Total)}</td>
                                 </tr>
