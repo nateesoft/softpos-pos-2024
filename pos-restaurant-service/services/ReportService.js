@@ -77,28 +77,35 @@ const getTerminalByMacno = async (macno) => {
     const sqlPaidIO = `select sum(PaidInAmt) PaidInAmt, sum(PaidOutAmt) PaidOutAmt 
                         from paidiofile 
                         where Terminal='${macno}' 
-                        and Date='${getMoment().format("YYYY-MM-DD")}'`;
+                        and Date='${getMoment().format("YYYY-MM-DD")}'`
     const resultsPaidIO = await pool.query(sqlPaidIO)
     let getPaidIO = {}
-    let getETDType = {}
     if (resultsPaidIO.length > 0) {
       getPaidIO = resultsPaidIO[0]
     }
 
     const sqlETD = `SELECT B_ETD, count(*) Bill_Count, sum(B_Cust) B_Cust, sum(B_NetTotal) B_NetTotal 
-                  FROM billno b WHERE b.B_OnDate='${getMoment().format("YYYY-MM-DD")}' 
+                  FROM billno b WHERE b.B_OnDate='${getMoment().format(
+                    "YYYY-MM-DD"
+                  )}' 
                   and b.B_MacNo ='${macno}' GROUP BY B_ETD`
     const resultETDType = await pool.query(sqlETD)
-    const E = resultETDType.filter(item => item.B_ETD === 'E')
-    const T = resultETDType.filter(item => item.B_ETD === 'T')
-    const D = resultETDType.filter(item => item.B_ETD === 'D')
+    const E = resultETDType.filter((item) => item.B_ETD === "E")
+    const T = resultETDType.filter((item) => item.B_ETD === "T")
+    const D = resultETDType.filter((item) => item.B_ETD === "D")
 
-    const initData = {Bill_Count: 0, B_Cust: 0, B_NetTotal: 0}
-    const sumTypeE = E.length>0 ? E[0]: initData
-    const sumTypeT = T.length>0 ? T[0]: initData
-    const sumTypeD = D.length>0 ? D[0]: initData
+    const initData = { Bill_Count: 0, B_Cust: 0, B_NetTotal: 0 }
+    const sumTypeE = E.length > 0 ? E[0] : initData
+    const sumTypeT = T.length > 0 ? T[0] : initData
+    const sumTypeD = D.length > 0 ? D[0] : initData
 
-    return { cashier: results[0], paidio: getPaidIO, sumTypeE, sumTypeT, sumTypeD }
+    return {
+      cashier: results[0],
+      paidio: getPaidIO,
+      sumTypeE,
+      sumTypeT,
+      sumTypeD
+    }
   }
   return {}
 }
@@ -122,20 +129,68 @@ const getTerminalByCashier = async (cashier) => {
             SUM(B_ItemDiscAmt) B_ItemDiscAmt,
             SUM(B_CuponDiscAmt) B_CuponDiscAmt,
             SUM(B_Earnest) B_Earnest,
+            SUM(B_Entertain) B_Entertain,
             SUM(B_NetTotal) B_NetTotal,
+            SUM(B_CrAmt1) B_CrAmt,
+            SUM(B_AccrAmt) B_AccrAmt,
             SUM(B_Cash) B_Cash,
             SUM(B_GiftVoucher) B_GiftVoucher,
             SUM(B_NetVat) B_NetVat,
             SUM(B_NetNonVat) B_NetNonVat,
             SUM(B_Vat) B_Vat,
+            SUM(B_Ton) B_Ton,
             SUM(B_Cust) B_Cust 
             FROM billno 
             WHERE B_OnDate='${getMoment().format("YYYY-MM-DD")}' 
             and B_Void <> 'V' 
-            and B_Cashier ='${cashier}' group by (B_Cashier)`
+            and B_Cashier ='${cashier}' 
+            group by (B_Cashier)`
   const results = await pool.query(sql)
   if (results.length > 0) {
-    return results[0]
+    const sqlPaidIO = `select sum(PaidInAmt) PaidInAmt, sum(PaidOutAmt) PaidOutAmt 
+                        from paidiofile 
+                        where Cashier='${cashier}' 
+                        and Date='${getMoment().format("YYYY-MM-DD")}'`
+    const resultsPaidIO = await pool.query(sqlPaidIO)
+    let getPaidIO = {}
+    if (resultsPaidIO.length > 0) {
+      getPaidIO = resultsPaidIO[0]
+    }
+
+    const sqlETD = `SELECT B_ETD, count(*) Bill_Count, sum(B_Cust) B_Cust, sum(B_NetTotal) B_NetTotal 
+                  FROM billno b WHERE b.B_OnDate='${getMoment().format(
+                    "YYYY-MM-DD"
+                  )}' 
+                  and b.B_Cashier ='${cashier}' GROUP BY B_ETD`
+    const resultETDType = await pool.query(sqlETD)
+    const E = resultETDType.filter((item) => item.B_ETD === "E")
+    const T = resultETDType.filter((item) => item.B_ETD === "T")
+    const D = resultETDType.filter((item) => item.B_ETD === "D")
+
+    const initData = { Bill_Count: 0, B_Cust: 0, B_NetTotal: 0 }
+    const sumTypeE = E.length > 0 ? E[0] : initData
+    const sumTypeT = T.length > 0 ? T[0] : initData
+    const sumTypeD = D.length > 0 ? D[0] : initData
+
+    const sql1 = `select b.B_Cashier, count(*) bill_count, sum(b.B_NetTotal) B_NetTotal 
+                from billno b where b.B_Void !='V' and b.B_Cashier ='${cashier}' 
+                and b.B_OnDate = '${getMoment().format("YYYY-MM-DD")}'`
+    const sql2 = `select b.B_Cashier, count(*) bill_count, b.B_Void, sum(b.B_NetTotal) B_NetTotal 
+                from billno b where b.B_Void ='V' and b.B_Cashier ='${cashier}' 
+                and b.B_OnDate = '${getMoment().format("YYYY-MM-DD")}'`
+
+    const result1 = await pool.query(sql1)
+    const result2 = await pool.query(sql2)
+
+    return {
+      cashier: results[0],
+      paidio: getPaidIO,
+      sumTypeE,
+      sumTypeT,
+      sumTypeD,
+      receiptBill: result1[0],
+      voidBill: result2[0]
+    }
   }
   return {}
 }
