@@ -60,7 +60,11 @@ const getBalanceByTableNo = async tableNo => {
     const sql = `select * from balance where R_Table='${tableNo}' order by R_Table, R_Index`;
     const results = await pool.query(sql)
     const mappingResult = results.map((item, index) => {
-        return { ...item, R_PName: ASCII2Unicode(item.R_PName) }
+        return { 
+            ...item, 
+            R_PName: ASCII2Unicode(item.R_PName),
+            R_Opt9: ASCII2Unicode(item.R_Opt9)
+        }
     })
     return mappingResult
 }

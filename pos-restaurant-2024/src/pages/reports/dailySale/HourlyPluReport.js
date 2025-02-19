@@ -54,7 +54,7 @@ class ComponentToPrint extends Component {
                                     {item.length > 0 && item.map(ii =>
                                         <tr>
                                             <td></td>
-                                            <td>{ii.R_PluCode}</td>
+                                            <td>{ii.R_PluCode} {ii.R_PName.substr(0, 15)}</td>
                                             <td align='right'>{ii.R_Quan}</td>
                                             <td align='right'>{formatCurrency(ii.R_Total)}</td>
                                         </tr>

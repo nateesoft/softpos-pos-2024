@@ -27,9 +27,6 @@ const encryptData = (text) => {
   };
 
 const Unicode2ASCII = unicode => {
-    if (process.env.CONVERT_LATIN_UTF === "N") {
-        return unicode
-    }
     if (!unicode) return '';
     let ascii = unicode.split('');
     let code;
@@ -43,9 +40,6 @@ const Unicode2ASCII = unicode => {
 }
 
 const ASCII2Unicode = ascii => {
-    if (process.env.CONVERT_LATIN_UTF === "N") {
-        return ascii
-    }
     if (!ascii) return '';
     let unicode = ascii.split('');
     let code;

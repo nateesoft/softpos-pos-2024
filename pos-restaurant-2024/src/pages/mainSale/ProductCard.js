@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState } from "react"
+import React, { memo, useContext } from "react"
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline"
 import SetMealIcon from "@mui/icons-material/MenuOpen"
 import Grid from "@mui/material/Grid2"
@@ -8,7 +8,9 @@ import { CurrencyContext } from "../../contexts/CurrencyContext"
 const ProductCard = memo(props => {
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const { id, product, openModal, setShowMenuSet, OrderList, setShowManualPrice, addOrder } = props
-    const productList = OrderList.filter(p => p.R_PluCode === product.menu_code)
+    const productList = OrderList.filter(p => {
+      return (p.R_PluCode === product.menu_code&&p.R_Void !== 'V')
+    })
     const saleQty = productList.reduce((totalQty, p) => totalQty + p.R_Quan, 0);
 
     const convertedTotal = convertCurrency(product.menu_price, currency)

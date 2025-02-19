@@ -8,7 +8,7 @@ const SquareNode = (props) => {
       {data.label &&
         <div style={{...style, backgroundColor: data.bgColor ?? "blue"}}>
           <span style={{ fontWeight: "bold", fontSize: "18px", color: "white" }}>{data.label}</span> &nbsp;
-          <span style={{color: "yellow"}}>({data.customerCount})</span>
+          <span style={{color: "yellow"}}>({data.customer})</span>
         </div>}
     </div>
   )
