@@ -4,7 +4,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { TextField } from '@mui/material';
-import Grid from '@mui/material/Grid2'
+import Grid2 from '@mui/material/Grid2'
 import { useTranslation } from 'react-i18next';
 
 const min = 0;
@@ -26,8 +26,8 @@ const CustomerNationDetail = props => {
                     {t("FloorPlanPage.customerTypeDetail")}
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Grid container spacing={2}>
-                        <Grid size={6}>
+                    <Grid2 container spacing={2}>
+                        <Grid2 size={6}>
                             <TextField
                                 id="outlined-number"
                                 label={t("FloorPlanPage.thaiPerson")}
@@ -45,8 +45,8 @@ const CustomerNationDetail = props => {
                                     setThaiCount(value);
                                 }}
                             />
-                        </Grid>
-                        <Grid size={6}>
+                        </Grid2>
+                        <Grid2 size={6}>
                             <TextField
                                 id="outlined-number"
                                 label={t("FloorPlanPage.europeanPerson")}
@@ -64,8 +64,8 @@ const CustomerNationDetail = props => {
                                     setEuropeCount(value);
                                 }}
                             />
-                        </Grid>
-                        <Grid size={6}>
+                        </Grid2>
+                        <Grid2 size={6}>
                             <TextField
                                 id="outlined-number"
                                 label={t("FloorPlanPage.americanPerson")}
@@ -83,8 +83,8 @@ const CustomerNationDetail = props => {
                                     setAmericaCount(value);
                                 }}
                             />
-                        </Grid>
-                        <Grid size={6}>
+                        </Grid2>
+                        <Grid2 size={6}>
                             <TextField
                                 id="outlined-number"
                                 label={t("FloorPlanPage.asianPerson")}
@@ -102,8 +102,8 @@ const CustomerNationDetail = props => {
                                     setAsiaCount(value);
                                 }}
                             />
-                        </Grid>
-                    </Grid>
+                        </Grid2>
+                    </Grid2>
                 </AccordionDetails>
             </Accordion>
         </div>

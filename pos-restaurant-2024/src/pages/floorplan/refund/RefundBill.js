@@ -10,16 +10,11 @@ import TableRow from "@mui/material/TableRow"
 import {
   Box,
   Button,
-  FormControl,
-  Grid2,
-  InputLabel,
-  MenuItem,
   Modal,
-  Select,
   TextField,
   Typography
 } from "@mui/material"
-import Grid from "@mui/material/Grid2"
+import Grid2 from "@mui/material/Grid2"
 import RefundIcon from "@mui/icons-material/ReceiptLong"
 import ReceiptIcon from "@mui/icons-material/ReceiptLong"
 import moment from "moment"
@@ -179,13 +174,13 @@ const RefundBill = ({ socket }) => {
   return (
     <Box sx={{ ...modalStyle, padding: "20px" }}>
       <SearchMenu setBillList={setBillList} />
-      <Grid container spacing={2} sx={{ marginTop: "15px" }}>
+      <Grid2 container spacing={2} sx={{ marginTop: "15px" }}>
         <RefundIcon color="error" />
         <Typography variant="h5" color="error">
           ยกเลิกบิล (Refund Bill)
         </Typography>
-      </Grid>
-      <Grid container spacing={2}>
+      </Grid2>
+      <Grid2 container spacing={2}>
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
@@ -276,7 +271,7 @@ const RefundBill = ({ socket }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-      </Grid>
+      </Grid2>
       <ModalConfirm
         open={showConfirm}
         setOpen={() => setShowConfirm(false)}

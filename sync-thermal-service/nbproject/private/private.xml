@@ -21,12 +21,6 @@
         <group name="ProjectCAT"/>
         <group name="CBMart"/>
         <group name="Jeffer_Group"/>
-        <group>
-            <file>file:/Users/nateesun/Documents/ics-project/softpos-pos-2024/sync-thermal-service/src/ics/client/printer/service/ClientSocket.java</file>
-            <file>file:/Users/nateesun/Documents/ics-project/softpos-pos-2024/sync-thermal-service/src/ics/client/printer/controller/POSHWSetup.java</file>
-            <file>file:/Users/nateesun/Documents/ics-project/softpos-pos-2024/sync-thermal-service/src/ics/client/printer/service/PaperPrint.java</file>
-            <file>file:/Users/nateesun/Documents/ics-project/softpos-pos-2024/sync-thermal-service/src/ics/client/printer/service/PrinterControlService.java</file>
-            <file>file:/Users/nateesun/Documents/ics-project/softpos-pos-2024/sync-thermal-service/src/ics/utils/MySQLConnect.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Box, Button, Divider, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
-import Grid from "@mui/material/Grid2"
+import Grid2 from "@mui/material/Grid2"
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel'
 
@@ -52,18 +52,18 @@ const TableSetup = (props) => {
 
   return (
     <Box sx={{ ...modalStyle, padding: "10px", width: "450px" }}>
-      <Grid container spacing={2} padding={2} justifyContent="center">
+      <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="h5">Table Floorplan Setup</Typography>
-      </Grid>
+      </Grid2>
       <Divider />
-      <Grid container spacing={2} padding={2} direction="column">
-        <Grid size={12}>
+      <Grid2 container spacing={2} padding={2} direction="column">
+        <Grid2 size={12}>
           <TextField label="ID" value={tableInfo.id} fullWidth disabled />
-        </Grid>
-        <Grid size={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <TextField label="Table No" value={tableNo} onChange={e => setTableNo(e.target.value)} fullWidth />
-        </Grid>
-        <Grid size={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <FormControl fullWidth>
             <InputLabel id="selectZone">Zone</InputLabel>
             <Select
@@ -80,11 +80,11 @@ const TableSetup = (props) => {
               <MenuItem value="WARTER_BAR">WARTER_BAR</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-        <Grid size={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <TextField label="Customer Size" type="number" value={customerCount} onChange={e => setCustomerCount(e.target.value)} fullWidth />
-        </Grid>
-        <Grid size={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <FormControl fullWidth>
             <InputLabel id="table-image-id">Table Image</InputLabel>
             <Select
@@ -99,8 +99,8 @@ const TableSetup = (props) => {
                 </MenuItem>)}
             </Select>
           </FormControl>
-        </Grid>
-        <Grid size={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <FormControl fullWidth>
             <InputLabel id="table-status-id">Table Status</InputLabel>
             <Select
@@ -113,13 +113,13 @@ const TableSetup = (props) => {
               <MenuItem value="N">Not Active</MenuItem>
             </Select>
           </FormControl>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <Box display="flex" justifyContent="center">
-        <Grid container spacing={2} padding={2}>
+        <Grid2 container spacing={2} padding={2}>
           <Button variant="contained" color="error" startIcon={<CancelIcon />} onClick={closeModal}>Cancel</Button>
           <Button variant="contained" color="info" startIcon={<SaveIcon />} onClick={handleSave}>Save</Button>
-        </Grid>
+        </Grid2>
       </Box>
     </Box>
   )

@@ -22,6 +22,7 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
 import SendToMobileIcon from "@mui/icons-material/SendToMobile"
 import CreditCardIcon from "@mui/icons-material/CreditCard"
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff"
+
 import { io } from "socket.io-client"
 
 import apiClient from "../../httpRequest"
@@ -30,6 +31,7 @@ import QrCodeGenerator from "./QRCodePayment"
 import CreditChargeModal from "./CreditChargeModal"
 import MultipleCreditPayment from "./MultipleCreditPayment"
 import { ModalConfirm } from "../ui-utils/AlertPopup"
+import DiscountFormModal from "./modal/DiscountFormModal"
 
 const NumFormat = (data) => {
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
@@ -68,7 +70,8 @@ function PaymentForm({
   handleNotification,
   tableFile,
   memberInfo,
-  setOpenSplitBill
+  setOpenSplitBill,
+  tableFileDb
 }) {
   const { appData } = useContext(POSContext)
   const { macno, branchInfo, companyInfo, empCode } = appData
@@ -111,6 +114,7 @@ function PaymentForm({
   const [transferAccount, setTransferAccount] = useState("")
 
   const [openCreditFile, setOpenCreditFile] = useState(false)
+  const [openDiscountModal, setOpenDiscountModal] = useState(false)
 
   // display
   const [netTotalDisplay, setNetTotalDisplay] = useState(0)
@@ -339,22 +343,22 @@ function PaymentForm({
         .post(`/api/billno`, payload)
         .then((response) => {
           if (response.status === 200) {
-            const billNo = response.data.data
-            socket.emit(
-              "printerMessage",
-              JSON.stringify({
-                id: 1,
-                printerType: "receipt",
-                printerName: "cashier",
-                message: `พิมพ์เลขที่เอกสาร: ${billNo}`,
-                terminal: macno,
-                tableNo: "",
-                billNo: billNo,
-                title: "ใบเสร็จรับเงิน",
-                billType: "",
-                database: "pos"
-              })
-            )
+            // const billNo = response.data.data
+            // socket.emit(
+            //   "printerMessage",
+            //   JSON.stringify({
+            //     id: 1,
+            //     printerType: "receipt",
+            //     printerName: "cashier",
+            //     message: `พิมพ์เลขที่เอกสาร: ${billNo}`,
+            //     terminal: macno,
+            //     tableNo: "",
+            //     billNo: billNo,
+            //     title: "ใบเสร็จรับเงิน",
+            //     billType: "",
+            //     database: "pos"
+            //   })
+            // )
             navigate("/floorplan")
           } else {
             handleNotification("พบข้อผิดพลาดในการรับชำระเงิน!")
@@ -450,19 +454,25 @@ function PaymentForm({
           justifyContent="space-between"
         >
           {netTotalDisplay > 0 && (
-            <Typography fontSize={28} sx={{ fontWeight: "bold", color: "#444" }}>
+            <Typography
+              fontSize={28}
+              sx={{ fontWeight: "bold", color: "#444" }}
+            >
               TOTAL
             </Typography>
           )}
           {netTotalDisplay <= 0 && (
-            <Typography fontSize={28} sx={{ fontWeight: "bold", color: "#444" }}>
+            <Typography
+              fontSize={28}
+              sx={{ fontWeight: "bold", color: "#444" }}
+            >
               TON
             </Typography>
           )}
           <Typography
             sx={{
               marginRight: "20px",
-              fontSize: {xs: "32px", md: "72px"},
+              fontSize: { xs: "32px", md: "72px" },
               textShadow: "3px 1px white",
               fontWeight: "bold"
             }}
@@ -475,7 +485,7 @@ function PaymentForm({
       </Grid2>
       <Grid2 size={12}>
         <Grid2 container spacing={1} display="flex" direction="row">
-          <Grid2 size={{xs: 12, md: 6}}>
+          <Grid2 size={{ xs: 12, md: 6 }}>
             <Paper elevation={3} sx={{ padding: "1px" }}>
               <Grid2 container spacing={1} padding={1}>
                 <Grid2 container>
@@ -608,10 +618,11 @@ function PaymentForm({
                 justifyContent="center"
               >
                 <Button
-                  variant="outlined"
+                  color="success"
+                  variant="contained"
                   fullWidth
                   startIcon={<DiscountIcon />}
-                  disabled
+                  onClick={() => setOpenDiscountModal(true)}
                 >
                   ให้ส่วนลดเพิ่ม
                 </Button>
@@ -641,7 +652,7 @@ function PaymentForm({
           </Grid2>
           <Grid2 size={6}>
             <Grid2 container spacing={2}>
-              <Grid2 size={12} sx={{display: {xs: 'none', md: 'block'}}}>
+              <Grid2 size={12} sx={{ display: { xs: "none", md: "block" } }}>
                 <table width="100%">
                   <tr>
                     <td>
@@ -817,7 +828,7 @@ function PaymentForm({
                   </tr>
                 </table>
               </Grid2>
-              <Grid2 size={12} sx={{display: {xs: 'none', md: 'block'}}}>
+              <Grid2 size={12} sx={{ display: { xs: "none", md: "block" } }}>
                 <Grid2 container spacing={2} justifyContent="space-evenly">
                   <Grid2 size={6}>
                     <img
@@ -860,7 +871,10 @@ function PaymentForm({
             </Grid2>
           </Grid2>
         </Grid2>
-        <AppBar position="fixed" sx={{top: "auto", bottom: 0, background: "none"}}>
+        <AppBar
+          position="fixed"
+          sx={{ top: "auto", bottom: 0, background: "none" }}
+        >
           <Grid2 size={12}>
             <Box textAlign="center">
               <Button
@@ -869,7 +883,9 @@ function PaymentForm({
                 color="primary"
                 startIcon={<ArrowBack />}
                 onClick={handleBackPage}
-              >Floor Plan</Button>
+              >
+                Floor Plan
+              </Button>
               <Button
                 variant="contained"
                 sx={{
@@ -911,32 +927,52 @@ function PaymentForm({
         aria-describedby="modal-modal-description"
       >
         <div>
-        <Box sx={{ ...modalStyle, width: "650px", padding: "5px", display: {xs: 'none', md: 'block'} }}>
-          <MultipleCreditPayment
-            tableNo={tableNo}
-            balanceAmount={
-              R_NetTotal + creditChargeAmount - depositAmount - entertainAmount
-            }
-            setCreditAmt={setCreditAmount}
-            setCreditChargeAmt={setCreditChargeAmount}
-            totalAmount={totalAmount}
-            onClose={() => setOpenCreditInfo(false)}
-            setCreditTempList={setCreditTempList}
-          />
-        </Box>
-        <Box sx={{ ...modalStyle, width: "400px", padding: "5px", display: {xs: 'block', md: 'none'} }}>
-          <MultipleCreditPayment
-            tableNo={tableNo}
-            balanceAmount={
-              R_NetTotal + creditChargeAmount - depositAmount - entertainAmount
-            }
-            setCreditAmt={setCreditAmount}
-            setCreditChargeAmt={setCreditChargeAmount}
-            totalAmount={totalAmount}
-            onClose={() => setOpenCreditInfo(false)}
-            setCreditTempList={setCreditTempList}
-          />
-        </Box>
+          <Box
+            sx={{
+              ...modalStyle,
+              width: "650px",
+              padding: "5px",
+              display: { xs: "none", md: "block" }
+            }}
+          >
+            <MultipleCreditPayment
+              tableNo={tableNo}
+              balanceAmount={
+                R_NetTotal +
+                creditChargeAmount -
+                depositAmount -
+                entertainAmount
+              }
+              setCreditAmt={setCreditAmount}
+              setCreditChargeAmt={setCreditChargeAmount}
+              totalAmount={totalAmount}
+              onClose={() => setOpenCreditInfo(false)}
+              setCreditTempList={setCreditTempList}
+            />
+          </Box>
+          <Box
+            sx={{
+              ...modalStyle,
+              width: "400px",
+              padding: "5px",
+              display: { xs: "block", md: "none" }
+            }}
+          >
+            <MultipleCreditPayment
+              tableNo={tableNo}
+              balanceAmount={
+                R_NetTotal +
+                creditChargeAmount -
+                depositAmount -
+                entertainAmount
+              }
+              setCreditAmt={setCreditAmount}
+              setCreditChargeAmt={setCreditChargeAmount}
+              totalAmount={totalAmount}
+              onClose={() => setOpenCreditInfo(false)}
+              setCreditTempList={setCreditTempList}
+            />
+          </Box>
         </div>
       </Modal>
       <Modal
@@ -1030,6 +1066,26 @@ function PaymentForm({
         header="Confirm Payment"
         content="ยืนยันการชำระเงิน ?"
       />
+      <Modal
+        open={openDiscountModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        onClose={() => setOpenDiscountModal(false)}
+      >
+        <Box
+          sx={{
+            ...modalStyle,
+            width: "650px",
+            padding: "5px",
+            display: { xs: "none", md: "block" }
+          }}
+        >
+          <DiscountFormModal 
+            tableFile={tableFileDb}
+            setOpenDiscountModal={setOpenDiscountModal}
+          />
+        </Box>
+      </Modal>
     </Grid2>
   )
 }

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
-import { Box, Button, FormControl, Grid2, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
-import Grid from "@mui/material/Grid2"
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
+import Grid2 from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 import { useNavigate } from "react-router-dom";
@@ -75,10 +75,10 @@ const TopSaleReportModal = ({ setOpen }) => {
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
-      <Grid container spacing={2} padding={2} justifyContent="center">
+      <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>รายงานอันดับสินค้าขายดี</Typography>
-      </Grid>
-      <Grid container spacing={1} margin={1}>
+      </Grid2>
+      <Grid2 container spacing={1} margin={1}>
         <Grid2 size={6}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">หมายเลขเครื่อง</InputLabel>
@@ -111,8 +111,8 @@ const TopSaleReportModal = ({ setOpen }) => {
             </Select>
           </FormControl>
         </Grid2>
-      </Grid>
-      <Grid container spacing={1} margin={1}>
+      </Grid2>
+      <Grid2 container spacing={1} margin={1}>
         <Grid2 size={6}>
           <FormControl fullWidth>
             <TextField label="รหัสพนักงานขาย" value={user1} onChange={e => setUser1(e.target.value)} fullWidth />
@@ -123,8 +123,8 @@ const TopSaleReportModal = ({ setOpen }) => {
             <TextField label="รหัสพนักงานขาย" value={user2} onChange={e => setUser2(e.target.value)} fullWidth />
           </FormControl>
         </Grid2>
-      </Grid>
-      <Grid container spacing={1} margin={1}>
+      </Grid2>
+      <Grid2 container spacing={1} margin={1}>
         <Grid2 size={6}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">กลุ่มสินค้า</InputLabel>
@@ -157,12 +157,12 @@ const TopSaleReportModal = ({ setOpen }) => {
             </Select>
           </FormControl>
         </Grid2>
-      </Grid>
+      </Grid2>
       <Box display="flex" justifyContent="center">
-        <Grid container spacing={2} padding={2}>
+        <Grid2 container spacing={2} padding={2}>
           <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
           <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
-        </Grid>
+        </Grid2>
       </Box>
     </Box>
   )

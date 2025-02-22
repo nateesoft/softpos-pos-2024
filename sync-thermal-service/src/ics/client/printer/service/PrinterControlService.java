@@ -51,7 +51,6 @@ public class PrinterControlService {
     // send to printer
     public void printMessage(String printerName, String content, int width, int height) {
         if (printerName == null) {
-            System.out.println("printMessage:" + content);
             createHtmlFile(content);
             return;
         }

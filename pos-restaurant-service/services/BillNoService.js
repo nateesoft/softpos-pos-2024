@@ -1,3 +1,8 @@
+const { io } = require('socket.io-client')
+// เชื่อมต่อกับ Socket.IO server
+const socket = io('http://127.0.0.1:8080', {
+  autoConnect: true
+})
 const pool = require("../config/database/MySqlConnect")
 const { PrefixZeroFormat, Unicode2ASCII } = require("../utils/StringUtil")
 const { emptyTableBalance, getBalanceByTableNo } = require("./BalanceService")
@@ -24,6 +29,7 @@ const {
 const { getMoment } = require("../utils/MomentUtil")
 const { summaryBalance } = require("./CoreService")
 const { createListCredit, deleteListTempCredit } = require("./TCreditService")
+const { printReceiptHtml } = require('./SyncPrinterService')
 
 const getAllBillNoToday = async () => {
   const sql = `select * from billno where B_OnDate='${getMoment().format(
@@ -409,6 +415,22 @@ const addNewBill = async (payload) => {
 
     // update tablefile
     await updateTableAvailableStatus(B_Table)
+
+    // send to printer
+    socket.emit(
+      "printerMessage",
+      JSON.stringify({
+        id: 1,
+        printerType: "message",
+        printerName: "kic1",
+        message: printReceiptHtml(),
+        terminal: "",
+        tableNo: "",
+        billNo: "",
+        title: "",
+        billType: ""
+      })
+    )
 
     return B_Refno
   }

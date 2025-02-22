@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import Grid from "@mui/material/Grid2"
+import Grid2 from "@mui/material/Grid2"
 import { Box, Typography } from "@mui/material"
 
 const LeftMenu = memo(() => {
@@ -15,8 +15,8 @@ const LeftMenu = memo(() => {
       background: "radial-gradient(circle at top, snow, yellow)"
     }}>
       <div className="description" style={{ color: "#aaa" }}>TABLE LAYOUT</div>
-      <Grid container spacing={1}>
-        <Grid size={12}>
+      <Grid2 container spacing={1}>
+        <Grid2 size={12}>
           <Box
             display="flex"
             justifyContent="center"
@@ -25,8 +25,8 @@ const LeftMenu = memo(() => {
             draggable>
             <Typography variant="h5">โต๊ะกลม</Typography>
           </Box>
-        </Grid>
-        <Grid size={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <Box
             display="flex"
             justifyContent="center"
@@ -35,8 +35,8 @@ const LeftMenu = memo(() => {
             draggable>
             <Typography variant="h5">โต๊ะเหลี่ยม</Typography>
           </Box>
-        </Grid>
-        <Grid size={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <Box
             display="flex"
             justifyContent="center"
@@ -45,8 +45,8 @@ const LeftMenu = memo(() => {
             draggable>
             <Typography variant="h5">แนวยาว</Typography>
           </Box>
-        </Grid>
-        <Grid size={12} display="flex" justifyContent="center" textAlign="center">
+        </Grid2>
+        <Grid2 size={12} display="flex" justifyContent="center" textAlign="center">
           <Box
             display="flex"
             justifyContent="center"
@@ -55,8 +55,8 @@ const LeftMenu = memo(() => {
             draggable>
             <Typography variant="h5">แนวตั้ง</Typography>
           </Box>
-        </Grid>
-        <Grid size={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <Box
             display="flex"
             justifyContent="center"
@@ -65,8 +65,8 @@ const LeftMenu = memo(() => {
             draggable>
             <Typography variant="h5">Custom</Typography>
           </Box>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </aside>
   )
 })

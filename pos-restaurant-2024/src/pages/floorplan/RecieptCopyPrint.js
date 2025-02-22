@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react"
 import { Box, Button, TextField, Typography } from "@mui/material"
-import Grid from "@mui/material/Grid2"
+import Grid2 from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 import { useNavigate } from "react-router-dom";
@@ -72,24 +72,24 @@ const RecieptCopyPrint = ({ setOpen, socket }) => {
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
-      <Grid container spacing={2} padding={2} justifyContent="center">
+      <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{fontWeight: "bold", fontSize: "16px"}}>
           กรุณาระบุเลขที่บิล และจำนวน Copy ที่ต้องการพิมพ์สำเนา
         </Typography>
-      </Grid>
-      <Grid container spacing={2} padding={2} direction="column">
-        <Grid size={12}>
+      </Grid2>
+      <Grid2 container spacing={2} padding={2} direction="column">
+        <Grid2 size={12}>
           <TextField label="เลขที่บิล (Receipt No)" value={receiptNo} onChange={e => setReceiptNo(e.target.value)} fullWidth />
-        </Grid>
-        <Grid size={12}>
+        </Grid2>
+        <Grid2 size={12}>
           <TextField label="จำนวน Copy" type="number" disabled value={copyCount} onChange={e => setCopyCount(e.target.value)} fullWidth />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <Box display="flex" justifyContent="center">
-        <Grid container spacing={2} padding={2}>
+        <Grid2 container spacing={2} padding={2}>
           <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
           <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
-        </Grid>
+        </Grid2>
       </Box>
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </Box>

@@ -42,6 +42,7 @@
     "qrcode": "^1.5.4",
     "receiptline": "^1.16.1",
     "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "utf8": "^3.0.0",
     "uuid": "^11.0.2"
   },

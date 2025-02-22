@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import Grid from "@mui/material/Grid2"
+import Grid2 from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { motion } from "framer-motion"
 
@@ -160,8 +160,8 @@ function MainSalePage() {
       exit={{ opacity: 0 }}
     >
       <AppbarMenu tableNo={tableNo} />
-      <Grid container sx={{background: "radial-gradient(circle, #001, #000)"}}>
-        <Grid size={matches ? 8 : 12}>
+      <Grid2 container sx={{background: "radial-gradient(circle, #001, #000)"}}>
+        <Grid2 size={matches ? 8 : 12}>
           <ProductMenu
             tableNo={tableNo}
             orderType={orderType}
@@ -180,8 +180,8 @@ function MainSalePage() {
             initLoadOrder={initLoadOrder}
             handleNotification={handleNotification}
           />
-        </Grid>
-        <Grid size={4} sx={{ backgroundColor: "white", border: "2px solid #ddd", display: {xs: 'none', md: 'flex'}, marginTop: "65px" }}>
+        </Grid2>
+        <Grid2 size={4} sx={{ backgroundColor: "white", border: "2px solid #ddd", display: {xs: 'none', md: 'flex'}, marginTop: "65px" }}>
           <OrderItem
             tableNo={tableNo}
             orderType={orderType}
@@ -194,8 +194,8 @@ function MainSalePage() {
             typePopup={false}
             handleNotification={handleNotification}
           />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <Footer />
       <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>

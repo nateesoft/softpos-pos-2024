@@ -1,5 +1,5 @@
 import React, { memo, useContext, useState } from "react"
-import Grid from "@mui/material/Grid2"
+import Grid2 from "@mui/material/Grid2"
 import { Box, Button, Typography, IconButton, TextField, useMediaQuery } from "@mui/material"
 import CheckIcon from "@mui/icons-material/CheckCircle"
 import CancelIcon from "@mui/icons-material/CancelRounded"
@@ -118,7 +118,7 @@ const ProductDetailCard = memo(({
           >
             <AddIcon fontSize="large" />
           </IconButton>
-        </Grid>
+        </Grid2>
         <OptionMenuSelect setSpecialText={setSpecialText} productCode={product.menu_code} optList={optList} setOptList={setOptList} />
         <div align="center">
           <Button

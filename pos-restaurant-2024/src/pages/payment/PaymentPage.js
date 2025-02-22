@@ -3,14 +3,13 @@ import Grid from '@mui/material/Grid2'
 import { useParams } from "react-router-dom";
 import { motion } from 'framer-motion'
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { Box, Modal } from "@mui/material";
 
 import apiClient from '../../httpRequest'
 import OrderItem from './OrderItem'
 import PaymentForm from './PaymentForm'
 import MemberInfo from "./MemberInfo";
 import ShowNotification from "../ui-utils/ShowNotification";
-import { Box, Modal } from "@mui/material";
-
 import MultiplePayment from "./split/MultiplePayment";
 
 const modalStyle = {
@@ -41,6 +40,7 @@ function PaymentPage() {
 
   const [openSplitBill, setOpenSplitBill] = useState(false)
 
+  const [tableFileDb, setTableFileDb] = useState({})
   const [orderList, setOrderList] = useState([])
   const [memberInfo, setMemberInfo] = useState({})
 
@@ -60,6 +60,20 @@ function PaymentPage() {
         if (response.status === 200) {
           const dataList = response.data.data
           setOrderList(dataList)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error.message)
+      })
+  }, [tableNo])
+
+  const initLoadTableFile = useCallback(() => {
+    apiClient
+      .get(`/api/tablefile/${tableNo}`)
+      .then((response) => {
+        if (response.status === 200) {
+          const tb = response.data.data
+          setTableFileDb(tb)
         }
       })
       .catch((error) => {
@@ -90,7 +104,8 @@ function PaymentPage() {
 
   useEffect(() => {
     initLoadOrder()
-  }, [initLoadOrder])
+    initLoadTableFile()
+  }, [initLoadOrder, initLoadTableFile])
 
   useEffect(() => {
     summaryTableFileBalance()
@@ -113,6 +128,7 @@ function PaymentPage() {
         <Grid size={matches ? 8 : 12}>
           <PaymentForm
             tableNo={tableNo}
+            tableFileDb={tableFileDb}
             orderList={orderList}
             handleNotification={handleNotification}
             tableFile={{
@@ -128,11 +144,6 @@ function PaymentPage() {
           />
         </Grid>
       </Grid>
-      {/* <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
-                <Box sx={{ ...modalStyle }}>
-                    <SplitBiPayment onClose={() => setOpenSplitBill(false)} />
-                </Box>
-            </Modal> */}
       <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
         <Box sx={{ ...modalStyle }}>
           <MultiplePayment

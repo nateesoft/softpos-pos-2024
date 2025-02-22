@@ -71,7 +71,7 @@ const OptionMenuSelect = ({ productCode, optList, setSpecialText, setOptList }) 
     }, [initLoad])
 
     return (
-        <FormControl sx={{ margin: "10px", width: "390px" }}>
+        <FormControl fullWidth>
             <InputLabel id="demo-multiple-chip-label">ข้อความพิเศษ</InputLabel>
             <Select
                 labelId="demo-multiple-chip-label"

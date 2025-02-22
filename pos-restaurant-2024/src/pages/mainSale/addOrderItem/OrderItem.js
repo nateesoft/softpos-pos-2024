@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom"
 import Moment from "react-moment"
 import NoFoodIcon from "@mui/icons-material/NoFood"
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
+import ArrowBack from "@mui/icons-material/TableBar"
+import PrintIcon from "@mui/icons-material/Print"
 import {
   Box,
   Button,
@@ -18,8 +20,6 @@ import {
 } from "@mui/material"
 
 import apiClient from "../../../httpRequest"
-import ArrowBack from "@mui/icons-material/TableBar"
-import PrintIcon from "@mui/icons-material/Print"
 import ProductCard from "./ProductCard"
 import ProductDetailCard from "./ProductDetailCard"
 import { CurrencyContext } from "../../../contexts/CurrencyContext"
