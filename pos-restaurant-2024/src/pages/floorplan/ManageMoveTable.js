@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react"
 import { Alert, Box, Button, TextField, Typography } from "@mui/material"
-import Grid from "@mui/material/Grid2"
+import Grid2 from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 
@@ -76,11 +76,11 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
-      <Grid container spacing={2} padding={2} justifyContent="center">
+      <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>กรุณาระบุข้อมูลโต๊ะหลัก และโต๊ะที่ต้องการย้าย</Typography>
-      </Grid>
-      <Grid container spacing={2} padding={2} direction="column">
-        <Grid container size={12}>
+      </Grid2>
+      <Grid2 container spacing={2} padding={2} direction="column">
+        <Grid2 container size={12}>
           <TextField label="ย้ายข้อมูลจากโต๊ะ" value={sourceTable} onChange={e => setSourceTable(e.target.value)} fullWidth />
           <TextField 
             label="ไปยังโต๊ะ" 
@@ -95,14 +95,14 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
             onChange={e => setAdmin(e.target.value)} 
             autoComplete="new-password"
             fullWidth />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       {showError && <Alert severity="error">{msgError}</Alert>}
       <Box display="flex" justifyContent="center">
-        <Grid container spacing={2} padding={2}>
+        <Grid2 container spacing={2} padding={2}>
           <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
           <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
-        </Grid>
+        </Grid2>
       </Box>
     </Box>
   )

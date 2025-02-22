@@ -4,7 +4,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { TextField } from '@mui/material';
-import Grid from '@mui/material/Grid2'
+import Grid2 from '@mui/material/Grid2'
 
 const min = 0;
 const max = 10;
@@ -22,8 +22,8 @@ const CustomerDetail = props => {
                     รายละเอียดลูกค้าเพิ่มเติม
                 </AccordionSummary>
                 <AccordionDetails>
-                    <Grid container spacing={2}>
-                        <Grid size={6}>
+                    <Grid2 container spacing={2}>
+                        <Grid2 size={6}>
                             <TextField
                                 id="outlined-number"
                                 label="ลูกค้าผู้ชาย (ท่าน)"
@@ -41,8 +41,8 @@ const CustomerDetail = props => {
                                     setMan(value);
                                 }}
                             />
-                        </Grid>
-                        <Grid size={6}>
+                        </Grid2>
+                        <Grid2 size={6}>
                             <TextField
                                 id="outlined-number"
                                 label="ลูกค้าผู้หญิง (ท่าน)"
@@ -60,8 +60,8 @@ const CustomerDetail = props => {
                                     setWoman(value);
                                 }}
                             />
-                        </Grid>
-                        <Grid size={6}>
+                        </Grid2>
+                        <Grid2 size={6}>
                             <TextField
                                 id="outlined-number"
                                 label="ลูกค้าเด็ก (ท่าน)"
@@ -79,8 +79,8 @@ const CustomerDetail = props => {
                                     setKid(value);
                                 }}
                             />
-                        </Grid>
-                        <Grid size={6}>
+                        </Grid2>
+                        <Grid2 size={6}>
                             <TextField
                                 id="outlined-number"
                                 label="ลูกค้าคนชรา (ท่าน)"
@@ -98,9 +98,8 @@ const CustomerDetail = props => {
                                     setOld(value);
                                 }}
                             />
-                        </Grid>
-                    </Grid>
-
+                        </Grid2>
+                    </Grid2>
 
                 </AccordionDetails>
             </Accordion>

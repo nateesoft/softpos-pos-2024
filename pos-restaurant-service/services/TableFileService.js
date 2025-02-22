@@ -1,23 +1,30 @@
-const pool = require('../config/database/MySqlConnect');
-const { getMoment } = require('../utils/MomentUtil');
-const { updateInActiveTable } = require('../services/management/TableCheckIn');
-const { getBalanceMaxIndex, updateBalanceMove, updateBalanceSplitBill, summaryBalance } = require('./CoreService');
-const { Unicode2ASCII } = require('../utils/StringUtil');
+const pool = require("../config/database/MySqlConnect")
+const { getMoment } = require("../utils/MomentUtil")
+const { updateInActiveTable } = require("../services/management/TableCheckIn")
+const {
+  getBalanceMaxIndex,
+  updateBalanceMove,
+  updateBalanceSplitBill,
+  summaryBalance
+} = require("./CoreService")
+const { Unicode2ASCII } = require("../utils/StringUtil")
 
 const getAllTable = async () => {
-    const sql = `select * FROM tablefile ORDER By Tcode`;
-    const results = await pool.query(sql)
-    return results
+  const sql = `select * FROM tablefile ORDER By Tcode`
+  const results = await pool.query(sql)
+  return results
 }
+
 const getCheckTableStatus = async () => {
-    const sql = `SELECT * FROM tablefile 
+  const sql = `SELECT * FROM tablefile 
     where TOnAct='Y' or TAmount > 0 or TItem > 0 or TCustomer > 0 
-    order by Tcode`;
-    const results = await pool.query(sql)
-    return results
+    order by Tcode`
+  const results = await pool.query(sql)
+  return results
 }
-const updateTableAvailableStatus = async tableNo => {
-    const sql = `update tablefile 
+
+const updateTableAvailableStatus = async (tableNo) => {
+  const sql = `update tablefile 
                 set TOnact='N', 
                 TItem=0,TAmount=0,TCustomer=0, Cashier=null,
                 Service=0,ServiceAmt=0,
@@ -32,107 +39,112 @@ const updateTableAvailableStatus = async tableNo => {
                 PrintChkBill='N', PrintCnt=0, PrintTime1='', PrintTime2='',
                 ChkBill='N', StkCode1='', StkCode2='',TDesk=0,TUser='',VoidMsg='',
                 TPause='Y',TTableIsOn='Y',TActive='',TAutoClose='' 
-                where Tcode='${tableNo}'`;
-    const results = await pool.query(sql)
+                where Tcode='${tableNo}'`
+  const results = await pool.query(sql)
 
-    // update table_checkin
-    await updateInActiveTable(tableNo)
-    return results
+  // update table_checkin
+  await updateInActiveTable(tableNo)
+  return results
 }
 
 const updateTableOpenStatus = async (tableNo, Cashier, TUser) => {
-    const sql = `update tablefile 
+  const sql = `update tablefile 
     set TOnact='Y', Cashier='${Cashier}', TUser=${TUser} 
-    where TCode='${tableNo}'`;
-    const results = await pool.query(sql)
-    return results
+    where TCode='${tableNo}'`
+  const results = await pool.query(sql)
+  return results
 }
 
-const updateMoveTableStatus = async (sourceTable, targetTable, Cashier, TUser) => {
-    await updateTableAvailableStatus(sourceTable)
-    await updateTableOpenStatus(targetTable, Cashier, TUser)
+const updateMoveTableStatus = async (
+  sourceTable,
+  targetTable,
+  Cashier,
+  TUser
+) => {
+  await updateTableAvailableStatus(sourceTable)
+  await updateTableOpenStatus(targetTable, Cashier, TUser)
 }
 
 const updateMember = async (memberInfo, tableNo) => {
-    const memBegin = getMoment(memberInfo.Member_AppliedDate).format('YYYY-MM-DD')
-    const memEnd = getMoment(memberInfo.Member_ExpiredDate).format('YYYY-MM-DD')
-    const sql = `UPDATE tablefile SET 
+  const memBegin = getMoment(memberInfo.Member_AppliedDate).format("YYYY-MM-DD")
+  const memEnd = getMoment(memberInfo.Member_ExpiredDate).format("YYYY-MM-DD")
+  const sql = `UPDATE tablefile SET 
     MemCode='${memberInfo.Member_Code}',
     MemName='${Unicode2ASCII(memberInfo.Member_NameThai)}',
     MemBegin='${memBegin}',
     MemEnd='${memEnd}' 
-    WHERE Tcode='${tableNo}'`;
-    const results = await pool.query(sql)
-    return results
+    WHERE Tcode='${tableNo}'`
+  const results = await pool.query(sql)
+  return results
 }
 
-const getBalanceAllByTable = async tableNo => {
-    const sql = `select * from balance  where R_Table='${tableNo}' order by r_index`;
-    const results = await pool.query(sql)
-    return results
+const getBalanceAllByTable = async (tableNo) => {
+  const sql = `select * from balance  where R_Table='${tableNo}' order by r_index`
+  const results = await pool.query(sql)
+  return results
 }
 
 const checkTableOpen = async (tableNo) => {
-    const sql = `select Cashier, TUser from tablefile where TOnact='Y' and TCode='${tableNo}'`;
-    const results = await pool.query(sql)
-    if (results.length > 0) {
-        return results[0]
-    }
-    return null
+  const sql = `select Cashier, TUser from tablefile where TOnact='Y' and TCode='${tableNo}'`
+  const results = await pool.query(sql)
+  if (results.length > 0) {
+    return results[0]
+  }
+  return null
 }
 
 const updateTableFile = async (tablefile) => {
-    const Tcode = tablefile.Tcode;
-    const SoneCode = tablefile.SoneCode;
-    const MacNo = tablefile.MacNo;
-    const Cashier = tablefile.Cashier;
-    const TCustomer = tablefile.TCustomer;
-    const TItem = tablefile.TItem;
-    const TAmount = tablefile.TAmount;
-    const TOnAct = tablefile.TOnAct;
-    const Service = tablefile.Service;
-    const ServiceAmt = tablefile.ServiceAmt;
-    const EmpDisc = tablefile.EmpDisc;
-    const EmpDiscAmt = tablefile.EmpDiscAmt;
-    const FastDisc = tablefile.FastDisc;
-    const FastDiscAmt = tablefile.FastDiscAmt;
-    const TrainDisc = tablefile.TrainDisc;
-    const TrainDiscAmt = tablefile.TrainDiscAmt;
-    const MemDisc = tablefile.MemDisc;
-    const MemDiscAmt = tablefile.MemDiscAmt;
-    const SubDisc = tablefile.SubDisc;
-    const SubDiscAmt = tablefile.SubDiscAmt;
-    const DiscBath = tablefile.DiscBath;
-    const ProDiscAmt = tablefile.ProDiscAmt;
-    const SpaDiscAmt = tablefile.SpaDiscAmt;
-    const CuponDiscAmt = tablefile.CuponDiscAmt;
-    const ItemDiscAmt = tablefile.ItemDiscAmt;
-    const MemCode = tablefile.MemCode;
-    const MemCurAmt = tablefile.MemCurAmt;
-    const MemName = Unicode2ASCII(tablefile.MemName);
-    const Food = tablefile.Food;
-    const Drink = tablefile.Drink;
-    const Product = tablefile.Product;
-    const NetTotal = tablefile.NetTotal;
-    const PrintTotal = tablefile.PrintTotal;
-    const PrintChkBill = tablefile.PrintChkBill;
-    const PrintCnt = tablefile.PrintCnt;
-    const PrintTime1 = tablefile.PrintTime1;
-    const PrintTime2 = tablefile.PrintTime2;
-    const ChkBill = tablefile.ChkBill;
-    const ChkBillTime = tablefile.ChkBillTime;
-    const StkCode1 = tablefile.StkCode1;
-    const StkCode2 = tablefile.StkCode2;
-    const TDesk = tablefile.TDesk;
-    const TUser = tablefile.TUser;
-    const VoidMsg = tablefile.VoidMsg;
-    const TPause = tablefile.TPause || '';
-    const CCUseCode = tablefile.CCUseCode;
-    const TTableIsOn = tablefile.TTableIsOn || '';
-    const TActive = tablefile.TActive || '';
-    const TAutoClose = tablefile.TAutoClose || ''
+  const Tcode = tablefile.Tcode
+  const SoneCode = tablefile.SoneCode
+  const MacNo = tablefile.MacNo
+  const Cashier = tablefile.Cashier
+  const TCustomer = tablefile.TCustomer
+  const TItem = tablefile.TItem
+  const TAmount = tablefile.TAmount
+  const TOnAct = tablefile.TOnAct
+  const Service = tablefile.Service
+  const ServiceAmt = tablefile.ServiceAmt
+  const EmpDisc = tablefile.EmpDisc
+  const EmpDiscAmt = tablefile.EmpDiscAmt
+  const FastDisc = tablefile.FastDisc
+  const FastDiscAmt = tablefile.FastDiscAmt
+  const TrainDisc = tablefile.TrainDisc
+  const TrainDiscAmt = tablefile.TrainDiscAmt
+  const MemDisc = tablefile.MemDisc
+  const MemDiscAmt = tablefile.MemDiscAmt
+  const SubDisc = tablefile.SubDisc
+  const SubDiscAmt = tablefile.SubDiscAmt
+  const DiscBath = tablefile.DiscBath
+  const ProDiscAmt = tablefile.ProDiscAmt
+  const SpaDiscAmt = tablefile.SpaDiscAmt
+  const CuponDiscAmt = tablefile.CuponDiscAmt
+  const ItemDiscAmt = tablefile.ItemDiscAmt
+  const MemCode = tablefile.MemCode
+  const MemCurAmt = tablefile.MemCurAmt
+  const MemName = Unicode2ASCII(tablefile.MemName)
+  const Food = tablefile.Food
+  const Drink = tablefile.Drink
+  const Product = tablefile.Product
+  const NetTotal = tablefile.NetTotal
+  const PrintTotal = tablefile.PrintTotal
+  const PrintChkBill = tablefile.PrintChkBill
+  const PrintCnt = tablefile.PrintCnt
+  const PrintTime1 = tablefile.PrintTime1
+  const PrintTime2 = tablefile.PrintTime2
+  const ChkBill = tablefile.ChkBill
+  const ChkBillTime = tablefile.ChkBillTime
+  const StkCode1 = tablefile.StkCode1
+  const StkCode2 = tablefile.StkCode2
+  const TDesk = tablefile.TDesk
+  const TUser = tablefile.TUser
+  const VoidMsg = tablefile.VoidMsg
+  const TPause = tablefile.TPause || ""
+  const CCUseCode = tablefile.CCUseCode
+  const TTableIsOn = tablefile.TTableIsOn || ""
+  const TActive = tablefile.TActive || ""
+  const TAutoClose = tablefile.TAutoClose || ""
 
-    const sql = `UPDATE tablefile 
+  const sql = `UPDATE tablefile 
         SET Tcode='${Tcode}',SoneCode='${SoneCode}',MacNo='${MacNo}',Cashier='${Cashier}',
             TCurTime=curtime(),TCustomer='${TCustomer}',TItem='${TItem}',TAmount='${TAmount}',
             TOnAct='${TOnAct}',
@@ -157,82 +169,129 @@ const updateTableFile = async (tablefile) => {
             TUser='${TUser}',VoidMsg='${VoidMsg}',TPause='${TPause}',
             CCUseCode='${CCUseCode}',
             TTableIsOn='${TTableIsOn}',TActive='${TActive}',TAutoClose='${TAutoClose}' 
-            WHERE Tcode='${Tcode}'`;
+            WHERE Tcode='${Tcode}'`
 
-    const results = await pool.query(sql)
-    return results
+  const results = await pool.query(sql)
+  return results
 }
 
-const getTableByCode = async tableNo => {
-    const sql = `select * from tablefile where Tcode='${tableNo}' limit 1`;
-    const results = await pool.query(sql)
-    if (results.length > 0) {
-        return results[0]
-    }
-    return null
+const getTableByCode = async (tableNo) => {
+  const sql = `select * from tablefile where Tcode='${tableNo}' limit 1`
+  const results = await pool.query(sql)
+  if (results.length > 0) {
+    return results[0]
+  }
+  return null
 }
 
 const tableMoveOrGroup = async (sourceTable, targetTable, admin, Cashier) => {
-    const sourceTableData = await getTableByCode(sourceTable)
-    const targetTableData = await getTableByCode(targetTable)
+  const sourceTableData = await getTableByCode(sourceTable)
+  const targetTableData = await getTableByCode(targetTable)
 
-    if (!sourceTableData || !targetTableData) {
-        return {
-            invalid: true,
-            message: 'ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!'
-        }
-    }
-    if (sourceTableData.Tcode === targetTableData.Tcode) {
-        return {
-            invalid: true,
-            message: 'ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!'
-        }
-    }
-
-    const balanceFrom = await getBalanceAllByTable(sourceTable)
-    if (balanceFrom.length === 0) {
-        return {
-            invalid: true,
-            message: 'ไม่พบข้อมูลที่ต้องการย้าย !!!'
-        }
-    }
-
-    // add source balance into target balance
-    for (let i = 0; i < balanceFrom.length; i++) {
-        const newBalance = { ...balanceFrom[i] }
-        newBalance.R_Index = await getBalanceMaxIndex(targetTable)
-        newBalance.R_MoveFrom = balanceFrom[i].R_Index
-        newBalance.R_MoveUser = admin
-        newBalance.R_Table = targetTable
-
-        await updateBalanceMove(newBalance, balanceFrom[i].R_Table)
-    }
-
-    // update source table to available status
-    await updateMoveTableStatus(sourceTable, targetTable, Cashier, admin)
+  if (!sourceTableData || !targetTableData) {
     return {
-        status: 2000,
-        message: "ย้ายโต๊ะสำเร็จ"
+      invalid: true,
+      message: "ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!"
     }
+  }
+  if (sourceTableData.Tcode === targetTableData.Tcode) {
+    return {
+      invalid: true,
+      message: "ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!"
+    }
+  }
+
+  const balanceFrom = await getBalanceAllByTable(sourceTable)
+  if (balanceFrom.length === 0) {
+    return {
+      invalid: true,
+      message: "ไม่พบข้อมูลที่ต้องการย้าย !!!"
+    }
+  }
+
+  // add source balance into target balance
+  for (let i = 0; i < balanceFrom.length; i++) {
+    const newBalance = { ...balanceFrom[i] }
+    newBalance.R_Index = await getBalanceMaxIndex(targetTable)
+    newBalance.R_MoveFrom = balanceFrom[i].R_Index
+    newBalance.R_MoveUser = admin
+    newBalance.R_Table = targetTable
+
+    await updateBalanceMove(newBalance, balanceFrom[i].R_Table)
+  }
+
+  // update source table to available status
+  await updateMoveTableStatus(sourceTable, targetTable, Cashier, admin)
+  return {
+    status: 2000,
+    message: "ย้ายโต๊ะสำเร็จ"
+  }
 }
 
 const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
-    const curdate = getMoment().format('YYYY-MM-DD')
-    const MemBegin = getMoment(sourceTableData.MemBegin).format('YYYY-MM-DD')
-    const MemEnd = getMoment(sourceTableData.MemEnd).format('YYYY-MM-DD')
-    const { SoneCode, MacNo, Cashier, TLoginTime, TCurTime, TCustomer, TItem, TAmount,
-        TOnAct, Service, ServiceAmt, EmpDisc, EmpDiscAmt, FastDisc, FastDiscAmt, TrainDisc, TrainDiscAmt,
-        MemDisc, MemDiscAmt, SubDisc, SubDiscAmt, DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt,
-        MemCode, MemCurAmt, MemName, Food, Drink, Product, NetTotal, PrintTotal, PrintChkBill,
-        PrintCnt, PrintTime1, PrintTime2, ChkBill, ChkBillTime, StkCode1, StkCode2, TDesk, TUser, VoidMsg, TPause,
-        CCUseCode, CCUseAmt, TTableIsOn, TActive, TAutoClose } = sourceTableData
-    const newTable = { ...sourceTableData }
-    newTable.Tcode = targetTableNo
-    newTable.TTableIsOn = TTableIsOn || ''
-    newTable.TActive = TActive || ''
-    newTable.TAutoClose = TAutoClose || ''
-    newTable.CCUseAmt = CCUseAmt || 0
-    const sql = `INSERT INTO tablefile 
+  const curdate = getMoment().format("YYYY-MM-DD")
+  const MemBegin = getMoment(sourceTableData.MemBegin).format("YYYY-MM-DD")
+  const MemEnd = getMoment(sourceTableData.MemEnd).format("YYYY-MM-DD")
+  const {
+    SoneCode,
+    MacNo,
+    Cashier,
+    TLoginTime,
+    TCurTime,
+    TCustomer,
+    TItem,
+    TAmount,
+    TOnAct,
+    Service,
+    ServiceAmt,
+    EmpDisc,
+    EmpDiscAmt,
+    FastDisc,
+    FastDiscAmt,
+    TrainDisc,
+    TrainDiscAmt,
+    MemDisc,
+    MemDiscAmt,
+    SubDisc,
+    SubDiscAmt,
+    DiscBath,
+    ProDiscAmt,
+    SpaDiscAmt,
+    CuponDiscAmt,
+    ItemDiscAmt,
+    MemCode,
+    MemCurAmt,
+    MemName,
+    Food,
+    Drink,
+    Product,
+    NetTotal,
+    PrintTotal,
+    PrintChkBill,
+    PrintCnt,
+    PrintTime1,
+    PrintTime2,
+    ChkBill,
+    ChkBillTime,
+    StkCode1,
+    StkCode2,
+    TDesk,
+    TUser,
+    VoidMsg,
+    TPause,
+    CCUseCode,
+    CCUseAmt,
+    TTableIsOn,
+    TActive,
+    TAutoClose
+  } = sourceTableData
+  const newTable = { ...sourceTableData }
+  newTable.Tcode = targetTableNo
+  newTable.TTableIsOn = TTableIsOn || ""
+  newTable.TActive = TActive || ""
+  newTable.TAutoClose = TAutoClose || ""
+  newTable.CCUseAmt = CCUseAmt || 0
+  const sql = `INSERT INTO tablefile 
             (Tcode,SoneCode,TLoginDate,MacNo,Cashier,TLoginTime,TCurTime,TCustomer,TItem,TAmount,TOnAct,Service,ServiceAmt,EmpDisc,EmpDiscAmt,
             FastDisc,FastDiscAmt,TrainDisc,TrainDiscAmt,MemDisc,MemDiscAmt,SubDisc,SubDiscAmt,DiscBath,ProDiscAmt,SpaDiscAmt,CuponDiscAmt,
             ItemDiscAmt,MemCode,MemCurAmt,MemName,MemBegin,MemEnd,Food,Drink,Product,NetTotal,PrintTotal,PrintChkBill,PrintCnt,
@@ -242,68 +301,97 @@ const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
             '${MemDisc}','${MemDiscAmt}','${SubDisc}','${SubDiscAmt}','${DiscBath}','${ProDiscAmt}','${SpaDiscAmt}','${CuponDiscAmt}','${ItemDiscAmt}',
             '${MemCode}','${MemCurAmt}','${MemName}','${MemBegin}','${MemEnd}','${Food}','${Drink}','${Product}','${NetTotal}','${PrintTotal}',
             '${PrintChkBill}','${PrintCnt}','${PrintTime1}','${PrintTime2}','${ChkBill}','${ChkBillTime}','${StkCode1}','${StkCode2}','${TDesk}',
-            '${TUser}','${VoidMsg}','${TPause}','${CCUseCode}','${newTable.CCUseAmt}','${newTable.TTableIsOn}','${newTable.TActive}','${newTable.TAutoClose}')`;
-    const checkExistTable = await getTableByCode(targetTableNo)
-    checkExistTable.MacNo = MacNo
-    if (checkExistTable) {
-        await updateTableFile(checkExistTable)
-    } else {
-        await pool.query(sql)
-    }
+            '${TUser}','${VoidMsg}','${TPause}','${CCUseCode}','${newTable.CCUseAmt}','${newTable.TTableIsOn}','${newTable.TActive}','${newTable.TAutoClose}')`
+  const checkExistTable = await getTableByCode(targetTableNo)
+  checkExistTable.MacNo = MacNo
+  if (checkExistTable) {
+    await updateTableFile(checkExistTable)
+  } else {
+    await pool.query(sql)
+  }
 
-    return { ...newTable }
+  return { ...newTable }
 }
 
-const splitTableToPayment = async (sourceTable, targetTable, orderListToMove) => {
-    const sourceTableData = await getTableByCode(sourceTable)
-    const targetTableData = await createTableForSplitPayment(sourceTableData, targetTable)
+const splitTableToPayment = async (
+  sourceTable,
+  targetTable,
+  orderListToMove
+) => {
+  const sourceTableData = await getTableByCode(sourceTable)
+  const targetTableData = await createTableForSplitPayment(
+    sourceTableData,
+    targetTable
+  )
 
-    if (!sourceTableData || !targetTableData) {
-        return {
-            invalid: true,
-            message: 'ไม่สามารถสร้างบิลสำหรับแยกชำระได้ กรุณาตรวจสอบ !!!'
-        }
+  if (!sourceTableData || !targetTableData) {
+    return {
+      invalid: true,
+      message: "ไม่สามารถสร้างบิลสำหรับแยกชำระได้ กรุณาตรวจสอบ !!!"
     }
+  }
 
-    if (sourceTableData.Tcode === targetTableData.Tcode) {
-        return {
-            invalid: true,
-            message: 'ข้อมูลบิลสำหรับแยกชำระ ไม่ถูกต้อง กรุณาตรวจสอบ !!!'
-        }
+  if (sourceTableData.Tcode === targetTableData.Tcode) {
+    return {
+      invalid: true,
+      message: "ข้อมูลบิลสำหรับแยกชำระ ไม่ถูกต้อง กรุณาตรวจสอบ !!!"
     }
+  }
 
-    const balanceFrom = await getBalanceAllByTable(sourceTable)
-    if (balanceFrom.length === 0) {
-        return {
-            invalid: true,
-            message: 'ไม่พบข้อมูลสินค้าที่ต้องการแยกชำระ !!!'
-        }
+  const balanceFrom = await getBalanceAllByTable(sourceTable)
+  if (balanceFrom.length === 0) {
+    return {
+      invalid: true,
+      message: "ไม่พบข้อมูลสินค้าที่ต้องการแยกชำระ !!!"
     }
+  }
 
-    // add source balance into target balance only orderListToMove
-    for (let i = 0; i < orderListToMove.length; i++) {
-        const newBalance = { ...orderListToMove[i] }
-        newBalance.R_Index = orderListToMove[i].R_Index
-        newBalance.R_Table = targetTable
+  // add source balance into target balance only orderListToMove
+  for (let i = 0; i < orderListToMove.length; i++) {
+    const newBalance = { ...orderListToMove[i] }
+    newBalance.R_Index = orderListToMove[i].R_Index
+    newBalance.R_Table = targetTable
 
-        await updateBalanceSplitBill(newBalance, orderListToMove[i].R_Table)
-    }
+    await updateBalanceSplitBill(newBalance, orderListToMove[i].R_Table)
+  }
 
-    // summary balance in table
-    await summaryBalance(sourceTable)
-    await summaryBalance(targetTable)
+  // summary balance in table
+  await summaryBalance(sourceTable)
+  await summaryBalance(targetTable)
+}
+
+const updateDiscountBill = async (tableNo) => {
+  // updateCalCelTableFile
+  let sql = `update tablefile 
+    set nettotal=(TAmount+ServiceAmt),
+      EMPDisc='', EMPDiscAmt='0',
+      FastDisc='', FASTDiscAmt='0',
+      TrainDisc='', TrainDiscAmt='0',
+      MemDisc='', MemDiscAmt='0',
+      SubDisc='', SubDiscAmt='0',
+      CuponDiscAmt='0' 
+    where tcode='${tableNo}'`
+  await pool.query(sql)
+
+  // clearCuponSpecail
+  sql = `delete from tempcupon where r_table='${tableNo}'`
+  await pool.query(sql)
+
+  // clearMemberDiscount
+  // updateCancelDiscountBalanceDiscClick
+  // updateCalCelTableFile
 }
 
 module.exports = {
-    updateTableAvailableStatus,
-    updateTableOpenStatus,
-    checkTableOpen,
-    updateMember,
-    updateTableFile,
-    getAllTable,
-    getCheckTableStatus,
-    tableMoveOrGroup,
-    getBalanceAllByTable,
-    getTableByCode,
-    splitTableToPayment
+  updateTableAvailableStatus,
+  updateTableOpenStatus,
+  checkTableOpen,
+  updateMember,
+  updateTableFile,
+  getAllTable,
+  getCheckTableStatus,
+  tableMoveOrGroup,
+  getBalanceAllByTable,
+  getTableByCode,
+  splitTableToPayment
 }

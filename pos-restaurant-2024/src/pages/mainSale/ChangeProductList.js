@@ -8,14 +8,6 @@ import { Grid2, Typography } from '@mui/material';
 const ChangeProductList = ({ optionalList, setOptionalList, subMenuSelected, setSubMenuSelected, currentMenu, closeDialog }) => {
   const newOptionList = optionalList.filter(item => (item.checked === false && item.menu_code !== currentMenu))
 
-  // const handleListItemClick = (event, menu) => {
-  //   menu.checked = true
-  //   const newFilter = [...optionalList, {...menu}]
-  //   console.log('newFilter:', newFilter)
-  //   setOptionalList(newFilter)
-  //   closeDialog()
-  // };
-
   const handleListItemClick = (menu) => {
     const updatedCheckedState = subMenuSelected.map((item, index) => {
       const found = item.menu_code === menu.menu_code

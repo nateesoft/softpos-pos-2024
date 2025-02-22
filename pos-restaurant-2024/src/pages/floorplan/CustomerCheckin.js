@@ -18,13 +18,12 @@ import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch"
 import CheckIcon from "@mui/icons-material/Check"
 import SearchOffIcon from "@mui/icons-material/SearchOff"
 import moment from "moment"
+import { useTranslation } from "react-i18next"
 
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import CustomerNationDetail from "./CustomerNationDetail"
-
 import CartItems from "../floorplan/modal/CartItems"
-import { useTranslation } from "react-i18next"
 
 const min = 1
 const max = 10

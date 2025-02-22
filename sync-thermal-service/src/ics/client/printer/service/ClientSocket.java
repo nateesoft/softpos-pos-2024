@@ -2,9 +2,7 @@ package ics.client.printer.service;
 
 import ics.client.printer.mapping.ClientPrinter;
 import com.google.gson.Gson;
-import ics.client.database.model.DatabaseConfigBean;
 import ics.client.printer.model.PrinterConfigBean;
-import ics.utils.AESSecret;
 import ics.utils.QRCodeGenerator;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -84,13 +82,10 @@ public class ClientSocket {
 
             socket.on("createQRCode", (Object... args1) -> {
                 ClientPrinter printerMessage = mappingObject(args1[0].toString());
-                System.out.println("Create qr code: " + printerMessage);
-
                 QRCodeGenerator.CreateQRCode(args1[0].toString());
                 
                 // load database config
-                DatabaseConfigBean dbConfigBean = loadDatabaseConfig("databases");
-                PaperPrint paperPrint = new PaperPrint(dbConfigBean);
+                PaperPrint paperPrint = new PaperPrint();
                 String htmlContent = paperPrint.getQrCodePrint();
 
                 //  load printer config
@@ -105,10 +100,6 @@ public class ClientSocket {
 
             socket.on("printerMessage", (Object... args1) -> {
                 ClientPrinter printerMessage = mappingObject(args1[0].toString());
-                System.out.println(printerMessage);
-                
-                // load database config
-                DatabaseConfigBean dbConfigBean = loadDatabaseConfig("databases");
 
                 //  load printer config
                 PrinterConfigBean bean = loadPrinterConfig(printerMessage.getPrinterName());
@@ -116,23 +107,7 @@ public class ClientSocket {
                 int prtWidth = bean.getWidth();
                 int prtHeight = bean.getHeight();
 
-                PaperPrint paperPrint = new PaperPrint(dbConfigBean);
-                switch (printerMessage.getPrinterType()) {
-                    case "receipt": {
-                        String htmlContent = paperPrint.getReceiptPrint(printerMessage.getTitle(), printerMessage.getTerminal(), printerMessage.getBillNo(), printerMessage.getBillType());
-                        printerService.printMessage(prtName, htmlContent, prtWidth, prtHeight);
-                        break;
-                    }
-                    case "review-bill": {
-                        String htmlContent = paperPrint.getReviewBill(printerMessage.getTitle(), printerMessage.getTerminal(), printerMessage.getTableNo());
-                        printerService.printMessage(prtName, htmlContent, prtWidth, prtHeight);
-                        break;
-                    }
-                    default:
-                        System.out.println(printerMessage.getMessage());
-                        printerService.printMessage(prtName, printerMessage.getMessage(), prtWidth, prtHeight);
-                        break;
-                }
+                printerService.printMessage(prtName, printerMessage.getMessage(), prtWidth, prtHeight);
             });
 
             // Event เมื่อการเชื่อมต่อถูกตัด
@@ -146,47 +121,5 @@ public class ClientSocket {
         } catch (URISyntaxException e) {
             System.err.println(e.getMessage());
         }
-    }
-
-    private static DatabaseConfigBean loadDatabaseConfig(String databaseName) {
-        DatabaseConfigBean dbConfig = new DatabaseConfigBean();
-        if (null == databaseName || databaseName.equals("")) {
-            return dbConfig;
-        }
-        Properties properties = new Properties();
-        try (InputStream input = new FileInputStream(databaseName + ".properties")) {
-            properties.load(input);
-            
-            // load legacy database
-            dbConfig.setLegacyDbHost(properties.getProperty("legacy.db.host"));
-            dbConfig.setLegacyDbName(properties.getProperty("legacy.db.name").replaceAll("\"", ""));
-            dbConfig.setLegacyDbPort(properties.getProperty("legacy.db.port"));
-            dbConfig.setLegacyDbUser(properties.getProperty("legacy.db.user"));
-            String decryptPass = AESSecret.decrypt(properties.getProperty("legacy.db.pass"), AESSecret.CHECK_PASS);
-            dbConfig.setLegacyDbPass(decryptPass);
-            dbConfig.setLegacyDbVersion(properties.getProperty("legacy.db.version"));
-            
-            // load new database
-            dbConfig.setNewDbHost(properties.getProperty("new.db.host"));
-            dbConfig.setNewDbName(properties.getProperty("new.db.name").replaceAll("\"", ""));
-            dbConfig.setNewDbPort(properties.getProperty("new.db.port"));
-            dbConfig.setNewDbUser(properties.getProperty("new.db.user"));
-            String decryptPass1 = AESSecret.decrypt(properties.getProperty("new.db.pass"), AESSecret.CHECK_PASS);
-            dbConfig.setNewDbPass(decryptPass1);
-            dbConfig.setNewDbVersion(properties.getProperty("new.db.version"));
-            
-            // load crm database
-            dbConfig.setCrmDbHost(properties.getProperty("crm.db.host"));
-            dbConfig.setCrmDbName(properties.getProperty("crm.db.name").replaceAll("\"", ""));
-            dbConfig.setCrmDbPort(properties.getProperty("crm.db.port"));
-            dbConfig.setCrmDbUser(properties.getProperty("crm.db.user"));
-            String decryptPass2 = AESSecret.decrypt(properties.getProperty("crm.db.pass"), AESSecret.CHECK_PASS);
-            dbConfig.setCrmDbPass(decryptPass2);
-            dbConfig.setCrmDbVersion(properties.getProperty("crm.db.version"));
-        } catch (Exception ex) {
-            System.err.println(ex.getMessage());
-        }
-
-        return dbConfig;
     }
 }

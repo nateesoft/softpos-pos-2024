@@ -1,7 +1,6 @@
 package ics.client.printer.main;
 
 import ics.client.printer.service.ClientSocket;
-import ics.client.printer.service.DatabaseConfig;
 import ics.client.printer.service.PrinterConfig;
 import ics.client.printer.service.SocketConfig;
 import java.awt.AWTException;
@@ -49,12 +48,6 @@ public class ICSPrinterServiceMain {
             mc.setVisible(true);
         });
         popupMenu.add(testPrinterItem);
-        MenuItem databaseConfigItem = new MenuItem("Database Configs...");
-        databaseConfigItem.addActionListener((ActionEvent e) -> {
-            DatabaseConfig dbConfig = new DatabaseConfig(null, true);
-            dbConfig.setVisible(true);
-        });
-        popupMenu.add(databaseConfigItem);
         popupMenu.addSeparator();
 
         // เพิ่มเมนู "ออกจากโปรแกรม"

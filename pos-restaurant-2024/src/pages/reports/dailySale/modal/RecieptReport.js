@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Box, Button, FormControl, Grid2, InputLabel, MenuItem, Select, Typography } from "@mui/material"
-import Grid from "@mui/material/Grid2"
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material"
+import Grid2 from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 import { useNavigate } from "react-router-dom";
@@ -52,10 +52,10 @@ const RecieptReportModal = ({ setOpen }) => {
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
-      <Grid container spacing={2} padding={2} justifyContent="center">
+      <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>รายงานการพิมพ์ใบเสร็จรับเงิน</Typography>
-      </Grid>
-      <Grid container spacing={1} margin={1}>
+      </Grid2>
+      <Grid2 container spacing={1} margin={1}>
         <Grid2 size={6}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">หมายเลขเครื่อง</InputLabel>
@@ -88,12 +88,12 @@ const RecieptReportModal = ({ setOpen }) => {
             </Select>
           </FormControl>
         </Grid2>
-      </Grid>
+      </Grid2>
       <Box display="flex" justifyContent="center">
-        <Grid container spacing={2} padding={2}>
+        <Grid2 container spacing={2} padding={2}>
           <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
           <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
-        </Grid>
+        </Grid2>
       </Box>
     </Box>
   )
