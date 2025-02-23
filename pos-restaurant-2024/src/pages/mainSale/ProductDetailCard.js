@@ -84,7 +84,7 @@ const ProductDetailCard = memo(({
             </tr>
           </table>
         </div>
-        <Grid
+        <Grid2
           container
           spacing={2}
           display="flex"

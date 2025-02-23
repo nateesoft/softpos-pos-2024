@@ -1,447 +1,552 @@
+const { getPOSConfigSetupByTerminal } = require("./POSConfigSetupService")
+const { getDataByMacno } = require("./PosHwSetup")
 
-const printReceiptHtml = () => {
-    const htmlContent = `<div style="padding: 2px;">
-      <div align="center">
-          <div>
-              <font face="Angsana New" size="4">*** ใบเสร็จรับเงิน ***</font>
-          </div>
+const companyLogo = `com_logo.jpg`
+const fontFamily = `Angsana New`
+const Divider = `
+<div align="center">
+  <font face="${fontFamily}" size="1">----------------------------------------------------------------------------------------------------</font>
+</div>`
+const footer = `
+    ${Divider}
+    <div align="center">
+      <font face="${fontFamily}" size="4"> (VAT INCLUDED)</font>
+    </div>
+    <div align="center">
+      <font face="${fontFamily}" size="4">E-mail GM@.com</font>
+    </div>
+    <div align="center">
+      <font face="${fontFamily}" size="4">Facebook Restaurant</font>
+    </div>
+    <div align="center">
+      <font face="${fontFamily}" size="4">มีอะไรก็ติดต่อมาได้ตลอด / Feedback</font>
+    </div>`
+
+const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
+  const posConfigSetup = await getPOSConfigSetupByTerminal(macno)
+  const poshwSetup = await getDataByMacno(macno)
+  let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+  headers = headers.filter(h => h !== "")
+
+  let header = `
+    <div align="center">
+      <div>
+        <font face="${fontFamily}" size="4">*** ใบเสร็จรับเงิน ***</font>
       </div>
-      <div align="center">
-          <div>
-              <font face="Angsana New" size="4">HENG GETSU</font>
-          </div>
-          <div>
-              <font face="Angsana New" size="4">Tax Invoice (ABB.)_Tax ID xxxxxxxxxx</font>
-          </div>
+    </div>
+    <div align="center">`;
+    headers.forEach(item => {
+      header += `
+        <div>
+          <font face="${fontFamily}" size="4">${item}</font>
+        </div>
+      </div>`
+    })
+    header += `
+    <div align="center"><img src="file:${companyLogo}" width="100" height="100"></div>
+    <div align="center">
+      <div>
+        <font face="${fontFamily}" size="4">Receipt No: ${billInfo.B_Refno}</font>
       </div>
-      <div align="center"><img src="file:com_logo.jpg" width="100" height="100"></div>
-      <div align="center">
-          <div>
-              <font face="Angsana New" size="4">Receipt No: 0000602</font>
-          </div>
-          <div>
-              <font face="Angsana New" size="4">Date: 19/02/2025 19:04:29</font>
-          </div>
-          <div>
-              <font face="Angsana New" size="4"> Customer: 1 Cashier: 1001 Mac:001 </font>
-          </div>
+      <div>
+        <font face="${fontFamily}" size="4">Date: ${billInfo.B_OnDate} ${billInfo.B_CashTime}</font>
       </div>
-      <div align="center">
-          <table width="100%" cellPadding="0" cellSpacing="0">
-              <tr>
-                  <th align="center">
-                      <font face="Angsana New" size="4">ETD</font>
-                  </th>
-                  <th align="left">
-                      <font face="Angsana New" size="4">Name</font>
-                  </th>
-                  <th align="right">
-                      <font face="Angsana New" size="4">Qty</font>
-                  </th>
-                  <th align="right">
-                      <font face="Angsana New" size="4">Amount</font>
-                  </th>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">TIPS EMP</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Akari Course 5,800++</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">5,800.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Junsai</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Mehikari</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Kuro Baigai</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Same Karei Uzukuri</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Ankimo Toast</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Shima-Aji</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Kuromatsu</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Sawara Sashimi</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Kinmedai</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Botan Ebi</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Ezo Awabi</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Tomato</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Akami Suke</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Otoro Aburi</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Uni Temaki</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Wagyu Don</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Soup</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">Desert</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td align="center">
-                      <font face="Angsana New" size="4">E</font>
-                  </td>
-                  <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-                      <font face="Angsana New" size="4">OPEN FOOD</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">1.0</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">0.00</font>
-                  </td>
-              </tr>
-          </table>
+      <div>
+        <font face="${fontFamily}" size="4"> Customer: ${billInfo.B_Cust} Cashier: ${billInfo.B_Cashier} Mac:${billInfo.B_MacNo} </font>
       </div>
+    </div>`
+  let billTable = `
+    <div align="center">
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <th align="center">
+            <font face="${fontFamily}" size="4">ETD</font>
+          </th>
+          <th align="left">
+            <font face="${fontFamily}" size="4">Name</font>
+          </th>
+          <th align="right">
+            <font face="${fontFamily}" size="4">Qty</font>
+          </th>
+          <th align="right">
+            <font face="${fontFamily}" size="4">Amount</font>
+          </th>
+        </tr>`
+    tSaleInfo.forEach(tSale => {
+      billTable += `<tr>
+            <td align="center">
+              <font face="${fontFamily}" size="4">${tSale.R_ETD}</font>
+            </td>
+            <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+              <font face="${fontFamily}" size="4">${tSale.R_PName}</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${tSale.R_Quan}</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${tSale.R_Total}</font>
+            </td>
+          </tr>`
+    })
+    
+    billTable += `</table>
+    </div>`
+  
+  let htmlContent = `
+  <div style="padding: 2px;">
+      ${header}
+      ${billTable}
       <div align="center">
-          <table width="100%" cellPadding="0" cellSpacing="0">
-              <tr>
-                  <td>
-                      <font face="Angsana New" size="4">Sub-TOTAL....(Item 21)</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">5,800.00</font>
-                  </td>
-              </tr>
-          </table>
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">Sub-TOTAL....(Item 21)</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${billInfo.B_Total}</font>
+            </td>
+          </tr>
+        </table>
       </div>
-      <div align="center">
-          <font face="Angsana New" size="1">
-              ----------------------------------------------------------------------------------------------------</font>
-      </div>
+      ${Divider}
       <div align="center" style="margin-left: 10px;">
-          <table width="100%" cellPadding="0" cellSpacing="0">
-              <tr>
-                  <td>
-                      <font face="Angsana New" size="4">สินค้าอื่นๆ (Other)</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">5,800.00</font>
-                  </td>
-              </tr>
-          </table>
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">อาหาร (Food)</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${billInfo.B_NetFood}</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">เครื่องดื่ม (Drink)</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${billInfo.B_NetDrink}</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">สินค้าอื่นๆ (Other)</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${billInfo.B_NetProduct}</font>
+            </td>
+          </tr>
+        </table>
+      </div>
+      ${Divider}
+      <div align="center">
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">ค่าบริการ ${billInfo.B_Service}%</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${billInfo.B_ServiceAmt}</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">มูลค่าสินค้า/บริการ.....</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${(billInfo.B_NetVat - billInfo.B_Vat)}</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">Vat ${posConfigSetup.P_Vat}%</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${billInfo.B_Vat}</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">Net Total</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${billInfo.B_NetTotal}</font>
+            </td>
+          </tr>
+        </table>
       </div>
       <div align="center">
-          <font face="Angsana New" size="1">
-              ----------------------------------------------------------------------------------------------------</font>
-      </div>
-      <div align="center">
           <table width="100%" cellPadding="0" cellSpacing="0">
-              <tr>
-                  <td>
-                      <font face="Angsana New" size="4">ค่าบริการ 10.00%</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">580.00</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <font face="Angsana New" size="4">มูลค่าสินค้า/บริการ.....</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">5,962.62</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <font face="Angsana New" size="4">Vat 7.00%</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">417.38</font>
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      <font face="Angsana New" size="4">Net Total</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">6,380.00</font>
-                  </td>
-              </tr>
-          </table>
-      </div>
-      <div align="center">
-          <table width="100%" cellPadding="0" cellSpacing="0">
-              <tr>
-                  <td>
-                      <font face="Angsana New" size="4">เงินสด</font>
-                  </td>
-                  <td align="right">
-                      <font face="Angsana New" size="4">6,380.00</font>
-                  </td>
-              </tr>
+            <tr>
+              <td>
+                <font face="${fontFamily}" size="4">เงินสด</font>
+              </td>
+              <td align="right">
+                <font face="${fontFamily}" size="4">${billInfo.B_Cash}</font>
+              </td>
+            </tr>
           </table>
         </div>
       </div>
-      <div align="center">
-          <font face="Angsana New" size="1">
-              ----------------------------------------------------------------------------------------------------
-          </font>
-      </div>
-      <div align="center">
-          <font face="Angsana New" size="4"> (VAT INCLUDED)</font>
-      </div>
-      <div align="center">
-          <font face="Angsana New" size="4">E-mail GM@.com</font>
-      </div>
-      <div align="center">
-          <font face="Angsana New" size="4">Facebook Restaurant</font>
-      </div>
-      <div align="center">
-          <font face="Angsana New" size="4">มีอะไรก็ติดต่อมาได้ตลอด / Feedback</font>
-      </div>
+      ${footer}
   </div>`
-  
-    return htmlContent
-  }
-  
-  module.exports = {
-    printReceiptHtml
-  }
-  
+
+  return htmlContent
+}
+
+const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo, copy }) => {
+  const receiptHtmlContent = await printReceiptHtml({macno, billInfo, tSaleInfo})
+  const htmlContent = `
+    <div align="right">
+      <font face="${fontFamily}" size="4">Bill Copy (${copy})</font>
+    </div>
+    ${receiptHtmlContent}
+  `
+
+  return htmlContent
+}
+
+const printReviewReceiptHtml = async () => {
+  const header = `
+    <div align="center">
+      <div>
+        <font face="${fontFamily}" size="4">*** ( ใบตรวจสอบรายการ ไม่ใช่ใบเสร็จรับเงิน ) ***</font>
+      </div>
+    </div>
+    <div align="center">
+      <div>
+        <font face="${fontFamily}" size="4">HENG GETSU</font>
+      </div>
+      <div>
+        <font face="${fontFamily}" size="4">Tax Invoice (ABB.)_Tax ID xxxxxxxxxx</font>
+      </div>
+    </div>
+    <div align="center"><img src="file:${companyLogo}" width="100" height="100"></div>
+    <div align="center">
+      <div>
+        <font face="${fontFamily}" size="4">Table: T9</font>
+      </div>
+      <div>
+        <font face="${fontFamily}" size="4">Date: 19/02/2025 19:04:18</font>
+      </div>
+      <div>
+        <font face="${fontFamily}" size="4"> Customer: 1 Cashier: 1001 Mac:001 </font>
+      </div>
+    </div>`
+  const billTable = `
+    <div align="center">
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <th align="center">
+            <font face="${fontFamily}" size="4">ETD</font>
+          </th>
+          <th align="left">
+            <font face="${fontFamily}" size="4">Name</font>
+          </th>
+          <th align="right">
+            <font face="${fontFamily}" size="4">Qty</font>
+          </th>
+          <th align="right">
+            <font face="${fontFamily}" size="4">Amount</font>
+          </th>
+        </tr>
+        <tr>
+          <td align="center">
+            <font face="${fontFamily}" size="4">E</font>
+          </td>
+          <td style="left">
+            <font face="${fontFamily}" size="4">OPEN FOOD</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">1.0</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">0.00</font>
+          </td>
+        </tr>
+        <tr>
+          <td align="center">
+            <font face="${fontFamily}" size="4">E</font>
+          </td>
+          <td style="left">
+            <font face="${fontFamily}" size="4">Akari Course 5,800++</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">1.0</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">5,800.00</font>
+          </td>
+        </tr>
+      </table>
+    </div>`
+
+  const htmlContent = `
+  <div style="padding: 2px;">
+    ${header}
+    ${billTable}
+    <div align="center">
+      <table width="100%">
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">Sub-TOTAL....(Item 21)</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">5,800.00</font>
+          </td>
+        </tr>
+      </table>
+    </div>
+    ${Divider}
+    <div style="margin-left: '10px'">
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">สินค้าอื่นๆ (Other)</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">5,800.00</font>
+          </td>
+        </tr>
+      </table>
+    </div>
+    ${Divider}
+    <div align="center">
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">ค่าบริการ 10.00%</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">580.00</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">มูลค่าสินค้า/บริการ.....</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">5,800.00</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">Vat 7.00%</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">417.38</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">Net Total</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">6,380.00</font>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div align="center" style="margin: 5px">
+      <font face="${fontFamily}" size="4">Tips ……………………………</font>
+    </div>
+  </div>
+  ${footer}
+  </div>`
+
+  return htmlContent
+}
+
+const printRefundBillHtml = async () => {
+  const header = `
+    <div align="center">
+      <div>
+        <font face="${fontFamily}" size="4">*** บิลยกเลิกรายการขาย ***</font>
+      </div>
+      <div>
+        <font face="${fontFamily}" size="4">*** (Refund) ***</font>
+      </div>
+    </div>
+    <div align="center">
+      <div>
+        <font face="${fontFamily}" size="4">HENG GETSU</font>
+      </div>
+      <div>
+        <font face="${fontFamily}" size="4">Tax Invoice (ABB.)_Tax ID xxxxxxxxxx</font>
+      </div>
+    </div>
+    <div align="center"><img src="file:${companyLogo}" width="100" height="100"></div>
+    <div align="center">
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <td align="left">
+            <font face="${fontFamily}" size="4">อ้างถึงใบเสร็จรับเงินเลขที่:</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4"> 0000597</font>
+          </td>
+        </tr>
+        <tr>
+          <td align="right">
+            <font face="${fontFamily}" size="4">REG ID:</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4"> 001</font>
+          </td>
+        </tr>
+        <tr>
+          <td align="right">
+            <font face="${fontFamily}" size="4">Void User:</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">9999</font>
+          </td>
+        </tr>
+        <tr>
+          <td align="right">
+            <font face="${fontFamily}" size="4">Void Time:</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">12:07:20</font>
+          </td>
+        </tr>
+      </table>
+    </div>`
+  const billTable = `
+    <div align="center">
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <th align="center">
+            <font face="${fontFamily}" size="4">ETD</font>
+          </th>
+          <th align="left">
+            <font face="${fontFamily}" size="4">Name</font>
+          </th>
+          <th align="right">
+            <font face="${fontFamily}" size="4">Qty</font>
+          </th>
+          <th align="right">
+            <font face="${fontFamily}" size="4">Amount</font>
+          </th>
+        </tr>
+        <tr>
+          <td align="center">
+            <font face="${fontFamily}" size="4">E</font>
+          </td>
+          <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+            <font face="${fontFamily}" size="4">Luna Course </font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">2.0</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">7,600.00</font>
+          </td>
+        </tr>
+        <tr>
+          <td align="center">
+            <font face="${fontFamily}" size="4">E</font>
+          </td>
+          <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+            <font face="${fontFamily}" size="4">Chawanmushi</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">2.0</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">0.00</font>
+          </td>
+        </tr>
+      </table>
+    </div>`
+
+  const htmlContent = `
+    <div style="padding: 2px;">
+      ${header}
+      ${billTable}
+      <div align="center">
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">Sub-TOTAL....(Item 14)</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">7,600.00</font>
+            </td>
+          </tr>
+        </table>
+      </div>
+      ${Divider}
+      <div align="center" style="margin-left: 10px;">
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">อาหาร (Food)</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">7,600.00</font>
+            </td>
+          </tr>
+        </table>
+      </div>
+      ${Divider}
+      <div align="center">
+        <table width="100%" cellPadding="0" cellSpacing="0">
+          <tr>
+            <td>
+                <font face="${fontFamily}" size="4">ค่าบริการ 10.00%</font>
+            </td>
+            <td align="right">
+                <font face="${fontFamily}" size="4">760.00</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <font face="${fontFamily}" size="4">มูลค่าสินค้า/บริการ.....</font>
+            </td>
+            <td align="right">
+                <font face="${fontFamily}" size="4">8,360.00</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <font face="${fontFamily}" size="4">Vat 7.00%</font>
+            </td>
+            <td align="right">
+                <font face="${fontFamily}" size="4">585.20</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+                <font face="${fontFamily}" size="4">Net Total</font>
+            </td>
+            <td align="right">
+                <font face="${fontFamily}" size="4">8,945.20</font>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div align="center">
+          <table width="100%" cellPadding="0" cellSpacing="0">
+            <tr>
+              <td>
+                <font face="${fontFamily}" size="4">เงินสด</font>
+              </td>
+              <td align="right">
+                <font face="${fontFamily}" size="4">8,945.20</font>
+              </td>
+            </tr>
+          </table>
+      </div>
+    </div>
+    ${footer}
+  </div>`
+
+  return htmlContent
+}
+
+module.exports = {
+  printReceiptHtml,
+  printReviewReceiptHtml,
+  printRefundBillHtml,
+  printReceiptCopyHtml
+}

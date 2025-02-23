@@ -2,7 +2,7 @@ import React, { memo, useContext } from "react"
 import AddCircleOutline from "@mui/icons-material/AddCircleOutline"
 import SetMealIcon from "@mui/icons-material/MenuOpen"
 import Grid2 from "@mui/material/Grid2"
-import { Box, Button, Badge, Typography, Grid2 } from "@mui/material"
+import { Box, Button, Badge, Typography } from "@mui/material"
 
 import { CurrencyContext } from "../../contexts/CurrencyContext"
 
@@ -56,7 +56,7 @@ const ProductCard = memo(props => {
             />
             <br />
           </Box>
-          <Grid
+          <Grid2
             container
             justifyContent="center"
             textAlign="center"

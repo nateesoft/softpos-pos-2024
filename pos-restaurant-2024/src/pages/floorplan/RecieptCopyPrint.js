@@ -3,7 +3,6 @@ import { Box, Button, TextField, Typography } from "@mui/material"
 import Grid2 from "@mui/material/Grid2"
 import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
-import { useNavigate } from "react-router-dom";
 
 import apiClient from '../../httpRequest';
 import ShowNotification from "../ui-utils/ShowNotification"
@@ -20,9 +19,7 @@ const modalStyle = {
   boxShadow: 24
 }
 
-const RecieptCopyPrint = ({ setOpen, socket }) => {
-  const navigate = useNavigate();
-
+const RecieptCopyPrint = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
   const { userLogin, macno } = appData
 
@@ -48,21 +45,7 @@ const RecieptCopyPrint = ({ setOpen, socket }) => {
       .then(response => {
         if(response.status === 200){
           const billNo = response.data.data
-          // send to printer
-          socket.emit(
-            "printerMessage",
-            JSON.stringify({
-              id: 1,
-              printerType: "receipt",
-              printerName: "cashier",
-              message: `พิมพ์สำเนาเอกสารเลขที่: ${billNo}`,
-              terminal: macno,
-              tableNo: "",
-              billNo: billNo,
-              billType: 'copy',
-              title: "(สำเนา) ใบเสร็จรับเงิน"
-            })
-          )
+          handleNotification(`พิมพ์สำเนาเอกสารเลขที่: ${billNo}`)
         }else {
           handleNotification("พบข้อผิดพลาดในการพิมพ์สำเนา!")
         }

@@ -16,7 +16,7 @@ import ConfirmIcon from "@mui/icons-material/CheckCircle"
 import DiscountIcon from "@mui/icons-material/Discount"
 import CloseIcon from "@mui/icons-material/Close"
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
-import ReceiptIcon from "@mui/icons-material/Receipt"
+import PrintCheckIcon from "@mui/icons-material/Print"
 import VideogameAssetIcon from "@mui/icons-material/VideogameAsset"
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
 import SendToMobileIcon from "@mui/icons-material/SendToMobile"
@@ -343,22 +343,6 @@ function PaymentForm({
         .post(`/api/billno`, payload)
         .then((response) => {
           if (response.status === 200) {
-            // const billNo = response.data.data
-            // socket.emit(
-            //   "printerMessage",
-            //   JSON.stringify({
-            //     id: 1,
-            //     printerType: "receipt",
-            //     printerName: "cashier",
-            //     message: `พิมพ์เลขที่เอกสาร: ${billNo}`,
-            //     terminal: macno,
-            //     tableNo: "",
-            //     billNo: billNo,
-            //     title: "ใบเสร็จรับเงิน",
-            //     billType: "",
-            //     database: "pos"
-            //   })
-            // )
             navigate("/floorplan")
           } else {
             handleNotification("พบข้อผิดพลาดในการรับชำระเงิน!")
@@ -378,22 +362,7 @@ function PaymentForm({
       .post(`/api/billno/printChkBill`, { tableNo })
       .then((response) => {
         if (response.status === 200) {
-          // navigate(`/payment/print-bill-check/${tableNo}`)
-          // send to printer
-          socket.emit(
-            "printerMessage",
-            JSON.stringify({
-              id: 1,
-              printerType: "review-bill",
-              printerName: "cashier",
-              message: `ใบตรวจสอบรายการ ไม่ใช่ใบเสร็จรับเงิน: ${tableNo}`,
-              terminal: macno,
-              billNo: "",
-              tableNo: tableNo,
-              title: "ใบตรวจสอบรายการ ไม่ใช่ใบเสร็จรับเงิน",
-              billType: ""
-            })
-          )
+          
         } else {
           handleNotification("พบข้อผิดพลาดในการพิมพ์บิลตรวจสอบ !")
         }
@@ -873,7 +842,7 @@ function PaymentForm({
         </Grid2>
         <AppBar
           position="fixed"
-          sx={{ top: "auto", bottom: 0, background: "none" }}
+          sx={{ top: "auto", bottom: 0, background: "#c9edfd" }}
         >
           <Grid2 size={12}>
             <Box textAlign="center">
@@ -893,10 +862,10 @@ function PaymentForm({
                   backgroundColor: "#aaa",
                   color: "black"
                 }}
-                startIcon={<ReceiptIcon />}
+                startIcon={<PrintCheckIcon />}
                 onClick={printBillCheck}
               >
-                ตรวจสอบ
+                ตรวจสอบรายการ
               </Button>
               <Button
                 variant="contained"

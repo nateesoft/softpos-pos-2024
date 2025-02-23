@@ -1,6 +1,7 @@
 const { io } = require('socket.io-client')
+
 // เชื่อมต่อกับ Socket.IO server
-const socket = io('http://127.0.0.1:8080', {
+const socket = io(process.env.SOCKETIO_SERVER, {
   autoConnect: true
 })
 const pool = require("../config/database/MySqlConnect")
@@ -29,7 +30,7 @@ const {
 const { getMoment } = require("../utils/MomentUtil")
 const { summaryBalance } = require("./CoreService")
 const { createListCredit, deleteListTempCredit } = require("./TCreditService")
-const { printReceiptHtml } = require('./SyncPrinterService')
+const { printReceiptHtml, printReviewReceiptHtml, printRefundBillHtml, printReceiptCopyHtml } = require('./SyncPrinterService')
 
 const getAllBillNoToday = async () => {
   const sql = `select * from billno where B_OnDate='${getMoment().format(
@@ -98,6 +99,25 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
     B_Cashier='${Cashier}',
     B_BillCopy=B_BillCopy+${copy} WHERE B_Refno='${billNo}'`
   await pool.query(sql)
+
+  const billInfo = await getBillNoByRefno(B_Refno)
+  const tSaleInfo = await getAllTSaleByRefno(B_Refno)
+
+  // send to printer
+  socket.emit(
+    "printerMessage",
+    JSON.stringify({
+      id: 1,
+      printerType: "message",
+      printerName: "kic1",
+      message: await printReceiptCopyHtml({macno, billInfo, tSaleInfo, copy}),
+      terminal: "",
+      tableNo: "",
+      billNo: "",
+      title: "",
+      billType: ""
+    })
+  )
 
   return billNo
 }
@@ -416,6 +436,9 @@ const addNewBill = async (payload) => {
     // update tablefile
     await updateTableAvailableStatus(B_Table)
 
+    const billInfo = await getBillNoByRefno(B_Refno)
+    const tSaleInfo = await getAllTSaleByRefno(B_Refno)
+
     // send to printer
     socket.emit(
       "printerMessage",
@@ -423,7 +446,7 @@ const addNewBill = async (payload) => {
         id: 1,
         printerType: "message",
         printerName: "kic1",
-        message: printReceiptHtml(),
+        message: await printReceiptHtml({macno: B_MacNo, billInfo, tSaleInfo}),
         terminal: "",
         tableNo: "",
         billNo: "",
@@ -520,6 +543,22 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
   // update refund tSale List
   await refundTSale(tSaleData, Cashier)
 
+  // send to printer
+  socket.emit(
+    "printerMessage",
+    JSON.stringify({
+      id: 1,
+      printerType: "message",
+      printerName: "kic1",
+      message: printRefundBillHtml(),
+      terminal: "",
+      tableNo: "",
+      billNo: "",
+      title: "",
+      billType: ""
+    })
+  )
+
   return billNo
 }
 
@@ -530,8 +569,6 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
     R_Index,
     R_Refno,
     R_Table,
-    R_Date,
-    R_Time,
     MacNo,
     Cashier,
     R_Emp,
@@ -562,12 +599,8 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
     R_PrCuAmt,
     R_Redule,
     R_DiscBath,
-    R_PrAdj,
-    R_PreDisAmt,
-    R_NetTotal,
     R_Kic,
     R_KicPrint,
-    R_Refund,
     VoidMsg,
     R_Void,
     R_VoidUser,
@@ -587,14 +620,6 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
     R_PrCuDisc,
     R_PrCuBath,
     R_PrCuAdj,
-    R_PrChkType2,
-    R_PrQuan2,
-    R_PrType2,
-    R_PrCode2,
-    R_PrDisc2,
-    R_PrBath2,
-    R_PrAmt2,
-    R_PrAdj2,
     R_PItemNo,
     R_PKicQue,
     R_PrVcType,
@@ -606,8 +631,6 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
     R_SPIndex,
     R_LinkIndex,
     R_VoidPause,
-    R_SetPrice,
-    R_SetDiscAmt,
     R_MoveItem,
     R_MoveFrom,
     R_MoveUser,
@@ -622,14 +645,8 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
     R_Opt8,
     R_PrintItemBill,
     R_CountTime,
-    R_Return,
     R_Earn,
-    R_EarnNo,
-    R_NetDiff,
-    R_SendOnline,
-    R_BranchCode,
-    R_CardPay
-  } = tSale
+    R_EarnNo  } = tSale
   const newBalance = { ...tSale }
   newBalance.R_Index = R_Index.replaceAll(R_Table, tableNo).replaceAll(R_Refno+"/", "")
   newBalance.R_Table = tableNo
@@ -697,6 +714,23 @@ const loadBillnoToBalance = async (billRefNo, tableNo) => {
 const updateStatusPrintChkBill = async (tableNo) => {
   const sql = `update tablefile set PrintChkBill='Y' where Tcode='${tableNo}'`
   const results = await pool.query(sql)
+
+  // send to printer
+  socket.emit(
+    "printerMessage",
+    JSON.stringify({
+      id: 1,
+      printerType: "message",
+      printerName: "kic1",
+      message: printReviewReceiptHtml(),
+      terminal: "",
+      tableNo: "",
+      billNo: "",
+      title: "",
+      billType: ""
+    })
+  )
+
   return results
 }
 

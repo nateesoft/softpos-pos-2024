@@ -111,22 +111,6 @@ const RefundBill = ({ socket }) => {
       .then((response) => {
         console.log("response:", response)
         if (response.status === 200) {
-          const billNo = response.data.data
-          // send to printer
-          socket.emit(
-            "printerMessage",
-            JSON.stringify({
-              id: 1,
-              printerType: "receipt",
-              printerName: "cashier",
-              message: `บิลยกเลิกรายการขายเลขที่: ${billNo}`,
-              terminal: macno,
-              tableNo: "",
-              billNo: billNo,
-              billType: "refund",
-              title: "บิลยกเลิกรายการขาย"
-            })
-          )
           setShowConfirm(false)
           loadBillNo()
         } else {
@@ -150,6 +134,9 @@ const RefundBill = ({ socket }) => {
   }, [])
 
   const loadBillToBalance = () => {
+    if(!tableNo){
+      return;
+    }
     apiClient
       .post("/api/billno/toBalance", { billRefNo, tableNo })
       .then((response) => {
