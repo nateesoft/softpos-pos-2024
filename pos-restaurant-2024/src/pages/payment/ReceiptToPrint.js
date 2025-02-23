@@ -100,10 +100,10 @@ class ComponentToPrint extends Component {
   render() {
     const { billInfo, tCreditList, posConfigSetup, poshwSetup, orderList } = this.props
     const {
-      B_Refno, B_Cust, B_Cashier, B_MacNo, B_NetFood, B_NetProduct,
+      B_NetFood, B_NetProduct,
       B_Total, B_Vat, B_ServiceAmt, B_NetTotal, B_NetDrink,
-      B_CrCode1, B_CrBank, B_CardNo1, B_AppCode1, B_CrCharge1, B_CrChargeAmt1, B_CrAmt1,
-      B_Ton = 0, B_NetVat, B_Table, B_Cash = 0, B_Earnest, B_Entertain
+      
+      B_Ton = 0, B_NetVat, B_Cash = 0, B_Earnest, B_Entertain
     } = billInfo
 
     let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]

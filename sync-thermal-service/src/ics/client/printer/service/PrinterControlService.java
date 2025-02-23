@@ -1,5 +1,6 @@
 package ics.client.printer.service;
 
+import ics.utils.OpenHTML;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.FileWriter;
@@ -51,7 +52,8 @@ public class PrinterControlService {
     // send to printer
     public void printMessage(String printerName, String content, int width, int height) {
         if (printerName == null) {
-            createHtmlFile(content);
+            String filePath = createHtmlFile(content);
+            OpenHTML.open(filePath);
             return;
         }
         try {
@@ -72,7 +74,7 @@ public class PrinterControlService {
     }
 
     int printerCount = 0;
-    private void createHtmlFile(String htmlContent) {
+    private String createHtmlFile(String htmlContent) {
         printerCount ++;
         String filePath = "printer_"+printerCount+".html";
         try (FileWriter fileWriter = new FileWriter(filePath)) {
@@ -81,6 +83,8 @@ public class PrinterControlService {
         } catch (IOException e) {
             System.err.println("An error occurred while writing the file: " + e.getMessage());
         }
+        
+        return filePath;
     }
 
 }
