@@ -428,6 +428,7 @@ function FloorPlanPage() {
             defaultViewport={defaultViewport}
             fitView
             minZoom={0.1}
+            proOptions={{ hideAttribution: true }}
           >
             <Controls />
             <Background variant={BackgroundVariant.Dots} />
