@@ -75,6 +75,11 @@
         "NumberCustomersNotMatch": "ข้อมูลจำนวนลูกค้าไม่ตรงกัน !",
         "dineIn": "ทานในร้าน",
         "takeAway": "รับกลับบ้าน",
-        "delivery": "เดลิเวอรี่"
+        "delivery": "เดลิเวอรี่",
+        "customerMoreDetail": "รายละเอียดลูกค้าเพิ่มเติม",
+        "manPerson": "ลูกค้าผู้ชาย (ท่าน)",
+        "womanPerson": "ลูกค้าผู้หญิง (ท่าน)",
+        "kidPerson": "ลูกค้าเด็ก (ท่าน)",
+        "oldPerson": "ลูกค้าคนชรา (ท่าน)"
     }
    }
