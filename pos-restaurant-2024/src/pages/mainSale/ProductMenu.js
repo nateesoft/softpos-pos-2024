@@ -489,7 +489,7 @@ const ProductMenu = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ ...modalStyle, width: "100%", height: "80vh", background: "black" }}>
+        <Box sx={{ ...modalStyle, width: "100%", height: "80vh", background: "black", overflow: "auto" }}>
           <Grid2
             container
             justifyContent="center"

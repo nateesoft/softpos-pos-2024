@@ -36,7 +36,7 @@ const TemplateReport = ({ columnTable, dataTable }) => {
     }
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <Paper sx={{ width: '80vw', overflow: 'auto' }}>
             <TableContainer>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
