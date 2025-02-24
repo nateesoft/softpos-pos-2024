@@ -39,10 +39,9 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
       header += `
         <div>
           <font face="${fontFamily}" size="4">${item}</font>
-        </div>
-      </div>`
+        </div>`
     })
-    header += `
+    header += `</div>
     <div align="center"><img src="file:${companyLogo}" width="100" height="100"></div>
     <div align="center">
       <div>
@@ -73,24 +72,27 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
           </th>
         </tr>`
     tSaleInfo.forEach(tSale => {
-      billTable += `<tr>
-            <td align="center">
-              <font face="${fontFamily}" size="4">${tSale.R_ETD}</font>
-            </td>
-            <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-              <font face="${fontFamily}" size="4">${tSale.R_PName}</font>
-            </td>
-            <td align="right">
-              <font face="${fontFamily}" size="4">${tSale.R_Quan}</font>
-            </td>
-            <td align="right">
-              <font face="${fontFamily}" size="4">${tSale.R_Total}</font>
-            </td>
-          </tr>`
+      billTable += `
+        <tr>
+          <td align="center">
+            <font face="${fontFamily}" size="4">${tSale.R_ETD}</font>
+          </td>
+          <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+            <font face="${fontFamily}" size="4">${tSale.R_PName}</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${tSale.R_Quan}</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${tSale.R_Total}</font>
+          </td>
+        </tr>`
     })
     
     billTable += `</table>
     </div>`
+
+  const subTotalItems = tSaleInfo.filter(item => item.R_Void !== 'V').length
   
   let htmlContent = `
   <div style="padding: 2px;">
@@ -100,7 +102,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
         <table width="100%" cellPadding="0" cellSpacing="0">
           <tr>
             <td>
-              <font face="${fontFamily}" size="4">Sub-TOTAL....(Item 21)</font>
+              <font face="${fontFamily}" size="4">Sub-TOTAL....(Item ${subTotalItems})</font>
             </td>
             <td align="right">
               <font face="${fontFamily}" size="4">${billInfo.B_Total}</font>
@@ -193,11 +195,11 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
   return htmlContent
 }
 
-const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo, copy }) => {
-  const receiptHtmlContent = await printReceiptHtml({macno, billInfo, tSaleInfo})
+const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo }) => {
+  const receiptHtmlContent = await printReceiptHtml({ macno, billInfo, tSaleInfo })
   const htmlContent = `
     <div align="right">
-      <font face="${fontFamily}" size="4">Bill Copy (${copy})</font>
+      <font face="${fontFamily}" size="4">Bill Copy (${billInfo.B_BillCopy})</font>
     </div>
     ${receiptHtmlContent}
   `
@@ -205,21 +207,27 @@ const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo, copy }) => {
   return htmlContent
 }
 
-const printReviewReceiptHtml = async () => {
-  const header = `
+const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
+  const posConfigSetup = await getPOSConfigSetupByTerminal(macno)
+  const poshwSetup = await getDataByMacno(macno)
+  let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+  headers = headers.filter(h => h !== "")
+
+  let header = `
     <div align="center">
       <div>
         <font face="${fontFamily}" size="4">*** ( ใบตรวจสอบรายการ ไม่ใช่ใบเสร็จรับเงิน ) ***</font>
       </div>
     </div>
-    <div align="center">
-      <div>
-        <font face="${fontFamily}" size="4">HENG GETSU</font>
-      </div>
-      <div>
-        <font face="${fontFamily}" size="4">Tax Invoice (ABB.)_Tax ID xxxxxxxxxx</font>
-      </div>
-    </div>
+    <div align="center">`
+    headers.forEach(item => {
+      header += `
+        <div>
+          <font face="${fontFamily}" size="4">${item}</font>
+        </div>
+      `
+    })
+    header += `</div>
     <div align="center"><img src="file:${companyLogo}" width="100" height="100"></div>
     <div align="center">
       <div>
@@ -232,7 +240,7 @@ const printReviewReceiptHtml = async () => {
         <font face="${fontFamily}" size="4"> Customer: 1 Cashier: 1001 Mac:001 </font>
       </div>
     </div>`
-  const billTable = `
+  let billTable = `
     <div align="center">
       <table width="100%" cellPadding="0" cellSpacing="0">
         <tr>
@@ -248,37 +256,28 @@ const printReviewReceiptHtml = async () => {
           <th align="right">
             <font face="${fontFamily}" size="4">Amount</font>
           </th>
-        </tr>
-        <tr>
-          <td align="center">
-            <font face="${fontFamily}" size="4">E</font>
-          </td>
-          <td style="left">
-            <font face="${fontFamily}" size="4">OPEN FOOD</font>
-          </td>
-          <td align="right">
-            <font face="${fontFamily}" size="4">1.0</font>
-          </td>
-          <td align="right">
-            <font face="${fontFamily}" size="4">0.00</font>
-          </td>
-        </tr>
-        <tr>
-          <td align="center">
-            <font face="${fontFamily}" size="4">E</font>
-          </td>
-          <td style="left">
-            <font face="${fontFamily}" size="4">Akari Course 5,800++</font>
-          </td>
-          <td align="right">
-            <font face="${fontFamily}" size="4">1.0</font>
-          </td>
-          <td align="right">
-            <font face="${fontFamily}" size="4">5,800.00</font>
-          </td>
-        </tr>
-      </table>
+        </tr>`
+        balanceInfo.forEach(balance => {
+          billTable += `
+            <tr>
+              <td align="center">
+                <font face="${fontFamily}" size="4">${balance.R_ETD}</font>
+              </td>
+              <td style="left">
+                <font face="${fontFamily}" size="4">${balance.R_PName}</font>
+              </td>
+              <td align="right">
+                <font face="${fontFamily}" size="4">${balance.R_Quan}</font>
+              </td>
+              <td align="right">
+                <font face="${fontFamily}" size="4">${balance.R_Total}</font>
+              </td>
+            </tr>`
+        })
+      `</table>
     </div>`
+
+  const subTotalItems = balanceInfo.filter(item => item.R_Void !== 'V').length
 
   const htmlContent = `
   <div style="padding: 2px;">
@@ -288,10 +287,10 @@ const printReviewReceiptHtml = async () => {
       <table width="100%">
         <tr>
           <td>
-            <font face="${fontFamily}" size="4">Sub-TOTAL....(Item 21)</font>
+            <font face="${fontFamily}" size="4">Sub-TOTAL....(Item ${subTotalItems})</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">5,800.00</font>
+            <font face="${fontFamily}" size="4">${tableInfo.NetTotal}</font>
           </td>
         </tr>
       </table>
@@ -301,10 +300,26 @@ const printReviewReceiptHtml = async () => {
       <table width="100%" cellPadding="0" cellSpacing="0">
         <tr>
           <td>
+            <font face="${fontFamily}" size="4">อาหาร (Food)</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${tableInfo.Food}</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">เครื่องดื่ม (Drink)</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${tableInfo.Drink}</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
             <font face="${fontFamily}" size="4">สินค้าอื่นๆ (Other)</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">5,800.00</font>
+            <font face="${fontFamily}" size="4">${tableInfo.Product}</font>
           </td>
         </tr>
       </table>
@@ -314,10 +329,10 @@ const printReviewReceiptHtml = async () => {
       <table width="100%" cellPadding="0" cellSpacing="0">
         <tr>
           <td>
-            <font face="${fontFamily}" size="4">ค่าบริการ 10.00%</font>
+            <font face="${fontFamily}" size="4">ค่าบริการ ${tableInfo.Service}%</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">580.00</font>
+            <font face="${fontFamily}" size="4">${tableInfo.ServiceAmt}</font>
           </td>
         </tr>
         <tr>
@@ -325,15 +340,15 @@ const printReviewReceiptHtml = async () => {
             <font face="${fontFamily}" size="4">มูลค่าสินค้า/บริการ.....</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">5,800.00</font>
+            <font face="${fontFamily}" size="4">${tableInfo.TAmount}</font>
           </td>
         </tr>
         <tr>
           <td>
-            <font face="${fontFamily}" size="4">Vat 7.00%</font>
+            <font face="${fontFamily}" size="4">Vat ${posConfigSetup.P_Vat}%</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">417.38</font>
+            <font face="${fontFamily}" size="4">${tableInfo.TAmount * posConfigSetup.P_Vat / 100}</font>
           </td>
         </tr>
         <tr>
@@ -341,7 +356,7 @@ const printReviewReceiptHtml = async () => {
             <font face="${fontFamily}" size="4">Net Total</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">6,380.00</font>
+            <font face="${fontFamily}" size="4">${tableInfo.NetTotal}</font>
           </td>
         </tr>
       </table>
@@ -356,8 +371,13 @@ const printReviewReceiptHtml = async () => {
   return htmlContent
 }
 
-const printRefundBillHtml = async () => {
-  const header = `
+const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
+  const posConfigSetup = await getPOSConfigSetupByTerminal(macno)
+  const poshwSetup = await getDataByMacno(macno)
+  let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+  headers = headers.filter(h => h !== "")
+
+  let header = `
     <div align="center">
       <div>
         <font face="${fontFamily}" size="4">*** บิลยกเลิกรายการขาย ***</font>
@@ -366,14 +386,14 @@ const printRefundBillHtml = async () => {
         <font face="${fontFamily}" size="4">*** (Refund) ***</font>
       </div>
     </div>
-    <div align="center">
-      <div>
-        <font face="${fontFamily}" size="4">HENG GETSU</font>
-      </div>
-      <div>
-        <font face="${fontFamily}" size="4">Tax Invoice (ABB.)_Tax ID xxxxxxxxxx</font>
-      </div>
-    </div>
+    <div align="center">`
+    headers.forEach(item => {
+      header += `
+        <div>
+          <font face="${fontFamily}" size="4">${item}</font>
+        </div>`
+    })
+    header += `</div>
     <div align="center"><img src="file:${companyLogo}" width="100" height="100"></div>
     <div align="center">
       <table width="100%" cellPadding="0" cellSpacing="0">
@@ -382,7 +402,7 @@ const printRefundBillHtml = async () => {
             <font face="${fontFamily}" size="4">อ้างถึงใบเสร็จรับเงินเลขที่:</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4"> 0000597</font>
+            <font face="${fontFamily}" size="4"> ${billInfo.B_Refno}</font>
           </td>
         </tr>
         <tr>
@@ -390,7 +410,7 @@ const printRefundBillHtml = async () => {
             <font face="${fontFamily}" size="4">REG ID:</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4"> 001</font>
+            <font face="${fontFamily}" size="4"> ${billInfo.B_MacNo}</font>
           </td>
         </tr>
         <tr>
@@ -398,7 +418,7 @@ const printRefundBillHtml = async () => {
             <font face="${fontFamily}" size="4">Void User:</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">9999</font>
+            <font face="${fontFamily}" size="4">${billInfo.B_VoidUser}</font>
           </td>
         </tr>
         <tr>
@@ -406,12 +426,12 @@ const printRefundBillHtml = async () => {
             <font face="${fontFamily}" size="4">Void Time:</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">12:07:20</font>
+            <font face="${fontFamily}" size="4">${billInfo.B_VoidTime}</font>
           </td>
         </tr>
       </table>
     </div>`
-  const billTable = `
+  let billTable = `
     <div align="center">
       <table width="100%" cellPadding="0" cellSpacing="0">
         <tr>
@@ -427,36 +447,25 @@ const printRefundBillHtml = async () => {
           <th align="right">
             <font face="${fontFamily}" size="4">Amount</font>
           </th>
-        </tr>
+        </tr>`
+      tSaleInfo.forEach(tSale => {
+        billTable += `
         <tr>
           <td align="center">
-            <font face="${fontFamily}" size="4">E</font>
+            <font face="${fontFamily}" size="4">${tSale.R_ETD}</font>
           </td>
           <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-            <font face="${fontFamily}" size="4">Luna Course </font>
+            <font face="${fontFamily}" size="4">${tSale.R_PName}</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">2.0</font>
+            <font face="${fontFamily}" size="4">${tSale.R_Quan}</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">7,600.00</font>
+            <font face="${fontFamily}" size="4">${tSale.R_Total}</font>
           </td>
-        </tr>
-        <tr>
-          <td align="center">
-            <font face="${fontFamily}" size="4">E</font>
-          </td>
-          <td style="max-width: 100px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-            <font face="${fontFamily}" size="4">Chawanmushi</font>
-          </td>
-          <td align="right">
-            <font face="${fontFamily}" size="4">2.0</font>
-          </td>
-          <td align="right">
-            <font face="${fontFamily}" size="4">0.00</font>
-          </td>
-        </tr>
-      </table>
+        </tr>`
+      })
+      billTable += `</table>
     </div>`
 
   const htmlContent = `
@@ -467,10 +476,10 @@ const printRefundBillHtml = async () => {
         <table width="100%" cellPadding="0" cellSpacing="0">
           <tr>
             <td>
-              <font face="${fontFamily}" size="4">Sub-TOTAL....(Item 14)</font>
+              <font face="${fontFamily}" size="4">Sub-TOTAL....(Item ${tSaleInfo.length})</font>
             </td>
             <td align="right">
-              <font face="${fontFamily}" size="4">7,600.00</font>
+              <font face="${fontFamily}" size="4">${billInfo.B_Total}</font>
             </td>
           </tr>
         </table>
@@ -483,7 +492,23 @@ const printRefundBillHtml = async () => {
               <font face="${fontFamily}" size="4">อาหาร (Food)</font>
             </td>
             <td align="right">
-              <font face="${fontFamily}" size="4">7,600.00</font>
+              <font face="${fontFamily}" size="4">${billInfo.B_NetFood}</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">เครื่องดื่ม (Drink)</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${billInfo.B_NetDrink}</font>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <font face="${fontFamily}" size="4">สินค้าอื่นๆ (Other)</font>
+            </td>
+            <td align="right">
+              <font face="${fontFamily}" size="4">${billInfo.B_NetProduct}</font>
             </td>
           </tr>
         </table>
@@ -493,10 +518,10 @@ const printRefundBillHtml = async () => {
         <table width="100%" cellPadding="0" cellSpacing="0">
           <tr>
             <td>
-                <font face="${fontFamily}" size="4">ค่าบริการ 10.00%</font>
+                <font face="${fontFamily}" size="4">ค่าบริการ ${billInfo.B_Service}%</font>
             </td>
             <td align="right">
-                <font face="${fontFamily}" size="4">760.00</font>
+                <font face="${fontFamily}" size="4">${billInfo.B_ServiceAmt}</font>
             </td>
           </tr>
           <tr>
@@ -504,15 +529,15 @@ const printRefundBillHtml = async () => {
                 <font face="${fontFamily}" size="4">มูลค่าสินค้า/บริการ.....</font>
             </td>
             <td align="right">
-                <font face="${fontFamily}" size="4">8,360.00</font>
+                <font face="${fontFamily}" size="4">${(billInfo.B_NetVat - billInfo.B_Vat)}</font>
             </td>
           </tr>
           <tr>
             <td>
-                <font face="${fontFamily}" size="4">Vat 7.00%</font>
+                <font face="${fontFamily}" size="4">Vat ${posConfigSetup.P_Vat}%</font>
             </td>
             <td align="right">
-                <font face="${fontFamily}" size="4">585.20</font>
+                <font face="${fontFamily}" size="4">${billInfo.B_Vat}</font>
             </td>
           </tr>
           <tr>
@@ -520,7 +545,7 @@ const printRefundBillHtml = async () => {
                 <font face="${fontFamily}" size="4">Net Total</font>
             </td>
             <td align="right">
-                <font face="${fontFamily}" size="4">8,945.20</font>
+                <font face="${fontFamily}" size="4">${billInfo.B_NetTotal}</font>
             </td>
           </tr>
         </table>
@@ -532,7 +557,7 @@ const printRefundBillHtml = async () => {
                 <font face="${fontFamily}" size="4">เงินสด</font>
               </td>
               <td align="right">
-                <font face="${fontFamily}" size="4">8,945.20</font>
+                <font face="${fontFamily}" size="4">${billInfo.B_Cash}</font>
               </td>
             </tr>
           </table>

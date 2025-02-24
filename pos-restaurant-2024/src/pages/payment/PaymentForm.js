@@ -359,10 +359,10 @@ function PaymentForm({
   const printBillCheck = async () => {
     // send print bill check
     apiClient
-      .post(`/api/billno/printChkBill`, { tableNo })
+      .post(`/api/billno/printChkBill`, { tableNo, macno })
       .then((response) => {
         if (response.status === 200) {
-          
+          handleNotification("พิมพ์ใบตรวจสอบรายการ")
         } else {
           handleNotification("พบข้อผิดพลาดในการพิมพ์บิลตรวจสอบ !")
         }

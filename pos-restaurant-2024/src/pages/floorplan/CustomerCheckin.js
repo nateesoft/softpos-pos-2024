@@ -24,6 +24,7 @@ import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import CustomerNationDetail from "./CustomerNationDetail"
 import CartItems from "../floorplan/modal/CartItems"
+import CustomerDetail from "./CustomerDetail"
 
 const min = 1
 const max = 10
@@ -74,20 +75,6 @@ const CustomerCheckin = (props) => {
   const [foundBooking, setFoundBooking] = useState("")
   const [orderId, setOrderId] = useState("")
   const [openBookingModal, setOpenBookingModal] = useState(false)
-  const [orderItems, setOrderItems] = useState([
-    {
-      id: 1,
-      img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-      menuName: "ก๋วยเตี๋ยวหมู",
-      options: [
-        { id: "101", label: "ใหญ่", price: 0 },
-        { id: "102", label: "น้ำ", price: 0 },
-        { id: "103", label: "เผ็ดปกติ", price: 0 }
-      ],
-      menuPrice: 60,
-      qty: 1
-    }
-  ])
 
   const [showError, setShowError] = useState(false)
   const [showCustomerError, setShowCustomerError] = useState(false)
@@ -100,7 +87,7 @@ const CustomerCheckin = (props) => {
     const checkTableActive = await apiClient.get(`/api/tablefile/${tableNo}`)
     const tableResponse = checkTableActive.data.data
     if (tableResponse != null) {
-      if (thaiCount + europeCount + americaCount + asiaCount !== custCount) {
+      if (thaiCount + europeCount + americaCount + asiaCount + manCount + womanCount + kidCount + oldCount !== custCount) {
         setShowCustomerCountError(true)
         return
       }
@@ -277,6 +264,12 @@ const CustomerCheckin = (props) => {
           setAmericaCount={setAmericaCount}
           asiaPeople={asiaCount}
           setAsiaCount={setAsiaCount}
+        />
+        <CustomerDetail
+          man={manCount} setMan={setManCount}
+          woman={womanCount} setWoman={setWomanCount}
+          kid={kidCount} setKid={setKidCount}
+          old={oldCount} setOld={setOldCount}
         />
       </Box>
       <Grid2 container padding={1} spacing={1}>

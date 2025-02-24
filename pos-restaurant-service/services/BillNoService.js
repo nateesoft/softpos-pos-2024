@@ -100,8 +100,8 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
     B_BillCopy=B_BillCopy+${copy} WHERE B_Refno='${billNo}'`
   await pool.query(sql)
 
-  const billInfo = await getBillNoByRefno(B_Refno)
-  const tSaleInfo = await getAllTSaleByRefno(B_Refno)
+  const billInfo = await getBillNoByRefno(billNo)
+  const tSaleInfo = await getAllTSaleByRefno(billNo)
 
   // send to printer
   socket.emit(
@@ -109,8 +109,8 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
     JSON.stringify({
       id: 1,
       printerType: "message",
-      printerName: "kic1",
-      message: await printReceiptCopyHtml({macno, billInfo, tSaleInfo, copy}),
+      printerName: "cashier",
+      message: await printReceiptCopyHtml({macno, billInfo, tSaleInfo}),
       terminal: "",
       tableNo: "",
       billNo: "",
@@ -445,7 +445,7 @@ const addNewBill = async (payload) => {
       JSON.stringify({
         id: 1,
         printerType: "message",
-        printerName: "kic1",
+        printerName: "cashier",
         message: await printReceiptHtml({macno: B_MacNo, billInfo, tSaleInfo}),
         terminal: "",
         tableNo: "",
@@ -543,14 +543,17 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
   // update refund tSale List
   await refundTSale(tSaleData, Cashier)
 
+  const billInfo = await getBillNoByRefno(billNo)
+  const tSaleInfo = await getAllTSaleByRefno(billNo)
+
   // send to printer
   socket.emit(
     "printerMessage",
     JSON.stringify({
       id: 1,
       printerType: "message",
-      printerName: "kic1",
-      message: printRefundBillHtml(),
+      printerName: "cashier",
+      message: await printRefundBillHtml({macno: macno, billInfo, tSaleInfo}),
       terminal: "",
       tableNo: "",
       billNo: "",
@@ -711,9 +714,12 @@ const loadBillnoToBalance = async (billRefNo, tableNo) => {
   }
 }
 
-const updateStatusPrintChkBill = async (tableNo) => {
+const updateStatusPrintChkBill = async (tableNo, macno) => {
   const sql = `update tablefile set PrintChkBill='Y' where Tcode='${tableNo}'`
   const results = await pool.query(sql)
+
+  const tableInfo = await getBillNoByTableNo(tableNo)
+  const balanceInfo = await getBalanceByTableNo(tableNo)
 
   // send to printer
   socket.emit(
@@ -721,8 +727,8 @@ const updateStatusPrintChkBill = async (tableNo) => {
     JSON.stringify({
       id: 1,
       printerType: "message",
-      printerName: "kic1",
-      message: printReviewReceiptHtml(),
+      printerName: "cashier",
+      message: await printReviewReceiptHtml({ macno, tableInfo, balanceInfo }),
       terminal: "",
       tableNo: "",
       billNo: "",

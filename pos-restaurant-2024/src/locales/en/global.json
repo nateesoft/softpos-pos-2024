@@ -34,6 +34,11 @@
         "NumberCustomersNotMatch": "The number of customers doesn't match !",
         "dineIn": "Dine In",
         "takeAway": "Take Away",
-        "delivery": "Delivery"
+        "delivery": "Delivery",
+        "customerMoreDetail": "More customer detail",
+        "manPerson": "Customer (Man)",
+        "womanPerson": "Customer (Woman)",
+        "kidPerson": "Customer (Kid)",
+        "oldPerson": "Customer (Old)"
     }
    }
