@@ -468,8 +468,7 @@ const ProductMenu = ({
         TransitionComponent={Transition}
         keepMounted
         onClose={() => setShowMenu(false)}
-        aria-describedby="alert-dialog-slide-description"
-      >
+        aria-describedby="alert-dialog-slide-description">
         <OrderItem
           tableNo={tableNo}
           OrderList={OrderList}
@@ -489,7 +488,7 @@ const ProductMenu = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ ...modalStyle, width: "100%", height: "80vh", background: "black", overflow: "auto" }}>
+        <Box sx={{ ...modalStyle, width: "80vw", height: "80vh", background: "black", overflow: "auto" }}>
           <Grid2
             container
             justifyContent="center"

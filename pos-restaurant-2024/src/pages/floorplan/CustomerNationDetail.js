@@ -46,6 +46,9 @@ const CustomerNationDetail = (props) => {
                   }
                 }}
                 value={thaiPeople}
+                onFocus={(evt) => {
+                  evt.target.select()
+                }}
                 onChange={(e) => {
                   var value = parseInt(e.target.value, 10)
                   if (value > max) value = max
@@ -65,6 +68,9 @@ const CustomerNationDetail = (props) => {
                   }
                 }}
                 value={europePeople}
+                onFocus={(evt) => {
+                  evt.target.select()
+                }}
                 onChange={(e) => {
                   var value = parseInt(e.target.value, 10)
                   if (value > max) value = max
@@ -84,6 +90,9 @@ const CustomerNationDetail = (props) => {
                   }
                 }}
                 value={americaPeople}
+                onFocus={(evt) => {
+                  evt.target.select()
+                }}
                 onChange={(e) => {
                   var value = parseInt(e.target.value, 10)
                   if (value > max) value = max
@@ -103,6 +112,9 @@ const CustomerNationDetail = (props) => {
                   }
                 }}
                 value={asiaPeople}
+                onFocus={(evt) => {
+                  evt.target.select()
+                }}
                 onChange={(e) => {
                   var value = parseInt(e.target.value, 10)
                   if (value > max) value = max
