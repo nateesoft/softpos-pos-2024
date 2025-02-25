@@ -36,6 +36,9 @@ const CustomerDetail = (props) => {
                   }
                 }}
                 value={man}
+                onFocus={(evt) => {
+                  evt.target.select()
+                }}
                 onChange={(e) => {
                   var value = parseInt(e.target.value, 10)
                   if (value > max) value = max
@@ -55,6 +58,9 @@ const CustomerDetail = (props) => {
                   }
                 }}
                 value={woman}
+                onFocus={(evt) => {
+                  evt.target.select()
+                }}
                 onChange={(e) => {
                   var value = parseInt(e.target.value, 10)
                   if (value > max) value = max
@@ -74,6 +80,9 @@ const CustomerDetail = (props) => {
                   }
                 }}
                 value={kid}
+                onFocus={(evt) => {
+                  evt.target.select()
+                }}
                 onChange={(e) => {
                   var value = parseInt(e.target.value, 10)
                   if (value > max) value = max
@@ -93,6 +102,9 @@ const CustomerDetail = (props) => {
                   }
                 }}
                 value={old}
+                onFocus={(evt) => {
+                  evt.target.select()
+                }}
                 onChange={(e) => {
                   var value = parseInt(e.target.value, 10)
                   if (value > max) value = max

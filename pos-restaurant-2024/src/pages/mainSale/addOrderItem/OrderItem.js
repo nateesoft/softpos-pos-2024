@@ -146,7 +146,7 @@ const OrderItem = ({
   }
 
   return (
-    <div style={{overflow: "auto"}}>
+    <div style={{overflow: "auto", width: "100%"}}>
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
           <Tab label="Dine In" value="E" sx={{ boxShadow: "2px 2px #eee" }} />
