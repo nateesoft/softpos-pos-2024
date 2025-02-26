@@ -43,6 +43,7 @@ const MenuSetModal = ({
   optionalList,
   setOptionalList
 }) => {
+  console.log('MenuSetModal')
   const [showNoti, setShowNoti] = useState(false)
   const [showChangeListMenu, setShowChangeListMenu] = useState(false)
 
@@ -58,8 +59,6 @@ const MenuSetModal = ({
     setShowNoti(true)
   }
 
-  // const matches = useMediaQuery('(min-width:600px)');
-
   const handleOnChange = (position) => {
     const updatedCheckedState = subMenuSelected.map((item, index) =>
       index === position ? !item : item
@@ -74,6 +73,19 @@ const MenuSetModal = ({
     })
 
     setOptionalList(updatedOrderListSelected)
+  }
+
+  const updateItemManualPrice = (position, newProduct) => {
+    console.log('updateItemManualPrice:', newProduct)
+    const updatedMenuState = optionalList.map((item, index) => {
+        if(item.id === newProduct.id) {
+          return {...newProduct}
+        } else {
+          return item
+        }
+      }
+    )
+    setOptionalList(updatedMenuState)
   }
 
   const loadOptionalList = useCallback(() => {
@@ -99,6 +111,11 @@ const MenuSetModal = ({
     setShowChangeListMenu(true)
     setCurrentMenu(menuCode)
   }
+
+  const handleOpenMenu = useCallback((product) => {
+    setProductInfo(product)
+    setShowManualPrice(product.manual_price==='Y')
+  }, [])
 
   useEffect(() => {
     loadOptionalList()
@@ -140,7 +157,7 @@ const MenuSetModal = ({
                   alt={item.menu_name}
                   width={180}
                   height={150}
-                  onClick={()=>setShowManualPrice(item.manual_price==='Y')}
+                  onClick={() => handleOpenMenu(item)}
                 />
               </Grid2>
               <Typography style={{ color: "white" }}>
@@ -203,7 +220,7 @@ const MenuSetModal = ({
           <ManualPriceInput
             productInfo={productInfo}
             setShowManualPrice={setShowManualPrice}
-            addOrder={()=>console.log('addOrder')}
+            addOrder={updateItemManualPrice}
           />
         </Box>
       </Modal>
