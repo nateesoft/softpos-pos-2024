@@ -33,15 +33,29 @@ const ProductDetailCard = ({
   const [optList, setOptList] = useState([])
   const [specialText, setSpecialText] = useState("")
 
+  // discount
+  const [discountPercent, setDiscountPercent] = useState(0)
+  const [discountBaht, setDiscountBaht] = useState(0)
+
   const handleChange = (event, oType) => {
     setOrderType(event.target.value)
   }
 
   const handleConfirm = () => {
+    if(discountPercent < 0 || discountPercent > 100) {
+      return
+    }
+    if(discountBaht < 0 || discountBaht > product.menuPrice) {
+      return
+    }
     // update balance
     apiClient
       .put(`/api/balance`, {
         oldBalance: product,
+        discount: {
+          discountPercent,
+          discountPercent
+        },
         optList,
         specialText,
         macno,
@@ -86,7 +100,7 @@ const ProductDetailCard = ({
           padding={1}
           sx={{ background: "chocolate", marginTop: -8, borderBottom: "1px solid snow" }}
         >
-          <Typography variant="p">เมนู {product.R_PName}</Typography>
+          <Typography variant="p" sx={{color: "white"}}>เมนู {product.R_PName}</Typography>
         </Grid2>
       </Box>
       <Grid2
@@ -96,8 +110,8 @@ const ProductDetailCard = ({
         marginBottom={1}
         sx={{ background: "chocolate" }}
       >
-        <Typography variant="p">ราคา {product.R_Price} บาท</Typography>
-        <Typography variant="p">รหัส {product.R_PluCode}</Typography>
+        <Typography variant="p" sx={{color: "white"}}>ราคา {product.R_Price} บาท</Typography>
+        <Typography variant="p" sx={{color: "white"}}>รหัส {product.R_PluCode}</Typography>
       </Grid2>
       <OptionMenuSelect
         setSpecialText={setSpecialText}
@@ -105,15 +119,15 @@ const ProductDetailCard = ({
         optList={optList}
         setOptList={setOptList}
       />
-      <Grid2
+      {product.R_Discount === 'Y' && <Grid2
         marginTop={1}
         marginBottom={1}
         container
         justifyContent="space-between"
       >
-        <TextField label="ส่วนลด %"></TextField>
-        <TextField label="จำนวนเงินส่วนลด"></TextField>
-      </Grid2>
+        <TextField label="ส่วนลด %" value={discountPercent} onChange={e=>setDiscountPercent(e.target.value)}></TextField>
+        <TextField label="จำนวนเงินส่วนลด" value={discountBaht} onChange={e=>setDiscountBaht(e.target.value)}></TextField>
+      </Grid2>}
       <Grid2 container>
         <Grid2 container size={12}>
           <Typography variant="p">ประเภทอาหาร</Typography>
