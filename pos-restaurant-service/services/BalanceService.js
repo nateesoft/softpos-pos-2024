@@ -125,7 +125,7 @@ const addListBalance = async (payload) => {
         const R_Index = Main_Index + "/" + PrefixZeroFormat(index + 1, 2)
         const reponseR_Index = await addNewBalance({
             tableNo,
-            menuInfo: { ...product, menu_price: 0 },
+            menuInfo: { ...product },
             qty: 1,
             optList: [],
             specialText: "",

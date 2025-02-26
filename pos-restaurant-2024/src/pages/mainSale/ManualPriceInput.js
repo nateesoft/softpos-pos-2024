@@ -4,6 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 
 const ManualPriceInput = ({ productInfo, setShowManualPrice, addOrder }) => {
+    console.log('ManualPriceInput')
     const [menuName, setMenuName] = useState(productInfo.menu_name)
     const [newPrice, setNewPrice] = useState(productInfo.menu_price)
 
