@@ -125,10 +125,13 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
               <GppGoodIcon fontSize='large' sx={{ color: "gold" }} />
             </ImageListItem>}
           </div>
+          {optList && optList.filter(o => o !== "").map((opt) =>
+              <Typography sx={{ fontSize: "12px", color: "green" }}>*{opt},</Typography>
+            )}
         </Grid2>
         <Grid2 size={7} padding={1} margin={1} sx={{ backgroundColor: product.R_Void === 'V' ? "#eee" : "snow" }}>
           <Grid2 margin={1}>{product.R_PluCode}-{product.R_PName}</Grid2>
-          {voidStatus && <Typography sx={{ fontWeight: "bold", color: "red" }}>( * ยกเลิกรายการอาหาร = {optList[8]} * )</Typography>}
+          {voidStatus && <Typography sx={{ fontWeight: "bold", color: "red" }}>( *{optList[8]}* )</Typography>}
           {!voidStatus &&
             <Grid2 display="flex" justifyContent="center">
               {showActionBalance(product) && <IconButton onClick={() => handleOpen(product.R_Index)} disabled={product.R_Pause === 'P'}>
@@ -155,12 +158,6 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
             <Typography>&nbsp;=&nbsp;</Typography>
             <Typography>{new Intl.NumberFormat("th-TH", { style: "currency", currency}).format(convertCurrency(RPriceQty))}</Typography>
           </Grid2>
-          {!voidStatus &&
-            <Box display="flex" flexDirection="row">
-              {optList && optList.filter(o => o !== "").map((opt) =>
-                <Typography sx={{ fontSize: "10px", color: "green" }}>{opt},</Typography>
-              )}
-            </Box>}
         </Grid2>
       </Grid2>
       <Modal

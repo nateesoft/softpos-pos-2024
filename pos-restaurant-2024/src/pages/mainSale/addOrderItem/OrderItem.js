@@ -38,7 +38,7 @@ const getTotalAmount = (orderList) => {
   for (let i = 0; i < orderList.length; i++) {
     const balance = orderList[i]
     if (balance.R_Void !== "V") {
-      totalBill = totalBill + parseInt(balance.R_Quan * balance.R_Price)
+      totalBill = totalBill + parseInt(balance.R_Quan * balance.R_Price - balance.R_DiscBath)
     }
   }
 
