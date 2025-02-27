@@ -47,6 +47,23 @@ const updateTableAvailableStatus = async (tableNo) => {
   return results
 }
 
+const updateTableDiscount = async ({
+  tableFile, FastDisc, FastDiscAmt, EmpDisc, EmpDiscAmt,
+  TrainDisc, TrainDiscAmt, MemDisc, MemDiscAmt, CuponDiscAmt,
+  DiscBath, SpaDiscAmt
+}) => {
+  const sql = `update tablefile set 
+        FastDisc='${FastDisc}',FastDiscAmt='${FastDiscAmt}',
+        EmpDisc='${EmpDisc}',EmpDiscAmt='${EmpDiscAmt}',
+        TrainDisc='${TrainDisc}',TrainDiscAmt='${TrainDiscAmt}',
+        MemDisc='${MemDisc}',MemDiscAmt='${MemDiscAmt}',
+        DiscBath='${DiscBath},CuponDiscAmt='${CuponDiscAmt}',
+        SpaDiscAmt='${SpaDiscAmt}' 
+        where Tcode='${tableFile.Tcode}'`
+  const results = await pool.query(sql)
+  return results
+}
+
 const updateTableOpenStatus = async (tableNo, Cashier, TUser) => {
   const sql = `update tablefile 
     set TOnact='Y', Cashier='${Cashier}', TUser=${TUser} 
@@ -393,5 +410,6 @@ module.exports = {
   tableMoveOrGroup,
   getBalanceAllByTable,
   getTableByCode,
-  splitTableToPayment
+  splitTableToPayment,
+  updateTableDiscount
 }
