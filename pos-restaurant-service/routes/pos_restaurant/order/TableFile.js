@@ -105,6 +105,20 @@ router.patch('/updateMember/:tableNo', function (req, res, next) {
     })
 });
 
+router.put('/discountInfo/:tableNo', function (req, res, next) {
+  const { tableNo } = req.params
+  TableFileService.updateTableDiscount(req.body)
+    .then(rows => {
+      return res.status(200).json({
+        status: 2000,
+        data: { message: `update success ${tableNo}` }
+      })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err })
+    })
+});
+
 router.put('/:id', function (req, res, next) {
   const id = req.params.id
   const { Tcode, SoneCode, TCustomer, TItem, TAmount, TOnAct, Service, ServiceAmt, EmpDiscAmt, FastDiscAmt,
