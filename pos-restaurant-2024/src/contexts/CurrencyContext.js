@@ -1,16 +1,17 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from "react"
 
-import { fetchExchangeRates } from '../services/exchangeRateService';
+import { fetchExchangeRates } from "../services/exchangeRateService"
 
-export const CurrencyContext = createContext();
+export const CurrencyContext = createContext()
 
 export const CurrencyProvider = ({ children }) => {
-  const [currency, setCurrency] = useState('THB');
-  const [exchangeRates, setExchangeRates] = useState({});
+  console.log("CurrencyContext")
+  const [currency, setCurrency] = useState("THB")
+  const [exchangeRates, setExchangeRates] = useState({})
 
   useEffect(() => {
-    fetchExchangeRates().then(rates => setExchangeRates(rates));
-  }, []);
+    fetchExchangeRates().then((rates) => setExchangeRates(rates))
+  }, [])
 
   const convertCurrency = (amount, targetCurrency) => {
     if (!exchangeRates[targetCurrency]) return amount
@@ -18,8 +19,10 @@ export const CurrencyProvider = ({ children }) => {
   }
 
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency, convertCurrency }}>
+    <CurrencyContext.Provider
+      value={{ currency, setCurrency, convertCurrency }}
+    >
       {children}
     </CurrencyContext.Provider>
-  );
-};
+  )
+}

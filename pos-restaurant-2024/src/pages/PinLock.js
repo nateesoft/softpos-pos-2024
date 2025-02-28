@@ -52,6 +52,7 @@ const inputPin = {
 }
 
 const PinLock = () => {
+  console.log("PinLock")
   const navigate = useNavigate();
 
   const [pin1, setPin1] = useState("")

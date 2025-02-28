@@ -1,26 +1,26 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import TableBarIcon from '@mui/icons-material/TableBar';
-import { Button, Menu, MenuItem, Modal } from '@mui/material';
-import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
-import Moment from 'react-moment';
-import { useNavigate } from 'react-router-dom';
-import MenuBookIcon from '@mui/icons-material/MenuBook';
-import QrCodeIcon from '@mui/icons-material/QrCode';
+import React, { useContext, useEffect, useState } from "react"
+import { styled, alpha } from "@mui/material/styles"
+import AppBar from "@mui/material/AppBar"
+import Box from "@mui/material/Box"
+import Toolbar from "@mui/material/Toolbar"
+import IconButton from "@mui/material/IconButton"
+import Typography from "@mui/material/Typography"
+import InputBase from "@mui/material/InputBase"
+import SearchIcon from "@mui/icons-material/Search"
+import AccountCircle from "@mui/icons-material/AccountCircle"
+import AccessTimeIcon from "@mui/icons-material/AccessTime"
+import MoreIcon from "@mui/icons-material/MoreVert"
+import TableBarIcon from "@mui/icons-material/TableBar"
+import { Button, Menu, MenuItem, Modal } from "@mui/material"
+import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
+import Moment from "react-moment"
+import { useNavigate } from "react-router-dom"
+import MenuBookIcon from "@mui/icons-material/MenuBook"
+import QrCodeIcon from "@mui/icons-material/QrCode"
 import { io } from "socket.io-client"
 
-import { POSContext } from '../../AppContext';
-import MenuSetupPage from './setupMenu/MenuSetupPage';
+import { POSContext } from "../../AppContext"
+import MenuSetupPage from "./setupMenu/MenuSetupPage"
 
 const modalStyle = {
   position: "absolute",
@@ -31,52 +31,52 @@ const modalStyle = {
   backgroundColor: "snow"
 }
 
-const appbarStyle = { 
-  border: "1px solid gray", 
-  background: "radial-gradient(circle, #123456, #000)", 
-  borderRadius: "5px" 
+const appbarStyle = {
+  border: "1px solid gray",
+  background: "radial-gradient(circle, #123456, #000)",
+  borderRadius: "5px"
 }
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25)
   },
   marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
-}));
+    width: "auto"
+  }
+}))
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
+const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center"
+}))
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  width: '100%',
-  '& .MuiInputBase-input': {
+  color: "inherit",
+  width: "100%",
+  "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '30ch',
-      },
-    },
-  },
-}));
+    transition: theme.transitions.create("width"),
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "30ch"
+      }
+    }
+  }
+}))
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
 // เชื่อมต่อกับ Socket.IO server
@@ -85,40 +85,41 @@ const socket = io(SOCKET_SERVER_URL, {
 })
 
 export default function AppbarMenu({ tableNo }) {
+  console.log("AppbarMenu")
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const openMenu = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = useState(null)
+  const openMenu = Boolean(anchorEl)
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
-  const menuId = 'primary-search-account-menu';
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  const menuId = "primary-search-account-menu"
+  const mobileMenuId = "primary-search-account-menu-mobile"
   const [open, setOpen] = useState(false)
   const [openMenuSetup, setOpenMenuSetup] = useState(false)
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
   const setupMenuPage = () => {
-    setAnchorEl(null);
+    setAnchorEl(null)
     setOpenMenuSetup(true)
   }
 
   const createQRCode = () => {
     const customerUrl = process.env.REACT_APP_FOOD_ORDING_APP
-    console.log('prepare create qrcode:', customerUrl+"/"+tableNo)
-    socket.emit("createQRCode", customerUrl + "/" +tableNo)
-    setAnchorEl(null);
+    console.log("prepare create qrcode:", customerUrl + "/" + tableNo)
+    socket.emit("createQRCode", customerUrl + "/" + tableNo)
+    setAnchorEl(null)
   }
 
   const navigate = useNavigate()
   const backFloorPlan = () => {
-    navigate('/floorplan')
+    navigate("/floorplan")
   }
 
-  useEffect(()=> {
+  useEffect(() => {
     socket.connect()
 
     // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
@@ -129,32 +130,45 @@ export default function AppbarMenu({ tableNo }) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Menu id="basic-menu"
+      <Menu
+        id="basic-menu"
         anchorEl={anchorEl}
         open={openMenu}
         onClose={handleClose}
         MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}>
-        <MenuItem onClick={() => setupMenuPage()} sx={{display: {xs: 'none', md: 'flex'}}}>
+          "aria-labelledby": "basic-button"
+        }}
+      >
+        <MenuItem
+          onClick={() => setupMenuPage()}
+          sx={{ display: { xs: "none", md: "flex" } }}
+        >
           <Box display="flex" justifyContent="center">
             <MenuBookIcon sx={{ marginRight: "10px" }} />
-            <Typography variant='p'>Menu Setup</Typography>
+            <Typography variant="p">Menu Setup</Typography>
           </Box>
         </MenuItem>
         <MenuItem onClick={createQRCode}>
           <Box display="flex" justifyContent="center">
             <QrCodeIcon sx={{ marginRight: "10px" }} />
-            <Typography variant='p'>QR สั่งอาหาร</Typography>
+            <Typography variant="p">QR สั่งอาหาร</Typography>
           </Box>
         </MenuItem>
       </Menu>
       <AppBar position="fixed" sx={appbarStyle}>
         <Toolbar>
           <div onClick={handleClick}>
-            <PointOfSaleIcon sx={{ display: { md: 'flex' }, mr: 1 }} />
+            <PointOfSaleIcon sx={{ display: { md: "flex" }, mr: 1 }} />
           </div>
-          <Button variant='text' sx={{ display: {xs: 'none', md: 'flex'}, fontSize: "18px", color: "white" }} onClick={handleClick}>
+          <Button
+            variant="text"
+            sx={{
+              display: { xs: "none", md: "flex" },
+              fontSize: "18px",
+              color: "white"
+            }}
+            onClick={handleClick}
+          >
             POS RESTUARANT ({tableNo})
           </Button>
           <Search>
@@ -163,11 +177,11 @@ export default function AppbarMenu({ tableNo }) {
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="ค้นหาเมนู…"
-              inputProps={{ 'aria-label': 'search' }}
+              inputProps={{ "aria-label": "search" }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
               edge="end"
@@ -188,10 +202,12 @@ export default function AppbarMenu({ tableNo }) {
               color="inherit"
             >
               <AccessTimeIcon />
-              <Typography sx={{ fontSize: "14px" }}><Moment format='DD/MM/YYYY HH:mm' /></Typography>
+              <Typography sx={{ fontSize: "14px" }}>
+                <Moment format="DD/MM/YYYY HH:mm" />
+              </Typography>
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: 'flex' } }}>
+          <Box sx={{ display: { xs: "flex" } }}>
             <IconButton
               size="large"
               aria-label="show more"
@@ -216,12 +232,21 @@ export default function AppbarMenu({ tableNo }) {
       </AppBar>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box sx={{ ...modalStyle, width: "80%", borderRadius: "10px" }}>
-          <div align="center" style={{ backgroundColor: "yellow", padding: "20px", borderRadius: "10px", color: "gray", fontSize: "22px" }}>
+          <div
+            align="center"
+            style={{
+              backgroundColor: "yellow",
+              padding: "20px",
+              borderRadius: "10px",
+              color: "gray",
+              fontSize: "22px"
+            }}
+          >
             Special Menu 2024 ... Comming soon...
           </div>
         </Box>
       </Modal>
       <MenuSetupPage open={openMenuSetup} setOpen={setOpenMenuSetup} />
     </Box>
-  );
+  )
 }

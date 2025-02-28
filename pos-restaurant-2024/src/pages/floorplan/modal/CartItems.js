@@ -4,45 +4,30 @@ import SendIcon from "@mui/icons-material/CheckBox"
 
 import apiClient from "../../../httpRequest"
 
-const items = [
-  {
-    id: 1,
-    img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    menuName: "ก๋วยเตี๋ยวหมู",
-    options: [
-      { id: "101", label: "ใหญ่", price: 0 },
-      { id: "102", label: "น้ำ", price: 0 },
-      { id: "103", label: "เผ็ดปกติ", price: 0 }
-    ],
-    menuPrice: 60,
-    qty: 1
-  }
-]
-
 const CartItems = ({ onClose, orderId }) => {
-  console.log('Show cart items:', orderId)
+  console.log("CartItems:", orderId)
   const [orderInfo, setOrderInfo] = useState({})
   const handleSendKitchen = () => {
     onClose()
   }
 
-  const initLoadOrder = useCallback(()=> {
-    console.log('initLoadOrder')
+  const initLoadOrder = useCallback(() => {
+    console.log("initLoadOrder")
     apiClient
-    .post(`/api/integration/booking/getOrder`, { reserveNo: orderId })
-    .then((response) => {
-      console.log(response)
-      if (response.data.status === 2000) {
-        const appData = response.data.data
-        setOrderInfo(appData)
-      }
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+      .post(`/api/integration/booking/getOrder`, { reserveNo: orderId })
+      .then((response) => {
+        console.log(response)
+        if (response.data.status === 2000) {
+          const appData = response.data.data
+          setOrderInfo(appData)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }, [orderId])
 
-  useEffect(()=> {
+  useEffect(() => {
     initLoadOrder()
   }, [initLoadOrder])
 
@@ -65,7 +50,12 @@ const CartItems = ({ onClose, orderId }) => {
                 <tbody>
                   <tr>
                     <td>
-                      <img src={item.image.src} alt="" width="auto" height={80} />
+                      <img
+                        src={item.image.src}
+                        alt=""
+                        width="auto"
+                        height={80}
+                      />
                     </td>
                     <td align="left" valign="top">
                       <div>{item.name}</div>
@@ -96,9 +86,7 @@ const CartItems = ({ onClose, orderId }) => {
         ))}
       <Box padding={1}>
         <Grid2 padding={1} container justifyContent="space-between">
-          <Typography fontSize={16}>
-            จำนวนรายการ
-          </Typography>
+          <Typography fontSize={16}>จำนวนรายการ</Typography>
           <Typography fontSize={16}>
             {orderInfo.line_items && orderInfo.line_items.length}
           </Typography>

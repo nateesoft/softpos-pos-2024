@@ -1,9 +1,10 @@
-import { Helmet } from 'react-helmet-async';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid2';
-import { Box } from '@mui/material';
+import { Helmet } from "react-helmet-async"
+import Typography from "@mui/material/Typography"
+import Grid from "@mui/material/Grid2"
+import { Box } from "@mui/material"
 
-export default function PageNotFound() {
+const PageNotFound = () => {
+  console.log("PageNotFound")
   return (
     <>
       <Helmet>
@@ -22,18 +23,20 @@ export default function PageNotFound() {
             src="/assets/illustration-404.svg"
             sx={{
               width: 320,
-              height: 'auto',
-              my: { xs: 5, sm: 10 },
+              height: "auto",
+              my: { xs: 5, sm: 10 }
             }}
           />
         </Grid>
         <Grid size={12} display="flex" justifyContent="center">
-          <Typography sx={{ color: 'text.secondary' }}>
-            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be
-            sure to check your spelling.
+          <Typography sx={{ color: "text.secondary" }}>
+            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve
+            mistyped the URL? Be sure to check your spelling.
           </Typography>
         </Grid>
       </Grid>
     </>
-  );
+  )
 }
+
+export default PageNotFound

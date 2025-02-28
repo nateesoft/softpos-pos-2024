@@ -7,13 +7,7 @@ import TableContainer from "@mui/material/TableContainer"
 import TableHead from "@mui/material/TableHead"
 import TablePagination from "@mui/material/TablePagination"
 import TableRow from "@mui/material/TableRow"
-import {
-  Box,
-  Button,
-  Modal,
-  TextField,
-  Typography
-} from "@mui/material"
+import { Box, Button, Modal, TextField, Typography } from "@mui/material"
 import Grid2 from "@mui/material/Grid2"
 import RefundIcon from "@mui/icons-material/ReceiptLong"
 import ReceiptIcon from "@mui/icons-material/ReceiptLong"
@@ -53,6 +47,7 @@ const modalStyle = {
 }
 
 const RefundBill = ({ socket }) => {
+  console.log("RefundBill")
   const navigate = useNavigate()
   const { appData } = useContext(POSContext)
   const { handleNotification } = useAlert()
@@ -127,8 +122,8 @@ const RefundBill = ({ socket }) => {
   }, [])
 
   const loadBillToBalance = () => {
-    if(!tableNo){
-      return;
+    if (!tableNo) {
+      return
     }
     apiClient
       .post("/api/billno/toBalance", { billRefNo, tableNo })

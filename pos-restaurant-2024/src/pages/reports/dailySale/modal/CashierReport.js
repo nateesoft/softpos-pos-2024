@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import { Box, Button, Grid2, TextField, Typography } from "@mui/material"
-import ConfirmIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel'
-import { useNavigate } from "react-router-dom";
+import ConfirmIcon from "@mui/icons-material/CheckCircle"
+import CancelIcon from "@mui/icons-material/Cancel"
+import { useNavigate } from "react-router-dom"
 
 const modalStyle = {
   position: "absolute",
@@ -16,6 +16,7 @@ const modalStyle = {
 }
 
 const CashierReportModal = ({ setOpen }) => {
+  console.log("CashierReportModal")
   const navigate = useNavigate()
 
   const [user, setUser] = useState("")
@@ -29,17 +30,38 @@ const CashierReportModal = ({ setOpen }) => {
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
       <Grid2 container spacing={2} padding={2} justifyContent="center">
-        <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>รายงานพนักงานขาย (Cashier Report)</Typography>
+        <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>
+          รายงานพนักงานขาย (Cashier Report)
+        </Typography>
       </Grid2>
       <Grid2 container spacing={2} padding={2} direction="column">
         <Grid2 size={12}>
-          <TextField label="รหัสพนักงานขาย" value={user} onChange={e => setUser(e.target.value)} fullWidth />
+          <TextField
+            label="รหัสพนักงานขาย"
+            value={user}
+            onChange={(e) => setUser(e.target.value)}
+            fullWidth
+          />
         </Grid2>
       </Grid2>
       <Box display="flex" justifyContent="center">
         <Grid2 container spacing={2} padding={2}>
-          <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
+          <Button
+            variant="contained"
+            color="error"
+            endIcon={<CancelIcon />}
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="info"
+            endIcon={<ConfirmIcon />}
+            onClick={handleConfirm}
+          >
+            Confirm
+          </Button>
         </Grid2>
       </Box>
     </Box>

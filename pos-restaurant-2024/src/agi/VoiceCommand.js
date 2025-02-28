@@ -37,7 +37,8 @@ const findIntent = (text) => {
   return bestMatch.intent
 }
 
-const AICharacter = () => {
+const VoiceCommand = () => {
+  console.log("VoiceCommand")
   const navigate = useNavigate()
   const [mood, setMood] = useState("neutral")
   const [command, setCommand] = useState("🎤 กำลังฟัง...")
@@ -122,4 +123,4 @@ const AICharacter = () => {
   )
 }
 
-export default AICharacter
+export default VoiceCommand

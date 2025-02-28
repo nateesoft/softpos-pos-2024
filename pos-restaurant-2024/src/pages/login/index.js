@@ -12,7 +12,7 @@ import LoginIcon from "@mui/icons-material/Login"
 import { Divider, Grid2, useMediaQuery } from "@mui/material"
 import { io } from "socket.io-client"
 
-import { useAlert } from '../../contexts/AlertContext'
+import { useAlert } from "../../contexts/AlertContext"
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import { handleEnter } from "../ui-utils/EventLisener"
@@ -54,7 +54,6 @@ const Login = () => {
   const iphonePro14max = useMediaQuery("(max-width:430px)")
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
-
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -248,10 +247,7 @@ const Login = () => {
                         </Typography>
                       )}
                     </Box>
-                    <Box
-                      component="form"
-                      onSubmit={handleSubmit}
-                    >
+                    <Box component="form" onSubmit={handleSubmit}>
                       <Grid2 container spacing={1}>
                         <TextField
                           required

@@ -323,9 +323,9 @@ class ComponentToPrint extends Component {
             <thead>
               <tr>
                 <th>ประเภทการขาย</th>
-                <th style={{textAlign: "right"}}>บิล</th>
-                <th style={{textAlign: "right"}}>ลูกค้า</th>
-                <th style={{textAlign: "right"}}>จำนวนเงิน</th>
+                <th style={{ textAlign: "right" }}>บิล</th>
+                <th style={{ textAlign: "right" }}>ลูกค้า</th>
+                <th style={{ textAlign: "right" }}>จำนวนเงิน</th>
               </tr>
             </thead>
             <tbody>
@@ -356,6 +356,7 @@ class ComponentToPrint extends Component {
 }
 
 const CashierReport = () => {
+  console.log("CashierReport")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const [query] = useSearchParams()

@@ -73,6 +73,7 @@ function PaymentForm({
   setOpenSplitBill,
   tableFileDb
 }) {
+  console.log("PaymentForm")
   const { appData } = useContext(POSContext)
   const { macno, branchInfo, companyInfo, empCode } = appData
 
@@ -1049,7 +1050,7 @@ function PaymentForm({
             display: { xs: "none", md: "block" }
           }}
         >
-          <DiscountFormModal 
+          <DiscountFormModal
             tableFile={tableFileDb}
             setOpenDiscountModal={setOpenDiscountModal}
           />

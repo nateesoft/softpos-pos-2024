@@ -4,20 +4,20 @@ import Grid2 from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { motion } from "framer-motion"
 
-import apiClient from '../../httpRequest'
+import apiClient from "../../httpRequest"
 import AppbarMenu from "./AppbarMenu"
 import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
-import Footer from '../Footer'
+import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
 
 function MainSalePage() {
-  console.log('MainSalePage')
-  const { tableNo } = useParams();
+  console.log("MainSalePage")
+  const { tableNo } = useParams()
   const { handleNotification } = useAlert()
 
   const matches = useMediaQuery("(min-width:1024px)")
-  
+
   const [orderType, setOrderType] = useState("E")
   const [ProductList, setProductList] = useState([])
   const [ProductA, setProductA] = useState([])
@@ -89,12 +89,14 @@ function MainSalePage() {
       .then((response) => {
         if (response.status === 200) {
           const dataList = response.data.data
-          const dataEList = dataList.filter(item => item.R_ETD === "E")
-          const dataTList = dataList.filter(item => item.R_ETD === "T")
-          const dataDList = dataList.filter(item => item.R_ETD === "D")
+          const dataEList = dataList.filter((item) => item.R_ETD === "E")
+          const dataTList = dataList.filter((item) => item.R_ETD === "T")
+          const dataDList = dataList.filter((item) => item.R_ETD === "D")
           setOrderList(
             dataList.map((item) => {
-              const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
+              const menu = listMenuSetup.find(
+                (a) => a.menu_code === item.R_PluCode
+              )
               if (!menu) return item
               return {
                 ...item,
@@ -104,7 +106,9 @@ function MainSalePage() {
           )
           setOrderEList(
             dataEList.map((item) => {
-              const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
+              const menu = listMenuSetup.find(
+                (a) => a.menu_code === item.R_PluCode
+              )
               if (!menu) return item
               return {
                 ...item,
@@ -114,7 +118,9 @@ function MainSalePage() {
           )
           setOrderTList(
             dataTList.map((item) => {
-              const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
+              const menu = listMenuSetup.find(
+                (a) => a.menu_code === item.R_PluCode
+              )
               if (!menu) return item
               return {
                 ...item,
@@ -124,7 +130,9 @@ function MainSalePage() {
           )
           setOrderDList(
             dataDList.map((item) => {
-              const menu = listMenuSetup.find((a) => a.menu_code === item.R_PluCode)
+              const menu = listMenuSetup.find(
+                (a) => a.menu_code === item.R_PluCode
+              )
               if (!menu) return item
               return {
                 ...item,
@@ -152,7 +160,10 @@ function MainSalePage() {
       exit={{ opacity: 0 }}
     >
       <AppbarMenu tableNo={tableNo} />
-      <Grid2 container sx={{background: "radial-gradient(circle, #001, #000)"}}>
+      <Grid2
+        container
+        sx={{ background: "radial-gradient(circle, #001, #000)" }}
+      >
         <Grid2 size={matches ? 8 : 12}>
           <ProductMenu
             tableNo={tableNo}
@@ -173,7 +184,15 @@ function MainSalePage() {
             handleNotification={handleNotification}
           />
         </Grid2>
-        <Grid2 size={4} sx={{ backgroundColor: "white", border: "2px solid #ddd", display: {xs: 'none', md: 'flex'}, marginTop: "65px" }}>
+        <Grid2
+          size={4}
+          sx={{
+            backgroundColor: "white",
+            border: "2px solid #ddd",
+            display: { xs: "none", md: "flex" },
+            marginTop: "65px"
+          }}
+        >
           <OrderItem
             tableNo={tableNo}
             orderType={orderType}

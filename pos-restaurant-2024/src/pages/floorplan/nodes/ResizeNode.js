@@ -1,9 +1,8 @@
-import { NodeResizer } from "@xyflow/react";
+import { NodeResizer } from "@xyflow/react"
 
 function ResizeNode({ data }) {
-  return (
-    <NodeResizer />
-  )
+  console.log("ResizeNode")
+  return <NodeResizer />
 }
 
 export default ResizeNode

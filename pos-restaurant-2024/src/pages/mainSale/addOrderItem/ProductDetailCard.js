@@ -25,6 +25,7 @@ const ProductDetailCard = ({
   initLoadOrder,
   initLoadMenu
 }) => {
+  console.log("ProductDetailCard")
   const { appData } = useContext(POSContext)
   const { empCode, macno, userLogin } = appData
 
@@ -42,10 +43,10 @@ const ProductDetailCard = ({
   }
 
   const handleConfirm = () => {
-    if(discountPercent < 0 || discountPercent > 100) {
+    if (discountPercent < 0 || discountPercent > 100) {
       return
     }
-    if(discountBaht < 0 || discountBaht > product.menuPrice) {
+    if (discountBaht < 0 || discountBaht > product.menuPrice) {
       return
     }
     // update balance
@@ -84,7 +85,7 @@ const ProductDetailCard = ({
         background: "#eee"
       }}
     >
-      <Box sx={{background: "radial-gradient(circle, #123456, #000)"}}>
+      <Box sx={{ background: "radial-gradient(circle, #123456, #000)" }}>
         <Grid2 container justifyContent="center">
           <img
             src={product.image_url}
@@ -98,9 +99,15 @@ const ProductDetailCard = ({
           container
           justifyContent="space-between"
           padding={1}
-          sx={{ background: "chocolate", marginTop: -8, borderBottom: "1px solid snow" }}
+          sx={{
+            background: "chocolate",
+            marginTop: -8,
+            borderBottom: "1px solid snow"
+          }}
         >
-          <Typography variant="p" sx={{color: "white"}}>เมนู {product.R_PName}</Typography>
+          <Typography variant="p" sx={{ color: "white" }}>
+            เมนู {product.R_PName}
+          </Typography>
         </Grid2>
       </Box>
       <Grid2
@@ -110,8 +117,12 @@ const ProductDetailCard = ({
         marginBottom={1}
         sx={{ background: "chocolate" }}
       >
-        <Typography variant="p" sx={{color: "white"}}>ราคา {product.R_Price} บาท</Typography>
-        <Typography variant="p" sx={{color: "white"}}>รหัส {product.R_PluCode}</Typography>
+        <Typography variant="p" sx={{ color: "white" }}>
+          ราคา {product.R_Price} บาท
+        </Typography>
+        <Typography variant="p" sx={{ color: "white" }}>
+          รหัส {product.R_PluCode}
+        </Typography>
       </Grid2>
       <OptionMenuSelect
         setSpecialText={setSpecialText}
@@ -119,15 +130,25 @@ const ProductDetailCard = ({
         optList={optList}
         setOptList={setOptList}
       />
-      {product.R_Discount === 'Y' && <Grid2
-        marginTop={1}
-        marginBottom={1}
-        container
-        justifyContent="space-between"
-      >
-        <TextField label="ส่วนลด %" value={discountPercent} onChange={e=>setDiscountPercent(e.target.value)}></TextField>
-        <TextField label="จำนวนเงินส่วนลด" value={discountBaht} onChange={e=>setDiscountBaht(e.target.value)}></TextField>
-      </Grid2>}
+      {product.R_Discount === "Y" && (
+        <Grid2
+          marginTop={1}
+          marginBottom={1}
+          container
+          justifyContent="space-between"
+        >
+          <TextField
+            label="ส่วนลด %"
+            value={discountPercent}
+            onChange={(e) => setDiscountPercent(e.target.value)}
+          ></TextField>
+          <TextField
+            label="จำนวนเงินส่วนลด"
+            value={discountBaht}
+            onChange={(e) => setDiscountBaht(e.target.value)}
+          ></TextField>
+        </Grid2>
+      )}
       <Grid2 container>
         <Grid2 container size={12}>
           <Typography variant="p">ประเภทอาหาร</Typography>

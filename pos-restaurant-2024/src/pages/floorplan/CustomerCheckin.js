@@ -41,7 +41,7 @@ const modalStyle = {
 }
 
 const CustomerCheckin = (props) => {
-  console.log('CustomerCheckin')
+  console.log("CustomerCheckin")
   const { t } = useTranslation("global")
   const { appData, setAppData } = useContext(POSContext)
   const { macno } = appData
@@ -87,7 +87,17 @@ const CustomerCheckin = (props) => {
     const checkTableActive = await apiClient.get(`/api/tablefile/${tableNo}`)
     const tableResponse = checkTableActive.data.data
     if (tableResponse != null) {
-      if (thaiCount + europeCount + americaCount + asiaCount + manCount + womanCount + kidCount + oldCount !== custCount) {
+      if (
+        thaiCount +
+          europeCount +
+          americaCount +
+          asiaCount +
+          manCount +
+          womanCount +
+          kidCount +
+          oldCount !==
+        custCount
+      ) {
         setShowCustomerCountError(true)
         return
       }
@@ -266,10 +276,14 @@ const CustomerCheckin = (props) => {
           setAsiaCount={setAsiaCount}
         />
         <CustomerDetail
-          man={manCount} setMan={setManCount}
-          woman={womanCount} setWoman={setWomanCount}
-          kid={kidCount} setKid={setKidCount}
-          old={oldCount} setOld={setOldCount}
+          man={manCount}
+          setMan={setManCount}
+          woman={womanCount}
+          setWoman={setWomanCount}
+          kid={kidCount}
+          setKid={setKidCount}
+          old={oldCount}
+          setOld={setOldCount}
         />
       </Box>
       <Grid2 container padding={1} spacing={1}>
@@ -294,7 +308,9 @@ const CustomerCheckin = (props) => {
           onClick={() => setOpenBookingModal(true)}
         >
           <Typography color="primary">
-            <u>{t("FloorPlanPage.foundBooking")} Order: {orderId}</u>
+            <u>
+              {t("FloorPlanPage.foundBooking")} Order: {orderId}
+            </u>
           </Typography>
         </Alert>
       )}

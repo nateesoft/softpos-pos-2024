@@ -13,7 +13,7 @@ import { Box, Modal } from "@mui/material"
 
 import "@xyflow/react/dist/style.css"
 
-import apiClient from '../../httpRequest'
+import apiClient from "../../httpRequest"
 import RoundNode from "./nodes/RoundNode"
 import SquareNode from "./nodes/SquareNode"
 import LongNode from "./nodes/LongBarNode"
@@ -44,9 +44,10 @@ const modalStyle = {
   boxShadow: 24
 }
 
-const defaultViewport = { x: 400, y: 400, zoom: 0.5 };
+const defaultViewport = { x: 400, y: 400, zoom: 0.5 }
 
 const TableManagement = () => {
+  console.log("TableManagement")
   const { handleNotification } = useAlert()
 
   const navigate = useNavigate()
@@ -140,7 +141,7 @@ const TableManagement = () => {
           if (response.status === 200) {
             navigate("/floorplan")
           } else {
-            handleNotification('พบข้อผิดพลาดในการแสดงข้อมูล!')
+            handleNotification("พบข้อผิดพลาดในการแสดงข้อมูล!")
           }
         })
         .catch((error) => {
@@ -209,22 +210,26 @@ const TableManagement = () => {
     }
   }
 
-  const loadFloorPlan = useCallback((floor) => {
-    apiClient.get(`/api/floorplan-template/${floor}`)
-      .then(response => {
-        if (response.data.data) {
-          const flow = response.data.data.template
-          if (flow) {
-            setNodes(flow.nodes || [])
+  const loadFloorPlan = useCallback(
+    (floor) => {
+      apiClient
+        .get(`/api/floorplan-template/${floor}`)
+        .then((response) => {
+          if (response.data.data) {
+            const flow = response.data.data.template
+            if (flow) {
+              setNodes(flow.nodes || [])
+            } else {
+              setNodes([])
+            }
           } else {
             setNodes([])
           }
-        } else {
-          setNodes([])
-        }
-      })
-      .catch(err => handleNotification(err.message))
-  }, [setNodes])
+        })
+        .catch((err) => handleNotification(err.message))
+    },
+    [setNodes]
+  )
 
   useEffect(() => {
     loadFloorPlan(selectFloor)
@@ -234,8 +239,8 @@ const TableManagement = () => {
     <motion.div
       className="dndflow"
       animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }} 
-      style={{background: "radial-gradient(circle at top, #003, #000)"}}
+      exit={{ opacity: 0 }}
+      style={{ background: "radial-gradient(circle at top, #003, #000)" }}
     >
       <AppbarMenu
         onSave={onSave}
