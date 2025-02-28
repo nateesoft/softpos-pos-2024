@@ -7,7 +7,7 @@ import CancelIcon from "@mui/icons-material/Cancel"
 import apiClient from "../../../httpRequest"
 
 const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
-  console.log('DiscountFormModal load:', tableFile)
+  console.log("DiscountFormModal load:", tableFile)
 
   // ref
   const inputRef0 = useRef(null)
@@ -19,7 +19,16 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
   const inputRef6 = useRef(null)
   const inputRef7 = useRef(null)
 
-  const arrayInputRef = [inputRef0, inputRef1, inputRef2, inputRef3, inputRef4, inputRef5, inputRef6, inputRef7]
+  const arrayInputRef = [
+    inputRef0,
+    inputRef1,
+    inputRef2,
+    inputRef3,
+    inputRef4,
+    inputRef5,
+    inputRef6,
+    inputRef7
+  ]
 
   const [netTotalBalance, setNetTotalBalance] = useState(tableFile.NetTotal)
 
@@ -31,48 +40,50 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
   const [cuponAmt, setCuponAmt] = useState(tableFile.SubDiscAmt || 0)
 
   const [bahtAmt, setBahtAmt] = useState(tableFile.DiscBath || 0)
-  const [specialCuponAmt, setSpecialCuponAmt] = useState(tableFile.CuponDiscAmt || 0)
+  const [specialCuponAmt, setSpecialCuponAmt] = useState(
+    tableFile.CuponDiscAmt || 0
+  )
 
   const nextComponent = (e, index) => {
-    console.log('nextComponent:', e.key)
-    if(e.key === "Enter"){
+    console.log("nextComponent:", e.key)
+    if (e.key === "Enter") {
       arrayInputRef[index].current?.focus()
     }
   }
 
   const summaryDiscount = () => {
     let netTotalAmount = tableFile.NetTotal
-    let formatFast = posConfigSetup.P_FastDisc.split('/')[0]
-    let formatEmp = posConfigSetup.P_EmpDisc.split('/')[0]
-    let formatMem = posConfigSetup.P_MemDisc.split('/')[0]
-    let formatTrain = posConfigSetup.P_TrainDisc.split('/')[0]
-    let formatSub = posConfigSetup.P_SubDisc.split('/')[0]
+    let formatFast = posConfigSetup.P_FastDisc.split("/")[0]
+    let formatEmp = posConfigSetup.P_EmpDisc.split("/")[0]
+    let formatMem = posConfigSetup.P_MemDisc.split("/")[0]
+    let formatTrain = posConfigSetup.P_TrainDisc.split("/")[0]
+    let formatSub = posConfigSetup.P_SubDisc.split("/")[0]
 
-    if(fastAmt > parseFloat(formatFast)){
-      console.log('FastAmt: Incorrect Number!!!')
-      return;
+    if (fastAmt > parseFloat(formatFast)) {
+      console.log("FastAmt: Incorrect Number!!!")
+      return
     }
-    if(empAmt > parseFloat(formatEmp)){
-      console.log('EmpAmt: Incorrect Number!!!')
-      return;
+    if (empAmt > parseFloat(formatEmp)) {
+      console.log("EmpAmt: Incorrect Number!!!")
+      return
     }
-    if(memAmt > parseFloat(formatMem)){
-      console.log('MemAmt: Incorrect Number!!!')
-      return;
+    if (memAmt > parseFloat(formatMem)) {
+      console.log("MemAmt: Incorrect Number!!!")
+      return
     }
-    if(traineeAmt > parseFloat(formatTrain)){
-      console.log('TraineeAmt: Incorrect Number!!!')
-      return;
+    if (traineeAmt > parseFloat(formatTrain)) {
+      console.log("TraineeAmt: Incorrect Number!!!")
+      return
     }
-    if(cuponAmt > parseFloat(formatSub)){
-      console.log('CuponAmt: Incorrect Number!!!')
-      return;
+    if (cuponAmt > parseFloat(formatSub)) {
+      console.log("CuponAmt: Incorrect Number!!!")
+      return
     }
-    netTotalAmount -= netTotalAmount * fastAmt / 100
-    netTotalAmount -= netTotalAmount * empAmt / 100
-    netTotalAmount -= netTotalAmount * memAmt / 100
-    netTotalAmount -= netTotalAmount * traineeAmt / 100
-    netTotalAmount -= netTotalAmount * cuponAmt / 100
+    netTotalAmount -= (netTotalAmount * fastAmt) / 100
+    netTotalAmount -= (netTotalAmount * empAmt) / 100
+    netTotalAmount -= (netTotalAmount * memAmt) / 100
+    netTotalAmount -= (netTotalAmount * traineeAmt) / 100
+    netTotalAmount -= (netTotalAmount * cuponAmt) / 100
     netTotalAmount -= bahtAmt
     netTotalAmount -= specialCuponAmt
 
@@ -125,7 +136,7 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
       DiscBath: bahtAmt,
       SpaDiscAmt: specialCuponAmt
     }
-    console.log('updPayload:', updPayload)
+    console.log("updPayload:", updPayload)
     apiClient
       .put(`/api/tablefile/discountInfo/${tableFile.Tcode}`, updPayload)
       .then((response) => {
@@ -148,33 +159,39 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
         <Typography variant="h6">ให้ส่วนลดต่างๆ ในระบบ</Typography>
       </Grid2>
       <Box component="form">
-        <Grid2 size={12} spacing={1} margin={1} container justifyContent="center">
+        <Grid2
+          size={12}
+          spacing={1}
+          margin={1}
+          container
+          justifyContent="center"
+        >
           <Grid2 container size={4}>
             <Button
               variant="contained"
               color="success"
               fullWidth
               disabled={posConfigSetup.P_FastDiscGet === "N"}
-              onClick={()=>focusComponent(0)}
+              onClick={() => focusComponent(0)}
             >
               ส่วนลดเทศกาล
             </Button>
           </Grid2>
           <Grid2 container size={4}>
             <TextField
-                value={posConfigSetup.P_FastDisc}
-                disabled={true}
-                inputProps={{ min: 0, style: { textAlign: "center" } }}
-              />
+              value={posConfigSetup.P_FastDisc}
+              disabled={true}
+              inputProps={{ min: 0, style: { textAlign: "center" } }}
+            />
           </Grid2>
           <Grid2 size={4}>
-            <TextField 
+            <TextField
               inputRef={inputRef0}
-              value={fastAmt} 
-              setValue={setFastAmt} 
+              value={fastAmt}
+              setValue={setFastAmt}
               disabled={posConfigSetup.P_FastDiscGet === "N"}
-              onChange={e=>setFastAmt(e.target.value)}
-              onKeyDown={e=>nextComponent(e, 1)}
+              onChange={(e) => setFastAmt(e.target.value)}
+              onKeyDown={(e) => nextComponent(e, 1)}
               onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
@@ -183,14 +200,20 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             />
           </Grid2>
         </Grid2>
-        <Grid2 size={12} spacing={1} margin={1} container justifyContent="center">
+        <Grid2
+          size={12}
+          spacing={1}
+          margin={1}
+          container
+          justifyContent="center"
+        >
           <Grid2 container size={4}>
             <Button
               variant="contained"
               color="success"
               fullWidth
               disabled={posConfigSetup.P_EmpDiscGet === "N"}
-              onClick={()=>focusComponent(1)}
+              onClick={() => focusComponent(1)}
             >
               ส่วนลดพนักงาน
             </Button>
@@ -199,16 +222,17 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             <TextField
               value={posConfigSetup.P_EmpDisc}
               disabled={true}
-              inputProps={{ min: 0, style: { textAlign: "center" } }} />
+              inputProps={{ min: 0, style: { textAlign: "center" } }}
+            />
           </Grid2>
           <Grid2 size={4}>
-            <TextField 
+            <TextField
               inputRef={inputRef1}
-              value={empAmt} 
-              setValue={setEmpAmt} 
+              value={empAmt}
+              setValue={setEmpAmt}
               disabled={posConfigSetup.P_EmpDiscGet === "N"}
-              onChange={e=>setEmpAmt(e.target.value)}
-              onKeyDown={e=>nextComponent(e, 2)}
+              onChange={(e) => setEmpAmt(e.target.value)}
+              onKeyDown={(e) => nextComponent(e, 2)}
               onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
@@ -217,14 +241,20 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             />
           </Grid2>
         </Grid2>
-        <Grid2 size={12} spacing={1} margin={1} container justifyContent="center">
+        <Grid2
+          size={12}
+          spacing={1}
+          margin={1}
+          container
+          justifyContent="center"
+        >
           <Grid2 container size={4}>
             <Button
               variant="contained"
               color="success"
               fullWidth
               disabled={posConfigSetup.P_MemDiscGet === "N"}
-              onClick={()=>focusComponent(2)}
+              onClick={() => focusComponent(2)}
             >
               ส่วนลดสมาชิก (VIP)
             </Button>
@@ -233,17 +263,18 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             <TextField
               value={posConfigSetup.P_MemDisc}
               disabled={true}
-              inputProps={{ min: 0, style: { textAlign: "center" } }} />
+              inputProps={{ min: 0, style: { textAlign: "center" } }}
+            />
           </Grid2>
           <Grid2 size={4}>
-            <TextField 
-              inputRef={inputRef2} 
-              value={memAmt} 
-              setValue={setMemAmt} 
-              disabled={posConfigSetup.P_MemDiscGet === "N"} 
-              onChange={e=>setMemAmt(e.target.value)}
-              onKeyDown={e=>nextComponent(e, 3)} 
-              onKeyUp={summaryDiscount} 
+            <TextField
+              inputRef={inputRef2}
+              value={memAmt}
+              setValue={setMemAmt}
+              disabled={posConfigSetup.P_MemDiscGet === "N"}
+              onChange={(e) => setMemAmt(e.target.value)}
+              onKeyDown={(e) => nextComponent(e, 3)}
+              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -251,14 +282,20 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             />
           </Grid2>
         </Grid2>
-        <Grid2 size={12} spacing={1} margin={1} container justifyContent="center">
+        <Grid2
+          size={12}
+          spacing={1}
+          margin={1}
+          container
+          justifyContent="center"
+        >
           <Grid2 container size={4}>
             <Button
               variant="contained"
               color="success"
               fullWidth
               disabled={posConfigSetup.P_TrainDiscGet === "N"}
-              onClick={()=>focusComponent(3)}
+              onClick={() => focusComponent(3)}
             >
               ส่วนลด Trainee
             </Button>
@@ -267,17 +304,18 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             <TextField
               value={posConfigSetup.P_TrainDisc}
               disabled={true}
-              inputProps={{ min: 0, style: { textAlign: "center" } }} />
+              inputProps={{ min: 0, style: { textAlign: "center" } }}
+            />
           </Grid2>
           <Grid2 size={4}>
-            <TextField 
+            <TextField
               inputRef={inputRef3}
-              value={traineeAmt} 
-              setValue={setTraineeAmt} 
-              disabled={posConfigSetup.P_TrainDiscGet === "N"} 
-              onChange={e=>setTraineeAmt(e.target.value)}
-              onKeyDown={e=>nextComponent(e, 4)} 
-              onKeyUp={summaryDiscount} 
+              value={traineeAmt}
+              setValue={setTraineeAmt}
+              disabled={posConfigSetup.P_TrainDiscGet === "N"}
+              onChange={(e) => setTraineeAmt(e.target.value)}
+              onKeyDown={(e) => nextComponent(e, 4)}
+              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -285,14 +323,21 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             />
           </Grid2>
         </Grid2>
-        <Grid2 size={12} spacing={1} margin={1} container justifyContent="center">
+        <Grid2
+          size={12}
+          spacing={1}
+          margin={1}
+          container
+          justifyContent="center"
+        >
           <Grid2 container size={4}>
             <Button
               variant="contained"
               color="success"
               fullWidth
               disabled={posConfigSetup.P_SubDiscGet === "N"}
-              onClick={()=>focusComponent(4)}>
+              onClick={() => focusComponent(4)}
+            >
               ส่วนลดคูปอง
             </Button>
           </Grid2>
@@ -300,17 +345,18 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             <TextField
               value={posConfigSetup.P_SubDisc}
               disabled={true}
-              inputProps={{ min: 0, style: { textAlign: "center" } }} />
+              inputProps={{ min: 0, style: { textAlign: "center" } }}
+            />
           </Grid2>
           <Grid2 size={4}>
-            <TextField 
-              inputRef={inputRef4} 
-              value={cuponAmt} 
-              setValue={setCuponAmt} 
+            <TextField
+              inputRef={inputRef4}
+              value={cuponAmt}
+              setValue={setCuponAmt}
               disabled={posConfigSetup.P_SubDiscGet === "N"}
-              onChange={e=>setCuponAmt(e.target.value)}
-              onKeyDown={e=>nextComponent(e, 5)} 
-              onKeyUp={summaryDiscount} 
+              onChange={(e) => setCuponAmt(e.target.value)}
+              onKeyDown={(e) => nextComponent(e, 5)}
+              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -318,14 +364,20 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             />
           </Grid2>
         </Grid2>
-        <Grid2 size={12} spacing={1} margin={1} container justifyContent="center">
+        <Grid2
+          size={12}
+          spacing={1}
+          margin={1}
+          container
+          justifyContent="center"
+        >
           <Grid2 container size={4}>
             <Button
               variant="contained"
               color="success"
               fullWidth
               disabled={posConfigSetup.P_DiscBathChk === "N"}
-              onClick={()=>focusComponent(5)}
+              onClick={() => focusComponent(5)}
             >
               ส่วนลดบาท
             </Button>
@@ -336,9 +388,9 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
               value={bahtAmt}
               setValue={setBahtAmt}
               disabled={posConfigSetup.P_DiscBathChk === "N"}
-              onChange={e=>setBahtAmt(e.target.value)}
-              onKeyDown={e=>nextComponent(e, 6)} 
-              onKeyUp={summaryDiscount} 
+              onChange={(e) => setBahtAmt(e.target.value)}
+              onKeyDown={(e) => nextComponent(e, 6)}
+              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -346,9 +398,21 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             />
           </Grid2>
         </Grid2>
-        <Grid2 size={12} spacing={1} margin={1} container justifyContent="center">
+        <Grid2
+          size={12}
+          spacing={1}
+          margin={1}
+          container
+          justifyContent="center"
+        >
           <Grid2 container size={4}>
-            <Button variant="contained" color="success" fullWidth onKeyDown={e=>nextComponent(e)} onClick={()=>focusComponent(6)}>
+            <Button
+              variant="contained"
+              color="success"
+              fullWidth
+              onKeyDown={(e) => nextComponent(e)}
+              onClick={() => focusComponent(6)}
+            >
               ส่วนลดบัตรคูปองพิเศษ
             </Button>
           </Grid2>
@@ -357,8 +421,8 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
               inputRef={inputRef6}
               value={specialCuponAmt}
               setValue={setSpecialCuponAmt}
-              onChange={e=>setSpecialCuponAmt(e.target.value)} 
-              onKeyUp={summaryDiscount} 
+              onChange={(e) => setSpecialCuponAmt(e.target.value)}
+              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}

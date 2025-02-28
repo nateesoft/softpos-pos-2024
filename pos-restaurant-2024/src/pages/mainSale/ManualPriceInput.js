@@ -1,64 +1,103 @@
-import React, { useState } from 'react'
-import { Box, Button, Divider, Grid2, TextField, Typography } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
+import React, { useState } from "react"
+import {
+  Box,
+  Button,
+  Divider,
+  Grid2,
+  TextField,
+  Typography
+} from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
+import CheckIcon from "@mui/icons-material/Check"
 
 const ManualPriceInput = ({ productInfo, setShowManualPrice, addOrder }) => {
-    console.log('ManualPriceInput')
-    const [menuName, setMenuName] = useState(productInfo.menu_name)
-    const [newPrice, setNewPrice] = useState(productInfo.menu_price)
+  console.log("ManualPriceInput")
+  const [menuName, setMenuName] = useState(productInfo.menu_name)
+  const [newPrice, setNewPrice] = useState(productInfo.menu_price)
 
-    const handleNewPrice = (data) => {
-        const price = parseFloat(data)
-        if (price < 0) {
-            setNewPrice(0)
-            return
-        }
-        if (price > 99999999999) {
-            setNewPrice(0)
-            return
-        }
-        setNewPrice(price)
+  const handleNewPrice = (data) => {
+    const price = parseFloat(data)
+    if (price < 0) {
+      setNewPrice(0)
+      return
     }
-
-    const handleChangeName = (data) => {
-        if (data.length > 200) {
-            setMenuName(productInfo.menu_name)
-            return;
-        }
-        setMenuName(data)
+    if (price > 99999999999) {
+      setNewPrice(0)
+      return
     }
+    setNewPrice(price)
+  }
 
-    const handleConfirm = (product) => {
-        const newProduct = {
-            ...product,
-
-        }
-        newProduct.menu_price = newPrice
-        newProduct.menu_name = menuName
-        addOrder(1, newProduct)
-        setShowManualPrice(false)
+  const handleChangeName = (data) => {
+    if (data.length > 200) {
+      setMenuName(productInfo.menu_name)
+      return
     }
+    setMenuName(data)
+  }
 
-    return (
-        <>
-            <Grid2 spacing={2} padding={2} container justifyContent="center" 
-                sx={{ backgroundColor: "purple", color: "white", borderRadius: "15px 15px 0px 0px" }}>
-                <Typography variant='h6'>แก้ไขราคาสินค้า</Typography>
-            </Grid2>
-            <Grid2 container spacing={2} padding={2} justifyContent="space-between">
-                <TextField label="รหัสสินค้า" disabled value={productInfo.menu_code} />
-                <TextField label="ราคาขาย" disabled value={productInfo.menu_price} />
-                <TextField label="ชื่อสินค้า" value={menuName} onChange={(e) => handleChangeName(e.target.value)} fullWidth />
-                <TextField label="กำหนดราคาใหม่" type='number' value={newPrice} onChange={(e) => handleNewPrice(e.target.value)} />
-            </Grid2>
-            <Divider />
-            <Grid2 container spacing={1} padding={1} justifyContent="center">
-                <Button variant="contained" color="error" startIcon={<CloseIcon />} onClick={() => setShowManualPrice(false)}>Cancel</Button>
-                <Button variant="contained" color="success" startIcon={<CheckIcon />} onClick={() => handleConfirm(productInfo)}>Add</Button>
-            </Grid2>
-        </>
-    )
+  const handleConfirm = (product) => {
+    const newProduct = {
+      ...product
+    }
+    newProduct.menu_price = newPrice
+    newProduct.menu_name = menuName
+    addOrder(1, newProduct)
+    setShowManualPrice(false)
+  }
+
+  return (
+    <>
+      <Grid2
+        spacing={2}
+        padding={2}
+        container
+        justifyContent="center"
+        sx={{
+          backgroundColor: "purple",
+          color: "white",
+          borderRadius: "15px 15px 0px 0px"
+        }}
+      >
+        <Typography variant="h6">แก้ไขราคาสินค้า</Typography>
+      </Grid2>
+      <Grid2 container spacing={2} padding={2} justifyContent="space-between">
+        <TextField label="รหัสสินค้า" disabled value={productInfo.menu_code} />
+        <TextField label="ราคาขาย" disabled value={productInfo.menu_price} />
+        <TextField
+          label="ชื่อสินค้า"
+          value={menuName}
+          onChange={(e) => handleChangeName(e.target.value)}
+          fullWidth
+        />
+        <TextField
+          label="กำหนดราคาใหม่"
+          type="number"
+          value={newPrice}
+          onChange={(e) => handleNewPrice(e.target.value)}
+        />
+      </Grid2>
+      <Divider />
+      <Grid2 container spacing={1} padding={1} justifyContent="center">
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<CloseIcon />}
+          onClick={() => setShowManualPrice(false)}
+        >
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<CheckIcon />}
+          onClick={() => handleConfirm(productInfo)}
+        >
+          Add
+        </Button>
+      </Grid2>
+    </>
+  )
 }
 
 export default ManualPriceInput

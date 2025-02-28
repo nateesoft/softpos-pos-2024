@@ -325,6 +325,7 @@ class ComponentToPrint extends Component {
 }
 
 const TerminalReport = () => {
+  console.log("TerminalReport")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const [query] = useSearchParams()

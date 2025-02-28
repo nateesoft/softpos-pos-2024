@@ -1,12 +1,22 @@
-import React from 'react';
-import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import { Grid2, Typography } from '@mui/material';
+import React from "react"
+import Box from "@mui/material/Box"
+import List from "@mui/material/List"
+import ListItemButton from "@mui/material/ListItemButton"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import { Grid2, Typography } from "@mui/material"
 
-const ChangeProductList = ({ optionalList, setOptionalList, subMenuSelected, setSubMenuSelected, currentMenu, closeDialog }) => {
-  const newOptionList = optionalList.filter(item => (item.checked === false && item.menu_code !== currentMenu))
+const ChangeProductList = ({
+  optionalList,
+  setOptionalList,
+  subMenuSelected,
+  setSubMenuSelected,
+  currentMenu,
+  closeDialog
+}) => {
+  console.log("ChangeProuductList")
+  const newOptionList = optionalList.filter(
+    (item) => item.checked === false && item.menu_code !== currentMenu
+  )
 
   const handleListItemClick = (menu) => {
     const updatedCheckedState = subMenuSelected.map((item, index) => {
@@ -18,7 +28,9 @@ const ChangeProductList = ({ optionalList, setOptionalList, subMenuSelected, set
     const updatedOrderListSelected = optionalList.map((item, index) => {
       if (item.menu_code === menu.menu_code) {
         const position = index
-        const updatedCheckedState = subMenuSelected.map((item, index2) => index2 === position ? !item : item)
+        const updatedCheckedState = subMenuSelected.map((item, index2) =>
+          index2 === position ? !item : item
+        )
         setSubMenuSelected(updatedCheckedState)
         return {
           ...item,
@@ -33,26 +45,42 @@ const ChangeProductList = ({ optionalList, setOptionalList, subMenuSelected, set
     })
     setOptionalList(updatedOrderListSelected)
     closeDialog()
-  };
+  }
 
   return (
-    <Box sx={{ width: "500px", height: "350px", bgcolor: 'background.paper' }}>
+    <Box sx={{ width: "500px", height: "350px", bgcolor: "background.paper" }}>
       <List component="nav" aria-label="main mailbox folders">
-        {newOptionList.length === 0 && <Typography variant='h5'>ไม่มีเมนูอาหารที่สามารถเปลี่ยนได้ !!!</Typography>}
-        {newOptionList && newOptionList.map((menu, index) =>
-          <ListItemButton onClick={() => handleListItemClick(menu)}>
-            <ListItemIcon>
-              <img src={menu.image_url} alt={menu.menu_name} width={100} height={100} />
-            </ListItemIcon>
-            <Grid2 container padding={2} spacing={2} display="flex" direction="column">
-              <Typography>{menu.menu_name}</Typography>
-              <Typography>ราคา: {menu.menu_price || 0} บาท</Typography>
-            </Grid2>
-          </ListItemButton>
+        {newOptionList.length === 0 && (
+          <Typography variant="h5">
+            ไม่มีเมนูอาหารที่สามารถเปลี่ยนได้ !!!
+          </Typography>
         )}
+        {newOptionList &&
+          newOptionList.map((menu, index) => (
+            <ListItemButton onClick={() => handleListItemClick(menu)}>
+              <ListItemIcon>
+                <img
+                  src={menu.image_url}
+                  alt={menu.menu_name}
+                  width={100}
+                  height={100}
+                />
+              </ListItemIcon>
+              <Grid2
+                container
+                padding={2}
+                spacing={2}
+                display="flex"
+                direction="column"
+              >
+                <Typography>{menu.menu_name}</Typography>
+                <Typography>ราคา: {menu.menu_price || 0} บาท</Typography>
+              </Grid2>
+            </ListItemButton>
+          ))}
       </List>
     </Box>
-  );
+  )
 }
 
 export default ChangeProductList

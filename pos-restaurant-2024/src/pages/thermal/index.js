@@ -4,7 +4,7 @@ import { Button, Grid2, TextField } from '@mui/material'
 import apiClient from '../../httpRequest';
 import { useAlert } from '../../contexts/AlertContext';
 
-const ConnectThermalPrinter = () => {
+const Thermal = () => {
     const [printerIp, setPrinterIp] = useState("192.168.1.209")
     const [message, setMessage] = useState("")
     const { handleNotification } = useAlert()
@@ -35,4 +35,4 @@ const ConnectThermalPrinter = () => {
     )
 }
 
-export default ConnectThermalPrinter
+export default Thermal

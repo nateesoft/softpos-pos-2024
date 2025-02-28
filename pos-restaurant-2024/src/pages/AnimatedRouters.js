@@ -60,6 +60,7 @@ import VoiceCommand from "../agi/VoiceCommand"
 import AICharacter from "../agi/AICharacter"
 
 const AnimatedRoutes = () => {
+  console.log("AnimatedRoutes")
   const location = useLocation()
 
   const handleOnUserIdle = () => {

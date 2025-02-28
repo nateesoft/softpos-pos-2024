@@ -46,6 +46,7 @@ const currencyList = [
 ]
 
 const PosSettingsForm = ({ setOpen }, data) => {
+  console.log("PosSettingsForm")
   const { user_update, terminal_id } = data
   const [language, setLanguage] = useState("th")
   const [timezone, setTimeZone] = useState("Asia/Bangkok")
@@ -134,13 +135,21 @@ const PosSettingsForm = ({ setOpen }, data) => {
   }, [])
 
   return (
-    <Box sx={{ ...modalStyle, width: "430px", overflow: "auto", padding: "10px" }}>
+    <Box
+      sx={{ ...modalStyle, width: "430px", overflow: "auto", padding: "10px" }}
+    >
       <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>
           POS Terminal Setting
         </Typography>
       </Grid2>
-      <Grid2 container spacing={1} padding={1} margin={1} justifyContent="space-evenly">
+      <Grid2
+        container
+        spacing={1}
+        padding={1}
+        margin={1}
+        justifyContent="space-evenly"
+      >
         {/* <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Language</InputLabel>
           <Select
@@ -192,7 +201,13 @@ const PosSettingsForm = ({ setOpen }, data) => {
         </FormControl>
       </Grid2>
       <Divider />
-      <Grid2 spacing={1} padding={1} container justifyContent="center" sx={{background: "#eee"}}>
+      <Grid2
+        spacing={1}
+        padding={1}
+        container
+        justifyContent="center"
+        sx={{ background: "#eee" }}
+      >
         <Typography>ทดสอบ (฿1000):</Typography>
         <Typography fontSize={18} fontWeight="bold">
           {new Intl.NumberFormat("th-TH", {

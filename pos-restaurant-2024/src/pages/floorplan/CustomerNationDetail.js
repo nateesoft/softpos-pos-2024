@@ -11,6 +11,7 @@ const min = 0
 const max = 10
 
 const CustomerNationDetail = (props) => {
+  console.log("CustomerNationDetail")
   const { t } = useTranslation("global")
 
   const {

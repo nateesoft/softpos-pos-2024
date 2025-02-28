@@ -183,7 +183,10 @@ function FloorPlanPage() {
           let tableStatus = response.data.data.tableStatus
           const Cashier = response.data.data.Cashier
           if (tableStatus === "cashierInUse" && Cashier !== userLogin) {
-            handleNotification(`มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`, "warning")
+            handleNotification(
+              `มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`,
+              "warning"
+            )
           } else {
             tableStatus = "available"
             setAppData({
@@ -360,7 +363,7 @@ function FloorPlanPage() {
                   color="inherit"
                   aria-label="open drawer"
                   edge="start"
-                  sx={{display: {xs: 'none', md: 'inline'}}}
+                  sx={{ display: { xs: "none", md: "inline" } }}
                 >
                   <ReportSelect />
                 </IconButton>
@@ -384,7 +387,17 @@ function FloorPlanPage() {
                 sx={{ color: "snow", fontWeight: "bold" }}
                 onClick={() => setOpenLogout(true)}
                 startIcon={<AccountCircleIcon />}
-                endIcon={<LogoutIcon sx={{color: "snow", background: "red", display: {xs: 'flex', md: 'none'}, borderRadius: "5px", padding: "2px"}} />}
+                endIcon={
+                  <LogoutIcon
+                    sx={{
+                      color: "snow",
+                      background: "red",
+                      display: { xs: "flex", md: "none" },
+                      borderRadius: "5px",
+                      padding: "2px"
+                    }}
+                  />
+                }
               >
                 {userLogin}
               </Button>

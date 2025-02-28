@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react"
 import { Alert, Box, Button, TextField, Typography } from "@mui/material"
 import Grid2 from "@mui/material/Grid2"
-import ConfirmIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel'
+import ConfirmIcon from "@mui/icons-material/CheckCircle"
+import CancelIcon from "@mui/icons-material/Cancel"
 
-import apiClient from '../../httpRequest'
-import { POSContext } from "../../AppContext";
+import apiClient from "../../httpRequest"
+import { POSContext } from "../../AppContext"
 
 const modalStyle = {
   position: "absolute",
@@ -19,6 +19,7 @@ const modalStyle = {
 }
 
 const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
+  console.log("ManageCustTable")
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
 
@@ -33,16 +34,16 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
     if (sourceTable === "" || targetTable === "") {
       setMsgError("ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!")
       setShowError(true)
-      return;
+      return
     }
     if (sourceTable === targetTable) {
       setMsgError("ท่านกำหนดเบอร์โต๊ะไม่ถูกต้อง กรุณาตรวจสอบ !!!")
       setShowError(true)
-      return;
+      return
     }
 
     if (admin.trim() === "") {
-      return;
+      return
     }
 
     const checkPin = await apiClient.post(`/api/employ/getEmployeeByCode`, {
@@ -52,13 +53,17 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
     if (!pinValid) {
       setMsgError("ข้อมูลผู้ดูแลระบบไม่ถูกต้อง !!!")
       setShowError(true)
-      return;
+      return
     }
 
-    apiClient.post(`/api/tablefile/moveTable`, {
-      sourceTable, targetTable, admin, Cashier: userLogin
-    })
-      .then(response => {
+    apiClient
+      .post(`/api/tablefile/moveTable`, {
+        sourceTable,
+        targetTable,
+        admin,
+        Cashier: userLogin
+      })
+      .then((response) => {
         if (response.status === 200 && response.data.status === 2000) {
           onLoadFloorPlan()
           setOpen(false)
@@ -67,41 +72,63 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
           setShowError(true)
         }
       })
-      .catch(err => {
+      .catch((err) => {
         setMsgError(err.message)
         setShowError(true)
       })
-
   }
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
       <Grid2 container spacing={2} padding={2} justifyContent="center">
-        <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>กรุณาระบุข้อมูลโต๊ะหลัก และโต๊ะที่ต้องการย้าย</Typography>
+        <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>
+          กรุณาระบุข้อมูลโต๊ะหลัก และโต๊ะที่ต้องการย้าย
+        </Typography>
       </Grid2>
       <Grid2 container spacing={2} padding={2} direction="column">
         <Grid2 container size={12}>
-          <TextField label="ย้ายข้อมูลจากโต๊ะ" value={sourceTable} onChange={e => setSourceTable(e.target.value)} fullWidth />
-          <TextField 
-            label="ไปยังโต๊ะ" 
-            value={targetTable} 
-            onChange={e => setTargetTable(e.target.value)} 
+          <TextField
+            label="ย้ายข้อมูลจากโต๊ะ"
+            value={sourceTable}
+            onChange={(e) => setSourceTable(e.target.value)}
             fullWidth
-            autoComplete="off" />
-          <TextField 
-            type="password" 
-            label="ผู้ดูแล" 
-            value={admin} 
-            onChange={e => setAdmin(e.target.value)} 
+          />
+          <TextField
+            label="ไปยังโต๊ะ"
+            value={targetTable}
+            onChange={(e) => setTargetTable(e.target.value)}
+            fullWidth
+            autoComplete="off"
+          />
+          <TextField
+            type="password"
+            label="ผู้ดูแล"
+            value={admin}
+            onChange={(e) => setAdmin(e.target.value)}
             autoComplete="new-password"
-            fullWidth />
+            fullWidth
+          />
         </Grid2>
       </Grid2>
       {showError && <Alert severity="error">{msgError}</Alert>}
       <Box display="flex" justifyContent="center">
         <Grid2 container spacing={2} padding={2}>
-          <Button variant="contained" color="error" endIcon={<CancelIcon />} onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
+          <Button
+            variant="contained"
+            color="error"
+            endIcon={<CancelIcon />}
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="info"
+            endIcon={<ConfirmIcon />}
+            onClick={handleConfirm}
+          >
+            Confirm
+          </Button>
         </Grid2>
       </Box>
     </Box>

@@ -121,7 +121,7 @@ const ProductMenu = ({
   initLoadOrder,
   handleNotification
 }) => {
-  console.log('ProductMenu')
+  console.log("ProductMenu")
   const { t } = useTranslation("global")
   const matches = useMediaQuery("(min-width:1024px)")
   const { appData } = useContext(POSContext)
@@ -469,7 +469,8 @@ const ProductMenu = ({
         TransitionComponent={Transition}
         keepMounted
         onClose={() => setShowMenu(false)}
-        aria-describedby="alert-dialog-slide-description">
+        aria-describedby="alert-dialog-slide-description"
+      >
         <OrderItem
           tableNo={tableNo}
           OrderList={OrderList}
@@ -489,7 +490,15 @@ const ProductMenu = ({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={{ ...modalStyle, width: "80vw", height: "80vh", background: "black", overflow: "auto" }}>
+        <Box
+          sx={{
+            ...modalStyle,
+            width: "80vw",
+            height: "80vh",
+            background: "black",
+            overflow: "auto"
+          }}
+        >
           <Grid2
             container
             justifyContent="center"
@@ -511,10 +520,12 @@ const ProductMenu = ({
               />
             </Grid2>
             <Typography color="error" variant="h5" sx={{ fontWeight: "bold" }}>
-              ( ราคา {new Intl.NumberFormat("th-TH", {
-            style: "currency",
-            currency
-          }).format(convertCurrency(productInfo.menu_price, currency))} )
+              ( ราคา{" "}
+              {new Intl.NumberFormat("th-TH", {
+                style: "currency",
+                currency
+              }).format(convertCurrency(productInfo.menu_price, currency))}{" "}
+              )
             </Typography>
             {msgWarning && (
               <Box
@@ -534,7 +545,8 @@ const ProductMenu = ({
             container
             spacing={1}
             padding={1}
-            justifyContent="center" sx={{border: "1px solid orange"}}
+            justifyContent="center"
+            sx={{ border: "1px solid orange" }}
           >
             <Typography sx={{ color: "green", fontWeight: "bold" }}>
               รายการที่เลือก:{" "}

@@ -1,6 +1,13 @@
 import React, { memo, useContext, useState } from "react"
 import Grid2 from "@mui/material/Grid2"
-import { Box, Button, Typography, IconButton, TextField, useMediaQuery } from "@mui/material"
+import {
+  Box,
+  Button,
+  Typography,
+  IconButton,
+  TextField,
+  useMediaQuery
+} from "@mui/material"
 import CheckIcon from "@mui/icons-material/CheckCircle"
 import CancelIcon from "@mui/icons-material/CancelRounded"
 import AddIcon from "@mui/icons-material/Add"
@@ -8,16 +15,18 @@ import RemoveIcon from "@mui/icons-material/Remove"
 
 import OptionMenuSelect from "./OptionMenuSelect"
 import { POSContext } from "../../AppContext"
-import apiClient from '../../httpRequest'
+import apiClient from "../../httpRequest"
 
-const ProductDetailCard = memo(({ 
-    tableNo, 
-    product, 
+const ProductDetailCard = memo(
+  ({
+    tableNo,
+    product,
     handleNotification,
     closeModal,
-    initLoadOrder, 
-    initLoadMenu 
+    initLoadOrder,
+    initLoadMenu
   }) => {
+    console.log("ProductDetailCard")
     const { appData } = useContext(POSContext)
     const { empCode, macno, userLogin } = appData
 
@@ -30,7 +39,14 @@ const ProductDetailCard = memo(({
       product.qty = count
       apiClient
         .post(`/api/balance`, {
-          tableNo, menuInfo: product, optList, specialText, qty: count, macno, userLogin, empCode
+          tableNo,
+          menuInfo: product,
+          optList,
+          specialText,
+          qty: count,
+          macno,
+          userLogin,
+          empCode
         })
         .then((response) => {
           initLoadMenu()
@@ -60,7 +76,7 @@ const ProductDetailCard = memo(({
                 <img
                   src={product.image_url}
                   width={300}
-                  height={matches ? 250: "auto"}
+                  height={matches ? 250 : "auto"}
                   alt=""
                   style={{ borderRadius: "5px", boxShadow: "2px 3px #ccc" }}
                 />
@@ -119,7 +135,12 @@ const ProductDetailCard = memo(({
             <AddIcon fontSize="large" />
           </IconButton>
         </Grid2>
-        <OptionMenuSelect setSpecialText={setSpecialText} productCode={product.menu_code} optList={optList} setOptList={setOptList} />
+        <OptionMenuSelect
+          setSpecialText={setSpecialText}
+          productCode={product.menu_code}
+          optList={optList}
+          setOptList={setOptList}
+        />
         <div align="center">
           <Button
             variant="contained"

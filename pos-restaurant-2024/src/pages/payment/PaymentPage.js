@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Grid from '@mui/material/Grid2'
-import { useParams } from "react-router-dom";
-import { motion } from 'framer-motion'
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { Box, Modal } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react"
+import Grid from "@mui/material/Grid2"
+import { useParams } from "react-router-dom"
+import { motion } from "framer-motion"
+import useMediaQuery from "@mui/material/useMediaQuery"
+import { Box, Modal } from "@mui/material"
 
-import apiClient from '../../httpRequest'
-import OrderItem from './OrderItem'
-import PaymentForm from './PaymentForm'
-import MemberInfo from "./MemberInfo";
-import MultiplePayment from "./split/MultiplePayment";
-import { useAlert } from "../../contexts/AlertContext";
+import apiClient from "../../httpRequest"
+import OrderItem from "./OrderItem"
+import PaymentForm from "./PaymentForm"
+import MemberInfo from "./MemberInfo"
+import MultiplePayment from "./split/MultiplePayment"
+import { useAlert } from "../../contexts/AlertContext"
 
 const modalStyle = {
   bgcolor: "background.paper",
@@ -25,8 +25,8 @@ const backgroundSpecial = {
 }
 
 function PaymentPage() {
-  console.log('PaymentPage')
-  const { tableNo } = useParams();
+  console.log("PaymentPage")
+  const { tableNo } = useParams()
   const { handleNotification } = useAlert()
 
   // Load summary tablefile
@@ -37,7 +37,7 @@ function PaymentPage() {
   const [netTotalAmount, setNetTotalAmount] = useState(0)
   const [printRecpMessage, setPrintRecpMessage] = useState("")
 
-  const matches = useMediaQuery('(min-width:1024px)');
+  const matches = useMediaQuery("(min-width:1024px)")
 
   const [openSplitBill, setOpenSplitBill] = useState(false)
 
@@ -74,8 +74,9 @@ function PaymentPage() {
   }, [tableNo, handleNotification])
 
   const summaryTableFileBalance = useCallback(() => {
-    apiClient.post('/api/balance/summaryBalance', { tableNo })
-      .then(response => {
+    apiClient
+      .post("/api/balance/summaryBalance", { tableNo })
+      .then((response) => {
         if (response.status === 200) {
           const data = response.data.data
           setSubTotalAmount(data.TAmount)
@@ -86,7 +87,7 @@ function PaymentPage() {
           setPrintRecpMessage(data.printRecpMessage)
         }
       })
-      .catch(err => handleNotification(err.message))
+      .catch((err) => handleNotification(err.message))
   }, [tableNo, handleNotification])
 
   const splitBillAction = () => {
@@ -104,19 +105,33 @@ function PaymentPage() {
   }, [summaryTableFileBalance])
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       <Grid container spacing={2} sx={backgroundSpecial}>
-        {matches && <Grid size={4}>
-          <OrderItem tableNo={tableNo} orderList={orderList} tableFile={{
-            subTotalAmount,
-            serviceAmount,
-            vatAmount,
-            netTotalAmount,
-            productAndService,
-            printRecpMessage
-          }} />
-          <MemberInfo tableNo={tableNo} memberInfo={memberInfo} setMemberInfo={setMemberInfo} />
-        </Grid>}
+        {matches && (
+          <Grid size={4}>
+            <OrderItem
+              tableNo={tableNo}
+              orderList={orderList}
+              tableFile={{
+                subTotalAmount,
+                serviceAmount,
+                vatAmount,
+                netTotalAmount,
+                productAndService,
+                printRecpMessage
+              }}
+            />
+            <MemberInfo
+              tableNo={tableNo}
+              memberInfo={memberInfo}
+              setMemberInfo={setMemberInfo}
+            />
+          </Grid>
+        )}
         <Grid size={matches ? 8 : 12}>
           <PaymentForm
             tableNo={tableNo}
@@ -156,7 +171,7 @@ function PaymentPage() {
         </Box>
       </Modal>
     </motion.div>
-  );
+  )
 }
 
-export default PaymentPage;
+export default PaymentPage

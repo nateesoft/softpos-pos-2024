@@ -1,34 +1,59 @@
-import React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Box, Button, Divider, Grid2, TableContainer, Typography } from '@mui/material';
+import React from "react"
+import Table from "@mui/material/Table"
+import TableBody from "@mui/material/TableBody"
+import TableCell from "@mui/material/TableCell"
+import TableRow from "@mui/material/TableRow"
+import Paper from "@mui/material/Paper"
+import {
+  Box,
+  Button,
+  Divider,
+  Grid2,
+  TableContainer,
+  Typography
+} from "@mui/material"
 
-const NumFormat = data => {
+const NumFormat = (data) => {
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
 const OrderItem = ({ tableNo, orderList, tableFile }) => {
+  console.log("OrderItem")
   return (
     <Paper elevation={3} sx={{ padding: "10px", margin: "10px" }}>
-      <Box sx={{ padding: "10px", borderRadius: "5px", background: "radial-gradient(circle, salmon, #005)" }}>
-        <Typography sx={{ fontWeight: "bold", fontSize: "18px", color: "white" }}>Table No: {tableNo}</Typography>
+      <Box
+        sx={{
+          padding: "10px",
+          borderRadius: "5px",
+          background: "radial-gradient(circle, salmon, #005)"
+        }}
+      >
+        <Typography
+          sx={{ fontWeight: "bold", fontSize: "18px", color: "white" }}
+        >
+          Table No: {tableNo}
+        </Typography>
       </Box>
       <Grid2>
-        <TableContainer sx={{overflow: 'auto', height: '368px'}}>
+        <TableContainer sx={{ overflow: "auto", height: "368px" }}>
           <Table aria-label="spanning table">
             <TableBody>
-              {orderList && orderList.map((order) => (
-                <TableRow key={order.R_Index}>
-                  <TableCell sx={{ whiteSpace: "nowrap" }}>{order.R_PName}</TableCell>
-                  <TableCell align="right">{order.R_Quan}</TableCell>
-                  <TableCell align="right">{NumFormat(order.R_Price)}</TableCell>
-                  <TableCell align="right">{NumFormat(order.R_Total)}</TableCell>
-                  <TableCell align="right">{order.R_ETD}</TableCell>
-                </TableRow>
-              ))}
+              {orderList &&
+                orderList.map((order) => (
+                  <TableRow key={order.R_Index}>
+                    <TableCell sx={{ whiteSpace: "nowrap" }}>
+                      {order.R_PName}
+                    </TableCell>
+                    <TableCell align="right">{order.R_Quan}</TableCell>
+                    <TableCell align="right">
+                      {NumFormat(order.R_Price)}
+                    </TableCell>
+                    <TableCell align="right">
+                      {NumFormat(order.R_Total)}
+                    </TableCell>
+                    <TableCell align="right">{order.R_ETD}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -54,16 +79,20 @@ const OrderItem = ({ tableNo, orderList, tableFile }) => {
         </Grid2>
         <Divider />
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography variant='h5'>Net-TOTAL</Typography>
-          <Typography variant='h5'>{NumFormat(tableFile.netTotalAmount)}</Typography>
+          <Typography variant="h5">Net-TOTAL</Typography>
+          <Typography variant="h5">
+            {NumFormat(tableFile.netTotalAmount)}
+          </Typography>
         </Grid2>
         <Divider />
         <Grid2 display="flex" justifyContent="center">
-          <Typography sx={{ fontSize: "10px" }}>{tableFile.printRecpMessage}</Typography>
+          <Typography sx={{ fontSize: "10px" }}>
+            {tableFile.printRecpMessage}
+          </Typography>
         </Grid2>
       </Box>
     </Paper>
-  );
+  )
 }
 
 export default OrderItem

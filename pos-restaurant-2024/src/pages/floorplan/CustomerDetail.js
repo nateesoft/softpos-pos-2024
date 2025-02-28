@@ -11,6 +11,7 @@ const min = 0
 const max = 10
 
 const CustomerDetail = (props) => {
+  console.log("CustomerDetail")
   const { t } = useTranslation("global")
   const { man, woman, kid, old, setMan, setWoman, setKid, setOld } = props
   return (

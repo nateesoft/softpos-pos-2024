@@ -1,8 +1,18 @@
 import React, { useState } from "react"
-import { Box, Button, Divider, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  Divider,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography
+} from "@mui/material"
 import Grid2 from "@mui/material/Grid2"
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Cancel'
+import SaveIcon from "@mui/icons-material/Save"
+import CancelIcon from "@mui/icons-material/Cancel"
 
 const modalStyle = {
   position: "absolute",
@@ -29,12 +39,17 @@ const imageItems = [
 ]
 
 const TableSetup = (props) => {
+  console.log("TableSetup")
   const { tableInfo, setTableInfo, closeModal, onChange } = props
   const [tableNo, setTableNo] = useState(tableInfo.data.label || "")
   const [image, setImage] = useState(tableInfo.data.image || "")
   const [zone, setZone] = useState(tableInfo.data.zone || "STAND_ROOM")
-  const [customerCount, setCustomerCount] = useState(tableInfo.data.customerCount || 0)
-  const [tableStatus, setTableStatus] = useState(tableInfo.data.tableStatus || "Y")
+  const [customerCount, setCustomerCount] = useState(
+    tableInfo.data.customerCount || 0
+  )
+  const [tableStatus, setTableStatus] = useState(
+    tableInfo.data.tableStatus || "Y"
+  )
 
   const handleChange = (status) => {
     setTableStatus(status)
@@ -61,7 +76,12 @@ const TableSetup = (props) => {
           <TextField label="ID" value={tableInfo.id} fullWidth disabled />
         </Grid2>
         <Grid2 size={12}>
-          <TextField label="Table No" value={tableNo} onChange={e => setTableNo(e.target.value)} fullWidth />
+          <TextField
+            label="Table No"
+            value={tableNo}
+            onChange={(e) => setTableNo(e.target.value)}
+            fullWidth
+          />
         </Grid2>
         <Grid2 size={12}>
           <FormControl fullWidth>
@@ -71,7 +91,7 @@ const TableSetup = (props) => {
               id="demo-simple-select-helper"
               value={zone}
               label="Table Status"
-              onChange={e => setZone(e.target.value)}
+              onChange={(e) => setZone(e.target.value)}
             >
               <MenuItem value="STAND_ROOM">STAND_ROOM</MenuItem>
               <MenuItem value="VIP_ROOM">VIP_ROOM</MenuItem>
@@ -82,7 +102,13 @@ const TableSetup = (props) => {
           </FormControl>
         </Grid2>
         <Grid2 size={12}>
-          <TextField label="Customer Size" type="number" value={customerCount} onChange={e => setCustomerCount(e.target.value)} fullWidth />
+          <TextField
+            label="Customer Size"
+            type="number"
+            value={customerCount}
+            onChange={(e) => setCustomerCount(e.target.value)}
+            fullWidth
+          />
         </Grid2>
         <Grid2 size={12}>
           <FormControl fullWidth>
@@ -91,12 +117,14 @@ const TableSetup = (props) => {
               labelId="table-image-id"
               value={image}
               label="Table Status"
-              onChange={e => setImage(e.target.value)}
+              onChange={(e) => setImage(e.target.value)}
             >
-              {imageItems && imageItems.map((img) =>
-                <MenuItem value={img}>
-                  <img src={img} width={32} height={32} alt="" />
-                </MenuItem>)}
+              {imageItems &&
+                imageItems.map((img) => (
+                  <MenuItem value={img}>
+                    <img src={img} width={32} height={32} alt="" />
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
         </Grid2>
@@ -107,7 +135,7 @@ const TableSetup = (props) => {
               labelId="table-status-id"
               value={tableStatus}
               label="Table Status"
-              onChange={e => handleChange(e.target.value)}
+              onChange={(e) => handleChange(e.target.value)}
             >
               <MenuItem value="Y">Active</MenuItem>
               <MenuItem value="N">Not Active</MenuItem>
@@ -117,8 +145,22 @@ const TableSetup = (props) => {
       </Grid2>
       <Box display="flex" justifyContent="center">
         <Grid2 container spacing={2} padding={2}>
-          <Button variant="contained" color="error" startIcon={<CancelIcon />} onClick={closeModal}>Cancel</Button>
-          <Button variant="contained" color="info" startIcon={<SaveIcon />} onClick={handleSave}>Save</Button>
+          <Button
+            variant="contained"
+            color="error"
+            startIcon={<CancelIcon />}
+            onClick={closeModal}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="info"
+            startIcon={<SaveIcon />}
+            onClick={handleSave}
+          >
+            Save
+          </Button>
         </Grid2>
       </Box>
     </Box>

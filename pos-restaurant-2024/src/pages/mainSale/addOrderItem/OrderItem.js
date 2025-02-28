@@ -38,7 +38,9 @@ const getTotalAmount = (orderList) => {
   for (let i = 0; i < orderList.length; i++) {
     const balance = orderList[i]
     if (balance.R_Void !== "V") {
-      totalBill = totalBill + parseInt(balance.R_Quan * balance.R_Price - balance.R_DiscBath)
+      totalBill =
+        totalBill +
+        parseInt(balance.R_Quan * balance.R_Price - balance.R_DiscBath)
     }
   }
 
@@ -46,6 +48,7 @@ const getTotalAmount = (orderList) => {
 }
 
 const TotalBill = ({ orderList }) => {
+  console.log("TotalBill")
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const totalBill = getTotalAmount(orderList)
   const convertedTotal = convertCurrency(totalBill, currency)
@@ -65,7 +68,10 @@ const TotalBill = ({ orderList }) => {
       </Grid2>
       <Grid2 container justifyContent="flex-end">
         <Typography fontSize={28} fontWeight="bold">
-        {new Intl.NumberFormat("th-TH", { style: "currency", currency}).format(convertCurrency(convertedTotal))}
+          {new Intl.NumberFormat("th-TH", {
+            style: "currency",
+            currency
+          }).format(convertCurrency(convertedTotal))}
         </Typography>
       </Grid2>
     </div>
@@ -146,7 +152,7 @@ const OrderItem = ({
   }
 
   return (
-    <div style={{overflow: "auto", width: "100%"}}>
+    <div style={{ overflow: "auto", width: "100%" }}>
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
           <Tab label="Dine In" value="E" sx={{ boxShadow: "2px 2px #eee" }} />
@@ -333,8 +339,15 @@ const OrderItem = ({
           >
             *** รายการส่งครัว ***
           </div>
-          <div style={{ background: "radial-gradient(circle, chocolate, white)", padding: "10px" }}>
-            <div style={{fontWeight: "bold", fontSize: "22px"}}>Table No: {tableNo}</div>
+          <div
+            style={{
+              background: "radial-gradient(circle, chocolate, white)",
+              padding: "10px"
+            }}
+          >
+            <div style={{ fontWeight: "bold", fontSize: "22px" }}>
+              Table No: {tableNo}
+            </div>
             <div>
               Date: <Moment format="DD/MM/YYYY HH:mm:ss" date={new Date()} />
             </div>
@@ -342,7 +355,16 @@ const OrderItem = ({
           <Paper elevation={3} sx={{ overflow: "auto", padding: "5px" }}>
             {OrderEList && OrderEList.length > 0 && (
               <div style={{ maxHeight: "400px", overflow: "auto" }}>
-                <div align="right" style={{fontWeight: "bold", color: "chocolate", textDecoration: "underline"}}>ประเภท Dine In</div>
+                <div
+                  align="right"
+                  style={{
+                    fontWeight: "bold",
+                    color: "chocolate",
+                    textDecoration: "underline"
+                  }}
+                >
+                  ประเภท Dine In
+                </div>
                 <table width="100%" cellPadding={3}>
                   {OrderEList.map((product) => {
                     return (
@@ -359,7 +381,16 @@ const OrderItem = ({
             )}
             {OrderTList && OrderTList.length > 0 && (
               <div>
-                <div align="right" style={{fontWeight: "bold", color: "chocolate", textDecoration: "underline"}}>ประเภท Take Away</div>
+                <div
+                  align="right"
+                  style={{
+                    fontWeight: "bold",
+                    color: "chocolate",
+                    textDecoration: "underline"
+                  }}
+                >
+                  ประเภท Take Away
+                </div>
                 <table width="100%">
                   {OrderTList.map((product) => {
                     return (
@@ -376,7 +407,16 @@ const OrderItem = ({
             )}
             {OrderDList && OrderDList.length > 0 && (
               <div>
-                <div align="right" style={{fontWeight: "bold", color: "chocolate", textDecoration: "underline"}}>ประเภท Deliver</div>
+                <div
+                  align="right"
+                  style={{
+                    fontWeight: "bold",
+                    color: "chocolate",
+                    textDecoration: "underline"
+                  }}
+                >
+                  ประเภท Deliver
+                </div>
                 <table width="100%">
                   {OrderDList.map((product) => {
                     return (
@@ -391,7 +431,13 @@ const OrderItem = ({
                 </table>
               </div>
             )}
-            <Grid2 container justifyContent="center" padding={1} marginTop={2} sx={{background: "#eee"}}>
+            <Grid2
+              container
+              justifyContent="center"
+              padding={1}
+              marginTop={2}
+              sx={{ background: "#eee" }}
+            >
               <Button
                 variant="contained"
                 startIcon={<PrintIcon />}

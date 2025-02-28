@@ -43,7 +43,7 @@ const MenuSetModal = ({
   optionalList,
   setOptionalList
 }) => {
-  console.log('MenuSetModal')
+  console.log("MenuSetModal")
   const { handleNotification } = useAlert()
 
   const [showChangeListMenu, setShowChangeListMenu] = useState(false)
@@ -68,15 +68,14 @@ const MenuSetModal = ({
   }
 
   const updateItemManualPrice = (position, newProduct) => {
-    console.log('updateItemManualPrice:', newProduct)
+    console.log("updateItemManualPrice:", newProduct)
     const updatedMenuState = optionalList.map((item, index) => {
-        if(item.id === newProduct.id) {
-          return {...newProduct}
-        } else {
-          return item
-        }
+      if (item.id === newProduct.id) {
+        return { ...newProduct }
+      } else {
+        return item
       }
-    )
+    })
     setOptionalList(updatedMenuState)
   }
 
@@ -97,7 +96,12 @@ const MenuSetModal = ({
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [product.menu_code, handleNotification, setOptionalList, setSubMenuSelected])
+  }, [
+    product.menu_code,
+    handleNotification,
+    setOptionalList,
+    setSubMenuSelected
+  ])
 
   const handleChangeMenuItem = (menuCode) => {
     setShowChangeListMenu(true)
@@ -106,7 +110,7 @@ const MenuSetModal = ({
 
   const handleOpenMenu = useCallback((product) => {
     setProductInfo(product)
-    setShowManualPrice(product.manual_price==='Y')
+    setShowManualPrice(product.manual_price === "Y")
   }, [])
 
   useEffect(() => {
