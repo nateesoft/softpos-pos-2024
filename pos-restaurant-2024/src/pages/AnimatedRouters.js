@@ -61,6 +61,7 @@ import AICharacter from "../agi/AICharacter"
 
 const AnimatedRoutes = () => {
   const location = useLocation()
+
   const handleOnUserIdle = () => {
     localStorage.setItem("userLogin", "")
     localStorage.setItem("posuser", null)
@@ -69,11 +70,13 @@ const AnimatedRoutes = () => {
       window.location.href = "/"
     }
   }
+
   useIdleTimer({
     timeout: 5 * 60 * 1000,
     onIdle: handleOnUserIdle,
     debounce: 500
   })
+
   return (
     <AnimatePresence>
       <Routes location={location}>
@@ -192,10 +195,10 @@ const AnimatedRoutes = () => {
             <Route path="/inventory/db" element={<TemplateReport />} />
           </Route>
         </Route>
+        <Route path="/" element={<LoginPage />} />
         <Route path="/modal" element={<UserAuthen />} />
         <Route path="/print-demo" element={<PrinterDemo />} />
         <Route path="/test-print" element={<TestPrinter />} />
-        <Route path="/" element={<LoginPage />} />
         <Route path="/agi" element={<Character />} />
         <Route path="/ai" element={<AICharacter />} />
         <Route path="/voice" element={<VoiceCommand />} />

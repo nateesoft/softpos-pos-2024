@@ -9,8 +9,8 @@ import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
 import { Checkbox, ListItemText, TextField } from '@mui/material';
 
-import ShowNotification from "../ui-utils/ShowNotification"
 import apiClient from '../../httpRequest';
+import { useAlert } from '../../contexts/AlertContext';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -33,16 +33,8 @@ function getStyles(name, optList, theme) {
 
 const OptionMenuSelect = ({ productCode, optList, setSpecialText, setOptList }) => {
     const theme = useTheme();
+    const { handleNotification } = useAlert()
     const [options, setOptions] = useState([])
-
-    const [showNoti, setShowNoti] = useState(false)
-    const [notiMessage, setNotiMessage] = useState("")
-    const [alertType, setAlertType] = useState("info")
-    const handleNotification = (message, type = "error") => {
-      setNotiMessage(message)
-      setAlertType(type)
-      setShowNoti(true)
-    }
 
     const handleChange = (event) => {
         const { target: { value }, } = event;
@@ -64,7 +56,7 @@ const OptionMenuSelect = ({ productCode, optList, setSpecialText, setOptList }) 
             .catch((error) => {
                 handleNotification(error.message)
             })
-    }, [])
+    }, [productCode, handleNotification])
 
     useEffect(() => {
         initLoad()
@@ -97,7 +89,6 @@ const OptionMenuSelect = ({ productCode, optList, setSpecialText, setOptList }) 
                 ))}
             </Select>
             <TextField fullWidth label="ระบุข้อความเพิ่มเติม..." onChange={e => addSpecialMessage(e.target.value)} sx={{ marginTop: "10px" }} id="fullWidth" multiline={true} rows={2} />
-            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </FormControl>
     );
 }

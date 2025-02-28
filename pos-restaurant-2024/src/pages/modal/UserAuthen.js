@@ -3,24 +3,16 @@ import { Button, Grid2, TextField, Typography } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login';
 
 import apiClient from '../../httpRequest'
-import ShowNotification from '../ui-utils/ShowNotification';
 import { POSContext } from '../../AppContext';
+import { useAlert } from '../../contexts/AlertContext';
 
 const UserAuthen = ({ setAuthenUser, handleShowConfirm, onClose }) => {
     const { appData } = useContext(POSContext)
     const { encryptData } = appData
+    const { handleNotification } = useAlert()
 
     const [username, setUsername] = useState()
     const [password, setPassword] = useState()
-
-    const [showNoti, setShowNoti] = useState(false)
-    const [notiMessage, setNotiMessage] = useState("")
-    const [alertType, setAlertType] = useState("info")
-    const handleNotification = (message, type = "error") => {
-        setNotiMessage(message)
-        setAlertType(type)
-        setShowNoti(true)
-    }
 
     const handleCancel = () => {
         setUsername("")
@@ -68,7 +60,6 @@ const UserAuthen = ({ setAuthenUser, handleShowConfirm, onClose }) => {
                     <Button variant='contained' color='primary' onClick={handleConfirm} endIcon={<LoginIcon />}>Ok</Button>
                 </Grid2>
             </Grid2>
-            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </Grid2>
     )
 }

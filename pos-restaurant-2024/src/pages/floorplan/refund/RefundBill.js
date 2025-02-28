@@ -26,8 +26,8 @@ import apiClient from "../../../httpRequest"
 import SearchMenu from "./SearchMenu"
 import { POSContext } from "../../../AppContext"
 import { ModalConfirm } from "../../ui-utils/AlertPopup"
-import ShowNotification from "../../ui-utils/ShowNotification"
 import UserAuthen from "../../modal/UserAuthen"
+import { useAlert } from "../../../contexts/AlertContext"
 
 const columns = [
   { id: "action", label: "", minWidth: 150 },
@@ -55,17 +55,10 @@ const modalStyle = {
 const RefundBill = ({ socket }) => {
   const navigate = useNavigate()
   const { appData } = useContext(POSContext)
+  const { handleNotification } = useAlert()
+
   const { userLogin, posuser, macno } = appData
   const PosUser = posuser ? JSON.parse(posuser) : {}
-
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -306,12 +299,6 @@ const RefundBill = ({ socket }) => {
           </Box>
         </Box>
       </Modal>
-      <ShowNotification
-        showNoti={showNoti}
-        setShowNoti={setShowNoti}
-        message={notiMessage}
-        alertType={alertType}
-      />
     </Box>
   )
 }

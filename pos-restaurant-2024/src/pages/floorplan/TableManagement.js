@@ -24,7 +24,7 @@ import "./index.css"
 import ResizeNode from "./nodes/ResizeNode"
 import AppbarMenu from "./AppbarMenu"
 import TableSetup from "./modal/TableSetup"
-import ShowNotification from "../ui-utils/ShowNotification"
+import { useAlert } from "../../contexts/AlertContext"
 
 const nodeTypes = {
   round: RoundNode,
@@ -47,6 +47,8 @@ const modalStyle = {
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 };
 
 const TableManagement = () => {
+  const { handleNotification } = useAlert()
+
   const navigate = useNavigate()
   const reactFlowWrapper = useRef(null)
   const [tableInfo, setTableInfo] = useState({})
@@ -55,15 +57,6 @@ const TableManagement = () => {
   const [openTableSetup, setOpenTableSetup] = useState(false)
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
   const [foundTable, setFoundTable] = useState(false)
-
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
 
   const onDragOver = useCallback((event) => {
     event.preventDefault()
@@ -287,7 +280,6 @@ const TableManagement = () => {
           />
         </Box>
       </Modal>
-      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   )
 }

@@ -12,7 +12,7 @@ import FindInPageIcon from '@mui/icons-material/FindInPage';
 import CalendarMonth from '@mui/icons-material/CalendarMonth'
 
 import apiClient from '../../../httpRequest';
-import ShowNotification from "../../ui-utils/ShowNotification"
+import { useAlert } from '../../../contexts/AlertContext';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -56,18 +56,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const SearchMenu = ({ setMemberMasters }) => {
+    const { handleNotification } = useAlert()
+
     const [recieptNo, setRecieptNo] = useState("")
     const [macNo, setMacNo] = useState("")
     const [billDate, setBillDate] = useState("")
-
-    const [showNoti, setShowNoti] = useState(false)
-    const [notiMessage, setNotiMessage] = useState("")
-    const [alertType, setAlertType] = useState("info")
-    const handleNotification = (message, type = "error") => {
-        setNotiMessage(message)
-        setAlertType(type)
-        setShowNoti(true)
-    }
 
     const handleSearchBillno = () => {
         if (!recieptNo && !macNo) {
@@ -129,7 +122,6 @@ const SearchMenu = ({ setMemberMasters }) => {
                     </Box>
                 </Toolbar>
             </AppBar>
-            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </Box>
     );
 }

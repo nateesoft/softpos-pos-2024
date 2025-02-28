@@ -11,7 +11,7 @@ import {
 import apiClient from "../../httpRequest"
 import CustomerCheckin from "./CustomerCheckin"
 import { POSContext } from "../../AppContext"
-import ShowNotification from "../ui-utils/ShowNotification"
+import { useAlert } from "../../contexts/AlertContext"
 
 const bgText = {
   backgroundColor: "rgba(0, 0, 0, 0.8)",
@@ -58,6 +58,8 @@ const buttonRadius = {
 const PinLock = ({ setOpenPin }) => {
   console.log('PinLock')
   const { appData, setAppData } = useContext(POSContext)
+  const { handleNotification } = useAlert()
+
   const { userLogin, tableInfo } = appData
   const [openCustCheckIn, setOpenCustCheckIn] = useState(false)
 
@@ -68,15 +70,6 @@ const PinLock = ({ setOpenPin }) => {
   const [empCode, setEmpCode] = useState("")
 
   const [showError, setShowError] = useState(false)
-
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
 
   const handleSubmitPin = () => {
     if (pin1 || pin2 || pin3 || pin4) {
@@ -355,12 +348,6 @@ const PinLock = ({ setOpenPin }) => {
           />
         </Box>
       </Modal>
-      <ShowNotification
-        showNoti={showNoti}
-        setShowNoti={setShowNoti}
-        message={notiMessage}
-        alertType={alertType}
-      />
     </div>
   )
 }

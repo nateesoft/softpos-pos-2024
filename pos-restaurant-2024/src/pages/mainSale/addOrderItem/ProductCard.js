@@ -8,8 +8,8 @@ import GppGoodIcon from '@mui/icons-material/GppGood';
 
 import apiClient from '../../../httpRequest';
 import { POSContext } from '../../../AppContext';
-import ShowNotification from "../../ui-utils/ShowNotification"
 import { CurrencyContext } from '../../../contexts/CurrencyContext';
+import { useAlert } from '../../../contexts/AlertContext';
 
 const modalStyle = {
   position: "absolute",
@@ -24,6 +24,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
   console.log('ProductCard:', product)
   const { appData } = useContext(POSContext)
   const { currency, convertCurrency } = useContext(CurrencyContext)
+  const { handleNotification } = useAlert()
 
   const { macno, userLogin, empCode } = appData
   const [voidMsgList, setVoidMsgList] = useState([])
@@ -34,20 +35,9 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
   const [open, setOpen] = useState(false)
 
   const voidStatus = product.R_Void === 'V'
-  const pauseStatus = product.R_Pause === 'P'
-  // const backgroundItem = product.R_Void === 'V' ? "yellow" : pauseStatus ? "#eee" : "snow"
 
   const RPrice = convertCurrency(product.R_Price, currency);
   const RPriceQty = convertCurrency(product.R_Price*product.R_Quan, currency);
-
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
 
   const handleVoidItem = (R_Index) => {
     if (voidMsg) {
@@ -99,7 +89,7 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
         setVoidMsgList(voidMsgData)
       })
       .catch(err => handleNotification(err.message))
-  }, [])
+  }, [handleNotification])
 
   const showActionBalance = product => {
     if ("" === product.R_LinkIndex || null === product.R_LinkIndex || "null" === product.R_LinkIndex) {
@@ -184,7 +174,6 @@ const ProductCard = ({ tableNo, product, openModal, initLoadMenu, initLoadOrder 
           </Grid2>
         </Box>
       </Modal>
-      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </>
   )
 }

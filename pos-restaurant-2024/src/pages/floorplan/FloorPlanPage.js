@@ -61,10 +61,10 @@ import ResizeNode from "./nodes/ResizeNode"
 import FloorSelect from "./FloorSelect"
 import OtherMenuSelect from "./OtherMenuSelect"
 import { POSContext } from "../../AppContext"
-import ShowNotification from "../ui-utils/ShowNotification"
 import ReportSelect from "./ReportSelect"
 import LanguageSettings from "./LanguageSettings"
 import Footer from "../Footer"
+import { useAlert } from "../../contexts/AlertContext"
 
 const modalPinStyle = {
   position: "absolute",
@@ -98,6 +98,7 @@ const socket = io(SOCKET_SERVER_URL, {
 function FloorPlanPage() {
   console.log("FloorPlanPage")
   const { t } = useTranslation("global")
+  const { handleNotification } = useAlert()
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -130,15 +131,6 @@ function FloorPlanPage() {
 
   const [messageAlert, setMessageAlert] = useState("")
   const [showClient, setShowClient] = useState(false)
-
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
 
   const [openPin, setOpenPin] = useState(false)
   const [openLogout, setOpenLogout] = useState(false)
@@ -191,9 +183,7 @@ function FloorPlanPage() {
           let tableStatus = response.data.data.tableStatus
           const Cashier = response.data.data.Cashier
           if (tableStatus === "cashierInUse" && Cashier !== userLogin) {
-            setNotiMessage(`มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`)
-            setAlertType("warning")
-            setShowNoti(true)
+            handleNotification(`มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`, "warning")
           } else {
             tableStatus = "available"
             setAppData({
@@ -518,12 +508,6 @@ function FloorPlanPage() {
           />
         </Box>
       </Modal>
-      <ShowNotification
-        showNoti={showNoti}
-        setShowNoti={setShowNoti}
-        message={notiMessage}
-        alertType={alertType}
-      />
       {showClient && (
         <Snackbar
           open={showClient}
