@@ -5,8 +5,8 @@ import ConfirmIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel'
 
 import apiClient from '../../httpRequest';
-import ShowNotification from "../ui-utils/ShowNotification"
 import { POSContext } from "../../AppContext";
+import { useAlert } from "../../contexts/AlertContext";
 
 const modalStyle = {
   position: "absolute",
@@ -22,18 +22,10 @@ const modalStyle = {
 const RecieptCopyPrint = ({ setOpen }) => {
   const { appData } = useContext(POSContext)
   const { userLogin, macno } = appData
+  const { handleNotification } = useAlert()
 
   const [receiptNo, setReceiptNo] = useState("")
   const [copyCount, setCopyCount] = useState(1)
-
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
 
   const handleConfirm = () => {
     apiClient.post(`/api/billno/billCopy`, {
@@ -74,7 +66,6 @@ const RecieptCopyPrint = ({ setOpen }) => {
           <Button variant="contained" color="info" endIcon={<ConfirmIcon />} onClick={handleConfirm}>Confirm</Button>
         </Grid2>
       </Box>
-      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </Box>
   )
 }

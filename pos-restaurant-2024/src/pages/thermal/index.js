@@ -2,20 +2,12 @@ import React, { useState } from 'react'
 import { Button, Grid2, TextField } from '@mui/material'
 
 import apiClient from '../../httpRequest';
-import ShowNotification from "../ui-utils/ShowNotification"
+import { useAlert } from '../../contexts/AlertContext';
 
 const ConnectThermalPrinter = () => {
     const [printerIp, setPrinterIp] = useState("192.168.1.209")
     const [message, setMessage] = useState("")
-
-    const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
+    const { handleNotification } = useAlert()
 
     const handlePrinter = () => {
         apiClient.post('/api/printer-thermal', {
@@ -39,7 +31,6 @@ const ConnectThermalPrinter = () => {
                     Test
                 </Button>
             </Grid2>
-            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </div>
     )
 }

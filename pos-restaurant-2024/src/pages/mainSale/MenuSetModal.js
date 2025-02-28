@@ -17,9 +17,9 @@ import CloseIcon from "@mui/icons-material/Cancel"
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle"
 
 import ChangeProductList from "./ChangeProductList"
-import ShowNotification from "../ui-utils/ShowNotification"
 import apiClient from "../../httpRequest"
 import ManualPriceInput from "./ManualPriceInput"
+import { useAlert } from "../../contexts/AlertContext"
 
 const modalStyle = {
   position: "absolute",
@@ -44,20 +44,12 @@ const MenuSetModal = ({
   setOptionalList
 }) => {
   console.log('MenuSetModal')
-  const [showNoti, setShowNoti] = useState(false)
-  const [showChangeListMenu, setShowChangeListMenu] = useState(false)
+  const { handleNotification } = useAlert()
 
+  const [showChangeListMenu, setShowChangeListMenu] = useState(false)
   const [showManualPrice, setShowManualPrice] = useState(false)
   const [productInfo, setProductInfo] = useState({})
-
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
   const [currentMenu, setCurrentMenu] = useState("")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
 
   const handleOnChange = (position) => {
     const updatedCheckedState = subMenuSelected.map((item, index) =>
@@ -105,7 +97,7 @@ const MenuSetModal = ({
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [product.menu_code])
+  }, [product.menu_code, handleNotification, setOptionalList, setSubMenuSelected])
 
   const handleChangeMenuItem = (menuCode) => {
     setShowChangeListMenu(true)
@@ -224,12 +216,6 @@ const MenuSetModal = ({
           />
         </Box>
       </Modal>
-      <ShowNotification
-        showNoti={showNoti}
-        setShowNoti={setShowNoti}
-        message={notiMessage}
-        alertType={alertType}
-      />
     </div>
   )
 }

@@ -12,7 +12,7 @@ import SelectIcon from '@mui/icons-material/CheckCircle';
 
 import apiClient from '../../httpRequest';
 import SearchAppBar from './member/SearchMember';
-import ShowNotification from "../ui-utils/ShowNotification"
+import { useAlert } from '../../contexts/AlertContext';
 
 const columns = [
     { id: 'action', label: '', minWidth: 50 },
@@ -26,18 +26,11 @@ const columns = [
 ];
 
 const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
+    const { handleNotification } = useAlert()
+
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [memmasters, setMemberMasters] = useState([])
-
-    const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -64,7 +57,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
                 setMemberMasters(response.data.data)
             })
             .catch(err => handleNotification(err.message))
-    }, [])
+    }, [handleNotification])
 
     useEffect(() => {
         loadMemmaster()
@@ -131,7 +124,6 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-                <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
             </Paper>
         </>
     );

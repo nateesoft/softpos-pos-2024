@@ -1,19 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import apiClient from '../../httpRequest'
-import ShowNotification from "../ui-utils/ShowNotification"
+import { useAlert } from '../../contexts/AlertContext';
 
 function QrCodeGenerator({ mobileNumber, amount }) {
     const [image, setImage] = useState();
     const [size, setSize] = useState(120)
-    const [showNoti, setShowNoti] = useState(false)
-    const [notiMessage, setNotiMessage] = useState("")
-    const [alertType, setAlertType] = useState("info")
-    const handleNotification = (message, type = "error") => {
-        setNotiMessage(message)
-        setAlertType(type)
-        setShowNoti(true)
-    }
+    const { handleNotification } = useAlert()
 
     const loadQRCodeImage = useCallback(() => {
         apiClient.post(`/api/qr-payment`, { mobileNumber, amount: parseFloat(amount) })
@@ -25,7 +18,7 @@ function QrCodeGenerator({ mobileNumber, amount }) {
             .catch(err => {
                 handleNotification(err.message)
             })
-    }, [mobileNumber, amount])
+    }, [mobileNumber, amount, handleNotification])
 
     useEffect(() => {
         loadQRCodeImage()
@@ -34,7 +27,6 @@ function QrCodeGenerator({ mobileNumber, amount }) {
     return (
         <div>
             <img src={image} width={size} onClick={() => setSize(s => s + 100)} alt="" />
-            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </div>
     );
 }

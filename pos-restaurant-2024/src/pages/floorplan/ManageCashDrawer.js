@@ -6,9 +6,9 @@ import { Button, Divider, TextField, Typography } from '@mui/material';
 import Grid2 from '@mui/material/Grid2';
 import MoneyIcon from '@mui/icons-material/MonetizationOn'
 
-import ShowNotification from "../ui-utils/ShowNotification"
 import apiClient from '../../httpRequest';
 import { POSContext } from '../../AppContext';
+import { useAlert } from '../../contexts/AlertContext';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -48,19 +48,12 @@ export default function ManageCashDrawer({ setOpen }) {
     const { appData } = useContext(POSContext)
     const { userLogin, macno } = appData
 
+    const { handleNotification } = useAlert()
+
     const [value, setValue] = useState(0);
     const [inCash, setInCash] = useState(0)
     const [outCash, setOutCash] = useState(0)
     const [outReason, setOutReason] = useState("")
-
-    const [showNoti, setShowNoti] = useState(false)
-    const [notiMessage, setNotiMessage] = useState("")
-    const [alertType, setAlertType] = useState("info")
-    const handleNotification = (message, type = "error") => {
-        setNotiMessage(message)
-        setAlertType(type)
-        setShowNoti(true)
-    }
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -135,7 +128,6 @@ export default function ManageCashDrawer({ setOpen }) {
                     <Button variant='contained' color='info' onClick={handleConfirmOut}>Confirm</Button>
                 </Grid2>
             </CustomTabPanel>
-            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </Box>
     );
 }

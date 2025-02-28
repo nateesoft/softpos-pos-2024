@@ -11,7 +11,7 @@ import { Button } from '@mui/material';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 
 import apiClient from '../../../httpRequest';
-import ShowNotification from "../../ui-utils/ShowNotification"
+import { useAlert } from '../../../contexts/AlertContext'
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -55,18 +55,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const SearchMember = ({ setMemberMasters }) => {
+    const { handleNotification } = useAlert()
+
     const [phone, setPhone] = useState("")
     const [code, setCode] = useState("")
     const [name, setName] = useState("")
-
-    const [showNoti, setShowNoti] = useState(false)
-    const [notiMessage, setNotiMessage] = useState("")
-    const [alertType, setAlertType] = useState("info")
-    const handleNotification = (message, type = "error") => {
-      setNotiMessage(message)
-      setAlertType(type)
-      setShowNoti(true)
-    }
 
     const handleSearchMember = () => {
         if (!phone && !code && !name) {
@@ -128,7 +121,6 @@ const SearchMember = ({ setMemberMasters }) => {
                     </Box>
                 </Toolbar>
             </AppBar>
-            <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
         </Box>
     );
 }

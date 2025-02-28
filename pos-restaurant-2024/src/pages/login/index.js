@@ -12,12 +12,12 @@ import LoginIcon from "@mui/icons-material/Login"
 import { Divider, Grid2, useMediaQuery } from "@mui/material"
 import { io } from "socket.io-client"
 
+import { useAlert } from '../../contexts/AlertContext'
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import { handleEnter } from "../ui-utils/EventLisener"
 import bg from "./bg/welcome.jpg"
 import bgimg from "./bg/bgbg.jpg"
-import ShowNotification from "../ui-utils/ShowNotification"
 import Footer from "../Footer"
 
 const darkTheme = createTheme({
@@ -46,23 +46,15 @@ const Login = () => {
   console.log("Login Page")
   const { appData, setAppData } = useContext(POSContext)
   const { macno, encryptData } = appData
+  const { handleNotification } = useAlert()
 
   const [branchInfo, setBranchInfo] = useState({})
+  const navigate = useNavigate()
 
   const iphonePro14max = useMediaQuery("(max-width:430px)")
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
 
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
-
-  const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -313,12 +305,6 @@ const Login = () => {
           </Grid>
         </Box>
         <Footer />
-        <ShowNotification
-          showNoti={showNoti}
-          setShowNoti={setShowNoti}
-          message={notiMessage}
-          alertType={alertType}
-        />
       </div>
     </motion.div>
   )

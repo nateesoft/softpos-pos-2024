@@ -9,8 +9,8 @@ import apiClient from '../../httpRequest'
 import OrderItem from './OrderItem'
 import PaymentForm from './PaymentForm'
 import MemberInfo from "./MemberInfo";
-import ShowNotification from "../ui-utils/ShowNotification";
 import MultiplePayment from "./split/MultiplePayment";
+import { useAlert } from "../../contexts/AlertContext";
 
 const modalStyle = {
   bgcolor: "background.paper",
@@ -27,6 +27,7 @@ const backgroundSpecial = {
 function PaymentPage() {
   console.log('PaymentPage')
   const { tableNo } = useParams();
+  const { handleNotification } = useAlert()
 
   // Load summary tablefile
   const [subTotalAmount, setSubTotalAmount] = useState(0)
@@ -44,15 +45,6 @@ function PaymentPage() {
   const [orderList, setOrderList] = useState([])
   const [memberInfo, setMemberInfo] = useState({})
 
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type = "error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
-
   const initLoadOrder = useCallback(() => {
     apiClient
       .get(`/api/balance/${tableNo}`)
@@ -65,7 +57,7 @@ function PaymentPage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo])
+  }, [tableNo, handleNotification])
 
   const initLoadTableFile = useCallback(() => {
     apiClient
@@ -79,7 +71,7 @@ function PaymentPage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo])
+  }, [tableNo, handleNotification])
 
   const summaryTableFileBalance = useCallback(() => {
     apiClient.post('/api/balance/summaryBalance', { tableNo })
@@ -95,7 +87,7 @@ function PaymentPage() {
         }
       })
       .catch(err => handleNotification(err.message))
-  }, [tableNo])
+  }, [tableNo, handleNotification])
 
   const splitBillAction = () => {
     initLoadOrder()
@@ -163,7 +155,6 @@ function PaymentPage() {
           />
         </Box>
       </Modal>
-      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   );
 }

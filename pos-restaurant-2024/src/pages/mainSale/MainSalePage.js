@@ -8,12 +8,13 @@ import apiClient from '../../httpRequest'
 import AppbarMenu from "./AppbarMenu"
 import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
-import ShowNotification from "../ui-utils/ShowNotification"
 import Footer from '../Footer'
+import { useAlert } from "../../contexts/AlertContext"
 
 function MainSalePage() {
   console.log('MainSalePage')
   const { tableNo } = useParams();
+  const { handleNotification } = useAlert()
 
   const matches = useMediaQuery("(min-width:1024px)")
   
@@ -30,15 +31,6 @@ function MainSalePage() {
   const [orderEList, setOrderEList] = useState([])
   const [orderTList, setOrderTList] = useState([])
   const [orderDList, setOrderDList] = useState([])
-
-  const [showNoti, setShowNoti] = useState(false)
-  const [notiMessage, setNotiMessage] = useState("")
-  const [alertType, setAlertType] = useState("info")
-  const handleNotification = (message, type="error") => {
-    setNotiMessage(message)
-    setAlertType(type)
-    setShowNoti(true)
-  }
 
   const initLoadMenu = useCallback(() => {
     apiClient
@@ -73,7 +65,7 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [])
+  }, [handleNotification])
 
   const initLoadTableCheckIn = useCallback(() => {
     apiClient
@@ -87,7 +79,7 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo])
+  }, [tableNo, handleNotification])
 
   const initLoadOrder = useCallback(async () => {
     const responseMenuSetup = await apiClient.get(`/api/menu_setup/all`)
@@ -145,7 +137,7 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo])
+  }, [tableNo, handleNotification])
 
   useEffect(() => {
     initLoadMenu()
@@ -197,7 +189,6 @@ function MainSalePage() {
         </Grid2>
       </Grid2>
       <Footer />
-      <ShowNotification showNoti={showNoti} setShowNoti={setShowNoti} message={notiMessage} alertType={alertType} />
     </motion.div>
   )
 }
