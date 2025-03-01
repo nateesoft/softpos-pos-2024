@@ -1,20 +1,21 @@
 import React, { useState } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
-import CryptoJS from "crypto-js";
-import { CookiesProvider } from 'react-cookie'
+import CryptoJS from "crypto-js"
+import { CookiesProvider } from "react-cookie"
 
-import { POSContext } from './AppContext'
+import { POSContext } from "./AppContext"
 import AnimatedRoutes from "./pages/AnimatedRouters"
-import { CurrencyProvider } from "./contexts/CurrencyContext";
-import { AlertProvider } from "./contexts/AlertContext";
+import { CurrencyProvider } from "./contexts/CurrencyContext"
+import { AlertProvider } from "./contexts/AlertContext"
+import { BackdropProvider } from "./contexts/BackdropProvider"
 
 const SECRET_PASS = process.env.REACT_APP_API_SECRET_PASS
 const initContext = {
   macno: process.env.REACT_APP_MACNO || "",
-  userLogin: localStorage.getItem('userLogin') || "",
+  userLogin: localStorage.getItem("userLogin") || "",
   empCode: "",
   companyInfo: {
-    companyCode: "",
+    companyCode: ""
   },
   tableInfo: {
     tableNo: "",
@@ -27,11 +28,12 @@ const initContext = {
     orderDetails: []
   },
   branchInfo: {
-    branchCode: "",
+    branchCode: ""
   },
   productList: [],
-  posuser: localStorage.getItem('posuser') || {},
-  encryptData: data => CryptoJS.AES.encrypt(JSON.stringify(data), SECRET_PASS).toString()
+  posuser: localStorage.getItem("posuser") || {},
+  encryptData: (data) =>
+    CryptoJS.AES.encrypt(JSON.stringify(data), SECRET_PASS).toString()
 }
 
 function App() {
@@ -43,7 +45,9 @@ function App() {
         <POSContext.Provider value={{ appData, setAppData }}>
           <CurrencyProvider>
             <AlertProvider>
-              <AnimatedRoutes />
+              <BackdropProvider>
+                <AnimatedRoutes />
+              </BackdropProvider>
             </AlertProvider>
           </CurrencyProvider>
         </POSContext.Provider>
