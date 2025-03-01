@@ -55,7 +55,6 @@ import TallNode from "./nodes/TallBarNode"
 
 import { useKeyPress } from "../ui-utils/PageListener"
 import { ModalConfirm } from "../ui-utils/AlertPopup"
-import PinLock from "./PinLock"
 
 import ResizeNode from "./nodes/ResizeNode"
 import FloorSelect from "./FloorSelect"
@@ -95,7 +94,7 @@ const socket = io(SOCKET_SERVER_URL, {
   autoConnect: false
 })
 
-function FloorPlanPage() {
+const FloorPlanPage = ({ setOpenPin }) => {
   console.log("FloorPlanPage")
   const { t } = useTranslation("global")
   const { handleNotification } = useAlert()
@@ -114,12 +113,8 @@ function FloorPlanPage() {
   const { appData, setAppData } = useContext(POSContext)
   const { userLogin } = appData
 
-  // const matches = useMediaQuery("(min-width:600px)")
-  const iphonePro14max = useMediaQuery("(max-width:430px)")
   const reactFlowWrapper = useRef(null)
-
-  const [nodes, setNodes, onNodesChange] = useNodesState([])
-
+  const [nodes, setNodes] = useNodesState([])
   const [openTableStatus, setOpenTableStatus] = useState(false)
   const [openCashierStatus, setOpenCashierStatus] = useState(false)
   const [openCopyPrint, setOpenCopyPrint] = useState(false)
@@ -132,7 +127,6 @@ function FloorPlanPage() {
   const [messageAlert, setMessageAlert] = useState("")
   const [showClient, setShowClient] = useState(false)
 
-  const [openPin, setOpenPin] = useState(false)
   const [openLogout, setOpenLogout] = useState(false)
 
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
@@ -424,7 +418,6 @@ function FloorPlanPage() {
         >
           <ReactFlow
             nodes={nodes}
-            onNodesChange={onNodesChange}
             onNodeClick={onNodeClick}
             nodeTypes={nodeTypes}
             nodesDraggable={false}
@@ -439,11 +432,7 @@ function FloorPlanPage() {
         </div>
       </ReactFlowProvider>
       <Footer />
-      <Modal open={openPin} onClose={() => setOpenPin(false)}>
-        <Box sx={{ ...modalPinStyle, width: 450, padding: "10px" }}>
-          <PinLock setOpenPin={setOpenPin} />
-        </Box>
-      </Modal>
+      
       <ModalConfirm
         open={openLogout}
         setOpen={() => setOpenLogout(false)}

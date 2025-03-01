@@ -5,7 +5,7 @@ import { useIdleTimer } from "react-idle-timer"
 
 import PinLock from "./PinLock"
 import LoginPage from "./login"
-import FloorPlanPage from "./floorplan/FloorPlanPage"
+import FloorPlanPage from "./floorplan"
 import TableManagement from "./floorplan/TableManagement"
 import MainSalePage from "./mainSale/MainSalePage"
 import PaymentPage from "./payment/PaymentPage"
