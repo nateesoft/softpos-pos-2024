@@ -94,7 +94,7 @@ const socket = io(SOCKET_SERVER_URL, {
   autoConnect: false
 })
 
-const FloorPlanPage = ({ setOpenPin }) => {
+const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   console.log("FloorPlanPage")
   const { t } = useTranslation("global")
   const { handleNotification } = useAlert()
@@ -167,39 +167,6 @@ const FloorPlanPage = ({ setOpenPin }) => {
         handleNotification(error.message)
       })
   }, [setOpenLogout, navigate, appData, setAppData])
-
-  const onNodeClick = (event, node) => {
-    const tableNo = node.data.label
-    apiClient
-      .post("/api/tablefile/checkTableOpen", { tableNo, Cashier: userLogin })
-      .then(async (response) => {
-        if (response.data.status === 2000) {
-          let tableStatus = response.data.data.tableStatus
-          const Cashier = response.data.data.Cashier
-          if (tableStatus === "cashierInUse" && Cashier !== userLogin) {
-            handleNotification(
-              `มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`,
-              "warning"
-            )
-          } else {
-            tableStatus = "available"
-            setAppData({
-              ...appData,
-              tableInfo: {
-                tableNo: tableNo,
-                tableStatus: tableStatus
-              }
-            })
-            setOpenPin(true)
-          }
-        } else {
-          handleNotification("พบปัญหาในการเปิดโต๊ะ")
-        }
-      })
-      .catch((error) => {
-        handleNotification(error.message)
-      })
-  }
 
   const handleSelect = (floor) => {
     setSelectFloor(floor)

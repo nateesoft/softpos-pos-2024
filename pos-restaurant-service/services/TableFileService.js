@@ -110,8 +110,12 @@ const getBalanceAllByTable = async (tableNo) => {
 const checkTableOpen = async (tableNo) => {
   const sql = `select Cashier, TUser from tablefile where TOnact='Y' and TCode='${tableNo}'`
   const results = await pool.query(sql)
+  const listTables = await getListTableByCode(tableNo)
   if (results.length > 0) {
-    return results[0]
+    return {
+      table: results[0],
+      tableList: listTables
+    }
   }
   return null
 }
@@ -205,6 +209,12 @@ const getTableByCode = async (tableNo) => {
     return results[0]
   }
   return null
+}
+
+const getListTableByCode = async (tableNo) => {
+  const sql = `select * from tablefile where (Tcode like '${tableNo}-%' or Tcode='${tableNo}')`
+  const results = await pool.query(sql)
+  return results
 }
 
 const tableMoveOrGroup = async (sourceTable, targetTable, admin, Cashier) => {
@@ -424,5 +434,6 @@ module.exports = {
   getBalanceAllByTable,
   getTableByCode,
   splitTableToPayment,
-  updateTableDiscount
+  updateTableDiscount,
+  getListTableByCode
 }

@@ -52,6 +52,17 @@ router.get('/:tableNo', function (req, res) {
     })
 });
 
+router.get('/list/:tableNo', function (req, res) {
+  const { tableNo } = req.params
+  TableFileService.getListTableByCode(tableNo)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 router.post('/checkTableOpen', function (req, res) {
   const { tableNo } = req.body
   TableFileService.checkTableOpen(tableNo)
@@ -59,12 +70,22 @@ router.post('/checkTableOpen', function (req, res) {
       if (rows === null) {
         return res.status(200).json({
           status: 2000,
-          data: { tableStatus: "available" }
+          data: {
+            tableStatus: "available",
+            table: {},
+            tableList: []
+          }
         })
       } else {
         res.status(200).json({
           status: 2000,
-          data: { tableStatus: "cashierInUse", Cashier: rows.Cashier, Employ: rows.TUser }
+          data: {
+            tableStatus: "cashierInUse",
+            Cashier: rows.table.Cashier,
+            Employ: rows.table.TUser,
+            table: rows.table,
+            tableList: rows.tableList
+          }
         })
       }
     })
