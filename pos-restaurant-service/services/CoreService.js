@@ -356,10 +356,22 @@ const summaryBalance = async (tableNo) => {
     netTotalAmount
   )
 
+  // compute discount ท้ายบิล
+  const { Tcode, EmpDiscAmt, FastDiscAmt, TrainDiscAmt, MemDiscAmt, SubDiscAmt,
+    DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt, TAmount, Service
+  } = tablefile
+
+  const discountAmount = EmpDiscAmt + FastDiscAmt + TrainDiscAmt + MemDiscAmt + SubDiscAmt + 
+  DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
+
+  const subTotalAmount = TAmount - discountAmount
+  const serviceAmt = (subTotalAmount * Service) / 100
+  const netTotal = subTotalAmount + serviceAmt
+
   tablefile.TAmount = responseData.Food + responseData.Drink + responseData.Product
   tablefile.Service = service
-  tablefile.ServiceAmt = responseData.totalServiceAmount
-  tablefile.NetTotal = responseData.netTotalAmount
+  tablefile.ServiceAmt = subTotalAmount * service / 100
+  tablefile.NetTotal = netTotal
   tablefile.Food = responseData.Food
   tablefile.Drink = responseData.Drink
   tablefile.Product = responseData.Product
@@ -369,13 +381,14 @@ const summaryBalance = async (tableNo) => {
   // update tablefile
   await updateTableFile(tablefile)
 
+  let computeProductAndService =  tablefile.TAmount
   return {
     TItem: tablefile.TItem,
     TAmount: tablefile.TAmount,
     ServiceAmt: tablefile.ServiceAmt,
     vatAmount: responseData.totalVatAmount,
     NetTotal: tablefile.NetTotal,
-    productAndService: responseData.Food + responseData.Drink + responseData.Product + responseData.totalServiceAmount,
+    productAndService: computeProductAndService + tablefile.ServiceAmt,
     Food: tablefile.Food,
     Drink: tablefile.Drink,
     Product: tablefile.Product,

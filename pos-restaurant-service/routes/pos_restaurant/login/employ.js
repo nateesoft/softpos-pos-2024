@@ -2,7 +2,7 @@ const express = require('express');
 const { getEmployeeByCode, getEmployeeActiveStatus, employForceLogout } = require('../../../services/EmployeeService');
 const router = express.Router();
 
-router.post('/getEmployeeByCode', function (req, res, next) {
+router.post('/getEmployeeByCode', function (req, res) {
   const { code } = req.body
   getEmployeeByCode(code)
     .then(rows => {
@@ -13,7 +13,7 @@ router.post('/getEmployeeByCode', function (req, res, next) {
     })
 });
 
-router.get('/status', function (req, res, next) {
+router.get('/status', function (req, res) {
   getEmployeeActiveStatus()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
@@ -23,7 +23,7 @@ router.get('/status', function (req, res, next) {
     })
 });
 
-router.post('/forceLogout', function (req, res, next) {
+router.post('/forceLogout', function (req, res) {
   const { username } = req.body
   employForceLogout(username)
     .then(rows => {

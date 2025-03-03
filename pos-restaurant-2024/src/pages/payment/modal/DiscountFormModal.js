@@ -1,13 +1,31 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { Box, Button, Grid2, TextField, Typography } from "@mui/material"
+import { Box, Button, Grid2, Modal, TextField, Typography } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import SaveIcon from "@mui/icons-material/Save"
 import CancelIcon from "@mui/icons-material/Cancel"
 
 import apiClient from "../../../httpRequest"
+import CuponListModal from './CuponListModal'
 
-const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  borderRadius: "16px",
+  border: "1px solid #eee",
+  boxShadow: 24
+}
+
+const DiscountFormModal = ({
+  setOpenDiscountModal,
+  tableFile,
+  initLoad
+}) => {
   console.log("DiscountFormModal load:", tableFile)
+
+  const [openCupon, setOpenCupon] = useState(false)
 
   // ref
   const inputRef0 = useRef(null)
@@ -29,9 +47,6 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
     inputRef6,
     inputRef7
   ]
-
-  const [netTotalBalance, setNetTotalBalance] = useState(tableFile.NetTotal)
-
   const [posConfigSetup, setPOSConfigSetup] = useState({})
   const [fastAmt, setFastAmt] = useState(tableFile.FastDiscAmt || 0)
   const [empAmt, setEmpAmt] = useState(tableFile.EmpDiscAmt || 0)
@@ -104,7 +119,6 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
     setSpecialCuponAmt(0)
 
     arrayInputRef[0].current?.focus()
-    // setOpenDiscountModal(false)
   }
 
   const loadPosConfigSetup = useCallback(() => {
@@ -121,7 +135,7 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
       })
   }, [])
 
-  const updateDiscountInfo = useCallback(() => {
+  const updateDiscountInfo = () => {
     const updPayload = {
       tableFile: tableFile,
       FastDisc: posConfigSetup.P_FastDisc,
@@ -132,7 +146,8 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
       MemDiscAmt: memAmt,
       TrainDisc: posConfigSetup.P_TrainDisc,
       TrainDiscAmt: traineeAmt,
-      CuponDiscAmt: cuponAmt,
+      SubDisc: posConfigSetup.P_SubDisc,
+      SubDiscAmt: cuponAmt,
       DiscBath: bahtAmt,
       SpaDiscAmt: specialCuponAmt
     }
@@ -141,22 +156,187 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
       .put(`/api/tablefile/discountInfo/${tableFile.Tcode}`, updPayload)
       .then((response) => {
         if (response.status === 200) {
+          initLoad()
           setOpenDiscountModal(false)
         }
       })
       .catch((error) => {
         alert(error.message)
       })
-  }, [])
+  }
+
+  const festDiscountCompute = () => {
+    let formatFast = posConfigSetup.P_FastDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_FastDiscChk.split("/")[0]
+
+    let sumDisc = empAmt + memAmt + traineeAmt + cuponAmt
+    if (sumDisc > 0 && formatYYY === "Y") {
+      return 0
+    }
+    let netTotal = tableFile.TAmount
+    let totalAmount = (netTotal * formatFast) / 100
+    setFastAmt(totalAmount)
+
+    focusComponent(0)
+  }
+
+  const handleFestManual = (value) => {
+    let formatFast = posConfigSetup.P_FastDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_FastDiscChk.split("/")[0]
+    if (posConfigSetup.P_FastDiscGet === "Y" && formatYYY === "Y") {
+      let sumDisc = empAmt + memAmt + traineeAmt + cuponAmt
+      if (sumDisc > 0) {
+        return 0
+      }
+      let totalAmount = (tableFile.TAmount * formatFast) / 100
+      if (value < 0 || value > totalAmount) {
+        setFastAmt(totalAmount)
+      } else {
+        setFastAmt(value)
+      }
+    }
+  }
+
+  const empDiscountCompute = () => {
+    let formatEmp = posConfigSetup.P_EmpDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_EmpDiscChk.split("/")[0]
+
+    let sumDisc = fastAmt + memAmt + traineeAmt + cuponAmt
+    if (sumDisc > 0 && formatYYY === "Y") {
+      return 0
+    }
+    let netTotal = tableFile.TAmount
+    let totalAmount = (netTotal * formatEmp) / 100
+    setEmpAmt(totalAmount)
+
+    focusComponent(1)
+  }
+
+  const handleEmpManual = (value) => {
+    let formatEmp = posConfigSetup.P_EmpDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_EmpDiscChk.split("/")[0]
+    if (posConfigSetup.P_EmpDiscGet === "Y" && formatYYY === "Y") {
+      let sumDisc = fastAmt + memAmt + traineeAmt + cuponAmt
+      if (sumDisc > 0) {
+        return 0
+      }
+      let totalAmount = (tableFile.TAmount * formatEmp) / 100
+      if (value < 0 || value > totalAmount) {
+        setEmpAmt(totalAmount)
+      } else {
+        setEmpAmt(value)
+      }
+    }
+  }
+
+  const memeberDiscountCompute = () => {
+    let formatMem = posConfigSetup.P_MemDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_MemDiscChk.split("/")[0]
+    let sumDisc = fastAmt + empAmt + traineeAmt + cuponAmt
+    if (sumDisc > 0&&formatYYY==="Y") {
+      return 0
+    }
+    let netTotal = tableFile.TAmount
+    let totalAmount = (netTotal * formatMem) / 100
+    setMemAmt(totalAmount)
+
+    focusComponent(2)
+  }
+
+  const handleMemManual = (value) => {
+    let formatMem = posConfigSetup.P_MemDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_MemDiscChk.split("/")[0]
+    if (posConfigSetup.P_MemDiscGet === "Y" && formatYYY === "Y") {
+      let sumDisc = fastAmt + empAmt + traineeAmt + cuponAmt
+      if (sumDisc > 0) {
+        return 0
+      }
+      let totalAmount = (tableFile.TAmount * formatMem) / 100
+      if (value < 0 || value > totalAmount) {
+        setMemAmt(totalAmount)
+      } else {
+        setMemAmt(value)
+      }
+    }
+  }
+
+  const traineeDiscountCompute = () => {
+    let formatTrain = posConfigSetup.P_TrainDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_TrainDiscChk.split("/")[0]
+
+    let sumDisc = fastAmt + empAmt + memAmt + cuponAmt
+    if (sumDisc > 0&&formatYYY==="Y") {
+      return 0
+    }
+    let netTotal = tableFile.TAmount
+    let totalAmount = (netTotal * formatTrain) / 100
+    setTraineeAmt(totalAmount)
+
+    focusComponent(3)
+  }
+
+  const handleTraineeManual = (value) => {
+    let formatTrain = posConfigSetup.P_TrainDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_TrainDiscChk.split("/")[0]
+    if (posConfigSetup.P_TrainDiscGet === "Y" && formatYYY === "Y") {
+      let sumDisc = fastAmt + empAmt + memAmt + cuponAmt
+      if (sumDisc > 0) {
+        return 0
+      }
+      let totalAmount = (tableFile.TAmount * formatTrain) / 100
+      if (value < 0 || value > totalAmount) {
+        setTraineeAmt(totalAmount)
+      } else {
+        setTraineeAmt(value)
+      }
+    }
+  }
+
+  const cuponDiscountCompute = () => {
+    let formatSub = posConfigSetup.P_SubDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_SubDiscChk.split("/")[0]
+
+    let sumDisc = fastAmt + empAmt + memAmt + traineeAmt
+    if (sumDisc > 0&&formatYYY==="Y") {
+      return 0
+    }
+    let netTotal = tableFile.TAmount
+    let totalAmount = (netTotal * formatSub) / 100
+    setCuponAmt(totalAmount)
+
+    focusComponent(4)
+  }
+
+  const handleCuponManual = (value) => {
+    let formatSub = posConfigSetup.P_SubDisc.split("/")[0]
+    let formatYYY = posConfigSetup.P_SubDiscChk.split("/")[0]
+    if (posConfigSetup.P_SubDiscGet === "Y" && formatYYY === "Y") {
+      let sumDisc = fastAmt + empAmt + memAmt + traineeAmt
+      if (sumDisc > 0) {
+        return 0
+      }
+      let totalAmount = (tableFile.TAmount * formatSub) / 100
+      if (value < 0 || value > totalAmount) {
+        setCuponAmt(totalAmount)
+      } else {
+        setCuponAmt(value)
+      }
+    }
+  }
 
   useEffect(() => {
     loadPosConfigSetup()
-  }, [loadPosConfigSetup])
+  }, [])
 
   return (
     <Grid2 container>
       <Grid2 size={12} padding={1} container justifyContent="center">
         <Typography variant="h6">ให้ส่วนลดต่างๆ ในระบบ</Typography>
+      </Grid2>
+      <Grid2 container justifyContent="center">
+        <Typography>
+          มูลค่าสินค้ารวม (Total Amount): {tableFile.TAmount}
+        </Typography>
       </Grid2>
       <Box component="form">
         <Grid2
@@ -171,8 +351,7 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
               variant="contained"
               color="success"
               fullWidth
-              disabled={posConfigSetup.P_FastDiscGet === "N"}
-              onClick={() => focusComponent(0)}
+              onClick={festDiscountCompute}
             >
               ส่วนลดเทศกาล
             </Button>
@@ -186,11 +365,11 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
           </Grid2>
           <Grid2 size={4}>
             <TextField
+              type="number"
               inputRef={inputRef0}
               value={fastAmt}
               setValue={setFastAmt}
-              disabled={posConfigSetup.P_FastDiscGet === "N"}
-              onChange={(e) => setFastAmt(e.target.value)}
+              onChange={(e) => handleFestManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 1)}
               onKeyUp={summaryDiscount}
               onFocus={(event) => {
@@ -212,8 +391,7 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
               variant="contained"
               color="success"
               fullWidth
-              disabled={posConfigSetup.P_EmpDiscGet === "N"}
-              onClick={() => focusComponent(1)}
+              onClick={empDiscountCompute}
             >
               ส่วนลดพนักงาน
             </Button>
@@ -227,11 +405,12 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
           </Grid2>
           <Grid2 size={4}>
             <TextField
+              type="number"
               inputRef={inputRef1}
               value={empAmt}
               setValue={setEmpAmt}
               disabled={posConfigSetup.P_EmpDiscGet === "N"}
-              onChange={(e) => setEmpAmt(e.target.value)}
+              onChange={(e) => handleEmpManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 2)}
               onKeyUp={summaryDiscount}
               onFocus={(event) => {
@@ -253,8 +432,7 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
               variant="contained"
               color="success"
               fullWidth
-              disabled={posConfigSetup.P_MemDiscGet === "N"}
-              onClick={() => focusComponent(2)}
+              onClick={memeberDiscountCompute}
             >
               ส่วนลดสมาชิก (VIP)
             </Button>
@@ -268,11 +446,12 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
           </Grid2>
           <Grid2 size={4}>
             <TextField
+              type="number"
               inputRef={inputRef2}
               value={memAmt}
               setValue={setMemAmt}
               disabled={posConfigSetup.P_MemDiscGet === "N"}
-              onChange={(e) => setMemAmt(e.target.value)}
+              onChange={(e) => handleMemManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 3)}
               onKeyUp={summaryDiscount}
               onFocus={(event) => {
@@ -294,8 +473,7 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
               variant="contained"
               color="success"
               fullWidth
-              disabled={posConfigSetup.P_TrainDiscGet === "N"}
-              onClick={() => focusComponent(3)}
+              onClick={traineeDiscountCompute}
             >
               ส่วนลด Trainee
             </Button>
@@ -309,11 +487,12 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
           </Grid2>
           <Grid2 size={4}>
             <TextField
+              type="number"
               inputRef={inputRef3}
               value={traineeAmt}
               setValue={setTraineeAmt}
               disabled={posConfigSetup.P_TrainDiscGet === "N"}
-              onChange={(e) => setTraineeAmt(e.target.value)}
+              onChange={(e) => handleTraineeManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 4)}
               onKeyUp={summaryDiscount}
               onFocus={(event) => {
@@ -335,8 +514,7 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
               variant="contained"
               color="success"
               fullWidth
-              disabled={posConfigSetup.P_SubDiscGet === "N"}
-              onClick={() => focusComponent(4)}
+              onClick={cuponDiscountCompute}
             >
               ส่วนลดคูปอง
             </Button>
@@ -350,11 +528,12 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
           </Grid2>
           <Grid2 size={4}>
             <TextField
+              type="number"
               inputRef={inputRef4}
               value={cuponAmt}
               setValue={setCuponAmt}
               disabled={posConfigSetup.P_SubDiscGet === "N"}
-              onChange={(e) => setCuponAmt(e.target.value)}
+              onChange={(e) => handleCuponManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 5)}
               onKeyUp={summaryDiscount}
               onFocus={(event) => {
@@ -384,6 +563,7 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
           </Grid2>
           <Grid2 size={8}>
             <TextField
+              type="number"
               inputRef={inputRef5}
               value={bahtAmt}
               setValue={setBahtAmt}
@@ -411,16 +591,18 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
               color="success"
               fullWidth
               onKeyDown={(e) => nextComponent(e)}
-              onClick={() => focusComponent(6)}
+              onClick={()=>setOpenCupon(true)}
             >
               ส่วนลดบัตรคูปองพิเศษ
             </Button>
           </Grid2>
           <Grid2 size={8}>
             <TextField
+              type="number"
               inputRef={inputRef6}
               value={specialCuponAmt}
               setValue={setSpecialCuponAmt}
+              disabled={true}
               onChange={(e) => setSpecialCuponAmt(e.target.value)}
               onKeyUp={summaryDiscount}
               onFocus={(event) => {
@@ -441,7 +623,7 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
             variant="contained"
             color="primary"
             endIcon={<SaveIcon />}
-            onClick={() => updateDiscountInfo()}
+            onClick={updateDiscountInfo}
           >
             บันทึก
           </Button>
@@ -463,6 +645,14 @@ const DiscountFormModal = ({ setOpenDiscountModal, tableFile }) => {
           </Button>
         </Grid2>
       </Box>
+      <Modal open={openCupon} onClose={() => setOpenCupon(false)}>
+        <Box sx={{ ...modalStyle, width: "auto", padding: "10px" }}>
+          <CuponListModal 
+            onClose={() => setOpenCupon(false)} 
+            setSpecialCuponAmt={setSpecialCuponAmt}
+            tableFile={tableFile} />
+        </Box>
+      </Modal>
     </Grid2>
   )
 }

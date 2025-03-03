@@ -71,7 +71,8 @@ function PaymentForm({
   tableFile,
   memberInfo,
   setOpenSplitBill,
-  tableFileDb
+  tableFileDb,
+  initLoad
 }) {
   console.log("PaymentForm")
   const { appData } = useContext(POSContext)
@@ -174,7 +175,7 @@ function PaymentForm({
     }
   }
 
-  const totalAmount = useCallback(() => {
+  const totalAmount = () => {
     const cc = cashAmount ? parseFloat(cashAmount) : 0
     const cd = creditAmount ? parseFloat(creditAmount) : 0
     const ta = transferAmount ? parseFloat(transferAmount) : 0
@@ -217,14 +218,7 @@ function PaymentForm({
     setPaymentAmount(paymentAmt)
     setDiscountAmount(discountAmt)
     setNetTotalDisplay(R_NetTotal - paymentAmt)
-  }, [
-    cashAmount,
-    depositAmount,
-    entertainAmount,
-    creditAmount,
-    transferAmount,
-    R_NetTotal
-  ])
+  }
 
   const handleClear = () => {
     setCashAmount(0)
@@ -384,7 +378,7 @@ function PaymentForm({
 
   useEffect(() => {
     totalAmount()
-  }, [totalAmount])
+  }, [])
 
   useEffect(() => {
     socket.connect()
@@ -1053,6 +1047,7 @@ function PaymentForm({
           <DiscountFormModal
             tableFile={tableFileDb}
             setOpenDiscountModal={setOpenDiscountModal}
+            initLoad={initLoad}
           />
         </Box>
       </Modal>

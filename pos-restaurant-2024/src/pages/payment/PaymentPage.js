@@ -45,7 +45,7 @@ function PaymentPage() {
   const [orderList, setOrderList] = useState([])
   const [memberInfo, setMemberInfo] = useState({})
 
-  const initLoadOrder = useCallback(() => {
+  const initLoadOrder = () => {
     apiClient
       .get(`/api/balance/${tableNo}`)
       .then((response) => {
@@ -57,9 +57,9 @@ function PaymentPage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo, handleNotification])
+  }
 
-  const initLoadTableFile = useCallback(() => {
+  const initLoadTableFile = () => {
     apiClient
       .get(`/api/tablefile/${tableNo}`)
       .then((response) => {
@@ -71,7 +71,7 @@ function PaymentPage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo, handleNotification])
+  }
 
   const summaryTableFileBalance = useCallback(() => {
     apiClient
@@ -95,10 +95,15 @@ function PaymentPage() {
     summaryTableFileBalance()
   }
 
-  useEffect(() => {
+  const initLoadPayment =() => {
     initLoadOrder()
     initLoadTableFile()
-  }, [initLoadOrder, initLoadTableFile])
+    summaryTableFileBalance()
+  }
+
+  useEffect(() => {
+    initLoadPayment()
+  }, [])
 
   useEffect(() => {
     summaryTableFileBalance()
@@ -124,6 +129,8 @@ function PaymentPage() {
                 productAndService,
                 printRecpMessage
               }}
+              tableFileDb={tableFileDb}
+              initLoad={initLoadPayment}
             />
             <MemberInfo
               tableNo={tableNo}
@@ -148,6 +155,7 @@ function PaymentPage() {
             }}
             memberInfo={memberInfo}
             setOpenSplitBill={setOpenSplitBill}
+            initLoad={initLoadPayment}
           />
         </Grid>
       </Grid>

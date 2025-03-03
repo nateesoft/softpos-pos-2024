@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { getDataCompany } = require('../../../services/CompanyService');
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   getDataCompany()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })

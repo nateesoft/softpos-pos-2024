@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { getBranch } = require('../../../services/BranchService');
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   getBranch()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })

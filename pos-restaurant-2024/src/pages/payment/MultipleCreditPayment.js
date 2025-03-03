@@ -263,25 +263,23 @@ const MultipleCreditPayment = (props) => {
     <>
       <Grid2 container>
         <Grid2 container spacing={1} padding={1} justifyContent="space-between">
-          <div>
-            <TextField
-              required
-              error
-              disabled
-              sx={{ marginRight: "5px" }}
-              variant="outlined"
-              label="CrCode"
-              value={crCode}
-              helperText={crCodeError}
-              onChange={(e) => setCrCode(e.target.value)}
-            />
-            <Button
-              variant="contained"
-              onClick={() => handleShowOpenCreditFile()}
-            >
-              ...
-            </Button>
-          </div>
+          <TextField
+            required
+            error
+            disabled
+            sx={{ marginRight: "5px" }}
+            variant="outlined"
+            label="CrCode"
+            value={crCode}
+            helperText={crCodeError}
+            onChange={(e) => setCrCode(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            onClick={() => handleShowOpenCreditFile()}
+          >
+            ...
+          </Button>
         </Grid2>
         <Grid2 container spacing={1} padding={1} justifyContent="space-between">
           <TextField

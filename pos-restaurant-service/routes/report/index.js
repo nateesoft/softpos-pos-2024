@@ -3,11 +3,11 @@ const router = express.Router();
 
 const { getTableOnAction, getTableOnActionList, getTerminalByMacno, getTerminalByCashier, getGroupPlu, getPluCode, getHourlyReport, getCustomerPerHour, getReceipt, getVoidBill, getCreditPayment, getTopSale, getPromotion, getSpecialCupon } = require('../../services/ReportService');
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   res.send('Success')
 });
 
-router.get('/table-on-action', async (req, res, next) => {
+router.get('/table-on-action', async (req, res) => {
   const { date } = req.body
   getTableOnAction(date)
     .then(rows => {
@@ -18,7 +18,7 @@ router.get('/table-on-action', async (req, res, next) => {
     })
 });
 
-router.get('/table-on-action/list', async (req, res, next) => {
+router.get('/table-on-action/list', async (req, res) => {
   getTableOnActionList()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
@@ -28,7 +28,7 @@ router.get('/table-on-action/list', async (req, res, next) => {
     })
 });
 
-router.post('/terminal-report', async (req, res, next) => {
+router.post('/terminal-report', async (req, res) => {
   const { macno } = req.body
   getTerminalByMacno(macno)
     .then(rows => {
@@ -39,7 +39,7 @@ router.post('/terminal-report', async (req, res, next) => {
     })
 });
 
-router.post('/cashier-report', async (req, res, next) => {
+router.post('/cashier-report', async (req, res) => {
   const { cashier } = req.body
   getTerminalByCashier(cashier)
     .then(rows => {
@@ -50,7 +50,7 @@ router.post('/cashier-report', async (req, res, next) => {
     })
 });
 
-router.post('/group-plu-report', async (req, res, next) => {
+router.post('/group-plu-report', async (req, res) => {
   const { macno1, macno2, cashier1, cashier2, group1, group2 } = req.body
   getGroupPlu(macno1, macno2, cashier1, cashier2, group1, group2)
     .then(rows => {
@@ -61,7 +61,7 @@ router.post('/group-plu-report', async (req, res, next) => {
     })
 });
 
-router.post('/plu-report', async (req, res, next) => {
+router.post('/plu-report', async (req, res) => {
   const { macno1, macno2, cashier1, cashier2, group1, group2, pluCode } = req.body
   getPluCode(macno1, macno2, cashier1, cashier2, group1, group2, pluCode)
     .then(rows => {
@@ -72,7 +72,7 @@ router.post('/plu-report', async (req, res, next) => {
     })
 });
 
-router.post('/customer-per-hour-report', async (req, res, next) => {
+router.post('/customer-per-hour-report', async (req, res) => {
   const { macno1, macno2 } = req.body
   getCustomerPerHour(macno1, macno2)
     .then(rows => {
@@ -83,7 +83,7 @@ router.post('/customer-per-hour-report', async (req, res, next) => {
     })
 });
 
-router.post('/hourly-report', async (req, res, next) => {
+router.post('/hourly-report', async (req, res) => {
   const { macno1, macno2 } = req.body
   getHourlyReport(macno1, macno2)
     .then(rows => {
@@ -94,7 +94,7 @@ router.post('/hourly-report', async (req, res, next) => {
     })
 });
 
-router.post('/receipt-report', async (req, res, next) => {
+router.post('/receipt-report', async (req, res) => {
   const { macno1, macno2 } = req.body
   getReceipt(macno1, macno2)
     .then(rows => {
@@ -105,7 +105,7 @@ router.post('/receipt-report', async (req, res, next) => {
     })
 });
 
-router.post('/void-report', async (req, res, next) => {
+router.post('/void-report', async (req, res) => {
   const { macno1, macno2, cashier1, cashier2 } = req.body
   getVoidBill(macno1, macno2, cashier1, cashier2)
     .then(rows => {
@@ -116,7 +116,7 @@ router.post('/void-report', async (req, res, next) => {
     })
 });
 
-router.post('/credit-report', async (req, res, next) => {
+router.post('/credit-report', async (req, res) => {
   const { macno1, macno2, cashier1, cashier2 } = req.body
   getCreditPayment(macno1, macno2, cashier1, cashier2)
     .then(rows => {
@@ -127,7 +127,7 @@ router.post('/credit-report', async (req, res, next) => {
     })
 });
 
-router.post('/top-sale-report', async (req, res, next) => {
+router.post('/top-sale-report', async (req, res) => {
   const { macno1, macno2, cashier1, cashier2, group1, group2 } = req.body
   getTopSale(macno1, macno2, cashier1, cashier2, group1, group2)
     .then(rows => {
@@ -138,7 +138,7 @@ router.post('/top-sale-report', async (req, res, next) => {
     })
 });
 
-router.post('/promotion-report', async (req, res, next) => {
+router.post('/promotion-report', async (req, res) => {
   const { macno } = req.body
   getPromotion(macno)
     .then(rows => {
@@ -149,7 +149,7 @@ router.post('/promotion-report', async (req, res, next) => {
     })
 });
 
-router.post('/special-cupon-report', async (req, res, next) => {
+router.post('/special-cupon-report', async (req, res) => {
   const { macno } = req.body
   getSpecialCupon(macno)
     .then(rows => {

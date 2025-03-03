@@ -4,7 +4,7 @@ const router = express.Router();
 const pool = require('../../../config/database/MySqlConnect')
 const TableFileService = require('../../../services/TableFileService')
 
-router.post('/splitBill', function (req, res, next) {
+router.post('/splitBill', function (req, res) {
   const { sourceTable, targetTable, orderListToMove } = req.body
   TableFileService.splitTableToPayment(sourceTable, targetTable, orderListToMove)
     .then(rows => {
@@ -15,7 +15,7 @@ router.post('/splitBill', function (req, res, next) {
     })
 });
 
-router.post('/moveTable', function (req, res, next) {
+router.post('/moveTable', function (req, res) {
   const { sourceTable, targetTable, admin, Cashier } = req.body
   TableFileService.tableMoveOrGroup(sourceTable, targetTable, admin, Cashier)
     .then(rows => {
@@ -30,7 +30,7 @@ router.post('/moveTable', function (req, res, next) {
     })
 });
 
-router.get('/tableStatus', function (req, res, next) {
+router.get('/tableStatus', function (req, res) {
   const { tableNo } = req.body
   TableFileService.getCheckTableStatus(tableNo)
     .then(rows => {
@@ -52,7 +52,7 @@ router.get('/:tableNo', function (req, res) {
     })
 });
 
-router.post('/checkTableOpen', function (req, res, next) {
+router.post('/checkTableOpen', function (req, res) {
   const { tableNo } = req.body
   TableFileService.checkTableOpen(tableNo)
     .then(rows => {
@@ -73,7 +73,7 @@ router.post('/checkTableOpen', function (req, res, next) {
     })
 });
 
-router.patch('/updateOpenTable/:tableNo', function (req, res, next) {
+router.patch('/updateOpenTable/:tableNo', function (req, res) {
   const { tableNo } = req.params
   const { Cashier, TUser } = req.body
   TableFileService.updateTableOpenStatus(tableNo, Cashier, TUser)
@@ -88,7 +88,7 @@ router.patch('/updateOpenTable/:tableNo', function (req, res, next) {
     })
 });
 
-router.patch('/updateMember/:tableNo', function (req, res, next) {
+router.patch('/updateMember/:tableNo', function (req, res) {
   const { tableNo } = req.params
   const { Member_Code, Member_NameThai, Member_AppliedDate, Member_ExpiredDate } = req.body
   TableFileService.updateMember({
@@ -105,13 +105,14 @@ router.patch('/updateMember/:tableNo', function (req, res, next) {
     })
 });
 
-router.put('/discountInfo/:tableNo', function (req, res, next) {
-  const { tableNo } = req.params
+router.put('/discountInfo/:tableNo', function (req, res) {
   TableFileService.updateTableDiscount(req.body)
     .then(rows => {
       return res.status(200).json({
         status: 2000,
-        data: { message: `update success ${tableNo}` }
+        data: { 
+          discounAmount: rows.discountAmount
+         }
       })
     })
     .catch(err => {
@@ -119,7 +120,7 @@ router.put('/discountInfo/:tableNo', function (req, res, next) {
     })
 });
 
-router.put('/:id', function (req, res, next) {
+router.put('/:id', function (req, res) {
   const id = req.params.id
   const { Tcode, SoneCode, TCustomer, TItem, TAmount, TOnAct, Service, ServiceAmt, EmpDiscAmt, FastDiscAmt,
     TrainDiscAmt, MemDiscAmt, SubDiscAmt, DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt,

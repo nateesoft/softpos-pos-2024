@@ -6,7 +6,6 @@ import TableRow from "@mui/material/TableRow"
 import Paper from "@mui/material/Paper"
 import {
   Box,
-  Button,
   Divider,
   Grid2,
   TableContainer,
@@ -17,8 +16,16 @@ const NumFormat = (data) => {
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
-const OrderItem = ({ tableNo, orderList, tableFile }) => {
-  console.log("OrderItem")
+const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb }) => {
+  console.log("OrderItem:", tableFileDb.TIem)
+  const { EmpDiscAmt, FastDiscAmt, TrainDiscAmt, MemDiscAmt, SubDiscAmt,
+    DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt
+  } = tableFileDb
+  const discountAmount = EmpDiscAmt + FastDiscAmt + TrainDiscAmt + MemDiscAmt + SubDiscAmt + 
+  DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
+
+  console.log("Discount Amount:", discountAmount)
+
   return (
     <Paper elevation={3} sx={{ padding: "10px", margin: "10px" }}>
       <Box
@@ -59,27 +66,35 @@ const OrderItem = ({ tableNo, orderList, tableFile }) => {
         </TableContainer>
       </Grid2>
       <Divider />
-      <Box padding={2}>
+      <Box padding={2} sx={{background: "lightpink", color: "black"}}>
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Sub-TOTAL</Typography>
+          <Typography sx={{ fontSize: "14px" }}>Item</Typography>
+          <Typography>{tableFileDb.TItem||0}</Typography>
+        </Grid2>
+        <Grid2 display="flex" justifyContent="space-between">
+          <Typography sx={{ fontSize: "14px" }}>Total Amt</Typography>
           <Typography>{NumFormat(tableFile.subTotalAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>ค่าบริการ (10%)</Typography>
+          <Typography sx={{ fontSize: "14px" }}>Discount</Typography>
+          <Typography>{NumFormat(discountAmount)}</Typography>
+        </Grid2>
+        <Grid2 display="flex" justifyContent="space-between">
+          <Typography sx={{ fontSize: "14px" }}>Service</Typography>
           <Typography>{NumFormat(tableFile.serviceAmount)}</Typography>
         </Grid2>
         <Divider />
-        <Grid2 display="flex" justifyContent="space-between">
+        {/* <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>VAT (7%)</Typography>
           <Typography>{NumFormat(tableFile.vatAmount)}</Typography>
-        </Grid2>
-        <Grid2 display="flex" justifyContent="space-between">
+        </Grid2> */}
+        {/* <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>มูลค่าสินค้า/บริการ</Typography>
           <Typography>{NumFormat(tableFile.productAndService)}</Typography>
-        </Grid2>
+        </Grid2> */}
         <Divider />
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography variant="h5">Net-TOTAL</Typography>
+          <Typography variant="h5">Amount Due</Typography>
           <Typography variant="h5">
             {NumFormat(tableFile.netTotalAmount)}
           </Typography>
