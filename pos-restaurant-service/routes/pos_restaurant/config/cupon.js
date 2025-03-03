@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllOptionFile, getOptionfileByProductCode } = require('../../services/OptionfileService');
+const { getDataCupon, saveDataCupon } = require('../../../services/CuponService');
 
-/* GET all optionfile. */
-router.get('/', function (req, res) {
-  getAllOptionFile()
+router.get('/list', (req, res) => {
+  getDataCupon()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -14,10 +13,8 @@ router.get('/', function (req, res) {
     })
 });
 
-/* GET optionfile by Product Code. */
-router.get('/:productCode', function (req, res) {
-  const { productCode } = req.params
-  getOptionfileByProductCode(productCode)
+router.post('/saveList', (req, res) => {
+  saveDataCupon(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

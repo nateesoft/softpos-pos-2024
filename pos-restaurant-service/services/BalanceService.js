@@ -16,12 +16,6 @@ const getTotalBalance = async (tableNo) => {
     return 0.00
 }
 
-const getBalanceByTable = async tableNo => {
-    const sql = `select * from balance  where R_Table='${tableNo}' and R_Void <> 'V' order by r_index`;
-    const results = await pool.query(sql)
-    return results
-}
-
 const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) => {
     // Update  Balance File For Void
     const balance = await getBalanceByRIndex(R_Index);

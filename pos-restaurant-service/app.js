@@ -54,6 +54,7 @@ const stcardRouter = require('./routes/pos_restaurant/stock/stcard')
 const posConfigSetup = require('./routes/pos_restaurant/config/posconfigsetup')
 const posHwSetup = require('./routes/pos_restaurant/config/poshwsetup')
 const company = require('./routes/pos_restaurant/config/company')
+const cupon = require('./routes/pos_restaurant/config/cupon')
 const branch = require('./routes/pos_restaurant/config/branch')
 
 const invenotryDbRouter = require('./routes/inventory')
@@ -129,6 +130,7 @@ app.use('/api/stcard', stcardRouter);
 app.use('/api/posconfigsetup', posConfigSetup);
 app.use('/api/poshwsetup', posHwSetup);
 app.use('/api/company', company);
+app.use('/api/cupon', cupon);
 app.use('/api/branch', branch);
 app.use('/api/paidinout', paidInOutRouter)
 

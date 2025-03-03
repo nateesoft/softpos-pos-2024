@@ -4,7 +4,7 @@ const router = express.Router();
 const { createPaidIn, createPaidOut } = require('../../services/PaidInOutService');
 
 /* create paid-in */
-router.post('/in', function (req, res, next) {
+router.post('/in', function (req, res) {
   createPaidIn(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
@@ -15,7 +15,7 @@ router.post('/in', function (req, res, next) {
 });
 
 /* create paid-out */
-router.post('/out', function (req, res, next) {
+router.post('/out', function (req, res) {
   createPaidOut(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })

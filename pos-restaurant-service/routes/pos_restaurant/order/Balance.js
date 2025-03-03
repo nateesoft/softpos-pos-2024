@@ -177,7 +177,7 @@ router.post('/getData', (req, res) => {
     })
 });
 
-router.post('/addList', function (req, res, next) {
+router.post('/addList', function (req, res) {
   addListBalance(req.body)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
@@ -187,7 +187,7 @@ router.post('/addList', function (req, res, next) {
     })
 });
 
-router.put('/', function (req, res, next) {
+router.put('/', function (req, res) {
   const id = req.params.id
   updateBalance(req.body, id)
     .then(rows => {

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const STCardService = require('../../../services/STCardService')
 
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
   res.status(200).send("api success")
 });
 

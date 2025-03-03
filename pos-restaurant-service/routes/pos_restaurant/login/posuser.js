@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { getAllData, getDataByUserName, checkLogin, processLogout, getLoginAuthen } = require("../../../services/PosUserService");
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   getAllData()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
@@ -13,7 +13,7 @@ router.get('/', (req, res, next) => {
     })
 });
 
-router.post('/login', function (req, res, next) {
+router.post('/login', function (req, res) {
   const { username, password, macno } = req.body
 
   checkLogin(username, password, macno)
@@ -25,7 +25,7 @@ router.post('/login', function (req, res, next) {
     })
 });
 
-router.post('/loginAuth', function (req, res, next) {
+router.post('/loginAuth', function (req, res) {
   const { username, password } = req.body
 
   getLoginAuthen(username, password)
@@ -41,7 +41,7 @@ router.post('/loginAuth', function (req, res, next) {
     })
 });
 
-router.patch('/logout', function (req, res, next) {
+router.patch('/logout', function (req, res) {
   const { username } = req.body
 
   processLogout(username)
@@ -53,7 +53,7 @@ router.patch('/logout', function (req, res, next) {
     })
 });
 
-router.get('/:username', (req, res, next) => {
+router.get('/:username', (req, res) => {
   const { username } = req.params
   getDataByUserName(username)
     .then(rows => {

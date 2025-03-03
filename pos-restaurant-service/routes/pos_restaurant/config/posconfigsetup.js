@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { getPOSConfigSetup } = require('../../../services/POSConfigSetupService');
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
   getPOSConfigSetup()
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
