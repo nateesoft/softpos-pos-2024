@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import {
   AppBar,
@@ -378,7 +378,7 @@ function PaymentForm({
 
   useEffect(() => {
     totalAmount()
-  }, [])
+  }, [totalAmount])
 
   useEffect(() => {
     socket.connect()
