@@ -20,4 +20,5 @@ yarn-debug.log*
 yarn-error.log*
 
 /dist
-/webapp*
+/server/node_modules
+/server/webapp
