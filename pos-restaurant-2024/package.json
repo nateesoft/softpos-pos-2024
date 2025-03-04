@@ -48,29 +48,31 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
-    "electron": "^33.2.1",
+    "concurrently": "^9.1.2",
+    "electron": "^33.4.2",
     "electron-builder": "^25.1.8",
     "electron-is-dev": "^3.0.1",
     "electron-packager": "^17.1.2",
-    "env-cmd": "^10.1.0"
+    "env-cmd": "^10.1.0",
+    "wait-on": "^8.0.2"
   },
   "scripts": {
-    "start": "env-cmd -f ./.env react-scripts start",
+    "start": "react-scripts start",
     "start:webapp1": "env-cmd -f ./.env.webapp1 react-scripts start",
     "start:webapp2": "env-cmd -f ./.env.webapp2 react-scripts start",
     "start:webapp3": "env-cmd -f ./.env.webapp3 react-scripts start",
-    "local": "env-cmd -f ./.env.local react-scripts start",
-    "build": "react-scripts build",
+    "build": "rm -rf webapp && react-scripts build && mv build webapp",
     "build:webapp1": "env-cmd -f ./.env.webapp1 react-scripts build && mv build webapp1",
     "build:webapp2": "env-cmd -f ./.env.webapp2 react-scripts build && mv build webapp2",
     "build:webapp3": "env-cmd -f ./.env.webapp3 react-scripts build && mv build webapp3",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "package": "electron-packager .",
-    "dist": "electron-builder",
+    "electron-build": "electron-builder",
+    "package": "electron-builder --dir",
     "start:local": "nodemon server.js",
-    "start:prod": "react-scripts build && nodemon server.js"
+    "start:prod": "react-scripts build && nodemon server.js",
+    "dist": "electron-builder"
   },
   "eslintConfig": {
     "extends": [
@@ -94,7 +96,19 @@
     "appId": "newpos.softpos.co.th",
     "productName": "pos-restaurant-2024",
     "directories": {
-      "output": "dist"
+      "output": "dist_electron"
+    },
+    "files": [
+      "build/**/*",
+      "public/electron.js"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/icon.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/icon.png"
     }
   }
 }

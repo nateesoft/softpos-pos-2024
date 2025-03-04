@@ -4,13 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start:service1": "node --env-file=.env.service1 ./bin/www",
-    "start:service2": "node --env-file=.env.service2 ./bin/www",
-    "start:service3": "node --env-file=.env.service3 ./bin/www",
     "local": "node --env-file=.env.local ./bin/www",
     "local:watch": "nodemon --trace-warnings --env-file=.env.local ./bin/www",
-    "start:watch": "nodemon ./bin/www",
-    "pm2": "pm2 start ./bin/www --name pos-restaurant-service"
+    "start:watch": "nodemon ./bin/www"
   },
   "dependencies": {
     "axios": "^1.7.9",
@@ -47,6 +43,8 @@
     "uuid": "^11.0.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
   }
 }

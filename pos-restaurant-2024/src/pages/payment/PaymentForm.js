@@ -23,8 +23,6 @@ import SendToMobileIcon from "@mui/icons-material/SendToMobile"
 import CreditCardIcon from "@mui/icons-material/CreditCard"
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff"
 
-import { io } from "socket.io-client"
-
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import QrCodeGenerator from "./QRCodePayment"
@@ -57,12 +55,6 @@ const modalStyle = {
   border: "1px solid #eee",
   boxShadow: 24
 }
-
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
 
 function PaymentForm({
   orderList,
@@ -379,24 +371,6 @@ function PaymentForm({
   useEffect(() => {
     totalAmount()
   }, [totalAmount])
-
-  useEffect(() => {
-    socket.connect()
-
-    // รับข้อความจาก server
-    socket.on("message", (newMessage) => {
-      console.log(newMessage)
-    })
-
-    socket.on("reply", (newMessage) => {
-      console.log(newMessage)
-    })
-
-    // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
-    return () => {
-      socket.disconnect()
-    }
-  }, [])
 
   return (
     <Grid2
