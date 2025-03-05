@@ -456,7 +456,7 @@ const addNewBill = async (payload) => {
     )
     
     // delete tablefile if found xxx-xx
-    if (B_Table.split("-").length > 0) {
+    if (B_Table.split("-").length > 1) {
       await pool.query(`delete from tablefile where Tcode='${B_Table}'`)
     }
 

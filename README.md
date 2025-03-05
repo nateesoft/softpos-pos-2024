@@ -50,3 +50,33 @@ npm install -g pm2
 pm2 start src/index.js --name my-express-app
 pm2 save
 pm2 startup
+
+
+### NOTE ###
+HRM = (Human Resource Management)
+-dashboard
+-กะพนักงาน
+-คำนวณเงินเดือน พนักงาน
+
+Mobile Staff (เชื่อมกับ HRM)
+-พนักงานดูข้อมูลตัวเองได้
+
+CRM = (Customer Relationship Management)
+-การทำ promotions
+-สะสมแต้มสมาชิก
+-เชื่อมกับ LineOA
+-boardcast ส่งโปรโมชั่น
+-ทฤษฏี RFM แยกประเภทลูกค้าให้
+
+Dashboard = (Realtime)
+-ยอดขาย
+-Profit and Lost (P&L)
+-ABC Analysyst
+-Promotion
+-Menu Engineering Metrix (BCG)
+-Inventory (Stock)
+-Supply Chain
+-เป้าหมายการขาย
+-Cashflow
+-CRM
+-COGs (ต้นทุนวัตถุดบ)
