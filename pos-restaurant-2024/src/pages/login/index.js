@@ -226,7 +226,7 @@ const Login = () => {
                           padding: "10px"
                         }}
                       >
-                        POS System
+                        POS Restaurant
                       </Typography>
                     </Box>
                     {iphonePro14max === true && (
