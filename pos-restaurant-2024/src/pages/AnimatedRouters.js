@@ -58,6 +58,7 @@ import MTopSaleReport from "./reports/monthlySale/TopSaleReport"
 import Character from "../agi/Character"
 import VoiceCommand from "../agi/VoiceCommand"
 import AICharacter from "../agi/AICharacter"
+import VirtualKeyboard from "../utils/VirtualKeyboard"
 
 const AnimatedRoutes = () => {
   console.log("AnimatedRoutes")
@@ -200,6 +201,7 @@ const AnimatedRoutes = () => {
         <Route path="/modal" element={<UserAuthen />} />
         <Route path="/print-demo" element={<PrinterDemo />} />
         <Route path="/test-print" element={<TestPrinter />} />
+        <Route path="/keyboard" element={<VirtualKeyboard />} />
         <Route path="/agi" element={<Character />} />
         <Route path="/ai" element={<AICharacter />} />
         <Route path="/voice" element={<VoiceCommand />} />

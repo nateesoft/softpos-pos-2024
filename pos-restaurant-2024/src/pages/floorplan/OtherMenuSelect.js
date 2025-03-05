@@ -44,7 +44,7 @@ const OtherMenuSelect = ({
         <MenuItem onClick={() => handleChange("CheckTableStatus")}>
           <Box display="flex" justifyContent="center">
             <TableRestaurantIcon sx={{ marginRight: "10px" }} />{" "}
-            <Typography variant="p">ตรวจสอบโต๊ะ</Typography>
+            <Typography variant="p">ตรวจสอบโต๊ะค้างชำระ</Typography>
           </Box>
         </MenuItem>
         <MenuItem onClick={() => handleChange("MgrTable")}>
