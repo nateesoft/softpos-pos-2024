@@ -226,7 +226,7 @@ const Login = () => {
                           padding: "10px"
                         }}
                       >
-                        POS Restaurant
+                        POS System
                       </Typography>
                     </Box>
                     {iphonePro14max === true && (
@@ -234,11 +234,10 @@ const Login = () => {
                         <img src={bg} width={220} alt="" />
                       </Grid2>
                     )}
-                    <Divider sx={{ marginBottom: "20px" }} />
                     <Box display="flex" justifyContent="center">
                       {macno && (
                         <Typography variant="p" sx={{ color: "yellow" }}>
-                          - หมายเลขเครื่อง {macno} -
+                          * หมายเลขเครื่อง {macno} *
                         </Typography>
                       )}
                       {!macno && (
@@ -247,6 +246,7 @@ const Login = () => {
                         </Typography>
                       )}
                     </Box>
+                    <Divider sx={{ marginBottom: "20px" }} />
                     <Box component="form" onSubmit={handleSubmit}>
                       <Grid2 container spacing={1}>
                         <TextField
