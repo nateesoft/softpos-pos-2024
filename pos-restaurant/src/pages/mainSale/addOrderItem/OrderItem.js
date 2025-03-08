@@ -18,6 +18,8 @@ import {
   Grid2,
   Divider
 } from "@mui/material"
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import apiClient from "../../../httpRequest"
 import ProductCard from "./ProductCard"
@@ -98,6 +100,8 @@ const OrderItem = ({
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
 
+  const [hideItem, setHideItem] = useState(false)
+
   const handleChange = (event, newValue) => {
     console.log("handleChange:", newValue)
     setValue(newValue)
@@ -162,24 +166,23 @@ const OrderItem = ({
         <Box textAlign="center">
           <Typography fontSize={16}>รายการอาหารที่สั่ง</Typography>
         </Box>
-        <Box textAlign="center" sx={{ marginTop: "10px" }}>
+        <Box textAlign="center" sx={{ marginTop: "10px", background: "#eee" }}>
           <Typography
             variant="p"
             sx={{
-              border: "1px solid salmon",
               fontWeight: "bold",
-              color: "snow",
-              borderRadius: "15px",
-              padding: "12px",
-              background: "chocolate"
+              borderRadius: "15px"
             }}
           >
             โต๊ะ {tableNo}
           </Typography>
+          <Button variant="text"  endIcon={hideItem ? <ExpandLessIcon /> : <ExpandMoreIcon />} 
+                onClick={()=>setHideItem(prev => !prev)}>แสดงรายการ</Button>
+          <Divider sx={{padding: "5px"}} />
         </Box>
         <TabPanel
           value="E"
-          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
+          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto", minHeight: "350px" }}
         >
           {OrderEList &&
             OrderEList.map((product) => {
@@ -210,7 +213,7 @@ const OrderItem = ({
         </TabPanel>
         <TabPanel
           value="T"
-          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
+          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto", minHeight: "350px" }}
         >
           {OrderTList &&
             OrderTList.map((product) => {
@@ -241,7 +244,7 @@ const OrderItem = ({
         </TabPanel>
         <TabPanel
           value="D"
-          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto" }}
+          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto", minHeight: "350px" }}
         >
           {OrderDList &&
             OrderDList.map((product) => {
@@ -277,6 +280,7 @@ const OrderItem = ({
           startIcon={<PrintIcon />}
           disabled={OrderList.length === 0}
           onClick={() => setShowKicPrint(true)}
+          color="secondary"
         >
           ส่งครัว/ พักโต๊ะ
         </Button>

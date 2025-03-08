@@ -184,9 +184,7 @@ function MainSalePage() {
             handleNotification={handleNotification}
           />
         </Grid2>
-        <Grid2
-          size={4}
-          sx={{
+        <Grid2 size={4} sx={{
             backgroundColor: "white",
             border: "2px solid #ddd",
             display: { xs: "none", md: "flex" },

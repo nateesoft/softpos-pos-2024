@@ -9,6 +9,12 @@ const intents = {
     "ระบบเดโม",
     "เข้าระบบทันที",
     "ล็อคอินทันที"
+  ],
+  ระบบคลังสินค้า: [
+    "ระบบคลังสินค้า",
+    "คลังสินค้า",
+    "ดูคลังสินค้า",
+    "ระบบสินค้า"
   ]
 }
 
@@ -62,8 +68,12 @@ const VoiceCommand = () => {
   }
 
   const handleCommand = (text) => {
+    console.log("text:", text)
     if (findIntent(text) === "เข้าสู่ระบบทดสอบ") {
       navigate("/")
+    }
+    if (findIntent(text) === "ระบบคลังสินค้า") {
+      window.location.href = "http://localhost:3001"
     }
     if (text === "ฟังภาษาอังกฤษ") {
       listenEnglish()

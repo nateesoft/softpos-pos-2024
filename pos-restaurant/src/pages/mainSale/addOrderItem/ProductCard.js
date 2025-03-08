@@ -12,9 +12,11 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  ImageListItem
+  ImageListItem,
+  Paper
 } from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
+
 import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
 import BlockIcon from "@mui/icons-material/Block"
 import GppGoodIcon from "@mui/icons-material/GppGood"
@@ -38,7 +40,9 @@ const ProductCard = ({
   product,
   openModal,
   initLoadMenu,
-  initLoadOrder
+  initLoadOrder,
+  hideItem,
+  setHideItem
 }) => {
   console.log("ProductCard:", product)
   const { appData } = useContext(POSContext)
@@ -167,7 +171,7 @@ const ProductCard = ({
               <ImageListItem
                 sx={{ position: "absolute", top: "0px", right: "0px" }}
               >
-                <GppGoodIcon fontSize="large" sx={{ color: "gold" }} />
+                <GppGoodIcon fontSize="small" sx={{ color: "gold" }} />
               </ImageListItem>
             )}
           </div>
@@ -207,7 +211,7 @@ const ProductCard = ({
                   />
                 </IconButton>
               )}
-              <TextField
+              {showActionBalance(product) && <TextField
                 inputProps={{
                   min: 0,
                   style: {
@@ -216,12 +220,12 @@ const ProductCard = ({
                     fontWeight: "bold"
                   }
                 }}
-                variant="outlined"
+                variant="standard"
                 type="number"
                 value={count}
                 disabled
                 onChange={(e) => setCount(e.target.value)}
-              />
+              />}
               {showActionBalance(product) && (
                 <IconButton onClick={handleAddItem}>
                   <AddCircleIcon color="success" fontSize="large" />
@@ -229,13 +233,8 @@ const ProductCard = ({
               )}
             </Grid2>
           )}
-          <Grid2 container>
+          <Grid2 container margin={1}>
             <Typography>
-              ราคา{" "}
-              {new Intl.NumberFormat("th-TH", {
-                style: "currency",
-                currency
-              }).format(convertCurrency(RPrice))}{" "}
               x {product.R_Quan}{" "}
             </Typography>
             <Typography>&nbsp;=&nbsp;</Typography>

@@ -8,8 +8,6 @@ import {
   Grid2
 } from "@mui/material"
 
-import bg from "./welcome.jpg"
-
 const LoginPage = () => {
   const handleLogin = (event) => {
     event.preventDefault()
@@ -26,17 +24,17 @@ const LoginPage = () => {
       }}
     >
       <Grid2 container spacing={1} direction="row">
-        <Grid2 container justifyContent="center">
-          <img src={bg} alt="" width={600} style={{borderRadius: "5px"}} />
-        </Grid2>
-        <Paper elevation={3} sx={{ p: 4, width: "80%", maxWidth: 400, minHeight: 350, background: "radial-gradient(circle at center, snow, lightgreen)" }}>
+        <Paper elevation={3} sx={{ p: 4, width: "80%", maxWidth: 400, minHeight: 350 }}>
           <Typography variant="h5" align="center" gutterBottom>
-            POS Minimart
+            ระบบคลังสินค้า
+          </Typography>
+          <Typography variant="h5" align="center" gutterBottom>
+            (Inventory Management)
           </Typography>
           <Box component="form" onSubmit={handleLogin} sx={{ mt: 2 }}>
             <TextField
               fullWidth
-              label="Username"
+              label="รหัสผู้ใช้งาน"
               type="text"
               variant="filled"
               margin="normal"
@@ -45,7 +43,7 @@ const LoginPage = () => {
             />
             <TextField
               fullWidth
-              label="Password"
+              label="รหัสผ่าน"
               type="password"
               variant="filled"
               margin="normal"
@@ -58,7 +56,7 @@ const LoginPage = () => {
               variant="contained"
               sx={{ mt: 2, py: 1 }}
             >
-              Login
+              เข้าสู่ระบบ
             </Button>
           </Box>
         </Paper>
