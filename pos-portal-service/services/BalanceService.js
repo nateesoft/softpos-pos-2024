@@ -120,7 +120,7 @@ const updateBalanceQty = async (tableNo, rIndex, qty) => {
 }
 
 const addListBalance = async (payload) => {
-    const { listBalance, tableNo, macno, userLogin, empCode, R_LinkIndex, etdType } = payload
+    const { listBalance, tableNo, macno, userLogin, empCode, R_LinkIndex, etdType, qty } = payload
     const Main_Index = await getBalanceMaxIndex(tableNo)
     listBalance.forEach(async (product, index) => {
         const posProduct = await getProductByPCode(product.menu_code)
@@ -128,7 +128,7 @@ const addListBalance = async (payload) => {
         const reponseR_Index = await addNewBalance({
             tableNo,
             menuInfo: { ...product },
-            qty: 1,
+            qty,
             optList: [],
             specialText: "",
             macno,

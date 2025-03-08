@@ -16,14 +16,18 @@ import {
   Slide,
   Dialog,
   Button,
-  Grid2
+  Grid2,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
 } from "@mui/material"
 import MenuBook from "@mui/icons-material/ShoppingCartOutlined"
 import { useTranslation } from "react-i18next"
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu"
 import CloseIcon from "@mui/icons-material/Close"
 import CloseModalIcon from "@mui/icons-material/Cancel"
-import CheckIcon from "@mui/icons-material/Check"
+import CheckIcon from "@mui/icons-material/AddCircle"
 import NoFoodIcon from "@mui/icons-material/NoFood"
 import useMediaQuery from "@mui/material/useMediaQuery"
 
@@ -126,8 +130,9 @@ const ProductMenu = ({
   const matches = useMediaQuery("(min-width:1024px)")
   const { appData } = useContext(POSContext)
   const { currency, convertCurrency } = useContext(CurrencyContext)
-  const { empCode, macno, userLogin, tableInfo } = appData
+  const { empCode, macno, userLogin } = appData
 
+  const [qtyOrder, setQtyOrder] = useState(1)
   const [value, setValue] = useState(0)
   const [open, setOpen] = useState(false)
   const [productInfo, setProductInfo] = useState({})
@@ -188,7 +193,7 @@ const ProductMenu = ({
         tableNo,
         menuInfo: product,
         etdType: orderType,
-        qty: 1,
+        qty: qtyOrder,
         macno,
         userLogin,
         empCode
@@ -224,7 +229,8 @@ const ProductMenu = ({
       macno,
       userLogin,
       empCode,
-      R_LinkIndex: R_LinkIndex
+      R_LinkIndex: R_LinkIndex,
+      qty: qtyOrder
     })
   }
 
@@ -548,16 +554,54 @@ const ProductMenu = ({
             justifyContent="center"
             sx={{ border: "1px solid orange" }}
           >
-            <Typography sx={{ color: "green", fontWeight: "bold" }}>
-              รายการที่เลือก:{" "}
-              {subMenuSelected.filter((item) => item === true).length}
-            </Typography>
-            <Typography sx={{ color: "yellow" }}>
-              สั่งขั้นต่ำ: {productInfo.min_count_set}
-            </Typography>
-            <Typography sx={{ color: "red" }}>
-              สั่งได้ไม่เกิน: {productInfo.max_count_set}
-            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Grid2 container spacing={1} marginRight={5}>
+                <Typography sx={{ color: "green", fontWeight: "bold" }}>
+                  รายการที่เลือก:{" "}
+                  {subMenuSelected.filter((item) => item === true).length}
+                </Typography>
+                <Typography sx={{ color: "yellow" }}>
+                  สั่งขั้นต่ำ: {productInfo.min_count_set}
+                </Typography>
+                <Typography sx={{ color: "red" }}>
+                  สั่งได้ไม่เกิน: {productInfo.max_count_set}
+                </Typography>
+              </Grid2>
+              <Grid2 container spacing={1}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  startIcon={<CloseIcon />}
+                  onClick={handleCloseMenuSet}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  endIcon={<CheckIcon />}
+                  onClick={() => handleConfirmSelectedSubMenu(productInfo)}
+                >
+                  Order
+                </Button>
+                <FormControl variant="outlined">
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={qtyOrder}
+                    onChange={(e)=>setQtyOrder(e.target.value)}
+                    variant="outlined"
+                    sx={{background: "snow", fontWeight: "bold"}}
+                  >
+                    <MenuItem value={1}>1</MenuItem>
+                    <MenuItem value={2}>2</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                    <MenuItem value={4}>4</MenuItem>
+                    <MenuItem value={5}>5</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid2>
+            </Box>
           </Grid2>
           <MenuSetModal
             product={productInfo}
@@ -566,24 +610,6 @@ const ProductMenu = ({
             optionalList={optionalList}
             setOptionalList={setOptionalList}
           />
-          <Grid2 container spacing={1} padding={1} justifyContent="center">
-            <Button
-              variant="contained"
-              color="error"
-              startIcon={<CloseIcon />}
-              onClick={handleCloseMenuSet}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              startIcon={<CheckIcon />}
-              onClick={() => handleConfirmSelectedSubMenu(productInfo)}
-            >
-              Confirm
-            </Button>
-          </Grid2>
         </Box>
       </Modal>
 
