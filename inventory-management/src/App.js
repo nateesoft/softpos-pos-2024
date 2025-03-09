@@ -11,6 +11,12 @@ import {
 
 import LoginPage from "./pages/login"
 import Recive from "./pages/inventory/recive"
+import Tranin from "./pages/inventory/tranin"
+import Tranout from "./pages/inventory/tranout"
+import Prolost from "./pages/inventory/prolost"
+import Charge from "./pages/inventory/charge"
+import Produce from "./pages/inventory/produce"
+import TranStk from "./pages/inventory/transtk"
 
 const App = () => {
   const location = useLocation()
@@ -46,42 +52,42 @@ const App = () => {
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/tranin")
               }}
             >
               {"โอนสินค้า (เข้า)"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/tranout")
               }}
             >
               {"โอนสินค้า (ออก)"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/prolost")
               }}
             >
               {"บันทึกรายการของเสีย & ชำรุด"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/charge")
               }}
             >
               {"บันทึกรายการแจกฟรี"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/produce")
               }}
             >
               {"บันทึกการผลิตสินค้า"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/transtk")
               }}
             >
               {"โอนสินค้าระหว่างคลัง (Stock)"}
@@ -210,39 +216,33 @@ const App = () => {
                 console.log("clicked")
               }}
             >
-              {"รายงานวิเคราะห์การซื้อ"}
+              {"รายงานการวิเคราะห์การสั่งซื้อ"}
             </DropdownMenuItem>,
             <Divider />,
             <DropdownNestedMenuItem
               label="รายงานการซื้อสินค้า"
               rightIcon={<ArrowRight />}
               menu={[
-                <DropdownMenuItem>
-                  <Button
-                    variant="text"
-                    component="label"
-                    sx={{
-                      color: "#000",
-                      textTransform: "none",
-                      fontSize: "1rem"
-                    }}
-                  >
-                    Upload from Computer
-                    <input
-                      id="imageInput"
-                      type="file"
-                      accept="image/png, image/jpeg"
-                      hidden
-                      onChange={() => {}}
-                    />
-                  </Button>
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  แสดงรายการซื้อสินค้า (ตามเอกสารการซื้อ)
                 </DropdownMenuItem>,
                 <DropdownMenuItem
                   onClick={() => {
                     console.log("clicked")
                   }}
                 >
-                  From URL
+                  สรุปการซื้อสินค้าตามรหัสสินค้า (Plu Code)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปการซื้อสินค้าตามกลุ่มสินค้า (Group)
                 </DropdownMenuItem>
               ]}
             />,
@@ -250,39 +250,20 @@ const App = () => {
               label="รายงานการบันทึกค่าใช้จ่าย"
               rightIcon={<ArrowRight />}
               menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  แสดงรายการ การบันทึกค่าใช้จ่าย (Voucher)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการค่าใช้จ่าย (ตามรหัสค่าใช้จ่าย)
+                </DropdownMenuItem>
               ]}
             />,
             <Divider />,
@@ -290,433 +271,174 @@ const App = () => {
               label="รายงานการรับสินค้าจากโรงงาน"
               rightIcon={<ArrowRight />}
               menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  แสดงรายการใบรับสินค้าจากโรงงาน
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายงานการรับสินค้าจากโรงงานตามรหัสสินค้า (PLU Code)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการรับสินค้าจากโรงงานตามแผนกสินค้า (Dept)
+                </DropdownMenuItem>
               ]}
             />,
             <DropdownNestedMenuItem
               label="รายงานการโอนสินค้า (เข้า)"
               rightIcon={<ArrowRight />}
               menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  แสดงรายการใบรับโอนสินค้า (เข้า)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการรับโอนสินค้า (เข้า) ตามรหัสสินค้า (PLU Code)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการรับโอนสินค้า (เข้า) ตามแผนกสินค้า (Dept)
+                </DropdownMenuItem>
               ]}
             />,
             <DropdownNestedMenuItem
               label="รายงานการโอนสินค้า (ออก)"
               rightIcon={<ArrowRight />}
               menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  แสดงรายการใบรับโอนสินค้า (ออก)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการรับโอนสินค้า (ออก) ตามรหัสสินค้า (PLU Code)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการรับโอนสินค้า (ออก) ตามแผนกสินค้า (Dept)
+                </DropdownMenuItem>
               ]}
             />,
             <DropdownNestedMenuItem
               label="รายงานการบันทึกรายการของเสีย"
               rightIcon={<ArrowRight />}
               menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  แสดงรายการบันทึกรายการของเสีย
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการบันทึกของเสียตามรหัสสินค้า (PLU Code)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการบันทึกของเสียตามแผนกสินค้า (Dept)
+                </DropdownMenuItem>
               ]}
             />,
             <DropdownNestedMenuItem
               label="รายงานการบันทึกรายการแจกฟรี (Charge)"
               rightIcon={<ArrowRight />}
               menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  แสดงรายการบันทึกรายการแจกฟรี (Charge)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการแจกฟรี (Charge) ตามรหัสสินค้า (PLU Code)
+                </DropdownMenuItem>,
+                <DropdownMenuItem
+                  onClick={() => {
+                    console.log("clicked")
+                  }}
+                >
+                  สรุปรายการแจกฟรี (Charge) ตามแผนกสินค้า (Dept)
+                </DropdownMenuItem>
               ]}
             />,
             <Divider />,
-            <DropdownNestedMenuItem
-              label="รายงานการใช้วัตถุดิบ"
-              rightIcon={<ArrowRight />}
-              menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
-              ]}
-            />,
-            <DropdownNestedMenuItem
-              label="รายงานการใช้วัตถุดิบแยกตามรหัสสินค้า"
-              rightIcon={<ArrowRight />}
-              menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
-              ]}
-            />,
+            <DropdownMenuItem
+              onClick={() => {
+                console.log("clicked")
+              }}
+            >
+              {"รายงานการใช้วัตถุดิบ"}
+            </DropdownMenuItem>,
+            <DropdownMenuItem
+              onClick={() => {
+                console.log("clicked")
+              }}
+            >
+              {"รายงานการใช้วัตถุดิบแยกตามรหัสสินค้า"}
+            </DropdownMenuItem>,
             <Divider />,
-            <DropdownNestedMenuItem
-              label="รายงานภาษีซื้อ"
-              rightIcon={<ArrowRight />}
-              menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
-              ]}
-            />,
-            <DropdownNestedMenuItem
-              label="รายงานภาษีซื้อ"
-              rightIcon={<ArrowRight />}
-              menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
-              ]}
-            />,
-            <DropdownNestedMenuItem
-              label="รายงานภาษีขาย (จาก POS)"
-              rightIcon={<ArrowRight />}
-              menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
-              ]}
-            />,
-            <DropdownNestedMenuItem
-              label="งบกำไรขาดทุนจากการดำเนินงาน"
-              rightIcon={<ArrowRight />}
-              menu={[
-                <DropdownNestedMenuItem
-                  label="As Table"
-                  rightIcon={<ArrowRight />}
-                  menu={[
-                    <DropdownMenuItem>
-                      <Button
-                        variant="text"
-                        component="label"
-                        sx={{
-                          color: "#000",
-                          textTransform: "none",
-                          fontSize: "1rem"
-                        }}
-                      >
-                        Upload from Computer
-                        <input
-                          id="csvInput"
-                          type="file"
-                          accept={`.csv`}
-                          hidden
-                          onChange={(e) => {}}
-                        />
-                      </Button>
-                    </DropdownMenuItem>,
-                    <DropdownMenuItem
-                      onClick={() => {
-                        console.log("clicked")
-                      }}
-                    >
-                      From URL
-                    </DropdownMenuItem>
-                  ]}
-                />
-              ]}
-            />
+            <DropdownMenuItem
+              onClick={() => {
+                console.log("clicked")
+              }}
+            >
+              {"รายงานภาษีซื้อ"}
+            </DropdownMenuItem>,
+            <DropdownMenuItem
+              onClick={() => {
+                console.log("clicked")
+              }}
+            >
+              {"รายงานภาษีขาย (จาก POS)"}
+            </DropdownMenuItem>,
+            <DropdownMenuItem
+              onClick={() => {
+                console.log("clicked")
+              }}
+            >
+              {"งบกำไรขาดทุนจากการดำเนินงาน"}
+            </DropdownMenuItem>
           ]}
         />
         <Dropdown
@@ -797,12 +519,20 @@ const App = () => {
             </DropdownMenuItem>
           ]}
         />
-        <Button color="white" onClick={()=>navigate("/")}>ออกจากระบบ (Exit Program)</Button>
+        <Button color="white" onClick={() => navigate("/")}>
+          ออกจากระบบ (Exit Program)
+        </Button>
       </Box>
       <Routes location={location}>
         <Route>
           <Route path="/" element={<LoginPage />} />
           <Route path="/recive" element={<Recive />} />
+          <Route path="/tranin" element={<Tranin />} />
+          <Route path="/tranout" element={<Tranout />} />
+          <Route path="/prolost" element={<Prolost />} />
+          <Route path="/charge" element={<Charge />} />
+          <Route path="/produce" element={<Produce />} />
+          <Route path="/transtk" element={<TranStk />} />
         </Route>
       </Routes>
     </div>
