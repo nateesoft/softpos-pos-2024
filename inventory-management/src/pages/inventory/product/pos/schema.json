@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "service": {
+      "type": "string",
+      "enum": [
+        {
+          "value": "Y",
+          "label": "คิดค่าบริการ"
+        },
+        {
+          "value": "N",
+          "label": "ไม่คิดค่าบริการ"
+        }
+      ]
+    },
+    "discount": {
+      "type": "string",
+      "enum": [
+        {
+          "value": "Y",
+          "label": "สามารถให้ส่วนลดได้"
+        },
+        {
+          "value": "N",
+          "label": "ไม่สามารถให้ส่วนลดได้"
+        }
+      ]
+    },
+    "promotion1": {
+      "type": "string"
+    }
+  }
+}

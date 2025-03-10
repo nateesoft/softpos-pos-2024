@@ -1,0 +1,126 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "RadioGroup",
+      "scope": "#/properties/service",
+      "options": {
+        "label": "การคิดค่าบริการ (Service Charge)",
+        "row": true
+      }
+    },
+    {
+      "type": "RadioGroup",
+      "scope": "#/properties/discount",
+      "options": {
+        "label": "การให้ส่วนลด (Discount)",
+        "row": true
+      }
+    },
+    {
+      "type": "StackLayout",
+      "options": {
+        "direction": "row",
+        "spacing": 1,
+        "margin": 1
+      },
+      "elements": [
+        {
+          "type": "Typography",
+          "label": "1)"
+        },
+        {
+          "type": "TextField",
+          "scope": "#/properties/promotion1",
+          "options": {
+            "sx": {
+              "size": "small"
+            }
+          }
+        },
+        {
+          "type": "IconButton"
+        },
+        {
+          "type": "TextField",
+          "scope": "#/properties/promotion1",
+          "options": {
+            "sx": {
+              "size": "small"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "StackLayout",
+      "options": {
+        "direction": "row",
+        "spacing": 1,
+        "margin": 1
+      },
+      "elements": [
+        {
+          "type": "Typography",
+          "label": "2)"
+        },
+        {
+          "type": "TextField",
+          "scope": "#/properties/promotion1",
+          "options": {
+            "sx": {
+              "size": "small"
+            }
+          }
+        },
+        {
+          "type": "IconButton"
+        },
+        {
+          "type": "TextField",
+          "scope": "#/properties/promotion1",
+          "options": {
+            "sx": {
+              "size": "small"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "StackLayout",
+      "options": {
+        "direction": "row",
+        "spacing": 1,
+        "margin": 1
+      },
+      "elements": [
+        {
+          "type": "Typography",
+          "label": "3)"
+        },
+        {
+          "type": "TextField",
+          "scope": "#/properties/promotion1",
+          "options": {
+            "sx": {
+              "size": "small"
+            }
+          }
+        },
+        {
+          "type": "IconButton"
+        },
+        {
+          "type": "TextField",
+          "scope": "#/properties/promotion1",
+          "options": {
+            "sx": {
+              "size": "small"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
