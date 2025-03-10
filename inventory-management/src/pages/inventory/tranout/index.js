@@ -30,13 +30,13 @@ import DataTable from "./DataTable"
 import { useNavigate } from "react-router-dom"
 
 const TextFieldCustom = (props) => {
-  return <TextField variant="outlined" {...props} />
+  return <TextField size="small" variant="outlined" {...props} />
 }
 
 const FindButton = (props) => {
   return (
     <IconButton
-      sx={{ border: "1px solid #ccc", borderRadius: "5px" }}
+      size="small"
       {...props}
     >
       <ZoomInIcon fontSize="large" />
@@ -46,7 +46,7 @@ const FindButton = (props) => {
 
 const FindButtonNoBorder = (props) => {
   return (
-    <IconButton>
+    <IconButton size="small">
       <ZoomInIcon fontSize="large" />
     </IconButton>
   )
@@ -139,6 +139,7 @@ const Tranout = () => {
           <FindButton />
           <TextFieldCustom label="วันที่รับสินค้า" />
           <TextField
+            size="small"
             label="หมายเหตุ"
             inputProps={{
               style: {

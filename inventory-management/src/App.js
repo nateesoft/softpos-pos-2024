@@ -17,6 +17,8 @@ import Prolost from "./pages/inventory/prolost"
 import Charge from "./pages/inventory/charge"
 import Produce from "./pages/inventory/produce"
 import TranStk from "./pages/inventory/transtk"
+import Product from "./pages/inventory/product"
+import Ingredient from "./pages/inventory/ingredient"
 
 const App = () => {
   const location = useLocation()
@@ -95,14 +97,14 @@ const App = () => {
             <Divider />,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/plusetup")
               }}
             >
               {"แฟ้มข้อมูลสินค้า (PLU Setup)"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/ingredient")
               }}
             >
               {"แฟ้มข้อมูลวัตถุดิบ"}
@@ -533,6 +535,8 @@ const App = () => {
           <Route path="/charge" element={<Charge />} />
           <Route path="/produce" element={<Produce />} />
           <Route path="/transtk" element={<TranStk />} />
+          <Route path="/plusetup" element={<Product />} />
+          <Route path="/ingredient" element={<Ingredient />} />
         </Route>
       </Routes>
     </div>
