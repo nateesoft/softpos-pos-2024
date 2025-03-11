@@ -19,6 +19,9 @@ import Produce from "./pages/inventory/produce"
 import TranStk from "./pages/inventory/transtk"
 import Product from "./pages/inventory/product"
 import Ingredient from "./pages/inventory/ingredient"
+import AdjustStock from "./pages/inventory/adjustStock"
+import PrintAdjustStock from "./pages/inventory/printAdjustStock"
+import EOrdering from "./pages/inventory/eOrdering"
 
 const App = () => {
   const location = useLocation()
@@ -112,14 +115,14 @@ const App = () => {
             <Divider />,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/adjust-stock")
               }}
             >
               {"รายการตรวจนับสต็อกสินค้า"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/print-adjust-stock")
               }}
             >
               {"พิมพ์ใบรายการสำหรับตรวจนับสินค้า"}
@@ -127,7 +130,7 @@ const App = () => {
             <Divider />,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/e-ordering")
               }}
             >
               {"ระบบสั่งสินค้า e-Ordering"}
@@ -527,6 +530,7 @@ const App = () => {
       </Box>
       <Routes location={location}>
         <Route>
+          {/* ระบบคลังสินค้า */}
           <Route path="/" element={<LoginPage />} />
           <Route path="/recive" element={<Recive />} />
           <Route path="/tranin" element={<Tranin />} />
@@ -537,6 +541,16 @@ const App = () => {
           <Route path="/transtk" element={<TranStk />} />
           <Route path="/plusetup" element={<Product />} />
           <Route path="/ingredient" element={<Ingredient />} />
+          <Route path="/adjust-stock" element={<AdjustStock />} />
+          <Route path="/print-adjust-stock" element={<PrintAdjustStock />} />
+          <Route path="/e-ordering" element={<EOrdering />} />
+
+          {/* ระบบการซื้อสินค้า/ค่าใช้จ่าย */}
+
+          {/* รายงานต่าง ๆ */}
+
+          {/* ระบบช่วยงาน/แฟ้มข้อมูลระบบ */}
+
         </Route>
       </Routes>
     </div>
