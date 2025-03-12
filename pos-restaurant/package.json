@@ -62,7 +62,7 @@
     "start:webapp1": "env-cmd -f ./.env.webapp1 react-scripts start",
     "start:webapp2": "env-cmd -f ./.env.webapp2 react-scripts start",
     "start:webapp3": "env-cmd -f ./.env.webapp3 react-scripts start",
-    "build": "rm -rf webapp && react-scripts build && mv build webapp",
+    "build": "rm -rf webapp && react-scripts build && mv build server/webapp",
     "build:webapp1": "env-cmd -f ./.env.webapp1 react-scripts build && mv build webapp1",
     "build:webapp2": "env-cmd -f ./.env.webapp2 react-scripts build && mv build webapp2",
     "build:webapp3": "env-cmd -f ./.env.webapp3 react-scripts build && mv build webapp3",

@@ -1,6 +1,6 @@
 module.exports = {
     apps: [{
-      name: "webapp",
+      name: "pos-app",
       script: "server.js",
       env: {
         WEB_PORT:3000,

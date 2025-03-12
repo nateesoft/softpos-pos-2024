@@ -87,17 +87,9 @@ const CustomerCheckin = (props) => {
     const checkTableActive = await apiClient.get(`/api/tablefile/${tableNo}`)
     const tableResponse = checkTableActive.data.data
     if (tableResponse != null) {
-      if (
-        thaiCount +
-          europeCount +
-          americaCount +
-          asiaCount +
-          manCount +
-          womanCount +
-          kidCount +
-          oldCount !==
-        custCount
-      ) {
+      const totalCustomer = thaiCount + europeCount + americaCount + asiaCount + manCount + womanCount + kidCount + oldCount
+      console.log('totalCustomer:', totalCustomer, custCount)
+      if (totalCustomer !== custCount) {
         setShowCustomerCountError(true)
         return
       }

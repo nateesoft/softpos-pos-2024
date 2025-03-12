@@ -89,8 +89,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
         </tr>`
     })
     
-    billTable += `</table>
-    </div>`
+    billTable += `</table></div>`
 
   const subTotalItems = tSaleInfo.filter(item => item.R_Void !== 'V').length
   
@@ -257,7 +256,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
             <font face="${fontFamily}" size="4">Amount</font>
           </th>
         </tr>`
-        balanceInfo.forEach(balance => {
+        balanceInfo && balanceInfo.forEach(balance => {
           billTable += `
             <tr>
               <td align="center">
@@ -274,8 +273,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
               </td>
             </tr>`
         })
-      `</table>
-    </div>`
+      billTable += `</table></div>`
 
   const subTotalItems = balanceInfo.filter(item => item.R_Void !== 'V').length
 
@@ -465,8 +463,7 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
           </td>
         </tr>`
       })
-      billTable += `</table>
-    </div>`
+      billTable += `</table></div>`
 
   const htmlContent = `
     <div style="padding: 2px;">

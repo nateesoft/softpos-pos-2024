@@ -3,7 +3,7 @@ require("dotenv").config()
 const mysql8 = require("mysql2")
 
 const util = require('util')
-const config = {
+const configPos = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -17,19 +17,19 @@ const config = {
   enableKeepAlive: true,
   keepAliveInitialDelay: 0
 }
-const pool = mysql8.createConnection(config)
-// console.log('mysql8 config(mysql2):',config )
+const poolMySql8 = mysql8.createConnection(configPos)
+console.log('mysql8 config(mysql2):', configPos )
 
-pool.query("SELECT 4+4 AS solution", function (error, results, fields) {
+poolMySql8.query("SELECT 4+4 AS solution", function (error, results, fields) {
   if (error) {
-    console.log(error) 
+    console.log('posdb connection error:', error)
     throw error
   }
-  console.log("Connect new mysql ip: ", config.host)
+  console.log("Connect new mysql ip: ", configPos.host)
   console.log("Connect new mysql version: ", results[0].solution)
   console.log('##### ##### #####')
 })
 
-pool.query = util.promisify(pool.query)
+poolMySql8.query = util.promisify(poolMySql8.query)
 
-module.exports = pool
+module.exports = poolMySql8
