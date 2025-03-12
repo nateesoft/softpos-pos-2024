@@ -331,7 +331,7 @@ const updateBalance = async payload => {
         R_KicPrint, R_Void, R_VoidUser, R_VoidTime, FieldName, R_PrCuCode, R_Serve, R_PrintOK, R_KicOK,
         StkCode, PosStk, R_PrChkType, R_PrQuan, R_PrSubType, R_PrSubCode, R_PrSubQuan, R_PrSubDisc,
         R_PrSubBath, R_PrSubAmt, R_PrSubAdj, R_PrCuDisc, R_PrCuBath, R_PrCuAdj, R_Order,
-        R_PItemNo, R_PKicQue, R_MemSum, R_PrVcType, R_PrVcCode, R_PrVcAmt, R_PrVcAdj, R_VoidQuan,
+        R_PItemNo, R_PKicQue, R_MemSum, R_PrVcType="", R_PrVcCode, R_PrVcAmt, R_PrVcAdj, R_VoidQuan,
         R_MoveFlag, R_MovePrint, R_Pause, R_SPIndex, R_LinkIndex, R_VoidPause, R_MoveItem, R_MoveFrom,
         R_MoveUser, VoidMsg, R_PrintItemBill, R_CountTime, SoneCode, R_Earn, R_EarnNo, TranType,
         PDAPrintCheck, PDAEMP, R_empName, R_ServiceAmt, R_PEName, R_Indulgent, R_Quan, R_QuanCanDisc } = oldBalance

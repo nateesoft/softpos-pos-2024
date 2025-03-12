@@ -3,9 +3,17 @@ package ics.client.printer.service;
 import ics.utils.OpenHTML;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.ByteArrayInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintException;
 import javax.print.PrintService;
+import javax.print.SimpleDoc;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.standard.MediaPrintableArea;
 import javax.swing.JEditorPane;
@@ -50,7 +58,7 @@ public class PrinterControlService {
     }
 
     // send to printer
-    public void printMessage(String printerName, String content, int width, int height) {
+    public void printMessage(String printerName, String content, int width, int height, String prtType) {
         if (printerName == null) {
             String filePath = createHtmlFile(content);
             OpenHTML.open(filePath);
@@ -67,6 +75,11 @@ public class PrinterControlService {
             PrintService myPrinter = getPrinterKitchen(printerName);
             if (myPrinter != null) {
                 editor.print(null, null, false, myPrinter, attr, false);
+                
+                if(prtType.equals("receipt")){
+                    // open cashDrawer
+                    openCashDrawer(myPrinter);
+                }
             }
         } catch (PrinterException ex) {
             System.err.println(ex.getMessage());
@@ -85,6 +98,25 @@ public class PrinterControlService {
         }
         
         return filePath;
+    }
+
+    private void openCashDrawer(PrintService printService) {
+        try {
+            // คำสั่ง ESC/POS เปิดลิ้นชัก
+            byte[] openDrawerCommand = { 27, 112, 0, (byte) 25, (byte) 250 };
+            // กำหนดประเภทของข้อมูลที่จะพิมพ์ (application/octet-stream สำหรับ raw data)
+            try (InputStream inputStream = new ByteArrayInputStream(openDrawerCommand)) {
+                DocFlavor flavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
+                Doc doc = new SimpleDoc(inputStream, flavor, null);
+                
+                // ส่งคำสั่งไปยังเครื่องพิมพ์
+                DocPrintJob job = printService.createPrintJob();
+                job.print(doc, null);
+            }
+            System.out.println("ส่งคำสั่งเปิดลิ้นชักเรียบร้อย");
+        } catch (IOException | PrintException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
 }

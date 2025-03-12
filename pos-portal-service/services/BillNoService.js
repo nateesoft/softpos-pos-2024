@@ -444,7 +444,7 @@ const addNewBill = async (payload) => {
       "printerMessage",
       JSON.stringify({
         id: 1,
-        printerType: "message",
+        printerType: "receipt",
         printerName: "cashier",
         message: await printReceiptHtml({macno: B_MacNo, billInfo, tSaleInfo}),
         terminal: "",
@@ -630,7 +630,7 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
     R_PrCuAdj,
     R_PItemNo,
     R_PKicQue,
-    R_PrVcType,
+    R_PrVcType="",
     R_PrVcCode,
     R_PrVcAmt,
     R_PrVcAdj,
@@ -674,6 +674,19 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
   newBalance.R_PEName = ""
   newBalance.R_Indulgent = ""
   newBalance.TranType = ""
+
+  // convert to ascii
+  const RPName = Unicode2ASCII(R_PName)
+  const ROpt1 = Unicode2ASCII(R_Opt1)
+  const ROpt2 = Unicode2ASCII(R_Opt2)
+  const ROpt3 = Unicode2ASCII(R_Opt3)
+  const ROpt4 = Unicode2ASCII(R_Opt4)
+  const ROpt5 = Unicode2ASCII(R_Opt5)
+  const ROpt6 = Unicode2ASCII(R_Opt6)
+  const ROpt7 = Unicode2ASCII(R_Opt7)
+  const ROpt8 = Unicode2ASCII(R_Opt8)
+  const ROpt9 = Unicode2ASCII(R_Opt9)
+
   const sql = `INSERT INTO balance 
     (R_Index,R_Table,R_Date,R_Time,Macno,Cashier,R_Emp,R_PluCode,R_PName,R_Unit,R_Group,R_Status,R_Normal,
     R_Discount,R_Service,R_Stock,R_Set,R_Vat,R_Type,R_ETD,R_Quan,R_Price,R_Total,R_PrType,R_PrCode,R_PrDisc,
@@ -684,12 +697,12 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
     R_MemSum,R_PrVcType,R_PrVcCode,R_PrVcAmt,R_PrVcAdj,R_VoidQuan,R_MoveFlag,R_MovePrint,R_Pause,R_SPIndex,
     R_LinkIndex,R_VoidPause,R_MoveItem,R_MoveFrom,R_MoveUser,VoidMsg,R_PrintItemBill,R_CountTime,SoneCode,
     R_Earn,R_EarnNo,TranType,PDAPrintCheck,PDAEMP,R_empName,R_ServiceAmt,R_PEName,R_Indulgent) 
-    VALUES ('${newBalance.R_Index}','${newBalance.R_Table}','${newRDate}','${newRTime}','${MacNo}','${Cashier}','${R_Emp}','${R_PluCode}','${R_PName}',
+    VALUES ('${newBalance.R_Index}','${newBalance.R_Table}','${newRDate}','${newRTime}','${MacNo}','${Cashier}','${R_Emp}','${R_PluCode}','${RPName}',
     '${R_Unit}','${R_Group}','${R_Status}','${R_Normal}','${R_Discount}','${R_Service}','${R_Stock}','${R_Set}','${R_Vat}',
     '${R_Type}','${R_ETD}','${R_Quan}','${R_Price}','${R_Total}','${R_PrType}','${R_PrCode}','${R_PrDisc}','${R_PrBath}',
     '${R_PrAmt}','${R_DiscBath}','${R_PrCuType}','${R_PrCuQuan}','${R_PrCuAmt}','${R_Redule}','${R_Kic}','${R_KicPrint}',
-    '${R_Void}','${R_VoidUser}','${R_VoidTime}','${newBalance.FieldName}','${R_Opt1}','${R_Opt2}','${R_Opt3}','${R_Opt4}','${R_Opt5}',
-    '${R_Opt6}','${R_Opt7}','${R_Opt8}','${R_Opt9}','${R_PrCuCode}','${newBalance.R_Serve}','${newBalance.R_PrintOK}','${newBalance.R_KicOK}','${StkCode}',
+    '${R_Void}','${R_VoidUser}','${R_VoidTime}','${newBalance.FieldName}','${ROpt1}','${ROpt2}','${ROpt3}','${ROpt4}','${ROpt5}',
+    '${ROpt6}','${ROpt7}','${ROpt8}','${ROpt9}','${R_PrCuCode}','${newBalance.R_Serve}','${newBalance.R_PrintOK}','${newBalance.R_KicOK}','${StkCode}',
     '${PosStk}','${R_PrChkType}','${R_PrQuan}','${R_PrSubType}','${R_PrSubCode}','${R_PrSubQuan}','${R_PrSubDisc}','${R_PrSubBath}',
     '${R_PrSubAmt}','${R_PrSubAdj}','${R_PrCuDisc}','${R_PrCuBath}','${R_PrCuAdj}','${newBalance.R_QuanCanDisc}','${newBalance.R_Order}','${R_PItemNo}',
     '${R_PKicQue}','${newBalance.R_MemSum}','${R_PrVcType}','${R_PrVcCode}','${R_PrVcAmt}','${R_PrVcAdj}','${newBalance.R_VoidQuan}','${R_MoveFlag}',

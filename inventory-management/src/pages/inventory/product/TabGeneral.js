@@ -11,7 +11,8 @@ import {
   RadioGroup,
   Select,
   Stack,
-  TextField
+  TextField,
+  Typography
 } from "@mui/material"
 import ZoomInIcon from "@mui/icons-material/ZoomIn"
 import FolderCopyIcon from "@mui/icons-material/FolderCopy"
@@ -277,16 +278,8 @@ const TabGeneral = () => {
           </FormControl>
         </Grid2>
         <Grid2 size={6}>
-          <Stack direction="row" spacing={1}>
-            <TextField
-              size="small"
-              label=""
-              inputProps={{
-                style: {
-                  width: 80
-                }
-              }}
-            />
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography>คลังสินค้าหลัก</Typography>
             <TextField
               size="small"
               label="A1"
@@ -298,16 +291,8 @@ const TabGeneral = () => {
             />
             <TextField size="small" label="คลังสินค้าหน้าร้าน" />
           </Stack>
-          <Stack direction="row" spacing={1} marginTop={1}>
-            <TextField
-              size="small"
-              label=""
-              inputProps={{
-                style: {
-                  width: 80
-                }
-              }}
-            />
+          <Stack direction="row" spacing={1} marginTop={1} alignItems="center">
+            <Typography>คลังสินค้าหน้าย่อย</Typography>
             <TextField
               size="small"
               label="A1"

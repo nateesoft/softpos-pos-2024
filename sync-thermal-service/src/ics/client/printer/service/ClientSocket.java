@@ -91,11 +91,12 @@ public class ClientSocket {
                 //  load printer config
                 PrinterConfigBean printerConfigBean = loadPrinterConfig(printerMessage.getPrinterName());
                 String prtName = printerConfigBean.getPrinterName();
+                String prtType = printerMessage.getPrinterType();
                 int prtWidth = printerConfigBean.getWidth();
                 int prtHeight = printerConfigBean.getHeight();
 
                 // send to printer
-                printerService.printMessage(prtName, htmlContent, prtWidth, prtHeight);
+                printerService.printMessage(prtName, htmlContent, prtWidth, prtHeight, prtType);
             });
 
             socket.on("printerMessage", (Object... args1) -> {
@@ -104,10 +105,11 @@ public class ClientSocket {
                 //  load printer config
                 PrinterConfigBean bean = loadPrinterConfig(printerMessage.getPrinterName());
                 String prtName = bean.getPrinterName();
+                String prtType= printerMessage.getPrinterType();
                 int prtWidth = bean.getWidth();
                 int prtHeight = bean.getHeight();
-
-                printerService.printMessage(prtName, printerMessage.getMessage(), prtWidth, prtHeight);
+                
+                printerService.printMessage(prtName, printerMessage.getMessage(), prtWidth, prtHeight, prtType);
             });
 
             // Event เมื่อการเชื่อมต่อถูกตัด

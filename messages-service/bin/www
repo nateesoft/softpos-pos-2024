@@ -6,7 +6,7 @@
 require('dotenv').config()
 
 const app = require('../app');
-const debug = require('debug')('printer-service:server');
+const debug = require('debug')('messages-service:server');
 const http = require('http');
 const { Server } = require("socket.io");
 
