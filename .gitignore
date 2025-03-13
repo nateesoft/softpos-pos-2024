@@ -1,5 +1,3 @@
-/lib
+lib
 sync-thermal-service/build*
-sync-thermal-service/dist*
-
-node_modules
+sync-thermal-service/dist
