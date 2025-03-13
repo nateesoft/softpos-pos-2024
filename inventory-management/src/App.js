@@ -23,6 +23,18 @@ import AdjustStock from "./pages/inventory/adjustStock"
 import PrintAdjustStock from "./pages/inventory/printAdjustStock"
 import EOrdering from "./pages/inventory/eOrdering"
 
+// for Master Menu
+import CompanyFile from "./pages/master/CompanyFile"
+import GroupFile from "./pages/master/GroupFile"
+import StockCode from "./pages/master/StockFile"
+import FactoryFile from './pages/master/FactoryFile'
+import BranchFile from './pages/master/BranchFile'
+import UnitFile from './pages/master/UnitFile'
+import UserGroupSetup from './pages/master/UserGroupSetup'
+import UserSetup from './pages/master/UserSetup'
+import EndOfYear from './pages/master/EndOfYear'
+import NewPeriod from './pages/master/NewPeriod'
+
 const App = () => {
   const location = useLocation()
   const navigate = useNavigate()
@@ -451,7 +463,7 @@ const App = () => {
           menu={[
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/company-file")
               }}
             >
               {"กำหนดรายละเอียดบริษัท (Company File)"}
@@ -459,35 +471,35 @@ const App = () => {
             <Divider />,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/group-file")
               }}
             >
               {"แฟ้มข้อมูลกลุ่มสินค้า (Group File)"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/stock-code")
               }}
             >
               {"แฟ้มข้อมูลสต็อกสินค้า (Stock Code)"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/factory-file")
               }}
             >
               {"แฟ้มข้อมูลโรงงาน (Factory File)"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/branch-file")
               }}
             >
               {"แฟ้มข้อมูลสาขา (Branch File)"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/unit-file")
               }}
             >
               {"แฟ้มข้อมูลหน่วยสินค้า (Unit File)"}
@@ -495,14 +507,14 @@ const App = () => {
             <Divider />,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/user-group-setup")
               }}
             >
               {"กำหนดรหัสกลุ่มผู้ใช้งาน (User Group Setup)"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/user-setup")
               }}
             >
               {"กำหนดสิทธิการใช้งนของพนักงาน (User Setup)"}
@@ -510,14 +522,14 @@ const App = () => {
             <Divider />,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/end-of-year")
               }}
             >
               {"ประมวลผลสิ้นปี (End Of Year)"}
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                console.log("clicked")
+                navigate("/new-period")
               }}
             >
               {"คำนวณยอดคงเหลือยกมาต้นงวดใหม่"}
@@ -550,6 +562,16 @@ const App = () => {
           {/* รายงานต่าง ๆ */}
 
           {/* ระบบช่วยงาน/แฟ้มข้อมูลระบบ */}
+          <Route path="/company-file" element={<CompanyFile />} />
+          <Route path="/group-file" element={<GroupFile />} />
+          <Route path="/stock-code" element={<StockCode />} />
+          <Route path="/factory-file" element={<FactoryFile />} />
+          <Route path="/branch-file" element={<BranchFile />} />
+          <Route path="/unit-file" element={<UnitFile />} />
+          <Route path="/user-group-setup" element={<UserGroupSetup />} />
+          <Route path="/user-setup" element={<UserSetup />} />
+          <Route path="/end-of-year" element={<EndOfYear />} />
+          <Route path="/new-period" element={<NewPeriod />} />
 
         </Route>
       </Routes>
