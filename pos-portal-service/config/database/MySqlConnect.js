@@ -17,9 +17,18 @@ const configDb = {
   user: process.env.MYSQL5_DB_USER,
   password: process.env.MYSQL5_DB_PASSWORD,
   database: process.env.MYSQL5_DB_NAME,
-  port: process.env.MYSQL5_DB_PORT
+  port: process.env.MYSQL5_DB_PORT,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  connectTimeout: 10000,
+  maxIdle: 3,
+  idleTimeout: 60000,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0
 }
-const poolPOS = mysqlConnectionPOS.createConnection(configDb);
+// const poolPOS = mysqlConnectionPOS.createConnection(configDb);
+const poolPOS = mysqlConnectionPOS.createPool(configDb);
 console.log('MySqlConnect config:', configDb)
 
 poolPOS.query("SELECT 5+0 AS solution", function (error, results, fields) {

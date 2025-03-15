@@ -1,0 +1,54 @@
+{
+  "name": "employee-take-order",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.2",
+    "@mui/material": "^6.4.2",
+    "env-cmd": "^10.1.0",
+    "i18next": "^24.2.2",
+    "i18next-browser-languagedetector": "^8.0.2",
+    "i18next-http-backend": "^3.0.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-i18next": "^15.4.0",
+    "react-router-dom": "^7.1.5",
+    "react-scripts": "5.0.1",
+    "socket.io-client": "^4.8.1",
+    "web-vitals": "^2.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "local": "env-cmd -f ./.env.local react-scripts start",
+    "start:custorder1": "env-cmd -f ./.env.emporder1 react-scripts start",
+    "start:emporder2": "env-cmd -f ./.env.emporder2 react-scripts start",
+    "start:emporder3": "env-cmd -f ./.env.emporder3 react-scripts start",
+    "build": "react-scripts build",
+    "build:local": "env-cmd -f ./.env.local react-scripts build",
+    "build:emporder": "env-cmd -f ./.env.emporder react-scripts build && mv build emporder",
+    "build:emporder1": "env-cmd -f ./.env.emporder1 react-scripts build && mv build emporder1",
+    "build:emporder2": "env-cmd -f ./.env.emporder2 react-scripts build && mv build emporder2",
+    "build:emporder3": "env-cmd -f ./.env.emporder3 react-scripts build && mv build emporder3",
+    "test": "react-scripts test"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

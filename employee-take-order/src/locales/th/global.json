@@ -1,0 +1,20 @@
+{
+    "header": {
+     "chooseLanguage": "เลือกภาษา:"
+    },
+    "mainSection": {
+     "title": "รองรับเว็บไซต์หลายภาษาด้วย lib ของ react-i18next: แบบขั้นตอนเรียบง่าย"
+    },
+    "productMenu": {
+        "allGroup": "เมนูทั้งหมด",
+        "breakfast": "อาหารเช้า",
+        "appetizer": "อาหารทานเล่น",
+        "chineseFood": "อาหารจีน",
+        "italianFood": "อาหารอิตาเลียน",
+        "drink": "เครื่องดื่ม",
+        "dessert": "ของหวาน"
+    },
+    "FloorPlanPage": {
+        "logoutButton": "ออก"
+    }
+   }

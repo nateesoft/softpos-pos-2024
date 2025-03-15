@@ -11,13 +11,14 @@ const configPos = {
   port: process.env.DB_PORT,
   waitForConnections: true,
   connectionLimit: 10,
+  queueLimit: 0,
   maxIdle: 3,
   idleTimeout: 60000,
-  queueLimit: 0,
   enableKeepAlive: true,
   keepAliveInitialDelay: 0
 }
-const poolMySql8 = mysql8.createConnection(configPos)
+// const poolMySql8 = mysql8.createConnection(configPos)
+const poolMySql8 = mysql8.createPool(configPos)
 console.log('mysql8 config(mysql2):', configPos )
 
 poolMySql8.query("SELECT 4+4 AS solution", function (error, results, fields) {

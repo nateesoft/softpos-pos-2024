@@ -17,9 +17,18 @@ const configCrm = {
   user: process.env.MYSQL5_CRM_DB_USER,
   password: process.env.MYSQL5_CRM_DB_PASSWORD,
   database: process.env.MYSQL5_CRM_DB_NAME,
-  port: process.env.MYSQL5_CRM_DB_PORT
+  port: process.env.MYSQL5_CRM_DB_PORT,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  connectTimeout: 10000,
+  maxIdle: 3,
+  idleTimeout: 60000,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0
 }
-const poolCrm = mysqlConnectionCrm.createConnection(configCrm);
+// const poolCrm = mysqlConnectionCrm.createConnection(configCrm);
+const poolCrm = mysqlConnectionCrm.createPool(configCrm);
 console.log('MyCrmDB config:', configCrm)
 
 poolCrm.query("SELECT 5+0 AS solution", function (error, results, fields) {
