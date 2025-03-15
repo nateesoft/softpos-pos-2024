@@ -29,6 +29,8 @@ function MainSalePage() {
   const [messageAlert, setMessageAlert] = useState("")
   const [showClient, setShowClient] = useState(false)
 
+  const [search, setSearch] = useState("")
+
   const [orderType, setOrderType] = useState("E")
   const [ProductList, setProductList] = useState([])
   const [ProductA, setProductA] = useState([])
@@ -42,6 +44,32 @@ function MainSalePage() {
   const [orderEList, setOrderEList] = useState([])
   const [orderTList, setOrderTList] = useState([])
   const [orderDList, setOrderDList] = useState([])
+
+  const seachProductMenu = useCallback(()=> {
+    console.log('seachProductMenu:', search)
+    if (search !== "") {
+      apiClient
+        .post("/api/menu_setup/search", { search })
+        .then((response) => {
+          if (response.status === 200) {
+            const productList = response.data.data
+            setProductList(
+              productList.filter((product) => product.tab_group !== "")
+            )
+          } else {
+            setProductList([])
+            setProductA([])
+            setProductB([])
+            setProductC([])
+            setProductD([])
+            setProductE([])
+            setProductF([])
+          }
+        }).catch((error) => {
+          handleNotification(error.message)
+        })
+      }
+  } ,[search])
 
   const initLoadMenu = useCallback(() => {
     apiClient
@@ -193,7 +221,7 @@ function MainSalePage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <AppbarMenu tableNo={tableNo} />
+      <AppbarMenu tableNo={tableNo} seachProductMenu={seachProductMenu} search={search} setSearch={setSearch} />
       <Grid2
         container
         sx={{ background: "radial-gradient(circle, #001, #000)" }}

@@ -37,6 +37,7 @@ import { useTranslation } from "react-i18next"
 import moment from "moment"
 import { io } from "socket.io-client"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 import CheckTableStatus from "./checkTable"
 import CheckCashierStatus from "./cashierStatus"
@@ -64,6 +65,7 @@ import ReportSelect from "./ReportSelect"
 import LanguageSettings from "./LanguageSettings"
 import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
+import QuickSaleMenu from "./QuickSaleMenu"
 
 const modalPinStyle = {
   position: "absolute",
@@ -327,6 +329,14 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
                   sx={{ display: { xs: "none", md: "inline" } }}
                 >
                   <ReportSelect />
+                </IconButton>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  sx={{ display: { xs: "none", md: "inline" } }}
+                >
+                  <QuickSaleMenu />
                 </IconButton>
               </div>
             </Grid2>

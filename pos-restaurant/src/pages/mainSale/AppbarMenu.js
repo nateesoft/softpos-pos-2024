@@ -84,7 +84,7 @@ const socket = io(SOCKET_SERVER_URL, {
   autoConnect: false
 })
 
-export default function AppbarMenu({ tableNo }) {
+const AppbarMenu = ({ tableNo, seachProductMenu, search, setSearch }) => {
   console.log("AppbarMenu")
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
@@ -178,8 +178,11 @@ export default function AppbarMenu({ tableNo }) {
             <StyledInputBase
               placeholder="ค้นหาเมนู…"
               inputProps={{ "aria-label": "search" }}
+              value={search}
+              onChange={e=>setSearch(e.target.value)}
             />
           </Search>
+          <Button variant="contained" color="info" sx={{marginLeft: 1}} onClick={seachProductMenu}>OK</Button>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
@@ -250,3 +253,5 @@ export default function AppbarMenu({ tableNo }) {
     </Box>
   )
 }
+
+export default AppbarMenu
