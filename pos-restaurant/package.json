@@ -2,6 +2,7 @@
   "name": "pos-restaurant",
   "version": "0.1.0",
   "private": true,
+  "main": "electron.js",
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
@@ -59,21 +60,20 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "local": "env-cmd -f ./.env.local react-scripts start",
     "start:webapp1": "env-cmd -f ./.env.webapp1 react-scripts start",
     "start:webapp2": "env-cmd -f ./.env.webapp2 react-scripts start",
     "start:webapp3": "env-cmd -f ./.env.webapp3 react-scripts start",
-    "build": "rm -rf webapp && react-scripts build && mv build server/webapp",
+    "build": "react-scripts build",
+    "build:local": "env-cmd -f ./.env.local react-scripts build",
+    "build:webapp": "rm -rf webapp && react-scripts build && mv build server/webapp",
     "build:webapp1": "env-cmd -f ./.env.webapp1 react-scripts build && mv build webapp1",
     "build:webapp2": "env-cmd -f ./.env.webapp2 react-scripts build && mv build webapp2",
     "build:webapp3": "env-cmd -f ./.env.webapp3 react-scripts build && mv build webapp3",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron": "electron .",
-    "electron-build": "electron-builder",
-    "package": "electron-builder --dir",
-    "start:local": "nodemon server.js",
-    "start:prod": "react-scripts build && nodemon server.js",
-    "dist": "electron-builder"
+    "start:electron": "electron .",
+    "build:electron": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "eslintConfig": {
     "extends": [
@@ -94,22 +94,23 @@
     ]
   },
   "build": {
-    "appId": "newpos.softpos.co.th",
-    "productName": "pos-restaurant",
-    "directories": {
-      "output": "dist_electron"
-    },
+    "appId": "softpos.restaurant-app",
+    "productName": "RestuarantApp",
     "files": [
       "build/**/*",
       "public/electron.js"
     ],
-    "win": {
-      "target": "nsis",
-      "icon": "public/icon.png"
+    "directories": {
+      "buildResources": "assets"
     },
     "mac": {
-      "target": "dmg",
-      "icon": "public/icon.png"
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
     }
   }
 }

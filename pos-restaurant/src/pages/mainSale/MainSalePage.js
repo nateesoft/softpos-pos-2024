@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom"
 import Grid2 from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { motion } from "framer-motion"
+import { io } from "socket.io-client"
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 
 import apiClient from "../../httpRequest"
 import AppbarMenu from "./AppbarMenu"
@@ -10,6 +12,13 @@ import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
 import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
+import { Alert, Snackbar, Typography } from "@mui/material"
+
+const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
+// เชื่อมต่อกับ Socket.IO server
+const socket = io(SOCKET_SERVER_URL, {
+  autoConnect: false
+})
 
 function MainSalePage() {
   console.log("MainSalePage")
@@ -17,6 +26,8 @@ function MainSalePage() {
   const { handleNotification } = useAlert()
 
   const matches = useMediaQuery("(min-width:1024px)")
+  const [messageAlert, setMessageAlert] = useState("")
+  const [showClient, setShowClient] = useState(false)
 
   const [orderType, setOrderType] = useState("E")
   const [ProductList, setProductList] = useState([])
@@ -153,6 +164,29 @@ function MainSalePage() {
     initLoadTableCheckIn()
   }, [initLoadMenu, initLoadOrder, initLoadTableCheckIn])
 
+    useEffect(() => {
+      socket.connect()
+  
+      // รับข้อความจาก server
+      socket.on("message", (newMessage) => {
+        console.log(newMessage)
+      })
+      socket.on("customerMessage", (newMessage) => {
+        console.log(newMessage)
+        setShowClient(true)
+        setMessageAlert(newMessage)
+      })
+  
+      socket.on("reply", (newMessage) => {
+        console.log(newMessage)
+      })
+  
+      // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
+      return () => {
+        socket.disconnect()
+      }
+    }, [])
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -206,6 +240,24 @@ function MainSalePage() {
         </Grid2>
       </Grid2>
       <Footer />
+      {showClient && (
+        <Snackbar
+          open={showClient}
+          autoHideDuration={10000}
+          onClose={() => setShowClient(false)}
+          anchorOrigin={{ vertical: "center", horizontal: "right" }}
+        >
+          <Alert
+            sx={{ background: "orange" }}
+            icon={<NotificationsActiveIcon fontSize="large" color="error" />}
+            severity="success"
+          >
+            <Typography fontWeight="bold" fontSize={20}>
+              ลูกค้า: {messageAlert}
+            </Typography>
+          </Alert>
+        </Snackbar>
+      )}
     </motion.div>
   )
 }
