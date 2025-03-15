@@ -365,12 +365,12 @@ const summaryBalance = async (tableNo) => {
   DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
 
   const subTotalAmount = TAmount - discountAmount
-  const serviceAmt = (subTotalAmount * Service) / 100
+  const serviceAmt = (totalServiceAmount * Service) / 100
   const netTotal = subTotalAmount + serviceAmt
 
   tablefile.TAmount = responseData.Food + responseData.Drink + responseData.Product
   tablefile.Service = service
-  tablefile.ServiceAmt = subTotalAmount * service / 100
+  tablefile.ServiceAmt = serviceAmt
   tablefile.NetTotal = netTotal
   tablefile.Food = responseData.Food
   tablefile.Drink = responseData.Drink

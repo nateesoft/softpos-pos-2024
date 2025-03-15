@@ -92,7 +92,7 @@ const ReportDaily = (props) => {
         onClick={handleClick}
         sx={{ color: "snow" }}
       >
-        <Typography variant="h6">รายงานการขาย</Typography>
+        <Typography variant="h6">เมนูรายงานการขาย</Typography>
       </Button>
       <Typography variant="h6">
         ( {moment().format("DD/MM/YYYY HH:mm:ss")} )

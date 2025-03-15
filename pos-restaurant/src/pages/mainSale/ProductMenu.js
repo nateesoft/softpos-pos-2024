@@ -569,7 +569,7 @@ const ProductMenu = ({
               </Grid2>
               <Grid2 container spacing={1}>
                 <Button
-                  variant="outlined"
+                  variant="contained"
                   color="error"
                   startIcon={<CloseIcon />}
                   onClick={handleCloseMenuSet}
