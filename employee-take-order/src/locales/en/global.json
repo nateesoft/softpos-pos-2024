@@ -1,0 +1,20 @@
+{
+    "header": {
+     "chooseLanguage": "Choose Language:"
+    },
+    "mainSection": {
+     "title": "Show sample title"
+    },
+    "productMenu": {
+        "allGroup": "All Menu",
+        "breakfast": "Breakfast",
+        "appetizer": "Appetizer",
+        "chineseFood": "Chinese Food",
+        "italianFood": "Italian Food",
+        "drink": "Drink",
+        "dessert": "Dessert"
+    },
+    "FloorPlanPage": {
+        "logoutButton": "Logout"
+    }
+   }
