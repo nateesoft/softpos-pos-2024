@@ -1,5 +1,5 @@
 {
-  "name": "food-ordering-app",
+  "name": "customer-take-order",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -20,14 +20,18 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "env-cmd -f ./.env react-scripts start",
+    "start": "react-scripts start",
     "local": "env-cmd -f ./.env.local react-scripts start",
+    "start:custorder1": "env-cmd -f ./.env.custorder1 react-scripts start",
+    "start:custorder2": "env-cmd -f ./.env.custorder2 react-scripts start",
+    "start:custorder3": "env-cmd -f ./.env.custorder3 react-scripts start",
     "build": "react-scripts build",
-    "build:orderapp1": "env-cmd -f ./.env.orderapp1 react-scripts build && mv build orderapp1",
-    "build:orderapp2": "env-cmd -f ./.env.orderapp2 react-scripts build && mv build orderapp2",
-    "build:orderapp3": "env-cmd -f ./.env.orderapp3 react-scripts build && mv build orderapp3",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build:local": "env-cmd -f ./.env.local react-scripts build",
+    "build:custorder": "env-cmd -f ./.env.custorder react-scripts build && mv build custorder",
+    "build:custorder1": "env-cmd -f ./.env.custorder1 react-scripts build && mv build custorder1",
+    "build:custorder2": "env-cmd -f ./.env.custorder2 react-scripts build && mv build custorder2",
+    "build:custorder3": "env-cmd -f ./.env.custorder3 react-scripts build && mv build custorder3",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
