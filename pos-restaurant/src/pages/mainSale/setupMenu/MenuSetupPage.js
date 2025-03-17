@@ -275,9 +275,17 @@ const MenuSetupPage = ({ open, setOpen }) => {
           <Toolbar>
             <MenuBookIcon />
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Menu Setup Page
+              Menu Setup
             </Typography>
             <Grid2 container spacing={1}>
+            <Button
+                variant="contained"
+                color="error"
+                endIcon={<CloseIcon />}
+                onClick={handleClose}
+              >
+                ยกเลิก
+              </Button>
               <Button
                 variant="outlined"
                 color="white"
@@ -285,14 +293,6 @@ const MenuSetupPage = ({ open, setOpen }) => {
                 onClick={handleConfirm}
               >
                 บันทึกข้อมูล
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                endIcon={<CloseIcon />}
-                onClick={handleClose}
-              >
-                ยกเลิก
               </Button>
             </Grid2>
           </Toolbar>
@@ -309,13 +309,14 @@ const MenuSetupPage = ({ open, setOpen }) => {
                 background: "#def7ff"
               }}
             >
-              <FormControl sx={{ width: "150px" }}>
+              <FormControl sx={{ width: "120px" }}>
                 <InputLabel key="" id="selectMenuTab">
-                  Tab ชื่อเมนู
+                  Tab Name
                 </InputLabel>
                 <Select
-                  labelId="selectMenuTab"
                   id="selectTab"
+                  size="small"
+                  labelId="selectMenuTab"
                   value={tabGroup}
                   label="Tab ชื่อเมนู"
                   onChange={(e) => handleSetTabGroup(e.target.value)}
@@ -330,20 +331,22 @@ const MenuSetupPage = ({ open, setOpen }) => {
               </FormControl>
               <TextField
                 label="ชื่อแท็บสินค้า"
+                size="small"
                 value={tabTitleName}
                 onChange={(e) => setTabTitleName(e.target.value)}
-                sx={{ minWidth: "300px" }}
+                sx={{ minWidth: "250px" }}
               />
               <IconButton size="large">
                 <SaveIcon />
               </IconButton>
-              <FormControl sx={{ minWidth: "200px" }}>
+              <FormControl sx={{ minWidth: "120px" }}>
                 <InputLabel id="demo-simple-select-label">
                   กลุ่มสินค้า
                 </InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
                   id="demo-simple-select"
+                  size="small"
+                  labelId="demo-simple-select-label"
                   value={productGroup}
                   label="กลุ่มสินค้า"
                   onChange={(e) => handleLoadProduct(e.target.value)}
@@ -361,8 +364,9 @@ const MenuSetupPage = ({ open, setOpen }) => {
                   รายการสินค้าในระบบ
                 </InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
                   id="demo-simple-select"
+                  size="small"
+                  labelId="demo-simple-select-label"
                   value={menuCode}
                   label="รายการสินค้าในระบบ"
                   onChange={(e) => handleUpdateMenuInfo(e.target.value)}
@@ -375,22 +379,25 @@ const MenuSetupPage = ({ open, setOpen }) => {
               </FormControl>
               <TextField
                 label="เลขเมนู"
+                size="small"
                 value={menuNumber}
                 onChange={(e) => setMenuNumber(e.target.value)}
               />
               <TextField
                 type="number"
+                size="small"
                 label="ราคาสินค้า/ราคาขาย"
                 value={menuPrice}
                 onChange={(e) => setMenuPrice(e.target.value)}
               />
-              <FormControl sx={{ minWidth: "250px" }}>
+              <FormControl sx={{ minWidth: "120px" }}>
                 <InputLabel id="demo-simple-select-label">
                   ประเภทสินค้า
                 </InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
                   id="demo-simple-select"
+                  size="small"
+                  labelId="demo-simple-select-label"
                   value={menuType}
                   label="ประเภทสินค้า"
                   onChange={(e) => setMenuType(e.target.value)}
@@ -403,8 +410,9 @@ const MenuSetupPage = ({ open, setOpen }) => {
                   สถานะใช้งาน
                 </InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
                   id="demo-simple-select"
+                  size="small"
+                  labelId="demo-simple-select-label"
                   value={menuStatus}
                   label="สถานะใช้งาน"
                   onChange={(e) => setMenuStatus(e.target.value)}
@@ -414,14 +422,16 @@ const MenuSetupPage = ({ open, setOpen }) => {
                 </Select>
               </FormControl>
               <TextField
-                label="กำหนดขั้นต่ำใน SET"
                 type="number"
+                size="small"
+                label="กำหนดขั้นต่ำใน SET"
                 value={minCountSet}
                 onChange={(e) => setMinCountSet(e.target.value)}
               />
               <TextField
-                label="กำหนดสูงสุดใน SET"
                 type="number"
+                size="small"
+                label="กำหนดสูงสุดใน SET"
                 value={maxCountSet}
                 onChange={(e) => setMaxCountSet(e.target.value)}
               />

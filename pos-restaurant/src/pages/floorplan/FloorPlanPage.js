@@ -24,9 +24,7 @@ import {
   IconButton,
   Snackbar,
   Toolbar,
-  Typography,
-  useMediaQuery
-} from "@mui/material"
+  Typography} from "@mui/material"
 import ExitToApp from "@mui/icons-material/ExitToApp"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import LogoutIcon from "@mui/icons-material/LogoutOutlined"
@@ -37,7 +35,6 @@ import { useTranslation } from "react-i18next"
 import moment from "moment"
 import { io } from "socket.io-client"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 import CheckTableStatus from "./checkTable"
 import CheckCashierStatus from "./cashierStatus"
@@ -134,7 +131,7 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
   const keyPressed = useKeyPress("Escape")
 
-  const [currentDate, setCurrentDate] = useState(new Date())
+  const timeRef = useRef(null)
 
   const confirmLogoutAlert = useCallback(() => {
     apiClient
@@ -178,6 +175,7 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   }
 
   const handleChange = (data) => {
+    console.log("handleChange:", data)
     setAnchorEl(null)
     if (data === "CopyPrint") {
       setOpenCopyPrint(true)
@@ -200,35 +198,28 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
     func()
   }
 
-  const loadFloorPlan = useCallback(
-    (floor) => {
-      apiClient
-        .get(`/api/floorplan-template/${floor}`)
-        .then((response) => {
-          const result = response.data
-          if (result.status === 2000) {
-            if (result.data != null) {
-              const flow = result.data.template
-              if (flow) {
-                setNodes(flow.nodes || [])
-              } else {
-                setNodes([])
-              }
-            } else {
-              setNodes([])
+  const loadFloorPlan = (floor) => {
+    console.log('loadFloorPlan:', floor)
+    apiClient
+      .get(`/api/floorplan-template/${floor}`)
+      .then((response) => {
+        const result = response.data
+        if (result.status === 2000) {
+          console.log('response:', response)
+          if (result.data != null) {
+            const flow = result.data.template
+            if (flow) {
+              setNodes(flow.nodes)
             }
-          } else {
-            setNodes([])
           }
-        })
-        .catch((err) => handleNotification(err.message))
-    },
-    [setNodes]
-  )
+        }
+      })
+      .catch((err) => handleNotification(err.message))
+  }
 
   useEffect(() => {
     loadFloorPlan(selectFloor)
-  }, [loadFloorPlan, selectFloor])
+  }, [])
 
   useEffect(() => {
     if (keyPressed) {
@@ -236,11 +227,18 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
     }
   }, [keyPressed])
 
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     setCurrentDate(new Date())
-  //   }, 1000)
-  // }, [])
+  useEffect(() => {
+    const updateClock = () => {
+      if (timeRef.current) {
+        timeRef.current.innerText = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
+      }
+      requestAnimationFrame(updateClock);
+    };
+
+    requestAnimationFrame(updateClock);
+
+    return () => cancelAnimationFrame(updateClock);
+  }, [])
 
   useEffect(() => {
     socket.connect()
@@ -347,10 +345,8 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
               alignItems="center"
               sx={{ flexGrow: 1 }}
             >
-              <Typography
-                sx={{ color: "yellow", display: { xs: "none", md: "flex" } }}
-              >
-                {moment(currentDate).format("DD/MM/YYYY HH:mm:ss")}
+              <Typography ref={timeRef} sx={{ color: "yellow", display: { xs: "none", md: "flex" } }} >
+                {moment(new Date()).format("DD/MM/YYYY HH:mm:ss")}
               </Typography>
               <LanguageSettings />
               <Button
