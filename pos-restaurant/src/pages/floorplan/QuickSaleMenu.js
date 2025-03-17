@@ -38,14 +38,14 @@ const QuickSaleMenu = ({ setSelectFloor }) => {
           "aria-labelledby": "basic-button"
         }}
       >
-        <MenuItem onClick={() => handleSelect("QUEUE_ORDER")}>
+        <MenuItem>
           <Box display="flex" justifyContent="center">
             <Filter5Icon sx={{ marginRight: "10px" }} />{" "}
             <Typography variant="p">ขายแบบรอบัตรคิว</Typography>
           </Box>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => handleSelect("QUICK_PAY")}>
+        <MenuItem>
           <Box display="flex" justifyContent="center">
             <ElectricBoltIcon sx={{ marginRight: "10px" }} />{" "}
             <Typography variant="p">ขายสินค้าทั่วไป</Typography>

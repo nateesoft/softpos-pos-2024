@@ -19,8 +19,10 @@ import MenuBookIcon from "@mui/icons-material/MenuBook"
 import QrCodeIcon from "@mui/icons-material/QrCode"
 import { io } from "socket.io-client"
 
+import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
-import MenuSetupPage from "./setupMenu/MenuSetupPage"
+import MenuSetupPage from "./setupMenu"
+import { useAlert } from "../../contexts/AlertContext"
 
 const modalStyle = {
   position: "absolute",
@@ -84,10 +86,23 @@ const socket = io(SOCKET_SERVER_URL, {
   autoConnect: false
 })
 
-const AppbarMenu = ({ tableNo, seachProductMenu, search, setSearch }) => {
+const AppbarMenu = ({ tableNo, 
+  setProductList,
+  setProductA,
+  setProductB,
+  setProductC,
+  setProductD,
+  setProductE,
+  setProductF,
+  initLoadMenu
+ }) => {
   console.log("AppbarMenu")
+  const [search, setSearch] = useState("")
+  
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
+
+  const { handleNotification } = useAlert()
 
   const [anchorEl, setAnchorEl] = useState(null)
   const openMenu = Boolean(anchorEl)
@@ -117,6 +132,35 @@ const AppbarMenu = ({ tableNo, seachProductMenu, search, setSearch }) => {
   const navigate = useNavigate()
   const backFloorPlan = () => {
     navigate("/floorplan")
+  }
+
+  const seachProductMenu = ()=> {
+    console.log('seachProductMenu:', search)
+    if (search !== "") {
+      apiClient
+        .post("/api/menu_setup/search", { search })
+        .then((response) => {
+          setProductList([])
+          setProductA([])
+          setProductB([])
+          setProductC([])
+          setProductD([])
+          setProductE([])
+          setProductF([])
+          if (response.status === 200) {
+            const productList = response.data.data
+            setProductList(
+              productList.filter((product) => product.tab_group !== "")
+            )
+          } else {
+            setProductList([])
+          }
+        }).catch((error) => {
+          handleNotification(error.message)
+        })
+      } else {
+        initLoadMenu()
+      }
   }
 
   useEffect(() => {
@@ -182,7 +226,7 @@ const AppbarMenu = ({ tableNo, seachProductMenu, search, setSearch }) => {
               onChange={e=>setSearch(e.target.value)}
             />
           </Search>
-          <Button variant="contained" color="info" sx={{marginLeft: 1}} onClick={seachProductMenu}>OK</Button>
+          <Button variant="contained" color="info" sx={{marginLeft: 1}} onClick={seachProductMenu}>ค้นหา</Button>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton

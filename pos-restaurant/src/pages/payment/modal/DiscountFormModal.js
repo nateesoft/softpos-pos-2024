@@ -621,11 +621,11 @@ const DiscountFormModal = ({
         >
           <Button
             variant="contained"
-            color="primary"
-            endIcon={<SaveIcon />}
-            onClick={updateDiscountInfo}
+            color="error"
+            startIcon={<CloseIcon />}
+            onClick={() => setOpenDiscountModal(false)}
           >
-            บันทึก
+            ยกเลิก
           </Button>
           <Button
             variant="contained"
@@ -636,12 +636,12 @@ const DiscountFormModal = ({
             ยกเลิกส่วนลด
           </Button>
           <Button
-            variant="outlined"
-            color="error"
-            endIcon={<CloseIcon />}
-            onClick={() => setOpenDiscountModal(false)}
+            variant="contained"
+            color="primary"
+            endIcon={<SaveIcon />}
+            onClick={updateDiscountInfo}
           >
-            ออก
+            บันทึก
           </Button>
         </Grid2>
       </Box>

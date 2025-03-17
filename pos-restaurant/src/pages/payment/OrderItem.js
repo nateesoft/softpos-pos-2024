@@ -46,8 +46,11 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb }) => {
           <Table aria-label="spanning table">
             <TableBody>
               {orderList &&
-                orderList.map((order) => (
-                  <TableRow key={order.R_Index}>
+                orderList.map((order, index) => (
+                  <TableRow key={order.R_Index} sx={{background: order.R_Void==="V" ? "red": "snow"}}>
+                    <TableCell align="center">{index+1}</TableCell>
+                    <TableCell align="center">{order.R_Void}</TableCell>
+                    <TableCell align="center">{order.R_ETD}</TableCell>
                     <TableCell sx={{ whiteSpace: "nowrap" }}>
                       {order.R_PName}
                     </TableCell>
@@ -58,7 +61,6 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb }) => {
                     <TableCell align="right">
                       {NumFormat(order.R_Total)}
                     </TableCell>
-                    <TableCell align="right">{order.R_ETD}</TableCell>
                   </TableRow>
                 ))}
             </TableBody>

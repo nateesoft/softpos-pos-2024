@@ -22,6 +22,7 @@ import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
 import SendToMobileIcon from "@mui/icons-material/SendToMobile"
 import CreditCardIcon from "@mui/icons-material/CreditCard"
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff"
+import Stack from '@mui/material/Stack'
 
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
@@ -385,7 +386,7 @@ function PaymentForm({
           display="flex"
           sx={{
             padding: "20px",
-            backgroundColor: "salmon",
+            backgroundColor: netTotalDisplay <= 0 ? "lightgreen": "salmon",
             border: "2px solid gray",
             borderRadius: "10px"
           }}
@@ -427,50 +428,55 @@ function PaymentForm({
             <Paper elevation={3} sx={{ padding: "1px" }}>
               <Grid2 container spacing={1} padding={1}>
                 <Grid2 container>
-                  <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
-                    <CreditCardOffIcon fontSize="large" />
-                  </IconButton>
-                  <TextField
-                    type="number"
-                    variant="filled"
-                    value={depositAmount}
-                    onFocus={() => setComponentFocus("deposit")}
-                    onChange={(e) => handleDepositAmountKeyIn(e.target.value)}
-                    id="txtDepositAmount"
-                    label="หักคืนเงินมัดจำ"
-                    sx={{
-                      backgroundColor:
-                        componentFocus === "deposit" ? "#f5fff3" : "",
-                      width: "140px"
-                    }}
-                    inputProps={{ min: 0, style: { textAlign: "right" } }}
-                  />
-                  <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
-                    <VideogameAssetIcon fontSize="large" />
-                  </IconButton>
-                  <TextField
-                    type="number"
-                    variant="filled"
-                    value={entertainAmount}
-                    onFocus={() => setComponentFocus("entertain")}
-                    onChange={(e) => handleEntertainAmountKeyIn(e.target.value)}
-                    id="txtEntertainAmount"
-                    label="ชำระแบบ Entertain"
-                    sx={{
-                      backgroundColor:
-                        componentFocus === "entertain" ? "#f5fff3" : "",
-                      width: "140px"
-                    }}
-                    inputProps={{ min: 0, style: { textAlign: "right" } }}
-                  />
+                  <Stack direction="row">
+                    <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
+                      <CreditCardOffIcon fontSize="large" />
+                    </IconButton>
+                    <TextField
+                      type="number"
+                      size="small"
+                      variant="filled"
+                      value={depositAmount}
+                      onFocus={() => setComponentFocus("deposit")}
+                      onChange={(e) => handleDepositAmountKeyIn(e.target.value)}
+                      id="txtDepositAmount"
+                      label="หักคืนเงินมัดจำ"
+                      sx={{
+                        backgroundColor:
+                          componentFocus === "deposit" ? "#f5fff3" : ""
+                      }}
+                      inputProps={{ min: 0, style: { textAlign: "right" } }}
+                    />
+                  </Stack>
+                  <Stack direction="row">
+                    <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
+                      <VideogameAssetIcon fontSize="large" />
+                    </IconButton>
+                    <TextField
+                      type="number"
+                      size="small"
+                      variant="filled"
+                      value={entertainAmount}
+                      onFocus={() => setComponentFocus("entertain")}
+                      onChange={(e) => handleEntertainAmountKeyIn(e.target.value)}
+                      id="txtEntertainAmount"
+                      label="ชำระแบบ Entertain"
+                      sx={{
+                        backgroundColor:
+                          componentFocus === "entertain" ? "#f5fff3" : ""
+                      }}
+                      inputProps={{ min: 0, style: { textAlign: "right" } }}
+                    />
+                  </Stack>
                 </Grid2>
               </Grid2>
-              <Grid2 container spacing={1} padding={1}>
+              <Grid2 container spacing={1}>
                 <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                   <AccountBalanceWalletIcon fontSize="large" />
                 </IconButton>
                 <TextField
                   type="number"
+                  size="small"
                   value={cashAmount}
                   onFocus={() => setComponentFocus("cash")}
                   onChange={(e) => handleCashAmountKeyIn(e.target.value)}
@@ -482,12 +488,13 @@ function PaymentForm({
                   inputProps={{ min: 0, style: { textAlign: "right" } }}
                 />
               </Grid2>
-              <Grid2 container spacing={1} padding={1}>
+              <Grid2 container spacing={1}>
                 <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                   <SendToMobileIcon fontSize="large" />
                 </IconButton>
                 <TextField
                   type="number"
+                  size="small"
                   value={transferAmount}
                   onChange={(e) => setTransferAmount(e.target.value)}
                   id="txtTransferAmount"
@@ -500,19 +507,21 @@ function PaymentForm({
                 />
                 <Button
                   variant="outlined"
+                  size="small"
                   onClick={handleTransferEnabled}
-                  sx={{ height: "55px" }}
+                  sx={{ height: "40px" }}
                 >
                   ...
                 </Button>
               </Grid2>
-              <Grid2 container spacing={1} padding={1}>
+              <Grid2 container spacing={1}>
                 <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                   <CreditCardIcon fontSize="large" />
                 </IconButton>
                 <TextField
-                  value={NumFormat(creditAmount)}
                   id="txtCreditAmount"
+                  size="small"
+                  value={NumFormat(creditAmount)}
                   label="ชำระด้วยบัตรเครดิต"
                   disabled
                   inputProps={{
@@ -521,8 +530,9 @@ function PaymentForm({
                   }}
                 />
                 <TextField
-                  value={NumFormat(creditChargeAmount)}
                   id="txtCreditAmount"
+                  size="small"
+                  value={NumFormat(creditChargeAmount)}
                   label="Credit Charge"
                   disabled
                   inputProps={{
@@ -533,7 +543,7 @@ function PaymentForm({
                 <Button
                   variant="outlined"
                   onClick={handleCreditEnabled}
-                  sx={{ height: "55px" }}
+                  sx={{ height: "40px" }}
                 >
                   ...
                 </Button>
@@ -567,9 +577,10 @@ function PaymentForm({
               </Grid2>
               <Box display="flex" justifyContent="flex-end" margin={2}>
                 <TextField
+                  type="number"
+                  size="small"
                   variant="filled"
                   label="ส่วนลด"
-                  type="number"
                   value={discountAmount}
                   inputProps={{ min: 0, style: { textAlign: "right" } }}
                   fullWidth
@@ -579,6 +590,7 @@ function PaymentForm({
               <Box display="flex" justifyContent="flex-end" margin={2}>
                 <TextField
                   variant="filled"
+                  size="small"
                   label="ค้างชำระ"
                   value={balanceAmount}
                   inputProps={{ min: 0, style: { textAlign: "right" } }}

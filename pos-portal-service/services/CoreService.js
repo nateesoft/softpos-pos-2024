@@ -68,7 +68,7 @@ const getBalanceByTable = async (tableNo) => {
 }
 
 const getSummaryItem = async (tableNo) => {
-  const sql = `select sum(R_Quan) R_Quan from balance where R_Table='${tableNo}'`
+  const sql = `select sum(R_Quan) R_Quan from balance where R_Table='${tableNo}' and R_Void <> 'V'`
   const results = await pool.query(sql)
   if (results.length > 0) {
     return results[0].R_Quan

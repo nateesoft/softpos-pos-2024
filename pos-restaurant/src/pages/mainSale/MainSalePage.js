@@ -45,32 +45,6 @@ function MainSalePage() {
   const [orderTList, setOrderTList] = useState([])
   const [orderDList, setOrderDList] = useState([])
 
-  const seachProductMenu = useCallback(()=> {
-    console.log('seachProductMenu:', search)
-    if (search !== "") {
-      apiClient
-        .post("/api/menu_setup/search", { search })
-        .then((response) => {
-          if (response.status === 200) {
-            const productList = response.data.data
-            setProductList(
-              productList.filter((product) => product.tab_group !== "")
-            )
-          } else {
-            setProductList([])
-            setProductA([])
-            setProductB([])
-            setProductC([])
-            setProductD([])
-            setProductE([])
-            setProductF([])
-          }
-        }).catch((error) => {
-          handleNotification(error.message)
-        })
-      }
-  } ,[search])
-
   const initLoadMenu = useCallback(() => {
     apiClient
       .get("/api/menu_setup")
@@ -104,7 +78,7 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [handleNotification])
+  }, [])
 
   const initLoadTableCheckIn = useCallback(() => {
     apiClient
@@ -221,7 +195,16 @@ function MainSalePage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <AppbarMenu tableNo={tableNo} seachProductMenu={seachProductMenu} search={search} setSearch={setSearch} />
+      <AppbarMenu tableNo={tableNo} 
+        setProductList={setProductList} 
+        setProductA={setProductA} 
+        setProductB={setProductB} 
+        setProductC={setProductC} 
+        setProductD={setProductD} 
+        setProductE={setProductE} 
+        setProductF={setProductF} 
+        initLoadMenu={initLoadMenu}
+      />
       <Grid2
         container
         sx={{ background: "radial-gradient(circle, #001, #000)" }}
