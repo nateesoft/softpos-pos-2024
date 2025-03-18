@@ -1,0 +1,185 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "รหัสสาขา (Branch Code)"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "ชื่อสาขา (Branch Name)"
+        }
+      ]
+    },
+    {
+      "type": "Categorization",
+      "elements": [
+        {
+          "type": "Category",
+          "label": "รายละเอียดสาขา (Branch)",
+          "elements": [
+            {
+              "type": "VerticalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/name",
+                  "label": "สถานที่ตั้งเลขที่"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/nationality",
+                  "label": "จังหวัด"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/nationality",
+                  "label": "เขต/อำเภอ"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/nationality",
+                  "label": "แขวง/ตำบล"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/nationality",
+                  "label": "รหัสไปรษณีย์"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/name",
+                  "label": "เบอร์โทรศัพท์"
+                },
+                {
+                  "type": "Control",
+                  "scope": "#/properties/email",
+                  "label": "เบอร์โทรสาร"
+                }
+              ]
+            },
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "Control",
+                  "scope": "#/properties/name",
+                  "label": "ชื่อผู้จัดการสาขา"
+                }
+              ]
+            },
+            
+            {
+              "type": "HorizontalLayout",
+              "elements": [
+                {
+                  "type": "GridVertical",
+                  "elements": [
+                    {
+                      "type": "TextField",
+                      "scope": "#/properties/name",
+                      "label": "จำนวนพื้นที่บริการ",
+                      "options": {
+                        "postfix": "ตรม."
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "scope": "#/properties/name",
+                      "label": "จำนวนพื้นที่เตรียม",
+                      "options": {
+                        "postfix": "ตรม."
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "scope": "#/properties/name",
+                      "label": "จำนวนพื้นที่ครัว",
+                      "options": {
+                        "postfix": "ตรม."
+                      }
+                    },
+                    {
+                      "type": "TextField",
+                      "scope": "#/properties/name",
+                      "label": "จำนวนพื้นที่รวมทั้งหมด",
+                      "options": {
+                        "postfix": "ตรม."
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "VerticalLayout",
+                  "elements": [
+                    {
+                      "type": "HorizontalLayout",
+                      "elements": [
+                        {
+                          "type": "Control",
+                          "scope": "#/properties/service",
+                          "label": "ค่าเช่า + ค่าบริการ"
+                        },
+                        {
+                          "type": "Control",
+                          "scope": "#/properties/gp",
+                          "label": "% GP"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "GridVertical",
+                      "elements": [
+                        {
+                          "type": "TextField",
+                          "scope": "#/properties/name",
+                          "label": "ค่าเช่า/เดือน",
+                          "options": {
+                            "postfix": "บาท"
+                          }
+                        },
+                        {
+                          "type": "TextField",
+                          "scope": "#/properties/name",
+                          "label": "ค่าบริการ/เดือน",
+                          "options": {
+                            "postfix": "บาท"
+                          }
+                        },
+                        {
+                          "type": "Control",
+                          "scope": "#/properties/name",
+                          "label": "% GP"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }    
+  ]
+}

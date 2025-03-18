@@ -6,7 +6,7 @@ import { Grid2 } from "@mui/material"
 const GridLayout = withJsonFormsControlProps((props) => {
   const { uischema, schema, path, enabled, renderers, cells } = props
 
-  const { direction, spacing, margin=0 } = uischema?.options
+  const { direction="column", spacing=1, margin=0 } = uischema?.options
   const elements = uischema?.elements
 
   return (

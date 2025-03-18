@@ -1,0 +1,248 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "รหัสบริษัท (Code)"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "เลขประจำตัวผู้เสียภาษี"
+        }
+      ]
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/personalData/properties/age",
+          "label": "ชื่อร้าน/บริษัท"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/personalData/properties/age",
+          "label": "ที่อยู่เลขที่"
+        }
+      ]
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/nationality",
+          "label": "จังหวัด"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/nationality",
+          "label": "อำเภอ/เขต"
+        }
+      ]
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/nationality",
+          "label": "ตำบล/แขวง"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/nationality",
+          "label": "รหัสไปรษณีย์"
+        }
+      ]
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "เบอร์โทรศัพท์"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "เบอร์โทรสาร"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "e-mail address"
+        }
+      ]
+    },
+    {
+      "type": "Label",
+      "text": "เกี่ยวกับบริษัท"
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/birthDate",
+          "label": "วันที่ต้นงวดบัญชี"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "การตัดสต๊อกสินค้าจากเครื่อง POS ให้ตัดที่คลัง"
+        }
+      ]
+    },
+    {
+      "type": "Button",
+      "label": "คำนวณต้นทุนสินค้าชุด/สินค้าที่มีส่วนประกอบ"
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/nationality",
+          "label": "คำนวณต้นทุนชุดสินค้า"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/nationality",
+          "label": "คำนวณต้นทุนส่วนประกอบสินค้า"
+        }
+      ]
+    },
+    {
+      "type": "Label",
+      "text": "รายละเอียดคลังสินค้า"
+    },
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "Typography",
+              "label": "การรับสินค้าจากโรงงาน"
+            },
+            {
+              "type": "Typography",
+              "label": "การรับโอนสินค้า (เข้า)"
+            },
+            {
+              "type": "Typography",
+              "label": "การรับโอนสินค้า (ออก)"
+            },
+            {
+              "type": "Typography",
+              "label": "การบันทึกรายการของเสีย"
+            },
+            {
+              "type": "Typography",
+              "label": "บันทึกรายการแจกฟรี"
+            },
+            {
+              "type": "Typography",
+              "label": "การโอนสินค้าระหว่างคลัง"
+            }
+          ]
+        },
+        {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/priceGroup",
+              "options": {
+                "format": "radio"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/priceGroup",
+              "options": {
+                "format": "radio"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/priceGroup",
+              "options": {
+                "format": "radio"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/priceGroup",
+              "options": {
+                "format": "radio"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/priceGroup",
+              "options": {
+                "format": "radio"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/priceGroup",
+              "options": {
+                "format": "radio"
+              }
+            }
+          ]
+        },
+        {
+          "type": "VerticalLayout",
+          "elements": [
+            {
+              "type": "Control",
+              "scope": "#/properties/priceCompute",
+              "options": {
+                "format": "radio"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/priceCompute",
+              "options": {
+                "format": "radio"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/priceCompute",
+              "options": {
+                "format": "radio"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/priceCompute",
+              "options": {
+                "format": "radio"
+              }
+            },
+            {
+              "type": "Control",
+              "scope": "#/properties/priceCompute",
+              "options": {
+                "format": "radio"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
