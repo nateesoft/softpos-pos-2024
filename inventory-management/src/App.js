@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { Box, Button, Divider } from "@mui/material"
 import ArrowRight from "@mui/icons-material/ArrowRight"
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom"
@@ -24,12 +24,12 @@ import PrintAdjustStock from "./pages/inventory/printAdjustStock"
 import EOrdering from "./pages/inventory/eOrdering"
 
 // for Master Menu
-import CompanyFile from "./pages/master/CompanyFile"
-import GroupFile from "./pages/master/GroupFile"
-import StockCode from "./pages/master/StockFile"
-import FactoryFile from './pages/master/FactoryFile'
-import BranchFile from './pages/master/BranchFile'
-import UnitFile from './pages/master/UnitFile'
+import CompanyFile from "./pages/master/company/CompanyFile"
+import GroupFile from "./pages/master/productGroup/GroupFile"
+import StockCode from "./pages/master/stock/StockFile"
+import FactoryFile from './pages/master/factory/FactoryFile'
+import BranchFile from './pages/master/branch/BranchFile'
+import UnitFile from './pages/master/unit/UnitFile'
 import UserGroupSetup from './pages/master/UserGroupSetup'
 import UserSetup from './pages/master/UserSetup'
 import EndOfYear from './pages/master/EndOfYear'
@@ -517,7 +517,7 @@ const App = () => {
                 navigate("/user-setup")
               }}
             >
-              {"กำหนดสิทธิการใช้งนของพนักงาน (User Setup)"}
+              {"กำหนดสิทธิการใช้งานของพนักงาน (User Setup)"}
             </DropdownMenuItem>,
             <Divider />,
             <DropdownMenuItem
