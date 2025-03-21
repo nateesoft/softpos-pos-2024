@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { Box, Button, Grid2, Modal, TextField, Typography } from "@mui/material"
+import { Box, Button, Grid2, Modal, Paper, Stack, TextField, Typography } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import SaveIcon from "@mui/icons-material/Save"
 import CancelIcon from "@mui/icons-material/Cancel"
 
 import apiClient from "../../../httpRequest"
 import CuponListModal from './CuponListModal'
+import MaskedInput from "./MaskedInput"
+import NumberFormat from '../../ui-utils/NumberFormat'
 
 const modalStyle = {
   position: "absolute",
@@ -331,11 +333,15 @@ const DiscountFormModal = ({
   return (
     <Grid2 container>
       <Grid2 size={12} padding={1} container justifyContent="center">
-        <Typography variant="h6">ให้ส่วนลดต่างๆ ในระบบ</Typography>
+        <Typography sx={{color: "white"}} variant="h6">ให้ส่วนลดต่างๆ ในระบบ (NN/CC/SS)</Typography>
       </Grid2>
-      <Grid2 container justifyContent="center">
-        <Typography>
-          มูลค่าสินค้ารวม (Total Amount): {tableFile.TAmount}
+      <Grid2 size={12} textAlign="center" padding={1} margin={1} sx={{
+        background: "lightblue",
+        color: "black",
+        fontWeight: "bold"
+      }}>
+        <Typography sx={{fontWeight: "bold"}}>
+          มูลค่าสินค้ารวม (Total Amount): {NumberFormat(tableFile.TAmount)}
         </Typography>
       </Grid2>
       <Box component="form">
@@ -357,9 +363,10 @@ const DiscountFormModal = ({
             </Button>
           </Grid2>
           <Grid2 container size={4}>
-            <TextField
+            <MaskedInput
               value={posConfigSetup.P_FastDisc}
-              disabled={true}
+              label={posConfigSetup.P_FastDisc}
+              disabled={posConfigSetup.P_FastDiscGet === 'N'}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
             />
           </Grid2>
@@ -376,6 +383,7 @@ const DiscountFormModal = ({
                 event.target.select()
               }}
               inputProps={{ min: 0, style: { textAlign: "right" } }}
+              sx={{background: "snow"}}
             />
           </Grid2>
         </Grid2>
@@ -397,9 +405,10 @@ const DiscountFormModal = ({
             </Button>
           </Grid2>
           <Grid2 size={4}>
-            <TextField
+            <MaskedInput
               value={posConfigSetup.P_EmpDisc}
-              disabled={true}
+              label={posConfigSetup.P_EmpDisc}
+              disabled={posConfigSetup.P_EmpDiscGet === 'N'}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
             />
           </Grid2>
@@ -417,6 +426,7 @@ const DiscountFormModal = ({
                 event.target.select()
               }}
               inputProps={{ min: 0, style: { textAlign: "right" } }}
+              sx={{background: "snow"}}
             />
           </Grid2>
         </Grid2>
@@ -438,9 +448,10 @@ const DiscountFormModal = ({
             </Button>
           </Grid2>
           <Grid2 size={4}>
-            <TextField
+            <MaskedInput
               value={posConfigSetup.P_MemDisc}
-              disabled={true}
+              label={posConfigSetup.P_MemDisc}
+              disabled={posConfigSetup.P_MemDiscGet === "N"}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
             />
           </Grid2>
@@ -458,6 +469,7 @@ const DiscountFormModal = ({
                 event.target.select()
               }}
               inputProps={{ min: 0, style: { textAlign: "right" } }}
+              sx={{background: "snow"}}
             />
           </Grid2>
         </Grid2>
@@ -479,9 +491,10 @@ const DiscountFormModal = ({
             </Button>
           </Grid2>
           <Grid2 size={4}>
-            <TextField
+            <MaskedInput
               value={posConfigSetup.P_TrainDisc}
-              disabled={true}
+              label={posConfigSetup.P_TrainDisc}
+              disabled={posConfigSetup.P_TrainDiscGet === "N"}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
             />
           </Grid2>
@@ -499,6 +512,7 @@ const DiscountFormModal = ({
                 event.target.select()
               }}
               inputProps={{ min: 0, style: { textAlign: "right" } }}
+              sx={{background: "snow"}}
             />
           </Grid2>
         </Grid2>
@@ -520,9 +534,10 @@ const DiscountFormModal = ({
             </Button>
           </Grid2>
           <Grid2 size={4}>
-            <TextField
+            <MaskedInput
               value={posConfigSetup.P_SubDisc}
-              disabled={true}
+              label={posConfigSetup.P_SubDisc}
+              disabled={posConfigSetup.P_SubDiscGet === "N"}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
             />
           </Grid2>
@@ -540,6 +555,7 @@ const DiscountFormModal = ({
                 event.target.select()
               }}
               inputProps={{ min: 0, style: { textAlign: "right" } }}
+              sx={{background: "snow"}}
             />
           </Grid2>
         </Grid2>
@@ -575,6 +591,7 @@ const DiscountFormModal = ({
                 event.target.select()
               }}
               inputProps={{ min: 0, style: { textAlign: "right" } }}
+              sx={{background: "snow"}}
             />
           </Grid2>
         </Grid2>
@@ -609,6 +626,7 @@ const DiscountFormModal = ({
                 event.target.select()
               }}
               inputProps={{ min: 0, style: { textAlign: "right" } }}
+              sx={{background: "snow"}}
             />
           </Grid2>
         </Grid2>

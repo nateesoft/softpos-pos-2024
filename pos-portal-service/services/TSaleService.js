@@ -14,7 +14,19 @@ const getAllTSaleByRefno = async (refno) => {
     const sql = `select * from t_sale where R_Refno='${refno}' order by R_Index`
     const results = await pool.query(sql)
     const mappingResult = results.map((item, index) => {
-        return { ...item, VoidMsg: ASCII2Unicode(item.VoidMsg) }
+        return { 
+            ...item, 
+            R_Opt1: ASCII2Unicode(item.R_Opt1) ,
+            R_Opt2: ASCII2Unicode(item.R_Opt2) ,
+            R_Opt3: ASCII2Unicode(item.R_Opt3) ,
+            R_Opt4: ASCII2Unicode(item.R_Opt4) ,
+            R_Opt5: ASCII2Unicode(item.R_Opt5) ,
+            R_Opt6: ASCII2Unicode(item.R_Opt6) ,
+            R_Opt7: ASCII2Unicode(item.R_Opt7) ,
+            R_Opt8: ASCII2Unicode(item.R_Opt8) ,
+            R_Opt9: ASCII2Unicode(item.R_Opt9) ,
+            VoidMsg: ASCII2Unicode(item.VoidMsg)
+        }
     })
     return mappingResult
 }
