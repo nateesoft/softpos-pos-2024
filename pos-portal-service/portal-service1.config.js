@@ -1,7 +1,7 @@
 module.exports = {
     apps: [{
       name: "portal-service-1",
-      script: "pos-portal-service/bin/www",
+      script: "bin/www",
       env: {
         PORT:9091,
         NODE_ENV:"production",

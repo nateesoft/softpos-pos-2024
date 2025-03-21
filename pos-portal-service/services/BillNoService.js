@@ -736,7 +736,7 @@ const updateStatusPrintChkBill = async (tableNo, macno) => {
   const sql = `update tablefile set PrintChkBill='Y' where Tcode='${tableNo}'`
   const results = await pool.query(sql)
 
-  const tableInfo = await getBillNoByTableNo(tableNo)
+  const tableInfo = await getTableByCode(tableNo)
   const balanceInfo = await getBalanceByTableNo(tableNo)
 
   // send to printer

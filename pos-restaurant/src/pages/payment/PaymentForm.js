@@ -405,7 +405,7 @@ function PaymentForm({
               fontSize={28}
               sx={{ fontWeight: "bold", color: "#444" }}
             >
-              TON
+              CHANGE
             </Typography>
           )}
           <Typography
@@ -1027,7 +1027,8 @@ function PaymentForm({
             ...modalStyle,
             width: "650px",
             padding: "5px",
-            display: { xs: "none", md: "block" }
+            display: { xs: "none", md: "block" },
+            background: "#123456"
           }}
         >
           <DiscountFormModal
