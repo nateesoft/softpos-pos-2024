@@ -9,7 +9,7 @@ import Container from "@mui/material/Container"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { motion } from "framer-motion"
 import LoginIcon from "@mui/icons-material/Login"
-import { Divider, Grid2, useMediaQuery } from "@mui/material"
+import { Divider, Grid2, Modal, useMediaQuery } from "@mui/material"
 import { io } from "socket.io-client"
 
 import { useAlert } from "../../contexts/AlertContext"
@@ -19,6 +19,7 @@ import { handleEnter } from "../ui-utils/EventLisener"
 import bg from "./bg/welcome.jpg"
 import bgimg from "./bg/bgbg.jpg"
 import Footer from "../Footer"
+import DashboardApps from "../dashboard"
 
 const darkTheme = createTheme({
   palette: {
@@ -33,6 +34,12 @@ const boxstyle = {
   transform: "translate(-50%, -50%)",
   width: "75%",
   boxShadow: 24
+}
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%"
 }
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
@@ -54,6 +61,8 @@ const Login = () => {
   const iphonePro14max = useMediaQuery("(max-width:430px)")
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
+
+  const [openDashboard, setOpenDashboard] = useState(false)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -107,7 +116,8 @@ const Login = () => {
               localStorage.removeItem("backLink")
               navigate(backLink)
             } else {
-              navigate("/floorplan")
+              // navigate("/floorplan")
+              setOpenDashboard(true)
             }
           } else {
             handleNotification(
@@ -226,7 +236,7 @@ const Login = () => {
                           padding: "10px"
                         }}
                       >
-                        POS Restaurant
+                        POS Login
                       </Typography>
                     </Box>
                     {iphonePro14max === true && (
@@ -303,6 +313,11 @@ const Login = () => {
         </Box>
         <Footer />
       </div>
+      <Modal open={openDashboard} onClose={() => setOpenDashboard(false)}>
+        <Box sx={{ ...modalStyle }}>
+          <DashboardApps open={openDashboard} />
+        </Box>
+      </Modal>
     </motion.div>
   )
 }

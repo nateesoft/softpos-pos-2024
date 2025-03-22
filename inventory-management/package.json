@@ -2,6 +2,7 @@
   "name": "inventory-management",
   "version": "0.1.0",
   "private": true,
+  "homepage": "inventory",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -13,6 +14,7 @@
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
     "@mui/x-date-pickers": "^7.28.0",
+    "moment": "^2.30.1",
     "react": "^19.0.0",
     "react-cookie": "^7.2.2",
     "react-dom": "^19.0.0",
