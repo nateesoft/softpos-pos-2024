@@ -60,6 +60,8 @@ import VoiceCommand from "../agi/VoiceCommand"
 import AICharacter from "../agi/AICharacter"
 import VirtualKeyboard from "../utils/VirtualKeyboard"
 
+import DashboardPage from "./dashboard"
+
 const AnimatedRoutes = () => {
   console.log("AnimatedRoutes")
   const location = useLocation()
@@ -205,6 +207,7 @@ const AnimatedRoutes = () => {
         <Route path="/agi" element={<Character />} />
         <Route path="/ai" element={<AICharacter />} />
         <Route path="/voice" element={<VoiceCommand />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="404" element={<PageNotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>

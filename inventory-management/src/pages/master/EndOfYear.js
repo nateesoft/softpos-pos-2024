@@ -1,11 +1,13 @@
 import React from "react"
-import { Button, Container, Grid2, Paper, TextField, Typography } from "@mui/material"
+import { Box, Button, Container, Grid2, Paper, Stack, TextField, Typography } from "@mui/material"
 
 const EndOfYear = () => {
   return (
     <Container maxWidth="lg" sx={{ marginTop: 10 }}>
       <Grid2 container justifyContent="center" spacing={2} padding={2}>
-        <Typography variant="h5">โปรแกรมประมวลผลข้อมูลสิ้นปี (End Of Year)</Typography>
+        <Grid2 container size={12} justifyContent="center">
+          <Typography variant="h5">โปรแกรมประมวลผลข้อมูลสิ้นปี (End Of Year)</Typography>
+        </Grid2>
         <Paper elevation={3} sx={{padding: 5, background: "#ff6c6c"}}>
           <Grid2
             container

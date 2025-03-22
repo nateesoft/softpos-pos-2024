@@ -14,6 +14,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { ZoomIn } from "@mui/icons-material"
 
+import LinearBuffer from './LinearBuffer'
+
 const NewPeriod = () => {
   return (
     <Container maxWidth="lg" sx={{ marginTop: 10 }}>
@@ -31,8 +33,8 @@ const NewPeriod = () => {
           </IconButton>
           <Button variant="contained">ตกลง</Button>
         </Grid2>
-        <Grid2 container padding={3}>
-          <TextField fullWidth value="Process Record..." disabled />
+        <Grid2 container padding={1}>
+          <LinearBuffer />
         </Grid2>
       </Paper>
     </Container>
