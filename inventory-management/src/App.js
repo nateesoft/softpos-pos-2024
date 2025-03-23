@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Button, Divider } from "@mui/material"
+import { Box, Button, Divider, Grid2, Typography } from "@mui/material"
 import ArrowRight from "@mui/icons-material/ArrowRight"
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom"
 
@@ -107,7 +107,12 @@ const App = () => {
         }}
       >
         <Dropdown
-          trigger={<Button color="white">ระบบคลังสินค้า</Button>}
+          trigger={
+            <Grid2 container justifyContent="center" alignItems="center">
+              <Button color="white">ระบบคลังสินค้า</Button>
+              <Typography variant="h5">|</Typography>
+            </Grid2>
+          }
           menu={[
             <DropdownMenuItem
               onClick={() => {
@@ -199,7 +204,12 @@ const App = () => {
           ]}
         />
         <Dropdown
-          trigger={<Button color="white">ระบบการซื้อสินค้า /ค่าใช้จ่าย</Button>}
+          trigger={
+            <Grid2 container justifyContent="center" alignItems="center">
+              <Button color="white">ระบบการซื้อสินค้า /ค่าใช้จ่าย</Button>
+              <Typography variant="h5">|</Typography>
+            </Grid2>
+          }
           menu={[
             <DropdownMenuItem
               onClick={() => {
@@ -240,7 +250,12 @@ const App = () => {
           ]}
         />
         <Dropdown
-          trigger={<Button color="white">รายงานต่าง ๆ</Button>}
+          trigger={
+            <Grid2 container justifyContent="center" alignItems="center">
+              <Button color="white">รายงานต่าง ๆ</Button>
+              <Typography variant="h5">|</Typography>
+            </Grid2>
+          }
           menu={[
             <DropdownMenuItem
               onClick={() => {
@@ -508,7 +523,12 @@ const App = () => {
           ]}
         />
         <Dropdown
-          trigger={<Button color="white">ระบบช่วยงาน/แฟ้มข้อมูลระบบ</Button>}
+          trigger={
+            <Grid2 container justifyContent="center" alignItems="center">
+              <Button color="white">ระบบช่วยงาน/แฟ้มข้อมูลระบบ</Button>
+              <Typography variant="h5">|</Typography>
+            </Grid2>
+          }
           menu={[
             <DropdownMenuItem
               onClick={() => {
@@ -586,7 +606,7 @@ const App = () => {
           ]}
         />
         <Button color="white" onClick={() => navigate("/")}>
-          ออกจากระบบ (Exit Program)
+          ออกจากระบบ
         </Button>
       </Box>
       <Routes location={location}>

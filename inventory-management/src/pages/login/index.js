@@ -5,10 +5,7 @@ import {
   Box,
   Typography,
   Paper,
-  Grid2,
-  Stack,
-  Divider
-} from "@mui/material"
+  Grid2} from "@mui/material"
 import moment from 'moment'
 
 const LoginPage = () => {
@@ -23,11 +20,12 @@ const LoginPage = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: "100vh"
+        height: "100vh",
+        background: "linear-gradient(to bottom right, #00C0FF, #123456)"
       }}
     >
       <Grid2 container spacing={1} direction="row">
-        <Paper elevation={3} sx={{ p: 4, width: "80%", maxWidth: 400, minHeight: 350 }}>
+        <Paper elevation={3} sx={{ p: 4 }}>
           <Typography variant="h5" align="center" gutterBottom>
             ระบบคลังสินค้า
           </Typography>
