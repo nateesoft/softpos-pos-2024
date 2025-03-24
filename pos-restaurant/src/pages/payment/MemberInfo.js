@@ -9,6 +9,8 @@ import Moment from "react-moment"
 
 import MemberInfoModal from "./MemberInfoModal"
 
+const baseName = process.env.REACT_APP_BASE_NAME
+
 const modalStyle = {
   position: "absolute",
   top: "50%",
@@ -37,7 +39,7 @@ const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
       sx={{ margin: "5px", background: "#123456", boxShadow: "3px 4px black" }}
     >
       <Grid container justifyContent="center" spacing={1} padding={1}>
-        <img src="/images/profile_crm.png" alt="" />
+        <img src={`/${baseName}/images/profile_crm.png`} alt="" />
         <Button
           variant="outlined"
           sx={{ color: "snow" }}

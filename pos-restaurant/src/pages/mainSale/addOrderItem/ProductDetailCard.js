@@ -9,13 +9,14 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Grid2,
-  TextField,
-  Divider
+  TextField
 } from "@mui/material"
 
 import apiClient from "../../../httpRequest"
 import OptionMenuSelect from "../OptionMenuSelect"
 import { POSContext } from "../../../AppContext"
+
+const baseName = process.env.REACT_APP_BASE_NAME
 
 const ProductDetailCard = ({
   tableNo,
@@ -88,7 +89,7 @@ const ProductDetailCard = ({
       <Box sx={{ background: "radial-gradient(circle, #123456, #000)" }}>
         <Grid2 container justifyContent="center">
           <img
-            src={product.image_url}
+            src={`/${baseName}/${product.image_url}`}
             height={150}
             width="auto"
             alt=""

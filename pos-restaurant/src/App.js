@@ -40,7 +40,7 @@ const App = () => {
   console.log("App")
   const [appData, setAppData] = useState(initContext)
   return (
-    <Router>
+    <Router basename="pos-restaurant">
       <CookiesProvider>
         <POSContext.Provider value={{ appData, setAppData }}>
           <CurrencyProvider>

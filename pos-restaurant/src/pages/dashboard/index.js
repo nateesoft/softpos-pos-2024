@@ -80,6 +80,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="Minimart" 
             desc="ร้านค้าปลีก" 
+            onClick={()=>navigate('/retail')}
             Icon={ShoppingCartIcon} />
         </Grid2>
         <Grid2
@@ -91,6 +92,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="Inventory" 
             desc="ระบบคลังสินค้า" 
+            onClick={()=>navigate('/floorplan')}
             Icon={InventoryIcon} />
         </Grid2>
         <Grid2
@@ -102,6 +104,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="POS Config" 
             desc="ระบบควบคุม" 
+            onClick={()=>navigate('/floorplan')}
             Icon={InventoryIcon} />
         </Grid2>
         <Grid2
@@ -113,6 +116,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="HRM" 
             desc="ระบบพนักงาน" 
+            onClick={()=>navigate('/floorplan')}
             Icon={BadgeIcon} />
         </Grid2>
         <Grid2
@@ -124,6 +128,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="CRM" 
             desc="ระบบสมาชิก" 
+            onClick={()=>navigate('/floorplan')}
             Icon={RememberMeIcon} />
         </Grid2>
         <Grid2
@@ -135,6 +140,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="Transport" 
             desc="การจัดส่งสินค้า" 
+            onClick={()=>navigate('/floorplan')}
             Icon={LocalShippingIcon} />
         </Grid2>
         <Grid2
@@ -146,6 +152,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="Take Order" 
             desc="รับออเดอร์" 
+            onClick={()=>navigate('/floorplan')}
             Icon={MenuBookIcon} />
         </Grid2>
         <Grid2
@@ -157,6 +164,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="All Report" 
             desc="ภาพรวมกิจการ" 
+            onClick={()=>navigate('/floorplan')}
             Icon={FlagIcon} />
         </Grid2>
       </Grid2>

@@ -1,8 +1,10 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
+const baseName = process.env.REACT_APP_BASE_NAME
+
 const bgImage = {
-  backgroundImage: `url(/images/login_images.jpg)`,
+  backgroundImage: `url(/${baseName}/images/login_images.jpg)`,
   width: "100vw",
   height: "100vh",
   border: "1px solid",
