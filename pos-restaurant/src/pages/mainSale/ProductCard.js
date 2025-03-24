@@ -6,6 +6,8 @@ import { Box, Button, Badge, Typography } from "@mui/material"
 
 import { CurrencyContext } from "../../contexts/CurrencyContext"
 
+const baseName = process.env.REACT_APP_BASE_NAME
+
 const ProductCard = memo((props) => {
   console.log("ProductCard")
   const { currency, convertCurrency } = useContext(CurrencyContext)
@@ -56,7 +58,7 @@ const ProductCard = memo((props) => {
       <Grid2 xs="auto" padding={1}>
         <Box textAlign="center">
           <img
-            src={product.image_url}
+            src={`/${baseName}/${product.image_url}`}
             alt=""
             height={150}
             width={160}

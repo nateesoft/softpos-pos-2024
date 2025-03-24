@@ -5,6 +5,8 @@ import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import { Grid2, Typography } from "@mui/material"
 
+const baseName = process.env.REACT_APP_BASE_NAME
+
 const ChangeProductList = ({
   optionalList,
   setOptionalList,
@@ -60,7 +62,7 @@ const ChangeProductList = ({
             <ListItemButton onClick={() => handleListItemClick(menu)}>
               <ListItemIcon>
                 <img
-                  src={menu.image_url}
+                  src={`/${baseName}/${menu.image_url}`}
                   alt={menu.menu_name}
                   width={100}
                   height={100}

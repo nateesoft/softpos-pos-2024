@@ -5,6 +5,7 @@ import useMediaQuery from "@mui/material/useMediaQuery"
 import { motion } from "framer-motion"
 import { io } from "socket.io-client"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
+import { Alert, Snackbar, Typography } from "@mui/material"
 
 import apiClient from "../../httpRequest"
 import AppbarMenu from "./AppbarMenu"
@@ -12,7 +13,6 @@ import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
 import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
-import { Alert, Snackbar, Typography } from "@mui/material"
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
 // เชื่อมต่อกับ Socket.IO server
@@ -166,28 +166,28 @@ function MainSalePage() {
     initLoadTableCheckIn()
   }, [initLoadMenu, initLoadOrder, initLoadTableCheckIn])
 
-    useEffect(() => {
-      socket.connect()
-  
-      // รับข้อความจาก server
-      socket.on("message", (newMessage) => {
-        console.log(newMessage)
-      })
-      socket.on("customerMessage", (newMessage) => {
-        console.log(newMessage)
-        setShowClient(true)
-        setMessageAlert(newMessage)
-      })
-  
-      socket.on("reply", (newMessage) => {
-        console.log(newMessage)
-      })
-  
-      // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
-      return () => {
-        socket.disconnect()
-      }
-    }, [])
+  useEffect(() => {
+    socket.connect()
+
+    // รับข้อความจาก server
+    socket.on("message", (newMessage) => {
+      console.log(newMessage)
+    })
+    socket.on("customerMessage", (newMessage) => {
+      console.log(newMessage)
+      setShowClient(true)
+      setMessageAlert(newMessage)
+    })
+
+    socket.on("reply", (newMessage) => {
+      console.log(newMessage)
+    })
+
+    // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
 
   return (
     <motion.div

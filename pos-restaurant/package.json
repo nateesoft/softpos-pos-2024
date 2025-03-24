@@ -2,6 +2,7 @@
   "name": "pos-restaurant",
   "version": "0.1.0",
   "private": true,
+  "homepage": "pos-restaurant",
   "main": "electron.js",
   "dependencies": {
     "@emotion/react": "^11.13.5",

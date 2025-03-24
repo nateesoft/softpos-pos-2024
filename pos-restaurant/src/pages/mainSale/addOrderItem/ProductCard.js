@@ -26,6 +26,8 @@ import { POSContext } from "../../../AppContext"
 import { CurrencyContext } from "../../../contexts/CurrencyContext"
 import { useAlert } from "../../../contexts/AlertContext"
 
+const baseName = process.env.REACT_APP_BASE_NAME
+
 const modalStyle = {
   position: "absolute",
   top: "50%",
@@ -160,7 +162,7 @@ const ProductCard = ({
             }}
           >
             <img
-              src={product.image_url}
+              src={`/${baseName}/${product.image_url}`}
               alt=""
               height={100}
               width={100}

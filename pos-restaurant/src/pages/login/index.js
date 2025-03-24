@@ -116,8 +116,11 @@ const Login = () => {
               localStorage.removeItem("backLink")
               navigate(backLink)
             } else {
-              // navigate("/floorplan")
-              setOpenDashboard(true)
+              if(user === "9999"){
+                setOpenDashboard(true)
+              }else{
+                navigate("/floorplan")
+              }
             }
           } else {
             handleNotification(

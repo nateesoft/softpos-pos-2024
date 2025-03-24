@@ -22,12 +22,8 @@ import { useTranslation } from "react-i18next"
 
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
-import CustomerNationDetail from "./CustomerNationDetail"
 import CartItems from "../floorplan/modal/CartItems"
-import CustomerDetail from "./CustomerDetail"
-
-const min = 1
-const max = 10
+import CustomerTabs from "./CustomerTabs"
 
 const modalStyle = {
   position: "absolute",
@@ -237,27 +233,7 @@ const CustomerCheckin = (props) => {
       </Grid2>
       <Divider sx={{ margin: "10px" }} />
       <Box sx={{ "& > :not(style)": { m: 1 } }}>
-        <Grid2 container spacing={2}>
-          <TextField
-            id="outlined-number"
-            label={t("FloorPlanPage.customerCount")}
-            value={custCount}
-            required
-            onChange={(e) => {
-              var value = parseInt(e.target.value, 10)
-              if (value > max) value = max
-              if (value < min) value = min
-              setCustCount(value)
-            }}
-            type="number"
-            slotProps={{
-              inputLabel: {
-                shrink: true
-              }
-            }}
-          />
-        </Grid2>
-        <CustomerNationDetail
+        <CustomerTabs
           thaiPeople={thaiCount}
           setThaiCount={setThaiCount}
           europePeople={europeCount}
@@ -265,9 +241,7 @@ const CustomerCheckin = (props) => {
           americaPeople={americaCount}
           setAmericaCount={setAmericaCount}
           asiaPeople={asiaCount}
-          setAsiaCount={setAsiaCount}
-        />
-        <CustomerDetail
+          setAsiaCount={setAsiaCount} 
           man={manCount}
           setMan={setManCount}
           woman={womanCount}
@@ -322,6 +296,7 @@ const CustomerCheckin = (props) => {
           <Typography variant="p">{t("FloorPlanPage.foodType")}</Typography>
         </Grid2>
         <ToggleButtonGroup
+          size="small"
           color="primary"
           value={orderType}
           exclusive
@@ -334,21 +309,6 @@ const CustomerCheckin = (props) => {
           <ToggleButton value="D">{t("FloorPlanPage.delivery")}</ToggleButton>
         </ToggleButtonGroup>
       </Grid2>
-      {showError && (
-        <Alert severity="error" sx={{ width: "100%" }}>
-          {t("FloorPlanPage.tableStatusUnavailable")}
-        </Alert>
-      )}
-      {showCustomerError && (
-        <Alert severity="error" sx={{ width: "100%" }}>
-          {t("FloorPlanPage.customerInfoIncorrect")}
-        </Alert>
-      )}
-      {showCustomerCountError && (
-        <Alert severity="error" sx={{ width: "100%" }}>
-          {t("FloorPlanPage.NumberCustomersNotMatch")}
-        </Alert>
-      )}
       <Grid2 textAlign="center" padding={1}>
         <Button
           variant="contained"

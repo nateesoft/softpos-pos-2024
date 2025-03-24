@@ -32,6 +32,8 @@ import MultipleCreditPayment from "./MultipleCreditPayment"
 import { ModalConfirm } from "../ui-utils/AlertPopup"
 import DiscountFormModal from "./modal/DiscountFormModal"
 
+const baseName = process.env.REACT_APP_BASE_NAME
+
 const NumFormat = (data) => {
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
@@ -782,7 +784,7 @@ function PaymentForm({
                 <Grid2 container spacing={2} justifyContent="space-evenly">
                   <Grid2 size={6}>
                     <img
-                      src="/images/payment/m1000.png"
+                      src={`/${baseName}/images/payment/m1000.png`}
                       width="100%"
                       style={{ border: "1px solid gray" }}
                       onClick={() => handleAdd(1000)}
@@ -791,7 +793,7 @@ function PaymentForm({
                   </Grid2>
                   <Grid2 size={6}>
                     <img
-                      src="/images/payment/m500.png"
+                      src={`/${baseName}/images/payment/m500.png`}
                       width="100%"
                       style={{ border: "1px solid gray" }}
                       onClick={() => handleAdd(500)}
@@ -800,7 +802,7 @@ function PaymentForm({
                   </Grid2>
                   <Grid2 size={6}>
                     <img
-                      src="/images/payment/m100.png"
+                      src={`/${baseName}/images/payment/m100.png`}
                       width="100%"
                       style={{ border: "1px solid gray" }}
                       onClick={() => handleAdd(100)}
@@ -809,7 +811,7 @@ function PaymentForm({
                   </Grid2>
                   <Grid2 size={6}>
                     <img
-                      src="/images/payment/m50.png"
+                      src={`/${baseName}/images/payment/m50.png`}
                       width="100%"
                       style={{ border: "1px solid gray" }}
                       onClick={() => handleAdd(50)}

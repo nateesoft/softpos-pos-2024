@@ -9,6 +9,7 @@ import NoFoodIcon from "@mui/icons-material/NoFood"
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
 import ArrowBack from "@mui/icons-material/TableBar"
 import PrintIcon from "@mui/icons-material/Print"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import {
   Box,
   Button,
@@ -18,8 +19,10 @@ import {
   Grid2,
   Divider
 } from "@mui/material"
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails} from "@mui/material"
 
 import apiClient from "../../../httpRequest"
 import ProductCard from "./ProductCard"
@@ -58,18 +61,18 @@ const TotalBill = ({ orderList }) => {
     <div
       style={{
         padding: "3px",
-        background: "salmon",
         border: "2px solid #eee",
-        borderRadius: "5px"
+        borderRadius: "5px",
+        background: "#ffb4a4"
       }}
     >
       <Grid2 container spacing={1} padding={1}>
-        <Typography variant="span" fontSize={14}>
+        <Typography variant="span" fontSize={14} fontWeight="bold" sx={{color: "black"}}>
           Total Amount
         </Typography>
       </Grid2>
       <Grid2 container justifyContent="flex-end">
-        <Typography fontSize={28} fontWeight="bold">
+        <Typography fontSize={28} fontWeight="bold" sx={{ color: "black" }}>
           {new Intl.NumberFormat("th-TH", {
             style: "currency",
             currency
@@ -157,49 +160,64 @@ const OrderItem = ({
 
   return (
     <div style={{ overflow: "auto", width: "100%" }}>
+      <Grid2
+          container
+          justifyContent="center"
+          padding={1}
+          sx={{
+            background:
+              "linear-gradient(90deg, #FF9A8B 0%, salmon 55%, #FF99AC 100%)"
+          }}
+        >
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              borderRadius: "15px",
+              color: "snow",
+              fontSize: 18
+            }}
+          >
+            โต๊ะ {tableNo}
+          </Typography>
+          <Divider sx={{ padding: "5px" }} />
+        </Grid2>
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
           <Tab label="Dine In" value="E" sx={{ boxShadow: "2px 2px #eee" }} />
           <Tab label="Take Away" value="T" sx={{ boxShadow: "2px 2px #eee" }} />
           <Tab label="Delivery" value="D" sx={{ boxShadow: "2px 2px #eee" }} />
         </TabList>
-        <Box textAlign="center">
-          <Typography fontSize={16}>รายการอาหารที่สั่ง</Typography>
-        </Box>
-        <Box textAlign="center" sx={{ marginTop: "10px", background: "#eee" }}>
-          <Typography
-            variant="p"
-            sx={{
-              fontWeight: "bold",
-              borderRadius: "15px"
-            }}
-          >
-            โต๊ะ {tableNo}
-          </Typography>
-          <Button variant="text"  endIcon={hideItem ? <ExpandLessIcon /> : <ExpandMoreIcon />} 
-                onClick={()=>setHideItem(prev => !prev)}>แสดงรายการ</Button>
-          <Divider sx={{padding: "5px"}} />
-        </Box>
         <TabPanel
           value="E"
-          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto", minHeight: "350px" }}
+          sx={{
+            height: typePopup ? "220px" : "270px",
+            overflow: "auto",
+            minHeight: "350px",
+            padding: 0
+          }}
         >
-          {OrderEList &&
-            OrderEList.map((product) => {
-              return (
-                <div style={{ margin: "5px" }} key={product.R_PluCode}>
-                  <ProductCard
-                    tableNo={tableNo}
-                    product={product}
-                    handleNotification={handleNotification}
-                    initLoadMenu={initLoadMenu}
-                    initLoadOrder={initLoadOrder}
-                    openModal={() => handleOpenMenu(product)}
-                  />
-                  <Divider />
-                </div>
-              )
-            })}
+          {OrderEList && OrderEList.length > 0 &&<Accordion key={1} sx={{ borderBottom: "1px solid #eee", boxShadow: "none", borderRadius: "none" }}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">{1}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {OrderEList.map((product) => {
+                return (
+                  <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                    <ProductCard
+                      tableNo={tableNo}
+                      product={product}
+                      handleNotification={handleNotification}
+                      initLoadMenu={initLoadMenu}
+                      initLoadOrder={initLoadOrder}
+                      openModal={() => handleOpenMenu(product)}
+                    />
+                    <Divider />
+                  </div>
+                )
+              })}
+            </AccordionDetails>
+          </Accordion>}
           {OrderEList && OrderEList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -213,24 +231,35 @@ const OrderItem = ({
         </TabPanel>
         <TabPanel
           value="T"
-          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto", minHeight: "350px" }}
+          sx={{
+            height: typePopup ? "220px" : "270px",
+            overflow: "auto",
+            minHeight: "350px",
+            padding: 0
+          }}
         >
-          {OrderTList &&
-            OrderTList.map((product) => {
-              return (
-                <div style={{ margin: "5px" }} key={product.R_PluCode}>
-                  <ProductCard
-                    tableNo={tableNo}
-                    product={product}
-                    handleNotification={handleNotification}
-                    initLoadMenu={initLoadMenu}
-                    initLoadOrder={initLoadOrder}
-                    openModal={() => handleOpenMenu(product)}
-                  />
-                  <Divider />
-                </div>
-              )
-            })}
+          {OrderTList && OrderTList.length > 0 &&<Accordion key={1} sx={{ borderBottom: "1px solid #eee", boxShadow: "none", borderRadius: "none" }}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">{1}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+            {OrderTList.map((product) => {
+                return (
+                  <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                    <ProductCard
+                      tableNo={tableNo}
+                      product={product}
+                      handleNotification={handleNotification}
+                      initLoadMenu={initLoadMenu}
+                      initLoadOrder={initLoadOrder}
+                      openModal={() => handleOpenMenu(product)}
+                    />
+                    <Divider />
+                  </div>
+                )
+              })}
+            </AccordionDetails>
+          </Accordion>}
           {OrderTList && OrderTList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -244,10 +273,19 @@ const OrderItem = ({
         </TabPanel>
         <TabPanel
           value="D"
-          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto", minHeight: "350px" }}
+          sx={{
+            height: typePopup ? "220px" : "270px",
+            overflow: "auto",
+            minHeight: "350px",
+            padding: 0
+          }}
         >
-          {OrderDList &&
-            OrderDList.map((product) => {
+          {OrderDList && OrderDList.length > 0 &&<Accordion key={1} sx={{ borderBottom: "1px solid #eee", boxShadow: "none", borderRadius: "none" }}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">{1}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+            {OrderDList.map((product) => {
               return (
                 <div style={{ margin: "5px" }} key={product.R_PluCode}>
                   <ProductCard
@@ -262,6 +300,8 @@ const OrderItem = ({
                 </div>
               )
             })}
+            </AccordionDetails>
+          </Accordion>}
           {OrderDList && OrderDList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
