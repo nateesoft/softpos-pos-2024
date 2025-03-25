@@ -73,8 +73,8 @@ const CustomerTabs = (props) => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <Tab label="Thai" {...a11yProps(0)} />
-          <Tab label="Other" {...a11yProps(1)} />
+          <Tab label="Thai" {...a11yProps(0)} sx={{fontWeight: "bold", fontSize: 22}} />
+          <Tab label="Other" {...a11yProps(1)} sx={{fontWeight: "bold", fontSize: 22}} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0} style={{ padding: 10 }}>

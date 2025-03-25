@@ -50,6 +50,24 @@ const DashboardApps = ({ open }) => {
 
   console.log("DashboardApps")
 
+  const handleOpenApp = (appName) => {
+    if(appName === "posconfig") {
+      window.location.href = 'http://localhost:5001/pos-control'
+    } else if(appName === "inventory") {
+      window.location.href = 'http://localhost:5002/inventory'
+    } else if(appName === "crm") {
+      window.location.href = 'http://localhost:5003/crm-management'
+    } else if(appName === "hrm") {
+      window.location.href = 'http://localhost:5004/hrm-management'
+    } else if(appName === "transport") {
+      window.location.href = 'http://localhost:5005/transport'
+    } else if(appName === "takeorder") {
+      window.location.href = 'http://localhost:5006/takeorder'
+    } else if(appName === "report") {
+      window.location.href = 'http://localhost:5007/all-report'
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -92,7 +110,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="Inventory" 
             desc="ระบบคลังสินค้า" 
-            onClick={()=>navigate('/floorplan')}
+            onClick={()=>handleOpenApp('inventory')}
             Icon={InventoryIcon} />
         </Grid2>
         <Grid2
@@ -104,7 +122,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="POS Config" 
             desc="ระบบควบคุม" 
-            onClick={()=>navigate('/floorplan')}
+            onClick={()=>handleOpenApp('posconfig')}
             Icon={InventoryIcon} />
         </Grid2>
         <Grid2
@@ -116,7 +134,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="HRM" 
             desc="ระบบพนักงาน" 
-            onClick={()=>navigate('/floorplan')}
+            onClick={()=>handleOpenApp('hrm')}
             Icon={BadgeIcon} />
         </Grid2>
         <Grid2
@@ -128,7 +146,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="CRM" 
             desc="ระบบสมาชิก" 
-            onClick={()=>navigate('/floorplan')}
+            onClick={()=>handleOpenApp('crm')}
             Icon={RememberMeIcon} />
         </Grid2>
         <Grid2
@@ -140,7 +158,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="Transport" 
             desc="การจัดส่งสินค้า" 
-            onClick={()=>navigate('/floorplan')}
+            onClick={()=>handleOpenApp('transport')}
             Icon={LocalShippingIcon} />
         </Grid2>
         <Grid2
@@ -152,7 +170,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="Take Order" 
             desc="รับออเดอร์" 
-            onClick={()=>navigate('/floorplan')}
+            onClick={()=>handleOpenApp('takeorder')}
             Icon={MenuBookIcon} />
         </Grid2>
         <Grid2
@@ -164,7 +182,7 @@ const DashboardApps = ({ open }) => {
           <AppComponent 
             title="All Report" 
             desc="ภาพรวมกิจการ" 
-            onClick={()=>navigate('/floorplan')}
+            onClick={()=>handleOpenApp('report')}
             Icon={FlagIcon} />
         </Grid2>
       </Grid2>

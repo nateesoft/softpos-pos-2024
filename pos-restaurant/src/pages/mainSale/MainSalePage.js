@@ -29,10 +29,9 @@ function MainSalePage() {
   const [messageAlert, setMessageAlert] = useState("")
   const [showClient, setShowClient] = useState(false)
 
-  const [search, setSearch] = useState("")
-
   const [orderType, setOrderType] = useState("E")
   const [ProductList, setProductList] = useState([])
+  const [balanceProductGroup, setBalanceProductGroup] = useState([])
   const [ProductA, setProductA] = useState([])
   const [ProductB, setProductB] = useState([])
   const [ProductC, setProductC] = useState([])
@@ -160,11 +159,25 @@ function MainSalePage() {
       })
   }, [tableNo, handleNotification])
 
+  const initLoadBalanceProductGroup = useCallback(() => {
+    apiClient
+      .get(`/api/balance/${tableNo}/groupProduct`)
+      .then((response) => {
+        if (response.status === 200) {
+          setBalanceProductGroup(response.data.data)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error.message)
+      })
+  }, [])
+
   useEffect(() => {
     initLoadMenu()
     initLoadOrder()
     initLoadTableCheckIn()
-  }, [initLoadMenu, initLoadOrder, initLoadTableCheckIn])
+    initLoadBalanceProductGroup()
+  }, [initLoadMenu, initLoadOrder, initLoadTableCheckIn, initLoadBalanceProductGroup])
 
   useEffect(() => {
     socket.connect()
@@ -227,6 +240,7 @@ function MainSalePage() {
             initLoadMenu={initLoadMenu}
             initLoadOrder={initLoadOrder}
             handleNotification={handleNotification}
+            initLoadBalanceProductGroup={initLoadBalanceProductGroup}
           />
         </Grid2>
         <Grid2 size={4} sx={{
@@ -238,6 +252,7 @@ function MainSalePage() {
         >
           <OrderItem
             tableNo={tableNo}
+            balanceProductGroup={balanceProductGroup}
             orderType={orderType}
             OrderList={orderList}
             OrderEList={orderEList}

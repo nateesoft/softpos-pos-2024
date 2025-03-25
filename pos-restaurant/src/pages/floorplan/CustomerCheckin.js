@@ -232,7 +232,7 @@ const CustomerCheckin = (props) => {
         </Typography>
       </Grid2>
       <Divider sx={{ margin: "10px" }} />
-      <Box sx={{ "& > :not(style)": { m: 1 } }}>
+      <Box sx={{ "& > :not(style)": { m: 1 }, background: "#faece9" }}>
         <CustomerTabs
           thaiPeople={thaiCount}
           setThaiCount={setThaiCount}
