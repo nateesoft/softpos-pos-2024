@@ -71,6 +71,24 @@ const getBalanceByTableNo = async tableNo => {
     return mappingResult
 }
 
+const getBalanceGroupProduct = async tableNo => {
+    const sql = `select R_ETD, R_PluCode, R_PName, 
+        sum(R_Quan) R_Quan, 
+        sum(R_Total) R_Total 
+        from balance 
+        where R_Table ='${tableNo}' 
+        and R_LinkIndex='' 
+        group by R_ETD, R_PluCode, R_PName`;
+    const results = await pool.query(sql)
+    const mappingResult = results.map((item, index) => {
+        return { 
+            ...item, 
+            R_PName: ASCII2Unicode(item.R_PName)
+        }
+    })
+    return mappingResult
+}
+
 const getVoidMsgList = async () => {
     const sql = `select * from voidmsg order by VCode`;
     const results = await pool.query(sql)
@@ -536,5 +554,6 @@ module.exports = {
     orderStockOut,
     returnStockIn,
     getVoidMsgList,
-    deleteBalanceOnly
+    deleteBalanceOnly,
+    getBalanceGroupProduct
 }

@@ -17,17 +17,21 @@ import {
   Typography,
   Paper,
   Grid2,
-  Divider
+  Divider,
+  IconButton
 } from "@mui/material"
 import {
   Accordion,
   AccordionSummary,
   AccordionDetails} from "@mui/material"
+import AddCircleIcon from "@mui/icons-material/AddCircle"
+import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
 
 import apiClient from "../../../httpRequest"
 import ProductCard from "./ProductCard"
 import ProductDetailCard from "./ProductDetailCard"
 import { CurrencyContext } from "../../../contexts/CurrencyContext"
+import NumberFormat from "../../ui-utils/NumberFormat"
 
 const modalStyle = {
   position: "absolute",
@@ -52,6 +56,13 @@ const getTotalAmount = (orderList) => {
   return totalBill
 }
 
+const getFormatMoney = (convertCurrency, currency, number) => {
+  return new Intl.NumberFormat("th-TH", {
+    style: "currency",
+    currency
+  }).format(convertCurrency(number))
+}
+
 const TotalBill = ({ orderList }) => {
   console.log("TotalBill")
   const { currency, convertCurrency } = useContext(CurrencyContext)
@@ -73,10 +84,7 @@ const TotalBill = ({ orderList }) => {
       </Grid2>
       <Grid2 container justifyContent="flex-end">
         <Typography fontSize={28} fontWeight="bold" sx={{ color: "black" }}>
-          {new Intl.NumberFormat("th-TH", {
-            style: "currency",
-            currency
-          }).format(convertCurrency(convertedTotal))}
+          {getFormatMoney(convertCurrency, currency, convertedTotal)}
         </Typography>
       </Grid2>
     </div>
@@ -85,6 +93,7 @@ const TotalBill = ({ orderList }) => {
 
 const OrderItem = ({
   tableNo,
+  balanceProductGroup,
   orderType,
   OrderList,
   OrderEList,
@@ -102,8 +111,6 @@ const OrderItem = ({
 
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
-
-  const [hideItem, setHideItem] = useState(false)
 
   const handleChange = (event, newValue) => {
     console.log("handleChange:", newValue)
@@ -173,8 +180,8 @@ const OrderItem = ({
             sx={{
               fontWeight: "bold",
               borderRadius: "15px",
-              color: "snow",
-              fontSize: 18
+              color: "#123456",
+              fontSize: 22
             }}
           >
             โต๊ะ {tableNo}
@@ -183,9 +190,9 @@ const OrderItem = ({
         </Grid2>
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
-          <Tab label="Dine In" value="E" sx={{ boxShadow: "2px 2px #eee" }} />
-          <Tab label="Take Away" value="T" sx={{ boxShadow: "2px 2px #eee" }} />
-          <Tab label="Delivery" value="D" sx={{ boxShadow: "2px 2px #eee" }} />
+          <Tab label="Dine In" value="E" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
+          <Tab label="Take Away" value="T" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
+          <Tab label="Delivery" value="D" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
         </TabList>
         <TabPanel
           value="E"
@@ -196,28 +203,52 @@ const OrderItem = ({
             padding: 0
           }}
         >
-          {OrderEList && OrderEList.length > 0 &&<Accordion key={1} sx={{ borderBottom: "1px solid #eee", boxShadow: "none", borderRadius: "none" }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6">{1}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {OrderEList.map((product) => {
-                return (
-                  <div style={{ margin: "5px" }} key={product.R_PluCode}>
-                    <ProductCard
-                      tableNo={tableNo}
-                      product={product}
-                      handleNotification={handleNotification}
-                      initLoadMenu={initLoadMenu}
-                      initLoadOrder={initLoadOrder}
-                      openModal={() => handleOpenMenu(product)}
-                    />
-                    <Divider />
-                  </div>
-                )
-              })}
-            </AccordionDetails>
-          </Accordion>}
+          {balanceProductGroup && balanceProductGroup.map(item => 
+            <Accordion key={1} sx={{ borderBottom: "1px solid #eee", background: "linear-gradient(0deg, #FFDEE9 0%, snow 100%)", boxShadow: "none", borderRadius: "none" }}>
+              <AccordionSummary>
+                <Grid2 container size={12}>
+                  <Grid2 size={5}>
+                    <Grid2 container>
+                      <Typography>{item.R_PName}</Typography>
+                    </Grid2>
+                  </Grid2>
+                  <Grid2 size={5}>
+                    <Grid2 container direction="row" justifyContent="center" alignItems="center">
+                      <IconButton>
+                        <RemoveCircleIcon color="error" fontSize="large"/>
+                      </IconButton>
+                      <Typography>{item.R_Quan}</Typography>
+                      <IconButton>
+                        <AddCircleIcon color="success" fontSize="large" />
+                      </IconButton>
+                    </Grid2>
+                  </Grid2>
+                  <Grid2 size={2}>
+                    <Grid2 container justifyContent="flex-end" paddingRight={1}>
+                      <Typography>{NumberFormat(item.R_Total)}</Typography>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
+              </AccordionSummary>
+              <AccordionDetails>
+                {OrderEList.filter(x => x.R_PluCode === item.R_PluCode).map((product) => {
+                  return (
+                    <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                      <ProductCard
+                        tableNo={tableNo}
+                        product={product}
+                        handleNotification={handleNotification}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder}
+                        openModal={() => handleOpenMenu(product)}
+                      />
+                      <Divider />
+                    </div>
+                  )
+                })}
+              </AccordionDetails>
+            </Accordion>
+          )}
           {OrderEList && OrderEList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -381,7 +412,7 @@ const OrderItem = ({
               fontWeight: "bold"
             }}
           >
-            *** รายการส่งครัว ***
+            *** รายการเตรียมส่งครัว ***
           </div>
           <div
             style={{
@@ -410,16 +441,20 @@ const OrderItem = ({
                   ประเภท Dine In
                 </div>
                 <table width="100%" cellPadding={3}>
-                  {OrderEList.map((product) => {
+                  {OrderEList.filter(x=>x.TranType!=='PDA').map((product) => {
                     return (
                       <tr key={product.R_PluCode}>
-                        <td>{product.R_ETD}</td>
+                        <td align="center" style={{border: "1px solid", background: "red", color: "white"}}>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
                         <td>{product.R_Quan}</td>
                       </tr>
                     )
                   })}
+                  {OrderEList.filter(x=>x.TranType!=='PDA').length===0 && 
+                  <div align="center" style={{padding: 50}}>
+                    <Typography>ไม่พบรายการส่งครัว</Typography>
+                  </div>}
                 </table>
               </div>
             )}
@@ -436,16 +471,20 @@ const OrderItem = ({
                   ประเภท Take Away
                 </div>
                 <table width="100%">
-                  {OrderTList.map((product) => {
+                  {OrderTList.filter(x=>x.TranType!=='PDA').map((product) => {
                     return (
                       <tr key={product.R_PluCode}>
-                        <td>{product.R_ETD}</td>
+                        <td align="center" style={{border: "1px solid", background: "blue", color: "white"}}>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
                         <td>{product.R_Quan}</td>
                       </tr>
                     )
                   })}
+                  {OrderTList.filter(x=>x.TranType!=='PDA').length===0 && 
+                  <div align="center" style={{padding: 50}}>
+                    <Typography>ไม่พบรายการส่งครัว</Typography>
+                  </div>}
                 </table>
               </div>
             )}
@@ -462,16 +501,20 @@ const OrderItem = ({
                   ประเภท Deliver
                 </div>
                 <table width="100%">
-                  {OrderDList.map((product) => {
+                  {OrderDList.filter(x=>x.TranType!=='PDA').map((product) => {
                     return (
                       <tr key={product.R_PluCode}>
-                        <td>{product.R_ETD}</td>
+                        <td align="center" style={{border: "1px solid", background: "green", color: "white"}}>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
                         <td>{product.R_Quan}</td>
                       </tr>
                     )
                   })}
+                  {OrderDList.filter(x=>x.TranType!=='PDA').length===0 && 
+                  <div align="center" style={{padding: 50}}>
+                    <Typography>ไม่พบรายการส่งครัว</Typography>
+                  </div>}
                 </table>
               </div>
             )}
@@ -485,9 +528,10 @@ const OrderItem = ({
               <Button
                 variant="contained"
                 startIcon={<PrintIcon />}
+                color="success"
                 onClick={handlePrint}
               >
-                Print
+                ส่งครัว/พักโต๊ะ
               </Button>
             </Grid2>
           </Paper>

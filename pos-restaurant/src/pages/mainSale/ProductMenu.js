@@ -123,7 +123,8 @@ const ProductMenu = ({
   OrderDList,
   initLoadMenu,
   initLoadOrder,
-  handleNotification
+  handleNotification,
+  initLoadBalanceProductGroup
 }) => {
   console.log("ProductMenu")
   const { t } = useTranslation("global")
@@ -181,6 +182,7 @@ const ProductMenu = ({
       .then((response) => {
         initLoadMenu()
         initLoadOrder()
+        initLoadBalanceProductGroup()
       })
       .catch((error2) => {
         handleNotification(error2.message)
