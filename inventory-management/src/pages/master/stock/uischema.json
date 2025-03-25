@@ -1,0 +1,38 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "รหัสสต็อก (Code)"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "ชื่อสต็อก (Description)"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/nationality",
+          "label": "สถานะสำหรับขาย"
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "options": {
+        "columns": [
+          { "field": "code", "title":  "รหัสสต็อก (Code)"}, 
+          { "field": "description", "title":  "ชื่อคลังสินค้า (Description)" },
+          { "field": "flage", "title":  "Flage" }
+        ],
+        "rows": [
+          { "code": "A1", "description": "คลังสินค้าหน้าร้าน", "flage": "Y" }
+        ]
+      }
+    }  
+  ]
+}

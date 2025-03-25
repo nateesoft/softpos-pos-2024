@@ -3,6 +3,8 @@ import Typography from "@mui/material/Typography"
 import Grid from "@mui/material/Grid2"
 import { Box } from "@mui/material"
 
+const baseName = process.env.REACT_APP_BASE_NAME
+
 const PageNotFound = () => {
   console.log("PageNotFound")
   return (
@@ -20,7 +22,7 @@ const PageNotFound = () => {
         <Grid size={12} display="flex" justifyContent="center">
           <Box
             component="img"
-            src="/assets/illustration-404.svg"
+            src={`/${baseName}/assets/illustration-404.svg`}
             sx={{
               width: 320,
               height: "auto",

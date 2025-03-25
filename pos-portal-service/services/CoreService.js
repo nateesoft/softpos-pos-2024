@@ -61,14 +61,13 @@ const getTableByCode = async (tableNo) => {
 }
 
 const getBalanceByTable = async (tableNo) => {
-  const sql = `select * from balance  where R_Table='${tableNo}' 
-    and R_Void <> 'V' order by r_index`
+  const sql = `select * from balance  where R_Table='${tableNo}' and R_Void <> 'V' order by r_index`
   const results = await pool.query(sql)
   return results
 }
 
 const getSummaryItem = async (tableNo) => {
-  const sql = `select sum(R_Quan) R_Quan from balance where R_Table='${tableNo}'`
+  const sql = `select sum(R_Quan) R_Quan from balance where R_Table='${tableNo}' and R_Void <> 'V'`
   const results = await pool.query(sql)
   if (results.length > 0) {
     return results[0].R_Quan
@@ -365,12 +364,12 @@ const summaryBalance = async (tableNo) => {
   DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
 
   const subTotalAmount = TAmount - discountAmount
-  const serviceAmt = (subTotalAmount * Service) / 100
+  const serviceAmt = (totalServiceAmount * Service) / 100
   const netTotal = subTotalAmount + serviceAmt
 
   tablefile.TAmount = responseData.Food + responseData.Drink + responseData.Product
   tablefile.Service = service
-  tablefile.ServiceAmt = subTotalAmount * service / 100
+  tablefile.ServiceAmt = serviceAmt
   tablefile.NetTotal = netTotal
   tablefile.Food = responseData.Food
   tablefile.Drink = responseData.Drink

@@ -17,6 +17,8 @@ import OptionMenuSelect from "./OptionMenuSelect"
 import { POSContext } from "../../AppContext"
 import apiClient from "../../httpRequest"
 
+const baseName = process.env.REACT_APP_BASE_NAME
+
 const ProductDetailCard = memo(
   ({
     tableNo,
@@ -74,7 +76,7 @@ const ProductDetailCard = memo(
             <tr>
               <td colSpan={2} align="center">
                 <img
-                  src={product.image_url}
+                  src={`/${baseName}/${product.image_url}`}
                   width={300}
                   height={matches ? 250 : "auto"}
                   alt=""

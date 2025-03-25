@@ -21,6 +21,8 @@ import apiClient from "../../httpRequest"
 import ManualPriceInput from "./ManualPriceInput"
 import { useAlert } from "../../contexts/AlertContext"
 
+const baseName = process.env.REACT_APP_BASE_NAME
+
 const modalStyle = {
   position: "absolute",
   top: "50%",
@@ -149,7 +151,7 @@ const MenuSetModal = ({
                 justifyContent="flex-start"
               >
                 <img
-                  src={item.image_url}
+                  src={`/${baseName}/${item.image_url}`}
                   alt={item.menu_name}
                   width={180}
                   height={150}

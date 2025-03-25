@@ -1,0 +1,36 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "รหัสกลุ่ม (Code)"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "ชื่อกลุ่ม (Description)"
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "options": {
+        "columns": [
+          { "field": "code", "title":  "รหัสกลุ่ม (Code)"}, 
+          { "field": "description", "title":  "ชื่อกลุ่ม (Description)" }
+        ],
+        "rows": [
+          { "code": "01", "description": "SET" },
+          { "code": "02", "description": "Pasta" },
+          { "code": "03", "description": "OMAGASE" },
+          { "code": "04", "description": "Other" },
+          { "code": "05", "description": "Soup" }
+        ]
+      }
+    }  
+  ]
+}
