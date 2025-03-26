@@ -9,7 +9,6 @@ import NoFoodIcon from "@mui/icons-material/NoFood"
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
 import ArrowBack from "@mui/icons-material/TableBar"
 import PrintIcon from "@mui/icons-material/Print"
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 import {
   Box,
   Button,
@@ -31,7 +30,6 @@ import apiClient from "../../../httpRequest"
 import ProductCard from "./ProductCard"
 import ProductDetailCard from "./ProductDetailCard"
 import { CurrencyContext } from "../../../contexts/CurrencyContext"
-import NumberFormat from "../../ui-utils/NumberFormat"
 
 const modalStyle = {
   position: "absolute",
@@ -204,7 +202,8 @@ const OrderItem = ({
             padding: 0
           }}
         >
-          {balanceProductGroup && balanceProductGroup.map(item => 
+          {balanceProductGroup && 
+          balanceProductGroup.filter(gg=>gg.R_ETD==='E').map(item => 
             <Accordion key={1} sx={{ borderBottom: "1px solid #eee", background: "linear-gradient(0deg, #FFDEE9 0%, snow 100%)", boxShadow: "none", borderRadius: "none" }}>
               <AccordionSummary>
                 <Grid2 container size={12}>
@@ -266,29 +265,49 @@ const OrderItem = ({
             padding: 0
           }}
         >
-          {OrderTList && OrderTList.length > 0 &&<Accordion key={1} sx={{ borderBottom: "1px solid #eee", boxShadow: "none", borderRadius: "none" }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6">{1}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            {OrderTList.map((product) => {
-                return (
-                  <div style={{ margin: "5px" }} key={product.R_PluCode}>
-                    <ProductCard
-                      tableNo={tableNo}
-                      product={product}
-                      handleNotification={handleNotification}
-                      initLoadMenu={initLoadMenu}
-                      initLoadOrder={initLoadOrder}
-                      openModal={() => handleOpenMenu(product)}
-                      initLoadBalanceProductGroup={initLoadBalanceProductGroup}
-                    />
-                    <Divider />
-                  </div>
-                )
-              })}
-            </AccordionDetails>
-          </Accordion>}
+          {balanceProductGroup && 
+          balanceProductGroup.filter(gg=>gg.R_ETD==='T').map(item => 
+            <Accordion key={1} sx={{ borderBottom: "1px solid #eee", background: "linear-gradient(0deg, #b5dbff 0%, snow 100%)", boxShadow: "none", borderRadius: "none" }}>
+              <AccordionSummary>
+                <Grid2 container size={12}>
+                  <Grid2 size={6}>
+                    <Grid2 container>
+                      <Typography>{item.R_PName}</Typography>
+                    </Grid2>
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <Grid2 container direction="row" justifyContent="center" alignItems="center">
+                      <IconButton onClick={()=>console.log("Click Void Menu")}>
+                        <RemoveCircleIcon color="error" fontSize="large"/>
+                      </IconButton>
+                      <Typography>{item.R_Quan}</Typography>
+                      <IconButton onClick={()=>console.log("Click Add Menu")}>
+                        <AddCircleIcon color="success" fontSize="large" />
+                      </IconButton>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
+              </AccordionSummary>
+              <AccordionDetails>
+                {OrderTList.filter(x => x.R_PluCode === item.R_PluCode).map((product) => {
+                  return (
+                    <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                      <ProductCard
+                        tableNo={tableNo}
+                        product={product}
+                        handleNotification={handleNotification}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+                      />
+                      <Divider />
+                    </div>
+                  )
+                })}
+              </AccordionDetails>
+            </Accordion>
+          )}
           {OrderTList && OrderTList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -309,29 +328,49 @@ const OrderItem = ({
             padding: 0
           }}
         >
-          {OrderDList && OrderDList.length > 0 &&<Accordion key={1} sx={{ borderBottom: "1px solid #eee", boxShadow: "none", borderRadius: "none" }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6">{1}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-            {OrderDList.map((product) => {
-              return (
-                <div style={{ margin: "5px" }} key={product.R_PluCode}>
-                  <ProductCard
-                    tableNo={tableNo}
-                    product={product}
-                    handleNotification={handleNotification}
-                    initLoadMenu={initLoadMenu}
-                    initLoadOrder={initLoadOrder}
-                    openModal={() => handleOpenMenu(product)}
-                    initLoadBalanceProductGroup={initLoadBalanceProductGroup}
-                  />
-                  <Divider />
-                </div>
-              )
-            })}
-            </AccordionDetails>
-          </Accordion>}
+          {balanceProductGroup && 
+          balanceProductGroup.filter(gg=>gg.R_ETD==='D').map(item => 
+            <Accordion key={1} sx={{ borderBottom: "1px solid #eee", background: "linear-gradient(0deg, #b5ffb5 0%, snow 100%)", boxShadow: "none", borderRadius: "none" }}>
+              <AccordionSummary>
+                <Grid2 container size={12}>
+                  <Grid2 size={6}>
+                    <Grid2 container>
+                      <Typography>{item.R_PName}</Typography>
+                    </Grid2>
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <Grid2 container direction="row" justifyContent="center" alignItems="center">
+                      <IconButton onClick={()=>console.log("Click Void Menu")}>
+                        <RemoveCircleIcon color="error" fontSize="large"/>
+                      </IconButton>
+                      <Typography>{item.R_Quan}</Typography>
+                      <IconButton onClick={()=>console.log("Click Add Menu")}>
+                        <AddCircleIcon color="success" fontSize="large" />
+                      </IconButton>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
+              </AccordionSummary>
+              <AccordionDetails>
+                {OrderDList.filter(x => x.R_PluCode === item.R_PluCode).map((product) => {
+                  return (
+                    <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                      <ProductCard
+                        tableNo={tableNo}
+                        product={product}
+                        handleNotification={handleNotification}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+                      />
+                      <Divider />
+                    </div>
+                  )
+                })}
+              </AccordionDetails>
+            </Accordion>
+          )}
           {OrderDList && OrderDList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
