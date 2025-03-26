@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import Grid from "@mui/material/Grid2"
 import { useParams } from "react-router-dom"
 import { motion } from "framer-motion"
@@ -11,6 +11,8 @@ import PaymentForm from "./PaymentForm"
 import MemberInfo from "./MemberInfo"
 import MultiplePayment from "./split/MultiplePayment"
 import { useAlert } from "../../contexts/AlertContext"
+import { POSContext } from "../../AppContext"
+import { useContext } from "react"
 
 const modalStyle = {
   bgcolor: "background.paper",
@@ -26,6 +28,8 @@ const backgroundSpecial = {
 
 function PaymentPage() {
   console.log("PaymentPage")
+  const { appData } = useContext(POSContext)
+  const { macno } = appData
   const { tableNo } = useParams()
   const { handleNotification } = useAlert()
 
@@ -73,9 +77,10 @@ function PaymentPage() {
       })
   }
 
-  const summaryTableFileBalance = useCallback(() => {
+  const summaryTableFileBalance = () => {
+    console.log('summaryTableFileBalance')
     apiClient
-      .post("/api/balance/summaryBalance", { tableNo })
+      .post("/api/balance/summaryBalance", { tableNo, macno })
       .then((response) => {
         if (response.status === 200) {
           const data = response.data.data
@@ -88,7 +93,7 @@ function PaymentPage() {
         }
       })
       .catch((err) => handleNotification(err.message))
-  }, [tableNo, handleNotification])
+  }
 
   const splitBillAction = () => {
     initLoadOrder()
@@ -104,10 +109,6 @@ function PaymentPage() {
   useEffect(() => {
     initLoadPayment()
   }, [])
-
-  useEffect(() => {
-    summaryTableFileBalance()
-  }, [summaryTableFileBalance])
 
   return (
     <motion.div
@@ -164,6 +165,7 @@ function PaymentPage() {
           <MultiplePayment
             setOpenSplitBill={setOpenSplitBill}
             onClose={() => setOpenSplitBill(false)}
+            macno={macno}
             tableNo={tableNo}
             orderList={orderList}
             initLoad={splitBillAction}

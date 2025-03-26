@@ -674,6 +674,7 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
   newBalance.R_PEName = ""
   newBalance.R_Indulgent = ""
   newBalance.TranType = ""
+  newBalance.VoidMsg = Unicode2ASCII(VoidMsg)
 
   // convert to ascii
   const RPName = Unicode2ASCII(R_PName)
@@ -707,7 +708,7 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
     '${R_PrSubAmt}','${R_PrSubAdj}','${R_PrCuDisc}','${R_PrCuBath}','${R_PrCuAdj}','${newBalance.R_QuanCanDisc}','${newBalance.R_Order}','${R_PItemNo}',
     '${R_PKicQue}','${newBalance.R_MemSum}','${R_PrVcType}','${R_PrVcCode}','${R_PrVcAmt}','${R_PrVcAdj}','${newBalance.R_VoidQuan}','${R_MoveFlag}',
     '${newBalance.R_MovePrint}','${R_Pause}','${R_SPIndex}','${R_LinkIndex}','${R_VoidPause}','${R_MoveItem}','${R_MoveFrom}','${R_MoveUser}',
-    '${VoidMsg}','${R_PrintItemBill}','${R_CountTime}','${newBalance.SoneCode}','${R_Earn}','${R_EarnNo}','${newBalance.TranType}',
+    '${newBalance.VoidMsg}','${R_PrintItemBill}','${R_CountTime}','${newBalance.SoneCode}','${R_Earn}','${R_EarnNo}','${newBalance.TranType}',
     '${newBalance.PDAPrintCheck}','${newBalance.PDAEMP}','${newBalance.R_empName}','${R_ServiceAmt}','${newBalance.R_PEName}','${newBalance.R_Indulgent}')`
   const result = await pool.query(sql)
   return result
@@ -722,7 +723,7 @@ const loadBillnoToBalance = async (billRefNo, tableNo) => {
     tSaleList.forEach(async (tSale) => {
       await createNewBalanceFromTSale(tSale, tableNo)
     })
-    await summaryBalance(tableNo)
+    await summaryBalance(tableNo, billno.B_MacNo)
   } else {
     // table not available
   }

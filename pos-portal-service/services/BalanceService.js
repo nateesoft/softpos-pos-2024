@@ -159,7 +159,7 @@ const addListBalance = async (payload) => {
         })
 
         // summary tablefile
-        await summaryBalance(tableNo)
+        await summaryBalance(tableNo, macno)
 
         // process stock out
         await orderStockOut(reponseR_Index)
@@ -193,7 +193,7 @@ const addBalance = async payload => {
     })
 
     // summary tablefile
-    await summaryBalance(tableNo)
+    await summaryBalance(tableNo, macno)
 
     // process stock out
     await orderStockOut(reponseR_Index)
@@ -366,6 +366,8 @@ const updateBalance = async payload => {
     const R_Opt8 = Unicode2ASCII(R_Opt[7]);
     const R_Opt9 = Unicode2ASCII(R_Opt[8]);
 
+    const GetVoidMsg = Unicode2ASCII(VoidMsg)
+
     const R_Date = getMoment().format('YYYY-MM-DD');
     const R_Time = getMoment().format('HH:mm:ss');
     const Macno = macno;
@@ -410,7 +412,7 @@ const updateBalance = async payload => {
         R_VoidQuan='${R_VoidQuan}',R_MoveFlag='${R_MoveFlag}',R_MovePrint='${R_MovePrint}',
         R_Pause='${R_Pause}',R_SPIndex='${R_SPIndex}',R_LinkIndex='${R_LinkIndex}',
         R_VoidPause='${R_VoidPause}',R_MoveItem='${R_MoveItem}',R_MoveFrom='${R_MoveFrom}',
-        R_MoveUser='${R_MoveUser}',VoidMsg='${VoidMsg}',R_PrintItemBill='${R_PrintItemBill}',
+        R_MoveUser='${R_MoveUser}',VoidMsg='${GetVoidMsg}',R_PrintItemBill='${R_PrintItemBill}',
         R_CountTime='${R_CountTime}',SoneCode='${SoneCode}',R_Earn='${R_Earn}',R_EarnNo='${R_EarnNo}',
         TranType='${TranType}',PDAPrintCheck='${PDAPrintCheck}',PDAEMP='${PDAEMP}',R_empName='${R_empName}',
         R_ServiceAmt='${R_ServiceAmt}',R_PEName='${R_PEName}',R_Indulgent='${R_Indulgent}' 
@@ -418,7 +420,7 @@ const updateBalance = async payload => {
     await pool.query(sql)
 
     // summary table
-    summaryBalance(R_Table)
+    summaryBalance(R_Table, macno)
 
     return R_Index
 }

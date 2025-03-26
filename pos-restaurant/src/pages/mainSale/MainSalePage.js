@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import Grid2 from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
@@ -44,7 +44,7 @@ function MainSalePage() {
   const [orderTList, setOrderTList] = useState([])
   const [orderDList, setOrderDList] = useState([])
 
-  const initLoadMenu = useCallback(() => {
+  const initLoadMenu = () => {
     apiClient
       .get("/api/menu_setup")
       .then((response) => {
@@ -77,9 +77,9 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [])
+  }
 
-  const initLoadTableCheckIn = useCallback(() => {
+  const initLoadTableCheckIn = () => {
     apiClient
       .get(`/api/table_checkin/${tableNo}/lastCheckIn`)
       .then((response) => {
@@ -91,9 +91,9 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo, handleNotification])
+  }
 
-  const initLoadOrder = useCallback(async () => {
+  const initLoadOrder =async () => {
     const responseMenuSetup = await apiClient.get(`/api/menu_setup/all`)
     const listMenuSetup = responseMenuSetup.data.data
     apiClient
@@ -157,9 +157,9 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo, handleNotification])
+  }
 
-  const initLoadBalanceProductGroup = useCallback(() => {
+  const initLoadBalanceProductGroup = () => {
     apiClient
       .get(`/api/balance/${tableNo}/groupProduct`)
       .then((response) => {
@@ -170,14 +170,14 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [])
+  }
 
   useEffect(() => {
     initLoadMenu()
     initLoadOrder()
     initLoadTableCheckIn()
     initLoadBalanceProductGroup()
-  }, [initLoadMenu, initLoadOrder, initLoadTableCheckIn, initLoadBalanceProductGroup])
+  }, [])
 
   useEffect(() => {
     socket.connect()
@@ -220,7 +220,7 @@ function MainSalePage() {
       />
       <Grid2
         container
-        sx={{ background: "radial-gradient(circle, #001, #000)" }}
+        sx={{ background: "radial-gradient(circle, #003, #000)", backgroundSize: "10px 10px" }}
       >
         <Grid2 size={matches ? 8 : 12}>
           <ProductMenu
@@ -262,6 +262,7 @@ function MainSalePage() {
             initLoadOrder={initLoadOrder}
             typePopup={false}
             handleNotification={handleNotification}
+            initLoadBalanceProductGroup={initLoadBalanceProductGroup}
           />
         </Grid2>
       </Grid2>

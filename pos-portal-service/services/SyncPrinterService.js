@@ -100,7 +100,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
           </th>
         </tr>`
     tSaleInfo.forEach(tSale => {
-      if(tSale.R_Void === 'V'){
+      if(tSale.R_Void === 'V' || tSale.R_Total === 0){
         return
       }
       billTable += `
