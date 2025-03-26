@@ -44,9 +44,10 @@ const ProductCard = ({
   initLoadMenu,
   initLoadOrder,
   hideItem,
-  setHideItem
+  setHideItem,
+  initLoadBalanceProductGroup
 }) => {
-  console.log("ProductCard:", product)
+  console.log("addOrderItem/ProductCard:", product)
   const { appData } = useContext(POSContext)
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const { handleNotification } = useAlert()
@@ -55,7 +56,7 @@ const ProductCard = ({
   const [voidMsgList, setVoidMsgList] = useState([])
   const [voidMsg, setVoidMsg] = useState([])
   const [currRIndex, setCurrRIndex] = useState("")
-  const [optList] = useState([
+  const optList = [
     product.R_Opt1,
     product.R_Opt2,
     product.R_Opt3,
@@ -65,7 +66,7 @@ const ProductCard = ({
     product.R_Opt7,
     product.R_Opt8,
     product.R_Opt9
-  ])
+  ]
   const [count, setCount] = useState(product.R_Quan || 1)
   const [open, setOpen] = useState(false)
 
@@ -75,6 +76,7 @@ const ProductCard = ({
   const RPriceQty = convertCurrency(product.R_Price * product.R_Quan, currency)
 
   const handleVoidItem = (R_Index) => {
+    console.log('addOrderItem/handleVoidItem')
     if (voidMsg) {
       apiClient
         .post(`/api/balance/void`, {
@@ -87,6 +89,8 @@ const ProductCard = ({
         .then((response) => {
           initLoadMenu()
           initLoadOrder()
+          initLoadBalanceProductGroup()
+
           setOpen(false)
         })
         .catch((err) => {
@@ -96,6 +100,7 @@ const ProductCard = ({
   }
 
   const handleAddItem = () => {
+    console.log('addOrderItem/handleAddItem')
     apiClient
       .post(`/api/balance`, {
         tableNo,
@@ -112,6 +117,7 @@ const ProductCard = ({
       .then((response) => {
         initLoadMenu()
         initLoadOrder()
+        initLoadBalanceProductGroup()
       })
       .catch((err) => {
         handleNotification(err.message)
@@ -124,15 +130,18 @@ const ProductCard = ({
     setOpen(true)
   }
 
-  const loadVoidMsgList = useCallback(() => {
+  const loadVoidMsgList = () => {
     apiClient
       .get(`/api/voidmsg`)
       .then((response) => {
-        const voidMsgData = response.data.data
-        setVoidMsgList(voidMsgData)
+        console.log('loadVoidMsgList:', response)
+        if(response.status === 200){
+          const voidMsgData = response.data.data
+          setVoidMsgList(voidMsgData)
+        }
       })
       .catch((err) => handleNotification(err.message))
-  }, [handleNotification])
+  }
 
   const showActionBalance = (product) => {
     if (
@@ -148,7 +157,7 @@ const ProductCard = ({
 
   useEffect(() => {
     loadVoidMsgList()
-  }, [loadVoidMsgList])
+  }, [])
 
   return (
     <>
@@ -177,8 +186,7 @@ const ProductCard = ({
               </ImageListItem>
             )}
           </div>
-          {optList &&
-            optList
+          {optList && optList
               .filter((o) => o !== "")
               .map((opt) => (
                 <Typography sx={{ fontSize: "12px", color: "green" }}>
@@ -268,12 +276,11 @@ const ProductCard = ({
                 label="เหตุผลในการ VOID"
                 onChange={(e) => setVoidMsg(e.target.value)}
               >
-                {voidMsgList &&
-                  voidMsgList.map((item) => (
-                    <MenuItem key={item.VName} value={item.VName}>
-                      {item.VName}
-                    </MenuItem>
-                  ))}
+                {voidMsgList && voidMsgList.map((item) => (
+                  <MenuItem key={item.VName} value={item.VName}>
+                    {item.VName}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <Button

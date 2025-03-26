@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Table from "@mui/material/Table"
 import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
@@ -13,11 +13,13 @@ import {
 } from "@mui/material"
 
 const NumFormat = (data) => {
+  if(!data)return
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
-const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb }) => {
-  console.log("OrderItem:", tableFileDb.TIem)
+const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => {
+  console.log("OrderItem:tableFileDb:", tableFileDb)
+  console.log("OrderItem:tableFile", tableFile)
   const { EmpDiscAmt, FastDiscAmt, TrainDiscAmt, MemDiscAmt, SubDiscAmt,
     DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt
   } = tableFileDb
@@ -25,7 +27,6 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb }) => {
   DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
 
   console.log("Discount Amount:", discountAmount)
-
   return (
     <Paper elevation={3} sx={{ padding: "10px", margin: "10px" }}>
       <Box
@@ -86,10 +87,10 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb }) => {
           <Typography>{NumFormat(tableFile.serviceAmount)}</Typography>
         </Grid2>
         <Divider />
-        {/* <Grid2 display="flex" justifyContent="space-between">
+        <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>VAT (7%)</Typography>
           <Typography>{NumFormat(tableFile.vatAmount)}</Typography>
-        </Grid2> */}
+        </Grid2>
         {/* <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>มูลค่าสินค้า/บริการ</Typography>
           <Typography>{NumFormat(tableFile.productAndService)}</Typography>

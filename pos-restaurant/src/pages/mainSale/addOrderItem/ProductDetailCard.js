@@ -21,6 +21,7 @@ import SubItemIcon from '@mui/icons-material/ViewSidebar';
 import apiClient from "../../../httpRequest"
 import OptionMenuSelect from "../OptionMenuSelect"
 import { POSContext } from "../../../AppContext"
+import NumberFormat from "../../ui-utils/NumberFormat"
 
 const baseName = process.env.REACT_APP_BASE_NAME
 
@@ -186,7 +187,7 @@ const ProductDetailCard = ({
             sx={{ background: "chocolate" }}
           >
             <Typography variant="p" sx={{ color: "white" }}>
-              ราคา {product.R_Price} บาท
+              ราคา {NumberFormat(product.R_Price)}
             </Typography>
             <Typography variant="p" sx={{ color: "white" }}>
               รหัส {product.R_PluCode}

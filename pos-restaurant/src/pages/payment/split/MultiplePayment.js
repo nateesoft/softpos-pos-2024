@@ -35,7 +35,8 @@ const MultiplePayment = ({
   tableNo,
   orderList,
   tableFile,
-  initLoad
+  initLoad,
+  macno
 }) => {
   console.log("MultiplePayment")
   const navigate = useNavigate()
@@ -109,6 +110,7 @@ const MultiplePayment = ({
     }
     apiClient
       .post("/api/tablefile/splitBill", {
+        macno,
         sourceTable: tableNo,
         targetTable: tableNo + "-1",
         orderListToMove: items.filter((item) => item.table === 2)

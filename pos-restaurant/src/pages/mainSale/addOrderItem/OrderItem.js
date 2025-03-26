@@ -102,7 +102,8 @@ const OrderItem = ({
   initLoadMenu,
   initLoadOrder,
   typePopup = false,
-  handleNotification
+  handleNotification,
+  initLoadBalanceProductGroup
 }) => {
   console.log("OrderItem:", orderType)
   const navigate = useNavigate()
@@ -207,25 +208,20 @@ const OrderItem = ({
             <Accordion key={1} sx={{ borderBottom: "1px solid #eee", background: "linear-gradient(0deg, #FFDEE9 0%, snow 100%)", boxShadow: "none", borderRadius: "none" }}>
               <AccordionSummary>
                 <Grid2 container size={12}>
-                  <Grid2 size={5}>
+                  <Grid2 size={6}>
                     <Grid2 container>
                       <Typography>{item.R_PName}</Typography>
                     </Grid2>
                   </Grid2>
-                  <Grid2 size={5}>
+                  <Grid2 size={6}>
                     <Grid2 container direction="row" justifyContent="center" alignItems="center">
-                      <IconButton>
+                      <IconButton onClick={()=>console.log("Click Void Menu")}>
                         <RemoveCircleIcon color="error" fontSize="large"/>
                       </IconButton>
                       <Typography>{item.R_Quan}</Typography>
-                      <IconButton>
+                      <IconButton onClick={()=>console.log("Click Add Menu")}>
                         <AddCircleIcon color="success" fontSize="large" />
                       </IconButton>
-                    </Grid2>
-                  </Grid2>
-                  <Grid2 size={2}>
-                    <Grid2 container justifyContent="flex-end" paddingRight={1}>
-                      <Typography>{NumberFormat(item.R_Total)}</Typography>
                     </Grid2>
                   </Grid2>
                 </Grid2>
@@ -241,6 +237,7 @@ const OrderItem = ({
                         initLoadMenu={initLoadMenu}
                         initLoadOrder={initLoadOrder}
                         openModal={() => handleOpenMenu(product)}
+                        initLoadBalanceProductGroup={initLoadBalanceProductGroup}
                       />
                       <Divider />
                     </div>
@@ -284,6 +281,7 @@ const OrderItem = ({
                       initLoadMenu={initLoadMenu}
                       initLoadOrder={initLoadOrder}
                       openModal={() => handleOpenMenu(product)}
+                      initLoadBalanceProductGroup={initLoadBalanceProductGroup}
                     />
                     <Divider />
                   </div>
@@ -326,6 +324,7 @@ const OrderItem = ({
                     initLoadMenu={initLoadMenu}
                     initLoadOrder={initLoadOrder}
                     openModal={() => handleOpenMenu(product)}
+                    initLoadBalanceProductGroup={initLoadBalanceProductGroup}
                   />
                   <Divider />
                 </div>

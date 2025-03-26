@@ -164,7 +164,7 @@ const updateTableFile = async (tablefile) => {
   const StkCode2 = tablefile.StkCode2
   const TDesk = tablefile.TDesk
   const TUser = tablefile.TUser
-  const VoidMsg = tablefile.VoidMsg
+  const VoidMsg = Unicode2ASCII(tablefile.VoidMsg)
   const TPause = tablefile.TPause || ""
   const CCUseCode = tablefile.CCUseCode
   const TTableIsOn = tablefile.TTableIsOn || ""
@@ -324,6 +324,7 @@ const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
   newTable.TActive = TActive || ""
   newTable.TAutoClose = TAutoClose || ""
   newTable.CCUseAmt = CCUseAmt || 0
+  newTable.VoidMsg = Unicode2ASCII(VoidMsg)
   const sql = `INSERT INTO tablefile 
             (Tcode,SoneCode,TLoginDate,MacNo,Cashier,TLoginTime,TCurTime,TCustomer,TItem,TAmount,TOnAct,Service,ServiceAmt,EmpDisc,EmpDiscAmt,
             FastDisc,FastDiscAmt,TrainDisc,TrainDiscAmt,MemDisc,MemDiscAmt,SubDisc,SubDiscAmt,DiscBath,ProDiscAmt,SpaDiscAmt,CuponDiscAmt,
@@ -334,7 +335,7 @@ const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
             '${MemDisc}','${MemDiscAmt}','${SubDisc}','${SubDiscAmt}','${DiscBath}','${ProDiscAmt}','${SpaDiscAmt}','${CuponDiscAmt}','${ItemDiscAmt}',
             '${MemCode}','${MemCurAmt}','${MemName}','${MemBegin}','${MemEnd}','${Food}','${Drink}','${Product}','${NetTotal}','${PrintTotal}',
             '${PrintChkBill}','${PrintCnt}','${PrintTime1}','${PrintTime2}','${ChkBill}','${ChkBillTime}','${StkCode1}','${StkCode2}','${TDesk}',
-            '${TUser}','${VoidMsg}','${TPause}','${CCUseCode}','${newTable.CCUseAmt}','${newTable.TTableIsOn}','${newTable.TActive}','${newTable.TAutoClose}')`
+            '${TUser}','${newTable.VoidMsg}','${TPause}','${CCUseCode}','${newTable.CCUseAmt}','${newTable.TTableIsOn}','${newTable.TActive}','${newTable.TAutoClose}')`
   const checkExistTable = await getTableByCode(targetTableNo)
   if (checkExistTable) {
     checkExistTable.MacNo = MacNo
@@ -349,7 +350,8 @@ const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
 const splitTableToPayment = async (
   sourceTable,
   targetTable,
-  orderListToMove
+  orderListToMove,
+  macno
 ) => {
   const sourceTableData = await getTableByCode(sourceTable)
   const targetTableData = await createTableForSplitPayment(
@@ -389,8 +391,8 @@ const splitTableToPayment = async (
   }
 
   // summary balance in table
-  await summaryBalance(sourceTable)
-  await summaryBalance(targetTable)
+  await summaryBalance(sourceTable, macno)
+  await summaryBalance(targetTable, macno)
 }
 
 const updateDiscountBill = async (tableNo) => {

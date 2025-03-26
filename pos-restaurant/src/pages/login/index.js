@@ -11,6 +11,7 @@ import { motion } from "framer-motion"
 import LoginIcon from "@mui/icons-material/Login"
 import { Divider, Grid2, Modal, useMediaQuery } from "@mui/material"
 import { io } from "socket.io-client"
+import moment from "moment"
 
 import { useAlert } from "../../contexts/AlertContext"
 import apiClient from "../../httpRequest"
@@ -95,7 +96,24 @@ const Login = () => {
                 id: 1,
                 printerType: "message",
                 printerName: "cashier",
-                message: "เข้าสู่ระบบสำเร็จ",
+                message: `
+                  <div>
+                    <font face="Angsana New" size="4">
+                      User: ${user} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
+                    </font>
+                  </div>
+                  <hr />
+                  <div align="center">
+                    <font face="Angsana New" size="4">*** เข้าสู่ระบบสำเร็จ ***</font>
+                  </div>
+                  <hr />
+                  <div align="right">
+                    <font face="Angsana New" size="4">
+                       ➲ สาขา ${branchInfo.Code} ${branchInfo.Name}
+                    </font>
+                  </div>
+                  <br />
+                `,
                 terminal: "",
                 tableNo: "",
                 billNo: "",

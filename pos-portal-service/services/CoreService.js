@@ -128,12 +128,16 @@ const updateTableFile = async (tablefile) => {
   const StkCode2 = tablefile.StkCode2
   const TDesk = tablefile.TDesk
   const TUser = tablefile.TUser
-  const VoidMsg = tablefile.VoidMsg
+  const VoidMsg = Unicode2ASCII(tablefile.VoidMsg)
   const TPause = tablefile.TPause || ""
   const CCUseCode = tablefile.CCUseCode
   const TTableIsOn = tablefile.TTableIsOn || ""
   const TActive = tablefile.TActive || ""
   const TAutoClose = tablefile.TAutoClose || ""
+
+  // add vat info
+  const Vat = tablefile.Vat
+  const VatAmt = tablefile.VatAmt
 
   const sql = `UPDATE tablefile 
         SET Tcode='${Tcode}',SoneCode='${SoneCode}',MacNo='${MacNo}',Cashier='${Cashier}',
@@ -159,7 +163,9 @@ const updateTableFile = async (tablefile) => {
             StkCode1='${StkCode1}',StkCode2='${StkCode2}',TDesk='${TDesk}',
             TUser='${TUser}',VoidMsg='${VoidMsg}',TPause='${TPause}',
             CCUseCode='${CCUseCode}',
-            TTableIsOn='${TTableIsOn}',TActive='${TActive}',TAutoClose='${TAutoClose}' 
+            TTableIsOn='${TTableIsOn}',
+            TActive='${TActive}',TAutoClose='${TAutoClose}',
+            Vat='${Vat}',VatAmt='${VatAmt}' 
             WHERE Tcode='${Tcode}'`
 
   const results = await pool.query(sql)
@@ -307,7 +313,7 @@ const computeBalanceSummary = (
   }
 }
 
-const summaryBalance = async (tableNo) => {
+const summaryBalance = async (tableNo, macno) => {
   const tablefile = await getTableByCode(tableNo)
   const configSetup = await getPOSConfigSetup()
   const balanceList = await getBalanceByTable(tableNo)
@@ -356,7 +362,7 @@ const summaryBalance = async (tableNo) => {
   )
 
   // compute discount ท้ายบิล
-  const { Tcode, EmpDiscAmt, FastDiscAmt, TrainDiscAmt, MemDiscAmt, SubDiscAmt,
+  const { EmpDiscAmt, FastDiscAmt, TrainDiscAmt, MemDiscAmt, SubDiscAmt,
     DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt, TAmount, Service
   } = tablefile
 
@@ -367,9 +373,12 @@ const summaryBalance = async (tableNo) => {
   const serviceAmt = (totalServiceAmount * Service) / 100
   const netTotal = subTotalAmount + serviceAmt
 
+  tablefile.MacNo = macno
   tablefile.TAmount = responseData.Food + responseData.Drink + responseData.Product
   tablefile.Service = service
   tablefile.ServiceAmt = serviceAmt
+  tablefile.Vat = vat
+  tablefile.VatAmt = responseData.totalVatAmount
   tablefile.NetTotal = netTotal
   tablefile.Food = responseData.Food
   tablefile.Drink = responseData.Drink
@@ -380,14 +389,13 @@ const summaryBalance = async (tableNo) => {
   // update tablefile
   await updateTableFile(tablefile)
 
-  let computeProductAndService =  tablefile.TAmount
   return {
     TItem: tablefile.TItem,
     TAmount: tablefile.TAmount,
     ServiceAmt: tablefile.ServiceAmt,
     vatAmount: responseData.totalVatAmount,
     NetTotal: tablefile.NetTotal,
-    productAndService: computeProductAndService + tablefile.ServiceAmt,
+    productAndService: tablefile.TAmount + tablefile.ServiceAmt,
     Food: tablefile.Food,
     Drink: tablefile.Drink,
     Product: tablefile.Product,

@@ -30,8 +30,8 @@ router.get('/', (req, res) => {
 });
 
 router.post('/summaryBalance', (req, res) => {
-  const { tableNo } = req.body
-  summaryBalance(tableNo)
+  const { tableNo, macno } = req.body
+  summaryBalance(tableNo, macno)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

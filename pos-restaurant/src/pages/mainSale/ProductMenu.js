@@ -203,6 +203,8 @@ const ProductMenu = ({
       .then(async (response) => {
         initLoadMenu()
         initLoadOrder()
+        initLoadBalanceProductGroup()
+
         const R_LinkIndex = response.data.data
 
         // add sub menu in set
@@ -215,6 +217,7 @@ const ProductMenu = ({
         // total summary display
         initLoadMenu()
         initLoadOrder()
+        initLoadBalanceProductGroup()
 
         setShowMenuSet(false)
       })
@@ -570,22 +573,6 @@ const ProductMenu = ({
                 </Typography>
               </Grid2>
               <Grid2 container spacing={1}>
-                <Button
-                  variant="contained"
-                  color="error"
-                  startIcon={<CloseIcon />}
-                  onClick={handleCloseMenuSet}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  color="success"
-                  endIcon={<CheckIcon />}
-                  onClick={() => handleConfirmSelectedSubMenu(productInfo)}
-                >
-                  Order
-                </Button>
                 <FormControl variant="outlined">
                   <Select
                     labelId="demo-simple-select-label"
@@ -602,6 +589,14 @@ const ProductMenu = ({
                     <MenuItem value={5}>5</MenuItem>
                   </Select>
                 </FormControl>
+                <Button
+                  variant="contained"
+                  color="success"
+                  endIcon={<CheckIcon />}
+                  onClick={() => handleConfirmSelectedSubMenu(productInfo)}
+                >
+                  Order
+                </Button>
               </Grid2>
             </Box>
           </Grid2>

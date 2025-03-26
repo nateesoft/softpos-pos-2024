@@ -110,7 +110,7 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   }
 
   const { appData, setAppData } = useContext(POSContext)
-  const { userLogin } = appData
+  const { userLogin, macno } = appData
 
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes] = useNodesState([])
@@ -148,7 +148,21 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
               id: 1,
               printerType: "message",
               printerName: "cashier",
-              message: "ออกจากระบบเรียบร้อย",
+              message: `
+                <div>
+                  <font face="Angsana New" size="4">
+                    User: ${userLogin} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
+                  </font>
+                </div>
+                <hr />
+                <div align="center">
+                  <font face="Angsana New" size="4">ออกจากระบบเรียบร้อย</font>
+                </div>
+                <hr />
+                <div align="center">
+                (づ ᴗ _ᴗ)づ♡
+                </div>
+              `,
               terminal: "",
               tableNo: "",
               billNo: "",
