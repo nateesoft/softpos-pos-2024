@@ -160,10 +160,12 @@ function MainSalePage() {
   }
 
   const initLoadBalanceProductGroup = () => {
+    console.log('initLoadBalanceProductGroup')
     apiClient
       .get(`/api/balance/${tableNo}/groupProduct`)
       .then((response) => {
         if (response.status === 200) {
+          console.log(response.data.data)
           setBalanceProductGroup(response.data.data)
         }
       })
