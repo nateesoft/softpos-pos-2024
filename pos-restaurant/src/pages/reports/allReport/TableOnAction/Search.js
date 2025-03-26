@@ -55,7 +55,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const AppbarSearch = ({ search, setSearch, handleLoad }) => {
-  console.log("TableOnAction:AppbarSearch")
   const navigate = useNavigate()
 
   const backHomePage = () => {

@@ -56,7 +56,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const SearchMenu = ({ setMemberMasters }) => {
-  console.log("SearchMenu")
   const { handleNotification } = useAlert()
 
   const [recieptNo, setRecieptNo] = useState("")

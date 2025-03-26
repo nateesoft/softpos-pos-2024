@@ -27,7 +27,6 @@ const backgroundSpecial = {
 }
 
 function PaymentPage() {
-  console.log("PaymentPage")
   const { appData } = useContext(POSContext)
   const { macno } = appData
   const { tableNo } = useParams()
@@ -78,7 +77,6 @@ function PaymentPage() {
   }
 
   const summaryTableFileBalance = () => {
-    console.log('summaryTableFileBalance')
     apiClient
       .post("/api/balance/summaryBalance", { tableNo, macno })
       .then((response) => {

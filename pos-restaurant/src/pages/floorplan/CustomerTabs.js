@@ -37,7 +37,6 @@ function a11yProps(index) {
 }
 
 const CustomerTabs = (props) => {
-  console.log("CustomerTabs:", props)
   const {
     manCount,
     setManCount,

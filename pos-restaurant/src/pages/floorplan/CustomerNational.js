@@ -58,7 +58,6 @@ const InputCustomer = ({ title, value, setValue, iconName }) => {
 }
 
 const CustomerNational = (props) => {
-  console.log("CustomerGeneral:", props)
   const [continent, setContinent] = useState("Asia")
   const [country, setCountry] = useState("")
 

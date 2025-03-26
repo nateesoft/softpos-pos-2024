@@ -37,7 +37,6 @@ const Transition = forwardRef(function Transition(props, ref) {
 })
 
 const MenuSetupPage = ({ open, setOpen }) => {
-  console.log("MenuSetupPage")
   const [showError, setShowError] = useState(false)
   const [msgError, setMsgError] = useState("")
 

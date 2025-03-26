@@ -28,7 +28,6 @@ const ProductDetailCard = memo(
     initLoadOrder,
     initLoadMenu
   }) => {
-    console.log("ProductDetailCard")
     const { appData } = useContext(POSContext)
     const { empCode, macno, userLogin } = appData
 

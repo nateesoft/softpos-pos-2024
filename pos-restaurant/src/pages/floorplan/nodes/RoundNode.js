@@ -7,7 +7,6 @@ const style = {
 const baseName = process.env.REACT_APP_BASE_NAME
 
 function RoundNode(props) {
-  console.log("RoundNode")
   const { data, bgColor } = props
   return (
     <div align="center" style={{ width: "256px" }}>

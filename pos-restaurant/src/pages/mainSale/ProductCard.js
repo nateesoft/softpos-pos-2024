@@ -9,7 +9,6 @@ import { CurrencyContext } from "../../contexts/CurrencyContext"
 const baseName = process.env.REACT_APP_BASE_NAME
 
 const ProductCard = memo((props) => {
-  console.log("ProductCard")
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const {
     id,

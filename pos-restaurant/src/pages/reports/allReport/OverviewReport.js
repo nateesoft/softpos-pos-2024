@@ -44,7 +44,6 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
 }))
 
 const OverviewReport = () => {
-  console.log("OverviewReport")
   const navigate = useNavigate()
   const { appData } = useContext(POSContext)
   const { userLogin } = appData

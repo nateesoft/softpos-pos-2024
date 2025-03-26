@@ -14,7 +14,6 @@ import LogoutIcon from "@mui/icons-material/Logout"
 import apiClient from "../../../httpRequest"
 
 const DataTable = ({ columnTable, dataTable, initLoad }) => {
-  console.log("DataTable")
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
@@ -31,7 +30,6 @@ const DataTable = ({ columnTable, dataTable, initLoad }) => {
     apiClient
       .post(`/api/employ/forceLogout`, { username })
       .then((response) => {
-        console.log("response", response)
         if (response.status === 200) {
           initLoad()
         }

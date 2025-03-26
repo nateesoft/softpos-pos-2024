@@ -28,7 +28,6 @@ const modalStyle = {
 }
 
 const ReportDaily = (props) => {
-  console.log("ReportDaily")
   // report modal
   const [openTableOnAction, setOpenTableOnAction] = useState(false)
   const [cashierReport, setCashierReport] = useState(false)

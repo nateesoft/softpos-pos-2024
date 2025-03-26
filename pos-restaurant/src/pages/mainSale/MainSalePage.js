@@ -21,7 +21,6 @@ const socket = io(SOCKET_SERVER_URL, {
 })
 
 function MainSalePage() {
-  console.log("MainSalePage")
   const { tableNo } = useParams()
   const { handleNotification } = useAlert()
 
@@ -160,12 +159,10 @@ function MainSalePage() {
   }
 
   const initLoadBalanceProductGroup = () => {
-    console.log('initLoadBalanceProductGroup')
     apiClient
       .get(`/api/balance/${tableNo}/groupProduct`)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data.data)
           setBalanceProductGroup(response.data.data)
         }
       })

@@ -7,7 +7,6 @@ import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard"
 import { useNavigate } from "react-router-dom"
 
 const ReportSelect = (props) => {
-  console.log("ReportSelect")
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState(null)

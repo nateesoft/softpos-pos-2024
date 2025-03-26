@@ -115,7 +115,6 @@ class ComponentToPrint extends Component {
 }
 
 const HourlyPluReport = () => {
-  console.log("HourlyPluReport")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const [query] = useSearchParams()
@@ -159,7 +158,6 @@ const HourlyPluReport = () => {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("response:", response.data.data)
           setReports(response.data.data)
         }
       })

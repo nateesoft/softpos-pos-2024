@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next"
 const baseName = process.env.REACT_APP_BASE_NAME
 
 const LanguageSettings = () => {
-  console.log("LanguageSettings")
   const { i18n } = useTranslation("global")
   const [anchorEl, setAnchorEl] = useState(null)
   const [language, setLanguage] = useState(

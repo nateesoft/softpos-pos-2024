@@ -20,7 +20,6 @@ const modalStyle = {
 }
 
 const RecieptCopyPrint = ({ setOpen }) => {
-  console.log("RecieptCopyPrint")
   const { appData } = useContext(POSContext)
   const { userLogin, macno } = appData
   const { handleNotification } = useAlert()

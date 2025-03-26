@@ -360,7 +360,6 @@ class ComponentToPrint extends Component {
 }
 
 const ReceiptToPrint = () => {
-  console.log("ReceiptToPrint")
   const { billNo } = useParams()
   const navigate = useNavigate()
   const contentRef = useRef(null)

@@ -10,7 +10,6 @@ import TableRow from "@mui/material/TableRow"
 import Moment from "react-moment"
 
 const DataTable = ({ columnTable, dataTable }) => {
-  console.log("AllReport:DataTable")
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(50)
 

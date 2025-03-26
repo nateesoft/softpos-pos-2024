@@ -47,9 +47,6 @@ const AppComponent = ({title, desc, Icon, onClick}) => {
 
 const DashboardApps = ({ open }) => {
   const navigate = useNavigate()
-
-  console.log("DashboardApps")
-
   const handleOpenApp = (appName) => {
     if(appName === "posconfig") {
       window.location.href = 'http://localhost:5001/pos-control'

@@ -22,7 +22,6 @@ const columns = [
 ]
 
 const ListTable = ({ tableNo, setOpenPin }) => {
-  console.log("ListTable:", tableNo)
   const { appData, setAppData } = useContext(POSContext)
 
   const [page, setPage] = useState(0)
@@ -43,7 +42,6 @@ const ListTable = ({ tableNo, setOpenPin }) => {
   }
 
   const handleClickOpenTable = (tableNo) => {
-    console.log("handleClickOpenTable:", tableNo)
     setAppData({
       ...appData,
       tableInfo: {

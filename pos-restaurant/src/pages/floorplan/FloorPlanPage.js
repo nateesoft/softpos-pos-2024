@@ -94,7 +94,6 @@ const socket = io(SOCKET_SERVER_URL, {
 })
 
 const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
-  console.log("FloorPlanPage")
   const { t } = useTranslation("global")
   const { handleNotification } = useAlert()
   const navigate = useNavigate()
@@ -189,7 +188,6 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   }
 
   const handleChange = (data) => {
-    console.log("handleChange:", data)
     setAnchorEl(null)
     if (data === "CopyPrint") {
       setOpenCopyPrint(true)
@@ -213,13 +211,11 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   }
 
   const loadFloorPlan = (floor) => {
-    console.log('loadFloorPlan:', floor)
     apiClient
       .get(`/api/floorplan-template/${floor}`)
       .then((response) => {
         const result = response.data
         if (result.status === 2000) {
-          console.log('response:', response)
           if (result.data != null) {
             const flow = result.data.template
             if (flow) {

@@ -31,7 +31,6 @@ const NumFormat = (data) => {
 }
 
 const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
-  console.log("MemberInfo")
   const [openMember, setOpenMember] = useState(false)
   return (
     <Paper

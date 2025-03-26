@@ -17,7 +17,8 @@ import {
   Paper,
   Grid2,
   Divider,
-  IconButton
+  IconButton,
+  Badge
 } from "@mui/material"
 import {
   Accordion,
@@ -62,7 +63,6 @@ const getFormatMoney = (convertCurrency, currency, number) => {
 }
 
 const TotalBill = ({ orderList }) => {
-  console.log("TotalBill")
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const totalBill = getTotalAmount(orderList)
   const convertedTotal = convertCurrency(totalBill, currency)
@@ -103,7 +103,6 @@ const OrderItem = ({
   handleNotification,
   initLoadBalanceProductGroup
 }) => {
-  console.log("OrderItem:", orderType)
   const navigate = useNavigate()
   const [value, setValue] = useState(orderType || "E")
   const [open, setOpen] = useState(false)
@@ -112,7 +111,6 @@ const OrderItem = ({
   const [showKicPrint, setShowKicPrint] = useState(false)
 
   const handleChange = (event, newValue) => {
-    console.log("handleChange:", newValue)
     setValue(newValue)
   }
 
@@ -189,9 +187,63 @@ const OrderItem = ({
         </Grid2>
       <TabContext value={value}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
-          <Tab label="Dine In" value="E" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
-          <Tab label="Take Away" value="T" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
-          <Tab label="Delivery" value="D" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
+          <Tab label={
+            <Badge
+                  badgeContent={balanceProductGroup && balanceProductGroup.filter(gg=>gg.R_ETD==='E').length}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      background: "lightpink",
+                      height: 20,
+                      width: 15,
+                      top: -2,
+                      right: -2,
+                      borderRadius: "50%",
+                      color: "white",
+                      fontWeight: "bold"
+                    }
+                  }}
+                >
+                  <Typography sx={{fontWeight: "bold"}}>Dine In</Typography>
+                </Badge>
+          } value="E" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
+          <Tab label={
+            <Badge
+                  badgeContent={balanceProductGroup && balanceProductGroup.filter(gg=>gg.R_ETD==='T').length}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      background: "lightblue",
+                      height: 20,
+                      width: 15,
+                      top: -2,
+                      right: -2,
+                      borderRadius: "50%",
+                      color: "white",
+                      fontWeight: "bold"
+                    }
+                  }}
+                >
+                  <Typography sx={{fontWeight: "bold"}}>Take Away</Typography>
+                </Badge>
+          } value="T" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
+          <Tab label={
+            <Badge
+                  badgeContent={balanceProductGroup && balanceProductGroup.filter(gg=>gg.R_ETD==='D').length}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      background: "lightgreen",
+                      height: 20,
+                      width: 15,
+                      top: -2,
+                      right: -2,
+                      borderRadius: "50%",
+                      color: "white",
+                      fontWeight: "bold"
+                    }
+                  }}
+                >
+                  <Typography sx={{fontWeight: "bold"}}>Delivery</Typography>
+                </Badge>
+          } value="D" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
         </TabList>
         <TabPanel
           value="E"
@@ -428,6 +480,7 @@ const OrderItem = ({
             closeModal={() => setOpen(false)}
             initLoadMenu={initLoadMenu}
             initLoadOrder={initLoadOrder}
+            initLoadBalanceProductGroup={initLoadBalanceProductGroup}
             handleNotification={handleNotification}
           />
         </Box>

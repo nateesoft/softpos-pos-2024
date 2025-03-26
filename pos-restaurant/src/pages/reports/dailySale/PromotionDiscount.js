@@ -99,7 +99,6 @@ class ComponentToPrint extends Component {
 }
 
 const PromotionDiscount = () => {
-  console.log("PromotionDiscount")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const { appData } = useContext(POSContext)

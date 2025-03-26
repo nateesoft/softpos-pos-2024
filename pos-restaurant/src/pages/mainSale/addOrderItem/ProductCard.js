@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import {
   IconButton,
@@ -12,9 +12,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  ImageListItem,
-  Paper
-} from "@mui/material"
+  ImageListItem} from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 
 import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
@@ -47,7 +45,6 @@ const ProductCard = ({
   setHideItem,
   initLoadBalanceProductGroup
 }) => {
-  console.log("addOrderItem/ProductCard:", product)
   const { appData } = useContext(POSContext)
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const { handleNotification } = useAlert()
@@ -76,7 +73,6 @@ const ProductCard = ({
   const RPriceQty = convertCurrency(product.R_Price * product.R_Quan, currency)
 
   const handleVoidItem = (R_Index) => {
-    console.log('addOrderItem/handleVoidItem')
     if (voidMsg) {
       apiClient
         .post(`/api/balance/void`, {
@@ -100,7 +96,6 @@ const ProductCard = ({
   }
 
   const handleAddItem = () => {
-    console.log('addOrderItem/handleAddItem')
     apiClient
       .post(`/api/balance`, {
         tableNo,
@@ -134,7 +129,6 @@ const ProductCard = ({
     apiClient
       .get(`/api/voidmsg`)
       .then((response) => {
-        console.log('loadVoidMsgList:', response)
         if(response.status === 200){
           const voidMsgData = response.data.data
           setVoidMsgList(voidMsgData)

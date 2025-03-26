@@ -5,18 +5,15 @@ import SendIcon from "@mui/icons-material/CheckBox"
 import apiClient from "../../../httpRequest"
 
 const CartItems = ({ onClose, orderId }) => {
-  console.log("CartItems:", orderId)
   const [orderInfo, setOrderInfo] = useState({})
   const handleSendKitchen = () => {
     onClose()
   }
 
   const initLoadOrder = useCallback(() => {
-    console.log("initLoadOrder")
     apiClient
       .post(`/api/integration/booking/getOrder`, { reserveNo: orderId })
       .then((response) => {
-        console.log(response)
         if (response.data.status === 2000) {
           const appData = response.data.data
           setOrderInfo(appData)

@@ -41,7 +41,6 @@ const imageItems = [
 ]
 
 const TableSetup = (props) => {
-  console.log("TableSetup")
   const { tableInfo, setTableInfo, closeModal, onChange } = props
   const [tableNo, setTableNo] = useState(tableInfo.data.label || "")
   const [image, setImage] = useState(tableInfo.data.image || "")

@@ -64,9 +64,9 @@ const ProductDetailCard = ({
   handleNotification,
   closeModal,
   initLoadOrder,
-  initLoadMenu
+  initLoadMenu,
+  initLoadBalanceProductGroup
 }) => {
-  console.log("ProductDetailCard")
   const { appData } = useContext(POSContext)
   const { empCode, macno, userLogin } = appData
 
@@ -115,6 +115,8 @@ const ProductDetailCard = ({
         if (response.data.status === 2000) {
           initLoadMenu()
           initLoadOrder()
+          initLoadBalanceProductGroup()
+
           closeModal()
         }
       })

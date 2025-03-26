@@ -51,7 +51,6 @@ const socket = io(SOCKET_SERVER_URL, {
 })
 
 const Login = () => {
-  console.log("Login Page")
   const { appData, setAppData } = useContext(POSContext)
   const { macno, encryptData } = appData
   const { handleNotification } = useAlert()
@@ -165,7 +164,6 @@ const Login = () => {
             ...prevState,
             ...newData
           }))
-          console.log(branchInfo)
         }
       })
       .catch((err) => {

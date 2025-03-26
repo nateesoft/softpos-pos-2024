@@ -18,15 +18,12 @@ const NumFormat = (data) => {
 }
 
 const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => {
-  console.log("OrderItem:tableFileDb:", tableFileDb)
-  console.log("OrderItem:tableFile", tableFile)
   const { EmpDiscAmt, FastDiscAmt, TrainDiscAmt, MemDiscAmt, SubDiscAmt,
     DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt
   } = tableFileDb
   const discountAmount = EmpDiscAmt + FastDiscAmt + TrainDiscAmt + MemDiscAmt + SubDiscAmt + 
   DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
 
-  console.log("Discount Amount:", discountAmount)
   return (
     <Paper elevation={3} sx={{ padding: "10px", margin: "10px" }}>
       <Box

@@ -111,7 +111,6 @@ class ComponentToPrint extends Component {
 }
 
 const CustomerPerHourReport = () => {
-  console.log("CustomerPerHourReport")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const [query] = useSearchParams()
@@ -155,7 +154,6 @@ const CustomerPerHourReport = () => {
         macno2: query.get("macno2")
       })
       .then((response) => {
-        console.log(response)
         if (response.status === 200) {
           setReports(response.data.data.data)
           setSummary(response.data.data.summary)

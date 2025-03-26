@@ -84,7 +84,6 @@ class ComponentToPrint extends Component {
 }
 
 const VoidReport = () => {
-  console.log("TopSaleReport")
     const navigate = useNavigate()
     const contentRef = useRef(null);
     const [query] = useSearchParams()

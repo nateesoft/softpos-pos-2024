@@ -28,7 +28,6 @@ const modalStyle = {
 }
 
 const PLUReportModal = ({ setOpen }) => {
-  console.log("PLUReportModal")
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])
