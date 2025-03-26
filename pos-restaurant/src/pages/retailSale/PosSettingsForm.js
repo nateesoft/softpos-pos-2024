@@ -46,7 +46,6 @@ const currencyList = [
 ]
 
 const PosSettingsForm = ({ setOpen }, data) => {
-  console.log("PosSettingsForm")
   const { user_update, terminal_id } = data
   const [language, setLanguage] = useState("th")
   const [timezone, setTimeZone] = useState("Asia/Bangkok")

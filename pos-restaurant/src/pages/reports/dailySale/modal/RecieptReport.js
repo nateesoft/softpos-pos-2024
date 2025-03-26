@@ -27,7 +27,6 @@ const modalStyle = {
 }
 
 const RecieptReportModal = ({ setOpen }) => {
-  console.log("RecieptReportModal")
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])

@@ -14,7 +14,6 @@ import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
 import MenuBookIcon from "@mui/icons-material/MenuBook"
 
 const TemplateTable = ({ columnTable, dataTable }) => {
-  console.log("TemplateTable")
   const navigate = useNavigate()
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)

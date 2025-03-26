@@ -16,7 +16,6 @@ const modalStyle = {
 }
 
 const CashierReportModal = ({ setOpen }) => {
-  console.log("CashierReportModal")
   const navigate = useNavigate()
 
   const [user, setUser] = useState("")

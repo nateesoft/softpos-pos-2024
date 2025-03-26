@@ -25,7 +25,6 @@ const bgText = {
 }
 
 const NumberPadLock = ({ nextStep, close }) => {
-  console.log("NumberPadLock")
   const [pin1, setPin1] = useState("")
   const [pin2, setPin2] = useState("")
   const [pin3, setPin3] = useState("")

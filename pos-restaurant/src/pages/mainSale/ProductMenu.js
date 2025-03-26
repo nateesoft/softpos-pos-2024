@@ -126,7 +126,6 @@ const ProductMenu = ({
   handleNotification,
   initLoadBalanceProductGroup
 }) => {
-  console.log("ProductMenu")
   const { t } = useTranslation("global")
   const matches = useMediaQuery("(min-width:1024px)")
   const { appData } = useContext(POSContext)

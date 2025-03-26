@@ -25,7 +25,6 @@ const columns = [
 ]
 
 const CuponListModal = (props) => {
-  console.log("CuponListModal")
   const { onClose, setSpecialCuponAmt, tableFile  } = props
 
   const [page, setPage] = useState(0)
@@ -49,7 +48,6 @@ const CuponListModal = (props) => {
   }
 
   const handleChange = (cuCode, field, value) => {
-    console.log("handleChange:", value)
     setCuponList((prevData) =>
       prevData.map((row) => (row.CuCode === cuCode ? { ...row, [field]: value } : row))
     );
@@ -68,7 +66,6 @@ const CuponListModal = (props) => {
     const summaryCuponAmt = computeSpecialCupon()
     const getCuponSelect = cuponList.filter(item => item.qty>0)
     if (getCuponSelect.length > 0) {
-      console.log("Cupon List:", cuponList)
       apiClient
         .post(`/api/cupon/saveList`, { 
           cuponList, 

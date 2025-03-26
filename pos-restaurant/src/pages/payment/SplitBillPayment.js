@@ -25,7 +25,6 @@ function union(a, b) {
 }
 
 const SplitBillPayment = ({ onClose }) => {
-  console.log("SplitBillPayment")
   const [checked, setChecked] = useState([])
   const [left, setLeft] = useState([0, 1, 2, 3])
   const [right, setRight] = useState([4, 5, 6, 7])

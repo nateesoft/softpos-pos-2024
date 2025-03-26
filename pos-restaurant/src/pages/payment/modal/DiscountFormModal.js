@@ -25,8 +25,6 @@ const DiscountFormModal = ({
   tableFile,
   initLoad
 }) => {
-  console.log("DiscountFormModal load:", tableFile)
-
   const [openCupon, setOpenCupon] = useState(false)
 
   // ref
@@ -62,7 +60,6 @@ const DiscountFormModal = ({
   )
 
   const nextComponent = (e, index) => {
-    console.log("nextComponent:", e.key)
     if (e.key === "Enter") {
       arrayInputRef[index].current?.focus()
     }
@@ -77,23 +74,18 @@ const DiscountFormModal = ({
     let formatSub = posConfigSetup.P_SubDisc.split("/")[0]
 
     if (fastAmt > parseFloat(formatFast)) {
-      console.log("FastAmt: Incorrect Number!!!")
       return
     }
     if (empAmt > parseFloat(formatEmp)) {
-      console.log("EmpAmt: Incorrect Number!!!")
       return
     }
     if (memAmt > parseFloat(formatMem)) {
-      console.log("MemAmt: Incorrect Number!!!")
       return
     }
     if (traineeAmt > parseFloat(formatTrain)) {
-      console.log("TraineeAmt: Incorrect Number!!!")
       return
     }
     if (cuponAmt > parseFloat(formatSub)) {
-      console.log("CuponAmt: Incorrect Number!!!")
       return
     }
     netTotalAmount -= (netTotalAmount * fastAmt) / 100
@@ -103,8 +95,6 @@ const DiscountFormModal = ({
     netTotalAmount -= (netTotalAmount * cuponAmt) / 100
     netTotalAmount -= bahtAmt
     netTotalAmount -= specialCuponAmt
-
-    console.log(netTotalAmount)
   }
 
   const focusComponent = (index) => {
@@ -128,7 +118,6 @@ const DiscountFormModal = ({
       .get(`/api/posconfigsetup`)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data.data)
           setPOSConfigSetup(response.data.data)
         }
       })
@@ -153,7 +142,6 @@ const DiscountFormModal = ({
       DiscBath: bahtAmt,
       SpaDiscAmt: specialCuponAmt
     }
-    console.log("updPayload:", updPayload)
     apiClient
       .put(`/api/tablefile/discountInfo/${tableFile.Tcode}`, updPayload)
       .then((response) => {

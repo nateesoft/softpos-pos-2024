@@ -5,7 +5,6 @@ import AppbarSearch from "./AppbarSearch"
 import TemplateReport from "./TemplateTable"
 
 const InventoryReport = () => {
-  console.log("InventoryReport")
   const [search, setSearch] = useState("stkfile")
   const [columnTable, setColumnTable] = useState([])
   const [dataTable, setDataTable] = useState([])

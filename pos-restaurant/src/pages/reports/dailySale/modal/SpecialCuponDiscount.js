@@ -27,7 +27,6 @@ const modalStyle = {
 }
 
 const SpecialCuponDiscountModal = ({ setOpen }) => {
-  console.log("SpecialCuponDiscountModal")
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])

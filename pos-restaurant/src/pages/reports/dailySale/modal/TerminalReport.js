@@ -27,7 +27,6 @@ const modalStyle = {
 }
 
 const TerminalReportModal = ({ setOpen }) => {
-  console.log("TerminalReportModal")
   const navigate = useNavigate()
 
   const [macno, setMacno] = useState("")

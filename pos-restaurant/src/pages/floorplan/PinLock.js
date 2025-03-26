@@ -49,7 +49,6 @@ const buttonRadius = {
 }
 
 const PinLock = ({ setOpenPin }) => {
-  console.log("PinLock")
   const { appData, setAppData } = useContext(POSContext)
   const { handleNotification } = useAlert()
 

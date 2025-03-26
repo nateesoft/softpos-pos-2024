@@ -16,7 +16,6 @@ const columns = [
 const paginationModel = { page: 0, pageSize: 5 }
 
 const OptionalList = ({ modalList, showDeleteItem }) => {
-  console.log("OptionalList")
   return (
     <Paper sx={{ height: 400, width: "100%" }}>
       <DataGrid

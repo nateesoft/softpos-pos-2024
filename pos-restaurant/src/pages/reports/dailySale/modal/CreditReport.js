@@ -28,7 +28,6 @@ const modalStyle = {
 }
 
 const CreditReportModal = ({ setOpen }) => {
-  console.log("CreditReportModal")
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])

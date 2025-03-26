@@ -112,7 +112,6 @@ class ComponentToPrint extends Component {
 }
 
 const PLUReport = () => {
-  console.log("PLUReport")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const [query] = useSearchParams()

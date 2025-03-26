@@ -29,7 +29,6 @@ const modalStyle = {
 }
 
 const TopSaleReportModal = ({ setOpen }) => {
-  console.log("TopSaleReportModal")
   const { appData } = useContext(POSContext)
   const navigate = useNavigate()
 

@@ -22,7 +22,6 @@ const detail = {
 }
 
 function LeftMenu() {
-  console.log("LeftMenu")
   const { i18n } = useTranslation("global")
   const [alignment, setAlignment] = React.useState("th")
 

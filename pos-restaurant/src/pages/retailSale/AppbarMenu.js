@@ -14,7 +14,6 @@ import CloseIcon from "@mui/icons-material/Close"
 const mobileMenuId = "primary-search-account-menu-mobile"
 
 const AppbarMenu = (props) => {
-  console.log("AppbarMenu")
   const { onSave, onExit } = props
   return (
     <AppBar position="fixed">

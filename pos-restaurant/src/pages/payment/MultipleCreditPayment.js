@@ -47,7 +47,6 @@ const modalStyle = {
 const floatFormat = (data) => data.toFixed(2)
 
 const MultipleCreditPayment = (props) => {
-  console.log("MultipleCreditPayment")
   const {
     balanceAmount,
     onClose,

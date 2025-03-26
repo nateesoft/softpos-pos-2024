@@ -127,7 +127,6 @@ class ComponentToPrint extends Component {
 }
 
 const CreditReport = () => {
-  console.log("CreditReport")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const [query] = useSearchParams()

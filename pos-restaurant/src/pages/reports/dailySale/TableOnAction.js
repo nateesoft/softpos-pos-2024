@@ -114,7 +114,6 @@ class ComponentToPrint extends Component {
 }
 
 const TableOnAction = () => {
-  console.log("TableOnAction")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const { appData } = useContext(POSContext)

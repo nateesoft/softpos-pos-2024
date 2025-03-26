@@ -37,7 +37,6 @@ const modalStyle = {
 }
 
 const CustomerCheckin = (props) => {
-  console.log("CustomerCheckin")
   const { t } = useTranslation("global")
   const { appData, setAppData } = useContext(POSContext)
   const { macno } = appData
@@ -84,7 +83,6 @@ const CustomerCheckin = (props) => {
     const tableResponse = checkTableActive.data.data
     if (tableResponse != null) {
       const totalCustomer = thaiCount + europeCount + americaCount + asiaCount + manCount + womanCount + kidCount + oldCount
-      console.log('totalCustomer:', totalCustomer, custCount)
       if (totalCustomer !== custCount) {
         setShowCustomerCountError(true)
         return
@@ -130,7 +128,6 @@ const CustomerCheckin = (props) => {
             }
           })
           .catch((err) => {
-            console.log(err)
             setShowCustomerError(true)
           })
       } else {
@@ -172,7 +169,6 @@ const CustomerCheckin = (props) => {
         }
       })
       .catch((err) => {
-        console.log(err)
         setFoundBooking("N")
         setOrderId("")
       })

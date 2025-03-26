@@ -18,7 +18,6 @@ const NumFormat = (data) => {
 }
 
 const OrderItem = ({ tableNo, orderList, tableFile }) => {
-  console.log("OrderItem")
   return (
     <Paper elevation={3} sx={{ padding: "10px", margin: "10px" }}>
       <Box

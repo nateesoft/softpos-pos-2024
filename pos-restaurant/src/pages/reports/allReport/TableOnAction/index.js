@@ -15,7 +15,6 @@ const columnTable = [
 ]
 
 const TableOnAction = () => {
-  console.log("TableOnAction")
   const [search, setSearch] = useState("")
   const [dataTable, setDataTable] = useState([])
 

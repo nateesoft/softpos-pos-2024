@@ -110,7 +110,6 @@ class ComponentToPrint extends Component {
 }
 
 const RecieptReport = () => {
-  console.log("RecieptReport")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const [query] = useSearchParams()

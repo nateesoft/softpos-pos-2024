@@ -26,7 +26,6 @@ const columns = [
 ]
 
 const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
-  console.log("MemberInfoModal")
   const { handleNotification } = useAlert()
 
   const [page, setPage] = useState(0)

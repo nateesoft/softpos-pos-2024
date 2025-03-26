@@ -6,7 +6,6 @@ import { Box } from "@mui/material"
 const baseName = process.env.REACT_APP_BASE_NAME
 
 const PageNotFound = () => {
-  console.log("PageNotFound")
   return (
     <>
       <Helmet>

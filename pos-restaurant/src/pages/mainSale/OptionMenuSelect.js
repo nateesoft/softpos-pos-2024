@@ -37,7 +37,6 @@ const OptionMenuSelect = ({
   setSpecialText,
   setOptList
 }) => {
-  console.log("OptionMenuSelect")
   const theme = useTheme()
   const { handleNotification } = useAlert()
   const [options, setOptions] = useState([])

@@ -38,7 +38,6 @@ const MultiplePayment = ({
   initLoad,
   macno
 }) => {
-  console.log("MultiplePayment")
   const navigate = useNavigate()
   const [tables, setTables] = useState([
     {

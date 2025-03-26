@@ -55,7 +55,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const SearchMember = ({ setMemberMasters }) => {
-  console.log("SearchMember")
   const { handleNotification } = useAlert()
 
   const [phone, setPhone] = useState("")

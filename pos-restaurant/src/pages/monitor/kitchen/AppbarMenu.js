@@ -12,7 +12,6 @@ import HomeIcon from "@mui/icons-material/Home"
 import { useNavigate } from "react-router-dom"
 
 export default function AppbarMenu() {
-  console.log("AppbarMenu")
   const navigate = useNavigate()
   const mobileMenuId = "primary-search-account-menu-mobile"
 

@@ -56,7 +56,6 @@ const InputCustomer = ({ title, value, setValue, iconName }) => {
 }
 
 const CustomerGeneral = (props) => {
-  console.log("CustomerGeneral:", props)
   const { t } = useTranslation("global")
   const { man, woman, kid, old, setMan, setWoman, setKid, setOld } = props
   return (

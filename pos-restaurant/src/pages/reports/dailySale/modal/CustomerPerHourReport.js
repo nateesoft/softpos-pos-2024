@@ -27,7 +27,6 @@ const modalStyle = {
 }
 
 const CustomerPerHourReportModal = ({ setOpen }) => {
-  console.log("CustomerPerHourReportModal")
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])

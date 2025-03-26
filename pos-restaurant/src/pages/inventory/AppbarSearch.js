@@ -53,7 +53,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const AppbarSearch = ({ search, setSearch, handleLoad }) => {
-  console.log("AppbarSearch")
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">

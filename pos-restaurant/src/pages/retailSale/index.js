@@ -98,7 +98,6 @@ const products = [
 ];
 
 const RetailSalePage = () => {
-  console.log("FloorPlanPage")
   const { t } = useTranslation("global")
   const { handleNotification } = useAlert()
   const navigate = useNavigate()
@@ -168,7 +167,6 @@ const RetailSalePage = () => {
   }, [setOpenLogout, navigate, appData, setAppData])
 
   const handleChange = (data) => {
-    console.log("handleChange:", data)
     setAnchorEl(null)
     if (data === "CopyPrint") {
       setOpenCopyPrint(true)
@@ -186,13 +184,11 @@ const RetailSalePage = () => {
   }
 
   const loadFloorPlan = (floor) => {
-    console.log('loadFloorPlan:', floor)
     apiClient
       .get(`/api/floorplan-template/${floor}`)
       .then((response) => {
         const result = response.data
         if (result.status === 2000) {
-          console.log('response:', response)
           if (result.data != null) {
             const flow = result.data.template
             if (flow) {

@@ -8,7 +8,6 @@ import Filter5Icon from '@mui/icons-material/Filter5';
 import ElectricBoltIcon from '@mui/icons-material/ElectricBolt';
 
 const QuickSaleMenu = ({ setSelectFloor }) => {
-  console.log("QuickSaleMenu")
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {

@@ -27,7 +27,6 @@ const modalStyle = {
 }
 
 const HourlyPluReportModal = ({ setOpen }) => {
-  console.log("HourlyPluReportModal")
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])

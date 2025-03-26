@@ -69,7 +69,6 @@ function PaymentForm({
   tableFileDb,
   initLoad
 }) {
-  console.log("PaymentForm")
   const { appData } = useContext(POSContext)
   const { macno, branchInfo, companyInfo, empCode } = appData
 

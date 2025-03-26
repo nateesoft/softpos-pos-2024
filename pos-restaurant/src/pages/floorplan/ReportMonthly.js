@@ -7,7 +7,6 @@ import SummarizeIcon from "@mui/icons-material/Summarize"
 import { useNavigate } from "react-router-dom"
 
 const ReportMonthly = (props) => {
-  console.log("ReportMonthly")
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState(null)

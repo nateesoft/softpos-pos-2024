@@ -28,7 +28,6 @@ const modalStyle = {
 }
 
 const VoidReportModal = ({ setOpen }) => {
-  console.log("VoidReportModal")
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])

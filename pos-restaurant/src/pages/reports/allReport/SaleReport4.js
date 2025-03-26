@@ -59,7 +59,6 @@ const rows = [
 ]
 
 const SaleReport4 = () => {
-  console.log("SaleReport4")
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 

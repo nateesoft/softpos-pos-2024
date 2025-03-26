@@ -52,7 +52,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 const FileMenuBar = () => {
-  console.log("FileMenuBar")
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar

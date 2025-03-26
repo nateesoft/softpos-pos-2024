@@ -47,7 +47,6 @@ const modalStyle = {
 }
 
 const RefundBill = ({ socket }) => {
-  console.log("RefundBill")
   const navigate = useNavigate()
   const { appData } = useContext(POSContext)
   const { handleNotification } = useAlert()
@@ -97,7 +96,6 @@ const RefundBill = ({ socket }) => {
         macno: macno
       })
       .then((response) => {
-        console.log("response:", response)
         if (response.status === 200) {
           setShowConfirm(false)
           loadBillNo()

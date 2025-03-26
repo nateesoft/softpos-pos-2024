@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material"
 
 function TallBarNode({ data }) {
-  console.log("TallBarNode")
   return (
     <Box
       display="flex"

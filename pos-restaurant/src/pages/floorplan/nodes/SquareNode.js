@@ -7,7 +7,6 @@ const style = {
 const baseName = process.env.REACT_APP_BASE_NAME
 
 const SquareNode = (props) => {
-  console.log("SquareNode")
   const { data, bgColor } = props
   return (
     <div align="center" style={{ width: "128px" }}>

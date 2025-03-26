@@ -15,7 +15,6 @@ const ChangeProductList = ({
   currentMenu,
   closeDialog
 }) => {
-  console.log("ChangeProuductList")
   const newOptionList = optionalList.filter(
     (item) => item.checked === false && item.menu_code !== currentMenu
   )

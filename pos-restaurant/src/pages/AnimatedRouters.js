@@ -66,7 +66,6 @@ import DashboardPage from "./dashboard"
 const baseName = process.env.REACT_APP_BASE_NAME
 
 const AnimatedRoutes = () => {
-  console.log("AnimatedRoutes")
   const location = useLocation()
 
   const handleOnUserIdle = () => {

@@ -45,7 +45,6 @@ const MenuSetModal = ({
   optionalList,
   setOptionalList
 }) => {
-  console.log("MenuSetModal")
   const { handleNotification } = useAlert()
 
   const [showChangeListMenu, setShowChangeListMenu] = useState(false)
@@ -70,7 +69,6 @@ const MenuSetModal = ({
   }
 
   const updateItemManualPrice = (position, newProduct) => {
-    console.log("updateItemManualPrice:", newProduct)
     const updatedMenuState = optionalList.map((item, index) => {
       if (item.id === newProduct.id) {
         return { ...newProduct }

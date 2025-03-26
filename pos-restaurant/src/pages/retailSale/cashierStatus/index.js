@@ -6,7 +6,6 @@ import DataTable from "./DataTable"
 const columnTable = ["Username", "MacNo", "OnACT", "Action"]
 
 const CashierStatus = ({ onClose }) => {
-  console.log("CashierStatus")
   const [dataTable, setDataTable] = useState([])
 
   const loadTableData = () => {

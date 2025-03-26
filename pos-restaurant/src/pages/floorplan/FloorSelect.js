@@ -10,7 +10,6 @@ import RestaurantIcon from "@mui/icons-material/Restaurant"
 import ViewCompactIcon from "@mui/icons-material/ViewCompact"
 
 const FloorSelect = ({ setSelectFloor }) => {
-  console.log("FloorSelect")
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {

@@ -3,7 +3,6 @@ import Grid2 from "@mui/material/Grid2"
 import { Box, Typography } from "@mui/material"
 
 const LeftMenu = memo(() => {
-  console.log("LeftMenu")
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData("application/reactflow", nodeType)
     event.dataTransfer.effectAllowed = "move"

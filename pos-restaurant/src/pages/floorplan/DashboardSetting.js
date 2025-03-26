@@ -27,8 +27,6 @@ const modalStyle = {
 }
 
 const DashboardSetting = ({ setOpen, openSetting }) => {
-  console.log("DashboardSetting")
-
   return (
     <Box
       sx={{

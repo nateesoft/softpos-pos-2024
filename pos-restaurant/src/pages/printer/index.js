@@ -99,7 +99,6 @@ class ComponentToPrint extends Component {
 }
 
 const PrintDemo = () => {
-  console.log("PrintDemo")
   const contentRef = useRef(null)
   const [show, setShow] = useState(true)
   const handlePrint1 = useReactToPrint({ contentRef })
@@ -108,7 +107,6 @@ const PrintDemo = () => {
     contentRef,
     documentTitle: "Printer Demo Testing",
     onAfterPrint: () => {
-      console.log("onAfterPrint")
       setShow(true)
     },
     onPrintError: (err) => {

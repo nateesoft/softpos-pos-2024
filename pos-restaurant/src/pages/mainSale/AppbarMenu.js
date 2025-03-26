@@ -96,7 +96,6 @@ const AppbarMenu = ({ tableNo,
   setProductF,
   initLoadMenu
  }) => {
-  console.log("AppbarMenu")
   const [search, setSearch] = useState("")
   
   const { appData } = useContext(POSContext)
@@ -124,7 +123,6 @@ const AppbarMenu = ({ tableNo,
 
   const createQRCode = () => {
     const customerUrl = process.env.REACT_APP_FOOD_ORDING_APP
-    console.log("prepare create qrcode:", customerUrl + "/" + tableNo)
     socket.emit("createQRCode", customerUrl + "/" + tableNo)
     setAnchorEl(null)
   }
@@ -135,7 +133,6 @@ const AppbarMenu = ({ tableNo,
   }
 
   const seachProductMenu = ()=> {
-    console.log('seachProductMenu:', search)
     if (search !== "") {
       apiClient
         .post("/api/menu_setup/search", { search })
