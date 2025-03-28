@@ -33,17 +33,11 @@ function PaymentPage() {
   const { handleNotification } = useAlert()
 
   // Load summary tablefile
-  const [subTotalAmount, setSubTotalAmount] = useState(0)
-  const [serviceAmount, setServiceAmount] = useState(0)
-  const [productAndService, setProductAndService] = useState(0)
-  const [vatAmount, setVatAmount] = useState(0)
-  const [netTotalAmount, setNetTotalAmount] = useState(0)
-  const [printRecpMessage, setPrintRecpMessage] = useState("")
+  const [summaryTable, setSummaryTable] = useState({})
 
   const matches = useMediaQuery("(min-width:1024px)")
 
   const [openSplitBill, setOpenSplitBill] = useState(false)
-
   const [tableFileDb, setTableFileDb] = useState({})
   const [orderList, setOrderList] = useState([])
   const [memberInfo, setMemberInfo] = useState({})
@@ -82,12 +76,19 @@ function PaymentPage() {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data.data
-          setSubTotalAmount(data.TAmount)
-          setServiceAmount(data.ServiceAmt)
-          setVatAmount(data.vatAmount)
-          setNetTotalAmount(data.NetTotal)
-          setProductAndService(data.productAndService)
-          setPrintRecpMessage(data.printRecpMessage)
+          setSummaryTable({
+            subTotalAmount: data.TAmount,
+            discountAmount: data.DiscountAmount,
+            service: data.Service,
+            serviceType: data.ServiceType,
+            serviceAmount: data.ServiceAmt,
+            vat: data.Vat,
+            vatType: data.VatType,
+            vatAmount: data.VatAmt,
+            netTotalAmount: data.NetTotal,
+            productAndService: data.ProductAndService,
+            printRecpMessage: data.PrintRecpMessage
+          })
         }
       })
       .catch((err) => handleNotification(err.message))
@@ -120,20 +121,14 @@ function PaymentPage() {
             <OrderItem
               tableNo={tableNo}
               orderList={orderList}
-              tableFile={{
-                subTotalAmount,
-                serviceAmount,
-                vatAmount,
-                netTotalAmount,
-                productAndService,
-                printRecpMessage
-              }}
+              tableFile={summaryTable}
               tableFileDb={tableFileDb}
               initLoad={initLoadPayment}
             />
             <MemberInfo
               tableNo={tableNo}
               memberInfo={memberInfo}
+              tableFile={summaryTable}
               setMemberInfo={setMemberInfo}
             />
           </Grid>
@@ -144,14 +139,7 @@ function PaymentPage() {
             tableFileDb={tableFileDb}
             orderList={orderList}
             handleNotification={handleNotification}
-            tableFile={{
-              subTotalAmount,
-              serviceAmount,
-              vatAmount,
-              netTotalAmount,
-              productAndService,
-              printRecpMessage
-            }}
+            tableFile={summaryTable}
             memberInfo={memberInfo}
             setOpenSplitBill={setOpenSplitBill}
             initLoad={initLoadPayment}
@@ -167,14 +155,8 @@ function PaymentPage() {
             tableNo={tableNo}
             orderList={orderList}
             initLoad={splitBillAction}
-            tableFile={{
-              subTotalAmount,
-              serviceAmount,
-              vatAmount,
-              netTotalAmount,
-              productAndService,
-              printRecpMessage
-            }}
+            tableFile={summaryTable}
+            memberInfo={memberInfo}
           />
         </Box>
       </Modal>

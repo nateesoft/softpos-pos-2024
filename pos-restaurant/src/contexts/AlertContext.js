@@ -4,7 +4,6 @@ import ShowNotification from "../pages/ui-utils/ShowNotification"
 const AlertContext = createContext()
 
 export const AlertProvider = ({ children }) => {
-  console.log("AlertContext")
   const [showNoti, setShowNoti] = useState(false)
 
   const [notiMessage, setNotiMessage] = useState("")
