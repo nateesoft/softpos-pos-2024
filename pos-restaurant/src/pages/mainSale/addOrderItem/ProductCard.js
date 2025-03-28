@@ -14,7 +14,7 @@ import {
   MenuItem,
   ImageListItem} from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
-
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
 import BlockIcon from "@mui/icons-material/Block"
 import GppGoodIcon from "@mui/icons-material/GppGood"
@@ -187,6 +187,7 @@ const ProductCard = ({
                   *{opt},
                 </Typography>
               ))}
+          {product.R_Pause === "P" && <LocalPrintshopIcon sx={{color: "#aaa"}} />}
         </Grid2>
         <Grid2
           size={7}
@@ -205,10 +206,7 @@ const ProductCard = ({
           {!voidStatus && (
             <Grid2 display="flex" justifyContent="center">
               {showActionBalance(product) && (
-                <IconButton
-                  onClick={() => handleOpen(product.R_Index)}
-                  disabled={product.R_Pause === "P"}
-                >
+                <IconButton onClick={() => handleOpen(product.R_Index)}>
                   <RemoveCircleIcon
                     sx={{ color: product.R_Pause === "P" ? "gray" : "red" }}
                     fontSize="large"

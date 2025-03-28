@@ -37,7 +37,6 @@ const initContext = {
 }
 
 const App = () => {
-  console.log("App")
   const [appData, setAppData] = useState(initContext)
   return (
     <Router basename="pos-restaurant">

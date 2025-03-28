@@ -361,20 +361,21 @@ const summaryBalance = async (tableNo, macno) => {
     netTotalAmount
   )
 
+  const TAmount = responseData.Food + responseData.Drink + responseData.Product
+
   // compute discount ท้ายบิล
   const { EmpDiscAmt, FastDiscAmt, TrainDiscAmt, MemDiscAmt, SubDiscAmt,
-    DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt, TAmount, Service
+    DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt
   } = tablefile
-
   const discountAmount = EmpDiscAmt + FastDiscAmt + TrainDiscAmt + MemDiscAmt + SubDiscAmt + 
   DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
-
   const subTotalAmount = TAmount - discountAmount
-  const serviceAmt = (totalServiceAmount * Service) / 100
+  const serviceAmt = responseData.totalServiceAmount
   const netTotal = subTotalAmount + serviceAmt
+  // end compute discount ท้ายบิล
 
   tablefile.MacNo = macno
-  tablefile.TAmount = responseData.Food + responseData.Drink + responseData.Product
+  tablefile.TAmount = TAmount
   tablefile.Service = service
   tablefile.ServiceAmt = serviceAmt
   tablefile.Vat = vat
@@ -392,14 +393,19 @@ const summaryBalance = async (tableNo, macno) => {
   return {
     TItem: tablefile.TItem,
     TAmount: tablefile.TAmount,
-    ServiceAmt: tablefile.ServiceAmt,
-    vatAmount: responseData.totalVatAmount,
+    DiscountAmount: discountAmount,
     NetTotal: tablefile.NetTotal,
-    productAndService: tablefile.TAmount + tablefile.ServiceAmt,
+    ProductAndService: tablefile.TAmount + tablefile.ServiceAmt,
     Food: tablefile.Food,
     Drink: tablefile.Drink,
     Product: tablefile.Product,
-    printRecpMessage: configSetup.P_PrintRecpMessage
+    PrintRecpMessage: configSetup.P_PrintRecpMessage,
+    Vat: tablefile.Vat,
+    VatType: vatType,
+    VatAmount: responseData.totalVatAmount,
+    Service: tablefile.Service,
+    ServiceType: serviceType,
+    ServiceAmt: tablefile.ServiceAmt
   }
 }
 

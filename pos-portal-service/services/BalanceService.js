@@ -38,6 +38,9 @@ const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) =>
         const results = await pool.query(updBalance)
 
         if (results.affectedRows > 0) {
+            // summary table
+            summaryBalance(balance.R_Table, macno)
+
             return `${R_Index} Updated.`
         }
     }

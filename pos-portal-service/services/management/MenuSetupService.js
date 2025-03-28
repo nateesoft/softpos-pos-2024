@@ -11,7 +11,6 @@ const searchMenuSetup = async (search) => {
     const sql = `SELECT * FROM menu_setup 
         where menu_type='product' 
         and (menu_name like '%${search}%' or menu_code like '%${search}%')`;
-    console.log(sql)
     const results = await pool.query(sql)
     return results
 }

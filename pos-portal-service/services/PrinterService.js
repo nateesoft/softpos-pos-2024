@@ -36,9 +36,7 @@ const sendToKafkaMessage = async data => {
 }
 
 const sendToDirectPrinter = async (config, data = {}) => {
-    console.log('Start Print:', data.message, data.type)
     return new Promise((resolve) => {
-        console.log('Printer finish: ', data.type)
         // printTest(config)
         resolve('Done')
     })
@@ -48,7 +46,6 @@ const printTest = (config) => {
     const { printerIp } = config
 
     return new Promise((resolve) => {
-        console.log('Print test done')
         let printer = new ThermalPrinter({
             type: PrinterTypes.EPSON,
             interface: `tcp://${printerIp}`, // IP address
@@ -70,7 +67,6 @@ const printTest = (config) => {
         };
 
         const printWidth = printer.getWidth();
-        console.log('printWidth:', printWidth);
         const pointAfter =
             data.pointBefore - data.item.reduce((a, b) => a + b.quantity * b.price, 0);
         const totalPoint = data.pointBefore - pointAfter;
@@ -208,11 +204,11 @@ const printReceipt = (billData, printType, posConfigSetup, poshwSetup, creditLis
         printLineData.push({ type: 'newline', value: 1 });
         printLineData.push({ type: 'printer', value: 'cut' });
 
-        printLineData.forEach(item => {
-            if (item.type === 'text') {
-                console.log(item.value)
-            }
-        })
+        // printLineData.forEach(item => {
+        //     if (item.type === 'text') {
+        //         console.log(item.value)
+        //     }
+        // })
 
         resolve(printLineData)
     })
@@ -220,8 +216,8 @@ const printReceipt = (billData, printType, posConfigSetup, poshwSetup, creditLis
 
 const getExecutePrinter = (printer, printData) => {
     return new Promise(async (resolve, reject) => {
-        const printWidth = printer.getWidth();
-        console.log('printWidth:', printWidth);
+        // const printWidth = printer.getWidth();
+        // console.log('printWidth:', printWidth);
 
         printData.forEach(async item => {
             if (item.type === 'text') {
@@ -301,8 +297,6 @@ async function printThaiWithBitmap(printer) {
       // พิมพ์การตัดกระดาษ
       printer.cut();
       await printer.execute();
-
-      console.log("พิมพ์เสร็จสิ้น");
   } catch (error) {
       console.error("เกิดข้อผิดพลาดในการพิมพ์:", error);
   }
@@ -325,10 +319,7 @@ const printReceiptProcess = (config, billData, printType, posConfigSetup, poshwS
         try {
             // generate data
             const printData = await printReceipt(billData, printType, posConfigSetup, poshwSetup, creditList, tSale, memberInfo)
-
-            console.log('Print receipt start')
             const isConnected = await printer.isPrinterConnected();
-            console.log('isConnected:', isConnected);
             if (!isConnected) return reject('unConnected!');
 
             // send to printer
@@ -340,8 +331,6 @@ const printReceiptProcess = (config, billData, printType, posConfigSetup, poshwS
                 })
 
             // update bill print database
-
-            console.log('Print done!')
             resolve('Done')
         } catch (error) {
             reject(error.message)

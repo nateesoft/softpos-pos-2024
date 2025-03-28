@@ -13,13 +13,16 @@ import {
 } from "@mui/material"
 
 const NumFormat = (data) => {
-  if(!data)return
+  if(!data) {
+    return "0.00"
+  }
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
 const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => {
-  const { EmpDiscAmt, FastDiscAmt, TrainDiscAmt, MemDiscAmt, SubDiscAmt,
-    DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt
+  console.log('tableFile:', tableFile)
+  const { EmpDiscAmt = 0, FastDiscAmt = 0, TrainDiscAmt = 0, MemDiscAmt = 0, SubDiscAmt = 0,
+    DiscBath = 0, ProDiscAmt = 0, SpaDiscAmt = 0, CuponDiscAmt = 0, ItemDiscAmt = 0
   } = tableFileDb
   const discountAmount = EmpDiscAmt + FastDiscAmt + TrainDiscAmt + MemDiscAmt + SubDiscAmt + 
   DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
@@ -71,38 +74,39 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => 
           <Typography sx={{ fontSize: "14px" }}>Item</Typography>
           <Typography>{tableFileDb.TItem||0}</Typography>
         </Grid2>
+        <Divider sx={{background: "black"}} />
         <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>Total Amt</Typography>
           <Typography>{NumFormat(tableFile.subTotalAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>Discount</Typography>
-          <Typography>{NumFormat(discountAmount)}</Typography>
+          <Typography>{NumFormat(tableFile.discountAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Service</Typography>
+          <Typography sx={{ fontSize: "14px" }}>Service ({tableFile.service}%)</Typography>
           <Typography>{NumFormat(tableFile.serviceAmount)}</Typography>
         </Grid2>
-        <Divider />
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>VAT (7%)</Typography>
+          <Typography sx={{ fontSize: "14px" }}>VAT ({tableFile.vat}%)</Typography>
           <Typography>{NumFormat(tableFile.vatAmount)}</Typography>
         </Grid2>
-        {/* <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>มูลค่าสินค้า/บริการ</Typography>
-          <Typography>{NumFormat(tableFile.productAndService)}</Typography>
-        </Grid2> */}
-        <Divider />
+        <Divider sx={{background: "black"}} />
         <Grid2 display="flex" justifyContent="space-between">
           <Typography variant="h5">Amount Due</Typography>
           <Typography variant="h5">
             {NumFormat(tableFile.netTotalAmount)}
           </Typography>
         </Grid2>
-        <Divider />
+        <Divider sx={{background: "black"}} />
         <Grid2 display="flex" justifyContent="center">
           <Typography sx={{ fontSize: "10px" }}>
             {tableFile.printRecpMessage}
+          </Typography>
+        </Grid2>
+        <Grid2 display="flex" justifyContent="center">
+          <Typography sx={{fontSize: 10}}>
+            Service Type = ({tableFile.serviceType}) Vat Type = ({tableFile.vatType})
           </Typography>
         </Grid2>
       </Box>

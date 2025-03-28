@@ -54,8 +54,6 @@ const updateTableDiscount = async (payload) => {
     MemDisc, MemDiscAmt, TrainDisc, TrainDiscAmt, SubDisc, SubDiscAmt,
     DiscBath, CuponDiscAmt=0, SpaDiscAmt
   } = payload
-  
-  console.log('updateTableDiscount:', payload)
   const sql = `update tablefile set 
         FastDisc='${FastDisc}',FastDiscAmt='${FastDiscAmt}',
         EmpDisc='${EmpDisc}',EmpDiscAmt='${EmpDiscAmt}',
@@ -65,7 +63,6 @@ const updateTableDiscount = async (payload) => {
         DiscBath='${DiscBath}',CuponDiscAmt='${CuponDiscAmt}',
         SpaDiscAmt='${SpaDiscAmt}' 
         where Tcode='${tableFile.Tcode}'`
-  console.log(sql)
   await pool.query(sql)
   return await updateDiscountBill(tableFile.Tcode)
 }
