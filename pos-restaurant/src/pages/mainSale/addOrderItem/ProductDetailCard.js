@@ -69,6 +69,7 @@ const ProductDetailCard = ({
 }) => {
   const { appData } = useContext(POSContext)
   const { empCode, macno, userLogin } = appData
+  console.log('ProductDetailCard:', product)
 
   const [value, setValue] = React.useState(0)
 
@@ -87,6 +88,12 @@ const ProductDetailCard = ({
 
   const handleTabChange = (event, newValue) => {
     setValue(newValue)
+  }
+
+  const computeDiscount = (e) => {
+    setDiscountPercent(e.target.value)
+    const totalAmount = product.R_Price * product.R_Quan * e.target.value / 100
+    setDiscountBaht(totalAmount)
   }
 
   const handleConfirm = () => {
@@ -211,33 +218,33 @@ const ProductDetailCard = ({
               <TextField
                 label="ส่วนลด %"
                 value={discountPercent}
-                onChange={(e) => setDiscountPercent(e.target.value)}
-              ></TextField>
+                onChange={computeDiscount}
+                onFocus={(evt) => {
+                  evt.target.select()
+                }} />
               <TextField
                 label="จำนวนเงินส่วนลด"
                 value={discountBaht}
                 onChange={(e) => setDiscountBaht(e.target.value)}
-              ></TextField>
+                onFocus={(evt) => {
+                  evt.target.select()
+                }} />
             </Grid2>
           )}
-          <Grid2 container>
-            <Grid2 container size={12}>
-              <Typography variant="p">ประเภทอาหาร</Typography>
-            </Grid2>
-            <Grid2 justifyContent="center" size={12}>
-              <ToggleButtonGroup
-                color="primary"
-                value={orderType}
-                exclusive
-                onChange={handleChange}
-                aria-label="Platform"
-                fullWidth
-              >
-                <ToggleButton value="E">Dine In</ToggleButton>
-                <ToggleButton value="T">Take Away</ToggleButton>
-                <ToggleButton value="D">Delivery</ToggleButton>
-              </ToggleButtonGroup>
-            </Grid2>
+          <Grid2 container spacing={2} marginTop={2}>
+            <Typography variant="p">ประเภทอาหาร</Typography>
+            <ToggleButtonGroup
+              color="primary"
+              value={orderType}
+              exclusive
+              onChange={handleChange}
+              aria-label="Platform"
+              fullWidth
+            >
+              <ToggleButton value="E">Dine In</ToggleButton>
+              <ToggleButton value="T">Take Away</ToggleButton>
+              <ToggleButton value="D">Delivery</ToggleButton>
+            </ToggleButtonGroup>
           </Grid2>
           {count === 0 && (
             <Alert severity="error" sx={{ width: "100%", marginBottom: "5px" }}>

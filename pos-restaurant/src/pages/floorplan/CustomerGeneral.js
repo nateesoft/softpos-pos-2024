@@ -57,38 +57,41 @@ const InputCustomer = ({ title, value, setValue, iconName }) => {
 
 const CustomerGeneral = (props) => {
   const { t } = useTranslation("global")
-  const { man, woman, kid, old, setMan, setWoman, setKid, setOld } = props
+  const {
+    thaiManCount,thaiWomanCount,thaiKidCount,thaiOldCount,
+    setThaiManCount,setThaiWomanCount,setThaiKidCount,setThaiOldCount
+  } = props
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={6}>
         <InputCustomer
           title={t("FloorPlanPage.manPerson")}
-          value={man}
-          setValue={setMan}
+          value={thaiManCount}
+          setValue={setThaiManCount}
           iconName="man"
         />
       </Grid2>
       <Grid2 size={6}>
         <InputCustomer
           title={t("FloorPlanPage.womanPerson")}
-          value={woman}
-          setValue={setWoman}
+          value={thaiWomanCount}
+          setValue={setThaiWomanCount}
           iconName="woman"
         />
       </Grid2>
       <Grid2 size={6}>
         <InputCustomer
           title={t("FloorPlanPage.oldPerson")}
-          value={old}
-          setValue={setOld}
+          value={thaiOldCount}
+          setValue={setThaiOldCount}
           iconName="elder"
         />
       </Grid2>
       <Grid2 size={6}>
         <InputCustomer
           title={t("FloorPlanPage.kidPerson")}
-          value={kid}
-          setValue={setKid}
+          value={thaiKidCount}
+          setValue={setThaiKidCount}
           iconName="kid"
         />
       </Grid2>

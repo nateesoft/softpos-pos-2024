@@ -67,7 +67,7 @@ const getBalanceByTable = async (tableNo) => {
 }
 
 const getSummaryItem = async (tableNo) => {
-  const sql = `select sum(R_Quan) R_Quan from balance where R_Table='${tableNo}' and R_Void <> 'V'`
+  const sql = `select sum(R_Quan) R_Quan from balance where R_Table='${tableNo}' and R_Void <> 'V' and R_LinkIndex=''`
   const results = await pool.query(sql)
   if (results.length > 0) {
     return results[0].R_Quan
@@ -183,8 +183,10 @@ const computeBalanceSummary = (
   FoodVat,
   DrinkVat,
   ProductVat,
+  totalDiscountAmount,
   totalServiceAmount,
   totalVatAmount,
+  totalProductNoneVatAmount,
   service,
   serviceType,
   vat,
@@ -192,107 +194,137 @@ const computeBalanceSummary = (
   netTotalAmount
 ) => {
   balanceList.forEach((balance) => {
+
+    // compute RNetTotal
+    let RNetTotal = balance.R_Price * balance.R_Quan
+
     if (balance.R_Service === "Y" && balance.R_Vat === "V") {
       let vatAmount = 0
       let serviceCharge = 0
       let subTotalAmount = 0
+      let productNonVat = 0
 
       if (serviceType === "N" && vatType === "I") { // คิด service แบบ Net & คิด vat แบบ Include
-        serviceCharge = balance.R_Total * service / 100
-        let totalAmount = balance.R_Total + serviceCharge
-        vatAmount = totalAmount*vat/(100+vat)
+        productNonVat = RNetTotal  // ถอด vat ออกจากสินค้า
+        let totalAmount = RNetTotal - balance.R_DiscBath // ลบส่วนลด
+        serviceCharge = totalAmount * service / 100 // คิด service หลังจากหักส่วนลด
+        totalAmount = totalAmount + serviceCharge
+        vatAmount = RNetTotal*vat/(100+vat)
         subTotalAmount = totalAmount
       } else if (serviceType === "N" && vatType === "E") { // คิด service แบบ Net & คิด vat แบบ Exclude
-        serviceCharge = balance.R_Total * service / 100
-        vatAmount = (balance.R_Total+serviceCharge)*vat/100
-        subTotalAmount = balance.R_Total + serviceCharge+vatAmount
+        productNonVat = RNetTotal
+        let totalAmount = RNetTotal - balance.R_DiscBath
+        serviceCharge = totalAmount * service / 100
+        totalAmount = totalAmount + serviceCharge
+        vatAmount = totalAmount*vat/100
+        subTotalAmount = totalAmount + vatAmount
       } else if (serviceType === "G" && vatType === "I") { // คิด service แบบ Gross & คิด vat แบบ Include
-        serviceCharge = balance.R_Total * service/100
-        let beforeVat = balance.R_Total + serviceCharge
-        vatAmount = beforeVat * vat/(100+vat)
-        subTotalAmount = balance.R_Total + serviceCharge
+        productNonVat = RNetTotal - RNetTotal*vat/(100+vat)// ถอด vat ออกจากสินค้า
+        let totalAmount = productNonVat - balance.R_DiscBath
+        serviceCharge = RNetTotal * service/100
+        totalAmount = totalAmount + serviceCharge
+        vatAmount = totalAmount * vat/100
+        subTotalAmount = totalAmount + vatAmount
       } else if (serviceType === "G" && vatType === "E") { // คิด service แบบ Net & คิด vat แบบ Exclude
-        let productVat = balance.R_Total * (1+vat/100)
-        serviceCharge = productVat * service/100
-        vatAmount = (balance.R_Total + serviceCharge) * vat/100
-        subTotalAmount = balance.R_Total + serviceCharge+vatAmount
+        let totalAmount = RNetTotal - balance.R_DiscBath
+        serviceCharge = RNetTotal * service/100
+        totalAmount = totalAmount + serviceCharge
+        vatAmount = totalAmount * vat/100
+        subTotalAmount = totalAmount + vatAmount
       }
 
+      totalDiscountAmount += balance.R_DiscBath
       totalServiceAmount += serviceCharge
       totalVatAmount += vatAmount
+      totalProductNoneVatAmount += productNonVat
       netTotalAmount += subTotalAmount
     } else if (balance.R_Service === "Y" && balance.R_Vat === "N") { // ไม่คิดภาษี
       let vatAmount = 0
       let serviceCharge = 0
       let subTotalAmount = 0
+      let productNonVat = RNetTotal
+
       if (serviceType === "N") { // คิด service แบบ Net
           if (vatType === "I") {
-            serviceCharge = balance.R_Total * service / 100
-            let totalAmount = balance.R_Total + serviceCharge
-            subTotalAmount = totalAmount
+            productNonVat = productNonVat = RNetTotal - (RNetTotal * vat / (100 + vat))
+            let totalAmount = productNonVat - balance.R_DiscBath
+            serviceCharge = totalAmount * service / 100
+            subTotalAmount = totalAmount + serviceCharge
           } else if(vatType === "E") {
-            serviceCharge = balance.R_Total * service / 100
-            subTotalAmount = balance.R_Total + serviceCharge + vatAmount
+            let totalAmount = RNetTotal - balance.R_DiscBath
+            serviceCharge = totalAmount * service / 100
+            subTotalAmount = totalAmount + serviceCharge
           }
       } else if (serviceType === "G") { // คิด service แบบ Gross
         if (vatType === "I") {
-          serviceCharge = balance.R_Total * service/100
-          let beforeVat = balance.R_Total + serviceCharge
-          subTotalAmount = balance.R_Total + serviceCharge
+          productNonVat = productNonVat = RNetTotal - (RNetTotal * vat / (100 + vat))
+          let totalAmount = productNonVat - balance.R_DiscBath
+          serviceCharge = RNetTotal * service/100
+          subTotalAmount = totalAmount + serviceCharge
         } else if(vatType === "E") {
-          let productVat = balance.R_Total * (1+vat/100)
-          serviceCharge = productVat * service/100
-          subTotalAmount = balance.R_Total + serviceCharge + vatAmount
+          let totalAmount = RNetTotal - balance.R_DiscBath
+          serviceCharge = RNetTotal * service/100
+          subTotalAmount = totalAmount + serviceCharge
         }
       }
 
+      totalDiscountAmount += balance.R_DiscBath
       totalServiceAmount += serviceCharge
       totalVatAmount += 0
+      totalProductNoneVatAmount += productNonVat
       netTotalAmount += subTotalAmount
     } else if (balance.R_Service === "N" && balance.R_Vat === "V") { // ไม่คิด Service
       let serviceCharge = 0
       let vatAmount = 0
       let subTotalAmount = 0
+      let productNonVat = 0
+
       if (vatType === "I") { // คิด vat แบบ Include
-        vatAmount = balance.R_Total * vat / (100 + vat)
-        subTotalAmount = balance.R_Total
+        productNonVat = RNetTotal - (RNetTotal * vat / (100 + vat))
+        let totalAmount = productNonVat - balance.R_DiscBath
+        vatAmount = totalAmount * vat / 100
+        subTotalAmount = totalAmount + vatAmount
       } else if (vatType === "E") { // คิด vat แบบ Exclude
-        vatAmount = balance.R_Total * vat / 100
-        subTotalAmount = balance.R_Total + vatAmount
+        let totalAmount = RNetTotal - balance.R_DiscBath
+        vatAmount = totalAmount * vat / 100
+        subTotalAmount = totalAmount + vatAmount
       }
 
+      totalDiscountAmount += balance.R_DiscBath
       totalServiceAmount += serviceCharge
       totalVatAmount += vatAmount
+      totalProductNoneVatAmount += productNonVat
       netTotalAmount += subTotalAmount
     } else if (balance.R_Service === "N" && balance.R_Vat === "N") { // ไม่คิดภาษี และ Service
       totalServiceAmount += 0
       totalVatAmount += 0
-      netTotalAmount += balance.R_Total
+      totalProductNoneVatAmount += RNetTotal
+      netTotalAmount += RNetTotal
     }
 
     if (balance.R_Type === '1') {
-      Food += balance.R_Total
+      Food += RNetTotal
       if (balance.R_Service === "Y") {
-        FoodService = balance.R_Total
+        FoodService = RNetTotal
       }
       if (balance.R_Vat === "V") {
-        FoodVat = balance.R_Total
+        FoodVat = RNetTotal
       }
     } else if (balance.R_Type === '2') {
-      Drink += balance.R_Total
+      Drink += RNetTotal
       if (balance.R_Service === "Y") {
-        DrinkService = balance.R_Total
+        DrinkService = RNetTotal
       }
       if (balance.R_Vat === "V") {
-        DrinkVat = balance.R_Total
+        DrinkVat = RNetTotal
       }
     } else if (balance.R_Type === '3') {
-      Product += balance.R_Total
+      Product += RNetTotal
       if (balance.R_Service === "Y") {
-        ProductService = balance.R_Total
+        ProductService = RNetTotal
       }
       if (balance.R_Vat === "V") {
-        ProductVat = balance.R_Total
+        ProductVat = RNetTotal
       }
     }
   })
@@ -307,6 +339,8 @@ const computeBalanceSummary = (
     FoodVat,
     DrinkVat,
     ProductVat,
+    totalProductNoneVatAmount,
+    totalDiscountAmount,
     totalServiceAmount,
     totalVatAmount,
     netTotalAmount
@@ -336,8 +370,10 @@ const summaryBalance = async (tableNo, macno) => {
   let DrinkVat = 0
   let ProductVat = 0
 
+  let totalDiscountAmount = 0
   let totalServiceAmount = 0
   let totalVatAmount = 0
+  let totalProductNoneVatAmount = 0
 
   let netTotalAmount = 0
 
@@ -352,8 +388,10 @@ const summaryBalance = async (tableNo, macno) => {
     FoodVat,
     DrinkVat,
     ProductVat,
+    totalDiscountAmount,
     totalServiceAmount,
     totalVatAmount,
+    totalProductNoneVatAmount,
     service,
     serviceType,
     vat,
@@ -361,26 +399,22 @@ const summaryBalance = async (tableNo, macno) => {
     netTotalAmount
   )
 
-  const TAmount = responseData.Food + responseData.Drink + responseData.Product
-
   // compute discount ท้ายบิล
   const { EmpDiscAmt, FastDiscAmt, TrainDiscAmt, MemDiscAmt, SubDiscAmt,
-    DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt
+    DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt
   } = tablefile
   const discountAmount = EmpDiscAmt + FastDiscAmt + TrainDiscAmt + MemDiscAmt + SubDiscAmt + 
-  DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
-  const subTotalAmount = TAmount - discountAmount
-  const serviceAmt = responseData.totalServiceAmount
-  const netTotal = subTotalAmount + serviceAmt
+  DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + responseData.totalDiscountAmount
   // end compute discount ท้ายบิล
 
   tablefile.MacNo = macno
-  tablefile.TAmount = TAmount
   tablefile.Service = service
-  tablefile.ServiceAmt = serviceAmt
   tablefile.Vat = vat
+  tablefile.TAmount = responseData.Food + responseData.Drink + responseData.Product
+  tablefile.ServiceAmt = responseData.totalServiceAmount
+  tablefile.ItemDiscAmt = responseData.totalDiscountAmount
   tablefile.VatAmt = responseData.totalVatAmount
-  tablefile.NetTotal = netTotal
+  tablefile.NetTotal = responseData.netTotalAmount
   tablefile.Food = responseData.Food
   tablefile.Drink = responseData.Drink
   tablefile.Product = responseData.Product
@@ -405,7 +439,8 @@ const summaryBalance = async (tableNo, macno) => {
     VatAmount: responseData.totalVatAmount,
     Service: tablefile.Service,
     ServiceType: serviceType,
-    ServiceAmt: tablefile.ServiceAmt
+    ServiceAmt: tablefile.ServiceAmt,
+    ProductNonVat: responseData.totalProductNoneVatAmount
   }
 }
 

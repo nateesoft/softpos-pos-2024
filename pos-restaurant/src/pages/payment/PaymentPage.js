@@ -76,6 +76,7 @@ function PaymentPage() {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data.data
+          console.log('summaryTableFileBalance:', data)
           setSummaryTable({
             subTotalAmount: data.TAmount,
             discountAmount: data.DiscountAmount,
@@ -84,10 +85,11 @@ function PaymentPage() {
             serviceAmount: data.ServiceAmt,
             vat: data.Vat,
             vatType: data.VatType,
-            vatAmount: data.VatAmt,
+            vatAmount: data.VatAmount,
             netTotalAmount: data.NetTotal,
             productAndService: data.ProductAndService,
-            printRecpMessage: data.PrintRecpMessage
+            printRecpMessage: data.PrintRecpMessage,
+            productNoneVat: data.ProductNonVat,
           })
         }
       })

@@ -23,6 +23,7 @@ import SendToMobileIcon from "@mui/icons-material/SendToMobile"
 import CreditCardIcon from "@mui/icons-material/CreditCard"
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff"
 import Stack from '@mui/material/Stack'
+import { motion, AnimatePresence } from "framer-motion";
 
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
@@ -35,6 +36,7 @@ import DiscountFormModal from "./modal/DiscountFormModal"
 const baseName = process.env.REACT_APP_BASE_NAME
 
 const NumFormat = (data) => {
+  if(!data && data !== 0) return
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
 }
 
@@ -409,18 +411,27 @@ function PaymentForm({
               CHANGE
             </Typography>
           )}
-          <Typography
-            sx={{
-              marginRight: "20px",
-              fontSize: { xs: "32px", md: "72px" },
-              textShadow: "3px 1px white",
-              fontWeight: "bold"
-            }}
-          >
-            {NumFormat(
-              netTotalDisplay > 0 ? netTotalDisplay : Math.abs(netTotalDisplay)
-            )}
-          </Typography>
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              key={netTotalDisplay}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Typography sx={{
+                marginRight: "20px",
+                fontSize: { xs: "32px", md: "72px" },
+                textShadow: "3px 1px white",
+                fontWeight: "bold"
+              }}>
+                {NumFormat(
+                  netTotalDisplay > 0 ? netTotalDisplay : Math.abs(netTotalDisplay)
+                )}
+              </Typography>
+          </motion.div>
+          </AnimatePresence>
+          
         </Box>
       </Grid2>
       <Grid2 size={12}>
@@ -831,11 +842,11 @@ function PaymentForm({
               <Button
                 variant="contained"
                 sx={{ margin: "5px" }}
-                color="primary"
+                color="success"
                 startIcon={<ArrowBack />}
                 onClick={handleBackPage}
               >
-                Floor Plan
+                สั่งอาหารเพิ่ม
               </Button>
               <Button
                 variant="contained"

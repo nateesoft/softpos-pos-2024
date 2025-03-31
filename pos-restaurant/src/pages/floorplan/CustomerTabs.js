@@ -38,24 +38,12 @@ function a11yProps(index) {
 
 const CustomerTabs = (props) => {
   const {
-    manCount,
-    setManCount,
-    womanCount,
-    setWomanCount,
-    kidCount,
-    setKidCount,
-    oldCount,
-    setOldCount
-  } = props
-  const {
-    thaiCount,
-    setThaiCount,
-    europeCount,
-    setEuropeCount,
-    americaCount,
-    setAmericaCount,
-    asiaCount,
-    setAsiaCount
+    thaiManCount,thaiWomanCount,thaiKidCount,thaiOldCount,
+    setThaiManCount,setThaiWomanCount,setThaiKidCount,setThaiOldCount,
+    nationManCount,nationWomanCount,nationKidCount,nationOldCount,
+    setNationManCount,setNationWomanCount,setNationKidCount,setNationOldCount,
+    nationCountry,customerNote,billNo,
+    setNationCountry,setCustomerNote,setBillNo
   } = props
   const { t } = useTranslation("global")
   const [value, setValue] = React.useState(0)

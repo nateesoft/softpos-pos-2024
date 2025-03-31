@@ -49,16 +49,21 @@ const CustomerCheckin = (props) => {
   const [orderType, setOrderType] = useState("E")
 
   // additional other customer count
-  const [manCount, setManCount] = useState(0)
-  const [womanCount, setWomanCount] = useState(0)
-  const [kidCount, setKidCount] = useState(0)
-  const [oldCount, setOldCount] = useState(0)
+  const [thaiManCount, setThaiManCount] = useState(0)
+  const [thaiWomanCount, setThaiWomanCount] = useState(0)
+  const [thaiKidCount, setThaiKidCount] = useState(0)
+  const [thaiOldCount, setThaiOldCount] = useState(0)
 
   // nation customer
-  const [thaiCount, setThaiCount] = useState(0)
-  const [europeCount, setEuropeCount] = useState(0)
-  const [americaCount, setAmericaCount] = useState(0)
-  const [asiaCount, setAsiaCount] = useState(0)
+  const [nationManCount, setNationManCount] = useState(0)
+  const [nationWomanCount, setNationWomanCount] = useState(0)
+  const [nationKidCount, setNationKidCount] = useState(0)
+  const [nationOldCount, setNationOldCount] = useState(0)
+
+  // nation country name
+  const [nationCountry, setNationCountry] = useState("Asia")
+  const [customerNote, setCustomerNote] = useState("")
+  const [billNo, setBillNo] = useState("")
 
   const [customerName, setCustomerName] = useState("")
   const [memberCode, setMemberCode] = useState("")
@@ -82,32 +87,39 @@ const CustomerCheckin = (props) => {
     const checkTableActive = await apiClient.get(`/api/tablefile/${tableNo}`)
     const tableResponse = checkTableActive.data.data
     if (tableResponse != null) {
-      const totalCustomer = thaiCount + europeCount + americaCount + asiaCount + manCount + womanCount + kidCount + oldCount
-      if (totalCustomer !== custCount) {
+      const thaiPerson = thaiManCount + thaiWomanCount + thaiKidCount + thaiOldCount
+      const nationPerson = nationManCount + nationWomanCount + nationKidCount + nationOldCount
+      const totalCustomer = thaiPerson + nationPerson
+      if (totalCustomer === 0) {
         setShowCustomerCountError(true)
         return
       }
-      if (custCount >= 0 && orderType !== "") {
+      if (totalCustomer > 0 && orderType !== "") {
         // call api to update table checkin
+        const payload = {
+          empCode,
+          macno,
+          customer_count: totalCustomer,
+          thai_man_count: thaiManCount,
+          thai_woman_count: thaiWomanCount,
+          thai_kid_count: thaiKidCount,
+          thai_old_count: thaiOldCount,
+          nation_man_count: nationManCount,
+          nation_woman_count: nationWomanCount,
+          nation_kid_count: nationKidCount,
+          nation_old_count: nationOldCount,
+          customer_name: customerName,
+          member_code: memberCode,
+          book_no: reserveNo,
+          order_id: orderId,
+          table_order_type_start: orderType,
+          nation_country: nationCountry,
+          customer_note: customerNote,
+          bill_no: billNo
+        }
+
         apiClient
-          .post(`/api/table_checkin/${tableNo}`, {
-            empCode,
-            macno,
-            customer_count: custCount,
-            cust_man_count: manCount,
-            cust_woman_count: womanCount,
-            cust_kid_count: kidCount,
-            cust_old_count: oldCount,
-            cust_thai_count: thaiCount,
-            cust_europe_count: europeCount,
-            cust_america_count: americaCount,
-            cust_asia_count: asiaCount,
-            customer_name: customerName,
-            member_code: memberCode,
-            book_no: reserveNo,
-            order_id: orderId,
-            table_order_type_start: orderType
-          })
+          .post(`/api/table_checkin/${tableNo}`, payload)
           .then((response) => {
             if (response.status === 200) {
               setShowError(false)
@@ -181,14 +193,14 @@ const CustomerCheckin = (props) => {
         if (response.status === 200 && response.data.data != null) {
           const tableInfoData = response.data.data
           setCustCount(tableInfoData.customer_count)
-          setManCount(tableInfoData.cust_man_count)
-          setWomanCount(tableInfoData.cust_woman_count)
-          setKidCount(tableInfoData.cust_kid_count)
-          setOldCount(tableInfoData.cust_old_count)
-          setThaiCount(tableInfoData.cust_thai_count)
-          setEuropeCount(tableInfoData.cust_europe_count)
-          setAmericaCount(tableInfoData.cust_america_count)
-          setAsiaCount(tableInfoData.cust_asia_count)
+          setThaiManCount(tableInfoData.thai_man_count)
+          setThaiWomanCount(tableInfoData.thai_woman_count)
+          setThaiKidCount(tableInfoData.thai_kid_count)
+          setThaiOldCount(tableInfoData.thai_old_count)
+          setNationManCount(tableInfoData.nation_man_count)
+          setNationWomanCount(tableInfoData.nation_woman_count)
+          setNationKidCount(tableInfoData.nation_kid_count)
+          setNationOldCount(tableInfoData.nation_old_count)
           setCustomerName(tableInfoData.customer_name)
           setMemberCode(tableInfoData.member_code)
           setReserveNo(tableInfoData.book_no)
@@ -196,6 +208,9 @@ const CustomerCheckin = (props) => {
             moment(tableInfoData.datetime_checkin).format("DD/MM/YYYY HH:mm:ss")
           )
           setOrderType(tableInfoData.table_order_type_start)
+          setNationCountry(tableInfoData.nation_country)
+          setCustomerNote(tableInfoData.customer_note)
+          setBillNo(tableInfoData.bill_no)
         }
       })
       .catch((err) => {
@@ -230,30 +245,44 @@ const CustomerCheckin = (props) => {
       <Divider sx={{ margin: "10px" }} />
       <Box sx={{ "& > :not(style)": { m: 1 }, background: "#faece9" }}>
         <CustomerTabs
-          thaiPeople={thaiCount}
-          setThaiCount={setThaiCount}
-          europePeople={europeCount}
-          setEuropeCount={setEuropeCount}
-          americaPeople={americaCount}
-          setAmericaCount={setAmericaCount}
-          asiaPeople={asiaCount}
-          setAsiaCount={setAsiaCount} 
-          man={manCount}
-          setMan={setManCount}
-          woman={womanCount}
-          setWoman={setWomanCount}
-          kid={kidCount}
-          setKid={setKidCount}
-          old={oldCount}
-          setOld={setOldCount}
+          thaiManCount={thaiManCount}
+          setThaiManCount={setThaiManCount}
+          thaiWomanCount={thaiWomanCount}
+          setThaiWomanCount={setThaiWomanCount}
+          thaiKidCount={thaiKidCount}
+          setThaiKidCount={setThaiKidCount}
+          thaiOldCount={thaiOldCount}
+          setThaiOldCount={setThaiOldCount}
+          nationManCount={nationManCount}
+          setNationManCount={setNationManCount}
+          nationWomanCount={nationWomanCount}
+          setNationWomanCount={setNationWomanCount}
+          nationKidCount={nationKidCount}
+          setNationKidCount={setNationKidCount}
+          nationOldCount={nationOldCount}
+          setNationOldCount={setNationOldCount}
+          nationCountry={nationCountry}
+          setNationCountry={setNationCountry}
+          customerNote={customerNote}
+          setCustomerNote={setCustomerNote}
+          billNo={billNo}
+          setBillNo={setBillNo}
         />
       </Box>
       <Grid2 container padding={1} spacing={1}>
+        <TextField 
+          id="txt-customer-name" 
+          label="Customer Name" 
+          value={customerName}
+          onChange={e=>setCustomerName(e.target.value)}
+          sx={{width: 150}}
+        />
         <TextField
           id="txt-reserve-no"
           label={t("FloorPlanPage.bookingNo")}
           value={reserveNo}
           onChange={handleInputReserveNo}
+          sx={{width: 150}}
         />
         <Button
           variant="contained"

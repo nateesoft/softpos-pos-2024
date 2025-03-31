@@ -14,8 +14,8 @@ const {
   addBalance,
   voidMenuBalance,
   addListBalance,
-  updateBalance,
-  getBalanceGroupProduct
+  getBalanceGroupProduct,
+  updateBalanceDetail
 } = require('../../../services/BalanceService')
 const { getBalanceByRIndex, getBalanceMaxIndex, summaryBalance } = require('../../../services/CoreService')
 
@@ -200,7 +200,7 @@ router.post('/addList', function (req, res) {
 
 router.put('/', function (req, res) {
   const id = req.params.id
-  updateBalance(req.body, id)
+  updateBalanceDetail(req.body, id)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

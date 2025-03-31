@@ -59,10 +59,14 @@ const InputCustomer = ({ title, value, setValue, iconName }) => {
 
 const CustomerNational = (props) => {
   const [continent, setContinent] = useState("Asia")
-  const [country, setCountry] = useState("")
 
   const { t } = useTranslation("global")
-  const { man, woman, kid, old, setMan, setWoman, setKid, setOld } = props
+  const {
+    nationManCount,nationWomanCount,nationKidCount,nationOldCount,
+    setNationManCount,setNationWomanCount,setNationKidCount,setNationOldCount,
+    nationCountry,customerNote,billNo,
+    setNationCountry,setCustomerNote,setBillNo
+  } = props
 
   const handleChangeContinent = (e) => {
     setContinent(e.target.value)
@@ -95,9 +99,9 @@ const CustomerNational = (props) => {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={country}
-            label="ทวีป"
-            onChange={(e) => setCountry(e.target.value)}
+            value={nationCountry}
+            label="ประเทศ"
+            onChange={(e) => setNationCountry(e.target.value)}
           >
             {CountryListFile[continent].map(item => <MenuItem value={item.English}>{item.Thai}</MenuItem>)}
           </Select>
@@ -106,32 +110,32 @@ const CustomerNational = (props) => {
       <Grid2 size={6}>
         <InputCustomer
           title={t("FloorPlanPage.manPerson")}
-          value={man}
-          setValue={setMan}
+          value={nationManCount}
+          setValue={setNationManCount}
           iconName="man"
         />
       </Grid2>
       <Grid2 size={6}>
         <InputCustomer
           title={t("FloorPlanPage.womanPerson")}
-          value={woman}
-          setValue={setWoman}
+          value={nationWomanCount}
+          setValue={setNationWomanCount}
           iconName="woman"
         />
       </Grid2>
       <Grid2 size={6}>
         <InputCustomer
           title={t("FloorPlanPage.oldPerson")}
-          value={old}
-          setValue={setOld}
+          value={nationOldCount}
+          setValue={setNationOldCount}
           iconName="elder"
         />
       </Grid2>
       <Grid2 size={6}>
         <InputCustomer
           title={t("FloorPlanPage.kidPerson")}
-          value={kid}
-          setValue={setKid}
+          value={nationKidCount}
+          setValue={setNationKidCount}
           iconName="kid"
         />
       </Grid2>

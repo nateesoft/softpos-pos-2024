@@ -26,6 +26,7 @@ import {
   AccordionDetails} from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
+import { motion, AnimatePresence } from "framer-motion";
 
 import apiClient from "../../../httpRequest"
 import ProductCard from "./ProductCard"
@@ -81,9 +82,19 @@ const TotalBill = ({ orderList }) => {
         </Typography>
       </Grid2>
       <Grid2 container justifyContent="flex-end">
-        <Typography fontSize={28} fontWeight="bold" sx={{ color: "black" }}>
-          {getFormatMoney(convertCurrency, currency, convertedTotal)}
-        </Typography>
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={totalBill}
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -20, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Typography fontSize={28} fontWeight="bold" sx={{ color: "black" }}>
+              {getFormatMoney(convertCurrency, currency, convertedTotal)}
+            </Typography>
+          </motion.div>
+        </AnimatePresence>
       </Grid2>
     </div>
   )

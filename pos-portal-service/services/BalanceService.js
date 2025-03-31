@@ -344,11 +344,11 @@ const addNewBalance = async payload => {
     return R_Index
 }
 
-const updateBalance = async payload => {
+const updateBalanceDetail = async payload => {
     const { oldBalance, discount, optList = [], specialText = "", macno, userLogin, empCode, R_ETD } = payload
     const { R_Index, R_Table, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal, R_Discount,
         R_Service, R_Stock, R_Set, R_Vat, R_Type, R_Price, R_Total, R_PrType, R_PrCode,
-        R_PrDisc, R_PrBath, R_PrAmt, R_PrCuType, R_PrCuQuan, R_PrCuAmt, R_Redule, R_Kic,
+        R_PrDisc, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuType, R_PrCuQuan, R_PrCuAmt, R_Redule, R_Kic,
         R_KicPrint, R_Void, R_VoidUser, R_VoidTime, FieldName, R_PrCuCode, R_Serve, R_PrintOK, R_KicOK,
         StkCode, PosStk, R_PrChkType, R_PrQuan, R_PrSubType, R_PrSubCode, R_PrSubQuan, R_PrSubDisc,
         R_PrSubBath, R_PrSubAmt, R_PrSubAdj, R_PrCuDisc, R_PrCuBath, R_PrCuAdj, R_Order,
@@ -377,17 +377,26 @@ const updateBalance = async payload => {
     const Cashier = userLogin;
     const R_Emp = empCode;
 
-    let newRTotal = R_Total
+    let newRTotal = R_Price * R_Quan
 
     // for discount
+    let RPrType = R_PrType || ''
     let newDiscountBaht = 0
     if (R_Discount === 'Y') {
         if (discount.discountPercent > 0) {
-            newDiscountBaht = R_Total * discount.discountPercent / 100
+            newDiscountBaht = newRTotal * parseFloat(discount.discountPercent) / 100
         } else if(discount.discountBaht > 0) {
             newDiscountBaht = discount.discountBaht
         }
+
+        if(newDiscountBaht>0){
+            RPrType = '-I'
+        }
     }
+    
+    let RPrDisc = discount.discountPercent || R_PrDisc
+    let RPrBath = R_PrBath || 0
+    let RPrAmt = newDiscountBaht || R_PrAmt
 
     newRTotal = newRTotal - newDiscountBaht
 
@@ -397,8 +406,8 @@ const updateBalance = async payload => {
         R_PName='${R_PName}',R_Unit='${R_Unit}',R_Group='${R_Group}',R_Status='${R_Status}',
         R_Normal='${R_Normal}',R_Discount='${R_Discount}',R_Service='${R_Service}',R_Stock='${R_Stock}',
         R_Set='${R_Set}',R_Vat='${R_Vat}',R_Type='${R_Type}',R_ETD='${R_ETD}',R_Quan='${R_Quan}',
-        R_Price='${R_Price}',R_Total='${newRTotal}',R_PrType='${R_PrType}',R_PrCode='${R_PrCode}',
-        R_PrDisc='${R_PrDisc}',R_PrBath='${R_PrBath}',R_PrAmt='${R_PrAmt}',R_DiscBath='${newDiscountBaht}',
+        R_Price='${R_Price}',R_Total='${newRTotal}',R_PrType='${RPrType}',R_PrCode='${R_PrCode}',
+        R_PrDisc='${RPrDisc}',R_PrBath='${RPrBath}',R_PrAmt='${RPrAmt}',R_DiscBath='${newDiscountBaht}',
         R_PrCuType='${R_PrCuType}',R_PrCuQuan='${R_PrCuQuan}',R_PrCuAmt='${R_PrCuAmt}',
         R_Redule='${R_Redule}',R_Kic='${R_Kic}',R_KicPrint='${R_KicPrint}',R_Void='${R_Void}',
         R_VoidUser='${R_VoidUser}',R_VoidTime='${R_VoidTime}',FieldName='${FieldName}',
@@ -553,7 +562,7 @@ module.exports = {
     addListBalance,
     addBalance,
     voidMenuBalance,
-    updateBalance,
+    updateBalanceDetail,
     inventoryStock,
     getBalanceByTableNo,
     orderStockOut,
