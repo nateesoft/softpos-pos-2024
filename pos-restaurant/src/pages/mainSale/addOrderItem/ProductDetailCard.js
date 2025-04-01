@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import CloseIcon from "@mui/icons-material/Cancel"
 import ConfirmIcon from "@mui/icons-material/Check"
 import PropTypes from "prop-types"
@@ -24,10 +24,6 @@ import { POSContext } from "../../../AppContext"
 import NumberFormat from "../../ui-utils/NumberFormat"
 
 const baseName = process.env.REACT_APP_BASE_NAME
-
-const testArray = [
-  "A", "B", "C", "D", "D", "E"
-]
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props
@@ -70,17 +66,20 @@ const ProductDetailCard = ({
   const { appData } = useContext(POSContext)
   const { empCode, macno, userLogin } = appData
   console.log('ProductDetailCard:', product)
+  const {R_Opt1,R_Opt2,R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8} = product
 
   const [value, setValue] = React.useState(0)
 
   const [count, setCount] = useState(product.R_Quan || 1)
   const [orderType, setOrderType] = useState(product.R_ETD || "E")
   const [optList, setOptList] = useState([])
-  const [specialText, setSpecialText] = useState("")
+  const [specialText, setSpecialText] = useState(R_Opt1+R_Opt2+R_Opt3+R_Opt4+R_Opt5+R_Opt6+R_Opt7+R_Opt8)
+
+  const [subMenuList, setSubMenuList] = useState([])
 
   // discount
-  const [discountPercent, setDiscountPercent] = useState(0)
-  const [discountBaht, setDiscountBaht] = useState(0)
+  const [discountPercent, setDiscountPercent] = useState(product.R_PrDisc||0)
+  const [discountBaht, setDiscountBaht] = useState(product.R_PrAmt||0)
 
   const handleChange = (event, oType) => {
     setOrderType(event.target.value)
@@ -131,6 +130,19 @@ const ProductDetailCard = ({
         handleNotification(error.message)
       })
   }
+
+  const initLoadSubProduct = async () => {
+    const listSubMenu = await apiClient.post(`/api/balance/getSubProduct`, {
+      tableNo: product.R_Table,
+      rLinkIndex: product.R_Index
+    })
+
+    setSubMenuList(listSubMenu.data.data)
+  }
+
+  useEffect(()=> {
+    initLoadSubProduct()
+  }, [])
 
   return (
     <div>
@@ -198,8 +210,8 @@ const ProductDetailCard = ({
             <Typography variant="p" sx={{ color: "white" }}>
               ราคา {NumberFormat(product.R_Price)}
             </Typography>
-            <Typography variant="p" sx={{ color: "white" }}>
-              รหัส {product.R_PluCode}
+            <Typography variant="p" sx={{ color: "white", fontSize: 12 }}>
+              รหัสสินค้า {product.R_PluCode}
             </Typography>
           </Grid2>
           <OptionMenuSelect
@@ -276,14 +288,12 @@ const ProductDetailCard = ({
           </Grid2>
         </div>
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1} style={{ padding: 10 }}>
+      <CustomTabPanel value={value} index={1} >
         <Box sx={{ flexGrow: 1, p: 2 }}>
-          <Grid2 container spacing={2}>
-          {testArray.map((item) => (
-            <Grid2 key={item} xs={3}>
-              <Paper sx={{ padding: 2, textAlign: "center", backgroundColor: "#123456", color: "snow", height: 100 }}>
-                <Typography>Column {item}</Typography>
-              </Paper>
+          <Grid2 container spacing={2} sx={{height: 500, overflow: 'auto'}} justifyContent="flex-start">
+          {subMenuList && subMenuList.map((item) => (
+            <Grid2 key={item.R_Index} xs={3}>
+              <Button variant="outlined" sx={{height: 100, width: 120}}>{item.R_PName}</Button>
             </Grid2>
           ))}
         </Grid2>

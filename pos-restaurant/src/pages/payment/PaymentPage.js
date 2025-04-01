@@ -76,7 +76,6 @@ function PaymentPage() {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data.data
-          console.log('summaryTableFileBalance:', data)
           setSummaryTable({
             subTotalAmount: data.TAmount,
             discountAmount: data.DiscountAmount,

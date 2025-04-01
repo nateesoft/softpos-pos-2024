@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Tab from "@mui/material/Tab"
 import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
@@ -18,7 +18,11 @@ import {
   Grid2,
   Divider,
   IconButton,
-  Badge
+  Badge,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material"
 import {
   Accordion,
@@ -32,6 +36,7 @@ import apiClient from "../../../httpRequest"
 import ProductCard from "./ProductCard"
 import ProductDetailCard from "./ProductDetailCard"
 import { CurrencyContext } from "../../../contexts/CurrencyContext"
+import { POSContext } from "../../../AppContext"
 
 const modalStyle = {
   position: "absolute",
@@ -63,10 +68,9 @@ const getFormatMoney = (convertCurrency, currency, number) => {
   }).format(convertCurrency(number))
 }
 
-const TotalBill = ({ orderList }) => {
+const TotalBill = ({ summaryTable }) => {
   const { currency, convertCurrency } = useContext(CurrencyContext)
-  const totalBill = getTotalAmount(orderList)
-  const convertedTotal = convertCurrency(totalBill, currency)
+  const convertedTotal = convertCurrency(summaryTable.netTotalAmount, currency)
   return (
     <div
       style={{
@@ -84,7 +88,7 @@ const TotalBill = ({ orderList }) => {
       <Grid2 container justifyContent="flex-end">
         <AnimatePresence mode="popLayout">
           <motion.div
-            key={totalBill}
+            key={summaryTable.netTotalAmount}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
@@ -112,17 +116,35 @@ const OrderItem = ({
   initLoadOrder,
   typePopup = false,
   handleNotification,
-  initLoadBalanceProductGroup
+  initLoadBalanceProductGroup,
+  summaryTable,
+  summaryTableFileBalance
 }) => {
+  console.log('OrderItem:', summaryTable)
   const navigate = useNavigate()
+  const { appData } = useContext(POSContext)
+  const { macno, userLogin, empCode } = appData
+
+  const [currentMenuCode, setCurrentMainMenuCode] = useState("")
+  
   const [value, setValue] = useState(orderType || "E")
   const [open, setOpen] = useState(false)
+  const [openVoidGroup, setOpenVoidGroup] = useState(false)
+
+  const [voidMsgList, setVoidMsgList] = useState([])
+  const [voidMsg, setVoidMsg] = useState([])
 
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
+  }
+
+  const handleVoidGroupMenu = (pluCode) => {
+    setCurrentMainMenuCode(pluCode)
+    setOpenVoidGroup(true)
+    summaryTableFileBalance()
   }
 
   const handleClick = () => {
@@ -137,6 +159,40 @@ const OrderItem = ({
       .catch((err) => {
         handleNotification(err.message)
       })
+  }
+
+  const loadVoidMsgList = () => {
+    apiClient
+      .get(`/api/voidmsg`)
+      .then((response) => {
+        if(response.status === 200){
+          const voidMsgData = response.data.data
+          setVoidMsgList(voidMsgData)
+        }
+      })
+      .catch((err) => handleNotification(err.message))
+  }
+
+  const handleVoidItem = () => {
+    if (voidMsg) {
+      apiClient
+        .post(`/api/balance/voidList`, {
+          menu_code: currentMenuCode,
+          void_message: voidMsg,
+          Cachier: userLogin,
+          empCode: empCode,
+          macno: macno
+        })
+        .then((response) => {
+          setOpenVoidGroup(false)
+          initLoadMenu()
+          initLoadOrder()
+          summaryTableFileBalance()
+        })
+        .catch((err) => {
+          handleNotification(err.message)
+        })
+    }
   }
 
   const backFloorPlan = () => {
@@ -172,6 +228,10 @@ const OrderItem = ({
         handleNotification(err.message)
       })
   }
+
+  useEffect(() => {
+    loadVoidMsgList()
+  }, [])
 
   return (
     <div style={{ overflow: "auto", width: "100%" }}>
@@ -277,7 +337,7 @@ const OrderItem = ({
                   </Grid2>
                   <Grid2 size={6}>
                     <Grid2 container direction="row" justifyContent="center" alignItems="center">
-                      <IconButton onClick={()=>console.log("Click Void Menu")}>
+                      <IconButton onClick={()=>handleVoidGroupMenu(item.R_PluCode)}>
                         <RemoveCircleIcon color="error" fontSize="large"/>
                       </IconButton>
                       <Typography>{item.R_Quan}</Typography>
@@ -340,7 +400,7 @@ const OrderItem = ({
                   </Grid2>
                   <Grid2 size={6}>
                     <Grid2 container direction="row" justifyContent="center" alignItems="center">
-                      <IconButton onClick={()=>console.log("Click Void Menu")}>
+                      <IconButton onClick={()=>handleVoidGroupMenu(item.R_PluCode)}>
                         <RemoveCircleIcon color="error" fontSize="large"/>
                       </IconButton>
                       <Typography>{item.R_Quan}</Typography>
@@ -403,7 +463,7 @@ const OrderItem = ({
                   </Grid2>
                   <Grid2 size={6}>
                     <Grid2 container direction="row" justifyContent="center" alignItems="center">
-                      <IconButton onClick={()=>console.log("Click Void Menu")}>
+                      <IconButton onClick={()=>handleVoidGroupMenu(item.R_PluCode)}>
                         <RemoveCircleIcon color="error" fontSize="large"/>
                       </IconButton>
                       <Typography>{item.R_Quan}</Typography>
@@ -457,7 +517,7 @@ const OrderItem = ({
           ส่งครัว/ พักโต๊ะ
         </Button>
       </Grid2>
-      <TotalBill orderList={OrderList} />
+      {summaryTable && <TotalBill summaryTable={summaryTable} />}
       <Grid2 container spacing={1} justifyContent="center" padding={1}>
         <Button
           variant="contained"
@@ -494,6 +554,38 @@ const OrderItem = ({
             initLoadBalanceProductGroup={initLoadBalanceProductGroup}
             handleNotification={handleNotification}
           />
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openVoidGroup}
+        onClose={() => setOpenVoidGroup(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{ ...modalStyle, width: 450 }}>
+          <Grid2 container justifyContent="center" padding={2} spacing={2}>
+            <Typography>เมนูอาหาร: {currentMenuCode}</Typography>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                เหตุผลในการยกเลิกรายการ
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={voidMsg}
+                label="เหตุผลในการ VOID"
+                onChange={(e) => setVoidMsg(e.target.value)}
+              >
+                {voidMsgList && voidMsgList.map((item) => (
+                  <MenuItem key={item.VName} value={item.VName}>
+                    {item.VName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button variant="contained" color="error" onClick={()=>handleVoidItem()}>Confirm Void</Button>
+          </Grid2>
         </Box>
       </Modal>
 

@@ -22,3 +22,6 @@ yarn-error.log*
 /dist
 /server/node_modules
 /server/webapp
+/server/webapp1
+/server/webapp2
+/server/webapp3

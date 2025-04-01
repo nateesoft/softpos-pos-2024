@@ -5,9 +5,11 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const path = require('path');
 const app = express();
 
-app.use(express.static(path.join(__dirname, process.env.WEB_FOLDER)));
+const BASENAME = "/pos-restaurant";
 
-app.use("/api", createProxyMiddleware({
+app.use(BASENAME, express.static(path.join(__dirname, process.env.WEB_FOLDER)));
+
+app.use(`/api`, createProxyMiddleware({
       target: process.env.SERVICE_HOST,
       changeOrigin: true,
     })
@@ -25,7 +27,7 @@ app.use((req, res, next) => {
 });
 
 // Serve React frontend for any unknown routes
-app.get("*", (req, res) => {
+app.get(`${BASENAME}/*`, (req, res) => {
     res.sendFile(express.static(path.join(__dirname, process.env.WEB_FOLDER)));
   });
   

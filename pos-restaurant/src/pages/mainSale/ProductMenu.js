@@ -124,7 +124,8 @@ const ProductMenu = ({
   initLoadMenu,
   initLoadOrder,
   handleNotification,
-  initLoadBalanceProductGroup
+  initLoadBalanceProductGroup,
+  summaryTableFileBalance
 }) => {
   const { t } = useTranslation("global")
   const matches = useMediaQuery("(min-width:1024px)")
@@ -182,6 +183,7 @@ const ProductMenu = ({
         initLoadMenu()
         initLoadOrder()
         initLoadBalanceProductGroup()
+        summaryTableFileBalance()
       })
       .catch((error2) => {
         handleNotification(error2.message)
@@ -203,6 +205,7 @@ const ProductMenu = ({
         initLoadMenu()
         initLoadOrder()
         initLoadBalanceProductGroup()
+        summaryTableFileBalance()
 
         const R_LinkIndex = response.data.data
 
@@ -217,6 +220,7 @@ const ProductMenu = ({
         initLoadMenu()
         initLoadOrder()
         initLoadBalanceProductGroup()
+        summaryTableFileBalance()
 
         setShowMenuSet(false)
       })

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import Grid2 from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
@@ -13,6 +13,7 @@ import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
 import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
+import { POSContext } from "../../AppContext"
 
 const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
 // เชื่อมต่อกับ Socket.IO server
@@ -23,6 +24,8 @@ const socket = io(SOCKET_SERVER_URL, {
 function MainSalePage() {
   const { tableNo } = useParams()
   const { handleNotification } = useAlert()
+  const { appData } = useContext(POSContext)
+  const { macno } = appData
 
   const matches = useMediaQuery("(min-width:1024px)")
   const [messageAlert, setMessageAlert] = useState("")
@@ -42,6 +45,9 @@ function MainSalePage() {
   const [orderEList, setOrderEList] = useState([])
   const [orderTList, setOrderTList] = useState([])
   const [orderDList, setOrderDList] = useState([])
+
+  // Load summary tablefile
+  const [summaryTable, setSummaryTable] = useState({})
 
   const initLoadMenu = () => {
     apiClient
@@ -171,11 +177,37 @@ function MainSalePage() {
       })
   }
 
+  const summaryTableFileBalance = () => {
+      apiClient
+        .post("/api/balance/summaryBalance", { tableNo, macno })
+        .then((response) => {
+          if (response.status === 200) {
+            const data = response.data.data
+            setSummaryTable({
+              subTotalAmount: data.TAmount,
+              discountAmount: data.DiscountAmount,
+              service: data.Service,
+              serviceType: data.ServiceType,
+              serviceAmount: data.ServiceAmt,
+              vat: data.Vat,
+              vatType: data.VatType,
+              vatAmount: data.VatAmount,
+              netTotalAmount: data.NetTotal,
+              productAndService: data.ProductAndService,
+              printRecpMessage: data.PrintRecpMessage,
+              productNoneVat: data.ProductNonVat,
+            })
+          }
+        })
+        .catch((err) => handleNotification(err.message))
+    }
+
   useEffect(() => {
     initLoadMenu()
     initLoadOrder()
     initLoadTableCheckIn()
     initLoadBalanceProductGroup()
+    summaryTableFileBalance()
   }, [])
 
   useEffect(() => {
@@ -240,6 +272,7 @@ function MainSalePage() {
             initLoadOrder={initLoadOrder}
             handleNotification={handleNotification}
             initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+            summaryTableFileBalance={summaryTableFileBalance}
           />
         </Grid2>
         <Grid2 size={4} sx={{
@@ -262,6 +295,8 @@ function MainSalePage() {
             typePopup={false}
             handleNotification={handleNotification}
             initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+            summaryTable={summaryTable}
+            summaryTableFileBalance={summaryTableFileBalance}
           />
         </Grid2>
       </Grid2>

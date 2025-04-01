@@ -15,7 +15,9 @@ const {
   voidMenuBalance,
   addListBalance,
   getBalanceGroupProduct,
-  updateBalanceDetail
+  updateBalanceDetail,
+  voidListMenuBalanceAll,
+  getSubProductByPluCode
 } = require('../../../services/BalanceService')
 const { getBalanceByRIndex, getBalanceMaxIndex, summaryBalance } = require('../../../services/CoreService')
 
@@ -174,6 +176,16 @@ router.post('/void', (req, res) => {
     })
 });
 
+router.post('/voidList', (req, res) => {
+  voidListMenuBalanceAll(req.body)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 router.post('/getData', (req, res) => {
   if (Object.keys(req.body).length === 0) {
     throw new Error("Payload Information Notfound !!!")
@@ -190,6 +202,17 @@ router.post('/getData', (req, res) => {
 
 router.post('/addList', function (req, res) {
   addListBalance(req.body)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.post('/getSubProduct', function (req, res) {
+  const { tableNo, rLinkIndex } = req.body
+  getSubProductByPluCode({ tableNo, rLinkIndex })
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

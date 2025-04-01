@@ -21,6 +21,8 @@ const columns = [
   { id: "CuType", label: "Type", minWidth: 50, align: "center" },
   { id: "CuCode", label: "Code", minWidth: 50, align: "center" },
   { id: "CuName", label: "Description/รายการ", minWidth: 50 },
+  { id: "CuDisc", label: "Discount(%)", minWidth: 50 },
+  { id: "CuDiscBath", label: "Baht", minWidth: 50 },
   { id: "qty", label: "Qty", minWidth: 100, align: "right" }
 ]
 
@@ -68,10 +70,11 @@ const CuponListModal = (props) => {
     if (getCuponSelect.length > 0) {
       apiClient
         .post(`/api/cupon/saveList`, { 
-          cuponList, 
+          cuponList: getCuponSelect, 
           cashier: tableFile.Cashier,
           tableNo: tableFile.Tcode,
-          macNo: tableFile.MacNo
+          macNo: tableFile.MacNo,
+          netTotalAmount: tableFile.NetTotal
         })
         .then((response) => {
           if (response.status === 200) {

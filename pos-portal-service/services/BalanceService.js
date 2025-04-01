@@ -16,6 +16,20 @@ const getTotalBalance = async (tableNo) => {
     return 0.00
 }
 
+const getSubProductByPluCode = async ({tableNo, rLinkIndex}) => {
+    const sql = `select * from balance where R_Table='${tableNo}' and R_LinkIndex='${rLinkIndex}'`;
+    const results = await pool.query(sql)
+
+    return results
+}
+
+const voidListMenuBalanceAll = async ({ menu_code, void_message, Cachier, empCode, macno }) => {
+    const allMenuInBalance = await getAllBalanceByMenuCode(menu_code)
+    allMenuInBalance.forEach(item => {
+        voidMenuBalance(item.R_Index, Cachier, empCode, void_message, macno)
+    })
+}
+
 const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) => {
     // Update  Balance File For Void
     const balance = await getBalanceByRIndex(R_Index);
@@ -49,6 +63,12 @@ const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) =>
 
 const getAllBalance = async () => {
     const sql = `select * from balance order by R_Table, R_Index`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const getAllBalanceByMenuCode = async (menuCode) => {
+    const sql = `select * from balance where R_PluCode='${menuCode}' order by R_Table, R_Index`;
     const results = await pool.query(sql)
     return results
 }
@@ -288,7 +308,7 @@ const addNewBalance = async payload => {
 
     const R_PrCuCode = "";
     const R_PrChkType = "";
-    const R_PrQuan = 0;
+    const R_PrQuan = 1;
     const R_PrSubType = "";
     const R_PrSubCode = "";
     const R_PrSubQuan = 0;
@@ -299,7 +319,7 @@ const addNewBalance = async payload => {
     const R_PrCuDisc = 0;
     const R_PrCuBath = 0;
     const R_PrCuAdj = 0;
-    const R_QuanCanDisc = 0;
+    const R_QuanCanDisc = 1;
     const R_PrVcType = "";
     const R_PrVcCode = "";
     const R_VoidPause = "";
@@ -379,6 +399,10 @@ const updateBalanceDetail = async payload => {
 
     let newRTotal = R_Price * R_Quan
 
+    let RPrDisc = R_PrDisc
+    let RPrBath = R_PrBath
+    let RPrAmt = R_PrAmt
+
     // for discount
     let RPrType = R_PrType || ''
     let newDiscountBaht = 0
@@ -391,12 +415,12 @@ const updateBalanceDetail = async payload => {
 
         if(newDiscountBaht>0){
             RPrType = '-I'
+        }else{
+            RPrType = ''
         }
     }
     
-    let RPrDisc = discount.discountPercent || R_PrDisc
-    let RPrBath = R_PrBath || 0
-    let RPrAmt = newDiscountBaht || R_PrAmt
+    
 
     newRTotal = newRTotal - newDiscountBaht
 
@@ -407,7 +431,7 @@ const updateBalanceDetail = async payload => {
         R_Normal='${R_Normal}',R_Discount='${R_Discount}',R_Service='${R_Service}',R_Stock='${R_Stock}',
         R_Set='${R_Set}',R_Vat='${R_Vat}',R_Type='${R_Type}',R_ETD='${R_ETD}',R_Quan='${R_Quan}',
         R_Price='${R_Price}',R_Total='${newRTotal}',R_PrType='${RPrType}',R_PrCode='${R_PrCode}',
-        R_PrDisc='${RPrDisc}',R_PrBath='${RPrBath}',R_PrAmt='${RPrAmt}',R_DiscBath='${newDiscountBaht}',
+        R_PrDisc='${RPrDisc}',R_PrBath='${RPrBath}',R_PrAmt='${RPrAmt}',R_DiscBath='${R_DiscBath}',
         R_PrCuType='${R_PrCuType}',R_PrCuQuan='${R_PrCuQuan}',R_PrCuAmt='${R_PrCuAmt}',
         R_Redule='${R_Redule}',R_Kic='${R_Kic}',R_KicPrint='${R_KicPrint}',R_Void='${R_Void}',
         R_VoidUser='${R_VoidUser}',R_VoidTime='${R_VoidTime}',FieldName='${FieldName}',
@@ -569,5 +593,7 @@ module.exports = {
     returnStockIn,
     getVoidMsgList,
     deleteBalanceOnly,
-    getBalanceGroupProduct
+    getBalanceGroupProduct,
+    voidListMenuBalanceAll,
+    getSubProductByPluCode
 }

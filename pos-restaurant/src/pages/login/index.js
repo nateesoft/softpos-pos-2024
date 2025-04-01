@@ -235,7 +235,7 @@ const Login = () => {
                 <ThemeProvider theme={darkTheme}>
                   <Container>
                     <Box height={35} />
-                    <Grid2 textAlign="right">
+                    {branchInfo && <Grid2 textAlign="right">
                       <Typography
                         sx={{
                           fontSize: "12px",
@@ -246,7 +246,7 @@ const Login = () => {
                       >
                         สาขา {branchInfo.Code} {branchInfo.Name} ➲
                       </Typography>
-                    </Grid2>
+                    </Grid2>}
                     <Box display="flex" justifyContent="center">
                       <Typography
                         sx={{

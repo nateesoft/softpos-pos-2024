@@ -115,7 +115,7 @@ const printReceipt = (billData, printType, posConfigSetup, poshwSetup, creditLis
             return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
         }
 
-        let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+        let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
         headers = headers.filter(h => h !== "")
         let footers = [poshwSetup.Footting1, poshwSetup.Footting2, poshwSetup.Footting3]
         const orderListFilter = tSale.filter(o => o.R_Price > 0)

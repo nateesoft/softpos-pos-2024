@@ -53,7 +53,7 @@ const footer = `
 const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
   const posConfigSetup = await getPOSConfigSetupByTerminal(macno)
   const poshwSetup = await getDataByMacno(macno)
-  let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+  let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
 
   let header = `
@@ -240,7 +240,7 @@ const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo }) => {
 const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
   const posConfigSetup = await getPOSConfigSetupByTerminal(macno)
   const poshwSetup = await getDataByMacno(macno)
-  let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+  let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
 
   let header = `
@@ -406,7 +406,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
 const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
   const posConfigSetup = await getPOSConfigSetupByTerminal(macno)
   const poshwSetup = await getDataByMacno(macno)
-  let headers = [poshwSetup.Heading1, poshwSetup.Heading2, poshwSetup.Heading3, poshwSetup.Heading4]
+  let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
 
   let header = `

@@ -10,7 +10,11 @@ const {
 const { Unicode2ASCII } = require("../utils/StringUtil")
 
 const getSummaryItem = async (tableNo) => {
-  const sql = `select sum(R_Quan) R_Quan from balance where R_Table='${tableNo}' and R_Void <> 'V' and R_LinkIndex=''`
+  const sql = `select sum(R_Quan) R_Quan 
+  from balance where R_Table='${tableNo}' 
+  and R_Void <> 'V' 
+  and R_LinkIndex='' 
+  and R_QuanCanDisc>0 `
   const results = await pool.query(sql)
   if (results.length > 0) {
     return results[0].R_Quan
@@ -64,8 +68,72 @@ const updateTableDiscount = async (payload) => {
     DiscBath, CuponDiscAmt=0, SpaDiscAmt
   } = payload
 
+  // update all balance
   const totalItem = await getSummaryItem(tableFile.Tcode)
-  const avgDiscBath = DiscBath/totalItem
+  if (DiscBath>0) {
+    let avgDiscBath = DiscBath/totalItem
+    const sqlBalance = `update balance set R_DiscBath='${avgDiscBath}' where R_Table='${tableFile.Tcode}'`
+    await pool.query(sqlBalance)
+  } else if(CuponDiscAmt>0) {
+    let avgCuponDiscAmt = CuponDiscAmt/totalItem
+    const sqlBalance = `update balance set R_PrCuType='-C', R_PrCuBath='${avgCuponDiscAmt}' where R_Table='${tableFile.Tcode}'`
+    await pool.query(sqlBalance)
+  } else if(FastDiscAmt>0) {
+    let avgFastDiscAmt = FastDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-F', 
+      R_PrSubCode='FAS', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='10', 
+      R_PrSubAmt='${avgFastDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  } else if(EmpDiscAmt>0) {
+    let avgEmpDiscAmt = EmpDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-E', 
+      R_PrSubCode='EMP', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='50', 
+      R_PrSubAmt='${avgEmpDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  } else if(MemDiscAmt>0) {
+    let avgMemDiscAmt = MemDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-M', 
+      R_PrSubCode='MEM', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='10', 
+      R_PrSubAmt='${avgMemDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  } else if(TrainDiscAmt>0) {
+    let avgTrainDiscAmt = TrainDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-T', 
+      R_PrSubCode='TRA', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='10', 
+      R_PrSubAmt='${avgTrainDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  } else if(SubDiscAmt>0) {
+    let avgSubDiscAmt = SubDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-S', 
+      R_PrSubCode='SUB', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='10', 
+      R_PrSubAmt='${avgSubDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  }
 
   const sql = `update tablefile set 
         FastDisc='${FastDisc}',FastDiscAmt='${FastDiscAmt}',
@@ -78,10 +146,10 @@ const updateTableDiscount = async (payload) => {
         where Tcode='${tableFile.Tcode}'`
   await pool.query(sql)
 
-  // update all balance
-  if (DiscBath>0) {
-    const sqlBalance = `update balance set R_DiscBath='${avgDiscBath}' where R_Table='${tableFile.Tcode}'`
-    await pool.query(sqlBalance)
+  const discountAmount = FastDiscAmt + EmpDiscAmt + MemDiscAmt + TrainDiscAmt + SubDiscAmt + 
+    DiscBath + CuponDiscAmt
+  return {
+    discountAmount: discountAmount
   }
 }
 

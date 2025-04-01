@@ -23,31 +23,55 @@ const getDataCupon = async () => {
   return mappingResult
 }
 
-const saveData = async (payload, tableNo, macNo, cashier) => {
-  const R_Index = tableNo+macNo
-  const Time = ""
-  const { CuCode, qty } = payload
-  const CuAmt = qty * CuDiscBath
+const saveData = async (payload, tableNo, macNo, cashier, netTotalAmount) => {
+  const { CuCode, CuDisc, CuDiscBath, qty } = payload
+  const R_Index = tableNo+CuCode
+  let CuTotal = 0
+  let CuAmt = 0
+  if(CuDisc>0){
+    CuAmt = (CuDisc * netTotalAmount / 100) * qty
+  }else{
+    CuAmt = CuDiscBath * qty
+  }
+  CuTotal = CuAmt
   const sql = `INSERT INTO tempcupon
     (R_Index, R_Table, Terminal, Cashier, \`Time\`, 
-    CuCode, CuQuan, CuAmt, CuTotal, CuDisc, CuRedule, CuPayment, CuTextCode, 
+    CuCode, CuQuan, CuAmt, CuTotal, CuDisc, 
+    CuRedule, CuPayment, CuTextCode, 
     CuTextComment, CuEntertainFlag, CuEntertainUser)
-    VALUES('${R_Index}', '${tableNo}', '${macNo}', '${cashier}', '${Time}', 
-    '${CuCode}', ${qty}, ${CuAmt}, 0, 0, 0, 0, '', '', '', '');`
+    VALUES('${R_Index}', '${tableNo}', '${macNo}', '${cashier}', curtime(), 
+    '${CuCode}', ${qty}, ${CuAmt}, ${CuTotal}, ${CuDisc}, 
+    0, 0, '', '', '', '');`
   await pool.query(sql)
+
+  // update tablefile for cuponAmt
+  const sql2 = `UPDATE tablefile set CuponDiscAmt='${CuAmt}' WHERE Tcode='${tableNo}'`
+  const result = await pool.query(sql2)
+  return result
 }
 
 const saveDataCupon = async (payload) => {
-  const { cuponList, cashier, tableNo, macNo } = payload
+  const { cuponList, cashier, tableNo, macNo, netTotalAmount } = payload
   // clear tempcupon
-  await pool.query(`delete from tempcupon where R_Index='${tableNo+macNo}'`)
+  await pool.query(`delete from tempcupon where R_Table='${tableNo}'`)
 
   cuponList.forEach(async (cupon, index) => {
-    await saveData(cupon, tableNo, macNo, cashier)
+    await saveData(cupon, tableNo, macNo, cashier, netTotalAmount)
   })
+}
+
+const summaryCuponDiscountAmount = async (tableNo) => {
+    const sql = `select sum(CuAmt) CuAmt from tempcupon where R_Table='${tableNo}'`;
+    const results = await pool.query(sql)
+    if(results.length>0){
+      return results[0]
+    }
+
+    return 0.00
 }
 
 module.exports = {
   getDataCupon,
-  saveDataCupon
+  saveDataCupon,
+  summaryCuponDiscountAmount
 }
