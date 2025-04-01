@@ -94,6 +94,7 @@ const ProductDetailCard = ({
       .then((response) => {
         if (response.data.status === 2000) {
           console.log(`change type updated (${oType}).`)
+          initLoadBalanceProductGroup()
         }
       })
       .catch((error) => {
