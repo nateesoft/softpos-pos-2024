@@ -17,7 +17,8 @@ const {
   getBalanceGroupProduct,
   updateBalanceDetail,
   voidListMenuBalanceAll,
-  getSubProductByPluCode
+  getSubProductByPluCode,
+  updateChangeTypeMenu
 } = require('../../../services/BalanceService')
 const { getBalanceByRIndex, getBalanceMaxIndex, summaryBalance } = require('../../../services/CoreService')
 
@@ -98,6 +99,17 @@ router.patch('/updateQty', (req, res) => {
     })
 });
 
+router.patch('/updateChangeType', (req, res) => {
+  const { R_Table, R_ETD, macno, R_Index } = req.body
+  updateChangeTypeMenu(R_Table, R_ETD, macno, R_Index)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 router.get('/void-msg-list', function (req, res) {
   getVoidMsgList()
     .then(rows => {
@@ -118,6 +130,7 @@ router.get('/:tableNo', function (req, res) {
       res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
     })
 });
+
 router.get('/:tableNo/groupProduct', function (req, res) {
   const tableNo = req.params.tableNo
   getBalanceGroupProduct(tableNo)

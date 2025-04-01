@@ -25,8 +25,14 @@ const getSubProductByPluCode = async ({tableNo, rLinkIndex}) => {
 
 const voidListMenuBalanceAll = async ({ menu_code, void_message, Cachier, empCode, macno }) => {
     const allMenuInBalance = await getAllBalanceByMenuCode(menu_code)
-    allMenuInBalance.forEach(item => {
-        voidMenuBalance(item.R_Index, Cachier, empCode, void_message, macno)
+    allMenuInBalance.forEach(async item => {
+        await voidMenuBalance({
+            R_Index: item.R_Index, 
+            Cachier, 
+            empCode, 
+            voidMsg: void_message, 
+            macno
+        })
     })
 }
 
@@ -69,6 +75,13 @@ const getAllBalance = async () => {
 
 const getAllBalanceByMenuCode = async (menuCode) => {
     const sql = `select * from balance where R_PluCode='${menuCode}' order by R_Table, R_Index`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const getAllBalanceByRLinkIndex = async (rLinkIndex) => {
+    const sql = `select * from balance 
+        where R_LinkIndex='${rLinkIndex}' order by R_Index`;
     const results = await pool.query(sql)
     return results
 }
@@ -364,6 +377,22 @@ const addNewBalance = async payload => {
     return R_Index
 }
 
+const updateChangeTypeMenu = async (R_Table, R_ETD, macno, R_Index) => {
+    // update main menu
+    await pool.query(`update balance 
+        set R_ETD='${R_ETD}' where R_Index='${R_Index}'`)
+
+    // check subMenuList
+    const subLinkIndex = await getAllBalanceByRLinkIndex(R_Index)
+    subLinkIndex.forEach(async item => {
+        await pool.query(`update balance 
+            set R_ETD='${R_ETD}' where R_Index='${item.R_Index}'`)
+    })
+
+    // summary table
+    summaryBalance(R_Table, macno)
+}
+
 const updateBalanceDetail = async payload => {
     const { oldBalance, discount, optList = [], specialText = "", macno, userLogin, empCode, R_ETD } = payload
     const { R_Index, R_Table, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal, R_Discount,
@@ -595,5 +624,6 @@ module.exports = {
     deleteBalanceOnly,
     getBalanceGroupProduct,
     voidListMenuBalanceAll,
-    getSubProductByPluCode
+    getSubProductByPluCode,
+    updateChangeTypeMenu
 }

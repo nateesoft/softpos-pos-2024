@@ -43,7 +43,8 @@ const ProductCard = ({
   initLoadOrder,
   hideItem,
   setHideItem,
-  initLoadBalanceProductGroup
+  initLoadBalanceProductGroup,
+  menuType
 }) => {
   const { appData } = useContext(POSContext)
   const { currency, convertCurrency } = useContext(CurrencyContext)
@@ -95,7 +96,7 @@ const ProductCard = ({
     }
   }
 
-  const handleAddItem = () => {
+  const handleAddItem = (etdType) => {
     apiClient
       .post(`/api/balance`, {
         tableNo,
@@ -107,7 +108,8 @@ const ProductCard = ({
         qty: 1,
         macno,
         userLogin,
-        empCode
+        empCode,
+        etdType
       })
       .then((response) => {
         initLoadMenu()
@@ -229,7 +231,7 @@ const ProductCard = ({
                 onChange={(e) => setCount(e.target.value)}
               />}
               {showActionBalance(product) && (
-                <IconButton onClick={handleAddItem}>
+                <IconButton onClick={()=>handleAddItem(menuType)}>
                   <AddCircleIcon color="success" fontSize="large" />
                 </IconButton>
               )}

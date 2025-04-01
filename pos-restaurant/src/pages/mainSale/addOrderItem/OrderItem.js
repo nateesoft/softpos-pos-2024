@@ -68,9 +68,9 @@ const getFormatMoney = (convertCurrency, currency, number) => {
   }).format(convertCurrency(number))
 }
 
-const TotalBill = ({ summaryTable }) => {
+const TotalBill = ({summaryTable}) => {
   const { currency, convertCurrency } = useContext(CurrencyContext)
-  const convertedTotal = convertCurrency(summaryTable.netTotalAmount, currency)
+  const convertedTotal = convertCurrency(summaryTable, currency)
   return (
     <div
       style={{
@@ -88,10 +88,10 @@ const TotalBill = ({ summaryTable }) => {
       <Grid2 container justifyContent="flex-end">
         <AnimatePresence mode="popLayout">
           <motion.div
-            key={summaryTable.netTotalAmount}
+            key={summaryTable}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -20, opacity: 0 }}
+            exit={{ y: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
             <Typography fontSize={28} fontWeight="bold" sx={{ color: "black" }}>
@@ -120,7 +120,6 @@ const OrderItem = ({
   summaryTable,
   summaryTableFileBalance
 }) => {
-  console.log('OrderItem:', summaryTable)
   const navigate = useNavigate()
   const { appData } = useContext(POSContext)
   const { macno, userLogin, empCode } = appData
@@ -359,7 +358,8 @@ const OrderItem = ({
                         initLoadMenu={initLoadMenu}
                         initLoadOrder={initLoadOrder}
                         openModal={() => handleOpenMenu(product)}
-                        initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+                        initLoadBalanceProductGroup={initLoadBalanceProductGroup} 
+                        menuType="E"
                       />
                       <Divider />
                     </div>
@@ -422,7 +422,8 @@ const OrderItem = ({
                         initLoadMenu={initLoadMenu}
                         initLoadOrder={initLoadOrder}
                         openModal={() => handleOpenMenu(product)}
-                        initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+                        initLoadBalanceProductGroup={initLoadBalanceProductGroup} 
+                        menuType="T"
                       />
                       <Divider />
                     </div>
@@ -485,7 +486,8 @@ const OrderItem = ({
                         initLoadMenu={initLoadMenu}
                         initLoadOrder={initLoadOrder}
                         openModal={() => handleOpenMenu(product)}
-                        initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+                        initLoadBalanceProductGroup={initLoadBalanceProductGroup} 
+                        menuType="D"
                       />
                       <Divider />
                     </div>
@@ -517,7 +519,7 @@ const OrderItem = ({
           ส่งครัว/ พักโต๊ะ
         </Button>
       </Grid2>
-      {summaryTable && <TotalBill summaryTable={summaryTable} />}
+      <TotalBill summaryTable={getTotalAmount(OrderList)} />
       <Grid2 container spacing={1} justifyContent="center" padding={1}>
         <Button
           variant="contained"

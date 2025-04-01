@@ -13,7 +13,7 @@ import {
   TextField,
   Tabs,
   Tab,
-  Paper
+  Divider
 } from "@mui/material"
 import MainMenuIcon from '@mui/icons-material/StarHalf';
 import SubItemIcon from '@mui/icons-material/ViewSidebar';
@@ -65,7 +65,6 @@ const ProductDetailCard = ({
 }) => {
   const { appData } = useContext(POSContext)
   const { empCode, macno, userLogin } = appData
-  console.log('ProductDetailCard:', product)
   const {R_Opt1,R_Opt2,R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8} = product
 
   const [value, setValue] = React.useState(0)
@@ -81,8 +80,25 @@ const ProductDetailCard = ({
   const [discountPercent, setDiscountPercent] = useState(product.R_PrDisc||0)
   const [discountBaht, setDiscountBaht] = useState(product.R_PrAmt||0)
 
-  const handleChange = (event, oType) => {
+  const handleChangeETDType = (event, oType) => {
     setOrderType(event.target.value)
+
+    // update balance
+    apiClient
+      .patch(`/api/balance/updateChangeType`, {
+        R_Table: tableNo, 
+        R_ETD: oType, 
+        macno, 
+        R_Index: product.R_Index
+      })
+      .then((response) => {
+        if (response.data.status === 2000) {
+          console.log(`change type updated (${oType}).`)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error.message)
+      })
   }
 
   const handleTabChange = (event, newValue) => {
@@ -244,20 +260,21 @@ const ProductDetailCard = ({
             </Grid2>
           )}
           <Grid2 container spacing={2} marginTop={2}>
-            <Typography variant="p">ประเภทอาหาร</Typography>
+            <Typography variant="p">ประเภทอาหาร ({orderType})</Typography>
             <ToggleButtonGroup
               color="primary"
               value={orderType}
               exclusive
-              onChange={handleChange}
+              onChange={handleChangeETDType}
               aria-label="Platform"
               fullWidth
             >
-              <ToggleButton value="E">Dine In</ToggleButton>
-              <ToggleButton value="T">Take Away</ToggleButton>
-              <ToggleButton value="D">Delivery</ToggleButton>
+              <ToggleButton value="E" sx={{background: "pink", fontWeight: "bold"}}>Dine In</ToggleButton>
+              <ToggleButton value="T" sx={{background: "lightblue", fontWeight: "bold"}}>Take Away</ToggleButton>
+              <ToggleButton value="D" sx={{background: "lightgreen", fontWeight: "bold"}}>Delivery</ToggleButton>
             </ToggleButtonGroup>
           </Grid2>
+          <Divider sx={{background: "#000", margin: 1}} />
           {count === 0 && (
             <Alert severity="error" sx={{ width: "100%", marginBottom: "5px" }}>
               <Box>
