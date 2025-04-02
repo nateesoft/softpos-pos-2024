@@ -15,7 +15,8 @@ const getAllTSaleByRefno = async (refno) => {
     const results = await pool.query(sql)
     const mappingResult = results.map((item, index) => {
         return { 
-            ...item, 
+            ...item,
+            R_PName: ASCII2Unicode(item.R_PName) ,
             R_Opt1: ASCII2Unicode(item.R_Opt1) ,
             R_Opt2: ASCII2Unicode(item.R_Opt2) ,
             R_Opt3: ASCII2Unicode(item.R_Opt3) ,

@@ -44,7 +44,7 @@ class ComponentToPrint extends Component {
         id="content"
         container
         justifyContent="center"
-        sx={{ marginBottom: "100px" }}
+        sx={{ marginBottom: "100px", fontSize: 12 }}
       >
         <Paper
           elevation={0}

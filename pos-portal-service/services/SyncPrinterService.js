@@ -1,6 +1,6 @@
-const { getPOSConfigSetupByTerminal } = require("./POSConfigSetupService")
 const { getDataByMacno } = require("./PosHwSetup")
-const { getMoment } = require('../utils/MomentUtil')
+const { getMoment } = require('../utils/MomentUtil');
+const { getPOSConfigSetup } = require("./CoreService");
 
 const formatNumber = (num) => {
   return new Intl.NumberFormat('th-TH', {
@@ -17,7 +17,7 @@ const formatDateTime = data => {
   return getMoment(data).format("HH:mm:ss")
 }
 
-const truncateWord = (text, maxLength = 15) => {
+const truncateWord = (text, maxLength = 25) => {
   if (text.length <= maxLength) return text;
   let words = text.split(" ");
   let result = "";
@@ -51,7 +51,7 @@ const footer = `
     </div>`
 
 const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
-  const posConfigSetup = await getPOSConfigSetupByTerminal(macno)
+  const posConfigSetup = await getPOSConfigSetup()
   const poshwSetup = await getDataByMacno(macno)
   let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
@@ -99,8 +99,12 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
             <font face="${fontFamily}" size="4">Amount</font>
           </th>
         </tr>`
+    let tipsItem = `<div align="center">`
     tSaleInfo.forEach(tSale => {
-      if(tSale.R_Void === 'V' || tSale.R_Total === 0){
+      if(tSale.R_Void === 'V' || tSale.R_Total === 0 || tSale.R_PluCode=== 'TIPS') {
+        if (tSale.R_PluCode=== 'TIPS') {
+          tipsItem += `<font face="${fontFamily}" size="4">${truncateWord(tSale.R_PName)} ... ${formatNumber(tSale.R_Total)}</font>`
+        }
         return
       }
       billTable += `
@@ -120,7 +124,8 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
         </tr>`
     })
     
-    billTable += `</table></div>`
+    billTable += `</div></div>`
+    tipsItem += `</div>`
 
   const subTotalItems = tSaleInfo.filter(item => item.R_Void !== 'V').length
   
@@ -170,6 +175,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
         </table>
       </div>
       ${Divider}
+      ${tipsItem}
       <div align="center">
         <table width="100%" cellPadding="0" cellSpacing="0">
           <tr>
@@ -206,6 +212,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
           </tr>
         </table>
       </div>
+      ${Divider}
       <div align="center">
           <table width="100%" cellPadding="0" cellSpacing="0">
             <tr>
@@ -214,6 +221,14 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
               </td>
               <td align="right">
                 <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_Cash)}</font>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <font face="${fontFamily}" size="4">บัตรเครดิต</font>
+              </td>
+              <td align="right">
+                <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_CrAmt1)}</font>
               </td>
             </tr>
           </table>
@@ -238,7 +253,7 @@ const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo }) => {
 }
 
 const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
-  const posConfigSetup = await getPOSConfigSetupByTerminal(macno)
+  const posConfigSetup = await getPOSConfigSetup()
   const poshwSetup = await getDataByMacno(macno)
   let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
@@ -404,7 +419,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
 }
 
 const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
-  const posConfigSetup = await getPOSConfigSetupByTerminal(macno)
+  const posConfigSetup = await getPOSConfigSetup()
   const poshwSetup = await getDataByMacno(macno)
   let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
