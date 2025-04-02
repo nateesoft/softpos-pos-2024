@@ -207,7 +207,7 @@ const CustomerCheckin = (props) => {
           setTimeCheckIn(
             moment(tableInfoData.datetime_checkin).format("DD/MM/YYYY HH:mm:ss")
           )
-          setOrderType(tableInfoData.table_order_type_start)
+          setOrderType(tableInfoData?.table_order_type_start || "E")
           setNationCountry(tableInfoData.nation_country)
           setCustomerNote(tableInfoData.customer_note)
           setBillNo(tableInfoData.bill_no)

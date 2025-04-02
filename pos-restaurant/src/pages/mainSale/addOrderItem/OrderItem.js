@@ -340,9 +340,6 @@ const OrderItem = ({
                         <RemoveCircleIcon color="error" fontSize="large"/>
                       </IconButton>
                       <Typography>({item.R_Quan} items)</Typography>
-                      {/* <IconButton onClick={()=>console.log("Click Add Menu")}>
-                        <AddCircleIcon color="success" fontSize="large" />
-                      </IconButton> */}
                     </Grid2>
                   </Grid2>
                 </Grid2>
@@ -399,14 +396,11 @@ const OrderItem = ({
                     </Grid2>
                   </Grid2>
                   <Grid2 size={6}>
-                    <Grid2 container direction="row" justifyContent="center" alignItems="center">
+                    <Grid2 container direction="row" justifyContent="flex-end" alignItems="center">
                       <IconButton onClick={()=>handleVoidGroupMenu(item.R_PluCode)}>
                         <RemoveCircleIcon color="error" fontSize="large"/>
                       </IconButton>
-                      <Typography>{item.R_Quan}</Typography>
-                      <IconButton onClick={()=>console.log("Click Add Menu")}>
-                        <AddCircleIcon color="success" fontSize="large" />
-                      </IconButton>
+                      <Typography>({item.R_Quan} items)</Typography>
                     </Grid2>
                   </Grid2>
                 </Grid2>
@@ -463,14 +457,11 @@ const OrderItem = ({
                     </Grid2>
                   </Grid2>
                   <Grid2 size={6}>
-                    <Grid2 container direction="row" justifyContent="center" alignItems="center">
+                    <Grid2 container direction="row" justifyContent="flex-end" alignItems="center">
                       <IconButton onClick={()=>handleVoidGroupMenu(item.R_PluCode)}>
                         <RemoveCircleIcon color="error" fontSize="large"/>
                       </IconButton>
-                      <Typography>{item.R_Quan}</Typography>
-                      <IconButton onClick={()=>console.log("Click Add Menu")}>
-                        <AddCircleIcon color="success" fontSize="large" />
-                      </IconButton>
+                      <Typography>({item.R_Quan} items)</Typography>
                     </Grid2>
                   </Grid2>
                 </Grid2>

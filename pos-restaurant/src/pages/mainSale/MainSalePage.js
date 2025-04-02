@@ -90,7 +90,7 @@ function MainSalePage() {
       .then((response) => {
         if (response.status === 200) {
           const tableCheckInData = response.data.data
-          setOrderType(tableCheckInData.table_order_type_start)
+          setOrderType(tableCheckInData?.table_order_type_start || "E")
         }
       })
       .catch((error) => {

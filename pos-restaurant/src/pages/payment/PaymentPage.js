@@ -155,9 +155,10 @@ function PaymentPage() {
             macno={macno}
             tableNo={tableNo}
             orderList={orderList}
-            initLoad={splitBillAction}
+            splitBillAction={splitBillAction}
             tableFile={summaryTable}
             memberInfo={memberInfo}
+            initLoad={initLoadPayment}
           />
         </Box>
       </Modal>

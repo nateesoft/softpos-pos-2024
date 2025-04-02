@@ -25,6 +25,7 @@ const getDataCupon = async () => {
 
 const saveData = async (payload, tableNo, macNo, cashier, netTotalAmount) => {
   const { CuCode, CuDisc, CuDiscBath, qty } = payload
+  const time = moment().format('HH:mm')
   const R_Index = tableNo+CuCode
   let CuTotal = 0
   let CuAmt = 0
@@ -39,7 +40,7 @@ const saveData = async (payload, tableNo, macNo, cashier, netTotalAmount) => {
     CuCode, CuQuan, CuAmt, CuTotal, CuDisc, 
     CuRedule, CuPayment, CuTextCode, 
     CuTextComment, CuEntertainFlag, CuEntertainUser)
-    VALUES('${R_Index}', '${tableNo}', '${macNo}', '${cashier}', curtime(), 
+    VALUES('${R_Index}', '${tableNo}', '${macNo}', '${cashier}', '${time}', 
     '${CuCode}', ${qty}, ${CuAmt}, ${CuTotal}, ${CuDisc}, 
     0, 0, '', '', '', '');`
   await pool.query(sql)
