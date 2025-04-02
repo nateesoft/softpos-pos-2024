@@ -72,7 +72,7 @@ app.use(helmet());
 
 const username = process.env.WEB_USER_AUTH
 const password = process.env.WEB_USER_PASS
-app.use(basicAuth({ users: { [username]: password } }))
+// app.use(basicAuth({ users: { [username]: password } }))
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
 

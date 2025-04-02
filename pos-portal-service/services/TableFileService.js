@@ -63,9 +63,9 @@ const updateTableAvailableStatus = async (tableNo) => {
 const updateTableDiscount = async (payload) => {
   const {
     tableFile, 
-    FastDisc, FastDiscAmt, EmpDisc, EmpDiscAmt,
-    MemDisc, MemDiscAmt, TrainDisc, TrainDiscAmt, SubDisc, SubDiscAmt,
-    DiscBath, CuponDiscAmt=0, SpaDiscAmt
+    FastDisc, FastDiscAmt=0, EmpDisc, EmpDiscAmt=0,
+    MemDisc, MemDiscAmt=0, TrainDisc, TrainDiscAmt=0, SubDisc, SubDiscAmt=0,
+    DiscBath=0, CuponDiscAmt=0, SpaDiscAmt=0
   } = payload
 
   // update all balance
@@ -147,7 +147,7 @@ const updateTableDiscount = async (payload) => {
   await pool.query(sql)
 
   const discountAmount = FastDiscAmt + EmpDiscAmt + MemDiscAmt + TrainDiscAmt + SubDiscAmt + 
-    DiscBath + CuponDiscAmt
+    DiscBath + CuponDiscAmt + SpaDiscAmt
   return {
     discountAmount: discountAmount
   }

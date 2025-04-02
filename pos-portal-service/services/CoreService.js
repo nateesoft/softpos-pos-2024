@@ -414,7 +414,7 @@ const summaryBalance = async (tableNo, macno) => {
   tablefile.ServiceAmt = responseData.totalServiceAmount
   tablefile.ItemDiscAmt = responseData.totalDiscountAmount
   tablefile.VatAmt = responseData.totalVatAmount
-  tablefile.NetTotal = responseData.netTotalAmount
+  tablefile.NetTotal = responseData.netTotalAmount - discountAmount
   tablefile.Food = responseData.Food
   tablefile.Drink = responseData.Drink
   tablefile.Product = responseData.Product

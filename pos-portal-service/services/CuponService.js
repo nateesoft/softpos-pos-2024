@@ -1,4 +1,5 @@
 const pool = require("../config/database/MySqlConnect")
+const { getMoment } = require("../utils/MomentUtil")
 const { ASCII2Unicode } = require("../utils/StringUtil")
 
 const getDataCupon = async () => {
@@ -25,7 +26,7 @@ const getDataCupon = async () => {
 
 const saveData = async (payload, tableNo, macNo, cashier, netTotalAmount) => {
   const { CuCode, CuDisc, CuDiscBath, qty } = payload
-  const time = moment().format('HH:mm')
+  const time = getMoment().format('HH:mm')
   const R_Index = tableNo+CuCode
   let CuTotal = 0
   let CuAmt = 0
@@ -56,9 +57,17 @@ const saveDataCupon = async (payload) => {
   // clear tempcupon
   await pool.query(`delete from tempcupon where R_Table='${tableNo}'`)
 
-  cuponList.forEach(async (cupon, index) => {
+  for (const cupon of cuponList) {
     await saveData(cupon, tableNo, macNo, cashier, netTotalAmount)
-  })
+  }
+
+  const sql = `select sum(CuAmt) CuAmt from tempcupon where R_Table='${tableNo}'`;
+  const results = await pool.query(sql)
+  if(results.length>0){
+    return results[0]
+  }else{
+    return 0.00
+  }
 }
 
 const summaryCuponDiscountAmount = async (tableNo) => {

@@ -78,7 +78,9 @@ const CuponListModal = (props) => {
         })
         .then((response) => {
           if (response.status === 200) {
-            setSpecialCuponAmt(summaryCuponAmt)
+            const cuponAmount = response.data.data
+            console.log('cuponAmount:', cuponAmount)
+            setSpecialCuponAmt(cuponAmount.CuAmt)
             onClose()
           }
         })

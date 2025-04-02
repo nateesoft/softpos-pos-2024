@@ -137,6 +137,10 @@ const getVoidMsgList = async () => {
 const emptyTableBalance = async tableNo => {
     const sql = `delete from balance where R_Table='${tableNo}'`;
     const results = await pool.query(sql)
+
+    // clear temp cupon
+    await pool.query(`delete from tempcupon where R_Table='${tableNo}'`)
+
     return results
 }
 
