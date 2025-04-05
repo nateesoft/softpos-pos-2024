@@ -25,3 +25,5 @@ yarn-error.log*
 /server/webapp1
 /server/webapp2
 /server/webapp3
+
+/server/Archive.zip
