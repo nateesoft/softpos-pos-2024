@@ -30,7 +30,7 @@ const truncateWord = (text, maxLength = 25) => {
 
 
 const companyLogo = `com_logo.jpg`
-const fontFamily = `Angsana New`
+const fontFamily = process.env.RECEIPT_FONT_FAMILY || `Angsana New`
 const Divider = `
 <div align="center">
   <font face="${fontFamily}" size="1">----------------------------------------------------------------------------------------------------</font>

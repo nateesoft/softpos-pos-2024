@@ -1,3 +1,3 @@
 @echo off
 
-pm2 start msg-service.config.js
+pm2 start ecosystem.config.js
