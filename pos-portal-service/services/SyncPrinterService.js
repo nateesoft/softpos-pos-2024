@@ -9,6 +9,10 @@ const formatNumber = (num) => {
   }).format(num);
 };
 
+const formatPoint = (point) => {
+  return point.toLocaleString()
+}
+
 const formatDate = data => {
   return getMoment(data).format("DD/MM/YYYY")
 }
@@ -229,6 +233,36 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
               </td>
               <td align="right">
                 <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_CrAmt1)}</font>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      ${Divider}
+      <div align="center">
+          <table width="100%" cellPadding="0" cellSpacing="0">
+            <tr>
+              <td>
+                <font face="${fontFamily}" size="4">สมาชิก</font>
+              </td>
+              <td align="right">
+                <font face="${fontFamily}" size="4">${billInfo.B_MemCode}</font>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <font face="${fontFamily}" size="4"></font>
+              </td>
+              <td align="right">
+                <font face="${fontFamily}" size="4">${billInfo.B_MemName}</font>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <font face="${fontFamily}" size="4">คะแนนสะสม</font>
+              </td>
+              <td align="right">
+                <font face="${fontFamily}" size="4">${formatPoint(billInfo.B_MemCurSum)}</font>
               </td>
             </tr>
           </table>

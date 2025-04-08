@@ -45,6 +45,7 @@ class ComponentToPrint extends Component {
     const sumTypeD = reports.sumTypeD
     const receiptBill = reports.receiptBill
     const voidBill = reports.voidBill
+    const memberInfo = reports.memberInfo
 
     if (!report) {
       return <div align="center">Loading...</div>
@@ -55,7 +56,7 @@ class ComponentToPrint extends Component {
         id="content"
         container
         justifyContent="center"
-        sx={{ marginBottom: "100px", fontSize: 12 }}
+        sx={{ marginBottom: "100px", fontSize: 12, fontFamily: "Angsana New" }}
       >
         <Paper
           elevation={0}
@@ -288,6 +289,20 @@ class ComponentToPrint extends Component {
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right">{report.B_Cust}</td>
+              </tr>
+              <tr>
+                <td>จำนวนสมาชิก</td>
+                <td align="right"></td>
+                <td align="right"></td>
+                <td align="right"></td>
+                <td align="right">{memberInfo.TotalMember}</td>
+              </tr>
+              <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
+                <td>ยอดซื้อสมาชิก: {formatCurrency(memberInfo.NetAmount)}</td>
+                <td align="right"></td>
+                <td align="right"></td>
+                <td align="right">คะแนนสะสม</td>
+                <td align="right">{memberInfo.TotalScore.toLocaleString()}</td>
               </tr>
               <tr>
                 <td>จำนวนใบกำกับภาษีอย่างย่อ</td>

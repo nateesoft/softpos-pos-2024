@@ -201,67 +201,66 @@ class ComponentToPrint extends Component {
                 <TableCell align="left"></TableCell>
                 <TableCell align="right">Amount</TableCell>
               </TableBody>
-              {orderListFilter &&
-                orderListFilter.map((item) => (
-                  <>
-                    {item.R_Void !== "V" && (
+              {orderListFilter && orderListFilter.map((item) => (
+                <>
+                  {item.R_Void !== "V" && (
+                    <TableBody>
+                      <TableCell>{item.R_ETD}</TableCell>
+                      <TableCell
+                        sx={{
+                          maxWidth: "150px",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden"
+                        }}
+                      >
+                        {item.R_PName}
+                      </TableCell>
+                      <TableCell align="right">{item.R_Quan}X</TableCell>
+                      <TableCell align="right">
+                        {NumFormat(item.R_Price)}
+                      </TableCell>
+                    </TableBody>
+                  )}
+                  {item.R_Void === "V" && (
+                    <>
                       <TableBody>
-                        <TableCell>{item.R_ETD}</TableCell>
                         <TableCell
                           sx={{
-                            maxWidth: "150px",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden"
+                            textDecoration: "line-through",
+                            color: "red"
+                          }}
+                        >
+                          {item.R_ETD}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            textDecoration: "line-through",
+                            color: "red"
                           }}
                         >
                           {item.R_PName}
                         </TableCell>
-                        <TableCell align="right">{item.R_Quan}X</TableCell>
-                        <TableCell align="right">
-                          {NumFormat(item.R_Price)}
+                        <TableCell
+                          sx={{
+                            textDecoration: "line-through",
+                            color: "red"
+                          }}
+                          align="right"
+                        >
+                          {item.R_Quan}X
+                        </TableCell>
+                        <TableCell align="right">{NumFormat(0)}</TableCell>
+                      </TableBody>
+                      <TableBody>
+                        <TableCell colSpan={4} align="right">
+                          ** Void สินค้า: {item.VoidMsg}
                         </TableCell>
                       </TableBody>
-                    )}
-                    {item.R_Void === "V" && (
-                      <>
-                        <TableBody>
-                          <TableCell
-                            sx={{
-                              textDecoration: "line-through",
-                              color: "red"
-                            }}
-                          >
-                            {item.R_ETD}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textDecoration: "line-through",
-                              color: "red"
-                            }}
-                          >
-                            {item.R_PName}
-                          </TableCell>
-                          <TableCell
-                            sx={{
-                              textDecoration: "line-through",
-                              color: "red"
-                            }}
-                            align="right"
-                          >
-                            {item.R_Quan}X
-                          </TableCell>
-                          <TableCell align="right">{NumFormat(0)}</TableCell>
-                        </TableBody>
-                        <TableBody>
-                          <TableCell colSpan={4} align="right">
-                            ** Void สินค้า: {item.VoidMsg}
-                          </TableCell>
-                        </TableBody>
-                      </>
-                    )}
-                  </>
-                ))}
+                    </>
+                  )}
+                </>
+              ))}
             </Table>
           </TableContainer>
           <Divider />
@@ -319,21 +318,20 @@ class ComponentToPrint extends Component {
                 ชำระด้วยบัตรเครดิต
               </Typography>
             )}
-            {tCreditList &&
-              tCreditList.map((item) => (
-                <div>
-                  <Box display="flex" justifyContent="space-between">
-                    <MyTypo2>{item.CrCode}</MyTypo2>
-                    <MyTypo2>{formatBindCredit(item.CardNo)}</MyTypo2>
-                  </Box>
-                  <Box display="flex" justifyContent="space-between">
-                    <MyTypo2>
-                      CR-Charge {NumFormat(item.CrCharge)}% (
-                      {NumFormat(item.CrChargeAmount)}) {NumFormat(item.CrAmt)}
-                    </MyTypo2>
-                  </Box>
-                </div>
-              ))}
+            {tCreditList && tCreditList.map((item) => (
+              <div>
+                <Box display="flex" justifyContent="space-between">
+                  <MyTypo2>{item.CrCode}</MyTypo2>
+                  <MyTypo2>{formatBindCredit(item.CardNo)}</MyTypo2>
+                </Box>
+                <Box display="flex" justifyContent="space-between">
+                  <MyTypo2>
+                    CR-Charge {NumFormat(item.CrCharge)}% (
+                    {NumFormat(item.CrChargeAmount)}) {NumFormat(item.CrAmt)}
+                  </MyTypo2>
+                </Box>
+              </div>
+            ))}
             <Box display="flex" justifyContent="space-between">
               <MyTypo2>เงินสด</MyTypo2>
               <MyTypo2>{NumFormat(B_Cash || 0)}</MyTypo2>
@@ -347,12 +345,11 @@ class ComponentToPrint extends Component {
           <div align="center">
             <MyTypo value={posConfigSetup.P_PrintRecpMessage} />
           </div>
-          {footers &&
-            footers.map((footer) => (
-              <div align="center">
-                <MyTypo value={footer} />
-              </div>
-            ))}
+          {footers && footers.map((footer) => (
+            <div align="center">
+              <MyTypo value={footer} />
+            </div>
+          ))}
         </Paper>
       </Grid2>
     )

@@ -26,7 +26,7 @@ class ComponentToPrint extends Component {
         return (
             <Grid2 id='content' container 
                 justifyContent="center" 
-                sx={{ marginBottom: "100px", fontSize: 12 }}>
+                sx={{ marginBottom: "100px", fontSize: 12, fontFamily: "Angsana New" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
                     {headers && headers.map((header) => <div>{header}</div>)}
                     <div style={{ marginTop: "30px" }}></div>

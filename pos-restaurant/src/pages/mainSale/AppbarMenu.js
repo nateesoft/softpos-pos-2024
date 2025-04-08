@@ -132,6 +132,12 @@ const AppbarMenu = ({ tableNo,
     navigate("/floorplan")
   }
 
+  const handleEnterSearch = (evt) => {
+    if (evt.key === "Enter") {
+      seachProductMenu()
+    }
+  }
+
   const seachProductMenu = ()=> {
     if (search !== "") {
       apiClient
@@ -219,8 +225,10 @@ const AppbarMenu = ({ tableNo,
             <StyledInputBase
               placeholder="ค้นหาเมนู…"
               inputProps={{ "aria-label": "search" }}
+              autoFocus
               value={search}
               onChange={e=>setSearch(e.target.value)}
+              onKeyDown={handleEnterSearch}
             />
           </Search>
           <Button variant="contained" color="info" sx={{marginLeft: 1}} onClick={seachProductMenu}>ค้นหา</Button>

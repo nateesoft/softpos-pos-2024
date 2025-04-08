@@ -35,7 +35,7 @@ const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
   return (
     <Paper
       elevation={3}
-      sx={{ margin: "5px", background: "#123456", boxShadow: "3px 4px black" }}
+      sx={{ margin: "5px", background: "#123456", boxShadow: "3px 4px black", overflow: "auto", height: 250 }}
     >
       <Grid container justifyContent="center" spacing={1} padding={1}>
         <img src={`/${baseName}/images/profile_crm.png`} alt="" />
@@ -87,10 +87,10 @@ const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
             </Typography>
             <Box sx={{ borderBlock: "2px solid yellow" }}>
               <Typography style={{ color: "white" }}>
-                วันที่สมัคร:{" "}
+                วันหมดอายุ:{" "}
                 <Moment
                   format="DD/MM/YYYY"
-                  date={memberInfo.Member_AppliedDate}
+                  date={memberInfo.Member_ExpiredDate}
                 />
               </Typography>
               <Typography style={{ color: "white" }}>
