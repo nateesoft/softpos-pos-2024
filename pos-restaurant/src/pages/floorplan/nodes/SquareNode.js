@@ -1,12 +1,17 @@
+import { useContext } from "react"
+
+import { POSContext } from "../../../AppContext"
+
 const style = {
   border: "1px solid #aaa",
   boxShadow: "2px 2px chocolate",
   borderRadius: "10px"
 }
 
-const baseName = process.env.REACT_APP_BASE_NAME
-
 const SquareNode = (props) => {
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const { data, bgColor } = props
   return (
     <div align="center" style={{ width: "128px" }}>

@@ -23,8 +23,6 @@ import OptionMenuSelect from "../OptionMenuSelect"
 import { POSContext } from "../../../AppContext"
 import NumberFormat from "../../ui-utils/NumberFormat"
 
-const baseName = process.env.REACT_APP_BASE_NAME
-
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props
 
@@ -64,7 +62,7 @@ const ProductDetailCard = ({
   initLoadBalanceProductGroup
 }) => {
   const { appData } = useContext(POSContext)
-  const { empCode, macno, userLogin } = appData
+  const { empCode, macno, userLogin, baseName } = appData
   const {R_Opt1,R_Opt2,R_Opt3,R_Opt4,R_Opt5,R_Opt6,R_Opt7,R_Opt8} = product
 
   const [value, setValue] = React.useState(0)

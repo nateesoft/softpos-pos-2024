@@ -122,9 +122,21 @@ const AppbarMenu = ({ tableNo,
   }
 
   const createQRCode = () => {
-    const customerUrl = process.env.REACT_APP_FOOD_ORDING_APP
-    socket.emit("createQRCode", customerUrl + "/" + tableNo)
-    setAnchorEl(null)
+    apiClient.post("/api/customer/order", {
+      branchCode: "xxx", // wait for get branch_code 
+      tableNo: tableNo
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const data = response.data.data
+        socket.emit("createQRCode", data.redirectUrl)
+        setAnchorEl(null)
+      }
+    })
+    .catch((error) => {
+      handleNotification(error.message)
+    })
+    
   }
 
   const navigate = useNavigate()

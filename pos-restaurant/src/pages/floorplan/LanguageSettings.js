@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import MenuItem from "@mui/material/MenuItem"
 import { Box, Grid2, IconButton, Menu, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
-
-const baseName = process.env.REACT_APP_BASE_NAME
+import { POSContext } from "../../AppContext"
 
 const LanguageSettings = () => {
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const { i18n } = useTranslation("global")
   const [anchorEl, setAnchorEl] = useState(null)
   const [language, setLanguage] = useState(

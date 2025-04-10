@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, forwardRef } from "react"
+import React, { useState, useEffect, useCallback, forwardRef, useContext } from "react"
 import {
   Box,
   Button,
@@ -20,8 +20,7 @@ import ChangeProductList from "./ChangeProductList"
 import apiClient from "../../httpRequest"
 import ManualPriceInput from "./ManualPriceInput"
 import { useAlert } from "../../contexts/AlertContext"
-
-const baseName = process.env.REACT_APP_BASE_NAME
+import { POSContext } from "../../AppContext"
 
 const modalStyle = {
   position: "absolute",
@@ -45,6 +44,9 @@ const MenuSetModal = ({
   optionalList,
   setOptionalList
 }) => {
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const { handleNotification } = useAlert()
 
   const [showChangeListMenu, setShowChangeListMenu] = useState(false)

@@ -1,11 +1,15 @@
+import { useContext } from "react"
 import { Helmet } from "react-helmet-async"
 import Typography from "@mui/material/Typography"
 import Grid from "@mui/material/Grid2"
 import { Box } from "@mui/material"
 
-const baseName = process.env.REACT_APP_BASE_NAME
+import { POSContext } from '../AppContext'
 
 const PageNotFound = () => {
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   return (
     <>
       <Helmet>

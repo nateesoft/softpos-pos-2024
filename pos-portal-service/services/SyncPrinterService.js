@@ -109,7 +109,6 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
         if (tSale.R_PluCode=== 'TIPS') {
           tipsItem += `<font face="${fontFamily}" size="4">${truncateWord(tSale.R_PName)} ... ${formatNumber(tSale.R_Total)}</font>`
         }
-        return
       }
       billTable += `
         <tr>
@@ -128,7 +127,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
         </tr>`
     })
     
-    billTable += `</div></div>`
+    billTable += `</table></div>`
     tipsItem += `</div>`
 
   const subTotalItems = tSaleInfo.filter(item => item.R_Void !== 'V').length

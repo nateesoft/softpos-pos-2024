@@ -17,8 +17,6 @@ import OptionMenuSelect from "./OptionMenuSelect"
 import { POSContext } from "../../AppContext"
 import apiClient from "../../httpRequest"
 
-const baseName = process.env.REACT_APP_BASE_NAME
-
 const ProductDetailCard = memo(
   ({
     tableNo,
@@ -29,7 +27,7 @@ const ProductDetailCard = memo(
     initLoadMenu
   }) => {
     const { appData } = useContext(POSContext)
-    const { empCode, macno, userLogin } = appData
+    const { empCode, macno, userLogin, baseName } = appData
 
     const [count, setCount] = useState(product.qty || 1)
     const [optList, setOptList] = useState([])

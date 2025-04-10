@@ -24,8 +24,6 @@ import { POSContext } from "../../../AppContext"
 import { CurrencyContext } from "../../../contexts/CurrencyContext"
 import { useAlert } from "../../../contexts/AlertContext"
 
-const baseName = process.env.REACT_APP_BASE_NAME
-
 const modalStyle = {
   position: "absolute",
   top: "50%",
@@ -50,7 +48,7 @@ const ProductCard = ({
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const { handleNotification } = useAlert()
 
-  const { macno, userLogin, empCode } = appData
+  const { macno, userLogin, empCode, baseName } = appData
   const [voidMsgList, setVoidMsgList] = useState([])
   const [voidMsg, setVoidMsg] = useState([])
   const [currRIndex, setCurrRIndex] = useState("")

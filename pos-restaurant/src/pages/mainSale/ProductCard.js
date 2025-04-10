@@ -5,10 +5,12 @@ import Grid2 from "@mui/material/Grid2"
 import { Box, Button, Badge, Typography } from "@mui/material"
 
 import { CurrencyContext } from "../../contexts/CurrencyContext"
-
-const baseName = process.env.REACT_APP_BASE_NAME
+import { POSContext } from "../../AppContext"
 
 const ProductCard = memo((props) => {
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const {
     id,

@@ -1,11 +1,13 @@
 module.exports = {
     apps: [{
-      name: "pos-app0",
+      name: "pos-app",
       script: "pos-restaurant/server/server.js",
       env: {
         WEB_PORT:3000,
-        SERVICE_HOST:"http://127.0.0.1:9090/api",
-        WEB_FOLDER:"webapp"
+        SERVICE_HOST:"http://127.0.0.1:9091/api",
+        SOCKET_HOST:"http://127.0.0.1:8081",
+        WEB_FOLDER:"webapp",
+        MACNO: "001"
       }
     },
     {
@@ -14,7 +16,9 @@ module.exports = {
       env: {
         WEB_PORT:3001,
         SERVICE_HOST:"http://127.0.0.1:9091/api",
-        WEB_FOLDER:"webapp"
+        SOCKET_HOST:"http://127.0.0.1:8081",
+        WEB_FOLDER:"webapp",
+        MACNO: "002"
       }
     },
     {
@@ -23,7 +27,9 @@ module.exports = {
       env: {
         WEB_PORT:3002,
         SERVICE_HOST:"http://127.0.0.1:9092/api",
-        WEB_FOLDER:"webapp"
+        SOCKET_HOST:"http://127.0.0.1:8082",
+        WEB_FOLDER:"webapp",
+        MACNO: "001"
       }
     },
     {
@@ -32,7 +38,10 @@ module.exports = {
       env: {
         WEB_PORT:3003,
         SERVICE_HOST:"http://127.0.0.1:9093/api",
-        WEB_FOLDER:"webapp"
+        SOCKET_HOST:"http://127.0.0.1:8083",
+        WEB_FOLDER:"webapp",
+        MACNO: "001"
       }
     }]
   }
+  

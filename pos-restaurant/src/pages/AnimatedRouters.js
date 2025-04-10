@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+import React, { Suspense, useContext } from "react"
 import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom"
 import { AnimatePresence } from "framer-motion"
 import { useIdleTimer } from "react-idle-timer"
@@ -62,11 +62,12 @@ import AICharacter from "../agi/AICharacter"
 import VirtualKeyboard from "../utils/VirtualKeyboard"
 
 import DashboardPage from "./dashboard"
-
-const baseName = process.env.REACT_APP_BASE_NAME
+import { POSContext } from "../AppContext"
 
 const AnimatedRoutes = () => {
   const location = useLocation()
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
 
   const handleOnUserIdle = () => {
     localStorage.setItem("userLogin", "")

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import Grid from "@mui/material/Grid2"
 import Paper from "@mui/material/Paper"
 import Box from "@mui/material/Box"
@@ -8,8 +8,7 @@ import PersonSearchIcon from "@mui/icons-material/PersonSearch"
 import Moment from "react-moment"
 
 import MemberInfoModal from "./MemberInfoModal"
-
-const baseName = process.env.REACT_APP_BASE_NAME
+import { POSContext } from '../../AppContext'
 
 const modalStyle = {
   position: "absolute",
@@ -32,6 +31,9 @@ const NumFormat = (data) => {
 
 const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
   const [openMember, setOpenMember] = useState(false)
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   return (
     <Paper
       elevation={3}

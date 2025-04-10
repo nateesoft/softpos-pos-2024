@@ -1,18 +1,20 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { useNavigate } from "react-router-dom";
 
-const baseName = process.env.REACT_APP_BASE_NAME
+import {POSContext} from '../AppContext'
 
-const bgImage = {
-  backgroundImage: `url(/${baseName}/images/login_images.jpg)`,
-  width: "100vw",
-  height: "100vh",
-  border: "1px solid",
-  padding: "10px",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-  opacity: "75%"
+const bgImage = (baseName) => {
+  return {
+    backgroundImage: `url(/${baseName}/images/login_images.jpg)`,
+    width: "100vw",
+    height: "100vh",
+    border: "1px solid",
+    padding: "10px",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+    opacity: "75%"
+  }
 }
 
 const bgText = {
@@ -55,6 +57,9 @@ const inputPin = {
 
 const PinLock = () => {
   const navigate = useNavigate();
+
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
 
   const [pin1, setPin1] = useState("")
   const [pin2, setPin2] = useState("")
@@ -106,7 +111,7 @@ const PinLock = () => {
 
   return (
     <div>
-      <div style={bgImage}></div>
+      <div style={() => bgImage(baseName)}></div>
       <div style={bgText}>
         <h2 style={{ color: "gold", textShadow: "2px 3px black" }}>POS RESTAURANT</h2>
         <table>

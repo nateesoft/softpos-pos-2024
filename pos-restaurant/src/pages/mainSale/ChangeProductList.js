@@ -1,11 +1,11 @@
-import React from "react"
+import React, { useContext } from "react"
 import Box from "@mui/material/Box"
 import List from "@mui/material/List"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import { Grid2, Typography } from "@mui/material"
 
-const baseName = process.env.REACT_APP_BASE_NAME
+import { POSContext } from "../../AppContext"
 
 const ChangeProductList = ({
   optionalList,
@@ -15,6 +15,9 @@ const ChangeProductList = ({
   currentMenu,
   closeDialog
 }) => {
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const newOptionList = optionalList.filter(
     (item) => item.checked === false && item.menu_code !== currentMenu
   )

@@ -33,8 +33,6 @@ import MultipleCreditPayment from "./MultipleCreditPayment"
 import { ModalConfirm } from "../ui-utils/AlertPopup"
 import DiscountFormModal from "./modal/DiscountFormModal"
 
-const baseName = process.env.REACT_APP_BASE_NAME
-
 const NumFormat = (data) => {
   if(!data && data !== 0) return
   return data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,")
@@ -72,7 +70,7 @@ function PaymentForm({
   initLoad
 }) {
   const { appData } = useContext(POSContext)
-  const { macno, branchInfo, companyInfo, empCode } = appData
+  const { macno, branchInfo, companyInfo, empCode, baseName } = appData
 
   const { serviceAmount, vatAmount, netTotalAmount } = tableFile
   const R_NetTotal = netTotalAmount
