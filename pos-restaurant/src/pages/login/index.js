@@ -10,7 +10,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { motion } from "framer-motion"
 import LoginIcon from "@mui/icons-material/Login"
 import { Divider, Grid2, Modal, useMediaQuery } from "@mui/material"
-import { io } from "socket.io-client"
 import moment from "moment"
 
 import { useAlert } from "../../contexts/AlertContext"
@@ -45,14 +44,8 @@ const modalStyle = {
 
 const Login = () => {
   const { appData, setAppData } = useContext(POSContext)
-  const { macno, encryptData, socketHost } = appData
+  const { macno, encryptData, socket } = appData
   const { handleNotification } = useAlert()
-
-  // เชื่อมต่อกับ Socket.IO server
-  const socket = io(socketHost, {
-    autoConnect: false
-  })
-
 
   const [branchInfo, setBranchInfo] = useState({})
   const navigate = useNavigate()

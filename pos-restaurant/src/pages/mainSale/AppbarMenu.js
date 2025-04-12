@@ -17,7 +17,6 @@ import Moment from "react-moment"
 import { useNavigate } from "react-router-dom"
 import MenuBookIcon from "@mui/icons-material/MenuBook"
 import QrCodeIcon from "@mui/icons-material/QrCode"
-import { io } from "socket.io-client"
 
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
@@ -93,12 +92,7 @@ const AppbarMenu = ({ tableNo,
   const [search, setSearch] = useState("")
   
   const { appData } = useContext(POSContext)
-  const { userLogin, socketHost } = appData
-
-  // เชื่อมต่อกับ Socket.IO server
-  const socket = io(socketHost, {
-    autoConnect: false
-  })
+  const { userLogin, socket } = appData
 
   const { handleNotification } = useAlert()
 

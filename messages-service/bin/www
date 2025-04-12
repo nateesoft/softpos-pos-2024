@@ -128,6 +128,7 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
+  console.log(`Socket IO running at port ${addr.port}`)
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;

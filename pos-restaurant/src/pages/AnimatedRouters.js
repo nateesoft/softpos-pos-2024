@@ -63,6 +63,7 @@ import VirtualKeyboard from "../utils/VirtualKeyboard"
 
 import DashboardPage from "./dashboard"
 import { POSContext } from "../AppContext"
+import Loading from "../Loading"
 
 const AnimatedRoutes = () => {
   const location = useLocation()

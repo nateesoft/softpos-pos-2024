@@ -31,7 +31,6 @@ import "@xyflow/react/dist/style.css"
 import StoreIcon from "@mui/icons-material/Store"
 import { useTranslation } from "react-i18next"
 import moment from "moment"
-import { io } from "socket.io-client"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 import SearchIcon from "@mui/icons-material/Search";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale"
@@ -94,12 +93,7 @@ const RetailSalePage = () => {
   }
 
   const { appData, setAppData } = useContext(POSContext)
-  const { userLogin, socketHost } = appData
-
-  // เชื่อมต่อกับ Socket.IO server
-  const socket = io(socketHost, {
-    autoConnect: false
-  })
+  const { userLogin, socket } = appData
 
   const [nodes, setNodes] = useNodesState([])
   const [openCashierStatus, setOpenCashierStatus] = useState(false)

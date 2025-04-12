@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom"
 import Grid2 from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { motion } from "framer-motion"
-import { io } from "socket.io-client"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 import { Alert, Snackbar, Typography } from "@mui/material"
 
@@ -19,12 +18,7 @@ function MainSalePage() {
   const { tableNo } = useParams()
   const { handleNotification } = useAlert()
   const { appData } = useContext(POSContext)
-  const { macno, socketHost } = appData
-
-  // เชื่อมต่อกับ Socket.IO server
-  const socket = io(socketHost, {
-    autoConnect: false
-  })
+  const { macno, socket } = appData
 
   const matches = useMediaQuery("(min-width:1024px)")
   const [messageAlert, setMessageAlert] = useState("")

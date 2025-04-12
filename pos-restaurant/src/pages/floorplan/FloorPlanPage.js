@@ -33,7 +33,6 @@ import "@xyflow/react/dist/style.css"
 import StoreIcon from "@mui/icons-material/Store"
 import { useTranslation } from "react-i18next"
 import moment from "moment"
-import { io } from "socket.io-client"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 
 import CheckTableStatus from "./checkTable"
@@ -87,12 +86,6 @@ const nodeTypes = {
 
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 }
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
-
 const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   const { t } = useTranslation("global")
   const { handleNotification } = useAlert()
@@ -109,7 +102,7 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   }
 
   const { appData, setAppData } = useContext(POSContext)
-  const { userLogin, macno } = appData
+  const { userLogin, macno, socket } = appData
 
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes] = useNodesState([])

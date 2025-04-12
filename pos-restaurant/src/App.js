@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
 import CryptoJS from "crypto-js"
 import { CookiesProvider } from "react-cookie"
-import Cookies from 'js-cookie';
+import { io } from "socket.io-client"
 
 import { POSContext } from "./AppContext"
 import AnimatedRoutes from "./pages/AnimatedRouters"
@@ -11,13 +11,12 @@ import { AlertProvider } from "./contexts/AlertContext"
 import { BackdropProvider } from "./contexts/BackdropProvider"
 
 import { getConfig, loadConfig } from './config';
+import Loading from './Loading'
 
 const SECRET_PASS = process.env.REACT_APP_API_SECRET_PASS
 const initContext = {
   baseName: 'pos-restaurant',
   userLogin: localStorage.getItem("userLogin") || "",
-  macno: Cookies.get('MACNO'),
-  socketHost: Cookies.get('SOCKET_HOST'),
   empCode: "",
   companyInfo: {
     companyCode: ""
@@ -46,14 +45,20 @@ const App = () => {
 
   useEffect(()=> {
     loadConfig().then(config => {
-      console.log(config)
       setAppData({ 
         ...appData, 
         macno: getConfig().MACNO, 
-        socketHost: getConfig().SOCKET_HOST 
+        socketHost: getConfig().SOCKET_HOST,
+        socket: io(getConfig().SOCKET_HOST, {
+          autoConnect: false
+        })
       })
     })
   }, [])
+
+  if(!appData.socket){
+    return <Loading />
+  }
 
   return (
     <Router basename="pos-restaurant">
