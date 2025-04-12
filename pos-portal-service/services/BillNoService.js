@@ -224,7 +224,8 @@ const addNewBill = async (payload) => {
     B_Entertain,
     B_UserEntertain,
     B_Earnest,
-    creditList
+    creditList,
+    specialCuponInfo
   } = payload
   const { Code: branchCode } = branchInfo
   const tableFile = await getTableByCode(tableNo)
@@ -255,7 +256,12 @@ const addNewBill = async (payload) => {
     await emptyBillNoTSale(B_Refno)
   }
 
-  const B_CuponDiscAmt = 0
+  // list all balance
+  const allBalance = await getBalanceByTableNo(tableNo)
+
+  const B_CuponDiscAmt = allBalance.reduce((sum, item) => {
+    return (item.R_PrCuType === '-C') ? sum + item.R_PrCuAmt: sum
+  }, 0)
   const B_Ontime = curtime
   const B_LoginTime = curtime
   const B_OnDate = curdate
@@ -402,9 +408,7 @@ const addNewBill = async (payload) => {
         '${VoidMsg}','${B_EarnDocNo}','${B_UseEarnNo}','${B_UserEntertain}','${B_SendOnline}')`
   const results = await pool.query(sql)
   if (results) {
-    // list all balance
-    const allBalance = await getBalanceByTableNo(tableNo)
-
+    
     // save t_sale list
     await addDataFromBalance(B_Table, B_Refno, allBalance)
 

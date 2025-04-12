@@ -22,6 +22,7 @@ const modalStyle = {
 
 const DiscountFormModal = ({
   setOpenDiscountModal,
+  setSpecialCuponInfo,
   tableFile,
   initLoad
 }) => {
@@ -58,6 +59,9 @@ const DiscountFormModal = ({
   const [specialCuponAmt, setSpecialCuponAmt] = useState(
     tableFile.CuponDiscAmt || 0
   )
+  const [PrCuCode, setPrCuCode] = useState(0)
+  const [PrCuDisc, setPrCuDisc] = useState(0)
+  const [PrCuBath, setPrCuBath] = useState(0)
 
   const nextComponent = (e, index) => {
     if (e.key === "Enter") {
@@ -140,7 +144,10 @@ const DiscountFormModal = ({
       SubDisc: posConfigSetup.P_SubDisc,
       SubDiscAmt: cuponAmt,
       DiscBath: bahtAmt,
-      SpaDiscAmt: specialCuponAmt
+      CuponDiscAmt: specialCuponAmt,
+      PrCuCode,
+      PrCuDisc,
+      PrCuBath
     }
     apiClient
       .put(`/api/tablefile/discountInfo/${tableFile.Tcode}`, updPayload)
@@ -148,6 +155,12 @@ const DiscountFormModal = ({
         if (response.status === 200) {
           initLoad()
           setOpenDiscountModal(false)
+          setSpecialCuponInfo({
+            CuponDiscAmt: specialCuponAmt,
+            PrCuCode,
+            PrCuDisc,
+            PrCuBath
+          })
         }
       })
       .catch((error) => {
@@ -656,6 +669,9 @@ const DiscountFormModal = ({
           <CuponListModal 
             onClose={() => setOpenCupon(false)} 
             setSpecialCuponAmt={setSpecialCuponAmt}
+            setPrCuCode={setPrCuCode} 
+            setPrCuDisc={setPrCuDisc} 
+            setPrCuBath={setPrCuBath} 
             tableFile={tableFile} />
         </Box>
       </Modal>

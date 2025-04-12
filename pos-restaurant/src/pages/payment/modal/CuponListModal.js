@@ -27,7 +27,14 @@ const columns = [
 ]
 
 const CuponListModal = (props) => {
-  const { onClose, setSpecialCuponAmt, tableFile  } = props
+  const { 
+    onClose, 
+    setSpecialCuponAmt, 
+    tableFile,
+    setPrCuCode,
+    setPrCuDisc,
+    setPrCuBath
+  } = props
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -55,17 +62,7 @@ const CuponListModal = (props) => {
     );
   };
 
-  const computeSpecialCupon = () => {
-    let cuponAmt = 0
-    cuponList.forEach(cupon => {
-      cuponAmt += cupon.CuDiscBath
-    })
-
-    return cuponAmt
-  }
-
   const handleSave = () => {
-    const summaryCuponAmt = computeSpecialCupon()
     const getCuponSelect = cuponList.filter(item => item.qty>0)
     if (getCuponSelect.length > 0) {
       apiClient
@@ -81,6 +78,10 @@ const CuponListModal = (props) => {
             const cuponAmount = response.data.data
             console.log('cuponAmount:', cuponAmount)
             setSpecialCuponAmt(cuponAmount.CuAmt)
+            setPrCuCode(getCuponSelect[0].CuCode)
+            setPrCuDisc(getCuponSelect[0].CuDisc)
+            setPrCuBath(getCuponSelect[0].CuDiscBath)
+
             onClose()
           }
         })

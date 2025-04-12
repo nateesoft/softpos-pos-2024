@@ -119,6 +119,9 @@ function PaymentForm({
   const [creditTempList, setCreditTempList] = useState([])
   const [openConfirmPayment, setOpenConfirmPayment] = useState(false)
 
+  // cupon list
+  const [specialCuponInfo, setSpecialCuponInfo] = useState({})
+
   const navigate = useNavigate()
   const handleBackPage = () => {
     navigate(`/sale/${tableNo}`)
@@ -314,6 +317,7 @@ function PaymentForm({
           discountEnable,
           discountAmount
         },
+        specialCuponInfo,
         memberInfo,
         tonAmount,
         paymentAmount,
@@ -351,7 +355,7 @@ function PaymentForm({
       .post(`/api/billno/printChkBill`, { tableNo, macno })
       .then((response) => {
         if (response.status === 200) {
-          handleNotification("พิมพ์ใบตรวจสอบรายการ")
+          handleNotification("พิมพ์ใบตรวจสอบรายการ", "info")
         } else {
           handleNotification("พบข้อผิดพลาดในการพิมพ์บิลตรวจสอบ !")
         }
@@ -1043,7 +1047,8 @@ function PaymentForm({
         >
           <DiscountFormModal
             tableFile={tableFileDb}
-            setOpenDiscountModal={setOpenDiscountModal}
+            setOpenDiscountModal={setOpenDiscountModal} 
+            setSpecialCuponInfo={setSpecialCuponInfo}
             initLoad={initLoad}
           />
         </Box>

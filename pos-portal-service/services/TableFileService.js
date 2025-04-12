@@ -65,7 +65,8 @@ const updateTableDiscount = async (payload) => {
     tableFile, 
     FastDisc, FastDiscAmt=0, EmpDisc, EmpDiscAmt=0,
     MemDisc, MemDiscAmt=0, TrainDisc, TrainDiscAmt=0, SubDisc, SubDiscAmt=0,
-    DiscBath=0, CuponDiscAmt=0, SpaDiscAmt=0
+    DiscBath=0, CuponDiscAmt=0, SpaDiscAmt=0, 
+    PrCuCode = "", PrCuDisc="", PrCuBath=""
   } = payload
 
   // update all balance
@@ -76,7 +77,13 @@ const updateTableDiscount = async (payload) => {
     await pool.query(sqlBalance)
   } else if(CuponDiscAmt>0) {
     let avgCuponDiscAmt = CuponDiscAmt/totalItem
-    const sqlBalance = `update balance set R_PrCuType='-C', R_PrCuBath='${avgCuponDiscAmt}' where R_Table='${tableFile.Tcode}'`
+    const sqlBalance = `update balance 
+        set R_PrCuType='-C',
+        R_PrCuCode='${PrCuCode}',
+        R_PrCuDisc='${PrCuDisc}',
+        R_PrCuBath='${PrCuBath}',
+        R_PrCuAmt='${avgCuponDiscAmt}' 
+        where R_Table='${tableFile.Tcode}'`
     await pool.query(sqlBalance)
   } else if(FastDiscAmt>0) {
     let avgFastDiscAmt = FastDiscAmt/totalItem
