@@ -43,7 +43,7 @@ class ComponentToPrint extends Component {
         id="content"
         container
         justifyContent="center"
-        sx={{ marginBottom: "100px" }}
+        sx={{ marginBottom: "100px", fontSize: 12, fontFamily: "Angsana New" }}
       >
         <Paper
           elevation={0}
@@ -74,38 +74,26 @@ class ComponentToPrint extends Component {
               </tr>
               <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
                 <td align="center">ลำดับ</td>
-                <td align="center">หมายเลขบัตร</td>
-                <td align="center">รหัสอนุมัติ</td>
+                <td align="left">เลขที่บิล</td>
+                <td align="left">หมายเลขบัตร</td>
                 <td align="right">Charge</td>
                 <td align="right">จำนวนเงิน</td>
               </tr>
             </thead>
-            {reports &&
-              reports.map((item) => (
+            {reports && reports.map((item) => (
                 <tbody>
                   <tr>
-                    <td align="center">{item.CrCode}</td>
-                    <td align="center">{item.CrName}</td>
-                  </tr>
-                  <tr>
                     <td align="center">{item.index}</td>
-                    <td align="center">{item.B_CardNo1}</td>
-                    <td align="right">{item.B_AppCode1}</td>
-                    <td align="right">{formatCurrency(item.B_CrChargeAmt1)}</td>
-                    <td align="right">{formatCurrency(item.B_CrAmt1)}</td>
+                    <td align="left">{item.refno}</td>
+                    <td align="left">{item.CrCode}</td>
+                    <td align="right">{formatCurrency(item.CrChargeAmount)}</td>
+                    <td align="right">{formatCurrency(item.CrAmt)}</td>
                   </tr>
-                  {/* <tr>
-                                    <td align='center'>Tot-Slip</td>
-                                    <td align='center'>1</td>
-                                    <td align='right'></td>
-                                    <td align='right'></td>
-                                    <td align='right'>4,305.40</td>
-                                </tr> */}
                 </tbody>
               ))}
           </table>
           {summary && (
-            <table width="100%" cellPadding={5}>
+            <table width="100%" cellPadding={4}>
               <tr
                 style={{
                   borderBottom: "1px solid",
@@ -127,7 +115,6 @@ class ComponentToPrint extends Component {
 }
 
 const CreditReport = () => {
-  console.log("CreditReport")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const [query] = useSearchParams()
@@ -175,7 +162,7 @@ const CreditReport = () => {
       .then((response) => {
         if (response.status === 200) {
           setReports(response.data.data.data)
-          setSummary(response.data.data.setSummary)
+          setSummary(response.data.data.summary)
         }
       })
       .catch((error) => {

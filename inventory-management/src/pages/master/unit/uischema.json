@@ -1,0 +1,36 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "รหัสหน่วยนับ (Code)"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "ชื่อหน่วยนับ (Description)"
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "options": {
+        "columns": [
+          { "field": "code", "title":  "รหัสหน่วยนับ (Code)"}, 
+          { "field": "description", "title":  "ชื่อหน่วยนับ (Description)" }
+        ],
+        "rows": [
+          { "code": "01", "description": "ม้วน" },
+          { "code": "02", "description": "โหล" },
+          { "code": "03", "description": "แก้ว" },
+          { "code": "04", "description": "แกลลอน" },
+          { "code": "05", "description": "ใบ" }
+        ]
+      }
+    }  
+  ]
+}

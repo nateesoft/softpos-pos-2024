@@ -19,7 +19,6 @@ const modalStyle = {
 }
 
 const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
-  console.log("ManageCustTable")
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
 

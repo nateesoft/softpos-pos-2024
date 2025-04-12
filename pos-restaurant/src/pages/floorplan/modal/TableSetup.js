@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import {
   Box,
   Button,
@@ -14,6 +14,8 @@ import Grid2 from "@mui/material/Grid2"
 import SaveIcon from "@mui/icons-material/Save"
 import CancelIcon from "@mui/icons-material/Cancel"
 
+import { POSContext } from "../../../AppContext"
+
 const modalStyle = {
   position: "absolute",
   top: "50%",
@@ -25,21 +27,23 @@ const modalStyle = {
   boxShadow: 24
 }
 
-const imageItems = [
-  "/images/floorplan/pos-table.png",
-  "/images/floorplan/oval-table.png",
-  "/images/floorplan/round-table.png",
-  "/images/floorplan/rectangle-table.png",
-  "/images/floorplan/dinner-table.png",
-  "/images/floorplan/toilet.png",
-  "/images/floorplan/chef.png",
-  "/images/floorplan/cash-counter.png",
-  "/images/floorplan/open-door.png",
-  "/images/floorplan/exit-door.png"
-]
-
 const TableSetup = (props) => {
-  console.log("TableSetup")
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
+  const imageItems = [
+    `/${baseName}/images/floorplan/pos-table.png`,
+    `/${baseName}/images/floorplan/oval-table.png`,
+    `/${baseName}/images/floorplan/round-table.png`,
+    `/${baseName}/images/floorplan/rectangle-table.png`,
+    `/${baseName}/images/floorplan/dinner-table.png`,
+    `/${baseName}/images/floorplan/toilet.png`,
+    `/${baseName}/images/floorplan/chef.png`,
+    `/${baseName}/images/floorplan/cash-counter.png`,
+    `/${baseName}/images/floorplan/open-door.png`,
+    `/${baseName}/images/floorplan/exit-door.png`
+  ]
+
   const { tableInfo, setTableInfo, closeModal, onChange } = props
   const [tableNo, setTableNo] = useState(tableInfo.data.label || "")
   const [image, setImage] = useState(tableInfo.data.image || "")
@@ -56,8 +60,9 @@ const TableSetup = (props) => {
   }
 
   const handleSave = () => {
+    const replaceImageUri = image.replace(`/${baseName}`, '')
     setTableInfo(tableInfo)
-    onChange({ label: tableNo, customerCount, tableStatus, zone, image })
+    onChange({ label: tableNo, customerCount, tableStatus, zone, image: replaceImageUri })
     closeModal()
   }
 

@@ -1,5 +1,6 @@
 const pool = require('../../config/database');
 const mysqlPool = require('../../config/database/MySqlConnect');
+const { Unicode2ASCII } = require('../../utils/StringUtil');
 
 const { getMoment } = require('../../utils/MomentUtil');
 
@@ -37,10 +38,15 @@ const updateInActiveTable = async (tableNo) => {
 }
 
 const createData = async (tableNo, payload) => {
+    const convCustName = Unicode2ASCII(payload.customer_name)
+    const convNationCountry = Unicode2ASCII(payload.nation_country)
     const { empCode, macno,
-        customer_count, cust_man_count, cust_woman_count, cust_kid_count, cust_old_count,
-        cust_thai_count, cust_europe_count, cust_america_count, cust_asia_count,
-        customer_name, member_code, book_no, table_order_type_start = "E" } = payload
+        customer_count, 
+        thai_man_count, thai_woman_count, thai_kid_count, thai_old_count,
+        nation_man_count, nation_woman_count, nation_kid_count, nation_old_count,
+        member_code, book_no, table_order_type_start = "E",
+        customer_note, bill_no
+     } = payload
     const emp_code_first = empCode;
 
     const tableInfo = await getTableInfo(tableNo) // check exists data
@@ -52,13 +58,16 @@ const createData = async (tableNo, payload) => {
 
     const sql = `INSERT INTO table_checkin 
                 (Tcode,emp_code_first,emp_code_last,macno,
-                customer_count,cust_man_count,cust_woman_count,cust_kid_count,cust_old_count,
+                customer_count,
+                thai_man_count, thai_woman_count, thai_kid_count, thai_old_count,
                 datetime_checkin,customer_name,member_code,book_no,table_order_type_start,
-                cust_thai_count,cust_europe_count,cust_america_count,cust_asia_count) 
+                nation_man_count, nation_woman_count, nation_kid_count, nation_old_count,
+                nation_country, customer_note, bill_no) 
                 VALUES ('${tableNo}','${emp_code_first}','','${macno}',
-                '${customer_count}','${cust_man_count}','${cust_woman_count}','${cust_kid_count}','${cust_old_count}',
-                '${dateTimeCheckin}','${customer_name}','${member_code}','${book_no}','${table_order_type_start}',
-                '${cust_thai_count}', '${cust_europe_count}', '${cust_america_count}', '${cust_asia_count}')`;
+                '${customer_count}','${thai_man_count}','${thai_woman_count}','${thai_kid_count}','${thai_old_count}',
+                '${dateTimeCheckin}','${convCustName}','${member_code}','${book_no}','${table_order_type_start}',
+                '${nation_man_count}', '${nation_woman_count}', '${nation_kid_count}', '${nation_old_count}',
+                '${convNationCountry}', '${customer_note}', '${bill_no}')`;
     const results = await pool.query(sql)
 
     // update tablefile
@@ -69,26 +78,36 @@ const createData = async (tableNo, payload) => {
 
 const updateData = async (tableNo, payload) => {
     const { empCode, macno,
-        customer_count, cust_man_count, cust_woman_count, cust_kid_count, cust_old_count,
-        customer_name, member_code, book_no, table_order_type_start,
-        cust_thai_count, cust_europe_count, cust_america_count, cust_asia_count } = payload
+        customer_count, 
+        thai_man_count, thai_woman_count, thai_kid_count, thai_old_count,
+        member_code, book_no, table_order_type_start = "E",
+        nation_man_count, nation_woman_count, nation_kid_count, nation_old_count,
+        bill_no
+        } = payload
     const emp_code_last = empCode;
+
+    const convCustName = Unicode2ASCII(payload.customer_name)
+    const convNationCountry = Unicode2ASCII(payload.nation_country)
+    const convCustNote = Unicode2ASCII(payload.customer_note)
 
     const sql = `UPDATE table_checkin 
                 SET emp_code_last='${emp_code_last}', 
                 macno='${macno}',
                 customer_count='${customer_count}',
-                cust_man_count='${cust_man_count}',
-                cust_woman_count='${cust_woman_count}',
-                cust_kid_count='${cust_kid_count}',
-                cust_old_count='${cust_old_count}',
-                cust_thai_count='${cust_thai_count}',
-                cust_europe_count='${cust_europe_count}',
-                cust_america_count='${cust_america_count}',
-                cust_asia_count='${cust_asia_count}',
-                customer_name='${customer_name}',
+                thai_man_count='${thai_man_count}',
+                thai_woman_count='${thai_woman_count}',
+                thai_kid_count='${thai_kid_count}',
+                thai_old_count='${thai_old_count}',
+                nation_man_count='${nation_man_count}',
+                nation_woman_count='${nation_woman_count}',
+                nation_kid_count='${nation_kid_count}',
+                nation_old_count='${nation_old_count}',
+                customer_name='${convCustName}',
                 member_code='${member_code}',
                 book_no='${book_no}',
+                nation_country='${convNationCountry}',
+                customer_note='${convCustNote}',
+                bill_no='${bill_no}',
                 table_order_type_start='${table_order_type_start}' 
                 WHERE Tcode='${tableNo}'`;
     const results = await pool.query(sql)

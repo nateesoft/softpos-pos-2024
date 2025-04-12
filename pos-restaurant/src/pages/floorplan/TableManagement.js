@@ -47,7 +47,6 @@ const modalStyle = {
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 }
 
 const TableManagement = () => {
-  console.log("TableManagement")
   const { handleNotification } = useAlert()
 
   const navigate = useNavigate()
@@ -132,7 +131,6 @@ const TableManagement = () => {
 
   const onSave = () => {
     if (reactFlowInstance) {
-      console.log(reactFlowInstance)
       apiClient
         .patch(`/api/floorplan-template/${selectFloor}`, {
           template: JSON.stringify(reactFlowInstance.toObject())

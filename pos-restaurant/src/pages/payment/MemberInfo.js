@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import Grid from "@mui/material/Grid2"
 import Paper from "@mui/material/Paper"
 import Box from "@mui/material/Box"
@@ -8,6 +8,7 @@ import PersonSearchIcon from "@mui/icons-material/PersonSearch"
 import Moment from "react-moment"
 
 import MemberInfoModal from "./MemberInfoModal"
+import { POSContext } from '../../AppContext'
 
 const modalStyle = {
   position: "absolute",
@@ -29,15 +30,17 @@ const NumFormat = (data) => {
 }
 
 const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
-  console.log("MemberInfo")
   const [openMember, setOpenMember] = useState(false)
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   return (
     <Paper
       elevation={3}
-      sx={{ margin: "5px", background: "#123456", boxShadow: "3px 4px black" }}
+      sx={{ margin: "5px", background: "#123456", boxShadow: "3px 4px black", overflow: "auto", height: 250 }}
     >
       <Grid container justifyContent="center" spacing={1} padding={1}>
-        <img src="/images/profile_crm.png" alt="" />
+        <img src={`/${baseName}/images/profile_crm.png`} alt="" />
         <Button
           variant="outlined"
           sx={{ color: "snow" }}
@@ -86,10 +89,10 @@ const MemberInfo = ({ tableNo, memberInfo, setMemberInfo }) => {
             </Typography>
             <Box sx={{ borderBlock: "2px solid yellow" }}>
               <Typography style={{ color: "white" }}>
-                วันที่สมัคร:{" "}
+                วันหมดอายุ:{" "}
                 <Moment
                   format="DD/MM/YYYY"
-                  date={memberInfo.Member_AppliedDate}
+                  date={memberInfo.Member_ExpiredDate}
                 />
               </Typography>
               <Typography style={{ color: "white" }}>

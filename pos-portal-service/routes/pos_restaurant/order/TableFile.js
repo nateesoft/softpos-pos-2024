@@ -5,8 +5,8 @@ const pool = require('../../../config/database/MySqlConnect')
 const TableFileService = require('../../../services/TableFileService')
 
 router.post('/splitBill', function (req, res) {
-  const { sourceTable, targetTable, orderListToMove } = req.body
-  TableFileService.splitTableToPayment(sourceTable, targetTable, orderListToMove)
+  const { sourceTable, targetTable, orderListToMove, macno } = req.body
+  TableFileService.splitTableToPayment(sourceTable, targetTable, orderListToMove, macno)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

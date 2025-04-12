@@ -1,4 +1,4 @@
-import React, { Suspense } from "react"
+import React, { Suspense, useContext } from "react"
 import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom"
 import { AnimatePresence } from "framer-motion"
 import { useIdleTimer } from "react-idle-timer"
@@ -8,6 +8,7 @@ import LoginPage from "./login"
 import FloorPlanPage from "./floorplan"
 import TableManagement from "./floorplan/TableManagement"
 import MainSalePage from "./mainSale/MainSalePage"
+import RetailSalePage from "./retailSale"
 import PaymentPage from "./payment/PaymentPage"
 
 import PageNotFound from "./PageNotFound"
@@ -60,16 +61,22 @@ import VoiceCommand from "../agi/VoiceCommand"
 import AICharacter from "../agi/AICharacter"
 import VirtualKeyboard from "../utils/VirtualKeyboard"
 
+import DashboardPage from "./dashboard"
+import { POSContext } from "../AppContext"
+import Loading from "../Loading"
+
 const AnimatedRoutes = () => {
-  console.log("AnimatedRoutes")
   const location = useLocation()
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
 
   const handleOnUserIdle = () => {
     localStorage.setItem("userLogin", "")
     localStorage.setItem("posuser", null)
-    if (window.location.pathname !== "/") {
-      localStorage.setItem("backLink", window.location.pathname)
-      window.location.href = "/"
+    if (window.location.pathname !== `/${baseName}`) {
+      const saveLink = window.location.pathname
+      localStorage.setItem("backLink", saveLink.replace(`/${baseName}`, ''))
+      window.location.href = `/${baseName}`
     }
   }
 
@@ -97,103 +104,38 @@ const AnimatedRoutes = () => {
             <Route path="/table-setup" element={<TableManagement />} />
             <Route path="/kitchen-monitor" element={<TrelloBoard />} />
             <Route path="/sale/:tableNo" element={<MainSalePage />} />
+            <Route path="/retail" element={<RetailSalePage />} />
             <Route path="/payment/:tableNo" element={<PaymentPage />} />
-            <Route
-              path="/payment/receipt/:billNo"
-              element={<ReceiptToPrint />}
-            />
-            <Route
-              path="/payment/receipt-test/:billNo"
-              element={<ReceiptPrint />}
-            />
+            <Route path="/payment/receipt/:billNo" element={<ReceiptToPrint />} />
+            <Route path="/payment/receipt-test/:billNo" element={<ReceiptPrint />} />
 
-            <Route
-              path="/payment/print-bill-check/:tableNo"
-              element={<PrintReceiptCheck />}
-            />
+            <Route path="/payment/print-bill-check/:tableNo" element={<PrintReceiptCheck />} />
 
             <Route path="/reportDaily/overview" element={<OverviewReport />} />
-            <Route
-              path="/reportDaily/table-on-action/list"
-              element={<TableOnActionList />}
-            />
+            <Route path="/reportDaily/table-on-action/list" element={<TableOnActionList />} />
 
-            <Route
-              path="/reportDaily/table-on-action"
-              element={<TableOnAction />}
-            />
-            <Route
-              path="/reportDaily/terminal-report"
-              element={<TerminalReport />}
-            />
-            <Route
-              path="/reportDaily/cashier-report"
-              element={<CashierReport />}
-            />
-            <Route
-              path="/reportDaily/department-group-report"
-              element={<DepartmentGroupReport />}
-            />
+            <Route path="/reportDaily/table-on-action" element={<TableOnAction />} />
+            <Route path="/reportDaily/terminal-report" element={<TerminalReport />} />
+            <Route path="/reportDaily/cashier-report" element={<CashierReport />} />
+            <Route path="/reportDaily/department-group-report" element={<DepartmentGroupReport />} />
             <Route path="/reportDaily/plu-report" element={<PLUReport />} />
-            <Route
-              path="/reportDaily/customer-per-hour-report"
-              element={<CustomerPerHourReport />}
-            />
-            <Route
-              path="/reportDaily/hourly-plu-report"
-              element={<HourlyPluReport />}
-            />
-            <Route
-              path="/reportDaily/reciept-report"
-              element={<RecieptReport />}
-            />
+            <Route path="/reportDaily/customer-per-hour-report" element={<CustomerPerHourReport />} />
+            <Route path="/reportDaily/hourly-plu-report" element={<HourlyPluReport />} />
+            <Route path="/reportDaily/reciept-report" element={<RecieptReport />} />
             <Route path="/reportDaily/void-report" element={<VoidReport />} />
-            <Route
-              path="/reportDaily/credit-report"
-              element={<CreditReport />}
-            />
-            <Route
-              path="/reportDaily/top-sale-report"
-              element={<TopSaleReport />}
-            />
-            <Route
-              path="/reportDaily/promotion-discount"
-              element={<PromotionDiscount />}
-            />
-            <Route
-              path="/reportDaily/special-cupon-discount"
-              element={<SpecialCuponDiscount />}
-            />
+            <Route path="/reportDaily/credit-report" element={<CreditReport />} />
+            <Route path="/reportDaily/top-sale-report" element={<TopSaleReport />} />
+            <Route path="/reportDaily/promotion-discount" element={<PromotionDiscount />} />
+            <Route path="/reportDaily/special-cupon-discount" element={<SpecialCuponDiscount />} />
 
-            <Route
-              path="/reportMonthly/terminal-report"
-              element={<MTerminalReport />}
-            />
-            <Route
-              path="/reportMonthly/department-group-report"
-              element={<MDepartmentGroupReport />}
-            />
+            <Route path="/reportMonthly/terminal-report" element={<MTerminalReport />} />
+            <Route path="/reportMonthly/department-group-report" element={<MDepartmentGroupReport />} />
             <Route path="/reportMonthly/plu-report" element={<MPLUReport />} />
-            <Route
-              path="/reportMonthly/customer-per-hour-report"
-              element={<MCustomerPerHourReport />}
-            />
-            <Route
-              path="/reportMonthly/reciept-report"
-              element={<MRecieptReport />}
-            />
-            <Route
-              path="/reportMonthly/void-report"
-              element={<MVoidReport />}
-            />
-            <Route
-              path="/reportMonthly/credit-report"
-              element={<MCreditReport />}
-            />
-            <Route
-              path="/reportMonthly/top-sale-report"
-              element={<MTopSaleReport />}
-            />
+            <Route path="/reportMonthly/customer-per-hour-report" element={<MCustomerPerHourReport />} />
+            <Route path="/reportMonthly/reciept-report" element={<MRecieptReport />} />
+            <Route path="/reportMonthly/void-report" element={<MVoidReport />} />
+            <Route path="/reportMonthly/credit-report" element={<MCreditReport />} />
+            <Route path="/reportMonthly/top-sale-report" element={<MTopSaleReport />} />
             <Route path="/inventory/db" element={<TemplateReport />} />
           </Route>
         </Route>
@@ -205,6 +147,7 @@ const AnimatedRoutes = () => {
         <Route path="/agi" element={<Character />} />
         <Route path="/ai" element={<AICharacter />} />
         <Route path="/voice" element={<VoiceCommand />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="404" element={<PageNotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>

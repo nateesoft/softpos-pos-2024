@@ -18,8 +18,6 @@ const OtherMenuSelect = ({
   open,
   anchorEl
 }) => {
-  console.log("OtherMenuSelect")
-
   return (
     <>
       <IconButton onClick={handleClick}>

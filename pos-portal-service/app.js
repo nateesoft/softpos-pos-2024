@@ -41,6 +41,9 @@ const overviewReportRouter = require('./routes/pos/report');
 // for CRM POS
 const memmasterRouter = require('./routes/member/crm/Memmaster');
 
+// for Customer Orsder
+const customerOrderRouter = require('./routes/customer')
+
 // for printer thermal
 const printerThermalRouter = require('./routes/printer')();
 const reportRouter = require('./routes/report');
@@ -72,7 +75,7 @@ app.use(helmet());
 
 const username = process.env.WEB_USER_AUTH
 const password = process.env.WEB_USER_PASS
-app.use(basicAuth({ users: { [username]: password } }))
+// app.use(basicAuth({ users: { [username]: password } }))
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }))
 
@@ -139,6 +142,9 @@ app.use('/api/inventory', invenotryDbRouter)
 
 // crm member
 app.use('/api/crm/member', memmasterRouter)
+
+// customer order
+app.use('/api/customer', customerOrderRouter)
 
 // route for test printer
 app.use('/api/printer-thermal', printerThermalRouter)

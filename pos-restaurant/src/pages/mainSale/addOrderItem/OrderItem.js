@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Tab from "@mui/material/Tab"
 import TabContext from "@mui/lab/TabContext"
 import TabList from "@mui/lab/TabList"
@@ -16,15 +16,27 @@ import {
   Typography,
   Paper,
   Grid2,
-  Divider
+  Divider,
+  IconButton,
+  Badge,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material"
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails} from "@mui/material"
+import AddCircleIcon from "@mui/icons-material/AddCircle"
+import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
+import { motion, AnimatePresence } from "framer-motion";
 
 import apiClient from "../../../httpRequest"
 import ProductCard from "./ProductCard"
 import ProductDetailCard from "./ProductDetailCard"
 import { CurrencyContext } from "../../../contexts/CurrencyContext"
+import { POSContext } from "../../../AppContext"
 
 const modalStyle = {
   position: "absolute",
@@ -49,32 +61,44 @@ const getTotalAmount = (orderList) => {
   return totalBill
 }
 
-const TotalBill = ({ orderList }) => {
-  console.log("TotalBill")
+const getFormatMoney = (convertCurrency, currency, number) => {
+  return new Intl.NumberFormat("th-TH", {
+    style: "currency",
+    currency
+  }).format(convertCurrency(number))
+}
+
+const TotalBill = ({summaryTable}) => {
   const { currency, convertCurrency } = useContext(CurrencyContext)
-  const totalBill = getTotalAmount(orderList)
-  const convertedTotal = convertCurrency(totalBill, currency)
+  const convertedTotal = convertCurrency(summaryTable, currency)
   return (
     <div
       style={{
         padding: "3px",
-        background: "salmon",
         border: "2px solid #eee",
-        borderRadius: "5px"
+        borderRadius: "5px",
+        background: "#ffb4a4"
       }}
     >
       <Grid2 container spacing={1} padding={1}>
-        <Typography variant="span" fontSize={14}>
+        <Typography variant="span" fontSize={14} fontWeight="bold" sx={{color: "black"}}>
           Total Amount
         </Typography>
       </Grid2>
       <Grid2 container justifyContent="flex-end">
-        <Typography fontSize={28} fontWeight="bold">
-          {new Intl.NumberFormat("th-TH", {
-            style: "currency",
-            currency
-          }).format(convertCurrency(convertedTotal))}
-        </Typography>
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={summaryTable}
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Typography fontSize={28} fontWeight="bold" sx={{ color: "black" }}>
+              {getFormatMoney(convertCurrency, currency, convertedTotal)}
+            </Typography>
+          </motion.div>
+        </AnimatePresence>
       </Grid2>
     </div>
   )
@@ -82,6 +106,7 @@ const TotalBill = ({ orderList }) => {
 
 const OrderItem = ({
   tableNo,
+  balanceProductGroup,
   orderType,
   OrderList,
   OrderEList,
@@ -90,21 +115,35 @@ const OrderItem = ({
   initLoadMenu,
   initLoadOrder,
   typePopup = false,
-  handleNotification
+  handleNotification,
+  initLoadBalanceProductGroup,
+  summaryTable,
+  summaryTableFileBalance
 }) => {
-  console.log("OrderItem:", orderType)
   const navigate = useNavigate()
+  const { appData } = useContext(POSContext)
+  const { macno, userLogin, empCode } = appData
+
+  const [currentMenuCode, setCurrentMainMenuCode] = useState("")
+  
   const [value, setValue] = useState(orderType || "E")
   const [open, setOpen] = useState(false)
+  const [openVoidGroup, setOpenVoidGroup] = useState(false)
+
+  const [voidMsgList, setVoidMsgList] = useState([])
+  const [voidMsg, setVoidMsg] = useState([])
 
   const [productInfo, setProductInfo] = useState({})
   const [showKicPrint, setShowKicPrint] = useState(false)
 
-  const [hideItem, setHideItem] = useState(false)
-
   const handleChange = (event, newValue) => {
-    console.log("handleChange:", newValue)
     setValue(newValue)
+  }
+
+  const handleVoidGroupMenu = (pluCode) => {
+    setCurrentMainMenuCode(pluCode)
+    setOpenVoidGroup(true)
+    summaryTableFileBalance()
   }
 
   const handleClick = () => {
@@ -119,6 +158,40 @@ const OrderItem = ({
       .catch((err) => {
         handleNotification(err.message)
       })
+  }
+
+  const loadVoidMsgList = () => {
+    apiClient
+      .get(`/api/voidmsg`)
+      .then((response) => {
+        if(response.status === 200){
+          const voidMsgData = response.data.data
+          setVoidMsgList(voidMsgData)
+        }
+      })
+      .catch((err) => handleNotification(err.message))
+  }
+
+  const handleVoidItem = () => {
+    if (voidMsg) {
+      apiClient
+        .post(`/api/balance/voidList`, {
+          menu_code: currentMenuCode,
+          void_message: voidMsg,
+          Cachier: userLogin,
+          empCode: empCode,
+          macno: macno
+        })
+        .then((response) => {
+          setOpenVoidGroup(false)
+          initLoadMenu()
+          initLoadOrder()
+          summaryTableFileBalance()
+        })
+        .catch((err) => {
+          handleNotification(err.message)
+        })
+    }
   }
 
   const backFloorPlan = () => {
@@ -155,51 +228,143 @@ const OrderItem = ({
       })
   }
 
+  useEffect(() => {
+    loadVoidMsgList()
+  }, [])
+
   return (
     <div style={{ overflow: "auto", width: "100%" }}>
-      <TabContext value={value}>
-        <TabList onChange={handleChange} aria-label="lab API tabs example">
-          <Tab label="Dine In" value="E" sx={{ boxShadow: "2px 2px #eee" }} />
-          <Tab label="Take Away" value="T" sx={{ boxShadow: "2px 2px #eee" }} />
-          <Tab label="Delivery" value="D" sx={{ boxShadow: "2px 2px #eee" }} />
-        </TabList>
-        <Box textAlign="center">
-          <Typography fontSize={16}>รายการอาหารที่สั่ง</Typography>
-        </Box>
-        <Box textAlign="center" sx={{ marginTop: "10px", background: "#eee" }}>
+      <Grid2
+          container
+          justifyContent="center"
+          padding={1}
+          sx={{
+            background:
+              "linear-gradient(90deg, #FF9A8B 0%, salmon 55%, #FF99AC 100%)"
+          }}
+        >
           <Typography
-            variant="p"
             sx={{
               fontWeight: "bold",
-              borderRadius: "15px"
+              borderRadius: "15px",
+              color: "#123456",
+              fontSize: 22
             }}
           >
             โต๊ะ {tableNo}
           </Typography>
-          <Button variant="text"  endIcon={hideItem ? <ExpandLessIcon /> : <ExpandMoreIcon />} 
-                onClick={()=>setHideItem(prev => !prev)}>แสดงรายการ</Button>
-          <Divider sx={{padding: "5px"}} />
-        </Box>
+          <Divider sx={{ padding: "5px" }} />
+        </Grid2>
+      <TabContext value={value}>
+        <TabList onChange={handleChange} aria-label="lab API tabs example">
+          <Tab label={
+            <Badge
+                  badgeContent={balanceProductGroup && balanceProductGroup.filter(gg=>gg.R_ETD==='E').length}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      background: "lightpink",
+                      height: 20,
+                      width: 15,
+                      top: -2,
+                      right: -2,
+                      borderRadius: "50%",
+                      color: "white",
+                      fontWeight: "bold"
+                    }
+                  }}
+                >
+                  <Typography sx={{fontWeight: "bold"}}>Dine In</Typography>
+                </Badge>
+          } value="E" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
+          <Tab label={
+            <Badge
+                  badgeContent={balanceProductGroup && balanceProductGroup.filter(gg=>gg.R_ETD==='T').length}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      background: "lightblue",
+                      height: 20,
+                      width: 15,
+                      top: -2,
+                      right: -2,
+                      borderRadius: "50%",
+                      color: "white",
+                      fontWeight: "bold"
+                    }
+                  }}
+                >
+                  <Typography sx={{fontWeight: "bold"}}>Take Away</Typography>
+                </Badge>
+          } value="T" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
+          <Tab label={
+            <Badge
+                  badgeContent={balanceProductGroup && balanceProductGroup.filter(gg=>gg.R_ETD==='D').length}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      background: "lightgreen",
+                      height: 20,
+                      width: 15,
+                      top: -2,
+                      right: -2,
+                      borderRadius: "50%",
+                      color: "white",
+                      fontWeight: "bold"
+                    }
+                  }}
+                >
+                  <Typography sx={{fontWeight: "bold"}}>Delivery</Typography>
+                </Badge>
+          } value="D" sx={{ border: "1px solid #eee", fontWeight: "bold", fontSize: 18 }} />
+        </TabList>
         <TabPanel
           value="E"
-          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto", minHeight: "350px" }}
+          sx={{
+            height: typePopup ? "220px" : "270px",
+            overflow: "auto",
+            minHeight: "350px",
+            padding: 0
+          }}
         >
-          {OrderEList &&
-            OrderEList.map((product) => {
-              return (
-                <div style={{ margin: "5px" }} key={product.R_PluCode}>
-                  <ProductCard
-                    tableNo={tableNo}
-                    product={product}
-                    handleNotification={handleNotification}
-                    initLoadMenu={initLoadMenu}
-                    initLoadOrder={initLoadOrder}
-                    openModal={() => handleOpenMenu(product)}
-                  />
-                  <Divider />
-                </div>
-              )
-            })}
+          {balanceProductGroup && 
+          balanceProductGroup.filter(gg=>gg.R_ETD==='E').map(item => 
+            <Accordion key={1} sx={{ borderBottom: "1px solid #eee", background: "linear-gradient(0deg, #FFDEE9 0%, snow 100%)", boxShadow: "none", borderRadius: "none" }}>
+              <AccordionSummary>
+                <Grid2 container size={12}>
+                  <Grid2 size={6}>
+                    <Grid2 container>
+                      <Typography>{item.R_PName}</Typography>
+                    </Grid2>
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <Grid2 container direction="row" justifyContent="flex-end" alignItems="center">
+                      <IconButton onClick={()=>handleVoidGroupMenu(item.R_PluCode)}>
+                        <RemoveCircleIcon color="error" fontSize="large"/>
+                      </IconButton>
+                      <Typography>({item.R_Quan} items)</Typography>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
+              </AccordionSummary>
+              <AccordionDetails>
+                {OrderEList.filter(x => x.R_PluCode === item.R_PluCode).map((product) => {
+                  return (
+                    <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                      <ProductCard
+                        tableNo={tableNo}
+                        product={product}
+                        handleNotification={handleNotification}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadBalanceProductGroup={initLoadBalanceProductGroup} 
+                        menuType="E"
+                      />
+                      <Divider />
+                    </div>
+                  )
+                })}
+              </AccordionDetails>
+            </Accordion>
+          )}
           {OrderEList && OrderEList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -213,24 +378,54 @@ const OrderItem = ({
         </TabPanel>
         <TabPanel
           value="T"
-          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto", minHeight: "350px" }}
+          sx={{
+            height: typePopup ? "220px" : "270px",
+            overflow: "auto",
+            minHeight: "350px",
+            padding: 0
+          }}
         >
-          {OrderTList &&
-            OrderTList.map((product) => {
-              return (
-                <div style={{ margin: "5px" }} key={product.R_PluCode}>
-                  <ProductCard
-                    tableNo={tableNo}
-                    product={product}
-                    handleNotification={handleNotification}
-                    initLoadMenu={initLoadMenu}
-                    initLoadOrder={initLoadOrder}
-                    openModal={() => handleOpenMenu(product)}
-                  />
-                  <Divider />
-                </div>
-              )
-            })}
+          {balanceProductGroup && 
+          balanceProductGroup.filter(gg=>gg.R_ETD==='T').map(item => 
+            <Accordion key={1} sx={{ borderBottom: "1px solid #eee", background: "linear-gradient(0deg, #b5dbff 0%, snow 100%)", boxShadow: "none", borderRadius: "none" }}>
+              <AccordionSummary>
+                <Grid2 container size={12}>
+                  <Grid2 size={6}>
+                    <Grid2 container>
+                      <Typography>{item.R_PName}</Typography>
+                    </Grid2>
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <Grid2 container direction="row" justifyContent="flex-end" alignItems="center">
+                      <IconButton onClick={()=>handleVoidGroupMenu(item.R_PluCode)}>
+                        <RemoveCircleIcon color="error" fontSize="large"/>
+                      </IconButton>
+                      <Typography>({item.R_Quan} items)</Typography>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
+              </AccordionSummary>
+              <AccordionDetails>
+                {OrderTList.filter(x => x.R_PluCode === item.R_PluCode).map((product) => {
+                  return (
+                    <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                      <ProductCard
+                        tableNo={tableNo}
+                        product={product}
+                        handleNotification={handleNotification}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadBalanceProductGroup={initLoadBalanceProductGroup} 
+                        menuType="T"
+                      />
+                      <Divider />
+                    </div>
+                  )
+                })}
+              </AccordionDetails>
+            </Accordion>
+          )}
           {OrderTList && OrderTList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -244,24 +439,54 @@ const OrderItem = ({
         </TabPanel>
         <TabPanel
           value="D"
-          sx={{ height: typePopup ? "220px" : "270px", overflow: "auto", minHeight: "350px" }}
+          sx={{
+            height: typePopup ? "220px" : "270px",
+            overflow: "auto",
+            minHeight: "350px",
+            padding: 0
+          }}
         >
-          {OrderDList &&
-            OrderDList.map((product) => {
-              return (
-                <div style={{ margin: "5px" }} key={product.R_PluCode}>
-                  <ProductCard
-                    tableNo={tableNo}
-                    product={product}
-                    handleNotification={handleNotification}
-                    initLoadMenu={initLoadMenu}
-                    initLoadOrder={initLoadOrder}
-                    openModal={() => handleOpenMenu(product)}
-                  />
-                  <Divider />
-                </div>
-              )
-            })}
+          {balanceProductGroup && 
+          balanceProductGroup.filter(gg=>gg.R_ETD==='D').map(item => 
+            <Accordion key={1} sx={{ borderBottom: "1px solid #eee", background: "linear-gradient(0deg, #b5ffb5 0%, snow 100%)", boxShadow: "none", borderRadius: "none" }}>
+              <AccordionSummary>
+                <Grid2 container size={12}>
+                  <Grid2 size={6}>
+                    <Grid2 container>
+                      <Typography>{item.R_PName}</Typography>
+                    </Grid2>
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <Grid2 container direction="row" justifyContent="flex-end" alignItems="center">
+                      <IconButton onClick={()=>handleVoidGroupMenu(item.R_PluCode)}>
+                        <RemoveCircleIcon color="error" fontSize="large"/>
+                      </IconButton>
+                      <Typography>({item.R_Quan} items)</Typography>
+                    </Grid2>
+                  </Grid2>
+                </Grid2>
+              </AccordionSummary>
+              <AccordionDetails>
+                {OrderDList.filter(x => x.R_PluCode === item.R_PluCode).map((product) => {
+                  return (
+                    <div style={{ margin: "5px" }} key={product.R_PluCode}>
+                      <ProductCard
+                        tableNo={tableNo}
+                        product={product}
+                        handleNotification={handleNotification}
+                        initLoadMenu={initLoadMenu}
+                        initLoadOrder={initLoadOrder}
+                        openModal={() => handleOpenMenu(product)}
+                        initLoadBalanceProductGroup={initLoadBalanceProductGroup} 
+                        menuType="D"
+                      />
+                      <Divider />
+                    </div>
+                  )
+                })}
+              </AccordionDetails>
+            </Accordion>
+          )}
           {OrderDList && OrderDList.length === 0 && (
             <Box textAlign="center" sx={{ marginTop: "100px", color: "#bbb" }}>
               <Box>
@@ -285,7 +510,7 @@ const OrderItem = ({
           ส่งครัว/ พักโต๊ะ
         </Button>
       </Grid2>
-      <TotalBill orderList={OrderList} />
+      <TotalBill summaryTable={getTotalAmount(OrderList)} />
       <Grid2 container spacing={1} justifyContent="center" padding={1}>
         <Button
           variant="contained"
@@ -319,8 +544,41 @@ const OrderItem = ({
             closeModal={() => setOpen(false)}
             initLoadMenu={initLoadMenu}
             initLoadOrder={initLoadOrder}
+            initLoadBalanceProductGroup={initLoadBalanceProductGroup}
             handleNotification={handleNotification}
           />
+        </Box>
+      </Modal>
+
+      <Modal
+        open={openVoidGroup}
+        onClose={() => setOpenVoidGroup(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{ ...modalStyle, width: 450 }}>
+          <Grid2 container justifyContent="center" padding={2} spacing={2}>
+            <Typography>เมนูอาหาร: {currentMenuCode}</Typography>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                เหตุผลในการยกเลิกรายการ
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={voidMsg}
+                label="เหตุผลในการ VOID"
+                onChange={(e) => setVoidMsg(e.target.value)}
+              >
+                {voidMsgList && voidMsgList.map((item) => (
+                  <MenuItem key={item.VName} value={item.VName}>
+                    {item.VName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button variant="contained" color="error" onClick={()=>handleVoidItem()}>Confirm Void</Button>
+          </Grid2>
         </Box>
       </Modal>
 
@@ -341,7 +599,7 @@ const OrderItem = ({
               fontWeight: "bold"
             }}
           >
-            *** รายการส่งครัว ***
+            *** รายการเตรียมส่งครัว ***
           </div>
           <div
             style={{
@@ -370,16 +628,20 @@ const OrderItem = ({
                   ประเภท Dine In
                 </div>
                 <table width="100%" cellPadding={3}>
-                  {OrderEList.map((product) => {
+                  {OrderEList.filter(x=>x.TranType!=='PDA').map((product) => {
                     return (
                       <tr key={product.R_PluCode}>
-                        <td>{product.R_ETD}</td>
+                        <td align="center" style={{border: "1px solid", background: "red", color: "white"}}>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
                         <td>{product.R_Quan}</td>
                       </tr>
                     )
                   })}
+                  {OrderEList.filter(x=>x.TranType!=='PDA').length===0 && 
+                  <div align="center" style={{padding: 50}}>
+                    <Typography>ไม่พบรายการส่งครัว</Typography>
+                  </div>}
                 </table>
               </div>
             )}
@@ -396,16 +658,20 @@ const OrderItem = ({
                   ประเภท Take Away
                 </div>
                 <table width="100%">
-                  {OrderTList.map((product) => {
+                  {OrderTList.filter(x=>x.TranType!=='PDA').map((product) => {
                     return (
                       <tr key={product.R_PluCode}>
-                        <td>{product.R_ETD}</td>
+                        <td align="center" style={{border: "1px solid", background: "blue", color: "white"}}>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
                         <td>{product.R_Quan}</td>
                       </tr>
                     )
                   })}
+                  {OrderTList.filter(x=>x.TranType!=='PDA').length===0 && 
+                  <div align="center" style={{padding: 50}}>
+                    <Typography>ไม่พบรายการส่งครัว</Typography>
+                  </div>}
                 </table>
               </div>
             )}
@@ -422,16 +688,20 @@ const OrderItem = ({
                   ประเภท Deliver
                 </div>
                 <table width="100%">
-                  {OrderDList.map((product) => {
+                  {OrderDList.filter(x=>x.TranType!=='PDA').map((product) => {
                     return (
                       <tr key={product.R_PluCode}>
-                        <td>{product.R_ETD}</td>
+                        <td align="center" style={{border: "1px solid", background: "green", color: "white"}}>{product.R_ETD}</td>
                         <td>{product.R_PName}</td>
                         <td>x</td>
                         <td>{product.R_Quan}</td>
                       </tr>
                     )
                   })}
+                  {OrderDList.filter(x=>x.TranType!=='PDA').length===0 && 
+                  <div align="center" style={{padding: 50}}>
+                    <Typography>ไม่พบรายการส่งครัว</Typography>
+                  </div>}
                 </table>
               </div>
             )}
@@ -445,9 +715,10 @@ const OrderItem = ({
               <Button
                 variant="contained"
                 startIcon={<PrintIcon />}
+                color="success"
                 onClick={handlePrint}
               >
-                Print
+                ส่งครัว/พักโต๊ะ
               </Button>
             </Grid2>
           </Paper>

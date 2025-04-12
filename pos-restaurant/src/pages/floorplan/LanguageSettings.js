@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import MenuItem from "@mui/material/MenuItem"
 import { Box, Grid2, IconButton, Menu, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { POSContext } from "../../AppContext"
 
 const LanguageSettings = () => {
-  console.log("LanguageSettings")
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const { i18n } = useTranslation("global")
   const [anchorEl, setAnchorEl] = useState(null)
   const [language, setLanguage] = useState(
@@ -36,14 +39,14 @@ const LanguageSettings = () => {
       <IconButton onClick={handleClick}>
         {language === "en" && (
           <img
-            src="/images/en.png"
+            src={`/${baseName}/images/en.png`}
             alt="United Kingdom"
             width={24}
             height={24}
           />
         )}
         {language === "th" && (
-          <img src="/images/th.png" alt="Thailand" width={24} height={24} />
+          <img src={`/${baseName}/images/th.png`} alt="Thailand" width={24} height={24} />
         )}
       </IconButton>
       <Menu
@@ -59,7 +62,7 @@ const LanguageSettings = () => {
           <Grid2 spacing={1} container alignItems="center">
             <Box>
               <img
-                src="/images/en.png"
+                src={`/${baseName}/images/en.png`}
                 alt="United Kingdom"
                 width={32}
                 height={32}
@@ -70,7 +73,7 @@ const LanguageSettings = () => {
         </MenuItem>
         <MenuItem onClick={() => handleChange("th")}>
           <Grid2 spacing={1} container alignItems="center">
-            <img src="/images/th.png" alt="Thailand" width={32} height={32} />
+            <img src={`/${baseName}/images/th.png`} alt="Thailand" width={32} height={32} />
             <Typography variant="p">Thai</Typography>
           </Grid2>
         </MenuItem>

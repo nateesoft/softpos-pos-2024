@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 
 import {
   IconButton,
@@ -12,11 +12,9 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  ImageListItem,
-  Paper
-} from "@mui/material"
+  ImageListItem} from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
-
+import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
 import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
 import BlockIcon from "@mui/icons-material/Block"
 import GppGoodIcon from "@mui/icons-material/GppGood"
@@ -42,18 +40,19 @@ const ProductCard = ({
   initLoadMenu,
   initLoadOrder,
   hideItem,
-  setHideItem
+  setHideItem,
+  initLoadBalanceProductGroup,
+  menuType
 }) => {
-  console.log("ProductCard:", product)
   const { appData } = useContext(POSContext)
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const { handleNotification } = useAlert()
 
-  const { macno, userLogin, empCode } = appData
+  const { macno, userLogin, empCode, baseName } = appData
   const [voidMsgList, setVoidMsgList] = useState([])
   const [voidMsg, setVoidMsg] = useState([])
   const [currRIndex, setCurrRIndex] = useState("")
-  const [optList] = useState([
+  const optList = [
     product.R_Opt1,
     product.R_Opt2,
     product.R_Opt3,
@@ -63,7 +62,7 @@ const ProductCard = ({
     product.R_Opt7,
     product.R_Opt8,
     product.R_Opt9
-  ])
+  ]
   const [count, setCount] = useState(product.R_Quan || 1)
   const [open, setOpen] = useState(false)
 
@@ -85,6 +84,8 @@ const ProductCard = ({
         .then((response) => {
           initLoadMenu()
           initLoadOrder()
+          initLoadBalanceProductGroup()
+
           setOpen(false)
         })
         .catch((err) => {
@@ -93,7 +94,7 @@ const ProductCard = ({
     }
   }
 
-  const handleAddItem = () => {
+  const handleAddItem = (etdType) => {
     apiClient
       .post(`/api/balance`, {
         tableNo,
@@ -105,11 +106,13 @@ const ProductCard = ({
         qty: 1,
         macno,
         userLogin,
-        empCode
+        empCode,
+        etdType
       })
       .then((response) => {
         initLoadMenu()
         initLoadOrder()
+        initLoadBalanceProductGroup()
       })
       .catch((err) => {
         handleNotification(err.message)
@@ -122,15 +125,17 @@ const ProductCard = ({
     setOpen(true)
   }
 
-  const loadVoidMsgList = useCallback(() => {
+  const loadVoidMsgList = () => {
     apiClient
       .get(`/api/voidmsg`)
       .then((response) => {
-        const voidMsgData = response.data.data
-        setVoidMsgList(voidMsgData)
+        if(response.status === 200){
+          const voidMsgData = response.data.data
+          setVoidMsgList(voidMsgData)
+        }
       })
       .catch((err) => handleNotification(err.message))
-  }, [handleNotification])
+  }
 
   const showActionBalance = (product) => {
     if (
@@ -146,7 +151,7 @@ const ProductCard = ({
 
   useEffect(() => {
     loadVoidMsgList()
-  }, [loadVoidMsgList])
+  }, [])
 
   return (
     <>
@@ -160,7 +165,7 @@ const ProductCard = ({
             }}
           >
             <img
-              src={product.image_url}
+              src={`/${baseName}/${product.image_url}`}
               alt=""
               height={100}
               width={100}
@@ -175,14 +180,14 @@ const ProductCard = ({
               </ImageListItem>
             )}
           </div>
-          {optList &&
-            optList
+          {optList && optList
               .filter((o) => o !== "")
               .map((opt) => (
                 <Typography sx={{ fontSize: "12px", color: "green" }}>
                   *{opt},
                 </Typography>
               ))}
+          {product.R_Pause === "P" && <LocalPrintshopIcon sx={{color: "#aaa"}} />}
         </Grid2>
         <Grid2
           size={7}
@@ -201,10 +206,7 @@ const ProductCard = ({
           {!voidStatus && (
             <Grid2 display="flex" justifyContent="center">
               {showActionBalance(product) && (
-                <IconButton
-                  onClick={() => handleOpen(product.R_Index)}
-                  disabled={product.R_Pause === "P"}
-                >
+                <IconButton onClick={() => handleOpen(product.R_Index)}>
                   <RemoveCircleIcon
                     sx={{ color: product.R_Pause === "P" ? "gray" : "red" }}
                     fontSize="large"
@@ -227,7 +229,7 @@ const ProductCard = ({
                 onChange={(e) => setCount(e.target.value)}
               />}
               {showActionBalance(product) && (
-                <IconButton onClick={handleAddItem}>
+                <IconButton onClick={()=>handleAddItem(menuType)}>
                   <AddCircleIcon color="success" fontSize="large" />
                 </IconButton>
               )}
@@ -266,12 +268,11 @@ const ProductCard = ({
                 label="เหตุผลในการ VOID"
                 onChange={(e) => setVoidMsg(e.target.value)}
               >
-                {voidMsgList &&
-                  voidMsgList.map((item) => (
-                    <MenuItem key={item.VName} value={item.VName}>
-                      {item.VName}
-                    </MenuItem>
-                  ))}
+                {voidMsgList && voidMsgList.map((item) => (
+                  <MenuItem key={item.VName} value={item.VName}>
+                    {item.VName}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <Button

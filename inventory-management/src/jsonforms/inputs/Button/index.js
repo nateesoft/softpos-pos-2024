@@ -3,11 +3,14 @@ import { rankWith, uiTypeIs } from "@jsonforms/core"
 import { withJsonFormsControlProps } from "@jsonforms/react"
 import { Button } from "@mui/material"
 
+import { getLabelValue } from "../../utils"
+
 const ButtonControl = withJsonFormsControlProps((props) => {
+  let label = getLabelValue(props.label, props.data)
   const newProps = {}
   
   return (
-    <Button {...newProps} />
+    <Button variant='contained' color='info' sx={{marginTop: "10px", marginBottom: "10px"}} {...newProps}>{label}</Button>
   )
 })
 

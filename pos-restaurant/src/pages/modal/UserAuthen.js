@@ -7,7 +7,6 @@ import { POSContext } from "../../AppContext"
 import { useAlert } from "../../contexts/AlertContext"
 
 const UserAuthen = ({ setAuthenUser, handleShowConfirm, onClose }) => {
-  console.log("UserAuthen")
   const { appData } = useContext(POSContext)
   const { encryptData } = appData
   const { handleNotification } = useAlert()

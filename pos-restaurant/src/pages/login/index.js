@@ -9,8 +9,8 @@ import Container from "@mui/material/Container"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { motion } from "framer-motion"
 import LoginIcon from "@mui/icons-material/Login"
-import { Divider, Grid2, useMediaQuery } from "@mui/material"
-import { io } from "socket.io-client"
+import { Divider, Grid2, Modal, useMediaQuery } from "@mui/material"
+import moment from "moment"
 
 import { useAlert } from "../../contexts/AlertContext"
 import apiClient from "../../httpRequest"
@@ -19,6 +19,7 @@ import { handleEnter } from "../ui-utils/EventLisener"
 import bg from "./bg/welcome.jpg"
 import bgimg from "./bg/bgbg.jpg"
 import Footer from "../Footer"
+import DashboardApps from "../dashboard"
 
 const darkTheme = createTheme({
   palette: {
@@ -35,17 +36,15 @@ const boxstyle = {
   boxShadow: 24
 }
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%"
+}
 
 const Login = () => {
-  console.log("Login Page")
   const { appData, setAppData } = useContext(POSContext)
-  const { macno, encryptData } = appData
+  const { macno, encryptData, socket } = appData
   const { handleNotification } = useAlert()
 
   const [branchInfo, setBranchInfo] = useState({})
@@ -54,6 +53,8 @@ const Login = () => {
   const iphonePro14max = useMediaQuery("(max-width:430px)")
   const [user, setUser] = useState("")
   const [password, setPassword] = useState("")
+
+  const [openDashboard, setOpenDashboard] = useState(false)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -86,7 +87,24 @@ const Login = () => {
                 id: 1,
                 printerType: "message",
                 printerName: "cashier",
-                message: "เข้าสู่ระบบสำเร็จ",
+                message: `
+                  <div>
+                    <font face="Angsana New" size="4">
+                      User: ${user} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
+                    </font>
+                  </div>
+                  <hr />
+                  <div align="center">
+                    <font face="Angsana New" size="4">*** เข้าสู่ระบบสำเร็จ ***</font>
+                  </div>
+                  <hr />
+                  <div align="right">
+                    <font face="Angsana New" size="4">
+                       ➲ สาขา ${branchInfo.Code} ${branchInfo.Name}
+                    </font>
+                  </div>
+                  <br />
+                `,
                 terminal: "",
                 tableNo: "",
                 billNo: "",
@@ -107,7 +125,11 @@ const Login = () => {
               localStorage.removeItem("backLink")
               navigate(backLink)
             } else {
-              navigate("/floorplan")
+              if(user === "9999"){
+                setOpenDashboard(true)
+              }else{
+                navigate("/floorplan")
+              }
             }
           } else {
             handleNotification(
@@ -134,7 +156,6 @@ const Login = () => {
             ...prevState,
             ...newData
           }))
-          console.log(branchInfo)
         }
       })
       .catch((err) => {
@@ -206,7 +227,7 @@ const Login = () => {
                 <ThemeProvider theme={darkTheme}>
                   <Container>
                     <Box height={35} />
-                    <Grid2 textAlign="right">
+                    {branchInfo && <Grid2 textAlign="right">
                       <Typography
                         sx={{
                           fontSize: "12px",
@@ -217,7 +238,7 @@ const Login = () => {
                       >
                         สาขา {branchInfo.Code} {branchInfo.Name} ➲
                       </Typography>
-                    </Grid2>
+                    </Grid2>}
                     <Box display="flex" justifyContent="center">
                       <Typography
                         sx={{
@@ -226,7 +247,7 @@ const Login = () => {
                           padding: "10px"
                         }}
                       >
-                        POS Restaurant
+                        POS Login
                       </Typography>
                     </Box>
                     {iphonePro14max === true && (
@@ -303,6 +324,11 @@ const Login = () => {
         </Box>
         <Footer />
       </div>
+      <Modal open={openDashboard} onClose={() => setOpenDashboard(false)}>
+        <Box sx={{ ...modalStyle }}>
+          <DashboardApps open={openDashboard} />
+        </Box>
+      </Modal>
     </motion.div>
   )
 }

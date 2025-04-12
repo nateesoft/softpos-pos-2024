@@ -9,7 +9,6 @@ import TablePagination from "@mui/material/TablePagination"
 import TableRow from "@mui/material/TableRow"
 
 const TemplateReport = ({ columnTable, dataTable }) => {
-  console.log("TemplateReport")
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
 

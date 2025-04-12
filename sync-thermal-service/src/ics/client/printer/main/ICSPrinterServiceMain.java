@@ -3,6 +3,7 @@ package ics.client.printer.main;
 import ics.client.printer.service.ClientSocket;
 import ics.client.printer.service.PrinterConfig;
 import ics.client.printer.service.SocketConfig;
+import ics.client.printer.service.SyncUpdateApplication;
 import java.awt.AWTException;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -41,13 +42,20 @@ public class ICSPrinterServiceMain {
             socketConfig.setVisible(true);
         });
         popupMenu.add(SocketItem);
-        popupMenu.addSeparator();
         MenuItem testPrinterItem = new MenuItem("Printer Settings...");
         testPrinterItem.addActionListener((ActionEvent e) -> {
             PrinterConfig mc = new PrinterConfig(null, true);
             mc.setVisible(true);
         });
         popupMenu.add(testPrinterItem);
+        popupMenu.addSeparator();
+        
+        MenuItem updateAppItem = new MenuItem("Sync Update");
+        updateAppItem.addActionListener((ActionEvent e) -> {
+            SyncUpdateApplication syncUpdateApp = new SyncUpdateApplication(null, true);
+            syncUpdateApp.setVisible(true);
+        });
+        popupMenu.add(updateAppItem);
         popupMenu.addSeparator();
 
         // เพิ่มเมนู "ออกจากโปรแกรม"

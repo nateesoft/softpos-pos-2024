@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import Grid2 from "@mui/material/Grid2"
 import useMediaQuery from "@mui/material/useMediaQuery"
 import { motion } from "framer-motion"
-import { io } from "socket.io-client"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
+import { Alert, Snackbar, Typography } from "@mui/material"
 
 import apiClient from "../../httpRequest"
 import AppbarMenu from "./AppbarMenu"
@@ -12,18 +12,13 @@ import ProductMenu from "./ProductMenu"
 import OrderItem from "./addOrderItem/OrderItem"
 import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
-import { Alert, Snackbar, Typography } from "@mui/material"
-
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
+import { POSContext } from "../../AppContext"
 
 function MainSalePage() {
-  console.log("MainSalePage")
   const { tableNo } = useParams()
   const { handleNotification } = useAlert()
+  const { appData } = useContext(POSContext)
+  const { macno, socket } = appData
 
   const matches = useMediaQuery("(min-width:1024px)")
   const [messageAlert, setMessageAlert] = useState("")
@@ -31,6 +26,7 @@ function MainSalePage() {
 
   const [orderType, setOrderType] = useState("E")
   const [ProductList, setProductList] = useState([])
+  const [balanceProductGroup, setBalanceProductGroup] = useState([])
   const [ProductA, setProductA] = useState([])
   const [ProductB, setProductB] = useState([])
   const [ProductC, setProductC] = useState([])
@@ -43,7 +39,10 @@ function MainSalePage() {
   const [orderTList, setOrderTList] = useState([])
   const [orderDList, setOrderDList] = useState([])
 
-  const initLoadMenu = useCallback(() => {
+  // Load summary tablefile
+  const [summaryTable, setSummaryTable] = useState({})
+
+  const initLoadMenu = () => {
     apiClient
       .get("/api/menu_setup")
       .then((response) => {
@@ -76,23 +75,23 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [handleNotification])
+  }
 
-  const initLoadTableCheckIn = useCallback(() => {
+  const initLoadTableCheckIn = () => {
     apiClient
       .get(`/api/table_checkin/${tableNo}/lastCheckIn`)
       .then((response) => {
         if (response.status === 200) {
           const tableCheckInData = response.data.data
-          setOrderType(tableCheckInData.table_order_type_start)
+          setOrderType(tableCheckInData?.table_order_type_start || "E")
         }
       })
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo, handleNotification])
+  }
 
-  const initLoadOrder = useCallback(async () => {
+  const initLoadOrder =async () => {
     const responseMenuSetup = await apiClient.get(`/api/menu_setup/all`)
     const listMenuSetup = responseMenuSetup.data.data
     apiClient
@@ -156,36 +155,76 @@ function MainSalePage() {
       .catch((error) => {
         handleNotification(error.message)
       })
-  }, [tableNo, handleNotification])
+  }
+
+  const initLoadBalanceProductGroup = () => {
+    apiClient
+      .get(`/api/balance/${tableNo}/groupProduct`)
+      .then((response) => {
+        if (response.status === 200) {
+          setBalanceProductGroup(response.data.data)
+        }
+      })
+      .catch((error) => {
+        handleNotification(error.message)
+      })
+  }
+
+  const summaryTableFileBalance = () => {
+      apiClient
+        .post("/api/balance/summaryBalance", { tableNo, macno })
+        .then((response) => {
+          if (response.status === 200) {
+            const data = response.data.data
+            setSummaryTable({
+              subTotalAmount: data.TAmount,
+              discountAmount: data.DiscountAmount,
+              service: data.Service,
+              serviceType: data.ServiceType,
+              serviceAmount: data.ServiceAmt,
+              vat: data.Vat,
+              vatType: data.VatType,
+              vatAmount: data.VatAmount,
+              netTotalAmount: data.NetTotal,
+              productAndService: data.ProductAndService,
+              printRecpMessage: data.PrintRecpMessage,
+              productNoneVat: data.ProductNonVat,
+            })
+          }
+        })
+        .catch((err) => handleNotification(err.message))
+    }
 
   useEffect(() => {
     initLoadMenu()
     initLoadOrder()
     initLoadTableCheckIn()
-  }, [initLoadMenu, initLoadOrder, initLoadTableCheckIn])
+    initLoadBalanceProductGroup()
+    summaryTableFileBalance()
+  }, [])
 
-    useEffect(() => {
-      socket.connect()
-  
-      // รับข้อความจาก server
-      socket.on("message", (newMessage) => {
-        console.log(newMessage)
-      })
-      socket.on("customerMessage", (newMessage) => {
-        console.log(newMessage)
-        setShowClient(true)
-        setMessageAlert(newMessage)
-      })
-  
-      socket.on("reply", (newMessage) => {
-        console.log(newMessage)
-      })
-  
-      // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
-      return () => {
-        socket.disconnect()
-      }
-    }, [])
+  useEffect(() => {
+    socket.connect()
+
+    // รับข้อความจาก server
+    socket.on("message", (newMessage) => {
+      console.log(newMessage)
+    })
+    socket.on("customerMessage", (newMessage) => {
+      console.log(newMessage)
+      setShowClient(true)
+      setMessageAlert(newMessage)
+    })
+
+    socket.on("reply", (newMessage) => {
+      console.log(newMessage)
+    })
+
+    // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
+    return () => {
+      socket.disconnect()
+    }
+  }, [])
 
   return (
     <motion.div
@@ -193,10 +232,19 @@ function MainSalePage() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <AppbarMenu tableNo={tableNo} />
+      <AppbarMenu tableNo={tableNo} 
+        setProductList={setProductList} 
+        setProductA={setProductA} 
+        setProductB={setProductB} 
+        setProductC={setProductC} 
+        setProductD={setProductD} 
+        setProductE={setProductE} 
+        setProductF={setProductF} 
+        initLoadMenu={initLoadMenu}
+      />
       <Grid2
         container
-        sx={{ background: "radial-gradient(circle, #001, #000)" }}
+        sx={{ background: "radial-gradient(circle, #003, #000)", backgroundSize: "10px 10px" }}
       >
         <Grid2 size={matches ? 8 : 12}>
           <ProductMenu
@@ -216,6 +264,8 @@ function MainSalePage() {
             initLoadMenu={initLoadMenu}
             initLoadOrder={initLoadOrder}
             handleNotification={handleNotification}
+            initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+            summaryTableFileBalance={summaryTableFileBalance}
           />
         </Grid2>
         <Grid2 size={4} sx={{
@@ -227,6 +277,7 @@ function MainSalePage() {
         >
           <OrderItem
             tableNo={tableNo}
+            balanceProductGroup={balanceProductGroup}
             orderType={orderType}
             OrderList={orderList}
             OrderEList={orderEList}
@@ -236,6 +287,9 @@ function MainSalePage() {
             initLoadOrder={initLoadOrder}
             typePopup={false}
             handleNotification={handleNotification}
+            initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+            summaryTable={summaryTable}
+            summaryTableFileBalance={summaryTableFileBalance}
           />
         </Grid2>
       </Grid2>

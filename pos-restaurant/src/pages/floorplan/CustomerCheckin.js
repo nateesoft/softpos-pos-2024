@@ -22,12 +22,8 @@ import { useTranslation } from "react-i18next"
 
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
-import CustomerNationDetail from "./CustomerNationDetail"
 import CartItems from "../floorplan/modal/CartItems"
-import CustomerDetail from "./CustomerDetail"
-
-const min = 1
-const max = 10
+import CustomerTabs from "./CustomerTabs"
 
 const modalStyle = {
   position: "absolute",
@@ -41,7 +37,6 @@ const modalStyle = {
 }
 
 const CustomerCheckin = (props) => {
-  console.log("CustomerCheckin")
   const { t } = useTranslation("global")
   const { appData, setAppData } = useContext(POSContext)
   const { macno } = appData
@@ -54,16 +49,21 @@ const CustomerCheckin = (props) => {
   const [orderType, setOrderType] = useState("E")
 
   // additional other customer count
-  const [manCount, setManCount] = useState(0)
-  const [womanCount, setWomanCount] = useState(0)
-  const [kidCount, setKidCount] = useState(0)
-  const [oldCount, setOldCount] = useState(0)
+  const [thaiManCount, setThaiManCount] = useState(0)
+  const [thaiWomanCount, setThaiWomanCount] = useState(0)
+  const [thaiKidCount, setThaiKidCount] = useState(0)
+  const [thaiOldCount, setThaiOldCount] = useState(0)
 
   // nation customer
-  const [thaiCount, setThaiCount] = useState(0)
-  const [europeCount, setEuropeCount] = useState(0)
-  const [americaCount, setAmericaCount] = useState(0)
-  const [asiaCount, setAsiaCount] = useState(0)
+  const [nationManCount, setNationManCount] = useState(0)
+  const [nationWomanCount, setNationWomanCount] = useState(0)
+  const [nationKidCount, setNationKidCount] = useState(0)
+  const [nationOldCount, setNationOldCount] = useState(0)
+
+  // nation country name
+  const [nationCountry, setNationCountry] = useState("Asia")
+  const [customerNote, setCustomerNote] = useState("")
+  const [billNo, setBillNo] = useState("")
 
   const [customerName, setCustomerName] = useState("")
   const [memberCode, setMemberCode] = useState("")
@@ -87,33 +87,39 @@ const CustomerCheckin = (props) => {
     const checkTableActive = await apiClient.get(`/api/tablefile/${tableNo}`)
     const tableResponse = checkTableActive.data.data
     if (tableResponse != null) {
-      const totalCustomer = thaiCount + europeCount + americaCount + asiaCount + manCount + womanCount + kidCount + oldCount
-      console.log('totalCustomer:', totalCustomer, custCount)
-      if (totalCustomer !== custCount) {
+      const thaiPerson = thaiManCount + thaiWomanCount + thaiKidCount + thaiOldCount
+      const nationPerson = nationManCount + nationWomanCount + nationKidCount + nationOldCount
+      const totalCustomer = thaiPerson + nationPerson
+      if (totalCustomer === 0) {
         setShowCustomerCountError(true)
         return
       }
-      if (custCount >= 0 && orderType !== "") {
+      if (totalCustomer > 0 && orderType !== "") {
         // call api to update table checkin
+        const payload = {
+          empCode,
+          macno,
+          customer_count: totalCustomer,
+          thai_man_count: thaiManCount,
+          thai_woman_count: thaiWomanCount,
+          thai_kid_count: thaiKidCount,
+          thai_old_count: thaiOldCount,
+          nation_man_count: nationManCount,
+          nation_woman_count: nationWomanCount,
+          nation_kid_count: nationKidCount,
+          nation_old_count: nationOldCount,
+          customer_name: customerName,
+          member_code: memberCode,
+          book_no: reserveNo,
+          order_id: orderId,
+          table_order_type_start: orderType,
+          nation_country: nationCountry,
+          customer_note: customerNote,
+          bill_no: billNo
+        }
+
         apiClient
-          .post(`/api/table_checkin/${tableNo}`, {
-            empCode,
-            macno,
-            customer_count: custCount,
-            cust_man_count: manCount,
-            cust_woman_count: womanCount,
-            cust_kid_count: kidCount,
-            cust_old_count: oldCount,
-            cust_thai_count: thaiCount,
-            cust_europe_count: europeCount,
-            cust_america_count: americaCount,
-            cust_asia_count: asiaCount,
-            customer_name: customerName,
-            member_code: memberCode,
-            book_no: reserveNo,
-            order_id: orderId,
-            table_order_type_start: orderType
-          })
+          .post(`/api/table_checkin/${tableNo}`, payload)
           .then((response) => {
             if (response.status === 200) {
               setShowError(false)
@@ -134,7 +140,6 @@ const CustomerCheckin = (props) => {
             }
           })
           .catch((err) => {
-            console.log(err)
             setShowCustomerError(true)
           })
       } else {
@@ -176,7 +181,6 @@ const CustomerCheckin = (props) => {
         }
       })
       .catch((err) => {
-        console.log(err)
         setFoundBooking("N")
         setOrderId("")
       })
@@ -189,21 +193,24 @@ const CustomerCheckin = (props) => {
         if (response.status === 200 && response.data.data != null) {
           const tableInfoData = response.data.data
           setCustCount(tableInfoData.customer_count)
-          setManCount(tableInfoData.cust_man_count)
-          setWomanCount(tableInfoData.cust_woman_count)
-          setKidCount(tableInfoData.cust_kid_count)
-          setOldCount(tableInfoData.cust_old_count)
-          setThaiCount(tableInfoData.cust_thai_count)
-          setEuropeCount(tableInfoData.cust_europe_count)
-          setAmericaCount(tableInfoData.cust_america_count)
-          setAsiaCount(tableInfoData.cust_asia_count)
+          setThaiManCount(tableInfoData.thai_man_count)
+          setThaiWomanCount(tableInfoData.thai_woman_count)
+          setThaiKidCount(tableInfoData.thai_kid_count)
+          setThaiOldCount(tableInfoData.thai_old_count)
+          setNationManCount(tableInfoData.nation_man_count)
+          setNationWomanCount(tableInfoData.nation_woman_count)
+          setNationKidCount(tableInfoData.nation_kid_count)
+          setNationOldCount(tableInfoData.nation_old_count)
           setCustomerName(tableInfoData.customer_name)
           setMemberCode(tableInfoData.member_code)
           setReserveNo(tableInfoData.book_no)
           setTimeCheckIn(
             moment(tableInfoData.datetime_checkin).format("DD/MM/YYYY HH:mm:ss")
           )
-          setOrderType(tableInfoData.table_order_type_start)
+          setOrderType(tableInfoData?.table_order_type_start || "E")
+          setNationCountry(tableInfoData.nation_country)
+          setCustomerNote(tableInfoData.customer_note)
+          setBillNo(tableInfoData.bill_no)
         }
       })
       .catch((err) => {
@@ -236,54 +243,46 @@ const CustomerCheckin = (props) => {
         </Typography>
       </Grid2>
       <Divider sx={{ margin: "10px" }} />
-      <Box sx={{ "& > :not(style)": { m: 1 } }}>
-        <Grid2 container spacing={2}>
-          <TextField
-            id="outlined-number"
-            label={t("FloorPlanPage.customerCount")}
-            value={custCount}
-            required
-            onChange={(e) => {
-              var value = parseInt(e.target.value, 10)
-              if (value > max) value = max
-              if (value < min) value = min
-              setCustCount(value)
-            }}
-            type="number"
-            slotProps={{
-              inputLabel: {
-                shrink: true
-              }
-            }}
-          />
-        </Grid2>
-        <CustomerNationDetail
-          thaiPeople={thaiCount}
-          setThaiCount={setThaiCount}
-          europePeople={europeCount}
-          setEuropeCount={setEuropeCount}
-          americaPeople={americaCount}
-          setAmericaCount={setAmericaCount}
-          asiaPeople={asiaCount}
-          setAsiaCount={setAsiaCount}
-        />
-        <CustomerDetail
-          man={manCount}
-          setMan={setManCount}
-          woman={womanCount}
-          setWoman={setWomanCount}
-          kid={kidCount}
-          setKid={setKidCount}
-          old={oldCount}
-          setOld={setOldCount}
+      <Box sx={{ "& > :not(style)": { m: 1 }, background: "#faece9" }}>
+        <CustomerTabs
+          thaiManCount={thaiManCount}
+          setThaiManCount={setThaiManCount}
+          thaiWomanCount={thaiWomanCount}
+          setThaiWomanCount={setThaiWomanCount}
+          thaiKidCount={thaiKidCount}
+          setThaiKidCount={setThaiKidCount}
+          thaiOldCount={thaiOldCount}
+          setThaiOldCount={setThaiOldCount}
+          nationManCount={nationManCount}
+          setNationManCount={setNationManCount}
+          nationWomanCount={nationWomanCount}
+          setNationWomanCount={setNationWomanCount}
+          nationKidCount={nationKidCount}
+          setNationKidCount={setNationKidCount}
+          nationOldCount={nationOldCount}
+          setNationOldCount={setNationOldCount}
+          nationCountry={nationCountry}
+          setNationCountry={setNationCountry}
+          customerNote={customerNote}
+          setCustomerNote={setCustomerNote}
+          billNo={billNo}
+          setBillNo={setBillNo}
         />
       </Box>
       <Grid2 container padding={1} spacing={1}>
+        <TextField 
+          id="txt-customer-name" 
+          label="Customer Name" 
+          value={customerName}
+          onChange={e=>setCustomerName(e.target.value)}
+          sx={{width: 150}}
+        />
         <TextField
           id="txt-reserve-no"
           label={t("FloorPlanPage.bookingNo")}
           value={reserveNo}
           onChange={handleInputReserveNo}
+          sx={{width: 150}}
         />
         <Button
           variant="contained"
@@ -322,6 +321,7 @@ const CustomerCheckin = (props) => {
           <Typography variant="p">{t("FloorPlanPage.foodType")}</Typography>
         </Grid2>
         <ToggleButtonGroup
+          size="small"
           color="primary"
           value={orderType}
           exclusive
@@ -334,21 +334,6 @@ const CustomerCheckin = (props) => {
           <ToggleButton value="D">{t("FloorPlanPage.delivery")}</ToggleButton>
         </ToggleButtonGroup>
       </Grid2>
-      {showError && (
-        <Alert severity="error" sx={{ width: "100%" }}>
-          {t("FloorPlanPage.tableStatusUnavailable")}
-        </Alert>
-      )}
-      {showCustomerError && (
-        <Alert severity="error" sx={{ width: "100%" }}>
-          {t("FloorPlanPage.customerInfoIncorrect")}
-        </Alert>
-      )}
-      {showCustomerCountError && (
-        <Alert severity="error" sx={{ width: "100%" }}>
-          {t("FloorPlanPage.NumberCustomersNotMatch")}
-        </Alert>
-      )}
       <Grid2 textAlign="center" padding={1}>
         <Button
           variant="contained"
