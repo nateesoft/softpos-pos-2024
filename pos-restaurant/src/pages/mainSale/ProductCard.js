@@ -5,9 +5,12 @@ import Grid2 from "@mui/material/Grid2"
 import { Box, Button, Badge, Typography } from "@mui/material"
 
 import { CurrencyContext } from "../../contexts/CurrencyContext"
+import { POSContext } from "../../AppContext"
 
 const ProductCard = memo((props) => {
-  console.log("ProductCard")
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const {
     id,
@@ -56,7 +59,7 @@ const ProductCard = memo((props) => {
       <Grid2 xs="auto" padding={1}>
         <Box textAlign="center">
           <img
-            src={product.image_url}
+            src={`/${baseName}/${product.image_url}`}
             alt=""
             height={150}
             width={160}

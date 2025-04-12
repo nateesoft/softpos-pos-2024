@@ -28,7 +28,6 @@ const modalStyle = {
 }
 
 const DepartmentGroupReportModal = ({ setOpen }) => {
-  console.log("DepartmentGroupReportModal")
   const navigate = useNavigate()
 
   const [terminalList, setTerminalList] = useState([])

@@ -24,9 +24,7 @@ import {
   IconButton,
   Snackbar,
   Toolbar,
-  Typography,
-  useMediaQuery
-} from "@mui/material"
+  Typography} from "@mui/material"
 import ExitToApp from "@mui/icons-material/ExitToApp"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import LogoutIcon from "@mui/icons-material/LogoutOutlined"
@@ -35,7 +33,6 @@ import "@xyflow/react/dist/style.css"
 import StoreIcon from "@mui/icons-material/Store"
 import { useTranslation } from "react-i18next"
 import moment from "moment"
-import { io } from "socket.io-client"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 
 import CheckTableStatus from "./checkTable"
@@ -64,6 +61,7 @@ import ReportSelect from "./ReportSelect"
 import LanguageSettings from "./LanguageSettings"
 import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
+import QuickSaleMenu from "./QuickSaleMenu"
 
 const modalPinStyle = {
   position: "absolute",
@@ -88,14 +86,7 @@ const nodeTypes = {
 
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 }
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
-
 const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
-  console.log("FloorPlanPage")
   const { t } = useTranslation("global")
   const { handleNotification } = useAlert()
   const navigate = useNavigate()
@@ -111,7 +102,7 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   }
 
   const { appData, setAppData } = useContext(POSContext)
-  const { userLogin } = appData
+  const { userLogin, macno, socket } = appData
 
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes] = useNodesState([])
@@ -132,7 +123,7 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
   const keyPressed = useKeyPress("Escape")
 
-  const [currentDate, setCurrentDate] = useState(new Date())
+  const timeRef = useRef(null)
 
   const confirmLogoutAlert = useCallback(() => {
     apiClient
@@ -149,7 +140,21 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
               id: 1,
               printerType: "message",
               printerName: "cashier",
-              message: "ออกจากระบบเรียบร้อย",
+              message: `
+                <div>
+                  <font face="Angsana New" size="4">
+                    User: ${userLogin} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
+                  </font>
+                </div>
+                <hr />
+                <div align="center">
+                  <font face="Angsana New" size="4">ออกจากระบบเรียบร้อย</font>
+                </div>
+                <hr />
+                <div align="center">
+                (づ ᴗ _ᴗ)づ♡
+                </div>
+              `,
               terminal: "",
               tableNo: "",
               billNo: "",
@@ -198,35 +203,26 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
     func()
   }
 
-  const loadFloorPlan = useCallback(
-    (floor) => {
-      apiClient
-        .get(`/api/floorplan-template/${floor}`)
-        .then((response) => {
-          const result = response.data
-          if (result.status === 2000) {
-            if (result.data != null) {
-              const flow = result.data.template
-              if (flow) {
-                setNodes(flow.nodes || [])
-              } else {
-                setNodes([])
-              }
-            } else {
-              setNodes([])
+  const loadFloorPlan = (floor) => {
+    apiClient
+      .get(`/api/floorplan-template/${floor}`)
+      .then((response) => {
+        const result = response.data
+        if (result.status === 2000) {
+          if (result.data != null) {
+            const flow = result.data.template
+            if (flow) {
+              setNodes(flow.nodes)
             }
-          } else {
-            setNodes([])
           }
-        })
-        .catch((err) => handleNotification(err.message))
-    },
-    [setNodes]
-  )
+        }
+      })
+      .catch((err) => handleNotification(err.message))
+  }
 
   useEffect(() => {
     loadFloorPlan(selectFloor)
-  }, [loadFloorPlan, selectFloor])
+  }, [])
 
   useEffect(() => {
     if (keyPressed) {
@@ -234,11 +230,18 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
     }
   }, [keyPressed])
 
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     setCurrentDate(new Date())
-  //   }, 1000)
-  // }, [])
+  useEffect(() => {
+    const updateClock = () => {
+      if (timeRef.current) {
+        timeRef.current.innerText = moment(new Date()).format("DD/MM/YYYY HH:mm:ss")
+      }
+      requestAnimationFrame(updateClock);
+    };
+
+    requestAnimationFrame(updateClock);
+
+    return () => cancelAnimationFrame(updateClock);
+  }, [])
 
   useEffect(() => {
     socket.connect()
@@ -328,6 +331,14 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
                 >
                   <ReportSelect />
                 </IconButton>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  sx={{ display: { xs: "none", md: "inline" } }}
+                >
+                  <QuickSaleMenu />
+                </IconButton>
               </div>
             </Grid2>
             <Grid2
@@ -337,10 +348,8 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
               alignItems="center"
               sx={{ flexGrow: 1 }}
             >
-              <Typography
-                sx={{ color: "yellow", display: { xs: "none", md: "flex" } }}
-              >
-                {moment(currentDate).format("DD/MM/YYYY HH:mm:ss")}
+              <Typography ref={timeRef} sx={{ color: "yellow", display: { xs: "none", md: "flex" } }} >
+                {moment(new Date()).format("DD/MM/YYYY HH:mm:ss")}
               </Typography>
               <LanguageSettings />
               <Button

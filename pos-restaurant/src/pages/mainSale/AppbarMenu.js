@@ -17,10 +17,11 @@ import Moment from "react-moment"
 import { useNavigate } from "react-router-dom"
 import MenuBookIcon from "@mui/icons-material/MenuBook"
 import QrCodeIcon from "@mui/icons-material/QrCode"
-import { io } from "socket.io-client"
 
+import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
-import MenuSetupPage from "./setupMenu/MenuSetupPage"
+import MenuSetupPage from "./setupMenu"
+import { useAlert } from "../../contexts/AlertContext"
 
 const modalStyle = {
   position: "absolute",
@@ -78,16 +79,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   }
 }))
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
-
-export default function AppbarMenu({ tableNo }) {
-  console.log("AppbarMenu")
+const AppbarMenu = ({ tableNo, 
+  setProductList,
+  setProductA,
+  setProductB,
+  setProductC,
+  setProductD,
+  setProductE,
+  setProductF,
+  initLoadMenu
+ }) => {
+  const [search, setSearch] = useState("")
+  
   const { appData } = useContext(POSContext)
-  const { userLogin } = appData
+  const { userLogin, socket } = appData
+
+  const { handleNotification } = useAlert()
 
   const [anchorEl, setAnchorEl] = useState(null)
   const openMenu = Boolean(anchorEl)
@@ -108,15 +115,60 @@ export default function AppbarMenu({ tableNo }) {
   }
 
   const createQRCode = () => {
-    const customerUrl = process.env.REACT_APP_FOOD_ORDING_APP
-    console.log("prepare create qrcode:", customerUrl + "/" + tableNo)
-    socket.emit("createQRCode", customerUrl + "/" + tableNo)
-    setAnchorEl(null)
+    apiClient.post("/api/customer/order", {
+      branchCode: "xxx", // wait for get branch_code 
+      tableNo: tableNo
+    })
+    .then(response => {
+      if (response.status === 200) {
+        const data = response.data.data
+        socket.emit("createQRCode", data.redirectUrl)
+        setAnchorEl(null)
+      }
+    })
+    .catch((error) => {
+      handleNotification(error.message)
+    })
+    
   }
 
   const navigate = useNavigate()
   const backFloorPlan = () => {
     navigate("/floorplan")
+  }
+
+  const handleEnterSearch = (evt) => {
+    if (evt.key === "Enter") {
+      seachProductMenu()
+    }
+  }
+
+  const seachProductMenu = ()=> {
+    if (search !== "") {
+      apiClient
+        .post("/api/menu_setup/search", { search })
+        .then((response) => {
+          setProductList([])
+          setProductA([])
+          setProductB([])
+          setProductC([])
+          setProductD([])
+          setProductE([])
+          setProductF([])
+          if (response.status === 200) {
+            const productList = response.data.data
+            setProductList(
+              productList.filter((product) => product.tab_group !== "")
+            )
+          } else {
+            setProductList([])
+          }
+        }).catch((error) => {
+          handleNotification(error.message)
+        })
+      } else {
+        initLoadMenu()
+      }
   }
 
   useEffect(() => {
@@ -178,8 +230,13 @@ export default function AppbarMenu({ tableNo }) {
             <StyledInputBase
               placeholder="ค้นหาเมนู…"
               inputProps={{ "aria-label": "search" }}
+              autoFocus
+              value={search}
+              onChange={e=>setSearch(e.target.value)}
+              onKeyDown={handleEnterSearch}
             />
           </Search>
+          <Button variant="contained" color="info" sx={{marginLeft: 1}} onClick={seachProductMenu}>ค้นหา</Button>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
@@ -250,3 +307,5 @@ export default function AppbarMenu({ tableNo }) {
     </Box>
   )
 }
+
+export default AppbarMenu

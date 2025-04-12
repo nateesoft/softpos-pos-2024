@@ -1,9 +1,11 @@
-import React from "react"
+import React, { useContext } from "react"
 import Box from "@mui/material/Box"
 import List from "@mui/material/List"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import { Grid2, Typography } from "@mui/material"
+
+import { POSContext } from "../../AppContext"
 
 const ChangeProductList = ({
   optionalList,
@@ -13,7 +15,9 @@ const ChangeProductList = ({
   currentMenu,
   closeDialog
 }) => {
-  console.log("ChangeProuductList")
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const newOptionList = optionalList.filter(
     (item) => item.checked === false && item.menu_code !== currentMenu
   )
@@ -60,7 +64,7 @@ const ChangeProductList = ({
             <ListItemButton onClick={() => handleListItemClick(menu)}>
               <ListItemIcon>
                 <img
-                  src={menu.image_url}
+                  src={`/${baseName}/${menu.image_url}`}
                   alt={menu.menu_name}
                   width={100}
                   height={100}

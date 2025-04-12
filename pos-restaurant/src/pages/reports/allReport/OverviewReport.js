@@ -44,7 +44,6 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
 }))
 
 const OverviewReport = () => {
-  console.log("OverviewReport")
   const navigate = useNavigate()
   const { appData } = useContext(POSContext)
   const { userLogin } = appData
@@ -130,7 +129,7 @@ const OverviewReport = () => {
           >
             <Box display="flex" flexDirection="column">
               <Typography sx={{ fontWeight: "bold" }}>
-                <u>จำนวนลูกค้าเข้าร้าน {customers.customer_count} คน</u>
+                <u>จำนวนลูกค้า {customers.customer_count} คน</u>
               </Typography>
               <table width="100%">
                 <tr>

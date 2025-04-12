@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, forwardRef } from "react"
+import React, { useState, useEffect, useCallback, forwardRef, useContext } from "react"
 import {
   Box,
   Button,
@@ -20,6 +20,7 @@ import ChangeProductList from "./ChangeProductList"
 import apiClient from "../../httpRequest"
 import ManualPriceInput from "./ManualPriceInput"
 import { useAlert } from "../../contexts/AlertContext"
+import { POSContext } from "../../AppContext"
 
 const modalStyle = {
   position: "absolute",
@@ -43,7 +44,9 @@ const MenuSetModal = ({
   optionalList,
   setOptionalList
 }) => {
-  console.log("MenuSetModal")
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const { handleNotification } = useAlert()
 
   const [showChangeListMenu, setShowChangeListMenu] = useState(false)
@@ -68,7 +71,6 @@ const MenuSetModal = ({
   }
 
   const updateItemManualPrice = (position, newProduct) => {
-    console.log("updateItemManualPrice:", newProduct)
     const updatedMenuState = optionalList.map((item, index) => {
       if (item.id === newProduct.id) {
         return { ...newProduct }
@@ -149,7 +151,7 @@ const MenuSetModal = ({
                 justifyContent="flex-start"
               >
                 <img
-                  src={item.image_url}
+                  src={`/${baseName}/${item.image_url}`}
                   alt={item.menu_name}
                   width={180}
                   height={150}

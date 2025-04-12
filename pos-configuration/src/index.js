@@ -19,7 +19,7 @@ const theme = createTheme({
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
-  <Router>
+  <Router basename="pos-control">
     <ThemeProvider theme={theme}>
       <App />
     </ThemeProvider>

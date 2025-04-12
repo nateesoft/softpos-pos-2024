@@ -4,7 +4,6 @@ import apiClient from "../../httpRequest"
 import { useAlert } from "../../contexts/AlertContext"
 
 const QRCodePayment = ({ mobileNumber, amount }) => {
-  console.log("QRCodePayment")
   const [image, setImage] = useState()
   const [size, setSize] = useState(120)
   const { handleNotification } = useAlert()

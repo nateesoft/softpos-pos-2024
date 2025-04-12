@@ -21,12 +21,20 @@ const columns = [
   { id: "CuType", label: "Type", minWidth: 50, align: "center" },
   { id: "CuCode", label: "Code", minWidth: 50, align: "center" },
   { id: "CuName", label: "Description/รายการ", minWidth: 50 },
+  { id: "CuDisc", label: "Discount(%)", minWidth: 50 },
+  { id: "CuDiscBath", label: "Baht", minWidth: 50 },
   { id: "qty", label: "Qty", minWidth: 100, align: "right" }
 ]
 
 const CuponListModal = (props) => {
-  console.log("CuponListModal")
-  const { onClose, setSpecialCuponAmt, tableFile  } = props
+  const { 
+    onClose, 
+    setSpecialCuponAmt, 
+    tableFile,
+    setPrCuCode,
+    setPrCuDisc,
+    setPrCuBath
+  } = props
 
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -49,36 +57,31 @@ const CuponListModal = (props) => {
   }
 
   const handleChange = (cuCode, field, value) => {
-    console.log("handleChange:", value)
     setCuponList((prevData) =>
       prevData.map((row) => (row.CuCode === cuCode ? { ...row, [field]: value } : row))
     );
   };
 
-  const computeSpecialCupon = () => {
-    let cuponAmt = 0
-    cuponList.forEach(cupon => {
-      cuponAmt += cupon.CuDiscBath
-    })
-
-    return cuponAmt
-  }
-
   const handleSave = () => {
-    const summaryCuponAmt = computeSpecialCupon()
     const getCuponSelect = cuponList.filter(item => item.qty>0)
     if (getCuponSelect.length > 0) {
-      console.log("Cupon List:", cuponList)
       apiClient
         .post(`/api/cupon/saveList`, { 
-          cuponList, 
+          cuponList: getCuponSelect, 
           cashier: tableFile.Cashier,
           tableNo: tableFile.Tcode,
-          macNo: tableFile.MacNo
+          macNo: tableFile.MacNo,
+          netTotalAmount: tableFile.NetTotal
         })
         .then((response) => {
           if (response.status === 200) {
-            setSpecialCuponAmt(summaryCuponAmt)
+            const cuponAmount = response.data.data
+            console.log('cuponAmount:', cuponAmount)
+            setSpecialCuponAmt(cuponAmount.CuAmt)
+            setPrCuCode(getCuponSelect[0].CuCode)
+            setPrCuDisc(getCuponSelect[0].CuDisc)
+            setPrCuBath(getCuponSelect[0].CuDiscBath)
+
             onClose()
           }
         })

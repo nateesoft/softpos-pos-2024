@@ -277,7 +277,6 @@ class ComponentToPrint extends Component {
 }
 
 const PrintReceiptCheck = () => {
-  console.log("PrintReceiptCheck")
   const { tableNo } = useParams()
   const navigate = useNavigate()
   const contentRef = useRef(null)

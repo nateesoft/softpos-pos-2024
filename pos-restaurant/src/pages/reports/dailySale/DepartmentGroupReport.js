@@ -44,7 +44,7 @@ class ComponentToPrint extends Component {
         id="content"
         container
         justifyContent="center"
-        sx={{ marginBottom: "100px" }}
+        sx={{ marginBottom: "100px", fontSize: 12, fontFamily: "Angsana New" }}
       >
         <Paper
           elevation={0}
@@ -114,7 +114,6 @@ class ComponentToPrint extends Component {
 }
 
 const DepartmentGroupReport = () => {
-  console.log("DepartmentGroupReport")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const [query] = useSearchParams()
@@ -161,7 +160,6 @@ const DepartmentGroupReport = () => {
         groupCode2: query.get("group2")
       })
       .then((response) => {
-        console.log(response.data.data)
         if (response.status === 200) {
           setReports(response.data.data)
         }

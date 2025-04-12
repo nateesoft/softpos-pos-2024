@@ -123,9 +123,10 @@ const ProductMenu = ({
   OrderDList,
   initLoadMenu,
   initLoadOrder,
-  handleNotification
+  handleNotification,
+  initLoadBalanceProductGroup,
+  summaryTableFileBalance
 }) => {
-  console.log("ProductMenu")
   const { t } = useTranslation("global")
   const matches = useMediaQuery("(min-width:1024px)")
   const { appData } = useContext(POSContext)
@@ -181,6 +182,8 @@ const ProductMenu = ({
       .then((response) => {
         initLoadMenu()
         initLoadOrder()
+        initLoadBalanceProductGroup()
+        summaryTableFileBalance()
       })
       .catch((error2) => {
         handleNotification(error2.message)
@@ -201,6 +204,9 @@ const ProductMenu = ({
       .then(async (response) => {
         initLoadMenu()
         initLoadOrder()
+        initLoadBalanceProductGroup()
+        summaryTableFileBalance()
+
         const R_LinkIndex = response.data.data
 
         // add sub menu in set
@@ -213,6 +219,8 @@ const ProductMenu = ({
         // total summary display
         initLoadMenu()
         initLoadOrder()
+        initLoadBalanceProductGroup()
+        summaryTableFileBalance()
 
         setShowMenuSet(false)
       })
@@ -299,7 +307,7 @@ const ProductMenu = ({
         </Tabs>
       )}
       <TabPanel value={value} index={0}>
-        <Grid2 container justifyContent="space-evenly">
+        <Grid2 container justifyContent="flex-start">
           {ProductList.length === 0 && <NotfoundMenu />}
           {ProductList &&
             ProductList.map((product) => (
@@ -320,7 +328,7 @@ const ProductMenu = ({
         </Grid2>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Grid2 container justifyContent="space-between">
+        <Grid2 container justifyContent="flex-start">
           {ProductA.length === 0 && <NotfoundMenu />}
           {ProductA &&
             ProductA.map((product) => (
@@ -340,7 +348,7 @@ const ProductMenu = ({
         </Grid2>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Grid2 container justifyContent="space-between">
+        <Grid2 container justifyContent="flex-start">
           {ProductB.length === 0 && <NotfoundMenu />}
           {ProductB &&
             ProductB.map((product) => (
@@ -360,7 +368,7 @@ const ProductMenu = ({
         </Grid2>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        <Grid2 container justifyContent="space-between">
+        <Grid2 container justifyContent="flex-start">
           {ProductC.length === 0 && <NotfoundMenu />}
           {ProductC &&
             ProductC.map((product) => (
@@ -380,7 +388,7 @@ const ProductMenu = ({
         </Grid2>
       </TabPanel>
       <TabPanel value={value} index={4}>
-        <Grid2 container justifyContent="space-between">
+        <Grid2 container justifyContent="flex-start">
           {ProductD.length === 0 && <NotfoundMenu />}
           {ProductD &&
             ProductD.map((product) => (
@@ -400,7 +408,7 @@ const ProductMenu = ({
         </Grid2>
       </TabPanel>
       <TabPanel value={value} index={5}>
-        <Grid2 container justifyContent="space-between">
+        <Grid2 container justifyContent="flex-start">
           {ProductE.length === 0 && <NotfoundMenu />}
           {ProductE &&
             ProductE.map((product) => (
@@ -420,7 +428,7 @@ const ProductMenu = ({
         </Grid2>
       </TabPanel>
       <TabPanel value={value} index={6}>
-        <Grid2 container justifyContent="space-between">
+        <Grid2 container justifyContent="flex-start">
           {ProductF.length === 0 && <NotfoundMenu />}
           {ProductF &&
             ProductF.map((product) => (
@@ -568,22 +576,6 @@ const ProductMenu = ({
                 </Typography>
               </Grid2>
               <Grid2 container spacing={1}>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<CloseIcon />}
-                  onClick={handleCloseMenuSet}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  color="success"
-                  endIcon={<CheckIcon />}
-                  onClick={() => handleConfirmSelectedSubMenu(productInfo)}
-                >
-                  Order
-                </Button>
                 <FormControl variant="outlined">
                   <Select
                     labelId="demo-simple-select-label"
@@ -600,6 +592,14 @@ const ProductMenu = ({
                     <MenuItem value={5}>5</MenuItem>
                   </Select>
                 </FormControl>
+                <Button
+                  variant="contained"
+                  color="success"
+                  endIcon={<CheckIcon />}
+                  onClick={() => handleConfirmSelectedSubMenu(productInfo)}
+                >
+                  Order
+                </Button>
               </Grid2>
             </Box>
           </Grid2>

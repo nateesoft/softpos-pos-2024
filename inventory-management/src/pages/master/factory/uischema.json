@@ -1,0 +1,33 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "HorizontalLayout",
+      "elements": [
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "รหัสโรงงาน (Code)"
+        },
+        {
+          "type": "Control",
+          "scope": "#/properties/name",
+          "label": "ชื่อโรงงาน (Description)"
+        }
+      ]
+    },
+    {
+      "type": "Table",
+      "options": {
+        "columns": [
+          { "field": "code", "title":  "รหัสโรงงาน (Code)"}, 
+          { "field": "description", "title":  "ชื่อโรงงาน (Description)" }
+        ],
+        "rows": [
+          { "code": "1", "description": "โรงงานสุขาภิบาล" },
+          { "code": "2", "description": "รับสินค้าที่นำเงินสดไปซื้อเอง" }
+        ]
+      }
+    }  
+  ]
+}

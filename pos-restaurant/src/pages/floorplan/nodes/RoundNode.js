@@ -1,3 +1,6 @@
+import { useContext } from "react"
+import { POSContext } from "../../../AppContext"
+
 const style = {
   border: "1px solid #aaa",
   boxShadow: "2px 2px chocolate",
@@ -5,12 +8,14 @@ const style = {
 }
 
 function RoundNode(props) {
-  console.log("RoundNode")
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   const { data, bgColor } = props
   return (
     <div align="center" style={{ width: "256px" }}>
       <img
-        src={data.image ?? "/images/floorplan/oval-table.png"}
+        src={`/${baseName}${data.image}` ?? `/${baseName}/images/floorplan/oval-table.png`}
         width={200}
         alt=""
       />

@@ -36,7 +36,7 @@ class ComponentToPrint extends Component {
         id="content"
         container
         justifyContent="center"
-        sx={{ marginBottom: "100px" }}
+        sx={{ marginBottom: "100px", fontSize: 12, fontFamily: "Angsana New" }}
       >
         <Paper
           elevation={0}
@@ -99,7 +99,6 @@ class ComponentToPrint extends Component {
 }
 
 const PromotionDiscount = () => {
-  console.log("PromotionDiscount")
   const navigate = useNavigate()
   const contentRef = useRef(null)
   const { appData } = useContext(POSContext)
