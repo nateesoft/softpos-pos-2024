@@ -16,6 +16,26 @@ const getTotalBalance = async (tableNo) => {
     return 0.00
 }
 
+const getSubProductByPluCode = async ({tableNo, rLinkIndex}) => {
+    const sql = `select * from balance where R_Table='${tableNo}' and R_LinkIndex='${rLinkIndex}'`;
+    const results = await pool.query(sql)
+
+    return results
+}
+
+const voidListMenuBalanceAll = async ({ menu_code, void_message, Cachier, empCode, macno }) => {
+    const allMenuInBalance = await getAllBalanceByMenuCode(menu_code)
+    allMenuInBalance.forEach(async item => {
+        await voidMenuBalance({
+            R_Index: item.R_Index, 
+            Cachier, 
+            empCode, 
+            voidMsg: void_message, 
+            macno
+        })
+    })
+}
+
 const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) => {
     // Update  Balance File For Void
     const balance = await getBalanceByRIndex(R_Index);
@@ -38,6 +58,9 @@ const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) =>
         const results = await pool.query(updBalance)
 
         if (results.affectedRows > 0) {
+            // summary table
+            summaryBalance(balance.R_Table, macno)
+
             return `${R_Index} Updated.`
         }
     }
@@ -46,6 +69,19 @@ const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) =>
 
 const getAllBalance = async () => {
     const sql = `select * from balance order by R_Table, R_Index`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const getAllBalanceByMenuCode = async (menuCode) => {
+    const sql = `select * from balance where R_PluCode='${menuCode}' order by R_Table, R_Index`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const getAllBalanceByRLinkIndex = async (rLinkIndex) => {
+    const sql = `select * from balance 
+        where R_LinkIndex='${rLinkIndex}' order by R_Index`;
     const results = await pool.query(sql)
     return results
 }
@@ -71,6 +107,24 @@ const getBalanceByTableNo = async tableNo => {
     return mappingResult
 }
 
+const getBalanceGroupProduct = async tableNo => {
+    const sql = `select R_ETD, R_PluCode, R_PName, 
+        sum(R_Quan) R_Quan, 
+        sum(R_Total) R_Total 
+        from balance 
+        where R_Table ='${tableNo}' 
+        and R_LinkIndex='' 
+        group by R_ETD, R_PluCode, R_PName`;
+    const results = await pool.query(sql)
+    const mappingResult = results.map((item, index) => {
+        return { 
+            ...item, 
+            R_PName: ASCII2Unicode(item.R_PName)
+        }
+    })
+    return mappingResult
+}
+
 const getVoidMsgList = async () => {
     const sql = `select * from voidmsg order by VCode`;
     const results = await pool.query(sql)
@@ -83,6 +137,10 @@ const getVoidMsgList = async () => {
 const emptyTableBalance = async tableNo => {
     const sql = `delete from balance where R_Table='${tableNo}'`;
     const results = await pool.query(sql)
+
+    // clear temp cupon
+    await pool.query(`delete from tempcupon where R_Table='${tableNo}'`)
+
     return results
 }
 
@@ -141,7 +199,7 @@ const addListBalance = async (payload) => {
         })
 
         // summary tablefile
-        await summaryBalance(tableNo)
+        await summaryBalance(tableNo, macno)
 
         // process stock out
         await orderStockOut(reponseR_Index)
@@ -175,7 +233,7 @@ const addBalance = async payload => {
     })
 
     // summary tablefile
-    await summaryBalance(tableNo)
+    await summaryBalance(tableNo, macno)
 
     // process stock out
     await orderStockOut(reponseR_Index)
@@ -267,7 +325,7 @@ const addNewBalance = async payload => {
 
     const R_PrCuCode = "";
     const R_PrChkType = "";
-    const R_PrQuan = 0;
+    const R_PrQuan = 1;
     const R_PrSubType = "";
     const R_PrSubCode = "";
     const R_PrSubQuan = 0;
@@ -278,7 +336,7 @@ const addNewBalance = async payload => {
     const R_PrCuDisc = 0;
     const R_PrCuBath = 0;
     const R_PrCuAdj = 0;
-    const R_QuanCanDisc = 0;
+    const R_QuanCanDisc = 1;
     const R_PrVcType = "";
     const R_PrVcCode = "";
     const R_VoidPause = "";
@@ -323,11 +381,27 @@ const addNewBalance = async payload => {
     return R_Index
 }
 
-const updateBalance = async payload => {
+const updateChangeTypeMenu = async (R_Table, R_ETD, macno, R_Index) => {
+    // update main menu
+    await pool.query(`update balance 
+        set R_ETD='${R_ETD}' where R_Index='${R_Index}'`)
+
+    // check subMenuList
+    const subLinkIndex = await getAllBalanceByRLinkIndex(R_Index)
+    subLinkIndex.forEach(async item => {
+        await pool.query(`update balance 
+            set R_ETD='${R_ETD}' where R_Index='${item.R_Index}'`)
+    })
+
+    // summary table
+    summaryBalance(R_Table, macno)
+}
+
+const updateBalanceDetail = async payload => {
     const { oldBalance, discount, optList = [], specialText = "", macno, userLogin, empCode, R_ETD } = payload
     const { R_Index, R_Table, R_PluCode, R_PName, R_Unit, R_Group, R_Status, R_Normal, R_Discount,
         R_Service, R_Stock, R_Set, R_Vat, R_Type, R_Price, R_Total, R_PrType, R_PrCode,
-        R_PrDisc, R_PrBath, R_PrAmt, R_PrCuType, R_PrCuQuan, R_PrCuAmt, R_Redule, R_Kic,
+        R_PrDisc, R_PrBath, R_PrAmt, R_DiscBath, R_PrCuType, R_PrCuQuan, R_PrCuAmt, R_Redule, R_Kic,
         R_KicPrint, R_Void, R_VoidUser, R_VoidTime, FieldName, R_PrCuCode, R_Serve, R_PrintOK, R_KicOK,
         StkCode, PosStk, R_PrChkType, R_PrQuan, R_PrSubType, R_PrSubCode, R_PrSubQuan, R_PrSubDisc,
         R_PrSubBath, R_PrSubAmt, R_PrSubAdj, R_PrCuDisc, R_PrCuBath, R_PrCuAdj, R_Order,
@@ -348,23 +422,38 @@ const updateBalance = async payload => {
     const R_Opt8 = Unicode2ASCII(R_Opt[7]);
     const R_Opt9 = Unicode2ASCII(R_Opt[8]);
 
+    const GetVoidMsg = Unicode2ASCII(VoidMsg)
+
     const R_Date = getMoment().format('YYYY-MM-DD');
     const R_Time = getMoment().format('HH:mm:ss');
     const Macno = macno;
     const Cashier = userLogin;
     const R_Emp = empCode;
 
-    let newRTotal = R_Total
+    let newRTotal = R_Price * R_Quan
+
+    let RPrDisc = R_PrDisc
+    let RPrBath = R_PrBath
+    let RPrAmt = R_PrAmt
 
     // for discount
+    let RPrType = R_PrType || ''
     let newDiscountBaht = 0
     if (R_Discount === 'Y') {
         if (discount.discountPercent > 0) {
-            newDiscountBaht = R_Total * discount.discountPercent / 100
+            newDiscountBaht = newRTotal * parseFloat(discount.discountPercent) / 100
         } else if(discount.discountBaht > 0) {
             newDiscountBaht = discount.discountBaht
         }
+
+        if(newDiscountBaht>0){
+            RPrType = '-I'
+        }else{
+            RPrType = ''
+        }
     }
+    
+    
 
     newRTotal = newRTotal - newDiscountBaht
 
@@ -374,8 +463,8 @@ const updateBalance = async payload => {
         R_PName='${R_PName}',R_Unit='${R_Unit}',R_Group='${R_Group}',R_Status='${R_Status}',
         R_Normal='${R_Normal}',R_Discount='${R_Discount}',R_Service='${R_Service}',R_Stock='${R_Stock}',
         R_Set='${R_Set}',R_Vat='${R_Vat}',R_Type='${R_Type}',R_ETD='${R_ETD}',R_Quan='${R_Quan}',
-        R_Price='${R_Price}',R_Total='${newRTotal}',R_PrType='${R_PrType}',R_PrCode='${R_PrCode}',
-        R_PrDisc='${R_PrDisc}',R_PrBath='${R_PrBath}',R_PrAmt='${R_PrAmt}',R_DiscBath='${newDiscountBaht}',
+        R_Price='${R_Price}',R_Total='${newRTotal}',R_PrType='${RPrType}',R_PrCode='${R_PrCode}',
+        R_PrDisc='${RPrDisc}',R_PrBath='${RPrBath}',R_PrAmt='${RPrAmt}',R_DiscBath='${R_DiscBath}',
         R_PrCuType='${R_PrCuType}',R_PrCuQuan='${R_PrCuQuan}',R_PrCuAmt='${R_PrCuAmt}',
         R_Redule='${R_Redule}',R_Kic='${R_Kic}',R_KicPrint='${R_KicPrint}',R_Void='${R_Void}',
         R_VoidUser='${R_VoidUser}',R_VoidTime='${R_VoidTime}',FieldName='${FieldName}',
@@ -392,7 +481,7 @@ const updateBalance = async payload => {
         R_VoidQuan='${R_VoidQuan}',R_MoveFlag='${R_MoveFlag}',R_MovePrint='${R_MovePrint}',
         R_Pause='${R_Pause}',R_SPIndex='${R_SPIndex}',R_LinkIndex='${R_LinkIndex}',
         R_VoidPause='${R_VoidPause}',R_MoveItem='${R_MoveItem}',R_MoveFrom='${R_MoveFrom}',
-        R_MoveUser='${R_MoveUser}',VoidMsg='${VoidMsg}',R_PrintItemBill='${R_PrintItemBill}',
+        R_MoveUser='${R_MoveUser}',VoidMsg='${GetVoidMsg}',R_PrintItemBill='${R_PrintItemBill}',
         R_CountTime='${R_CountTime}',SoneCode='${SoneCode}',R_Earn='${R_Earn}',R_EarnNo='${R_EarnNo}',
         TranType='${TranType}',PDAPrintCheck='${PDAPrintCheck}',PDAEMP='${PDAEMP}',R_empName='${R_empName}',
         R_ServiceAmt='${R_ServiceAmt}',R_PEName='${R_PEName}',R_Indulgent='${R_Indulgent}' 
@@ -400,7 +489,7 @@ const updateBalance = async payload => {
     await pool.query(sql)
 
     // summary table
-    summaryBalance(R_Table)
+    summaryBalance(R_Table, macno)
 
     return R_Index
 }
@@ -530,11 +619,15 @@ module.exports = {
     addListBalance,
     addBalance,
     voidMenuBalance,
-    updateBalance,
+    updateBalanceDetail,
     inventoryStock,
     getBalanceByTableNo,
     orderStockOut,
     returnStockIn,
     getVoidMsgList,
-    deleteBalanceOnly
+    deleteBalanceOnly,
+    getBalanceGroupProduct,
+    voidListMenuBalanceAll,
+    getSubProductByPluCode,
+    updateChangeTypeMenu
 }

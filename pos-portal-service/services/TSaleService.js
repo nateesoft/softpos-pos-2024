@@ -14,7 +14,20 @@ const getAllTSaleByRefno = async (refno) => {
     const sql = `select * from t_sale where R_Refno='${refno}' order by R_Index`
     const results = await pool.query(sql)
     const mappingResult = results.map((item, index) => {
-        return { ...item, VoidMsg: ASCII2Unicode(item.VoidMsg) }
+        return { 
+            ...item,
+            R_PName: ASCII2Unicode(item.R_PName) ,
+            R_Opt1: ASCII2Unicode(item.R_Opt1) ,
+            R_Opt2: ASCII2Unicode(item.R_Opt2) ,
+            R_Opt3: ASCII2Unicode(item.R_Opt3) ,
+            R_Opt4: ASCII2Unicode(item.R_Opt4) ,
+            R_Opt5: ASCII2Unicode(item.R_Opt5) ,
+            R_Opt6: ASCII2Unicode(item.R_Opt6) ,
+            R_Opt7: ASCII2Unicode(item.R_Opt7) ,
+            R_Opt8: ASCII2Unicode(item.R_Opt8) ,
+            R_Opt9: ASCII2Unicode(item.R_Opt9) ,
+            VoidMsg: ASCII2Unicode(item.VoidMsg)
+        }
     })
     return mappingResult
 }
@@ -69,6 +82,7 @@ const createNewTSale = async (balance, BillRefNo) => {
     const ROpt7 = Unicode2ASCII(R_Opt7)
     const ROpt8 = Unicode2ASCII(R_Opt8)
     const ROpt9 = Unicode2ASCII(R_Opt9)
+    const getVoidMsg = Unicode2ASCII(VoidMsg)
 
 
     const sql = `INSERT INTO t_sale 
@@ -85,7 +99,7 @@ const createNewTSale = async (balance, BillRefNo) => {
         '${RPName}','${R_Unit}','${R_Group}','${R_Status}','${R_Normal}','${R_Discount}','${R_Service}','${R_Stock}','${R_Set}',
         '${R_Vat}','${R_Type}','${R_ETD}','${R_Quan}','${R_Price}','${R_Total}','${R_PrType}','${R_PrCode}','${R_PrDisc}','${R_PrBath}',
         '${R_PrAmt}','${R_PrCuType}','${R_PrCuCode}','${R_PrCuQuan}','${R_PrCuAmt}','${R_Redule}','${R_DiscBath}','${R_PrAdj}',
-        '${R_PreDisAmt}','${R_NetTotal}','${R_Kic}','${R_KicPrint}','${R_Refund}','${VoidMsg}','${R_Void}','${R_VoidUser}','${R_VoidTime}',
+        '${R_PreDisAmt}','${R_NetTotal}','${R_Kic}','${R_KicPrint}','${R_Refund}','${getVoidMsg}','${R_Void}','${R_VoidUser}','${R_VoidTime}',
         '${StkCode}','${PosStk}','${R_ServiceAmt}','${R_PrChkType}','${R_PrQuan}','${R_PrSubType}','${R_PrSubCode}','${R_PrSubQuan}',
         '${R_PrSubDisc}','${R_PrSubBath}','${R_PrSubAmt}','${R_PrSubAdj}','${R_PrCuDisc}','${R_PrCuBath}','${R_PrCuAdj}','${R_PrChkType2}',
         '${R_PrQuan2}','${R_PrType2}','${R_PrCode2}','${R_PrDisc2}','${R_PrBath2}','${R_PrAmt2}','${R_PrAdj2}','${R_PItemNo}',

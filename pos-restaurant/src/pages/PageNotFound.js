@@ -1,10 +1,15 @@
+import { useContext } from "react"
 import { Helmet } from "react-helmet-async"
 import Typography from "@mui/material/Typography"
 import Grid from "@mui/material/Grid2"
 import { Box } from "@mui/material"
 
+import { POSContext } from '../AppContext'
+
 const PageNotFound = () => {
-  console.log("PageNotFound")
+  const { appData } = useContext(POSContext)
+  const { baseName } = appData
+
   return (
     <>
       <Helmet>
@@ -20,7 +25,7 @@ const PageNotFound = () => {
         <Grid size={12} display="flex" justifyContent="center">
           <Box
             component="img"
-            src="/assets/illustration-404.svg"
+            src={`/${baseName}/assets/illustration-404.svg`}
             sx={{
               width: 320,
               height: "auto",

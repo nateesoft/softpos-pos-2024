@@ -16,7 +16,6 @@ import FloorSelect from "./FloorSelect"
 const mobileMenuId = "primary-search-account-menu-mobile"
 
 const AppbarMenu = (props) => {
-  console.log("AppbarMenu")
   const { onSave, onExit, selectFloor, setSelectFloor } = props
   return (
     <AppBar position="fixed">

@@ -9,6 +9,19 @@ const {
 } = require("./CoreService")
 const { Unicode2ASCII } = require("../utils/StringUtil")
 
+const getSummaryItem = async (tableNo) => {
+  const sql = `select sum(R_Quan) R_Quan 
+  from balance where R_Table='${tableNo}' 
+  and R_Void <> 'V' 
+  and R_LinkIndex='' 
+  and R_QuanCanDisc>0 `
+  const results = await pool.query(sql)
+  if (results.length > 0) {
+    return results[0].R_Quan
+  }
+  return 0.0
+}
+
 const getAllTable = async () => {
   const sql = `select * FROM tablefile ORDER By Tcode`
   const results = await pool.query(sql)
@@ -50,12 +63,85 @@ const updateTableAvailableStatus = async (tableNo) => {
 const updateTableDiscount = async (payload) => {
   const {
     tableFile, 
-    FastDisc, FastDiscAmt, EmpDisc, EmpDiscAmt,
-    MemDisc, MemDiscAmt, TrainDisc, TrainDiscAmt, SubDisc, SubDiscAmt,
-    DiscBath, CuponDiscAmt=0, SpaDiscAmt
+    FastDisc, FastDiscAmt=0, EmpDisc, EmpDiscAmt=0,
+    MemDisc, MemDiscAmt=0, TrainDisc, TrainDiscAmt=0, SubDisc, SubDiscAmt=0,
+    DiscBath=0, CuponDiscAmt=0, SpaDiscAmt=0, 
+    PrCuCode = "", PrCuDisc="", PrCuBath=""
   } = payload
-  
-  console.log('updateTableDiscount:', payload)
+
+  // update all balance
+  const totalItem = await getSummaryItem(tableFile.Tcode)
+  if (DiscBath>0) {
+    let avgDiscBath = DiscBath/totalItem
+    const sqlBalance = `update balance set R_DiscBath='${avgDiscBath}' where R_Table='${tableFile.Tcode}'`
+    await pool.query(sqlBalance)
+  } else if(CuponDiscAmt>0) {
+    let avgCuponDiscAmt = CuponDiscAmt/totalItem
+    const sqlBalance = `update balance 
+        set R_PrCuType='-C',
+        R_PrCuCode='${PrCuCode}',
+        R_PrCuDisc='${PrCuDisc}',
+        R_PrCuBath='${PrCuBath}',
+        R_PrCuAmt='${avgCuponDiscAmt}' 
+        where R_Table='${tableFile.Tcode}'`
+    await pool.query(sqlBalance)
+  } else if(FastDiscAmt>0) {
+    let avgFastDiscAmt = FastDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-F', 
+      R_PrSubCode='FAS', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='10', 
+      R_PrSubAmt='${avgFastDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  } else if(EmpDiscAmt>0) {
+    let avgEmpDiscAmt = EmpDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-E', 
+      R_PrSubCode='EMP', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='50', 
+      R_PrSubAmt='${avgEmpDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  } else if(MemDiscAmt>0) {
+    let avgMemDiscAmt = MemDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-M', 
+      R_PrSubCode='MEM', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='10', 
+      R_PrSubAmt='${avgMemDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  } else if(TrainDiscAmt>0) {
+    let avgTrainDiscAmt = TrainDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-T', 
+      R_PrSubCode='TRA', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='10', 
+      R_PrSubAmt='${avgTrainDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  } else if(SubDiscAmt>0) {
+    let avgSubDiscAmt = SubDiscAmt/totalItem
+    const sqlBalance = `update balance set 
+      R_PrSubType='-S', 
+      R_PrSubCode='SUB', 
+      R_PrSubQuan=1, 
+      R_PrSubDisc='10', 
+      R_PrSubAmt='${avgSubDiscAmt}' 
+      R_QuanCanDisc=R_QuanCanDisc-1
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+    await pool.query(sqlBalance)
+  }
+
   const sql = `update tablefile set 
         FastDisc='${FastDisc}',FastDiscAmt='${FastDiscAmt}',
         EmpDisc='${EmpDisc}',EmpDiscAmt='${EmpDiscAmt}',
@@ -65,9 +151,13 @@ const updateTableDiscount = async (payload) => {
         DiscBath='${DiscBath}',CuponDiscAmt='${CuponDiscAmt}',
         SpaDiscAmt='${SpaDiscAmt}' 
         where Tcode='${tableFile.Tcode}'`
-  console.log(sql)
   await pool.query(sql)
-  return await updateDiscountBill(tableFile.Tcode)
+
+  const discountAmount = FastDiscAmt + EmpDiscAmt + MemDiscAmt + TrainDiscAmt + SubDiscAmt + 
+    DiscBath + CuponDiscAmt + SpaDiscAmt
+  return {
+    discountAmount: discountAmount
+  }
 }
 
 const updateTableOpenStatus = async (tableNo, Cashier, TUser) => {
@@ -164,7 +254,7 @@ const updateTableFile = async (tablefile) => {
   const StkCode2 = tablefile.StkCode2
   const TDesk = tablefile.TDesk
   const TUser = tablefile.TUser
-  const VoidMsg = tablefile.VoidMsg
+  const VoidMsg = Unicode2ASCII(tablefile.VoidMsg)
   const TPause = tablefile.TPause || ""
   const CCUseCode = tablefile.CCUseCode
   const TTableIsOn = tablefile.TTableIsOn || ""
@@ -324,6 +414,7 @@ const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
   newTable.TActive = TActive || ""
   newTable.TAutoClose = TAutoClose || ""
   newTable.CCUseAmt = CCUseAmt || 0
+  newTable.VoidMsg = Unicode2ASCII(VoidMsg)
   const sql = `INSERT INTO tablefile 
             (Tcode,SoneCode,TLoginDate,MacNo,Cashier,TLoginTime,TCurTime,TCustomer,TItem,TAmount,TOnAct,Service,ServiceAmt,EmpDisc,EmpDiscAmt,
             FastDisc,FastDiscAmt,TrainDisc,TrainDiscAmt,MemDisc,MemDiscAmt,SubDisc,SubDiscAmt,DiscBath,ProDiscAmt,SpaDiscAmt,CuponDiscAmt,
@@ -334,7 +425,7 @@ const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
             '${MemDisc}','${MemDiscAmt}','${SubDisc}','${SubDiscAmt}','${DiscBath}','${ProDiscAmt}','${SpaDiscAmt}','${CuponDiscAmt}','${ItemDiscAmt}',
             '${MemCode}','${MemCurAmt}','${MemName}','${MemBegin}','${MemEnd}','${Food}','${Drink}','${Product}','${NetTotal}','${PrintTotal}',
             '${PrintChkBill}','${PrintCnt}','${PrintTime1}','${PrintTime2}','${ChkBill}','${ChkBillTime}','${StkCode1}','${StkCode2}','${TDesk}',
-            '${TUser}','${VoidMsg}','${TPause}','${CCUseCode}','${newTable.CCUseAmt}','${newTable.TTableIsOn}','${newTable.TActive}','${newTable.TAutoClose}')`
+            '${TUser}','${newTable.VoidMsg}','${TPause}','${CCUseCode}','${newTable.CCUseAmt}','${newTable.TTableIsOn}','${newTable.TActive}','${newTable.TAutoClose}')`
   const checkExistTable = await getTableByCode(targetTableNo)
   if (checkExistTable) {
     checkExistTable.MacNo = MacNo
@@ -349,7 +440,8 @@ const createTableForSplitPayment = async (sourceTableData, targetTableNo) => {
 const splitTableToPayment = async (
   sourceTable,
   targetTable,
-  orderListToMove
+  orderListToMove,
+  macno
 ) => {
   const sourceTableData = await getTableByCode(sourceTable)
   const targetTableData = await createTableForSplitPayment(
@@ -389,37 +481,8 @@ const splitTableToPayment = async (
   }
 
   // summary balance in table
-  await summaryBalance(sourceTable)
-  await summaryBalance(targetTable)
-}
-
-const updateDiscountBill = async (tableNo) => {
-  let sql = ''
-
-  // clearCuponSpecial
-  sql = `delete from tempcupon where r_table='${tableNo}'`
-  await pool.query(sql)
-
-  // clearMemberDiscount
-  // updateCancelDiscountBalanceDiscClick
-
-  const tableFile = await getTableByCode(tableNo)
-  const { Tcode, FastDiscAmt, EmpDiscAmt, MemDiscAmt, TrainDiscAmt, SubDiscAmt,
-    DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt, ItemDiscAmt, TAmount, Service
-  } = tableFile
-  const discountAmount = FastDiscAmt + EmpDiscAmt + MemDiscAmt + TrainDiscAmt + SubDiscAmt + 
-    DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + ItemDiscAmt
-  const subTotalAmount = TAmount - discountAmount
-  const serviceAmt = (subTotalAmount * Service) / 100
-  const netTotal = subTotalAmount + serviceAmt
-
-  // updateCalCelTableFile
-  sql = `UPDATE tablefile SET ServiceAmt='${serviceAmt}', NetTotal='${netTotal}' WHERE Tcode='${Tcode}'`
-  await pool.query(sql)
-
-  return {
-    discountAmount: discountAmount
-  }
+  await summaryBalance(sourceTable, macno)
+  await summaryBalance(targetTable, macno)
 }
 
 module.exports = {

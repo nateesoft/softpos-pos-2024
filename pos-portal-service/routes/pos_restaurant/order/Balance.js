@@ -14,7 +14,11 @@ const {
   addBalance,
   voidMenuBalance,
   addListBalance,
-  updateBalance
+  getBalanceGroupProduct,
+  updateBalanceDetail,
+  voidListMenuBalanceAll,
+  getSubProductByPluCode,
+  updateChangeTypeMenu
 } = require('../../../services/BalanceService')
 const { getBalanceByRIndex, getBalanceMaxIndex, summaryBalance } = require('../../../services/CoreService')
 
@@ -29,8 +33,8 @@ router.get('/', (req, res) => {
 });
 
 router.post('/summaryBalance', (req, res) => {
-  const { tableNo } = req.body
-  summaryBalance(tableNo)
+  const { tableNo, macno } = req.body
+  summaryBalance(tableNo, macno)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -95,6 +99,17 @@ router.patch('/updateQty', (req, res) => {
     })
 });
 
+router.patch('/updateChangeType', (req, res) => {
+  const { R_Table, R_ETD, macno, R_Index } = req.body
+  updateChangeTypeMenu(R_Table, R_ETD, macno, R_Index)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 router.get('/void-msg-list', function (req, res) {
   getVoidMsgList()
     .then(rows => {
@@ -108,6 +123,17 @@ router.get('/void-msg-list', function (req, res) {
 router.get('/:tableNo', function (req, res) {
   const tableNo = req.params.tableNo
   getBalanceByTableNo(tableNo)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
+router.get('/:tableNo/groupProduct', function (req, res) {
+  const tableNo = req.params.tableNo
+  getBalanceGroupProduct(tableNo)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
@@ -163,6 +189,16 @@ router.post('/void', (req, res) => {
     })
 });
 
+router.post('/voidList', (req, res) => {
+  voidListMenuBalanceAll(req.body)
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 router.post('/getData', (req, res) => {
   if (Object.keys(req.body).length === 0) {
     throw new Error("Payload Information Notfound !!!")
@@ -187,9 +223,20 @@ router.post('/addList', function (req, res) {
     })
 });
 
+router.post('/getSubProduct', function (req, res) {
+  const { tableNo, rLinkIndex } = req.body
+  getSubProductByPluCode({ tableNo, rLinkIndex })
+    .then(rows => {
+      res.status(200).json({ status: 2000, data: rows })
+    })
+    .catch(err => {
+      res.status(500).json({ status: 5000, data: null, errorMessage: err.message })
+    })
+});
+
 router.put('/', function (req, res) {
   const id = req.params.id
-  updateBalance(req.body, id)
+  updateBalanceDetail(req.body, id)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })

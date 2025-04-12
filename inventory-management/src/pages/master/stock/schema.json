@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "ชื่อ"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "title": "อีเมล"
+    },
+    "address": {
+      "type": "string",
+      "title": "ที่อยู่"
+    },
+    "city": {
+      "type": "string",
+      "title": "เมือง"
+    },
+    "service": {
+      "type": "boolean"
+    },
+    "gp": {
+      "type": "boolean"
+    },
+    "nationality": {
+      "type": "string",
+      "enum": ["Y", "N"]
+    }
+  }
+}

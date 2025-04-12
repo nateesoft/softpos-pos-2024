@@ -1,3 +1,4 @@
 lib
 sync-thermal-service/build*
 sync-thermal-service/dist
+printer_*

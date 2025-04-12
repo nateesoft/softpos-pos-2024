@@ -22,7 +22,6 @@ const modalStyle = {
 }
 
 const TableOnActionModal = ({ setOpen }) => {
-  console.log("TableOnActionModal")
   const navigate = useNavigate()
 
   const [date, setDate] = useState("")

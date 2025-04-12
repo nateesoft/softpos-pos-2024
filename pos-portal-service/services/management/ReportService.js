@@ -5,10 +5,10 @@ const { getTopSaleList, getSaleByGroup, getSaleByType, getSaleByTime } = require
 const getCustomers = async () => {
     const sql = `select 
         sum(customer_count) customer_count,
-        sum(cust_man_count) customer_man_count,
-        sum(cust_woman_count) customer_woman_count,
-        sum(cust_kid_count) customer_kid_count,
-        sum(cust_old_count) customer_old_count 
+        sum(thai_man_count) customer_man_count,
+        sum(thai_woman_count) customer_woman_count,
+        sum(thai_kid_count) customer_kid_count,
+        sum(thai_old_count) customer_old_count 
         from table_checkin tc 
         where DATE_FORMAT(tc.datetime_checkin, '%Y-%m-%d') = '${getMoment().format('YYYY-MM-DD')}' `
     const results = await pool.query(sql)

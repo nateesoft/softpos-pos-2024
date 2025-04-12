@@ -162,7 +162,6 @@ class ComponentToPrint extends Component {
 }
 
 const TableOnAction = () => {
-  console.log("TableOnAction")
   const billNo = "0000350"
   const contentRef = useRef(null)
 

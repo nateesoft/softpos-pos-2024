@@ -3,7 +3,6 @@ import Box from "@mui/material/Box"
 import { Grid2, Typography } from "@mui/material"
 
 const Footer = () => {
-  console.log("FixedBottomNavigation")
   return (
     <Box sx={{ pb: 7 }}>
       <Grid2

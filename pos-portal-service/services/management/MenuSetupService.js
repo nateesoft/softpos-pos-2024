@@ -1,7 +1,16 @@
 const pool = require('../../config/database')
 const { generateUUID } = require('../../utils/StringUtil')
+
 const getMenuSetup = async () => {
     const sql = `SELECT * FROM menu_setup where menu_type='product'`;
+    const results = await pool.query(sql)
+    return results
+}
+
+const searchMenuSetup = async (search) => {
+    const sql = `SELECT * FROM menu_setup 
+        where menu_type='product' 
+        and (menu_name like '%${search}%' or menu_code like '%${search}%')`;
     const results = await pool.query(sql)
     return results
 }
@@ -75,5 +84,6 @@ module.exports = {
     getMenuSetupByMenuCode,
     createMenuSetup,
     createMenuSetupRef,
-    getMenuTabs
+    getMenuTabs,
+    searchMenuSetup
 }

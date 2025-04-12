@@ -26,9 +26,8 @@ const ProductDetailCard = memo(
     initLoadOrder,
     initLoadMenu
   }) => {
-    console.log("ProductDetailCard")
     const { appData } = useContext(POSContext)
-    const { empCode, macno, userLogin } = appData
+    const { empCode, macno, userLogin, baseName } = appData
 
     const [count, setCount] = useState(product.qty || 1)
     const [optList, setOptList] = useState([])
@@ -74,7 +73,7 @@ const ProductDetailCard = memo(
             <tr>
               <td colSpan={2} align="center">
                 <img
-                  src={product.image_url}
+                  src={`/${baseName}/${product.image_url}`}
                   width={300}
                   height={matches ? 250 : "auto"}
                   alt=""

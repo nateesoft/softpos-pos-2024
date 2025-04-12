@@ -1,5 +1,6 @@
 package ics.client.printer.service;
 
+import java.awt.GraphicsEnvironment;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -18,6 +19,7 @@ public class PrinterConfig extends javax.swing.JDialog {
         initComponents();
 
         initPrinterNameList();
+        initLoadFonts();
     }
 
     @SuppressWarnings("unchecked")
@@ -27,40 +29,29 @@ public class PrinterConfig extends javax.swing.JDialog {
         buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        btnSave = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        btnPrintTest = new javax.swing.JButton();
         txtHeight = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         cbPrinterName = new javax.swing.JComboBox<>();
-        txtContent1 = new javax.swing.JTextArea();
         txtWidth = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        cbFonts = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        btnApplyFont = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        btnSave = new javax.swing.JButton();
         chkCashier = new javax.swing.JRadioButton();
         chkKitchen = new javax.swing.JRadioButton();
+        btnPrintTest = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtContent1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Printer Configuration");
         setAlwaysOnTop(true);
 
-        btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnSave.setText("Add Printer Config");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("Printer Width:");
-
-        btnPrintTest.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnPrintTest.setText("Print Test");
-        btnPrintTest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrintTestActionPerformed(evt);
-            }
-        });
 
         txtHeight.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtHeight.setText("72");
@@ -70,18 +61,35 @@ public class PrinterConfig extends javax.swing.JDialog {
 
         cbPrinterName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
-        txtContent1.setColumns(20);
-        txtContent1.setFont(new java.awt.Font("Thonburi", 0, 13)); // NOI18N
-        txtContent1.setLineWrap(true);
-        txtContent1.setRows(5);
-        txtContent1.setText("<div align=\"center\">\n<img src=\"file:com_logo.jpg\" width=100 height=100></img>\n</div>\n<div align=\"center\">\n<table>\n<tr>\n<td><font face=\"Angsana New\" size=\"4\">[E]</font></td>\n<td><font face=\"Angsana New\" size=\"4\">กะเพราหมูสับ + ไข่ดาวไม่สุก</font></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">55 บาท</font></td>\n<td><font face=\"Angsana New\" size=\"4\">X 1</font></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">รวม 55 บาท</font></td>\n</tr>\n<tr>\n<td><font face=\"Angsana New\" size=\"4\">[E]</font></td>\n<td><font face=\"Angsana New\" size=\"4\">หมูจุ่มชุดใหญ่ + ไข่ดาวไม่สุก</font></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">199 บาท</font></td>\n<td><font face=\"Angsana New\" size=\"4\">X 1</font></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">รวม 155 บาท</font></td>\n</tr>\n<tr>\n<td colspan=\"4\"></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">210 บาท</font></td>\n</tr>\n</table>\n</div>\n<hr />");
-        txtContent1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
         txtWidth.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtWidth.setText("75");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("Printer Name:");
+
+        cbFonts.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        cbFonts.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setText("Fonts:");
+
+        btnApplyFont.setText("Apply Font");
+        btnApplyFont.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnApplyFontActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 204, 153)));
+
+        btnSave.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(0, 153, 255));
+        btnSave.setText("Save Printer Config");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(chkCashier);
         chkCashier.setSelected(true);
@@ -90,6 +98,55 @@ public class PrinterConfig extends javax.swing.JDialog {
         buttonGroup1.add(chkKitchen);
         chkKitchen.setText("Kitchen Printer");
 
+        btnPrintTest.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnPrintTest.setText("Test Printer");
+        btnPrintTest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintTestActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(238, 238, 238)
+                        .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(chkCashier)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPrintTest, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(chkKitchen)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkCashier)
+                    .addComponent(btnPrintTest, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(chkKitchen)
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        txtContent1.setColumns(20);
+        txtContent1.setFont(new java.awt.Font("Thonburi", 0, 13)); // NOI18N
+        txtContent1.setLineWrap(true);
+        txtContent1.setRows(5);
+        txtContent1.setText("<div align=\"center\">\n<img src=\"file:com_logo.jpg\" width=100 height=100></img>\n</div>\n<div align=\"center\">\n<table>\n<tr>\n<td><font face=\"Angsana New\" size=\"4\">[E]</font></td>\n<td><font face=\"Angsana New\" size=\"4\">กะเพราหมูสับ + ไข่ดาวไม่สุก</font></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">55 บาท</font></td>\n<td><font face=\"Angsana New\" size=\"4\">X 1</font></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">รวม 55 บาท</font></td>\n</tr>\n<tr>\n<td><font face=\"Angsana New\" size=\"4\">[E]</font></td>\n<td><font face=\"Angsana New\" size=\"4\">หมูจุ่มชุดใหญ่ + ไข่ดาวไม่สุก</font></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">199 บาท</font></td>\n<td><font face=\"Angsana New\" size=\"4\">X 1</font></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">รวม 155 บาท</font></td>\n</tr>\n<tr>\n<td colspan=\"4\"></td>\n<td align=\"right\"><font face=\"Angsana New\" size=\"4\">210 บาท</font></td>\n</tr>\n</table>\n</div>\n<hr />");
+        txtContent1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jScrollPane1.setViewportView(txtContent1);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -97,26 +154,32 @@ public class PrinterConfig extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtContent1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel1))
+                                .addGap(9, 9, 9))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(chkCashier)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cbPrinterName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtWidth)
-                                    .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnPrintTest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)))
-                            .addComponent(chkKitchen))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(cbFonts, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnApplyFont, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbPrinterName, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -124,24 +187,23 @@ public class PrinterConfig extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnPrintTest, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(cbPrinterName, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3)
+                    .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(cbFonts, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(btnApplyFont, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkCashier)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(chkKitchen)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtContent1, javax.swing.GroupLayout.PREFERRED_SIZE, 509, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -158,10 +220,10 @@ public class PrinterConfig extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 688, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -181,17 +243,35 @@ public class PrinterConfig extends javax.swing.JDialog {
         saveConfig();
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    String tempFont = "Angsana New";
+    private void btnApplyFontActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApplyFontActionPerformed
+        // update all font in report test
+        if(cbFonts.getSelectedItem()!=null){
+            String fontSelected = "" + cbFonts.getSelectedItem();
+            String replace = txtContent1.getText().replace(tempFont, fontSelected);
+            txtContent1.setText(replace);
+            
+            // backup tempFont
+            tempFont = fontSelected;
+        }
+    }//GEN-LAST:event_btnApplyFontActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnApplyFont;
     private javax.swing.JButton btnPrintTest;
     private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox<String> cbFonts;
     private javax.swing.JComboBox<String> cbPrinterName;
     private javax.swing.JRadioButton chkCashier;
     private javax.swing.JRadioButton chkKitchen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea txtContent1;
     private javax.swing.JTextField txtHeight;
@@ -238,6 +318,17 @@ public class PrinterConfig extends javax.swing.JDialog {
                 System.err.println("Error writing config file: " + e.getMessage());
             }
         } catch (Exception e) {
+        }
+    }
+
+    private void initLoadFonts() {
+        cbFonts.removeAllItems();
+        
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        String[] fonts = ge.getAvailableFontFamilyNames();
+        
+        for(String font: fonts) {
+            cbFonts.addItem(font);
         }
     }
 }

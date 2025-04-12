@@ -5,7 +5,6 @@ import { fetchExchangeRates } from "../services/exchangeRateService"
 export const CurrencyContext = createContext()
 
 export const CurrencyProvider = ({ children }) => {
-  console.log("CurrencyContext")
   const [currency, setCurrency] = useState("THB")
   const [exchangeRates, setExchangeRates] = useState({})
 
