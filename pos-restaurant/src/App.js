@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
 import CryptoJS from "crypto-js"
 import { CookiesProvider } from "react-cookie"
@@ -10,12 +10,14 @@ import { CurrencyProvider } from "./contexts/CurrencyContext"
 import { AlertProvider } from "./contexts/AlertContext"
 import { BackdropProvider } from "./contexts/BackdropProvider"
 
+import { getConfig, loadConfig } from './config';
+
 const SECRET_PASS = process.env.REACT_APP_API_SECRET_PASS
 const initContext = {
-  macno: Cookies.get('MACNO') || "XXX",
-  baseName: process.env.REACT_APP_BASE_NAME || 'pos-restaurant',
-  socketHost: Cookies.get('SOCKET_HOST') || '',
+  baseName: 'pos-restaurant',
   userLogin: localStorage.getItem("userLogin") || "",
+  macno: Cookies.get('MACNO'),
+  socketHost: Cookies.get('SOCKET_HOST'),
   empCode: "",
   companyInfo: {
     companyCode: ""
@@ -41,6 +43,18 @@ const initContext = {
 
 const App = () => {
   const [appData, setAppData] = useState(initContext)
+
+  useEffect(()=> {
+    loadConfig().then(config => {
+      console.log(config)
+      setAppData({ 
+        ...appData, 
+        macno: getConfig().MACNO, 
+        socketHost: getConfig().SOCKET_HOST 
+      })
+    })
+  }, [])
+
   return (
     <Router basename="pos-restaurant">
       <CookiesProvider>

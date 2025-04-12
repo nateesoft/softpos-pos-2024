@@ -16,17 +16,10 @@ import {
   Box,
   Button,
   Divider,
-  FormControl,
-  Grid,
   Grid2,
   IconButton,
   InputAdornment,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
   Snackbar,
-  Stack,
   TextField,
   Toolbar,
   Typography} from "@mui/material"
@@ -85,18 +78,6 @@ const modalStyle = {
   left: "50%"
 }
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
-
-const products = [
-  { id: 1, name: "สินค้า A", price: "฿100" },
-  { id: 2, name: "สินค้า B", price: "฿200" },
-  { id: 3, name: "สินค้า C", price: "฿300" },
-];
-
 const RetailSalePage = () => {
   const { t } = useTranslation("global")
   const { handleNotification } = useAlert()
@@ -113,7 +94,12 @@ const RetailSalePage = () => {
   }
 
   const { appData, setAppData } = useContext(POSContext)
-  const { userLogin } = appData
+  const { userLogin, socketHost } = appData
+
+  // เชื่อมต่อกับ Socket.IO server
+  const socket = io(socketHost, {
+    autoConnect: false
+  })
 
   const [nodes, setNodes] = useNodesState([])
   const [openCashierStatus, setOpenCashierStatus] = useState(false)

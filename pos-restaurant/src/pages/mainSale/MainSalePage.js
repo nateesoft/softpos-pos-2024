@@ -15,17 +15,16 @@ import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
 import { POSContext } from "../../AppContext"
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
-
 function MainSalePage() {
   const { tableNo } = useParams()
   const { handleNotification } = useAlert()
   const { appData } = useContext(POSContext)
-  const { macno } = appData
+  const { macno, socketHost } = appData
+
+  // เชื่อมต่อกับ Socket.IO server
+  const socket = io(socketHost, {
+    autoConnect: false
+  })
 
   const matches = useMediaQuery("(min-width:1024px)")
   const [messageAlert, setMessageAlert] = useState("")

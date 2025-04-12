@@ -21,6 +21,9 @@
         <group name="ProjectCAT"/>
         <group name="CBMart"/>
         <group name="Jeffer_Group"/>
-        <group/>
+        <group>
+            <file>file:/Users/nateesun/Documents/ics-project/softpos-pos-2024/sync-thermal-service/src/ics/utils/FileDownloader.java</file>
+            <file>file:/Users/nateesun/Documents/ics-project/softpos-pos-2024/sync-thermal-service/src/ics/utils/FTPUtils.java</file>
+        </group>
     </open-files>
 </project-private>

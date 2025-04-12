@@ -21,9 +21,9 @@ yarn-error.log*
 
 /dist
 /server/node_modules
-/server/webapp
-/server/webapp1
-/server/webapp2
-/server/webapp3
+/server/desktop-app
+/server/tablet-1
+/server/tablet-2
+/server/tablet-3
 
 /server/Archive.zip

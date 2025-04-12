@@ -43,17 +43,16 @@ const modalStyle = {
   left: "50%"
 }
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
-
 const Login = () => {
   const { appData, setAppData } = useContext(POSContext)
-  const { macno, encryptData } = appData
+  const { macno, encryptData, socketHost } = appData
   const { handleNotification } = useAlert()
+
+  // เชื่อมต่อกับ Socket.IO server
+  const socket = io(socketHost, {
+    autoConnect: false
+  })
+
 
   const [branchInfo, setBranchInfo] = useState({})
   const navigate = useNavigate()

@@ -80,12 +80,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   }
 }))
 
-const SOCKET_SERVER_URL = process.env.REACT_APP_SOCKETIO_SERVER
-// เชื่อมต่อกับ Socket.IO server
-const socket = io(SOCKET_SERVER_URL, {
-  autoConnect: false
-})
-
 const AppbarMenu = ({ tableNo, 
   setProductList,
   setProductA,
@@ -99,7 +93,12 @@ const AppbarMenu = ({ tableNo,
   const [search, setSearch] = useState("")
   
   const { appData } = useContext(POSContext)
-  const { userLogin } = appData
+  const { userLogin, socketHost } = appData
+
+  // เชื่อมต่อกับ Socket.IO server
+  const socket = io(socketHost, {
+    autoConnect: false
+  })
 
   const { handleNotification } = useAlert()
 

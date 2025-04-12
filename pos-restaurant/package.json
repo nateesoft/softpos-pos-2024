@@ -69,7 +69,7 @@
     "build": "react-scripts build",
     "build:local": "env-cmd -f ./.env.local react-scripts build",
     "build:prod": "env-cmd -f ./.env.prod react-scripts build",
-    "build:webapp": "rm -rf server/webapp && env-cmd -f ./.env.webapp react-scripts build && mv build server/webapp",
+    "build:webapp": "rm -rf build && rm -rf server/webapp && env-cmd -f ./.env.webapp react-scripts build && mv build server/webapp",
     "test": "react-scripts test",
     "start:electron": "electron .",
     "build:electron": "electron-builder",
