@@ -58,6 +58,8 @@ const TableManagement = () => {
   const [selectFloor, setSelectFloor] = useState("STAND_ROOM")
   const [foundTable, setFoundTable] = useState(false)
 
+  const [backgroundColor, setBackgroundColor] = useState("radial-gradient(circle at top, #003, #000)")
+
   const onDragOver = useCallback((event) => {
     event.preventDefault()
     event.dataTransfer.dropEffect = "move"
@@ -238,7 +240,7 @@ const TableManagement = () => {
       className="dndflow"
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ background: "radial-gradient(circle at top, #003, #000)" }}
+      style={{ background: backgroundColor }}
     >
       <AppbarMenu
         onSave={onSave}

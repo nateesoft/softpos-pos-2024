@@ -13,13 +13,10 @@ const SquareNode = (props) => {
   const { baseName } = appData
 
   const { data, bgColor } = props
+  const displayImage = data.image ? `/${baseName}${data.image}` : `/${baseName}/images/floorplan/rectangle-table.png`
   return (
     <div align="center" style={{ width: "128px" }}>
-      <img
-        src={`/${baseName}${data.image}` ?? `/${baseName}/images/floorplan/rectangle-table.png`}
-        width={128}
-        alt=""
-      />
+      <img src={displayImage} width={128} alt="" />
       {data.label && (
         <div style={{ ...style, backgroundColor: data.bgColor ?? "blue" }}>
           <span

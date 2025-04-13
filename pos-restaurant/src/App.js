@@ -48,6 +48,9 @@ const App = () => {
       setAppData({ 
         ...appData, 
         macno: getConfig().MACNO, 
+        bgImage: getConfig().bgImage ?? "/pos-restaurant/images/default/bgbg.jpg",
+        bgFloorPlan: getConfig().bgFloorPlan ?? "",
+        bgLogin: getConfig().bgLogin ?? "/pos-restaurant/images/default/welcome.jpg",
         socketHost: getConfig().SOCKET_HOST,
         socket: io(getConfig().SOCKET_HOST, {
           autoConnect: false
