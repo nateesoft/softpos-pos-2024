@@ -6,6 +6,10 @@ docker exec -i 89f97a5acdbc mysqldump -uroot -pnathee2024 MyRestaurantJefferSako
 docker exec -i 89f97a5acdbc mysqldump -uroot -pnathee2024 MyRestaurant_Heng1 > MyRestaurant_Heng1.sql
 docker exec -i 89f97a5acdbc mysqldump -uroot -pnathee2024 MyRestaurant_SUSHI2 > MyRestaurant_SUSHI2.sql
 
+docker exec -i 89f97a5acdbc mysqldump -uroot -pnathee2024 posdb_JefferSakon > posdb_JefferSakon.sql
+docker exec -i 89f97a5acdbc mysqldump -uroot -pnathee2024 posdb_Heng1 > posdb_Heng1.sql
+docker exec -i 89f97a5acdbc mysqldump -uroot -pnathee2024 posdb_SUSHI2 > posdb_SUSHI2.sql
+
 
 ### FOR RESTORE FILE ###
 docker exec -i <mysql-container> mysql -u<username> -p<password> <database-name> < backup.sql
@@ -14,3 +18,7 @@ docker exec -i <mysql-container> mysql -u<username> -p<password> <database-name>
 docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurantJefferSakon < MyRestaurantJefferSakon.sql
 docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurant_Heng1 < MyRestaurant_Heng1.sql
 docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurant_SUSHI2 < MyRestaurant_SUSHI2.sql
+
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb_JefferSakon < posdb_JefferSakon.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb_Heng1 < posdb_Heng1.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb_SUSHI2 < posdb_SUSHI2.sql
