@@ -221,6 +221,8 @@ function PaymentForm({
     setCashAmount(0)
     setDepositAmount(0)
     setEntertainAmount(0)
+
+    setComponentFocus("cash")
   }
 
   const handleFit = () => {
@@ -235,6 +237,11 @@ function PaymentForm({
 
   const handleEntertainAmountKeyIn = (entertainAmt) => {
     setEntertainAmount(entertainAmt)
+  }
+
+  const handleCashFocus = (evt) => {
+    setComponentFocus("cash")
+    evt.target.select()
   }
 
   const handleCashAmountKeyIn = (cashAmt) => {
@@ -492,7 +499,7 @@ function PaymentForm({
                   type="number"
                   size="small"
                   value={cashAmount}
-                  onFocus={() => setComponentFocus("cash")}
+                  onFocus={handleCashFocus}
                   onChange={(e) => handleCashAmountKeyIn(e.target.value)}
                   id="txtCashAmount"
                   label="ชำระด้วยเงินสด"
@@ -500,6 +507,7 @@ function PaymentForm({
                     backgroundColor: componentFocus === "cash" ? "#f5fff3" : ""
                   }}
                   inputProps={{ min: 0, style: { textAlign: "right" } }}
+                  autoFocus
                 />
               </Grid2>
               <Grid2 container spacing={1}>
@@ -652,7 +660,7 @@ function PaymentForm({
                     <td>
                       <Button
                         variant="contained"
-                        sx={{ ...normalButton }}
+                        sx={{ ...normalButton, background: "radial-gradient(circle, red, #000)" }}
                         fullWidth
                         onClick={handleClear}
                       >
@@ -782,7 +790,7 @@ function PaymentForm({
                     <td>
                       <Button
                         variant="contained"
-                        sx={{ ...normalButton }}
+                        sx={{ ...normalButton, background: "radial-gradient(circle, green, #000)" }}
                         fullWidth
                         onClick={handleFit}
                       >

@@ -82,7 +82,7 @@ const TotalBill = ({summaryTable}) => {
     >
       <Grid2 container spacing={1} padding={1}>
         <Typography variant="span" fontSize={14} fontWeight="bold" sx={{color: "black"}}>
-          Total Amount
+          ราคาสินค้า (ไม่รวมส่วนลด)
         </Typography>
       </Grid2>
       <Grid2 container justifyContent="flex-end">
