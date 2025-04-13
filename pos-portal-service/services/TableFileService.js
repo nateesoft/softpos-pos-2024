@@ -17,7 +17,7 @@ const getSummaryItem = async (tableNo) => {
   and R_QuanCanDisc>0 `
   const results = await pool.query(sql)
   if (results.length > 0) {
-    return results[0].R_Quan
+    return results[0].R_Quan || 0.0
   }
   return 0.0
 }
@@ -51,7 +51,8 @@ const updateTableAvailableStatus = async (tableNo) => {
                 Food=0,Drink=0,Product=0,NetTotal=0,PrintTotal=0,
                 PrintChkBill='N', PrintCnt=0, PrintTime1='', PrintTime2='',
                 ChkBill='N', StkCode1='', StkCode2='',TDesk=0,TUser='',VoidMsg='',
-                TPause='Y',TTableIsOn='Y',TActive='',TAutoClose='' 
+                TPause='Y',TTableIsOn='Y',TActive='',TAutoClose='',
+                VatAmt=0,Vat=0,MemBegin=null,MemEnd=null,TCurTime='' 
                 where Tcode='${tableNo}'`
   const results = await pool.query(sql)
 
@@ -71,8 +72,9 @@ const updateTableDiscount = async (payload) => {
 
   // update all balance
   const totalItem = await getSummaryItem(tableFile.Tcode)
-  if (DiscBath>0) {
-    let avgDiscBath = DiscBath/totalItem
+  const discBath = parseFloat(DiscBath)
+  if (discBath > 0 && totalItem > 0) {
+    let avgDiscBath = discBath/totalItem
     const sqlBalance = `update balance set R_DiscBath='${avgDiscBath}' where R_Table='${tableFile.Tcode}'`
     await pool.query(sqlBalance)
   } else if(CuponDiscAmt>0) {
@@ -92,8 +94,8 @@ const updateTableDiscount = async (payload) => {
       R_PrSubCode='FAS', 
       R_PrSubQuan=1, 
       R_PrSubDisc='10', 
-      R_PrSubAmt='${avgFastDiscAmt}' 
-      R_QuanCanDisc=R_QuanCanDisc-1
+      R_PrSubAmt='${avgFastDiscAmt}',
+      R_QuanCanDisc=R_QuanCanDisc-1 
       where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
     await pool.query(sqlBalance)
   } else if(EmpDiscAmt>0) {
@@ -103,8 +105,8 @@ const updateTableDiscount = async (payload) => {
       R_PrSubCode='EMP', 
       R_PrSubQuan=1, 
       R_PrSubDisc='50', 
-      R_PrSubAmt='${avgEmpDiscAmt}' 
-      R_QuanCanDisc=R_QuanCanDisc-1
+      R_PrSubAmt='${avgEmpDiscAmt}',
+      R_QuanCanDisc=R_QuanCanDisc-1 
       where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
     await pool.query(sqlBalance)
   } else if(MemDiscAmt>0) {
@@ -114,8 +116,8 @@ const updateTableDiscount = async (payload) => {
       R_PrSubCode='MEM', 
       R_PrSubQuan=1, 
       R_PrSubDisc='10', 
-      R_PrSubAmt='${avgMemDiscAmt}' 
-      R_QuanCanDisc=R_QuanCanDisc-1
+      R_PrSubAmt='${avgMemDiscAmt}',
+      R_QuanCanDisc=R_QuanCanDisc-1 
       where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
     await pool.query(sqlBalance)
   } else if(TrainDiscAmt>0) {
@@ -125,8 +127,8 @@ const updateTableDiscount = async (payload) => {
       R_PrSubCode='TRA', 
       R_PrSubQuan=1, 
       R_PrSubDisc='10', 
-      R_PrSubAmt='${avgTrainDiscAmt}' 
-      R_QuanCanDisc=R_QuanCanDisc-1
+      R_PrSubAmt='${avgTrainDiscAmt}',
+      R_QuanCanDisc=R_QuanCanDisc-1 
       where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
     await pool.query(sqlBalance)
   } else if(SubDiscAmt>0) {
@@ -136,8 +138,8 @@ const updateTableDiscount = async (payload) => {
       R_PrSubCode='SUB', 
       R_PrSubQuan=1, 
       R_PrSubDisc='10', 
-      R_PrSubAmt='${avgSubDiscAmt}' 
-      R_QuanCanDisc=R_QuanCanDisc-1
+      R_PrSubAmt='${avgSubDiscAmt}',
+      R_QuanCanDisc=R_QuanCanDisc-1 
       where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
     await pool.query(sqlBalance)
   }
@@ -148,13 +150,13 @@ const updateTableDiscount = async (payload) => {
         MemDisc='${MemDisc}',MemDiscAmt='${MemDiscAmt}',
         TrainDisc='${TrainDisc}',TrainDiscAmt='${TrainDiscAmt}',
         SubDisc='${SubDisc}',SubDiscAmt='${SubDiscAmt}',
-        DiscBath='${DiscBath}',CuponDiscAmt='${CuponDiscAmt}',
+        DiscBath='${discBath}',CuponDiscAmt='${CuponDiscAmt}',
         SpaDiscAmt='${SpaDiscAmt}' 
         where Tcode='${tableFile.Tcode}'`
   await pool.query(sql)
 
   const discountAmount = FastDiscAmt + EmpDiscAmt + MemDiscAmt + TrainDiscAmt + SubDiscAmt + 
-    DiscBath + CuponDiscAmt + SpaDiscAmt
+  discBath + CuponDiscAmt + SpaDiscAmt
   return {
     discountAmount: discountAmount
   }

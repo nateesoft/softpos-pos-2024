@@ -102,7 +102,7 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   }
 
   const { appData, setAppData } = useContext(POSContext)
-  const { userLogin, macno, socket } = appData
+  const { userLogin, macno, socket, bgFloorPlan } = appData
 
   const reactFlowWrapper = useRef(null)
   const [nodes, setNodes] = useNodesState([])
@@ -271,7 +271,7 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
   return (
     <motion.div
       style={{
-        background: "radial-gradient(circle at top, #003, #000)",
+        background: bgFloorPlan !== '' ? `url(${bgFloorPlan})`: `radial-gradient(circle at top, #003, #000)`,
         padding: "10px"
       }}
       initial={{ opacity: 0 }}
