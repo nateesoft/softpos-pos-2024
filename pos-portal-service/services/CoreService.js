@@ -184,6 +184,7 @@ const computeBalanceSummary = (
   DrinkVat,
   ProductVat,
   totalDiscountAmount,
+  totalItemDiscAmount,
   totalServiceAmount,
   totalVatAmount,
   totalProductNoneVatAmount,
@@ -197,6 +198,7 @@ const computeBalanceSummary = (
 
     // compute RNetTotal
     let RNetTotal = balance.R_Price * balance.R_Quan
+    let sumDiscountAll = balance.R_DiscBath + balance.R_PrSubAmt
 
     if (balance.R_Service === "Y" && balance.R_Vat === "V") {
       let vatAmount = 0
@@ -206,34 +208,35 @@ const computeBalanceSummary = (
 
       if (serviceType === "N" && vatType === "I") { // คิด service แบบ Net & คิด vat แบบ Include
         productNonVat = RNetTotal  // ถอด vat ออกจากสินค้า
-        let totalAmount = RNetTotal - balance.R_DiscBath // ลบส่วนลด
+        let totalAmount = RNetTotal - sumDiscountAll // ลบส่วนลด
         serviceCharge = totalAmount * service / 100 // คิด service หลังจากหักส่วนลด
         totalAmount = totalAmount + serviceCharge
         vatAmount = RNetTotal*vat/(100+vat)
         subTotalAmount = totalAmount
       } else if (serviceType === "N" && vatType === "E") { // คิด service แบบ Net & คิด vat แบบ Exclude
         productNonVat = RNetTotal
-        let totalAmount = RNetTotal - balance.R_DiscBath
+        let totalAmount = RNetTotal - sumDiscountAll
         serviceCharge = totalAmount * service / 100
         totalAmount = totalAmount + serviceCharge
         vatAmount = totalAmount*vat/100
         subTotalAmount = totalAmount + vatAmount
       } else if (serviceType === "G" && vatType === "I") { // คิด service แบบ Gross & คิด vat แบบ Include
         productNonVat = RNetTotal - RNetTotal*vat/(100+vat)// ถอด vat ออกจากสินค้า
-        let totalAmount = productNonVat - balance.R_DiscBath
+        let totalAmount = productNonVat - sumDiscountAll
         serviceCharge = RNetTotal * service/100
         totalAmount = totalAmount + serviceCharge
         vatAmount = totalAmount * vat/100
         subTotalAmount = totalAmount + vatAmount
       } else if (serviceType === "G" && vatType === "E") { // คิด service แบบ Net & คิด vat แบบ Exclude
-        let totalAmount = RNetTotal - balance.R_DiscBath
+        let totalAmount = RNetTotal - sumDiscountAll
         serviceCharge = RNetTotal * service/100
         totalAmount = totalAmount + serviceCharge
         vatAmount = totalAmount * vat/100
         subTotalAmount = totalAmount + vatAmount
       }
 
-      totalDiscountAmount += balance.R_DiscBath
+      totalDiscountAmount += sumDiscountAll
+      totalItemDiscAmount += balance.R_PrAmt
       totalServiceAmount += serviceCharge
       totalVatAmount += vatAmount
       totalProductNoneVatAmount += productNonVat
@@ -269,6 +272,7 @@ const computeBalanceSummary = (
       }
 
       totalDiscountAmount += balance.R_DiscBath
+      totalItemDiscAmount += balance.R_PrAmt
       totalServiceAmount += serviceCharge
       totalVatAmount += 0
       totalProductNoneVatAmount += productNonVat
@@ -291,6 +295,7 @@ const computeBalanceSummary = (
       }
 
       totalDiscountAmount += balance.R_DiscBath
+      totalItemDiscAmount += balance.R_PrAmt
       totalServiceAmount += serviceCharge
       totalVatAmount += vatAmount
       totalProductNoneVatAmount += productNonVat
@@ -341,6 +346,7 @@ const computeBalanceSummary = (
     ProductVat,
     totalProductNoneVatAmount,
     totalDiscountAmount,
+    totalItemDiscAmount,
     totalServiceAmount,
     totalVatAmount,
     netTotalAmount
@@ -371,6 +377,7 @@ const summaryBalance = async (tableNo, macno) => {
   let ProductVat = 0
 
   let totalDiscountAmount = 0
+  let totalItemDiscAmount = 0
   let totalServiceAmount = 0
   let totalVatAmount = 0
   let totalProductNoneVatAmount = 0
@@ -389,6 +396,7 @@ const summaryBalance = async (tableNo, macno) => {
     DrinkVat,
     ProductVat,
     totalDiscountAmount,
+    totalItemDiscAmount,
     totalServiceAmount,
     totalVatAmount,
     totalProductNoneVatAmount,
@@ -404,7 +412,7 @@ const summaryBalance = async (tableNo, macno) => {
     DiscBath, ProDiscAmt, SpaDiscAmt, CuponDiscAmt
   } = tablefile
   const discountAmount = EmpDiscAmt + FastDiscAmt + TrainDiscAmt + MemDiscAmt + SubDiscAmt + 
-  DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + responseData.totalDiscountAmount
+  DiscBath + ProDiscAmt + SpaDiscAmt + CuponDiscAmt + responseData.totalItemDiscAmount
   // end compute discount ท้ายบิล
 
   tablefile.MacNo = macno
@@ -412,9 +420,9 @@ const summaryBalance = async (tableNo, macno) => {
   tablefile.Vat = vat
   tablefile.TAmount = responseData.Food + responseData.Drink + responseData.Product
   tablefile.ServiceAmt = responseData.totalServiceAmount
-  tablefile.ItemDiscAmt = responseData.totalDiscountAmount
+  tablefile.ItemDiscAmt = responseData.totalItemDiscAmount
   tablefile.VatAmt = responseData.totalVatAmount
-  tablefile.NetTotal = responseData.netTotalAmount - discountAmount
+  tablefile.NetTotal = responseData.netTotalAmount
   tablefile.Food = responseData.Food
   tablefile.Drink = responseData.Drink
   tablefile.Product = responseData.Product

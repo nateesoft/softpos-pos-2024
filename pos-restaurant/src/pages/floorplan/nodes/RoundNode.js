@@ -12,13 +12,10 @@ function RoundNode(props) {
   const { baseName } = appData
 
   const { data, bgColor } = props
+  const displayImage = data.image ? `/${baseName}${data.image}` : `/${baseName}/images/floorplan/oval-table.png`
   return (
     <div align="center" style={{ width: "256px" }}>
-      <img
-        src={`/${baseName}${data.image}` ?? `/${baseName}/images/floorplan/oval-table.png`}
-        width={200}
-        alt=""
-      />
+      <img src={displayImage} width={200} alt="" />
       {data.label && (
         <div style={{ ...style, backgroundColor: data.bgColor ?? "blue" }}>
           <span

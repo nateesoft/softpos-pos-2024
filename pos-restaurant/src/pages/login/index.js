@@ -16,8 +16,6 @@ import { useAlert } from "../../contexts/AlertContext"
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import { handleEnter } from "../ui-utils/EventLisener"
-import bg from "./bg/welcome.jpg"
-import bgimg from "./bg/bgbg.jpg"
 import Footer from "../Footer"
 import DashboardApps from "../dashboard"
 
@@ -44,7 +42,7 @@ const modalStyle = {
 
 const Login = () => {
   const { appData, setAppData } = useContext(POSContext)
-  const { macno, encryptData, socket } = appData
+  const { macno, encryptData, socket, bgImage, bgLogin } = appData
   const { handleNotification } = useAlert()
 
   const [branchInfo, setBranchInfo] = useState({})
@@ -192,7 +190,7 @@ const Login = () => {
     <motion.div animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       <div
         style={{
-          background: `url(${bgimg}) no-repeat center center fixed`,
+          background: `url(${bgImage}) no-repeat center center fixed`,
           backgroundSize: "cover",
           height: "100vh",
           width: "100vw",
@@ -201,10 +199,10 @@ const Login = () => {
       >
         <Box sx={boxstyle}>
           <Grid container>
-            <Grid item xs={12} sm={6} lg={6}>
+            <Grid item xs={12} sm={6} lg={6} sx={{backgroundColor: "#fffbd6"}}>
               <Box
                 style={{
-                  background: `url(${bg}) no-repeat center center fixed`,
+                  background: `url(${bgLogin}) no-repeat center center fixed`,
                   backgroundSize: "cover",
                   height: "100%",
                   width: "100%",
@@ -252,7 +250,7 @@ const Login = () => {
                     </Box>
                     {iphonePro14max === true && (
                       <Grid2 container justifyContent="center">
-                        <img src={bg} width={220} alt="" />
+                        <img src={`${bgLogin}`} width={220} alt="" />
                       </Grid2>
                     )}
                     <Box display="flex" justifyContent="center">

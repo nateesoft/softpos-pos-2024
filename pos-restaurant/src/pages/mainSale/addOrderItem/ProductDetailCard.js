@@ -123,7 +123,7 @@ const ProductDetailCard = ({
         oldBalance: product,
         discount: {
           discountPercent,
-          discountPercent
+          discountBaht
         },
         optList,
         specialText,
