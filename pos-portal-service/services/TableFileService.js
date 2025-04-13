@@ -22,6 +22,18 @@ const getSummaryItem = async (tableNo) => {
   return 0.0
 }
 
+const getSummaryItemNoCheckQuanCanDisc = async (tableNo) => {
+  const sql = `select sum(R_Quan) R_Quan 
+  from balance where R_Table='${tableNo}' 
+  and R_Void <> 'V' 
+  and R_LinkIndex='' `
+  const results = await pool.query(sql)
+  if (results.length > 0) {
+    return results[0].R_Quan || 0.0
+  }
+  return 0.0
+}
+
 const getAllTable = async () => {
   const sql = `select * FROM tablefile ORDER By Tcode`
   const results = await pool.query(sql)
@@ -72,10 +84,14 @@ const updateTableDiscount = async (payload) => {
 
   // update all balance
   const totalItem = await getSummaryItem(tableFile.Tcode)
+
+  const totalItemForDiscBaht = await getSummaryItemNoCheckQuanCanDisc(tableFile.Tcode)
   const discBath = parseFloat(DiscBath)
-  if (discBath > 0 && totalItem > 0) {
-    let avgDiscBath = discBath/totalItem
-    const sqlBalance = `update balance set R_DiscBath='${avgDiscBath}' where R_Table='${tableFile.Tcode}'`
+  if (discBath > 0 && totalItemForDiscBaht > 0) {
+    let avgDiscBath = discBath/totalItemForDiscBaht
+    const sqlBalance = `update balance 
+        set R_DiscBath='${avgDiscBath}' 
+        where R_Table='${tableFile.Tcode}' and R_LinkIndex = ''`
     await pool.query(sqlBalance)
   } else if(CuponDiscAmt>0) {
     let avgCuponDiscAmt = CuponDiscAmt/totalItem
@@ -85,7 +101,7 @@ const updateTableDiscount = async (payload) => {
         R_PrCuDisc='${PrCuDisc}',
         R_PrCuBath='${PrCuBath}',
         R_PrCuAmt='${avgCuponDiscAmt}' 
-        where R_Table='${tableFile.Tcode}'`
+        where R_Table='${tableFile.Tcode}' and R_LinkIndex = ''`
     await pool.query(sqlBalance)
   } else if(FastDiscAmt>0) {
     let avgFastDiscAmt = FastDiscAmt/totalItem
@@ -96,7 +112,7 @@ const updateTableDiscount = async (payload) => {
       R_PrSubDisc='10', 
       R_PrSubAmt='${avgFastDiscAmt}',
       R_QuanCanDisc=R_QuanCanDisc-1 
-      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0 and R_LinkIndex = ''`
     await pool.query(sqlBalance)
   } else if(EmpDiscAmt>0) {
     let avgEmpDiscAmt = EmpDiscAmt/totalItem
@@ -107,7 +123,7 @@ const updateTableDiscount = async (payload) => {
       R_PrSubDisc='50', 
       R_PrSubAmt='${avgEmpDiscAmt}',
       R_QuanCanDisc=R_QuanCanDisc-1 
-      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0 and R_LinkIndex = ''`
     await pool.query(sqlBalance)
   } else if(MemDiscAmt>0) {
     let avgMemDiscAmt = MemDiscAmt/totalItem
@@ -118,7 +134,7 @@ const updateTableDiscount = async (payload) => {
       R_PrSubDisc='10', 
       R_PrSubAmt='${avgMemDiscAmt}',
       R_QuanCanDisc=R_QuanCanDisc-1 
-      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0 and R_LinkIndex = ''`
     await pool.query(sqlBalance)
   } else if(TrainDiscAmt>0) {
     let avgTrainDiscAmt = TrainDiscAmt/totalItem
@@ -129,7 +145,7 @@ const updateTableDiscount = async (payload) => {
       R_PrSubDisc='10', 
       R_PrSubAmt='${avgTrainDiscAmt}',
       R_QuanCanDisc=R_QuanCanDisc-1 
-      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0 and R_LinkIndex = ''`
     await pool.query(sqlBalance)
   } else if(SubDiscAmt>0) {
     let avgSubDiscAmt = SubDiscAmt/totalItem
@@ -140,7 +156,7 @@ const updateTableDiscount = async (payload) => {
       R_PrSubDisc='10', 
       R_PrSubAmt='${avgSubDiscAmt}',
       R_QuanCanDisc=R_QuanCanDisc-1 
-      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0`
+      where R_Table='${tableFile.Tcode}' and R_QuanCanDisc>0 and R_LinkIndex = ''`
     await pool.query(sqlBalance)
   }
 
