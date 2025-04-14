@@ -61,6 +61,8 @@ const RecieptCopyPrint = ({ setOpen }) => {
             label="เลขที่บิล (Receipt No)"
             value={receiptNo}
             onChange={(e) => setReceiptNo(e.target.value)}
+            autoFocus
+            onFocus={e=>e.target.select()}
             fullWidth
           />
         </Grid2>

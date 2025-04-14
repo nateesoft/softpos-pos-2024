@@ -128,6 +128,8 @@ const ManageCashDrawer = ({ setOpen }) => {
           type="number"
           value={inCash}
           onChange={(e) => setInCash(e.target.value)}
+          autoFocus
+          onFocus={e=>e.target.select()}
           fullWidth
         />
         <Grid2 container spacing={2} margin={2} justifyContent="center">
@@ -151,6 +153,8 @@ const ManageCashDrawer = ({ setOpen }) => {
             label="สาเหตุการนำเงินออกจากลิ้นชัก"
             value={outReason}
             onChange={(e) => setOutReason(e.target.value)}
+            autoFocus
+            onFocus={e=>e.target.select()}
             fullWidth
           />
           <TextField
@@ -158,6 +162,8 @@ const ManageCashDrawer = ({ setOpen }) => {
             type="number"
             value={outCash}
             onChange={(e) => setOutCash(e.target.value)}
+            autoFocus
+            onFocus={e=>e.target.select()}
             fullWidth
           />
         </Grid2>

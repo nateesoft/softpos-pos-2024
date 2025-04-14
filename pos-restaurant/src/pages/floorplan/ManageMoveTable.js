@@ -90,6 +90,8 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
             label="ย้ายข้อมูลจากโต๊ะ"
             value={sourceTable}
             onChange={(e) => setSourceTable(e.target.value)}
+            autoFocus
+            onFocus={e=>e.target.select()}
             fullWidth
           />
           <TextField
@@ -97,6 +99,7 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
             value={targetTable}
             onChange={(e) => setTargetTable(e.target.value)}
             fullWidth
+            onFocus={e=>e.target.select()}
             autoComplete="off"
           />
           <TextField
@@ -105,6 +108,7 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
             value={admin}
             onChange={(e) => setAdmin(e.target.value)}
             autoComplete="new-password"
+            onFocus={e=>e.target.select()}
             fullWidth
           />
         </Grid2>
