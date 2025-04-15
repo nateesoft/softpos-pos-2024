@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
+import { FONT_FAMILY } from "../../../AppConstants"
 
 const formatCurrency = (amount = 0) => {
   return new Intl.NumberFormat("th-TH", {
@@ -67,14 +68,13 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">REG ID :{macno}</div>
-          <div align="center">รายงานยอดการเงิน (Terminal Report)</div>
-          <div align="center">หมายเลขเครื่อง : {filter.macno}</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">REG ID :{macno}</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานยอดการเงิน (Terminal Report)</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : {filter.macno}</font></div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "} {macno}</font>
           </div>
           <table width="100%">
             <tbody
@@ -85,258 +85,258 @@ class ComponentToPrint extends Component {
               }}
             >
               <tr>
-                <td>ยอดรวมค่าอาหาร (Food)</td>
+                <td><font face={FONT_FAMILY} size="4">ยอดรวมค่าอาหาร (Food)</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_Food)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_Food)}</font></td>
               </tr>
               <tr>
-                <td>ยอดรวมค่าเครื่องดื่ม</td>
+                <td><font face={FONT_FAMILY} size="4">ยอดรวมค่าเครื่องดื่ม</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_Drink)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_Drink)}</font></td>
               </tr>
               <tr>
-                <td>ยอดรวมค่าสินค้าทั่วไป</td>
+                <td><font face={FONT_FAMILY} size="4">ยอดรวมค่าสินค้าทั่วไป</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_Product)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_Product)}</font></td>
               </tr>
               <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
-                <td>ยอดขายตามป้าย (Dept-Sum)</td>
+                <td><font face={FONT_FAMILY} size="4">ยอดขายตามป้าย (Dept-Sum)</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.Dept_Sum)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.Dept_Sum)}</font></td>
               </tr>
               <tr>
-                <td>ค่าบริการ Service</td>
+                <td><font face={FONT_FAMILY} size="4">ค่าบริการ Service</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_ServiceAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_ServiceAmt)}</font></td>
               </tr>
               <tr>
-                <td>Charge บัตรเครดิต</td>
+                <td><font face={FONT_FAMILY} size="4">Charge บัตรเครดิต</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_CrChargeAmt1)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_CrChargeAmt1)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลดสมาชิก VIP</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลดสมาชิก VIP</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_MemDiscAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_MemDiscAmt)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลดเทศกาล</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลดเทศกาล</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_FastDiscAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_FastDiscAmt)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลดพนักงาน</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลดพนักงาน</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_EmpDiscAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_EmpDiscAmt)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลดพนักงาน Trainee</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลดพนักงาน Trainee</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_TrainDiscAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_TrainDiscAmt)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลดคูปอง</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลดคูปอง</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_CuponDiscAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_CuponDiscAmt)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลดบาท</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลดบาท</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_SubDiscBath)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_SubDiscBath)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลด Promotion</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลด Promotion</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_ProDiscAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_ProDiscAmt)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลดพิเศษ (Special)</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลดพิเศษ (Special)</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_SpaDiscAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_SpaDiscAmt)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลดรายการ (Item)</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลดรายการ (Item)</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_ItemDiscAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_ItemDiscAmt)}</font></td>
               </tr>
               <tr>
-                <td>ส่วนลดบัตรคูปอง (Cupon)</td>
+                <td><font face={FONT_FAMILY} size="4">ส่วนลดบัตรคูปอง (Cupon)</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_CuponDiscAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_CuponDiscAmt)}</font></td>
               </tr>
               <tr>
-                <td>หักคืนเงินมัดจำ</td>
+                <td><font face={FONT_FAMILY} size="4">หักคืนเงินมัดจำ</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_Earnest)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_Earnest)}</font></td>
               </tr>
               <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
-                <td>ค่า Entertain</td>
+                <td><font face={FONT_FAMILY} size="4">ค่า Entertain</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_Entertain)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_Entertain)}</font></td>
               </tr>
               <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
-                <td>ยอดขายสุทธิ (Net-Sales)</td>
+                <td><font face={FONT_FAMILY} size="4">ยอดขายสุทธิ (Net-Sales)</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_NetTotal)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_NetTotal)}</font></td>
               </tr>
               <tr>
-                <td>เงินสด Cash</td>
+                <td><font face={FONT_FAMILY} size="4">เงินสด Cash</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_Cash)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_Cash)}</font></td>
               </tr>
               <tr>
-                <td>เงินทอน</td>
+                <td><font face={FONT_FAMILY} size="4">เงินทอน</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_Ton)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_Ton)}</font></td>
               </tr>
               <tr>
-                <td>บัตรเครดิต</td>
+                <td><font face={FONT_FAMILY} size="4">บัตรเครดิต</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_CrAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_CrAmt)}</font></td>
               </tr>
               <tr>
-                <td>บัตรกำนัล Gift Voucher</td>
+                <td><font face={FONT_FAMILY} size="4">บัตรกำนัล Gift Voucher</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_GiftVoucher)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_GiftVoucher)}</font></td>
               </tr>
               <tr>
-                <td>ลูกหนี้การค้า</td>
+                <td><font face={FONT_FAMILY} size="4">ลูกหนี้การค้า</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_AccrAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_AccrAmt)}</font></td>
               </tr>
               <tr style={{ borderTop: "1px solid", borderStyle: "dashed" }}>
-                <td>PAID-IN</td>
+                <td><font face={FONT_FAMILY} size="4">PAID-IN</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(paidio.PaidInAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(paidio.PaidInAmt)}</font></td>
               </tr>
               <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
-                <td>PAID-OUT</td>
+                <td><font face={FONT_FAMILY} size="4">PAID-OUT</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(paidio.PaidOutAmt)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(paidio.PaidOutAmt)}</font></td>
               </tr>
               <tr>
-                <td>ยอดขายสินค้า/บริการ คิดภาษี</td>
+                <td><font face={FONT_FAMILY} size="4">ยอดขายสินค้า/บริการ คิดภาษี</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_NetVat)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_NetVat)}</font></td>
               </tr>
               <tr>
-                <td>ยอดขายไม่คิดภาษี</td>
+                <td><font face={FONT_FAMILY} size="4">ยอดขายไม่คิดภาษี</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_NetNonVat)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_NetNonVat)}</font></td>
               </tr>
               <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
-                <td>ภาษีมูลค่าเพิ่ม (Vat)</td>
+                <td><font face={FONT_FAMILY} size="4">ภาษีมูลค่าเพิ่ม (Vat)</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{formatCurrency(report.B_Vat)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_Vat)}</font></td>
               </tr>
               <tr>
-                <td>จำนวนลูกค้าทั้งสิ้น</td>
+                <td><font face={FONT_FAMILY} size="4">จำนวนลูกค้าทั้งสิ้น</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{report.B_Cust}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{report.B_Cust}</font></td>
               </tr>
               <tr>
-                <td>จำนวนสมาชิก</td>
+                <td><font face={FONT_FAMILY} size="4">จำนวนสมาชิก</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">{memberInfo.TotalMember}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{memberInfo.TotalMember}</font></td>
               </tr>
               <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
-                <td>ยอดซื้อสมาชิก: {formatCurrency(memberInfo.NetAmount)}</td>
+                <td><font face={FONT_FAMILY} size="4">ยอดซื้อสมาชิก: {formatCurrency(memberInfo.NetAmount)}</font></td>
                 <td align="right"></td>
                 <td align="right"></td>
-                <td align="right">คะแนนสะสม</td>
-                <td align="right">{formatPoint(memberInfo?.TotalScore)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">คะแนนสะสม</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatPoint(memberInfo?.TotalScore)}</font></td>
               </tr>
             </tbody>
           </table>
           <table width="100%">
             <thead>
               <tr>
-                <th>ประเภทการขาย</th>
-                <th style={{textAlign: "right"}}>บิล</th>
-                <th style={{textAlign: "right"}}>ลูกค้า</th>
-                <th style={{textAlign: "right"}}>จำนวนเงิน</th>
+                <th><font face={FONT_FAMILY} size="4">ประเภทการขาย</font></th>
+                <th style={{textAlign: "right"}}><font face={FONT_FAMILY} size="4">บิล</font></th>
+                <th style={{textAlign: "right"}}><font face={FONT_FAMILY} size="4">ลูกค้า</font></th>
+                <th style={{textAlign: "right"}}><font face={FONT_FAMILY} size="4">จำนวนเงิน</font></th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Dine In</td>
-                <td align="right">{sumTypeE?.Bill_Count}</td>
-                <td align="right">{sumTypeE?.B_Cust}</td>
-                <td align="right">{formatCurrency(sumTypeE?.B_NetTotal)}</td>
+                <td><font face={FONT_FAMILY} size="4">Dine In</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{sumTypeE?.Bill_Count}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{sumTypeE?.B_Cust}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(sumTypeE?.B_NetTotal)}</font></td>
               </tr>
               <tr>
-                <td>Take Away</td>
-                <td align="right">{sumTypeT?.Bill_Count}</td>
-                <td align="right">{sumTypeT?.B_Cust}</td>
-                <td align="right">{formatCurrency(sumTypeT.B_NetTotal)}</td>
+                <td><font face={FONT_FAMILY} size="4">Take Away</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{sumTypeT?.Bill_Count}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{sumTypeT?.B_Cust}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(sumTypeT.B_NetTotal)}</font></td>
               </tr>
               <tr>
-                <td>Delivery</td>
-                <td align="right">{sumTypeD?.Bill_Count}</td>
-                <td align="right">{sumTypeD?.B_Cust}</td>
-                <td align="right">{formatCurrency(sumTypeD?.B_NetTotal)}</td>
+                <td><font face={FONT_FAMILY} size="4">Delivery</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{sumTypeD?.Bill_Count}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{sumTypeD?.B_Cust}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(sumTypeD?.B_NetTotal)}</font></td>
               </tr>
             </tbody>
           </table>

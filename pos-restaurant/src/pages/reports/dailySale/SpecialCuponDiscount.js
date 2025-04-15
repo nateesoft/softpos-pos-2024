@@ -7,6 +7,7 @@ import React, {
   useState
 } from "react"
 import { Button, Grid2, Paper } from "@mui/material"
+import { useNavigate } from "react-router-dom"
 import { useReactToPrint } from "react-to-print"
 import PrintIcon from "@mui/icons-material/Print"
 import BackIcon from "@mui/icons-material/ReplyAll"
@@ -14,7 +15,7 @@ import moment from "moment"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
-import { useNavigate } from "react-router-dom"
+import { FONT_FAMILY } from "../../../AppConstants"
 
 class ComponentToPrint extends Component {
   constructor(props) {
@@ -43,16 +44,16 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานคูปองส่วนลดพิเศษ</div>
-          <div align="center">(Special Cupon Discount)</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานคูปองส่วนลดพิเศษ</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">(Special Cupon Discount)</font></div>
           <div align="left" style={{ margin: "20px" }}>
-            หมายเลขเครื่อง : 001 .. 001
+            <font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : 001 .. 001</font>
           </div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
+            {macno}</font>
           </div>
           <table width="100%">
             <thead>
@@ -63,18 +64,17 @@ class ComponentToPrint extends Component {
                   borderStyle: "dashed"
                 }}
               >
-                <td align="left">บัตรคูปอง</td>
-                <td align="right">จำนวน</td>
-                <td align="right">ส่วนลด</td>
+                <td align="left"><font face={FONT_FAMILY} size="4">บัตรคูปอง</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวน</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">ส่วนลด</font></td>
               </tr>
             </thead>
             <tbody>
-              {reports &&
-                reports.map((row) => (
+              {reports && reports.map((row) => (
                   <tr>
-                    <td align="left">{row.R_Table}</td>
-                    <td align="right">{row.R_Total}</td>
-                    <td align="right">{row.TCurTime}</td>
+                    <td align="left"><font face={FONT_FAMILY} size="4">{row.R_Table}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{row.R_Total}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{row.TCurTime}</font></td>
                   </tr>
                 ))}
             </tbody>
@@ -86,9 +86,9 @@ class ComponentToPrint extends Component {
                   borderStyle: "dashed"
                 }}
               >
-                <td align="left">ยอดรวม (Total)....</td>
-                <td align="right">0</td>
-                <td align="right">0.00</td>
+                <td align="left"><font face={FONT_FAMILY} size="4">ยอดรวม (Total)....</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">0</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">0.00</font></td>
               </tr>
             </tfoot>
           </table>

@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
+import { FONT_FAMILY } from "../../../AppConstants"
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("th-TH", {
@@ -50,44 +51,44 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานการชำระด้วยบัตรเครดิต</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานการชำระด้วยบัตรเครดิต</font></div>
           <div align="center" style={{ marginBottom: "10px" }}>
-            (Credit Card Report)
+            <font face={FONT_FAMILY} size="4">(Credit Card Report)</font>
           </div>
           <div align="center">
-            หมายเลขเครื่อง : {filter.macno1} .. {filter.macno2}
+            <font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : {filter.macno1} .. {filter.macno2}</font>
           </div>
           <div align="center" style={{ marginBottom: "10px" }}>
-            รหัสพนักงาน Cashier : {filter.cashier1} .. {filter.cashier2}
+            <font face={FONT_FAMILY} size="4">รหัสพนักงาน Cashier : {filter.cashier1} .. {filter.cashier2}</font>
           </div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
+            {macno}</font>
           </div>
           <table width="100%">
             <thead>
               <tr style={{ borderTop: "1px solid", borderStyle: "dashed" }}>
-                <td align="center">ประเภทบัตร</td>
-                <td align="center">ชื่อบัตรเครดิต</td>
+                <td align="center"><font face={FONT_FAMILY} size="4">ประเภทบัตร</font></td>
+                <td align="center"><font face={FONT_FAMILY} size="4">ชื่อบัตรเครดิต</font></td>
               </tr>
               <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
-                <td align="center">ลำดับ</td>
-                <td align="left">เลขที่บิล</td>
-                <td align="left">หมายเลขบัตร</td>
-                <td align="right">Charge</td>
-                <td align="right">จำนวนเงิน</td>
+                <td align="center"><font face={FONT_FAMILY} size="4">ลำดับ</font></td>
+                <td align="left"><font face={FONT_FAMILY} size="4">เลขที่บิล</font></td>
+                <td align="left"><font face={FONT_FAMILY} size="4">หมายเลขบัตร</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">Charge</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวนเงิน</font></td>
               </tr>
             </thead>
             {reports && reports.map((item) => (
                 <tbody>
                   <tr>
-                    <td align="center">{item.index}</td>
-                    <td align="left">{item.refno}</td>
-                    <td align="left">{item.CrCode}</td>
-                    <td align="right">{formatCurrency(item.CrChargeAmount)}</td>
-                    <td align="right">{formatCurrency(item.CrAmt)}</td>
+                    <td align="center"><font face={FONT_FAMILY} size="4">{item.index}</font></td>
+                    <td align="left"><font face={FONT_FAMILY} size="4">{item.refno}</font></td>
+                    <td align="left"><font face={FONT_FAMILY} size="4">{item.CrCode}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.CrChargeAmount)}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.CrAmt)}</font></td>
                   </tr>
                 </tbody>
               ))}
@@ -102,9 +103,9 @@ class ComponentToPrint extends Component {
                   borderStyle: "dashed"
                 }}
               >
-                <td>Sum-Total Slip</td>
-                <td align="rigth">{summary.creditCount}</td>
-                <td align="right">{formatCurrency(summary.creditAmount)}</td>
+                <td><font face={FONT_FAMILY} size="4">Sum-Total Slip</font></td>
+                <td align="rigth"><font face={FONT_FAMILY} size="4">{summary.creditCount}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(summary.creditAmount)}</font></td>
               </tr>
             </table>
           )}
