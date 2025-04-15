@@ -16,11 +16,17 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
 
-const formatCurrency = (amount) => {
+const formatCurrency = (amount=0) => {
   return new Intl.NumberFormat("th-TH", {
     style: "currency",
     currency: "THB"
   }).format(amount)
+}
+
+const formatPoint = (amount = 0) => {
+  if(amount){
+    return amount.toLocaleString()
+  }
 }
 
 class ComponentToPrint extends Component {
@@ -302,7 +308,7 @@ class ComponentToPrint extends Component {
                 <td align="right"></td>
                 <td align="right"></td>
                 <td align="right">คะแนนสะสม</td>
-                <td align="right">{memberInfo.TotalScore.toLocaleString()}</td>
+                <td align="right">{formatPoint(memberInfo?.TotalScore)}</td>
               </tr>
               <tr>
                 <td>จำนวนใบกำกับภาษีอย่างย่อ</td>

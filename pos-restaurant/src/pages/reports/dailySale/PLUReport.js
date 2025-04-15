@@ -79,8 +79,7 @@ class ComponentToPrint extends Component {
                 borderStyle: "dashed"
               }}
             >
-              {reports &&
-                reports.map((item) => (
+              {reports && reports.map((item) => (
                   <tr>
                     <td>{item.GroupName}</td>
                     <td>

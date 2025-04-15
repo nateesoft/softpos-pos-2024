@@ -17,6 +17,9 @@ import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
 
 const formatCurrency = (amount) => {
+  if(amount===""){
+    return ""
+  }
   return new Intl.NumberFormat("th-TH", {
     style: "currency",
     currency: "THB"
@@ -96,8 +99,7 @@ class ComponentToPrint extends Component {
                 borderStyle: "dashed"
               }}
             >
-              {reports &&
-                reports.map((item, index) => (
+              {reports && reports.map((item, index) => (
                   <tr>
                     <td>{item.data1}</td>
                     <td align="right">{formatCurrency(item.data2)}</td>
