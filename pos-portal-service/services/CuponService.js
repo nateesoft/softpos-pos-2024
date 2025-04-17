@@ -1,4 +1,5 @@
 const pool = require("../config/database/MySqlConnect")
+const { mappingResultDataList } = require("../utils/ConvertThai")
 const { getMoment } = require("../utils/MomentUtil")
 const { ASCII2Unicode } = require("../utils/StringUtil")
 
@@ -14,14 +15,7 @@ const getDataCupon = async () => {
       and ChkMember='N' 
       order by cutype,cucode`
   const results = await pool.query(sql)
-  const mappingResult = results.map((item, index) => {
-    return {
-      ...item,
-      CuName: ASCII2Unicode(item.CuName),
-      qty: 0
-    }
-  })
-  return mappingResult
+  return mappingResultDataList(results)
 }
 
 const saveData = async (payload, tableNo, macNo, cashier, netTotalAmount) => {

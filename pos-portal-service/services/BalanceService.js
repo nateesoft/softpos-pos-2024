@@ -1,5 +1,5 @@
 const pool = require('../config/database/MySqlConnect')
-const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
+const { PrefixZeroFormat, Unicode2ASCII } = require('../utils/StringUtil');
 
 const { getProductByPCode } = require('./ProductService');
 const { ProcessStockOut } = require('./STCardService');

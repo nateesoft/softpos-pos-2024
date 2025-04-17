@@ -28,6 +28,9 @@ const RecieptCopyPrint = ({ setOpen }) => {
   const [copyCount, setCopyCount] = useState(1)
 
   const handleConfirm = () => {
+    if(!receiptNo){
+      return
+    }
     apiClient
       .post(`/api/billno/billCopy`, {
         billNo: receiptNo,

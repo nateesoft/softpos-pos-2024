@@ -52,10 +52,6 @@ class ComponentToPrint extends Component {
     const sumTypeT = reports.sumTypeT
     const sumTypeD = reports.sumTypeD
     const memberInfo = reports.memberInfo
-    
-    if(report) {
-      return <div align="center">Loading...</div>
-    }
 
     return (
       <Grid2
