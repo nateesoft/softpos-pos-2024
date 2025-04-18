@@ -222,12 +222,12 @@ const PosSettingsForm = ({ setOpen }, data) => {
       <Grid2 container spacing={1} padding={1} sx={{background: "lightgreen"}}>
         <Grid2 size={6}>
           <FormGroup>
-            <FormControlLabel control={<Checkbox defaultChecked />} label="พิมพ์ข้อความต้อนรับ" />
+            <FormControlLabel control={<Checkbox defaultChecked />} label="พิมพ์ข้อความเข้าออกระบบ" />
           </FormGroup>
         </Grid2>
         <Grid2 size={6}>
           <FormGroup>
-            < FormControlLabel control={<Checkbox defaultChecked />} label="พิมพ์ข้อความออกจากระบบ" />
+            < FormControlLabel control={<Checkbox defaultChecked />} label="บันทึกเอกสารเป็น pdf" />
           </FormGroup>
         </Grid2>
       </Grid2>

@@ -290,6 +290,40 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
     </tr>`
   }
 
+  let MemberInfo = ''
+  if(billInfo.B_MemCode) {
+    MemberInfo = `
+    ${Divider}
+    <div align="center">
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">Member</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${billInfo.B_MemCode}</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4"></font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${billInfo.B_MemName}</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">Point</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${formatPoint(billInfo.B_MemCurSum)}</font>
+          </td>
+        </tr>
+      </table>
+    </div>`
+  }
+
   let htmlContent = `
   <div style="padding: 2px;">
       ${header}
@@ -394,36 +428,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
           </table>
         </div>
       </div>
-      ${Divider}
-      <div align="center">
-          <table width="100%" cellPadding="0" cellSpacing="0">
-            <tr>
-              <td>
-                <font face="${fontFamily}" size="4">Member</font>
-              </td>
-              <td align="right">
-                <font face="${fontFamily}" size="4">${billInfo.B_MemCode}</font>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <font face="${fontFamily}" size="4"></font>
-              </td>
-              <td align="right">
-                <font face="${fontFamily}" size="4">${billInfo.B_MemName}</font>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <font face="${fontFamily}" size="4">Point</font>
-              </td>
-              <td align="right">
-                <font face="${fontFamily}" size="4">${formatPoint(billInfo.B_MemCurSum)}</font>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
+      ${MemberInfo}
       ${footer}
   </div>`
 
@@ -878,6 +883,40 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
     </tr>`
   }
 
+  let MemberInfo = ''
+  if(billInfo.B_MemCode) {
+    MemberInfo = `
+    ${Divider}
+    <div align="center">
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">Member</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${billInfo.B_MemCode}</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4"></font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${billInfo.B_MemName}</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">Point</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${formatPoint(billInfo.B_MemCurSum)}</font>
+          </td>
+        </tr>
+      </table>
+    </div>`
+  }
+
   const htmlContent = `
     <div style="padding: 2px;">
       ${header}
@@ -980,37 +1019,7 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
             ${B_ItemDiscAmt}
           </table>
       </div>
-      ${Divider}
-      <div align="center">
-          <table width="100%" cellPadding="0" cellSpacing="0">
-            <tr>
-              <td>
-                <font face="${fontFamily}" size="4">Member</font>
-              </td>
-              <td align="right">
-                <font face="${fontFamily}" size="4">${billInfo.B_MemCode}</font>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <font face="${fontFamily}" size="4"></font>
-              </td>
-              <td align="right">
-                <font face="${fontFamily}" size="4">${billInfo.B_MemName}</font>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <font face="${fontFamily}" size="4">Point</font>
-              </td>
-              <td align="right">
-                <font face="${fontFamily}" size="4">${formatPoint(billInfo.B_MemCurSum)}</font>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
+      ${MemberInfo}
     ${footer}
   </div>`
 
