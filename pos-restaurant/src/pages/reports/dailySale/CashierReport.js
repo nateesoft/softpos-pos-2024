@@ -277,13 +277,6 @@ class ComponentToPrint extends Component {
                     <td align="right"></td>
                     <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_NetVat)}</font></td>
                   </tr>
-                  <tr>
-                    <td><font face={FONT_FAMILY} size="4">ยอดขายไม่คิดภาษี</font></td>
-                    <td align="right"></td>
-                    <td align="right"></td>
-                    <td align="right"></td>
-                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_NetNonVat)}</font></td>
-                  </tr>
                   <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
                     <td><font face={FONT_FAMILY} size="4">ภาษีมูลค่าเพิ่ม (Vat)</font></td>
                     <td align="right"></td>

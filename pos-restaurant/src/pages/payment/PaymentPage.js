@@ -76,7 +76,7 @@ function PaymentPage() {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data.data
-          setSummaryTable({
+          const resultSummary = {
             subTotalAmount: data.TAmount,
             discountAmount: data.DiscountAmount,
             service: data.Service,
@@ -89,7 +89,10 @@ function PaymentPage() {
             productAndService: data.ProductAndService,
             printRecpMessage: data.PrintRecpMessage,
             productNoneVat: data.ProductNonVat,
-          })
+          }
+          console.log(summaryTable)
+
+          setSummaryTable(resultSummary)
         }
       })
       .catch((err) => handleNotification(err.message))

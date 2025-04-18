@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { Box, Button, Grid2, Modal, Paper, Stack, TextField, Typography } from "@mui/material"
+import { Box, Button, Grid2, Modal, TextField, Typography } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import SaveIcon from "@mui/icons-material/Save"
 import CancelIcon from "@mui/icons-material/Cancel"
@@ -153,14 +153,14 @@ const DiscountFormModal = ({
       .put(`/api/tablefile/discountInfo/${tableFile.Tcode}`, updPayload)
       .then((response) => {
         if (response.status === 200) {
-          initLoad()
-          setOpenDiscountModal(false)
           setSpecialCuponInfo({
             CuponDiscAmt: specialCuponAmt,
             PrCuCode,
             PrCuDisc,
             PrCuBath
           })
+          initLoad()
+          setOpenDiscountModal(false)
         }
       })
       .catch((error) => {

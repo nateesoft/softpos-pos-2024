@@ -213,7 +213,7 @@ const computeBalanceSummary = (
 
       // compute RNetTotal
       let RNetTotal = balance.R_Price * balance.R_Quan
-      let sumDiscountAll = balance.R_DiscBath + balance.R_PrSubAmt + balance.R_PrAmt
+      let sumDiscountAll = balance.R_DiscBath + balance.R_PrSubAmt + balance.R_PrAmt + balance.R_PrCuAmt
 
       if (balance.R_Service === "Y" && balance.R_Vat === "V") {
         let vatAmount = 0

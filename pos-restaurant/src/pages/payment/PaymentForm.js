@@ -381,6 +381,10 @@ function PaymentForm({
     setOpenTransferInfo(false)
   }
 
+  const handleCLoseDiscountModal = () => {
+    setOpenDiscountModal(false)
+  }
+
   useEffect(() => {
     totalAmount()
   }, [totalAmount])
@@ -1042,7 +1046,7 @@ function PaymentForm({
         open={openDiscountModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        onClose={() => setOpenDiscountModal(false)}
+        onClose={handleCLoseDiscountModal}
       >
         <Box
           sx={{

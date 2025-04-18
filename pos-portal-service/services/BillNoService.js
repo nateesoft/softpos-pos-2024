@@ -293,8 +293,8 @@ const addNewBill = async (payload) => {
   const B_NetVat = netTotal - creditChargeAmount
   const B_NetNonVat = 0
   const B_Vat = vatAmount
-  const B_PayAmt = cashAmount + transferAmount
-  const B_Cash = cashAmount + transferAmount
+  const B_PayAmt = parseFloat(cashAmount) + transferAmount
+  const B_Cash = parseFloat(cashAmount) + transferAmount
   const B_GiftVoucher = 0
   // const B_Earnest = 0;
   const B_Ton = tonAmount

@@ -1,7 +1,6 @@
 const pool = require("../config/database/MySqlConnect")
 const { mappingResultDataList, mappingResultData } = require("../utils/ConvertThai")
 const { getMoment } = require("../utils/MomentUtil")
-const { ASCII2Unicode } = require("../utils/StringUtil")
 const { getBranch } = require("./BranchService")
 const { getReportCashier, getReportTerminal } = require("./member/crm/MTranService")
 
@@ -79,20 +78,20 @@ const getTerminalByMacno = async (macno) => {
   const results = await pool.query(sql)
   if (results.length > 0) {
     const sqlPaidIO = `select sum(PaidInAmt) PaidInAmt, sum(PaidOutAmt) PaidOutAmt 
-                        from paidiofile 
-                        where Terminal='${macno}' 
-                        and Date='${getMoment().format("YYYY-MM-DD")}'`
+      from paidiofile 
+      where Terminal='${macno}' 
+      and Date='${getMoment().format("YYYY-MM-DD")}'`
     const resultsPaidIO = await pool.query(sqlPaidIO)
     let getPaidIO = {}
     if (resultsPaidIO.length > 0) {
       getPaidIO = resultsPaidIO[0]
     }
 
-    const sqlETD = `SELECT B_ETD, count(*) Bill_Count, sum(B_Cust) B_Cust, sum(B_NetTotal) B_NetTotal 
-                  FROM billno b WHERE b.B_OnDate='${getMoment().format(
-                    "YYYY-MM-DD"
-                  )}' 
-                  and b.B_MacNo ='${macno}' GROUP BY B_ETD`
+    const sqlETD = `SELECT B_ETD, 
+      count(*) Bill_Count, sum(B_Cust) B_Cust, sum(B_NetTotal) B_NetTotal 
+      FROM billno b 
+      WHERE b.B_OnDate='${getMoment().format("YYYY-MM-DD")}' 
+      and b.B_MacNo ='${macno}' GROUP BY B_ETD`
     const resultETDType = await pool.query(sqlETD)
     const E = resultETDType.filter((item) => item.B_ETD === "E")
     const T = resultETDType.filter((item) => item.B_ETD === "T")
@@ -103,9 +102,16 @@ const getTerminalByMacno = async (macno) => {
     const sumTypeT = T.length > 0 ? T[0] : initData
     const sumTypeD = D.length > 0 ? D[0] : initData
 
-    // get member info from crm service
-    const branchInfo = await getBranch()
-    const memberInfo = await getReportTerminal(macno, branchInfo.Code)
+    // get member info
+    const sqlMember = `select count(*) TotalMember, 
+      sum(B_NetTotal) NetAmount, sum(B_SumScore ) TotalScore 
+      FROM billno 
+      WHERE B_OnDate='${getMoment().format("YYYY-MM-DD")}' 
+      and B_Void <> 'V' 
+      and B_MacNo ='${macno}' 
+      group by (B_MacNo)`;
+    const resultMember = await pool.query(sqlMember)
+    const memberInfo = resultMember.length > 0 ? resultMember[0] : {}
 
     return {
       cashier: mappingResultData(results),
@@ -192,9 +198,15 @@ const getTerminalByCashier = async (cashier) => {
     const result1 = await pool.query(sql1)
     const result2 = await pool.query(sql2)
 
-    // get member info from crm service
-    const branchInfo = await getBranch()
-    const memberInfo = await getReportCashier(cashier, branchInfo.Code)
+    // get member info
+    const sqlMember = `select count(*) TotalMember, 
+      sum(B_NetTotal) NetAmount, sum(B_SumScore ) TotalScore 
+      FROM billno 
+      WHERE B_OnDate='${getMoment().format("YYYY-MM-DD")}' 
+      and B_Void <> 'V' and B_Cashier ='${cashier}' 
+      group by (B_Cashier)`;
+    const resultMember = await pool.query(sqlMember)
+    const memberInfo = resultMember.length > 0 ? resultMember[0] : {}
 
     return {
       cashier: mappingResultData(results),
