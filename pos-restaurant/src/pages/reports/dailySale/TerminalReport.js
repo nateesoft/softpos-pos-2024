@@ -158,7 +158,7 @@ class ComponentToPrint extends Component {
                     <td align="right"></td>
                     <td align="right"></td>
                     <td align="right"></td>
-                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_CuponDiscAmt)}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(report.B_SubDiscAmt)}</font></td>
                   </tr>
                   <tr>
                     <td><font face={FONT_FAMILY} size="4">ส่วนลดบาท</font></td>

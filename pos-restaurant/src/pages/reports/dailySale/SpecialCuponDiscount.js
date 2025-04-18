@@ -17,13 +17,21 @@ import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
 import { FONT_FAMILY } from "../../../AppConstants"
 
+const formatCurrency = (amount=0) => {
+  return new Intl.NumberFormat("th-TH", {
+    style: "currency",
+    currency: "THB"
+  }).format(amount)
+}
+
 class ComponentToPrint extends Component {
   constructor(props) {
     super(props)
   }
 
   render() {
-    const { userLogin, macno, reports } = this.props
+    const { userLogin, macno, reports, summary } = this.props
+    console.log('Summary:', summary)
     const poshwSetup = this.props.poshwSetup
     let headers = [
       poshwSetup.Heading1,
@@ -72,9 +80,9 @@ class ComponentToPrint extends Component {
             <tbody>
               {reports && reports.map((row) => (
                   <tr>
-                    <td align="left"><font face={FONT_FAMILY} size="4">{row.R_Table}</font></td>
-                    <td align="right"><font face={FONT_FAMILY} size="4">{row.R_Total}</font></td>
-                    <td align="right"><font face={FONT_FAMILY} size="4">{row.TCurTime}</font></td>
+                    <td align="left"><font face={FONT_FAMILY} size="4">{row.CuCode}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{row.CuQuan}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(row.CuAmt)}</font></td>
                   </tr>
                 ))}
             </tbody>
@@ -87,8 +95,8 @@ class ComponentToPrint extends Component {
                 }}
               >
                 <td align="left"><font face={FONT_FAMILY} size="4">ยอดรวม (Total)....</font></td>
-                <td align="right"><font face={FONT_FAMILY} size="4">0</font></td>
-                <td align="right"><font face={FONT_FAMILY} size="4">0.00</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{summary.CuQuan}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(summary.CuAmt)}</font></td>
               </tr>
             </tfoot>
           </table>
@@ -104,6 +112,7 @@ const SpecialCuponDiscount = () => {
   const { appData } = useContext(POSContext)
   const { macno, userLogin } = appData
   const [reports, setReports] = useState([])
+  const [summary, setSummary] = useState({})
   const [poshwSetup, setPosHwSetup] = useState({})
 
   const functionToPrint = useReactToPrint({
@@ -134,10 +143,11 @@ const SpecialCuponDiscount = () => {
 
   const loadReport = useCallback(() => {
     apiClient
-      .post(`/api/report/special-cupon-report`)
+      .post(`/api/report/special-cupon-report`, {macno})
       .then((response) => {
         if (response.status === 200) {
-          setReports(response.data.data)
+          setReports(response.data.data.items)
+          setSummary(response.data.data.summary)
         }
       })
       .catch((error) => {
@@ -157,6 +167,7 @@ const SpecialCuponDiscount = () => {
         userLogin={userLogin}
         macno={macno}
         reports={reports}
+        summary={summary}
         poshwSetup={poshwSetup}
       />
       <Paper

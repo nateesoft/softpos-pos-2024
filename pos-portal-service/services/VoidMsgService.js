@@ -1,6 +1,6 @@
 const pool = require('../config/database/MySqlConnect');
 const { mappingResultDataList } = require('../utils/ConvertThai');
-const { ASCII2Unicode } = require('../utils/StringUtil');
+require('../utils/StringUtil');
 
 const getVoidMsg = async () => {
     const sql = `select * from voidmsg order by VCode`;

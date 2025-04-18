@@ -1,8 +1,7 @@
 const pool = require("../config/database/MySqlConnect")
 const { mappingResultDataList, mappingResultData } = require("../utils/ConvertThai")
 const { getMoment } = require("../utils/MomentUtil")
-const { getBranch } = require("./BranchService")
-const { getReportCashier, getReportTerminal } = require("./member/crm/MTranService")
+require("./member/crm/MTranService")
 
 const getTableOnAction = async (date) => {
   let sql = `select R_Date, R_Table,sum(R_Total) R_Total,R_Void,TCurTime,TCustomer 
@@ -605,12 +604,23 @@ const getTopSale = async (
   return mappingResultDataList(newResults)
 }
 
-const getPromotion = async (macno) => {
+const getPromotion = async () => {
   return []
 }
 
 const getSpecialCupon = async (macno) => {
-  return []
+  const sql1 = `select CuCode, sum(CuQuan) CuQuan, sum(CuAmt) CuAmt 
+    from t_cupon where Terminal = '${macno}' group by (CuCode)`
+  const results1 = await pool.query(sql1)
+
+  const sql2 = `select sum(CuQuan) CuQuan, sum(CuAmt) CuAmt 
+    from t_cupon where Terminal = '${macno}'`
+  const results2 = await pool.query(sql2)
+
+  return {
+    items: results1,
+    summary: results2[0]
+  }
 }
 
 const getTopSaleList = async () => {

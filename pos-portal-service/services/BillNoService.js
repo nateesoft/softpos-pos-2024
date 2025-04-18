@@ -33,6 +33,7 @@ const { summaryBalance } = require("./CoreService")
 const { createListCredit, deleteListTempCredit } = require("./TCreditService")
 const { printReceiptHtml, printReviewReceiptHtml, printRefundBillHtml, printReceiptCopyHtml } = require('./SyncPrinterService')
 const { mappingResultDataList, mappingResultData } = require('../utils/ConvertThai')
+const { addDataFromTemp } = require('./CuponService')
 
 const getAllBillNoToday = async () => {
   const sql = `select * from billno where B_OnDate='${getMoment().format("YYYY-MM-DD")}'`
@@ -404,16 +405,16 @@ const addNewBill = async (payload) => {
     // save t_sale list
     await addDataFromBalance(B_Table, B_Refno, allBalance)
 
+    // move cupon temp
+    if(B_CuponDiscAmt>0){
+      await addDataFromTemp(B_Refno, B_Table)
+    }
+
     if (creditAmount > 0) {
       // update credit file
       await createListCredit(creditList, B_Refno, B_Cashier)
       await deleteListTempCredit(creditList, tableNo)
     }
-
-    // // update promotion
-    // await updateProSerTable(B_Table, allBalance);
-
-    // await ThermalPrinterConnect("192.168.1.209", "", B_Table)
 
     if (Object.keys(memberInfo).length > 0) {
       // update member memmaster
