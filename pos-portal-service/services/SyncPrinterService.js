@@ -2,6 +2,8 @@ const { getDataByMacno } = require("./PosHwSetup")
 const { getMoment } = require('../utils/MomentUtil');
 const { getPOSConfigSetup } = require("./CoreService");
 const { savePdfFile } = require("../utils/PdfUtil");
+const { getCuponByRefno } = require("./CuponService");
+const { getTCreditList } = require("./TCreditService");
 
 const formatNumber = (num) => {
   return new Intl.NumberFormat('th-TH', {
@@ -54,11 +56,14 @@ const footer = `
       <font face="${fontFamily}" size="4">มีอะไรก็ติดต่อมาได้ตลอด / Feedback</font>
     </div>`
 
-const flagToSavePdf = true
+const flagToSavePdf = "Y" === process.env.SAVE_PDF_PRINTER
 
 const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
   const posConfigSetup = await getPOSConfigSetup()
   const poshwSetup = await getDataByMacno(macno)
+  const specialCupon = await getCuponByRefno(billInfo.B_Refno)
+  const creditList = await getTCreditList(billInfo.B_Refno)
+
   let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
 
@@ -191,15 +196,17 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
     </tr>`
   }
   let B_CuponDiscAmt = ''
-  if(billInfo.B_CuponDiscAmt>0){
-    B_CuponDiscAmt = `<tr>
-      <td>
-        <font face="${fontFamily}" size="4">Special Cupon Discount</font>
-      </td>
-      <td align="right">
-        <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_CuponDiscAmt)}</font>
-      </td>
-    </tr>`
+  if(specialCupon.length > 0){
+    for(let key in specialCupon) {
+      B_CuponDiscAmt += `<tr>
+        <td>
+          <font face="${fontFamily}" size="4">${specialCupon[key].CuName}</font>
+        </td>
+        <td align="right">
+          <font face="${fontFamily}" size="4">${formatNumber(specialCupon[key].CuAmt)}</font>
+        </td>
+      </tr>`
+    }
   }
   let B_ProDiscAmt = ''
   if(billInfo.B_ProDiscAmt>0){
@@ -288,6 +295,17 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
         <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_CrAmt1)}</font>
       </td>
     </tr>`
+    for(let key in creditList) {
+      const creditInfo = creditList[key]
+      B_CrAmt1 += `<tr>
+          <td>
+            <font face="${fontFamily}" size="4">${creditInfo.CrCode}</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${formatNumber(creditInfo.CrAmt)}</font>
+          </td>
+        </tr>`
+    }
   }
 
   let MemberInfo = ''
@@ -375,7 +393,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
         <table width="100%" cellPadding="0" cellSpacing="0">
           <tr>
             <td>
-              <font face="${fontFamily}" size="4">Service Charge ${formatNumber(billInfo.B_Service)}%</font>
+              <font face="${fontFamily}" size="4">Service Charge ${parseInt(billInfo.B_Service)}%</font>
             </td>
             <td align="right">
               <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_ServiceAmt)}</font>
@@ -579,7 +597,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
       <table width="100%" cellPadding="0" cellSpacing="0">
         <tr>
           <td>
-            <font face="${fontFamily}" size="4">Service Charge ${tableInfo.Service}%</font>
+            <font face="${fontFamily}" size="4">Service Charge ${parseInt(tableInfo.Service)}%</font>
           </td>
           <td align="right">
             <font face="${fontFamily}" size="4">${formatNumber(tableInfo.ServiceAmt)}</font>
@@ -629,6 +647,9 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
 const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
   const posConfigSetup = await getPOSConfigSetup()
   const poshwSetup = await getDataByMacno(macno)
+  const specialCupon = await getCuponByRefno(billInfo.B_Refno)
+  const creditList = await getTCreditList(billInfo.B_Refno)
+
   let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
 
@@ -783,15 +804,17 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
         </tr>`
   }
   let B_CuponDiscAmt = ''
-  if (billInfo.B_CuponDiscAmt > 0) {
-    B_CuponDiscAmt = `<tr>
-          <td>
-            <font face="${fontFamily}" size="4">Special Cupon Discount</font>
-          </td>
-          <td align="right">
-            <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_CuponDiscAmt)}</font>
-          </td>
-        </tr>`
+  if(specialCupon.length > 0){
+    for(let key in specialCupon) {
+      B_CuponDiscAmt += `<tr>
+        <td>
+          <font face="${fontFamily}" size="4">${specialCupon[key].CuName}</font>
+        </td>
+        <td align="right">
+          <font face="${fontFamily}" size="4">${formatNumber(specialCupon[key].CuAmt)}</font>
+        </td>
+      </tr>`
+    }
   }
   let B_ProDiscAmt = ''
   if (billInfo.B_ProDiscAmt > 0) {
@@ -881,6 +904,17 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
         <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_CrAmt1)}</font>
       </td>
     </tr>`
+    for(let key in creditList) {
+      const creditInfo = creditList[key]
+      B_CrAmt1 += `<tr>
+          <td>
+            <font face="${fontFamily}" size="4">${creditInfo.CrCode}</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${formatNumber(creditInfo.CrAmt)}</font>
+          </td>
+        </tr>`
+    }
   }
 
   let MemberInfo = ''
@@ -967,7 +1001,7 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
         <table width="100%" cellPadding="0" cellSpacing="0">
           <tr>
             <td>
-                <font face="${fontFamily}" size="4">Service Charge ${billInfo.B_Service}%</font>
+                <font face="${fontFamily}" size="4">Service Charge ${parseInt(billInfo.B_Service)}%</font>
             </td>
             <td align="right">
                 <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_ServiceAmt)}</font>

@@ -99,24 +99,20 @@ const MultipleCreditPayment = (props) => {
     setCrCodeError("")
     setCreditNumberError("")
 
-    handleConfirmCreditModal()
+    onClose()
   }
 
   const handleConfirmCreditModal = () => {
-    const summaryCreditAmt = creditList.reduce(
-      (n, { CrCreditAmount }) => n + parseFloat(CrCreditAmount),
-      0
-    )
-    const summaryChargeAmt = creditList.reduce(
-      (n, { CrChargeAmount }) => n + parseFloat(CrChargeAmount),
-      0
-    )
-    setCreditAmt(summaryCreditAmt - summaryChargeAmt)
-    setCreditChargeAmt(summaryChargeAmt)
-    setCreditTempList(creditList)
-
-    totalAmount()
-    onClose()
+    if(creditList.length > 0){
+      const summaryCreditAmt = creditList.reduce((n, { CrCreditAmount }) => n + parseFloat(CrCreditAmount),0)
+      const summaryChargeAmt = creditList.reduce((n, { CrChargeAmount }) => n + parseFloat(CrChargeAmount),0)
+      setCreditAmt(summaryCreditAmt - summaryChargeAmt)
+      setCreditChargeAmt(summaryChargeAmt)
+      setCreditTempList(creditList)
+  
+      totalAmount()
+      onClose()
+    }
   }
 
   const handleCreditInfoSelect = (cInfo) => {
