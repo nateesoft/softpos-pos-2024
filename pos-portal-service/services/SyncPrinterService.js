@@ -93,7 +93,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
       <table width="100%" cellPadding="0" cellSpacing="0">
         <tr>
           <th align="left">
-            <font face="${fontFamily}" size="4">Name</font>
+            <font face="${fontFamily}" size="4">Item Description</font>
           </th>
           <th align="right">
             <font face="${fontFamily}" size="4">Qty</font>
@@ -289,7 +289,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
   if(billInfo.B_CrAmt1>0){
     B_CrAmt1 = `<tr>
       <td>
-        <font face="${fontFamily}" size="4">Credit</font>
+        <font face="${fontFamily}" size="4">Credit Amount</font>
       </td>
       <td align="right">
         <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_CrAmt1)}</font>
@@ -299,7 +299,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
       const creditInfo = creditList[key]
       B_CrAmt1 += `<tr>
           <td>
-            <font face="${fontFamily}" size="4">${creditInfo.CrCode}</font>
+            <font face="${fontFamily}" size="4"> ${creditInfo.CrCode}</font>
           </td>
           <td align="right">
             <font face="${fontFamily}" size="4">${formatNumber(creditInfo.CrAmt)}</font>
@@ -516,7 +516,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
       <table width="100%" cellPadding="0" cellSpacing="0">
         <tr>
           <th align="left">
-            <font face="${fontFamily}" size="4">Name</font>
+            <font face="${fontFamily}" size="4">Item Description</font>
           </th>
           <th align="right">
             <font face="${fontFamily}" size="4">Qty</font>
@@ -709,7 +709,7 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
       <table width="100%" cellPadding="0" cellSpacing="0">
         <tr>
           <th align="left">
-            <font face="${fontFamily}" size="4">Name</font>
+            <font face="${fontFamily}" size="4">Item Description</font>
           </th>
           <th align="right">
             <font face="${fontFamily}" size="4">Qty</font>
@@ -898,7 +898,7 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
   if (billInfo.B_CrAmt1 > 0) {
     B_CrAmt1 = `<tr>
       <td>
-        <font face="${fontFamily}" size="4">Credit</font>
+        <font face="${fontFamily}" size="4">Credit Amount</font>
       </td>
       <td align="right">
         <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_CrAmt1)}</font>
@@ -908,7 +908,7 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
       const creditInfo = creditList[key]
       B_CrAmt1 += `<tr>
           <td>
-            <font face="${fontFamily}" size="4">${creditInfo.CrCode}</font>
+            <font face="${fontFamily}" size="4"> ${creditInfo.CrCode}</font>
           </td>
           <td align="right">
             <font face="${fontFamily}" size="4">${formatNumber(creditInfo.CrAmt)}</font>
