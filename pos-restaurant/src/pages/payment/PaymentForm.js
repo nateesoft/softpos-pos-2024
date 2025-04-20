@@ -17,7 +17,7 @@ import DiscountIcon from "@mui/icons-material/Discount"
 import CloseIcon from "@mui/icons-material/Close"
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 import PrintCheckIcon from "@mui/icons-material/Print"
-import VideogameAssetIcon from "@mui/icons-material/VideogameAsset"
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
 import SendToMobileIcon from "@mui/icons-material/SendToMobile"
 import CreditCardIcon from "@mui/icons-material/CreditCard"
@@ -32,6 +32,7 @@ import CreditChargeModal from "./CreditChargeModal"
 import MultipleCreditPayment from "./MultipleCreditPayment"
 import { ModalConfirm } from "../ui-utils/AlertPopup"
 import DiscountFormModal from "./modal/DiscountFormModal"
+import GiftVoucherPayment from './GiftVoucherPayment'
 
 const NumFormat = (data) => {
   if(!data && data !== 0) return
@@ -102,12 +103,16 @@ function PaymentForm({
 
   const [openCreditInfo, setOpenCreditInfo] = useState(false)
   const [openTransferInfo, setOpenTransferInfo] = useState(false)
+  const [openGiftVoucherInfo, setOpenGiftVoucherInfo] = useState(false)
 
   // transfer info
   const [transferAmount, setTransferAmount] = useState(0)
   const [transferAccountNo, setTransferAccountNo] = useState("")
   const [transferToAccount, setTransferToAccount] = useState("0000000000")
   const [transferAccount, setTransferAccount] = useState("")
+
+  // gift voucher
+  const [giftVoucherAmt, setGiftVoucherAmt] = useState(0)
 
   const [openCreditFile, setOpenCreditFile] = useState(false)
   const [openDiscountModal, setOpenDiscountModal] = useState(false)
@@ -149,6 +154,12 @@ function PaymentForm({
     if (balanceAmount <= 0) {
       setTransferAmount(R_NetTotal - cashAmount)
       setOpenTransferInfo(true)
+    }
+  }
+
+  const handleGiftVoucherEnabled = () => {
+    if (balanceAmount <= 0) {
+      setOpenGiftVoucherInfo(true)
     }
   }
 
@@ -473,7 +484,7 @@ function PaymentForm({
                       inputProps={{ min: 0, style: { textAlign: "right" } }}
                     />
                   </Stack>
-                  <Stack direction="row">
+                  {/* <Stack direction="row">
                     <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                       <VideogameAssetIcon fontSize="large" />
                     </IconButton>
@@ -492,9 +503,35 @@ function PaymentForm({
                       }}
                       inputProps={{ min: 0, style: { textAlign: "right" } }}
                     />
-                  </Stack>
+                  </Stack> */}
                 </Grid2>
               </Grid2>
+              {/* <Grid2 container spacing={1}>
+                <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
+                  <CardGiftcardIcon fontSize="large" />
+                </IconButton>
+                <TextField
+                  type="number"
+                  size="small"
+                  value={giftVoucherAmt}
+                  onChange={(e) => setGiftVoucherAmt(e.target.value)}
+                  id="txtGiftVoucherAmount"
+                  label="บัตรกำนัล/บัตรของขวัญ"
+                  disabled
+                  inputProps={{
+                    min: 0,
+                    style: { textAlign: "right", width: "169px" }
+                  }}
+                />
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={handleGiftVoucherEnabled}
+                  sx={{ height: "40px" }}
+                >
+                  ...
+                </Button>
+              </Grid2> */}
               <Grid2 container spacing={1}>
                 <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                   <AccountBalanceWalletIcon fontSize="large" />
@@ -528,7 +565,7 @@ function PaymentForm({
                   disabled
                   inputProps={{
                     min: 0,
-                    style: { textAlign: "right", width: "100px" }
+                    style: { textAlign: "right", width: "169px" }
                   }}
                 />
                 <Button
@@ -601,18 +638,6 @@ function PaymentForm({
                   ให้ส่วนลดเพิ่ม
                 </Button>
               </Grid2>
-              <Box display="flex" justifyContent="flex-end" margin={2}>
-                <TextField
-                  type="number"
-                  size="small"
-                  variant="filled"
-                  label="ส่วนลด"
-                  value={discountAmount}
-                  inputProps={{ min: 0, style: { textAlign: "right" } }}
-                  fullWidth
-                  disabled
-                />
-              </Box>
               <Box display="flex" justifyContent="flex-end" margin={2}>
                 <TextField
                   variant="filled"
@@ -916,8 +941,7 @@ function PaymentForm({
               balanceAmount={
                 R_NetTotal +
                 creditChargeAmount -
-                depositAmount -
-                entertainAmount
+                depositAmount
               }
               setCreditAmt={setCreditAmount}
               setCreditChargeAmt={setCreditChargeAmount}
@@ -939,8 +963,7 @@ function PaymentForm({
               balanceAmount={
                 R_NetTotal +
                 creditChargeAmount -
-                depositAmount -
-                entertainAmount
+                depositAmount
               }
               setCreditAmt={setCreditAmount}
               setCreditChargeAmt={setCreditChargeAmount}
@@ -1064,6 +1087,33 @@ function PaymentForm({
             initLoad={initLoad}
           />
         </Box>
+      </Modal>
+      <Modal
+        open={openGiftVoucherInfo}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div>
+          <Box
+            sx={{
+              ...modalStyle,
+              width: "560px",
+              padding: "5px"
+            }}
+          >
+            <GiftVoucherPayment
+              tableNo={tableNo}
+              balanceAmount={
+                R_NetTotal +
+                creditChargeAmount -
+                depositAmount
+              }
+              setGiftVoucherAmt={setGiftVoucherAmt}
+              totalAmount={totalAmount}
+              onClose={() => setOpenGiftVoucherInfo(false)}
+            />
+          </Box>
+        </div>
       </Modal>
     </Grid2>
   )

@@ -66,7 +66,7 @@ const FloorPlan = () => {
           const rrr = response.data.data
           let tableStatus = rrr.tableStatus
           const Cashier = rrr.Cashier
-          if (tableStatus === "cashierInUse" && Cashier !== userLogin && Cashier !== null) {
+          if (tableStatus === "cashierInUse" && Cashier !== userLogin && Cashier !== null && Cashier !== 'null') {
             handleNotification(
               `มีพนักงาน ${Cashier} กำลังใช้งานโต๊ะนี้อยู่ !!!`,
               "warning"
