@@ -19,13 +19,10 @@ import {
   Grid2,
   Select,
   MenuItem,
-  FormControl,
-  InputLabel
-} from "@mui/material"
+  FormControl} from "@mui/material"
 import MenuBook from "@mui/icons-material/ShoppingCartOutlined"
 import { useTranslation } from "react-i18next"
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu"
-import CloseIcon from "@mui/icons-material/Close"
 import CloseModalIcon from "@mui/icons-material/Cancel"
 import CheckIcon from "@mui/icons-material/AddCircle"
 import NoFoodIcon from "@mui/icons-material/NoFood"
@@ -111,12 +108,7 @@ const ProductMenu = ({
   tableNo,
   orderType,
   ProductList,
-  ProductA,
-  ProductB,
-  ProductC,
-  ProductD,
-  ProductE,
-  ProductF,
+  ProductItem,
   OrderList,
   OrderEList,
   OrderTList,
@@ -132,6 +124,16 @@ const ProductMenu = ({
   const { appData } = useContext(POSContext)
   const { currency, convertCurrency } = useContext(CurrencyContext)
   const { empCode, macno, userLogin } = appData
+
+  const productTabList = [
+    {productTab: ProductList, key: "all"},
+    {productTab: ProductItem.ProductA, key: "a"},
+    {productTab: ProductItem.ProductB, key: "b"},
+    {productTab: ProductItem.ProductC, key: "c"},
+    {productTab: ProductItem.ProductD, key: "d"},
+    {productTab: ProductItem.ProductE, key: "e"},
+    {productTab: ProductItem.ProductF, key: "f"}
+  ]
 
   const [qtyOrder, setQtyOrder] = useState(1)
   const [value, setValue] = useState(0)
@@ -306,147 +308,32 @@ const ProductMenu = ({
             ))}
         </Tabs>
       )}
-      <TabPanel value={value} index={0}>
-        <Grid2 container justifyContent="flex-start">
-          {ProductList.length === 0 && <NotfoundMenu />}
-          {ProductList &&
-            ProductList.map((product) => (
-              <ProductCard
-                id={"all" + product.id}
-                OrderList={OrderList}
-                tableNo={tableNo}
-                product={product}
-                initLoadOrder={initLoadOrder}
-                initLoadMenu={initLoadMenu}
-                addOrder={addOrder}
-                openModal={() => handleOpenMenu(product)}
-                setShowMenuSet={() => handleShowMenuSet(product)}
-                setShowManualPrice={() => handleShowManualPrice(product)}
-                handleNotification={handleNotification}
-              />
-            ))}
-        </Grid2>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Grid2 container justifyContent="flex-start">
-          {ProductA.length === 0 && <NotfoundMenu />}
-          {ProductA &&
-            ProductA.map((product) => (
-              <ProductCard
-                id={"a" + product.id}
-                key={product.id}
-                OrderList={OrderList}
-                tableNo={tableNo}
-                product={product}
-                openModal={() => handleOpenMenu(product)}
-                initLoadOrder={initLoadOrder}
-                initLoadMenu={initLoadMenu}
-                setShowMenuSet={() => handleShowMenuSet(product)}
-                handleNotification={handleNotification}
-              />
-            ))}
-        </Grid2>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <Grid2 container justifyContent="flex-start">
-          {ProductB.length === 0 && <NotfoundMenu />}
-          {ProductB &&
-            ProductB.map((product) => (
-              <ProductCard
-                id={"b" + product.id}
-                key={product.id}
-                OrderList={OrderList}
-                tableNo={tableNo}
-                product={product}
-                openModal={() => handleOpenMenu(product)}
-                initLoadOrder={initLoadOrder}
-                initLoadMenu={initLoadMenu}
-                setShowMenuSet={() => handleShowMenuSet(product)}
-                handleNotification={handleNotification}
-              />
-            ))}
-        </Grid2>
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <Grid2 container justifyContent="flex-start">
-          {ProductC.length === 0 && <NotfoundMenu />}
-          {ProductC &&
-            ProductC.map((product) => (
-              <ProductCard
-                id={"c" + product.id}
-                key={product.id}
-                OrderList={OrderList}
-                tableNo={tableNo}
-                product={product}
-                openModal={() => handleOpenMenu(product)}
-                initLoadOrder={initLoadOrder}
-                initLoadMenu={initLoadMenu}
-                setShowMenuSet={() => handleShowMenuSet(product)}
-                handleNotification={handleNotification}
-              />
-            ))}
-        </Grid2>
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        <Grid2 container justifyContent="flex-start">
-          {ProductD.length === 0 && <NotfoundMenu />}
-          {ProductD &&
-            ProductD.map((product) => (
-              <ProductCard
-                id={"d" + product.id}
-                key={product.id}
-                OrderList={OrderList}
-                tableNo={tableNo}
-                product={product}
-                openModal={() => handleOpenMenu(product)}
-                initLoadOrder={initLoadOrder}
-                initLoadMenu={initLoadMenu}
-                setShowMenuSet={() => handleShowMenuSet(product)}
-                handleNotification={handleNotification}
-              />
-            ))}
-        </Grid2>
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        <Grid2 container justifyContent="flex-start">
-          {ProductE.length === 0 && <NotfoundMenu />}
-          {ProductE &&
-            ProductE.map((product) => (
-              <ProductCard
-                id={"e" + product.id}
-                key={product.id}
-                OrderList={OrderList}
-                tableNo={tableNo}
-                product={product}
-                openModal={() => handleOpenMenu(product)}
-                initLoadOrder={initLoadOrder}
-                initLoadMenu={initLoadMenu}
-                setShowMenuSet={() => handleShowMenuSet(product)}
-                handleNotification={handleNotification}
-              />
-            ))}
-        </Grid2>
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        <Grid2 container justifyContent="flex-start">
-          {ProductF.length === 0 && <NotfoundMenu />}
-          {ProductF &&
-            ProductF.map((product) => (
-              <ProductCard
-                id={"f" + product.id}
-                key={product.id}
-                OrderList={OrderList}
-                tableNo={tableNo}
-                product={product}
-                openModal={() => handleOpenMenu(product)}
-                initLoadOrder={initLoadOrder}
-                initLoadMenu={initLoadMenu}
-                setShowMenuSet={() => handleShowMenuSet(product)}
-                handleNotification={handleNotification}
-              />
-            ))}
-        </Grid2>
-      </TabPanel>
+
+      { productTabList && productTabList.map((item, i) => {
+          return (
+            <TabPanel value={value} index={i}>
+              <Grid2 container justifyContent="flex-start">
+                {item.productTab.length === 0 && <NotfoundMenu />}
+                {item.productTab.map((product) => (
+                  <ProductCard
+                    id={item.key + product.id}
+                    OrderList={OrderList}
+                    tableNo={tableNo}
+                    product={product}
+                    initLoadOrder={initLoadOrder}
+                    initLoadMenu={initLoadMenu}
+                    addOrder={addOrder}
+                    openModal={() => handleOpenMenu(product)}
+                    setShowMenuSet={() => handleShowMenuSet(product)}
+                    setShowManualPrice={() => handleShowManualPrice(product)}
+                    handleNotification={handleNotification}
+                  />
+                ))}
+              </Grid2>
+            </TabPanel>
+          )
+        })
+      }
 
       <Modal
         open={open}
@@ -462,6 +349,8 @@ const ProductMenu = ({
             initLoadOrder={initLoadOrder}
             initLoadMenu={initLoadMenu}
             handleNotification={handleNotification}
+            initLoadBalanceProductGroup={initLoadBalanceProductGroup}
+            summaryTableFileBalance={summaryTableFileBalance}
           />
         </Box>
       </Modal>
