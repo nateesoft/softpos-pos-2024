@@ -189,9 +189,8 @@ function PaymentForm({
     const ta = transferAmount ? parseFloat(transferAmount) : 0
     const totalNetAmt = parseFloat(R_NetTotal) + parseFloat(creditChargeAmount)
     const _depositAmount = parseFloat(depositAmount)
-    const _entertainAmount = parseFloat(entertainAmount)
     const paymentAmt = parseFloat(
-      cc + cd + ta + _depositAmount + _entertainAmount
+      cc + cd + ta + _depositAmount  + giftVoucherAmt
     )
     const discountAmt = 0
     let balanceAmt = parseFloat(paymentAmt - discountAmt - totalNetAmt)
@@ -201,12 +200,7 @@ function PaymentForm({
       setCreditAmount(0)
       setCreditChargeAmount(0)
     }
-    if (_entertainAmount > totalNetAmt) {
-      setEntertainAmount(totalNetAmt)
-      setCashAmount(0)
-      setCreditAmount(0)
-      setCreditChargeAmount(0)
-    }
+
     if (balanceAmt < 0) {
       if (creditAmount > 0) {
         setBalanceAmount(0)
@@ -310,6 +304,7 @@ function PaymentForm({
         tableNo,
         billType: "E",
         orderList,
+        giftVoucherAmt,
         serviceInfo: {
           serviceAmount,
           vatAmount
@@ -506,7 +501,7 @@ function PaymentForm({
                   </Stack> */}
                 </Grid2>
               </Grid2>
-              {/* <Grid2 container spacing={1}>
+              <Grid2 container spacing={1}>
                 <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                   <CardGiftcardIcon fontSize="large" />
                 </IconButton>
@@ -514,7 +509,6 @@ function PaymentForm({
                   type="number"
                   size="small"
                   value={giftVoucherAmt}
-                  onChange={(e) => setGiftVoucherAmt(e.target.value)}
                   id="txtGiftVoucherAmount"
                   label="บัตรกำนัล/บัตรของขวัญ"
                   disabled
@@ -531,7 +525,7 @@ function PaymentForm({
                 >
                   ...
                 </Button>
-              </Grid2> */}
+              </Grid2>
               <Grid2 container spacing={1}>
                 <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                   <AccountBalanceWalletIcon fontSize="large" />

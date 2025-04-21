@@ -10,7 +10,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField} from "@mui/material"
+  TextField,
+  Typography} from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import ConfirmIcon from "@mui/icons-material/CheckCircle"
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline"
@@ -69,9 +70,15 @@ const GiftVoucherPayment = (props) => {
   const handleConfirmGiftVoucherModal = () => {
     if(giftTempList.length > 0){
       const summaryGiftVoucherAmt = giftTempList.reduce((n, { giftamt }) => n + parseFloat(giftamt),0)
+      if(summaryGiftVoucherAmt > balanceAmount) {
+        return;
+      }
       setGiftVoucherAmt(summaryGiftVoucherAmt)
   
       totalAmount()
+      onClose()
+    } else {
+      setGiftVoucherAmt(0)
       onClose()
     }
   }
@@ -146,6 +153,9 @@ const GiftVoucherPayment = (props) => {
 
   return (
     <>
+      <Box padding={2} sx={{background: "lightpink"}} textAlign="right">
+        <Typography variant="h5">ยอดชำระทั้งหมด: {NumFormat(balanceAmount)}</Typography>
+      </Box>
       <Grid2 container padding={1}>
         <Grid2 container spacing={1} padding={1}>
           <TextField
