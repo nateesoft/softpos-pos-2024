@@ -337,7 +337,7 @@ function PaymentForm({
         },
         specialCuponInfo,
         memberInfo,
-        tonAmount,
+        tonAmount: netTotalDisplay < 0 ? Math.abs(netTotalDisplay): 0,
         paymentAmount,
         netTotal: R_NetTotal + creditChargeAmount,
         empCode,
