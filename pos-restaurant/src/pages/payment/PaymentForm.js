@@ -291,7 +291,7 @@ function PaymentForm({
   }
 
   const handleConfirmPayment = async () => {
-    if (tonAmount > 1000) {
+    if (tonAmount > 100000) {
       handleNotification("กรุณาระบุจำนวนเงินสดให้ถูกต้อง !!!")
       return
     }
