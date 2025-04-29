@@ -19,7 +19,7 @@ import java.util.Properties;
 public class ClientSocket {
 
     private static final PrinterControlService printerService = new PrinterControlService();
-    private static String SOCKET_HOT;
+    private static String SOCKET_HOT = "";
 
     static {
         try (InputStream fis = new FileInputStream("socket_config.properties")) {
@@ -41,6 +41,9 @@ public class ClientSocket {
     }
 
     public static void connection(TrayIcon trayIcon) {
+        if(SOCKET_HOT.equals("")){
+            return;
+        }
         try {
             // เชื่อมต่อกับเซิร์ฟเวอร์
             Socket socket = IO.socket(SOCKET_HOT);
@@ -92,7 +95,7 @@ public class ClientSocket {
                 int prtHeight = bean.getHeight();
                 String version = bean.getVersion();
 
-                if ("1.0".equals(version)) {
+                if ("1.0".equals(version) || version == null) {
                     printerService.printMessage(prtName, printerMessage.getMessage(), prtWidth, prtHeight, prtType);
                 } else if ("1.2".equals(version)) {
                     printerService.printMessageV2(prtName, printerMessage.getMessage(), prtWidth, prtHeight, prtType);
