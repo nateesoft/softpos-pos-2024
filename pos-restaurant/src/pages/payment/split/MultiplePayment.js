@@ -40,7 +40,6 @@ const MultiplePayment = ({
   initLoad
 }) => {
   const navigate = useNavigate()
-  console.log('orderList:', orderList)
   const [tables, setTables] = useState([
     {
       id: 1,

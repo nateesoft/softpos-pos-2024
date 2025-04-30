@@ -254,6 +254,7 @@ function PaymentForm({
       setCashAmount(0)
       return
     }
+    
     if (cashAmt > R_NetTotal) {
       setTransferAccount("")
       setTransferAccountNo("")
@@ -268,6 +269,7 @@ function PaymentForm({
     }
 
     setCashAmount(cashAmt)
+    setNetTotalDisplay(balanceAmount)
   }
 
   const handleTransferKeyIn = (transferAmt) => {
@@ -365,7 +367,7 @@ function PaymentForm({
   const printBillCheck = async () => {
     // send print bill check
     apiClient
-      .post(`/api/billno/printChkBill`, { tableNo, macno })
+      .post(`/api/billno/printChkBill`, { tableNo, macno, depositAmt: depositAmount })
       .then((response) => {
         if (response.status === 200) {
           handleNotification("พิมพ์ใบตรวจสอบรายการ", "info")
@@ -583,7 +585,7 @@ function PaymentForm({
                   disabled
                   inputProps={{
                     min: 0,
-                    style: { textAlign: "right", width: "100px" }
+                    style: { textAlign: "right", width: "82px" }
                   }}
                 />
                 <TextField
@@ -594,7 +596,7 @@ function PaymentForm({
                   disabled
                   inputProps={{
                     min: 0,
-                    style: { textAlign: "right", width: "100px" }
+                    style: { textAlign: "right", width: "50px" }
                   }}
                 />
                 <Button
@@ -888,6 +890,7 @@ function PaymentForm({
                   backgroundColor: "#aaa",
                   color: "black"
                 }}
+                disabled={cashAmount>0||creditAmount>0}
                 startIcon={<PrintCheckIcon />}
                 onClick={printBillCheck}
               >
@@ -907,7 +910,7 @@ function PaymentForm({
                 sx={{ margin: "5px" }}
                 color="success"
                 onClick={() => setOpenConfirmPayment(true)}
-                disabled={balanceAmount < 0}
+                disabled={netTotalDisplay > 0}
                 endIcon={<ConfirmIcon />}
               >
                 ชำระเงิน

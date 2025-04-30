@@ -92,7 +92,6 @@ function PaymentPage() {
             printRecpMessage: data.PrintRecpMessage,
             productNoneVat: data.ProductNonVat,
           }
-          console.log(summaryTable)
 
           setSummaryTable(resultSummary)
         }
