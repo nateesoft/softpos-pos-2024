@@ -510,7 +510,7 @@ function PaymentForm({
                 <TextField
                   type="number"
                   size="small"
-                  value={giftVoucherAmt}
+                  value={NumFormat(giftVoucherAmt)}
                   id="txtGiftVoucherAmount"
                   label="บัตรกำนัล/บัตรของขวัญ"
                   disabled
@@ -554,7 +554,7 @@ function PaymentForm({
                 <TextField
                   type="number"
                   size="small"
-                  value={transferAmount}
+                  value={NumFormat(transferAmount)}
                   onChange={(e) => setTransferAmount(e.target.value)}
                   id="txtTransferAmount"
                   label="เงินโอน"
@@ -639,7 +639,7 @@ function PaymentForm({
                   variant="filled"
                   size="small"
                   label="ค้างชำระ"
-                  value={balanceAmount}
+                  value={NumFormat(balanceAmount)}
                   inputProps={{ min: 0, style: { textAlign: "right" } }}
                   fullWidth
                   disabled
