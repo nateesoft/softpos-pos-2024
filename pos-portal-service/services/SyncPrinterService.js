@@ -51,22 +51,29 @@ const getSavePdfPath = (p) => {
   return path.join(publicPath + "/" + dayFolder, p)
 }
 
-const companyLogo = 'com_logo.jpg'
-const fontFamily = 'Angsana New'
+const defaultLogo = 'com_logo.jpg'
+const defaultFont = 'Angsana New'
+const defaultWidth = 75
+const defaultHeight = 75
 
 const Divider = `
 <div align="center">
-  <font face="${fontFamily}" size="1">----------------------------------------------------------------------------------------------------</font>
+  <font face="${defaultFont}" size="1">----------------------------------------------------------------------------------------------------</font>
 </div>`
 
 const flagToSavePdf = "Y" === process.env.SAVE_PDF_PRINTER
 
-const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
+const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => {
   const posConfigSetup = await getPOSConfigSetup()
   const poshwSetup = await getDataByMacno(macno)
   const specialCupon = await getCuponByRefno(billInfo.B_Refno)
   const creditList = await getTCreditList(billInfo.B_Refno)
   const giftVoucherList = await getTGiftList(billInfo.B_Refno)
+
+  const companyLogo = printerInfo.logo_name || defaultLogo
+  const fontFamily = printerInfo.fontFamily || defaultFont
+  const logoWidth = printerInfo.logo_width || defaultWidth
+  const logoHeight = printerInfo.logo_height || defaultHeight
 
   const getDiscountPercent = strSlash => {
     return `(${strSlash.split('/')[0]}%)`
@@ -85,7 +92,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
   }
 
   let header = `
-    <div align="center"><img src="file:${companyLogo}" width="100" height="100"></div>
+    <div align="center"><img src="file:${companyLogo}" width="${logoWidth}" height="${logoHeight}"></div>
     <div align="center">`;
     for (const [index, item] of headers.entries()) {
       if(index===0){
@@ -548,8 +555,11 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo }) => {
   return htmlContent
 }
 
-const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo }) => {
-  const receiptHtmlContent = await printReceiptHtml({ macno, billInfo, tSaleInfo })
+const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => {
+  const receiptHtmlContent = await printReceiptHtml({ macno, billInfo, tSaleInfo, printerInfo })
+
+  const fontFamily = printerInfo.fontFamily || defaultFont
+
   const htmlContent = `
     <div align="right">
       <font face="${fontFamily}" size="4">Bill Copy (${billInfo.B_BillCopy})</font>
@@ -565,12 +575,17 @@ const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo }) => {
   return htmlContent
 }
 
-const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
+const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerInfo }) => {
   const poshwSetup = await getDataByMacno(macno)
   let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
   let footers = [poshwSetup.Footting1||"", poshwSetup.Footting2||"", poshwSetup.Footting3||""]
   footers = footers.filter(h => h !== "")
+
+  const companyLogo = printerInfo.logo_name || defaultLogo
+  const fontFamily = printerInfo.fontFamily || defaultFont
+  const logoWidth = printerInfo.logo_width || defaultWidth
+  const logoHeight = printerInfo.logo_height || defaultHeight
 
   let footerHtml = `${Divider}`
   for (const [index, item] of footers.entries()) {
@@ -584,7 +599,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
   }, 0)
 
   let header = `
-    <div align="center"><img src="file:${companyLogo}" width="100" height="100"></div>
+    <div align="center"><img src="file:${companyLogo}" width="${logoWidth}" height="${logoHeight}"></div>
     <div align="center">
         <font face="${fontFamily}" size="4">*** ( Order review, not an official receipt ) ***</font>
     </div>
@@ -887,12 +902,17 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo }) => {
   return htmlContent
 }
 
-const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
+const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => {
   const posConfigSetup = await getPOSConfigSetup()
   const poshwSetup = await getDataByMacno(macno)
   const specialCupon = await getCuponByRefno(billInfo.B_Refno)
   const creditList = await getTCreditList(billInfo.B_Refno)
   const giftVoucherList = await getTGiftList(billInfo.B_Refno)
+
+  const companyLogo = printerInfo.logo_name || defaultLogo
+  const fontFamily = printerInfo.fontFamily || defaultFont
+  const logoWidth = printerInfo.logo_width || defaultWidth
+  const logoHeight = printerInfo.logo_height || defaultHeight
 
   let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
@@ -907,7 +927,7 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
   }
 
   let header = `
-    <div align="center"><img src="file:${companyLogo}" width="100" height="100"></div>
+    <div align="center"><img src="file:${companyLogo}" width="${logoWidth}" height="${logoHeight}"></div>
     <div align="center">
       <div>
         <font face="${fontFamily}" size="4">*** (Receipt Refund) ***</font>
@@ -1388,7 +1408,9 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo }) => {
   return htmlContent
 }
 
-const printPaidInOutHtml = async ({ branchName, cashier, paidInOutAmt, typeDesc, timeProcess, reason, macno }) => {
+const printPaidInOutHtml = async ({ branchName, cashier, paidInOutAmt, typeDesc, timeProcess, reason, macno, printerInfo }) => {
+  const fontFamily = printerInfo.fontFamily || defaultFont
+
   const htmlContent = `
     ${Divider}
     <div align="center">Cash In/Out Records</div>

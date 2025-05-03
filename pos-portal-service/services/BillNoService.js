@@ -7,6 +7,7 @@ const socket = io(process.env.SOCKETIO_SERVER, {
 const pool = require("../config/database/MySqlConnect")
 const { PrefixZeroFormat, Unicode2ASCII } = require("../utils/StringUtil")
 const { emptyTableBalance, getBalanceByTableNo, getBalanceByTableNoSummary } = require("./BalanceService")
+const { getCashierPrinterName } = require("../services/management/TerminalService")
 
 const {
   getTableByCode,
@@ -111,14 +112,16 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
   const billInfo = await getBillNoByRefno(billNo)
   const tSaleInfo = await getAllTSaleByRefno(billNo)
 
+  const printerInfo = await getCashierPrinterName(macno)
+
   // send to printer
   socket.emit(
     "printerMessage",
     JSON.stringify({
       id: 1,
       printerType: "message",
-      printerName: "cashier",
-      message: await printReceiptCopyHtml({macno, billInfo, tSaleInfo}),
+      printerName: printerInfo.receipt_printer || 'cashier',
+      message: await printReceiptCopyHtml({macno, billInfo, tSaleInfo, printerInfo}),
       terminal: "",
       tableNo: "",
       billNo: "",
@@ -476,14 +479,16 @@ const addNewBill = async (payload) => {
     const billInfo = await getBillNoByRefno(B_Refno)
     const tSaleInfo = await getAllTSaleByRefnoSummary(B_Refno)
 
+    const printerInfo = await getCashierPrinterName(B_MacNo)
+
     // send to printer
     socket.emit(
       "printerMessage",
       JSON.stringify({
         id: 1,
         printerType: "receipt",
-        printerName: "cashier",
-        message: await printReceiptHtml({macno: B_MacNo, billInfo, tSaleInfo}),
+        printerName: printerInfo.receipt_printer || 'cashier',
+        message: await printReceiptHtml({macno: B_MacNo, billInfo, tSaleInfo, printerInfo}),
         terminal: "",
         tableNo: "",
         billNo: "",
@@ -588,14 +593,16 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
   const billInfo = await getBillNoByRefno(billNo)
   const tSaleInfo = await getAllTSaleByRefnoSummary(billNo)
 
+  const printerInfo = await getCashierPrinterName(macno)
+
   // send to printer
   socket.emit(
     "printerMessage",
     JSON.stringify({
       id: 1,
       printerType: "message",
-      printerName: "cashier",
-      message: await printRefundBillHtml({macno: macno, billInfo, tSaleInfo}),
+      printerName: printerInfo.receipt_printer || 'cashier',
+      message: await printRefundBillHtml({macno, billInfo, tSaleInfo, printerInfo}),
       terminal: "",
       tableNo: "",
       billNo: "",
@@ -777,14 +784,16 @@ const updateStatusPrintChkBill = async (tableNo, macno, depositAmt) => {
   const tableInfo = await getTableByCode(tableNo)
   const balanceInfo = await getBalanceByTableNoSummary(tableNo)
 
+  const printerInfo = await getCashierPrinterName(macno)
+
   // send to printer
   socket.emit(
     "printerMessage",
     JSON.stringify({
       id: 1,
       printerType: "message",
-      printerName: "cashier",
-      message: await printReviewReceiptHtml({ macno, tableInfo: {...tableInfo, depositAmt}, balanceInfo }),
+      printerName: printerInfo.receipt_printer || 'cashier',
+      message: await printReviewReceiptHtml({ macno, tableInfo: {...tableInfo, depositAmt}, balanceInfo, printerInfo }),
       terminal: "",
       tableNo: "",
       billNo: "",

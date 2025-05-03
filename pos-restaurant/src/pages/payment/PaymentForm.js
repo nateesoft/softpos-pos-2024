@@ -24,6 +24,7 @@ import CreditCardIcon from "@mui/icons-material/CreditCard"
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff"
 import Stack from '@mui/material/Stack'
 import { motion, AnimatePresence } from "framer-motion";
+import { useParams } from 'react-router-dom';
 
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
@@ -72,6 +73,8 @@ function PaymentForm({
 }) {
   const { appData } = useContext(POSContext)
   const { macno, branchInfo, companyInfo, empCode, baseName } = appData
+
+  const { tableNo: tableNoRoute } = useParams();
 
   const { serviceAmount, vatAmount, netTotalAmount } = tableFile
   const R_NetTotal = netTotalAmount
@@ -367,7 +370,7 @@ function PaymentForm({
   const printBillCheck = async () => {
     // send print bill check
     apiClient
-      .post(`/api/billno/printChkBill`, { tableNo, macno, depositAmt: depositAmount })
+      .post(`/api/billno/printChkBill`, { tableNo: tableNoRoute, macno, depositAmt: depositAmount })
       .then((response) => {
         if (response.status === 200) {
           handleNotification("พิมพ์ใบตรวจสอบรายการ", "info")
