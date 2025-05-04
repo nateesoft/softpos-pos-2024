@@ -308,8 +308,8 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
   let B_Cash = ''
   if(billInfo.B_Cash>0){
     B_Cash = `<tr>
-      <td>
-        <font face="${fontFamily}" size="4">Cash</font>
+      <td align="right">
+        <font face="${fontFamily}" size="4">Cash:</font>
       </td>
       <td align="right">
         <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_Cash)}</font>
@@ -319,8 +319,8 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
   let B_Ton = ''
   if(billInfo.B_Ton>0){
     B_Ton = `<tr>
-      <td>
-        <font face="${fontFamily}" size="4">Change</font>
+      <td align="right">
+        <font face="${fontFamily}" size="4">Change:</font>
       </td>
       <td align="right">
         <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_Ton)}</font>
@@ -496,11 +496,18 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
             </td>
           </tr>
           <tr>
+            <td colspan="2">${Divider}</td>
+          </tr>
+          ${B_Earnest}
+          <tr>
+            <td colspan="2">${Divider}</td>
+          </tr>
+          <tr>
             <td align="right">
-              <font face="${fontFamily}" size="4">Cash voucher:</font>
+              <font face="${fontFamily}" size="4">Grand Total:</font>
             </td>
             <td align="right">
-              <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_GiftVoucher)}</font>
+              <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_NetTotal-billInfo.B_Earnest)}</font>
             </td>
           </tr>
         </table>
@@ -508,12 +515,18 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
       ${Divider}
         <div align="center">
           <table width="100%" cellPadding="0" cellSpacing="0">
-            ${B_Earnest}
-            ${B_Entertain}
-            ${B_GiftVoucher}
             <tr>
               <td colspan="2">
                 <font face="${fontFamily}" size="4">[Payment Detail]</font>
+              </td>
+            </tr>
+            ${B_GiftVoucher}
+            <tr>
+              <td align="right">
+                <font face="${fontFamily}" size="4">Cash voucher:</font>
+              </td>
+              <td align="right">
+                <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_GiftVoucher)}</font>
               </td>
             </tr>
             ${B_Cash}
@@ -532,14 +545,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
             <tr>
               <td colspan="2">${Divider}</td>
             </tr>
-            <tr>
-              <td align="right">
-                <font face="${fontFamily}" size="4">Grand Total:</font>
-              </td>
-              <td align="right">
-                <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_NetTotal-billInfo.B_GiftVoucher)}</font>
-              </td>
-            </tr>
+            
           </table>
         </div>
       </div>
@@ -849,6 +855,17 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerIn
         </tr>
         <tr>
           <td>
+            <font face="${fontFamily}" size="4">Total:</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${formatNumber(tableInfo.NetTotal)}</font>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">${Divider}</td>
+        </tr>
+        <tr>
+          <td>
             <font face="${fontFamily}" size="4">Discount Amount</font>
           </td>
           <td align="right">
@@ -860,7 +877,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerIn
             <font face="${fontFamily}" size="4">Deposit</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">${formatNumber(tableInfo.depositAmt || 0)}</font>
+            <font face="${fontFamily}" size="4">${formatNumber(tableInfo.DepositAmt || 0)}</font>
           </td>
         </tr>
         <tr>
@@ -868,10 +885,10 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerIn
         </tr>
         <tr>
           <td>
-            <font face="${fontFamily}" size="4">Total:</font>
+            <font face="${fontFamily}" size="4">Grand Total:</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">${formatNumber(tableInfo.NetTotal-tableInfo.depositAmt)}</font>
+            <font face="${fontFamily}" size="4">${formatNumber(tableInfo.NetTotal-parseFloat(tableInfo.DepositAmt))}</font>
           </td>
         </tr>
       </table>

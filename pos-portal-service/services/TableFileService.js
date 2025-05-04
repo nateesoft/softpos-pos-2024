@@ -65,7 +65,7 @@ const updateTableAvailableStatus = async (tableNo) => {
                 PrintChkBill='N', PrintCnt=0, PrintTime1='', PrintTime2='',
                 ChkBill='N', StkCode1='', StkCode2='',TDesk=0,TUser='',VoidMsg='',
                 TPause='Y',TTableIsOn='Y',TActive='',TAutoClose='',
-                VatAmt=0,Vat=0,MemBegin=null,MemEnd=null,TCurTime='' 
+                VatAmt=0,Vat=0,MemBegin=null,MemEnd=null,TCurTime='',DepositAmt=0 
                 where Tcode='${tableNo}'`
   const results = await pool.query(sql)
 

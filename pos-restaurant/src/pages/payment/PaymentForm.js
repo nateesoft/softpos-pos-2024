@@ -198,7 +198,7 @@ function PaymentForm({
     const discountAmt = 0
     let balanceAmt = parseFloat(paymentAmt - discountAmt - totalNetAmt)
     if (_depositAmount > totalNetAmt) {
-      setDepositAmount(totalNetAmt)
+      setDepositAmount(0)
       setCashAmount(0)
       setCreditAmount(0)
       setCreditChargeAmount(0)
@@ -249,6 +249,11 @@ function PaymentForm({
 
   const handleCashFocus = (evt) => {
     setComponentFocus("cash")
+    evt.target.select()
+  }
+
+  const handleDepositFocus = (evt) => {
+    setComponentFocus("deposit")
     evt.target.select()
   }
 
@@ -397,6 +402,11 @@ function PaymentForm({
   }
 
   useEffect(() => {
+    console.log('change deposit amount')
+    setDepositAmount(tableFileDb.DepositAmt)
+  }, [tableFileDb])
+
+  useEffect(() => {
     totalAmount()
   }, [totalAmount])
 
@@ -473,7 +483,7 @@ function PaymentForm({
                       size="small"
                       variant="filled"
                       value={depositAmount}
-                      onFocus={() => setComponentFocus("deposit")}
+                      onFocus={handleDepositFocus}
                       onChange={(e) => handleDepositAmountKeyIn(e.target.value)}
                       id="txtDepositAmount"
                       label="หักคืนเงินมัดจำ"
@@ -484,26 +494,6 @@ function PaymentForm({
                       inputProps={{ min: 0, style: { textAlign: "right" } }}
                     />
                   </Stack>
-                  {/* <Stack direction="row">
-                    <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
-                      <VideogameAssetIcon fontSize="large" />
-                    </IconButton>
-                    <TextField
-                      type="number"
-                      size="small"
-                      variant="filled"
-                      value={entertainAmount}
-                      onFocus={() => setComponentFocus("entertain")}
-                      onChange={(e) => handleEntertainAmountKeyIn(e.target.value)}
-                      id="txtEntertainAmount"
-                      label="ชำระแบบ Entertain"
-                      sx={{
-                        backgroundColor:
-                          componentFocus === "entertain" ? "#f5fff3" : ""
-                      }}
-                      inputProps={{ min: 0, style: { textAlign: "right" } }}
-                    />
-                  </Stack> */}
                 </Grid2>
               </Grid2>
               <Grid2 container spacing={1}>
