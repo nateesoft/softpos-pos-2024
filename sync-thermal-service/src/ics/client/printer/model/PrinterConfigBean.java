@@ -9,6 +9,8 @@ public class PrinterConfigBean {
     private String printerName;
     private int width;
     private int height;
+    private String version;
+    private String fontName;
 
     public String getPrinterName() {
         return printerName;
@@ -32,6 +34,22 @@ public class PrinterConfigBean {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getFontName() {
+        return fontName;
+    }
+
+    public void setFontName(String fontName) {
+        this.fontName = fontName;
     }
 
 }

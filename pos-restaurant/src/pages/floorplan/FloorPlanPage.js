@@ -134,34 +134,34 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
           localStorage.setItem("userLogin", "")
 
           // send to printer
-          socket.emit(
-            "printerMessage",
-            JSON.stringify({
-              id: 1,
-              printerType: "message",
-              printerName: "cashier",
-              message: `
-                <div>
-                  <font face="Angsana New" size="4">
-                    User: ${userLogin} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
-                  </font>
-                </div>
-                <hr />
-                <div align="center">
-                  <font face="Angsana New" size="4">ออกจากระบบเรียบร้อย</font>
-                </div>
-                <hr />
-                <div align="center">
-                (づ ᴗ _ᴗ)づ♡
-                </div>
-              `,
-              terminal: "",
-              tableNo: "",
-              billNo: "",
-              title: "",
-              billType: ""
-            })
-          )
+          // socket.emit(
+          //   "printerMessage",
+          //   JSON.stringify({
+          //     id: 1,
+          //     printerType: "message",
+          //     printerName: "cashier",
+          //     message: `
+          //       <div>
+          //         <font face="Angsana New" size="4">
+          //           User: ${userLogin} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
+          //         </font>
+          //       </div>
+          //       <hr />
+          //       <div align="center">
+          //         <font face="Angsana New" size="4">ออกจากระบบเรียบร้อย</font>
+          //       </div>
+          //       <hr />
+          //       <div align="center">
+          //       (づ ᴗ _ᴗ)づ♡
+          //       </div>
+          //     `,
+          //     terminal: "",
+          //     tableNo: "",
+          //     billNo: "",
+          //     title: "",
+          //     billType: ""
+          //   })
+          // )
 
           navigate("/")
         } else {

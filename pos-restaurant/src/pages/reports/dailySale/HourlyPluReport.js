@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
+import { FONT_FAMILY } from "../../../AppConstants"
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("th-TH", {
@@ -50,15 +51,14 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานการขายรายชั่วโมง</div>
-          <div align="center">(Hourly By Plu Report)</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานการขายรายชั่วโมง</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">(Hourly By Plu Report)</font></div>
           <div style={{ margin: "20px" }}></div>
           <div style={{ margin: "20px" }}></div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "} {macno}</font>
           </div>
           <table width="100%">
             <tbody
@@ -69,10 +69,10 @@ class ComponentToPrint extends Component {
               }}
             >
               <tr>
-                <td>เวลา</td>
-                <td>รหัสสินค้า</td>
-                <td align="center">จำนวน</td>
-                <td align="right">จำนวนเงิน</td>
+                <td><font face={FONT_FAMILY} size="4">เวลา</font></td>
+                <td><font face={FONT_FAMILY} size="4">รหัสสินค้า</font></td>
+                <td align="center"><font face={FONT_FAMILY} size="4">จำนวน</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวนเงิน</font></td>
               </tr>
             </tbody>
             <tbody
@@ -82,26 +82,24 @@ class ComponentToPrint extends Component {
                 borderStyle: "dashed"
               }}
             >
-              {reports &&
-                reports.map((item) => (
+              {reports && reports.map((item) => (
                   <>
                     {item.time && (
                       <tr>
-                        <td>{item.time}</td>
+                        <td><font face={FONT_FAMILY} size="4">{item.time}</font></td>
                         <td></td>
                         <td align="right"></td>
                         <td align="right"></td>
                       </tr>
                     )}
-                    {item.length > 0 &&
-                      item.map((ii) => (
+                    {item.length > 0 && item.map((ii) => (
                         <tr>
                           <td></td>
                           <td>
-                            {ii.R_PluCode} {ii.R_PName.substr(0, 15)}
+                            <font face={FONT_FAMILY} size="4">{ii.R_PluCode} {ii.R_PName.substr(0, 15)}</font>
                           </td>
-                          <td align="right">{ii.R_Quan}</td>
-                          <td align="right">{formatCurrency(ii.R_Total)}</td>
+                          <td align="right"><font face={FONT_FAMILY} size="4">{ii.R_Quan}</font></td>
+                          <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(ii.R_Total)}</font></td>
                         </tr>
                       ))}
                   </>

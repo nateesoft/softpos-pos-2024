@@ -98,6 +98,7 @@ const SearchMenu = ({ setMemberMasters }) => {
               inputProps={{ "aria-label": "search" }}
               value={recieptNo}
               onChange={(e) => setRecieptNo(e.target.value)}
+              autoFocus
             />
           </Search>
           <Search>

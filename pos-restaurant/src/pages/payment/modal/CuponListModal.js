@@ -71,12 +71,11 @@ const CuponListModal = (props) => {
           cashier: tableFile.Cashier,
           tableNo: tableFile.Tcode,
           macNo: tableFile.MacNo,
-          netTotalAmount: tableFile.NetTotal
+          netTotalAmount: tableFile.TAmount
         })
         .then((response) => {
           if (response.status === 200) {
             const cuponAmount = response.data.data
-            console.log('cuponAmount:', cuponAmount)
             setSpecialCuponAmt(cuponAmount.CuAmt)
             setPrCuCode(getCuponSelect[0].CuCode)
             setPrCuDisc(getCuponSelect[0].CuDisc)

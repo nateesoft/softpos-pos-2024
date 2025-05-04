@@ -99,18 +99,12 @@ const MultipleCreditPayment = (props) => {
     setCrCodeError("")
     setCreditNumberError("")
 
-    handleConfirmCreditModal()
+    onClose()
   }
 
   const handleConfirmCreditModal = () => {
-    const summaryCreditAmt = creditList.reduce(
-      (n, { CrCreditAmount }) => n + parseFloat(CrCreditAmount),
-      0
-    )
-    const summaryChargeAmt = creditList.reduce(
-      (n, { CrChargeAmount }) => n + parseFloat(CrChargeAmount),
-      0
-    )
+    const summaryCreditAmt = creditList.reduce((n, { CrCreditAmount }) => n + parseFloat(CrCreditAmount),0)
+    const summaryChargeAmt = creditList.reduce((n, { CrChargeAmount }) => n + parseFloat(CrChargeAmount),0)
     setCreditAmt(summaryCreditAmt - summaryChargeAmt)
     setCreditChargeAmt(summaryChargeAmt)
     setCreditTempList(creditList)
@@ -378,8 +372,7 @@ const MultipleCreditPayment = (props) => {
                         tabIndex={-1}
                         key={row.CrCode}
                       >
-                        {columns &&
-                          columns.map((column) => {
+                        {columns && columns.map((column) => {
                             const value = row[column.id]
                             if (column.id === "action") {
                               return (

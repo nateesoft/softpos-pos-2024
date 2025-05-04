@@ -45,7 +45,7 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => 
         <TableContainer sx={{ overflow: "auto", height: "368px" }}>
           <Table aria-label="spanning table">
             <TableBody>
-              {orderList && orderList.map((order, index) => (
+              {orderList && orderList.filter(item => (item.R_Void !='V' && item.R_LinkIndex === '')).map((order, index) => (
                   <TableRow key={order.R_Index} sx={{background: order.R_Void==="V" ? "red": "snow"}}>
                     <TableCell align="center">{index+1}</TableCell>
                     <TableCell align="center">{order.R_Void}</TableCell>

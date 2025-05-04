@@ -40,6 +40,7 @@ function PaymentPage() {
   const [openSplitBill, setOpenSplitBill] = useState(false)
   const [tableFileDb, setTableFileDb] = useState({})
   const [orderList, setOrderList] = useState([])
+  const [orderListToSplit, setOrderListToSplit] = useState([])
   const [memberInfo, setMemberInfo] = useState({})
 
   const initLoadOrder = () => {
@@ -49,6 +50,7 @@ function PaymentPage() {
         if (response.status === 200) {
           const dataList = response.data.data
           setOrderList(dataList)
+          setOrderListToSplit(dataList.filter(item => item.R_Void !== 'V' && item.R_LinkIndex === ''))
         }
       })
       .catch((error) => {
@@ -76,7 +78,7 @@ function PaymentPage() {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data.data
-          setSummaryTable({
+          const resultSummary = {
             subTotalAmount: data.TAmount,
             discountAmount: data.DiscountAmount,
             service: data.Service,
@@ -89,7 +91,9 @@ function PaymentPage() {
             productAndService: data.ProductAndService,
             printRecpMessage: data.PrintRecpMessage,
             productNoneVat: data.ProductNonVat,
-          })
+          }
+
+          setSummaryTable(resultSummary)
         }
       })
       .catch((err) => handleNotification(err.message))
@@ -154,7 +158,7 @@ function PaymentPage() {
             onClose={() => setOpenSplitBill(false)}
             macno={macno}
             tableNo={tableNo}
-            orderList={orderList}
+            orderList={orderListToSplit}
             splitBillAction={splitBillAction}
             tableFile={summaryTable}
             memberInfo={memberInfo}

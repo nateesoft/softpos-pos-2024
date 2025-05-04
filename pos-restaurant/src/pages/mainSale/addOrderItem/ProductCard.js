@@ -15,6 +15,7 @@ import {
   ImageListItem} from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import DiscountIcon from '@mui/icons-material/Discount';
 import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
 import BlockIcon from "@mui/icons-material/Block"
 import GppGoodIcon from "@mui/icons-material/GppGood"
@@ -187,7 +188,8 @@ const ProductCard = ({
                   *{opt},
                 </Typography>
               ))}
-          {product.R_Pause === "P" && <LocalPrintshopIcon sx={{color: "#aaa"}} />}
+          {product.R_Pause === "P" && <LocalPrintshopIcon sx={{color: "#bbb"}} />}
+          {product.R_PrType === "-I" && <DiscountIcon sx={{color: "red"}} />}
         </Grid2>
         <Grid2
           size={7}

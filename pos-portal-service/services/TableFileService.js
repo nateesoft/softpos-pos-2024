@@ -8,6 +8,7 @@ const {
   summaryBalance
 } = require("./CoreService")
 const { Unicode2ASCII } = require("../utils/StringUtil")
+const { mappingResultDataList, mappingResultData } = require("../utils/ConvertThai")
 
 const getSummaryItem = async (tableNo) => {
   const sql = `select sum(R_Quan) R_Quan 
@@ -37,7 +38,7 @@ const getSummaryItemNoCheckQuanCanDisc = async (tableNo) => {
 const getAllTable = async () => {
   const sql = `select * FROM tablefile ORDER By Tcode`
   const results = await pool.query(sql)
-  return results
+  return mappingResultDataList(results)
 }
 
 const getCheckTableStatus = async () => {
@@ -45,7 +46,7 @@ const getCheckTableStatus = async () => {
     where TOnAct='Y' or TAmount > 0 or TItem > 0 or TCustomer > 0 
     order by Tcode`
   const results = await pool.query(sql)
-  return results
+  return mappingResultDataList(results)
 }
 
 const updateTableAvailableStatus = async (tableNo) => {
@@ -81,6 +82,17 @@ const updateTableDiscount = async (payload) => {
     DiscBath=0, CuponDiscAmt=0, SpaDiscAmt=0, 
     PrCuCode = "", PrCuDisc="", PrCuBath=""
   } = payload
+
+  // clear discount all balance
+  const sqlClearBalance = `UPDATE balance 
+        SET R_PrDisc='0', R_PrBath='0', R_PrAmt='0',
+        R_DiscBath='0', R_PrCuQuan=R_Quan, R_PrCuAmt='0',
+        R_Redule='0', R_PrQuan=R_Quan, R_PrSubQuan=R_Quan,
+        R_PrSubDisc='0', R_PrSubBath='0', R_PrSubAmt='0',
+        R_PrSubAdj='0', R_PrCuDisc='0', R_PrCuBath='0',
+        R_PrCuAdj='0', R_QuanCanDisc=R_Quan 
+        WHERE R_Table='${tableFile.Tcode}' and R_LinkIndex = '' and R_Void != 'V'`
+  await pool.query(sqlClearBalance)
 
   // update all balance
   const totalItem = await getSummaryItem(tableFile.Tcode)
@@ -171,6 +183,8 @@ const updateTableDiscount = async (payload) => {
         where Tcode='${tableFile.Tcode}'`
   await pool.query(sql)
 
+  await summaryBalance(tableFile.Tcode, tableFile.MacNo)
+
   const discountAmount = FastDiscAmt + EmpDiscAmt + MemDiscAmt + TrainDiscAmt + SubDiscAmt + 
   discBath + CuponDiscAmt + SpaDiscAmt
   return {
@@ -212,7 +226,7 @@ const updateMember = async (memberInfo, tableNo) => {
 const getBalanceAllByTable = async (tableNo) => {
   const sql = `select * from balance  where R_Table='${tableNo}' order by r_index`
   const results = await pool.query(sql)
-  return results
+  return mappingResultDataList(results)
 }
 
 const checkTableOpen = async (tableNo) => {
@@ -224,7 +238,13 @@ const checkTableOpen = async (tableNo) => {
       table: results[0],
       tableList: listTables
     }
+  } else if (listTables.length > 0) {
+    return {
+      table: listTables[0],
+      tableList: listTables
+    }
   }
+  
   return null
 }
 
@@ -314,7 +334,7 @@ const getTableByCode = async (tableNo) => {
   const sql = `select * from tablefile where Tcode='${tableNo}' limit 1`
   const results = await pool.query(sql)
   if (results.length > 0) {
-    return results[0]
+    return mappingResultData(results)
   }
   return null
 }
@@ -322,7 +342,7 @@ const getTableByCode = async (tableNo) => {
 const getListTableByCode = async (tableNo) => {
   const sql = `select * from tablefile where (Tcode like '${tableNo}-%' or Tcode='${tableNo}')`
   const results = await pool.query(sql)
-  return results
+  return mappingResultDataList(results)
 }
 
 const tableMoveOrGroup = async (sourceTable, targetTable, admin, Cashier) => {

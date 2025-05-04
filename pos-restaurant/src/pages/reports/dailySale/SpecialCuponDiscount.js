@@ -7,6 +7,7 @@ import React, {
   useState
 } from "react"
 import { Button, Grid2, Paper } from "@mui/material"
+import { useNavigate } from "react-router-dom"
 import { useReactToPrint } from "react-to-print"
 import PrintIcon from "@mui/icons-material/Print"
 import BackIcon from "@mui/icons-material/ReplyAll"
@@ -14,7 +15,14 @@ import moment from "moment"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
-import { useNavigate } from "react-router-dom"
+import { FONT_FAMILY } from "../../../AppConstants"
+
+const formatCurrency = (amount=0) => {
+  return new Intl.NumberFormat("th-TH", {
+    style: "currency",
+    currency: "THB"
+  }).format(amount)
+}
 
 class ComponentToPrint extends Component {
   constructor(props) {
@@ -22,7 +30,8 @@ class ComponentToPrint extends Component {
   }
 
   render() {
-    const { userLogin, macno, reports } = this.props
+    const { userLogin, macno, reports, summary } = this.props
+    console.log('Summary:', summary)
     const poshwSetup = this.props.poshwSetup
     let headers = [
       poshwSetup.Heading1,
@@ -43,16 +52,16 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานคูปองส่วนลดพิเศษ</div>
-          <div align="center">(Special Cupon Discount)</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานคูปองส่วนลดพิเศษ</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">(Special Cupon Discount)</font></div>
           <div align="left" style={{ margin: "20px" }}>
-            หมายเลขเครื่อง : 001 .. 001
+            <font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : 001 .. 001</font>
           </div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
+            {macno}</font>
           </div>
           <table width="100%">
             <thead>
@@ -63,18 +72,17 @@ class ComponentToPrint extends Component {
                   borderStyle: "dashed"
                 }}
               >
-                <td align="left">บัตรคูปอง</td>
-                <td align="right">จำนวน</td>
-                <td align="right">ส่วนลด</td>
+                <td align="left"><font face={FONT_FAMILY} size="4">บัตรคูปอง</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวน</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">ส่วนลด</font></td>
               </tr>
             </thead>
             <tbody>
-              {reports &&
-                reports.map((row) => (
+              {reports && reports.map((row) => (
                   <tr>
-                    <td align="left">{row.R_Table}</td>
-                    <td align="right">{row.R_Total}</td>
-                    <td align="right">{row.TCurTime}</td>
+                    <td align="left"><font face={FONT_FAMILY} size="4">{row.CuCode}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{row.CuQuan}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(row.CuAmt)}</font></td>
                   </tr>
                 ))}
             </tbody>
@@ -86,9 +94,9 @@ class ComponentToPrint extends Component {
                   borderStyle: "dashed"
                 }}
               >
-                <td align="left">ยอดรวม (Total)....</td>
-                <td align="right">0</td>
-                <td align="right">0.00</td>
+                <td align="left"><font face={FONT_FAMILY} size="4">ยอดรวม (Total)....</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{summary.CuQuan}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(summary.CuAmt)}</font></td>
               </tr>
             </tfoot>
           </table>
@@ -104,6 +112,7 @@ const SpecialCuponDiscount = () => {
   const { appData } = useContext(POSContext)
   const { macno, userLogin } = appData
   const [reports, setReports] = useState([])
+  const [summary, setSummary] = useState({})
   const [poshwSetup, setPosHwSetup] = useState({})
 
   const functionToPrint = useReactToPrint({
@@ -134,10 +143,11 @@ const SpecialCuponDiscount = () => {
 
   const loadReport = useCallback(() => {
     apiClient
-      .post(`/api/report/special-cupon-report`)
+      .post(`/api/report/special-cupon-report`, {macno})
       .then((response) => {
         if (response.status === 200) {
-          setReports(response.data.data)
+          setReports(response.data.data.items)
+          setSummary(response.data.data.summary)
         }
       })
       .catch((error) => {
@@ -157,6 +167,7 @@ const SpecialCuponDiscount = () => {
         userLogin={userLogin}
         macno={macno}
         reports={reports}
+        summary={summary}
         poshwSetup={poshwSetup}
       />
       <Paper

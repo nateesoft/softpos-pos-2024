@@ -2,15 +2,12 @@ import React, { useContext, useEffect, useState } from "react"
 import {
   Button,
   Grid2,
-  IconButton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-  TextField
-} from "@mui/material"
+  TableRow} from "@mui/material"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
@@ -64,8 +61,7 @@ const ListTable = ({ tableNo, setOpenPin }) => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  {columns &&
-                    columns.map((column) => (
+                  {columns && columns.map((column) => (
                       <TableCell
                         key={column.id}
                         align={column.align}
@@ -88,10 +84,12 @@ const ListTable = ({ tableNo, setOpenPin }) => {
                         tabIndex={-1}
                         key={row.Tcode}
                       >
-                        {columns &&
-                          columns.map((column) => {
+                        {columns && columns.map((column) => {
                             const value = row[column.id]
                             if (column.id === "action") {
+                              if(tableSplit.length>1 && row.TAmount === 0){
+                                return <></>
+                              }
                               return (
                                 <TableCell>
                                     <Button

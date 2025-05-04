@@ -64,7 +64,7 @@
   "scripts": {
     "start": "react-scripts start",
     "local": "react-scripts start",
-    "prod": "env-cmd -f ./.env.prod react-scripts start",
+    "softpos": "env-cmd -f ./.env.prod react-scripts start",
     "start:webapp": "env-cmd -f ./.env.webapp react-scripts start",
     "build": "react-scripts build",
     "build:local": "env-cmd -f ./.env.local react-scripts build",

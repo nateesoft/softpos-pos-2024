@@ -1,7 +1,7 @@
 const pool = require("../config/database/MySqlConnect")
+const { mappingResultDataList, mappingResultData } = require("../utils/ConvertThai")
 const { getMoment } = require("../utils/MomentUtil")
-const { getBranch } = require("./BranchService")
-const { getReportCashier, getReportTerminal } = require("./member/crm/MTranService")
+require("./member/crm/MTranService")
 
 const getTableOnAction = async (date) => {
   let sql = `select R_Date, R_Table,sum(R_Total) R_Total,R_Void,TCurTime,TCustomer 
@@ -21,7 +21,7 @@ const getTableOnAction = async (date) => {
   const resultFooter = await pool.query(sql2)
   const reponse = {
     header: {},
-    data: results,
+    data: mappingResultDataList(results),
     footer: {
       total: resultFooter[0].R_Total
     }
@@ -36,7 +36,7 @@ const getTableOnActionList = async () => {
                 where b.r_void<>'V' 
                 group by b.Macno, b.r_table, b.r_date, b.r_void`
   const results = await pool.query(sql)
-  return results
+  return mappingResultDataList(results)
 }
 
 const getTerminalByMacno = async (macno) => {
@@ -77,20 +77,20 @@ const getTerminalByMacno = async (macno) => {
   const results = await pool.query(sql)
   if (results.length > 0) {
     const sqlPaidIO = `select sum(PaidInAmt) PaidInAmt, sum(PaidOutAmt) PaidOutAmt 
-                        from paidiofile 
-                        where Terminal='${macno}' 
-                        and Date='${getMoment().format("YYYY-MM-DD")}'`
+      from paidiofile 
+      where Terminal='${macno}' 
+      and Date='${getMoment().format("YYYY-MM-DD")}'`
     const resultsPaidIO = await pool.query(sqlPaidIO)
     let getPaidIO = {}
     if (resultsPaidIO.length > 0) {
       getPaidIO = resultsPaidIO[0]
     }
 
-    const sqlETD = `SELECT B_ETD, count(*) Bill_Count, sum(B_Cust) B_Cust, sum(B_NetTotal) B_NetTotal 
-                  FROM billno b WHERE b.B_OnDate='${getMoment().format(
-                    "YYYY-MM-DD"
-                  )}' 
-                  and b.B_MacNo ='${macno}' GROUP BY B_ETD`
+    const sqlETD = `SELECT B_ETD, 
+      count(*) Bill_Count, sum(B_Cust) B_Cust, sum(B_NetTotal) B_NetTotal 
+      FROM billno b 
+      WHERE b.B_OnDate='${getMoment().format("YYYY-MM-DD")}' 
+      and b.B_MacNo ='${macno}' GROUP BY B_ETD`
     const resultETDType = await pool.query(sqlETD)
     const E = resultETDType.filter((item) => item.B_ETD === "E")
     const T = resultETDType.filter((item) => item.B_ETD === "T")
@@ -101,12 +101,19 @@ const getTerminalByMacno = async (macno) => {
     const sumTypeT = T.length > 0 ? T[0] : initData
     const sumTypeD = D.length > 0 ? D[0] : initData
 
-    // get member info from crm service
-    const branchInfo = await getBranch()
-    const memberInfo = await getReportTerminal(macno, branchInfo.Code)
+    // get member info
+    const sqlMember = `select count(*) TotalMember, 
+      sum(B_NetTotal) NetAmount, sum(B_SumScore ) TotalScore 
+      FROM billno 
+      WHERE B_OnDate='${getMoment().format("YYYY-MM-DD")}' 
+      and B_Void <> 'V' 
+      and B_MacNo ='${macno}' 
+      group by (B_MacNo)`;
+    const resultMember = await pool.query(sqlMember)
+    const memberInfo = resultMember.length > 0 ? resultMember[0] : {}
 
     return {
-      cashier: results[0],
+      cashier: mappingResultData(results),
       paidio: getPaidIO,
       sumTypeE,
       sumTypeT,
@@ -190,18 +197,24 @@ const getTerminalByCashier = async (cashier) => {
     const result1 = await pool.query(sql1)
     const result2 = await pool.query(sql2)
 
-    // get member info from crm service
-    const branchInfo = await getBranch()
-    const memberInfo = await getReportCashier(cashier, branchInfo.Code)
+    // get member info
+    const sqlMember = `select count(*) TotalMember, 
+      sum(B_NetTotal) NetAmount, sum(B_SumScore ) TotalScore 
+      FROM billno 
+      WHERE B_OnDate='${getMoment().format("YYYY-MM-DD")}' 
+      and B_Void <> 'V' and B_Cashier ='${cashier}' 
+      group by (B_Cashier)`;
+    const resultMember = await pool.query(sqlMember)
+    const memberInfo = resultMember.length > 0 ? resultMember[0] : {}
 
     return {
-      cashier: results[0],
+      cashier: mappingResultData(results),
       paidio: getPaidIO,
       sumTypeE,
       sumTypeT,
       sumTypeD,
-      receiptBill: result1[0],
-      voidBill: result2[0],
+      receiptBill: mappingResultData(result1),
+      voidBill: mappingResultData(result2),
       memberInfo
     }
   } else {
@@ -223,7 +236,7 @@ const summaryETD = (results, dataList) => {
   results.map((item) => {
     dataList.push({
       data1: item.R_Group + getGroupName(item.GroupName),
-      data2: item.GroupName,
+      data2: "",
       data3: "",
       data4: ""
     })
@@ -266,13 +279,11 @@ const getGroupPlu = async (
   groupCode2
 ) => {
   let sql = `SELECT ts.R_ETD, ts.R_Group, g.GroupName, 
-            SUM(ts.R_Total) R_Total 
-            FROM billno b 
+            SUM(ts.R_Total) R_Total FROM billno b 
             INNER JOIN t_sale ts on b.B_Refno =ts.R_Refno 
             LEFT JOIN groupfile g on ts.R_Group = g.GroupCode 
-            WHERE ts.R_Date='${getMoment().format(
-              "YYYY-MM-DD"
-            )}' and ts.R_Void <> 'V' `
+            WHERE ts.R_Date='${getMoment().format( "YYYY-MM-DD")}' 
+            and ts.R_Void <> 'V'`
   if (macno1 && macno2) {
     sql = sql + ` and ts.MacNo between '${macno1}' and '${macno2}' `
   }
@@ -327,13 +338,14 @@ const getPluCode = async (
   }
   sql += ` group by ts.R_Group, ts.R_PluCode, ts.R_PName`
   const results = await pool.query(sql)
+
   const sumQty = results.reduce((partialSum, a) => partialSum + a.R_Quan, 0)
   const sumNetTotal = results.reduce(
     (partialSum, a) => partialSum + a.R_Total,
     0
   )
   return {
-    data: results,
+    data: mappingResultDataList(results),
     summary: {
       qty: sumQty,
       netTotal: sumNetTotal
@@ -505,9 +517,7 @@ const getVoidBill = async (macno1, macno2, cashier1, cashier2) => {
   let sql = `select B_MacNo, B_Cashier, B_Table, B_Ontime, B_VoidUser, B_VoidTime, 
         B_Refno, ts.R_PluCode, ts.R_Quan, ts.R_Total 
         from billno b inner join t_sale ts on b.B_Refno =ts.R_Refno 
-        where b.B_OnDate ='${getMoment().format(
-          "YYYY-MM-DD"
-        )}' and b.B_Void = 'V' `
+        where b.B_OnDate ='${getMoment().format("YYYY-MM-DD")}' and b.B_Void = 'V' `
   if (macno1 && macno2) {
     sql = sql + ` and b.B_MacNo between '${macno1}' and '${macno2}' `
   }
@@ -552,10 +562,7 @@ const getCreditPayment = async (macno1, macno2, cashier1, cashier2) => {
     data: newResults,
     summary: {
       creditCount: newResults.length,
-      creditAmount: newResults.reduce(
-        (partialSum, a) => partialSum + a.CrAmt,
-        0
-      )
+      creditAmount: newResults.reduce((partialSum, a) => partialSum + a.CrAmt,0)
     }
   }
 }
@@ -586,9 +593,7 @@ const getTopSale = async (
   if (group1 && group2) {
     sql = sql + ` and g.GroupCode between '${group1}' and '${group2}' `
   }
-  sql =
-    sql +
-    ` group by t.R_PluCode, t.R_PName , g.GroupCode, g.GroupName limit 0, 10 `
+  sql = sql +` group by t.R_PluCode, t.R_PName , g.GroupCode, g.GroupName limit 0, 10 `
   const results = await pool.query(sql)
   const newResults = results.sort(compareNumbers).map((item, index) => {
     return {
@@ -596,15 +601,26 @@ const getTopSale = async (
       index: index + 1
     }
   })
-  return newResults
+  return mappingResultDataList(newResults)
 }
 
-const getPromotion = async (macno) => {
+const getPromotion = async () => {
   return []
 }
 
 const getSpecialCupon = async (macno) => {
-  return []
+  const sql1 = `select CuCode, sum(CuQuan) CuQuan, sum(CuAmt) CuAmt 
+    from t_cupon where Terminal = '${macno}' group by (CuCode)`
+  const results1 = await pool.query(sql1)
+
+  const sql2 = `select sum(CuQuan) CuQuan, sum(CuAmt) CuAmt 
+    from t_cupon where Terminal = '${macno}'`
+  const results2 = await pool.query(sql2)
+
+  return {
+    items: results1,
+    summary: results2[0]
+  }
 }
 
 const getTopSaleList = async () => {
@@ -620,7 +636,7 @@ const getTopSaleList = async () => {
       index: index + 1
     }
   })
-  return newResults
+  return mappingResultDataList(newResults)
 }
 
 const getSaleByType = async () => {

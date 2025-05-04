@@ -17,13 +17,14 @@ import DiscountIcon from "@mui/icons-material/Discount"
 import CloseIcon from "@mui/icons-material/Close"
 import SplitBillIcon from "@mui/icons-material/VerticalSplit"
 import PrintCheckIcon from "@mui/icons-material/Print"
-import VideogameAssetIcon from "@mui/icons-material/VideogameAsset"
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet"
 import SendToMobileIcon from "@mui/icons-material/SendToMobile"
 import CreditCardIcon from "@mui/icons-material/CreditCard"
 import CreditCardOffIcon from "@mui/icons-material/CreditCardOff"
 import Stack from '@mui/material/Stack'
 import { motion, AnimatePresence } from "framer-motion";
+import { useParams } from 'react-router-dom';
 
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
@@ -32,6 +33,7 @@ import CreditChargeModal from "./CreditChargeModal"
 import MultipleCreditPayment from "./MultipleCreditPayment"
 import { ModalConfirm } from "../ui-utils/AlertPopup"
 import DiscountFormModal from "./modal/DiscountFormModal"
+import GiftVoucherPayment from './GiftVoucherPayment'
 
 const NumFormat = (data) => {
   if(!data && data !== 0) return
@@ -72,6 +74,8 @@ function PaymentForm({
   const { appData } = useContext(POSContext)
   const { macno, branchInfo, companyInfo, empCode, baseName } = appData
 
+  const { tableNo: tableNoRoute } = useParams();
+
   const { serviceAmount, vatAmount, netTotalAmount } = tableFile
   const R_NetTotal = netTotalAmount
 
@@ -102,12 +106,16 @@ function PaymentForm({
 
   const [openCreditInfo, setOpenCreditInfo] = useState(false)
   const [openTransferInfo, setOpenTransferInfo] = useState(false)
+  const [openGiftVoucherInfo, setOpenGiftVoucherInfo] = useState(false)
 
   // transfer info
   const [transferAmount, setTransferAmount] = useState(0)
   const [transferAccountNo, setTransferAccountNo] = useState("")
   const [transferToAccount, setTransferToAccount] = useState("0000000000")
   const [transferAccount, setTransferAccount] = useState("")
+
+  // gift voucher
+  const [giftVoucherAmt, setGiftVoucherAmt] = useState(0)
 
   const [openCreditFile, setOpenCreditFile] = useState(false)
   const [openDiscountModal, setOpenDiscountModal] = useState(false)
@@ -152,6 +160,12 @@ function PaymentForm({
     }
   }
 
+  const handleGiftVoucherEnabled = () => {
+    if (balanceAmount <= 0) {
+      setOpenGiftVoucherInfo(true)
+    }
+  }
+
   const handleAdd = (addMoney) => {
     if (componentFocus === "cash") {
       handleCashAmountKeyIn(cashAmount + addMoney)
@@ -178,9 +192,8 @@ function PaymentForm({
     const ta = transferAmount ? parseFloat(transferAmount) : 0
     const totalNetAmt = parseFloat(R_NetTotal) + parseFloat(creditChargeAmount)
     const _depositAmount = parseFloat(depositAmount)
-    const _entertainAmount = parseFloat(entertainAmount)
     const paymentAmt = parseFloat(
-      cc + cd + ta + _depositAmount + _entertainAmount
+      cc + cd + ta + _depositAmount  + giftVoucherAmt
     )
     const discountAmt = 0
     let balanceAmt = parseFloat(paymentAmt - discountAmt - totalNetAmt)
@@ -190,12 +203,7 @@ function PaymentForm({
       setCreditAmount(0)
       setCreditChargeAmount(0)
     }
-    if (_entertainAmount > totalNetAmt) {
-      setEntertainAmount(totalNetAmt)
-      setCashAmount(0)
-      setCreditAmount(0)
-      setCreditChargeAmount(0)
-    }
+
     if (balanceAmt < 0) {
       if (creditAmount > 0) {
         setBalanceAmount(0)
@@ -221,6 +229,8 @@ function PaymentForm({
     setCashAmount(0)
     setDepositAmount(0)
     setEntertainAmount(0)
+
+    setComponentFocus("cash")
   }
 
   const handleFit = () => {
@@ -237,11 +247,17 @@ function PaymentForm({
     setEntertainAmount(entertainAmt)
   }
 
+  const handleCashFocus = (evt) => {
+    setComponentFocus("cash")
+    evt.target.select()
+  }
+
   const handleCashAmountKeyIn = (cashAmt) => {
     if (cashAmt > 100000) {
       setCashAmount(0)
       return
     }
+    
     if (cashAmt > R_NetTotal) {
       setTransferAccount("")
       setTransferAccountNo("")
@@ -256,6 +272,7 @@ function PaymentForm({
     }
 
     setCashAmount(cashAmt)
+    setNetTotalDisplay(balanceAmount)
   }
 
   const handleTransferKeyIn = (transferAmt) => {
@@ -279,7 +296,7 @@ function PaymentForm({
   }
 
   const handleConfirmPayment = async () => {
-    if (tonAmount > 1000) {
+    if (tonAmount > 100000) {
       handleNotification("กรุณาระบุจำนวนเงินสดให้ถูกต้อง !!!")
       return
     }
@@ -292,6 +309,7 @@ function PaymentForm({
         tableNo,
         billType: "E",
         orderList,
+        giftVoucherAmt,
         serviceInfo: {
           serviceAmount,
           vatAmount
@@ -319,7 +337,7 @@ function PaymentForm({
         },
         specialCuponInfo,
         memberInfo,
-        tonAmount,
+        tonAmount: netTotalDisplay < 0 ? Math.abs(netTotalDisplay): 0,
         paymentAmount,
         netTotal: R_NetTotal + creditChargeAmount,
         empCode,
@@ -352,7 +370,7 @@ function PaymentForm({
   const printBillCheck = async () => {
     // send print bill check
     apiClient
-      .post(`/api/billno/printChkBill`, { tableNo, macno })
+      .post(`/api/billno/printChkBill`, { tableNo: tableNoRoute, macno, depositAmt: depositAmount })
       .then((response) => {
         if (response.status === 200) {
           handleNotification("พิมพ์ใบตรวจสอบรายการ", "info")
@@ -372,6 +390,10 @@ function PaymentForm({
     setTransferAmount(0)
 
     setOpenTransferInfo(false)
+  }
+
+  const handleCLoseDiscountModal = () => {
+    setOpenDiscountModal(false)
   }
 
   useEffect(() => {
@@ -462,7 +484,7 @@ function PaymentForm({
                       inputProps={{ min: 0, style: { textAlign: "right" } }}
                     />
                   </Stack>
-                  <Stack direction="row">
+                  {/* <Stack direction="row">
                     <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
                       <VideogameAssetIcon fontSize="large" />
                     </IconButton>
@@ -481,8 +503,33 @@ function PaymentForm({
                       }}
                       inputProps={{ min: 0, style: { textAlign: "right" } }}
                     />
-                  </Stack>
+                  </Stack> */}
                 </Grid2>
+              </Grid2>
+              <Grid2 container spacing={1}>
+                <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
+                  <CardGiftcardIcon fontSize="large" />
+                </IconButton>
+                <TextField
+                  type="number"
+                  size="small"
+                  value={NumFormat(giftVoucherAmt)}
+                  id="txtGiftVoucherAmount"
+                  label="บัตรกำนัล/บัตรของขวัญ"
+                  disabled
+                  inputProps={{
+                    min: 0,
+                    style: { textAlign: "right", width: "169px" }
+                  }}
+                />
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={handleGiftVoucherEnabled}
+                  sx={{ height: "40px" }}
+                >
+                  ...
+                </Button>
               </Grid2>
               <Grid2 container spacing={1}>
                 <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
@@ -492,7 +539,7 @@ function PaymentForm({
                   type="number"
                   size="small"
                   value={cashAmount}
-                  onFocus={() => setComponentFocus("cash")}
+                  onFocus={handleCashFocus}
                   onChange={(e) => handleCashAmountKeyIn(e.target.value)}
                   id="txtCashAmount"
                   label="ชำระด้วยเงินสด"
@@ -500,6 +547,7 @@ function PaymentForm({
                     backgroundColor: componentFocus === "cash" ? "#f5fff3" : ""
                   }}
                   inputProps={{ min: 0, style: { textAlign: "right" } }}
+                  autoFocus
                 />
               </Grid2>
               <Grid2 container spacing={1}>
@@ -509,14 +557,14 @@ function PaymentForm({
                 <TextField
                   type="number"
                   size="small"
-                  value={transferAmount}
+                  value={NumFormat(transferAmount)}
                   onChange={(e) => setTransferAmount(e.target.value)}
                   id="txtTransferAmount"
                   label="เงินโอน"
                   disabled
                   inputProps={{
                     min: 0,
-                    style: { textAlign: "right", width: "100px" }
+                    style: { textAlign: "right", width: "169px" }
                   }}
                 />
                 <Button
@@ -540,7 +588,7 @@ function PaymentForm({
                   disabled
                   inputProps={{
                     min: 0,
-                    style: { textAlign: "right", width: "100px" }
+                    style: { textAlign: "right", width: "82px" }
                   }}
                 />
                 <TextField
@@ -551,7 +599,7 @@ function PaymentForm({
                   disabled
                   inputProps={{
                     min: 0,
-                    style: { textAlign: "right", width: "100px" }
+                    style: { textAlign: "right", width: "50px" }
                   }}
                 />
                 <Button
@@ -591,22 +639,10 @@ function PaymentForm({
               </Grid2>
               <Box display="flex" justifyContent="flex-end" margin={2}>
                 <TextField
-                  type="number"
-                  size="small"
-                  variant="filled"
-                  label="ส่วนลด"
-                  value={discountAmount}
-                  inputProps={{ min: 0, style: { textAlign: "right" } }}
-                  fullWidth
-                  disabled
-                />
-              </Box>
-              <Box display="flex" justifyContent="flex-end" margin={2}>
-                <TextField
                   variant="filled"
                   size="small"
                   label="ค้างชำระ"
-                  value={balanceAmount}
+                  value={NumFormat(balanceAmount)}
                   inputProps={{ min: 0, style: { textAlign: "right" } }}
                   fullWidth
                   disabled
@@ -652,7 +688,7 @@ function PaymentForm({
                     <td>
                       <Button
                         variant="contained"
-                        sx={{ ...normalButton }}
+                        sx={{ ...normalButton, background: "radial-gradient(circle, red, #000)" }}
                         fullWidth
                         onClick={handleClear}
                       >
@@ -782,7 +818,7 @@ function PaymentForm({
                     <td>
                       <Button
                         variant="contained"
-                        sx={{ ...normalButton }}
+                        sx={{ ...normalButton, background: "radial-gradient(circle, green, #000)" }}
                         fullWidth
                         onClick={handleFit}
                       >
@@ -857,6 +893,7 @@ function PaymentForm({
                   backgroundColor: "#aaa",
                   color: "black"
                 }}
+                disabled={cashAmount>0||creditAmount>0}
                 startIcon={<PrintCheckIcon />}
                 onClick={printBillCheck}
               >
@@ -876,7 +913,7 @@ function PaymentForm({
                 sx={{ margin: "5px" }}
                 color="success"
                 onClick={() => setOpenConfirmPayment(true)}
-                disabled={balanceAmount < 0}
+                disabled={netTotalDisplay > 0}
                 endIcon={<ConfirmIcon />}
               >
                 ชำระเงิน
@@ -904,8 +941,7 @@ function PaymentForm({
               balanceAmount={
                 R_NetTotal +
                 creditChargeAmount -
-                depositAmount -
-                entertainAmount
+                depositAmount
               }
               setCreditAmt={setCreditAmount}
               setCreditChargeAmt={setCreditChargeAmount}
@@ -927,8 +963,7 @@ function PaymentForm({
               balanceAmount={
                 R_NetTotal +
                 creditChargeAmount -
-                depositAmount -
-                entertainAmount
+                depositAmount
               }
               setCreditAmt={setCreditAmount}
               setCreditChargeAmt={setCreditChargeAmount}
@@ -1034,7 +1069,7 @@ function PaymentForm({
         open={openDiscountModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        onClose={() => setOpenDiscountModal(false)}
+        onClose={handleCLoseDiscountModal}
       >
         <Box
           sx={{
@@ -1052,6 +1087,33 @@ function PaymentForm({
             initLoad={initLoad}
           />
         </Box>
+      </Modal>
+      <Modal
+        open={openGiftVoucherInfo}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div>
+          <Box
+            sx={{
+              ...modalStyle,
+              width: "560px",
+              padding: "5px"
+            }}
+          >
+            <GiftVoucherPayment
+              tableNo={tableNo}
+              balanceAmount={
+                R_NetTotal +
+                creditChargeAmount -
+                depositAmount
+              }
+              setGiftVoucherAmt={setGiftVoucherAmt}
+              totalAmount={totalAmount}
+              onClose={() => setOpenGiftVoucherInfo(false)}
+            />
+          </Box>
+        </div>
       </Modal>
     </Grid2>
   )
