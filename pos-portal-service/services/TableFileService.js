@@ -83,6 +83,12 @@ const updateTableDiscount = async (payload) => {
     PrCuCode = "", PrCuDisc="", PrCuBath=""
   } = payload
 
+  // clear tempcupon
+  if(CuponDiscAmt === 0){
+    const sqlClearTempCupon = `delete from tempcupon where R_Table='${tableFile.Tcode}'`
+    await pool.query(sqlClearTempCupon)
+  }
+
   // clear discount all balance
   const sqlClearBalance = `UPDATE balance 
         SET R_PrDisc='0', R_PrBath='0', R_PrAmt='0',

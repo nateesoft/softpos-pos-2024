@@ -79,11 +79,12 @@ function PaymentPage() {
         if (response.status === 200) {
           const data = response.data.data
           const resultSummary = {
-            subTotalAmount: data.TAmount,
+            totalAmount: data.TAmount,
             discountAmount: data.DiscountAmount,
             service: data.Service,
             serviceType: data.ServiceType,
             serviceAmount: data.ServiceAmt,
+            subTotalAmount: data.SubTotal_Amt,
             vat: data.Vat,
             vatType: data.VatType,
             vatAmount: data.VatAmount,

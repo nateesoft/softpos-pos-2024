@@ -89,17 +89,16 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => 
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>Before VAT</Typography>
-          <Typography>{NumFormat(tableFile.productNoneVat+tableFile.serviceAmount)}</Typography>
-        </Grid2>
-        <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>VAT ({tableFile.vat}%)</Typography>
-          <Typography>{NumFormat(tableFile.vatAmount)}</Typography>
+          <Typography>{NumFormat(tableFile.subTotalAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>Discount</Typography>
           <Typography>{NumFormat(tableFile.discountAmount)}</Typography>
         </Grid2>
-        
+        <Grid2 display="flex" justifyContent="space-between">
+          <Typography sx={{ fontSize: "14px" }}>VAT ({tableFile.vat}%)</Typography>
+          <Typography>{NumFormat(tableFile.vatAmount)}</Typography>
+        </Grid2>
         <Divider sx={{background: "black"}} />
         <Grid2 display="flex" justifyContent="space-between">
           <Typography variant="h5">Grand Total</Typography>

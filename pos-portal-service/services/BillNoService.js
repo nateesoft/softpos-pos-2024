@@ -39,7 +39,7 @@ const { addDataFromTemp } = require('./CuponService')
 const { getTempGiftList, deleteTempGiftAll, createListGiftFromTemp } = require('./TGiftService')
 
 const getAllBillNoToday = async () => {
-  const sql = `select * from billno where B_OnDate='${getMoment().format("YYYY-MM-DD")}'`
+  const sql = `select * from billno where B_OnDate='${getMoment().format("YYYY-MM-DD")}' order by B_Refno desc`
   const results = await pool.query(sql)
   return mappingResultDataList(results)
 }
@@ -782,13 +782,16 @@ const updateStatusPrintChkBill = async (tableNo, macno, depositAmt) => {
   const sql = `update tablefile 
     set PrintChkBill='Y', DepositAmt='${depositAmt}' 
     where Tcode='${tableNo}'`
-
   const results = await pool.query(sql)
 
-  const tableInfo = await getTableByCode(tableNo)
+  await summaryBalance(tableNo, macno)
+  
+  let tableInfo = await getTableByCode(tableNo)
   const balanceInfo = await getBalanceByTableNoSummary(tableNo)
 
   const printerInfo = await getCashierPrinterName(macno)
+
+  tableInfo = await getTableByCode(tableNo)
 
   // send to printer
   socket.emit(
