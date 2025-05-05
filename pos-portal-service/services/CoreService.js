@@ -1,5 +1,6 @@
 const pool = require("../config/database/MySqlConnect")
 const { mappingResultData, mappingResultDataList } = require("../utils/ConvertThai")
+const { getCurrentTime } = require("../utils/MomentUtil")
 
 const { PrefixZeroFormat, Unicode2ASCII } = require("../utils/StringUtil")
 
@@ -154,7 +155,7 @@ const updateTableFile = async (tablefile) => {
 
   const sql = `UPDATE tablefile 
         SET Tcode='${Tcode}',SoneCode='${SoneCode}',MacNo='${MacNo}',Cashier='${Cashier}',
-            TCurTime=curtime(),TCustomer='${TCustomer}',TItem='${TItem}',TAmount='${TAmount}',
+            TCurTime='${getCurrentTime()}',TCustomer='${TCustomer}',TItem='${TItem}',TAmount='${TAmount}',
             TOnAct='${TOnAct}',
             Service='${Service}',
             ServiceAmt='${ServiceAmt}',

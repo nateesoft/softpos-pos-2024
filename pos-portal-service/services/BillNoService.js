@@ -30,7 +30,7 @@ const {
   updateMemberData,
   getDataByMemberCode
 } = require("./member/crm/MemberMasterService")
-const { getMoment } = require("../utils/MomentUtil")
+const { getMoment, getMomentTime, getCurrentTime } = require("../utils/MomentUtil")
 const { summaryBalance } = require("./CoreService")
 const { createListCredit, deleteListTempCredit } = require("./TCreditService")
 const { printReceiptHtml, printReviewReceiptHtml, printRefundBillHtml, printReceiptCopyHtml } = require('./SyncPrinterService')
@@ -134,8 +134,9 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
 }
 
 const updateRefundBill = async (billNoData) => {
+  const getVoidTime = getCurrentTime()
   const sql = `UPDATE billno SET B_Void='${billNoData.B_Void}', 
-    B_VoidTime=curtime(), 
+    B_VoidTime='${getVoidTime}', 
     B_VoidUser='${billNoData.B_VoidUser}' 
     WHERE B_Refno='${billNoData.B_Refno}'`
   const results = await pool.query(sql)

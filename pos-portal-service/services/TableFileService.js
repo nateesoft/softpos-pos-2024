@@ -1,5 +1,5 @@
 const pool = require("../config/database/MySqlConnect")
-const { getMoment } = require("../utils/MomentUtil")
+const { getMoment, getCurrentTime } = require("../utils/MomentUtil")
 const { updateInActiveTable } = require("../services/management/TableCheckIn")
 const {
   getBalanceMaxIndex,
@@ -301,7 +301,7 @@ const updateTableFile = async (tablefile) => {
 
   const sql = `UPDATE tablefile 
         SET Tcode='${Tcode}',SoneCode='${SoneCode}',MacNo='${MacNo}',Cashier='${Cashier}',
-            TCurTime=curtime(),TCustomer='${TCustomer}',TItem='${TItem}',TAmount='${TAmount}',
+            TCurTime='${getCurrentTime()}',TCustomer='${TCustomer}',TItem='${TItem}',TAmount='${TAmount}',
             TOnAct='${TOnAct}',
             Service='${Service}',
             ServiceAmt='${ServiceAmt}',
