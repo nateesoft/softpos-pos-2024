@@ -7,7 +7,7 @@ const { getPOSConfigSetup } = require("./CoreService");
 const { savePdfFile } = require("../utils/PdfUtil");
 const { getCuponByRefno, getTempCuponByTable } = require("./CuponService");
 const { getTCreditList } = require("./TCreditService");
-const { getTGiftList } = require("./TGiftService");
+const { getTGiftList, getTempGiftList } = require("./TGiftService");
 
 const formatNumber = (num) => {
   return new Intl.NumberFormat('th-TH', {
@@ -15,6 +15,14 @@ const formatNumber = (num) => {
     maximumFractionDigits: 2
   }).format(num);
 };
+
+function maskData(data, visibleDigits = 4, maskChar = '*') {
+  const dataStr = String(data);
+  const maskedLength = Math.max(dataStr.length - visibleDigits, 0);
+  const maskedPart = maskChar.repeat(maskedLength);
+  const visiblePart = dataStr.slice(-visibleDigits);
+  return maskedPart + visiblePart;
+}
 
 const formatPoint = (point) => {
   return point.toLocaleString()
@@ -28,7 +36,7 @@ const formatDateTime = data => {
   return getMoment(data).format("HH:mm:ss")
 }
 
-const truncateWord = (text, maxLength = 25) => {
+const truncateWord = (text, maxLength = 25, mark="...") => {
   if (text.length <= maxLength) return text;
   let words = text.split(" ");
   let result = "";
@@ -36,7 +44,7 @@ const truncateWord = (text, maxLength = 25) => {
     if ((result + word).length > maxLength) break;
     result += (result ? " " : "") + word;
   }
-  return result + "...";
+  return result + mark;
 };
 
 const publicPath = path.join(__dirname, '..', 'public', 'savePdf');
@@ -293,8 +301,8 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
   if(billInfo.B_Earnest>0){
     B_Earnest = `
     <tr>
-      <td>
-        <font face="${fontFamily}" size="4">Deposit Deduction</font>
+      <td align="right">
+        <font face="${fontFamily}" size="4">Deposit</font>
       </td>
       <td align="right">
         <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_Earnest)}</font>
@@ -369,7 +377,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
             <font face="${fontFamily}" size="4">Member</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">${billInfo.B_MemCode}</font>
+            <font face="${fontFamily}" size="4">${maskData(billInfo.B_MemCode)}</font>
           </td>
         </tr>
         <tr>
@@ -377,7 +385,7 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
             <font face="${fontFamily}" size="4"></font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">${billInfo.B_MemName}</font>
+            <font face="${fontFamily}" size="4">${billInfo.B_MemName?.split(" ")[0]}</font>
           </td>
         </tr>
         <tr>
@@ -528,12 +536,13 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
               <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_Vat)}</font>
             </td>
           </tr>
+          ${B_Earnest}
           <tr>
             <td align="right">
               <font face="${fontFamily}" size="4">Grand Total:</font>
             </td>
             <td align="right">
-              <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_NetTotal-billInfo.B_Earnest)}</font>
+              <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_NetTotal)}</font>
             </td>
           </tr>
         </table>
@@ -546,7 +555,6 @@ const printReceiptHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) => 
                 <font face="${fontFamily}" size="4">[Payment Detail]</font>
               </td>
             </tr>
-            ${B_Earnest}
             ${B_TransferAmt}
             ${B_CrAmt1}
             ${B_GiftVoucher}
@@ -590,6 +598,8 @@ const printReceiptCopyHtml = async ({ macno, billInfo, tSaleInfo, printerInfo })
 const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerInfo }) => {
   const poshwSetup = await getDataByMacno(macno)
   const specialCupon = await getTempCuponByTable(tableInfo.Tcode)
+  const giftVoucherList = await getTempGiftList(tableInfo.Tcode)
+
   let headers = [poshwSetup.Heading1||"", poshwSetup.Heading2||"", poshwSetup.Heading3||"", poshwSetup.Heading4||""]
   headers = headers.filter(h => h !== "")
   let footers = [poshwSetup.Footting1||"", poshwSetup.Footting2||"", poshwSetup.Footting3||""]
@@ -684,6 +694,29 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerIn
   const getDiscountPercent = strSlash => {
     // return `(${strSlash.split('/')[0]}%)`
     return strSlash
+  }
+
+  let B_GiftVoucher = ''
+  if (tableInfo.GiftVoucher_Amt>0) {
+    B_GiftVoucher = `<tr>
+      <td>
+        <font face="${fontFamily}" size="4">Cash Voucher</font>
+      </td>
+      <td align="right">
+        <font face="${fontFamily}" size="4">${formatNumber(tableInfo.GiftVoucher_Amt)}</font>
+      </td>
+    </tr>`
+    for(let key in giftVoucherList) {
+      const giftInfo = giftVoucherList[key]
+      B_GiftVoucher += `<tr>
+          <td>
+            <font face="${fontFamily}" size="4">... ${giftInfo.giftno}</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${formatNumber(giftInfo.giftamt)}</font>
+          </td>
+        </tr>`
+    }
   }
 
   let B_FastDiscAmt = ''
@@ -835,7 +868,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerIn
   if(tableInfo.DepositAmt > 0) {
     DepositAmount += `
     <tr>
-      <td>
+      <td align="right">
         <font face="${fontFamily}" size="4">Deposit</font>
       </td>
       <td align="right">
@@ -855,6 +888,40 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerIn
         <font face="${fontFamily}" size="4">${formatNumber(totalDiscountAmount)}</font>
       </td>
     </tr>`
+  }
+
+  let MemberInfo = ''
+  if(tableInfo.MemCode) {
+    MemberInfo = `
+    ${Divider}
+    <div align="center">
+      <table width="100%" cellPadding="0" cellSpacing="0">
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">Member</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${maskData(tableInfo.MemCode)}</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4"></font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${tableInfo.MemName?.split(" ")[0]}</font>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <font face="${fontFamily}" size="4">Point</font>
+          </td>
+          <td align="right">
+            <font face="${fontFamily}" size="4">${formatPoint(tableInfo.MemCurAmt)}</font>
+          </td>
+        </tr>
+      </table>
+    </div>`
   }
 
   const htmlContent = `
@@ -909,7 +976,6 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerIn
             <font face="${fontFamily}" size="4">${formatNumber(tableInfo.SubTotal_Amt)}</font>
           </td>
         </tr>
-        ${DepositAmount}
         ${showDiscount}
         ${B_FastDiscAmt}
         ${B_EmpDiscAmt}
@@ -940,12 +1006,14 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerIn
             <font face="${fontFamily}" size="4">${formatNumber(tableInfo.VatAmt)}</font>
           </td>
         </tr>
+        ${DepositAmount}
+        ${B_GiftVoucher}
         <tr>
           <td align="right">
             <font face="${fontFamily}" size="4">Grand Total:</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">${formatNumber(tableInfo.NetTotal-parseFloat(tableInfo.DepositAmt))}</font>
+            <font face="${fontFamily}" size="4">${formatNumber(tableInfo.NetTotal-tableInfo.DepositAmt-tableInfo.GiftVoucher_Amt)}</font>
           </td>
         </tr>
       </table>
@@ -954,6 +1022,7 @@ const printReviewReceiptHtml = async ({ macno, tableInfo, balanceInfo, printerIn
       <font face="${fontFamily}" size="4">Tips ……………${(tipsTotalAmount>0) ? formatNumber(tipsTotalAmount): ""}………………</font>
     </div>
   </div>
+  ${MemberInfo}
   ${footerHtml}
   </div>`
 
@@ -1204,8 +1273,8 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) 
   let B_Earnest = ''
   if (billInfo.B_Earnest > 0) {
     B_Earnest = `<tr>
-      <td>
-        <font face="${fontFamily}" size="4">Deposit Deduction</font>
+      <td align="right">
+        <font face="${fontFamily}" size="4">Deposit</font>
       </td>
       <td align="right">
         <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_Earnest)}</font>
@@ -1279,7 +1348,7 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) 
             <font face="${fontFamily}" size="4">Member</font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">${billInfo.B_MemCode}</font>
+            <font face="${fontFamily}" size="4">${maskData(billInfo.B_MemCode)}</font>
           </td>
         </tr>
         <tr>
@@ -1287,7 +1356,7 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) 
             <font face="${fontFamily}" size="4"></font>
           </td>
           <td align="right">
-            <font face="${fontFamily}" size="4">${billInfo.B_MemName}</font>
+            <font face="${fontFamily}" size="4">${billInfo.B_MemName?.split(" ")[0]}</font>
           </td>
         </tr>
         <tr>
@@ -1438,12 +1507,13 @@ const printRefundBillHtml = async ({ macno, billInfo, tSaleInfo, printerInfo }) 
                 <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_Vat)}</font>
             </td>
           </tr>
+          ${B_Earnest}
           <tr>
             <td align="right">
                 <font face="${fontFamily}" size="4">Grand Total:</font>
             </td>
             <td align="right">
-                <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_NetTotal-billInfo.B_GiftVoucher)}</font>
+                <font face="${fontFamily}" size="4">${formatNumber(billInfo.B_NetTotal)}</font>
             </td>
           </tr>
         </table>

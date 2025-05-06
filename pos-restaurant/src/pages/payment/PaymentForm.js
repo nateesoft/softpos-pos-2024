@@ -234,9 +234,7 @@ function PaymentForm({
   }
 
   const handleFit = () => {
-    setCashAmount(R_NetTotal)
-    setDepositAmount(0)
-    setEntertainAmount(0)
+    setCashAmount(R_NetTotal-depositAmount-giftVoucherAmt)
   }
 
   const handleDepositAmountKeyIn = (depAmt) => {
@@ -344,7 +342,7 @@ function PaymentForm({
         memberInfo,
         tonAmount: netTotalDisplay < 0 ? Math.abs(netTotalDisplay): 0,
         paymentAmount,
-        netTotal: R_NetTotal + creditChargeAmount,
+        netTotal: R_NetTotal + creditChargeAmount - depositAmount,
         empCode,
         B_Entertain: entertainAmount,
         B_UserEntertain: empCode,
@@ -402,8 +400,8 @@ function PaymentForm({
   }
 
   useEffect(() => {
-    console.log('change deposit amount')
     setDepositAmount(tableFileDb.DepositAmt)
+    setGiftVoucherAmt(tableFileDb.GiftVoucher_Amt)
   }, [tableFileDb])
 
   useEffect(() => {
@@ -503,7 +501,7 @@ function PaymentForm({
                 <TextField
                   type="number"
                   size="small"
-                  value={NumFormat(giftVoucherAmt)}
+                  value={giftVoucherAmt}
                   id="txtGiftVoucherAmount"
                   label="บัตรกำนัล/บัตรของขวัญ"
                   disabled

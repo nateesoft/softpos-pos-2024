@@ -51,22 +51,23 @@ const getCheckTableStatus = async () => {
 
 const updateTableAvailableStatus = async (tableNo) => {
   const sql = `update tablefile 
-                set TOnact='N', 
-                TItem=0,TAmount=0,TCustomer=0, Cashier=null,
-                Service=0,ServiceAmt=0,
-                EmpDisc='',EmpDiscAmt=0,
-                FastDisc='',FastDiscAmt=0,
-                TrainDisc='',TrainDiscAmt=0,
-                MemDisc='',MemDiscAmt=0,
-                SubDisc='',SubDiscAmt=0,
-                DiscBath=0,ProDiscAmt=0,SpaDiscAmt=0,CuponDiscAmt=0,
-                ItemDiscAmt=0,MemCode='',MemCurAmt=0,MemName='',
-                Food=0,Drink=0,Product=0,NetTotal=0,PrintTotal=0,
-                PrintChkBill='N', PrintCnt=0, PrintTime1='', PrintTime2='',
-                ChkBill='N', StkCode1='', StkCode2='',TDesk=0,TUser='',VoidMsg='',
-                TPause='Y',TTableIsOn='Y',TActive='',TAutoClose='',
-                VatAmt=0,Vat=0,MemBegin=null,MemEnd=null,TCurTime='',DepositAmt=0 
-                where Tcode='${tableNo}'`
+      set TOnact='N', 
+      TItem=0,TAmount=0,TCustomer=0, Cashier=null,
+      Service=0,ServiceAmt=0,
+      EmpDisc='',EmpDiscAmt=0,
+      FastDisc='',FastDiscAmt=0,
+      TrainDisc='',TrainDiscAmt=0,
+      MemDisc='',MemDiscAmt=0,
+      SubDisc='',SubDiscAmt=0,
+      DiscBath=0,ProDiscAmt=0,SpaDiscAmt=0,CuponDiscAmt=0,
+      ItemDiscAmt=0,MemCode='',MemCurAmt=0,MemName='',
+      Food=0,Drink=0,Product=0,NetTotal=0,PrintTotal=0,
+      PrintChkBill='N', PrintCnt=0, PrintTime1='', PrintTime2='',
+      ChkBill='N', StkCode1='', StkCode2='',TDesk=0,TUser='',VoidMsg='',
+      TPause='Y',TTableIsOn='Y',TActive='',TAutoClose='',
+      VatAmt=0,Vat=0,MemBegin=null,MemEnd=null,TCurTime='',
+      DepositAmt=0,SubTotal_Amt=0,GiftVoucher_Amt=0 
+      where Tcode='${tableNo}'`
   const results = await pool.query(sql)
 
   // update table_checkin

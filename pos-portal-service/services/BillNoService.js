@@ -30,7 +30,7 @@ const {
   updateMemberData,
   getDataByMemberCode
 } = require("./member/crm/MemberMasterService")
-const { getMoment, getMomentTime, getCurrentTime } = require("../utils/MomentUtil")
+const { getMoment, getCurrentTime } = require("../utils/MomentUtil")
 const { summaryBalance } = require("./CoreService")
 const { createListCredit, deleteListTempCredit } = require("./TCreditService")
 const { printReceiptHtml, printReviewReceiptHtml, printRefundBillHtml, printReceiptCopyHtml } = require('./SyncPrinterService')
@@ -437,9 +437,9 @@ const addNewBill = async (payload) => {
 
     if (giftVoucherAmt > 0) {
       // update tempgift
-      const resultTempGift = await getTempGiftList(macno)
+      const resultTempGift = await getTempGiftList(tableNo)
       await createListGiftFromTemp(resultTempGift, B_Refno)
-      await deleteTempGiftAll(macno)
+      await deleteTempGiftAll(macno, B_Table)
     }
 
     if (Object.keys(memberInfo).length > 0) {
@@ -779,8 +779,12 @@ const loadBillnoToBalance = async (billRefNo, tableNo) => {
 }
 
 const updateStatusPrintChkBill = async (tableNo, macno, depositAmt) => {
+  // check gift amount
+  const giftTempList = await getTempGiftList(tableNo)
+  const giftVoucherAmt = giftTempList.reduce((n, { giftamt }) => n + parseFloat(giftamt),0)
+
   const sql = `update tablefile 
-    set PrintChkBill='Y', DepositAmt='${depositAmt}' 
+    set PrintChkBill='Y', DepositAmt='${depositAmt}', GiftVoucher_Amt='${giftVoucherAmt}' 
     where Tcode='${tableNo}'`
   const results = await pool.query(sql)
 
