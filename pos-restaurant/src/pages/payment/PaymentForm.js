@@ -76,7 +76,7 @@ function PaymentForm({
 
   const { tableNo: tableNoRoute } = useParams();
 
-  const { serviceAmount, vatAmount, netTotalAmount } = tableFile
+  const { serviceAmount, vatAmount, netDiff, netTotalAmount } = tableFile
   const R_NetTotal = netTotalAmount
 
   const [paymentAmount, setPaymentAmount] = useState(0)
@@ -342,6 +342,7 @@ function PaymentForm({
         memberInfo,
         tonAmount: netTotalDisplay < 0 ? Math.abs(netTotalDisplay): 0,
         paymentAmount,
+        netDiff,
         netTotal: R_NetTotal + creditChargeAmount - depositAmount,
         empCode,
         B_Entertain: entertainAmount,
@@ -414,7 +415,7 @@ function PaymentForm({
       spacing={2}
       display="flex"
       direction="column"
-      sx={{ padding: "10px" }}
+      sx={{ padding: "5px" }}
     >
       <Grid2 size={12}>
         <Box
@@ -453,7 +454,7 @@ function PaymentForm({
             >
               <Typography sx={{
                 marginRight: "20px",
-                fontSize: { xs: "32px", md: "72px" },
+                fontSize: { xs: "28px", md: "60px" },
                 textShadow: "3px 1px white",
                 fontWeight: "bold"
               }}>
@@ -463,7 +464,6 @@ function PaymentForm({
               </Typography>
           </motion.div>
           </AnimatePresence>
-          
         </Box>
       </Grid2>
       <Grid2 size={12}>
@@ -927,9 +927,7 @@ function PaymentForm({
             <MultipleCreditPayment
               tableNo={tableNo}
               balanceAmount={
-                R_NetTotal +
-                creditChargeAmount -
-                depositAmount
+                R_NetTotal + creditChargeAmount - depositAmount - cashAmount - giftVoucherAmt
               }
               setCreditAmt={setCreditAmount}
               setCreditChargeAmt={setCreditChargeAmount}
@@ -948,11 +946,7 @@ function PaymentForm({
           >
             <MultipleCreditPayment
               tableNo={tableNo}
-              balanceAmount={
-                R_NetTotal +
-                creditChargeAmount -
-                depositAmount
-              }
+              balanceAmount={R_NetTotal+creditChargeAmount-depositAmount - cashAmount - giftVoucherAmt}
               setCreditAmt={setCreditAmount}
               setCreditChargeAmt={setCreditChargeAmount}
               totalAmount={totalAmount}
@@ -1091,11 +1085,7 @@ function PaymentForm({
           >
             <GiftVoucherPayment
               tableNo={tableNo}
-              balanceAmount={
-                R_NetTotal +
-                creditChargeAmount -
-                depositAmount
-              }
+              balanceAmount={R_NetTotal+creditChargeAmount-depositAmount - cashAmount}
               setGiftVoucherAmt={setGiftVoucherAmt}
               totalAmount={totalAmount}
               onClose={() => setOpenGiftVoucherInfo(false)}

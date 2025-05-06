@@ -56,11 +56,11 @@ const DiscountFormModal = ({
   const [cuponAmt, setCuponAmt] = useState(tableFile.SubDiscAmt || 0)
 
   // set config
-  const [fastDisc, setFastDisc] = useState(tableFile.FastDisc || posConfigSetup.P_FastDisc)
-  const [empDisc, setEmpDisc] = useState(tableFile.EmpDisc || posConfigSetup.P_EmpDisc)
-  const [memDisc, setMemDisc] = useState(tableFile.MemDisc || posConfigSetup.P_MemDisc)
-  const [trainDisc, setTrainDisc] = useState(tableFile.TrainDisc || posConfigSetup.P_TrainDisc)
-  const [subDisc, setSubDisc] = useState(tableFile.SubDisc || posConfigSetup.P_SubDisc)
+  const [fastDisc, setFastDisc] = useState("")
+  const [empDisc, setEmpDisc] = useState("")
+  const [memDisc, setMemDisc] = useState("")
+  const [trainDisc, setTrainDisc] = useState("")
+  const [subDisc, setSubDisc] = useState("")
 
   const [bahtAmt, setBahtAmt] = useState(tableFile.DiscBath || 0)
   const [specialCuponAmt, setSpecialCuponAmt] = useState(
@@ -121,6 +121,13 @@ const DiscountFormModal = ({
     setBahtAmt(0)
     setSpecialCuponAmt(0)
 
+    // clear format
+    setFastDisc(posConfigSetup.P_FastDisc)
+    setEmpDisc(posConfigSetup.P_EmpDisc)
+    setMemDisc(posConfigSetup.P_MemDisc)
+    setTrainDisc(posConfigSetup.P_TrainDisc)
+    setSubDisc(posConfigSetup.P_SubDisc)
+
     arrayInputRef[0].current?.focus()
   }
 
@@ -156,7 +163,6 @@ const DiscountFormModal = ({
       PrCuDisc,
       PrCuBath
     }
-    console.log('payload:', updPayload)
     apiClient
       .put(`/api/tablefile/discountInfo/${tableFile.Tcode}`, updPayload)
       .then((response) => {
@@ -339,10 +345,18 @@ const DiscountFormModal = ({
     loadPosConfigSetup()
   }, [])
 
+  useEffect(()=> {
+    setFastDisc(tableFile.FastDisc || posConfigSetup.P_FastDisc)
+    setEmpDisc(tableFile.EmpDisc || posConfigSetup.P_EmpDisc)
+    setMemDisc(tableFile.MemDisc || posConfigSetup.P_MemDisc)
+    setTrainDisc(tableFile.TrainDisc || posConfigSetup.P_TrainDisc)
+    setSubDisc(tableFile.SubDisc || posConfigSetup.P_SubDisc)
+  }, [posConfigSetup])
+
   return (
     <Grid2 container>
       <Grid2 size={12} padding={1} container justifyContent="center">
-        <Typography sx={{color: "white"}} variant="h6">ให้ส่วนลดต่างๆ ในระบบ (NN/CC/SS)</Typography>
+        <Typography sx={{color: "white"}} variant="h6">ให้ส่วนลดต่างๆ ในระบบ (FF/DD/PP)</Typography>
       </Grid2>
       <Grid2 size={12} textAlign="center" padding={1} margin={1} sx={{
         background: "lightblue",

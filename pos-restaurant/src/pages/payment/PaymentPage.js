@@ -92,6 +92,7 @@ function PaymentPage() {
             productAndService: data.ProductAndService,
             printRecpMessage: data.PrintRecpMessage,
             productNoneVat: data.ProductNonVat,
+            netDiff: data.NetDiff,
           }
 
           setSummaryTable(resultSummary)
