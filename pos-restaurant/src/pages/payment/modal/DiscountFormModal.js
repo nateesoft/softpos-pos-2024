@@ -55,6 +55,13 @@ const DiscountFormModal = ({
   const [traineeAmt, setTraineeAmt] = useState(tableFile.TrainDiscAmt || 0)
   const [cuponAmt, setCuponAmt] = useState(tableFile.SubDiscAmt || 0)
 
+  // set config
+  const [fastDisc, setFastDisc] = useState(tableFile.FastDisc || posConfigSetup.P_FastDisc)
+  const [empDisc, setEmpDisc] = useState(tableFile.EmpDisc || posConfigSetup.P_EmpDisc)
+  const [memDisc, setMemDisc] = useState(tableFile.MemDisc || posConfigSetup.P_MemDisc)
+  const [trainDisc, setTrainDisc] = useState(tableFile.TrainDisc || posConfigSetup.P_TrainDisc)
+  const [subDisc, setSubDisc] = useState(tableFile.SubDisc || posConfigSetup.P_SubDisc)
+
   const [bahtAmt, setBahtAmt] = useState(tableFile.DiscBath || 0)
   const [specialCuponAmt, setSpecialCuponAmt] = useState(
     tableFile.CuponDiscAmt || 0
@@ -133,15 +140,15 @@ const DiscountFormModal = ({
   const updateDiscountInfo = () => {
     const updPayload = {
       tableFile: tableFile,
-      FastDisc: posConfigSetup.P_FastDisc,
+      FastDisc: fastDisc,
       FastDiscAmt: fastAmt,
-      EmpDisc: posConfigSetup.P_EmpDisc,
+      EmpDisc: empDisc,
       EmpDiscAmt: empAmt,
-      MemDisc: posConfigSetup.P_MemDisc,
+      MemDisc: memDisc,
       MemDiscAmt: memAmt,
-      TrainDisc: posConfigSetup.P_TrainDisc,
+      TrainDisc: trainDisc,
       TrainDiscAmt: traineeAmt,
-      SubDisc: posConfigSetup.P_SubDisc,
+      SubDisc: subDisc,
       SubDiscAmt: cuponAmt,
       DiscBath: bahtAmt,
       CuponDiscAmt: specialCuponAmt,
@@ -149,6 +156,7 @@ const DiscountFormModal = ({
       PrCuDisc,
       PrCuBath
     }
+    console.log('payload:', updPayload)
     apiClient
       .put(`/api/tablefile/discountInfo/${tableFile.Tcode}`, updPayload)
       .then((response) => {
@@ -365,11 +373,12 @@ const DiscountFormModal = ({
           </Grid2>
           <Grid2 container size={4}>
             <MaskedInput
-              value={posConfigSetup.P_FastDisc}
-              label={posConfigSetup.P_FastDisc}
+              value={fastDisc}
+              label={fastDisc}
               disabled={posConfigSetup.P_FastDiscGet === 'N'}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setFastAmt}
+              setFormat={setFastDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(0)}
             />
@@ -410,11 +419,12 @@ const DiscountFormModal = ({
           </Grid2>
           <Grid2 size={4}>
             <MaskedInput
-              value={posConfigSetup.P_EmpDisc}
-              label={posConfigSetup.P_EmpDisc}
+              value={empDisc}
+              label={empDisc}
               disabled={posConfigSetup.P_EmpDiscGet === 'N'}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setEmpAmt}
+              setFormat={setEmpDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(1)}
             />
@@ -456,11 +466,12 @@ const DiscountFormModal = ({
           </Grid2>
           <Grid2 size={4}>
             <MaskedInput
-              value={posConfigSetup.P_MemDisc}
-              label={posConfigSetup.P_MemDisc}
+              value={memDisc}
+              label={memDisc}
               disabled={posConfigSetup.P_MemDiscGet === "N"}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setMemAmt}
+              setFormat={setMemDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(2)}
             />
@@ -502,11 +513,12 @@ const DiscountFormModal = ({
           </Grid2>
           <Grid2 size={4}>
             <MaskedInput
-              value={posConfigSetup.P_TrainDisc}
-              label={posConfigSetup.P_TrainDisc}
+              value={trainDisc}
+              label={trainDisc}
               disabled={posConfigSetup.P_TrainDiscGet === "N"}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setTraineeAmt}
+              setFormat={setTrainDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(3)}
             />
@@ -548,11 +560,12 @@ const DiscountFormModal = ({
           </Grid2>
           <Grid2 size={4}>
             <MaskedInput
-              value={posConfigSetup.P_SubDisc}
-              label={posConfigSetup.P_SubDisc}
+              value={subDisc}
+              label={subDisc}
               disabled={posConfigSetup.P_SubDiscGet === "N"}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setCuponAmt}
+              setFormat={setSubDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(4)}
             />

@@ -5,7 +5,8 @@ const {
   getBalanceMaxIndex,
   updateBalanceMove,
   updateBalanceSplitBill,
-  summaryBalance
+  summaryBalance,
+  getPOSConfigSetup
 } = require("./CoreService")
 const { Unicode2ASCII } = require("../utils/StringUtil")
 const { mappingResultDataList, mappingResultData } = require("../utils/ConvertThai")
@@ -84,6 +85,14 @@ const updateTableDiscount = async (payload) => {
     PrCuCode = "", PrCuDisc="", PrCuBath=""
   } = payload
 
+  const posConfigSetup = await getPOSConfigSetup()
+
+  let fastDisc = FastDiscAmt > 0 ? FastDisc : posConfigSetup.P_FastDisc
+  let empDisc = EmpDiscAmt > 0 ? EmpDisc : posConfigSetup.P_EmpDisc
+  let memDisc = MemDiscAmt > 0 ? MemDisc : posConfigSetup.P_MemDisc
+  let trainDisc = TrainDiscAmt > 0 ? TrainDisc : posConfigSetup.P_TrainDisc
+  let subDisc = SubDiscAmt > 0 ? SubDisc : posConfigSetup.P_SubDisc
+
   // clear tempcupon
   if(CuponDiscAmt === 0){
     const sqlClearTempCupon = `delete from tempcupon where R_Table='${tableFile.Tcode}'`
@@ -91,6 +100,11 @@ const updateTableDiscount = async (payload) => {
   }
 
   // clear discount all balance
+  const sqlClearDiscounTable = `UPDATE tablefile set 
+    EmpDisc='',FastDisc='',TrainDisc='',MemDisc='',SubDisc='' 
+    where Tcode='${tableFile.Tcode}'`
+  await pool.query(sqlClearDiscounTable)
+
   const sqlClearBalance = `UPDATE balance 
         SET R_PrDisc='0', R_PrBath='0', R_PrAmt='0',
         R_DiscBath='0', R_PrCuQuan=R_Quan, R_PrCuAmt='0',
@@ -180,11 +194,11 @@ const updateTableDiscount = async (payload) => {
   }
 
   const sql = `update tablefile set 
-        FastDisc='${FastDisc}',FastDiscAmt='${FastDiscAmt}',
-        EmpDisc='${EmpDisc}',EmpDiscAmt='${EmpDiscAmt}',
-        MemDisc='${MemDisc}',MemDiscAmt='${MemDiscAmt}',
-        TrainDisc='${TrainDisc}',TrainDiscAmt='${TrainDiscAmt}',
-        SubDisc='${SubDisc}',SubDiscAmt='${SubDiscAmt}',
+        FastDisc='${fastDisc}',FastDiscAmt='${FastDiscAmt}',
+        EmpDisc='${empDisc}',EmpDiscAmt='${EmpDiscAmt}',
+        MemDisc='${memDisc}',MemDiscAmt='${MemDiscAmt}',
+        TrainDisc='${trainDisc}',TrainDiscAmt='${TrainDiscAmt}',
+        SubDisc='${subDisc}',SubDiscAmt='${SubDiscAmt}',
         DiscBath='${discBath}',CuponDiscAmt='${CuponDiscAmt}',
         SpaDiscAmt='${SpaDiscAmt}' 
         where Tcode='${tableFile.Tcode}'`
