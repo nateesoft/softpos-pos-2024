@@ -53,6 +53,7 @@ const getCheckTableStatus = async () => {
 const updateTableAvailableStatus = async (tableNo) => {
   const sql = `update tablefile 
       set TOnact='N', 
+      TTableIsOn='N',
       TItem=0,TAmount=0,TCustomer=0, Cashier=null,
       Service=0,ServiceAmt=0,
       EmpDisc='',EmpDiscAmt=0,

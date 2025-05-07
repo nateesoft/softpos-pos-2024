@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useContext } from "react"
 import Grid from "@mui/material/Grid2"
 import { useParams } from "react-router-dom"
 import { motion } from "framer-motion"
@@ -12,7 +12,6 @@ import MemberInfo from "./MemberInfo"
 import MultiplePayment from "./split/MultiplePayment"
 import { useAlert } from "../../contexts/AlertContext"
 import { POSContext } from "../../AppContext"
-import { useContext } from "react"
 
 const modalStyle = {
   bgcolor: "background.paper",
@@ -101,11 +100,6 @@ function PaymentPage() {
       .catch((err) => handleNotification(err.message))
   }
 
-  const splitBillAction = () => {
-    initLoadOrder()
-    summaryTableFileBalance()
-  }
-
   const initLoadPayment =() => {
     initLoadOrder()
     initLoadTableFile()
@@ -114,7 +108,7 @@ function PaymentPage() {
 
   useEffect(() => {
     initLoadPayment()
-  }, [])
+  }, [tableNo])
 
   return (
     <motion.div
@@ -156,15 +150,10 @@ function PaymentPage() {
       <Modal open={openSplitBill} onClose={() => setOpenSplitBill(false)}>
         <Box sx={{ ...modalStyle }}>
           <MultiplePayment
-            setOpenSplitBill={setOpenSplitBill}
             onClose={() => setOpenSplitBill(false)}
             macno={macno}
             tableNo={tableNo}
             orderList={orderListToSplit}
-            splitBillAction={splitBillAction}
-            tableFile={summaryTable}
-            memberInfo={memberInfo}
-            initLoad={initLoadPayment}
           />
         </Box>
       </Modal>

@@ -10,7 +10,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { motion } from "framer-motion"
 import LoginIcon from "@mui/icons-material/Login"
 import { Divider, Grid2, Modal, useMediaQuery } from "@mui/material"
-import moment from "moment"
 
 import { useAlert } from "../../contexts/AlertContext"
 import apiClient from "../../httpRequest"
@@ -169,7 +168,7 @@ const Login = () => {
     socket.connect()
 
     // send to printer
-    socket.emit("message", "hello, world")
+    socket.emit("message", "Hello POS Restuarant !!!")
 
     // รับข้อความจาก server
     socket.on("message", (newMessage) => {
