@@ -885,7 +885,7 @@ function PaymentForm({
                 startIcon={<PrintCheckIcon />}
                 onClick={printBillCheck}
               >
-                ตรวจสอบรายการ
+                พิมพ์ใบตรวจสอบ
               </Button>
               <Button
                 variant="contained"
