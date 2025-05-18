@@ -21,7 +21,6 @@ import {
   MenuItem,
   FormControl} from "@mui/material"
 import MenuBook from "@mui/icons-material/ShoppingCartOutlined"
-import { useTranslation } from "react-i18next"
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu"
 import CloseModalIcon from "@mui/icons-material/Cancel"
 import CheckIcon from "@mui/icons-material/AddCircle"
@@ -36,6 +35,7 @@ import MenuSetModal from "./MenuSetModal"
 import { POSContext } from "../../AppContext"
 import ManualPriceInput from "./ManualPriceInput"
 import { CurrencyContext } from "../../contexts/CurrencyContext"
+import { useTranslation } from "../../contexts/Translation"
 
 const modalStyle = {
   position: "absolute",
@@ -119,7 +119,7 @@ const ProductMenu = ({
   initLoadBalanceProductGroup,
   summaryTableFileBalance
 }) => {
-  const { t } = useTranslation("global")
+  const { t } = useTranslation()
   const matches = useMediaQuery("(min-width:1024px)")
   const { appData } = useContext(POSContext)
   const { currency, convertCurrency } = useContext(CurrencyContext)

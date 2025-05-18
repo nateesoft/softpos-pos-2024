@@ -3,8 +3,9 @@ import Button from "@mui/material/Button"
 import ToggleButton from "@mui/material/ToggleButton"
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 import { Box, Typography } from "@mui/material"
-import { useTranslation } from "react-i18next"
 import MenuIcon from "@mui/icons-material/MenuBook"
+
+import { useTranslation } from "../../contexts/Translation"
 
 const myStyle = {
   listStyleType: "none",
@@ -22,7 +23,7 @@ const detail = {
 }
 
 function LeftMenu() {
-  const { i18n } = useTranslation("global")
+  const { setLang } = useTranslation()
   const [alignment, setAlignment] = React.useState("th")
 
   const handleAlignment = (event, newAlignment) => {
@@ -42,7 +43,7 @@ function LeftMenu() {
           <ToggleButton
             value="th"
             aria-label="centered"
-            onClick={() => i18n.changeLanguage("th")}
+            onClick={() => setLang("th")}
           >
             <Typography variant="p" sx={{ fontWeight: "bold" }}>
               TH
@@ -51,7 +52,7 @@ function LeftMenu() {
           <ToggleButton
             value="en"
             aria-label="left aligned"
-            onClick={() => i18n.changeLanguage("en")}
+            onClick={() => setLang("en")}
           >
             <Typography variant="p" sx={{ fontWeight: "bold" }}>
               EN

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Button, Modal, Typography } from '@mui/material'
 import ErrorBox from '@mui/icons-material/Error'
 import CloseIcon from '@mui/icons-material/Cancel'
@@ -40,6 +40,14 @@ export const ModalInfo = ({ open, setOpen, header = "Header", content = "Show Co
 }
 
 export const ModalConfirm = ({ open, setOpen, onSubmit, header = "Header", content = "Show Content" }) => {
+    const [isDisabled, setIsDisabled] = useState(false);
+
+    const handleClick = () => {
+        setIsDisabled(true);
+
+        onSubmit()
+      };
+
     return <Modal open={open} onClose={() => setOpen(false)}
         aria-labelledby="modal-title"
         aria-describedby="modal-description" disableEscapeKeyDown>
@@ -61,7 +69,7 @@ export const ModalConfirm = ({ open, setOpen, onSubmit, header = "Header", conte
             <Box sx={{ backgroundColor: "#eee", padding: "10px", borderRadius: "5px" }}>
                 <Box display="flex" justifyContent="center">
                     <Button variant='contained' color='error' startIcon={<CloseIcon />} onClick={() => setOpen(false)} sx={{ marginRight: "10px" }}>Cancel</Button>
-                    <Button variant='contained' color='primary' onClick={() => onSubmit()} startIcon={<OkIcon />}>OK</Button>
+                    <Button variant='contained' color='primary' onClick={handleClick} startIcon={<OkIcon />} disabled={isDisabled}>OK</Button>
                 </Box>
             </Box>
         </Box>

@@ -29,7 +29,8 @@ import PrintReceiptCheck from "./payment/PrintReceiptCheck"
 import UserAuthen from "./modal/UserAuthen"
 
 // all reports
-import OverviewReport from "./reports/allReport/OverviewReport"
+import DashboardReport from "./reports/Dashboard"
+import OverviewReport from "./reports"
 import TableOnActionList from "./reports/allReport/TableOnAction"
 
 // daily report
@@ -111,6 +112,7 @@ const AnimatedRoutes = () => {
 
             <Route path="/payment/print-bill-check/:tableNo" element={<PrintReceiptCheck />} />
 
+            <Route path="/reportDaily" element={<DashboardReport />} />
             <Route path="/reportDaily/overview" element={<OverviewReport />} />
             <Route path="/reportDaily/table-on-action/list" element={<TableOnActionList />} />
 
