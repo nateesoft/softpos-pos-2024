@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import { Box, Button, Typography } from "@mui/material"
+import React, { useState, useEffect } from "react"
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material"
 import Grid2 from "@mui/material/Grid2"
 import ConfirmIcon from "@mui/icons-material/CheckCircle"
 import CancelIcon from "@mui/icons-material/Cancel"
@@ -9,6 +9,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo"
 import { useNavigate } from "react-router-dom"
 import moment from "moment"
+
+import apiClient from "../../../../../httpRequest"
 
 const modalStyle = {
   position: "absolute",
@@ -24,12 +26,33 @@ const modalStyle = {
 const NewRegisterModal = ({ setOpen }) => {
   const navigate = useNavigate()
 
+  const [branchList, setBranchList] = useState([])
+  
   const [date, setDate] = useState("")
+  const [branch1, setBranch1] = useState("")
+  const [branch2, setBranch2] = useState("")
 
   const handleConfirm = async () => {
     const dateSelect = moment(date).format("YYYY-MM-DD")
-    navigate(`/reportDaily/table-on-action/?date=${dateSelect}`)
+    navigate(`/reportDaily/new-register/?date=${dateSelect}&branch1=${branch1}&branch2=${branch2}`)
   }
+
+  const loadBranchList = () => {
+    apiClient
+      .get(`/api/branch/all`)
+      .then((response) => {
+        if (response.status === 200) {
+          setBranchList(response.data.data)
+        }
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
+  }
+
+  useEffect(() => {
+    loadBranchList()
+  }, [])
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -40,10 +63,52 @@ const NewRegisterModal = ({ setOpen }) => {
               variant="p"
               sx={{ fontWeight: "bold", fontSize: "16px" }}
             >
-              รายงานโต๊ะค้าง (ยังไม่ได้ชำระเงิน)
+              รายงานสมาชิกสมัครใช้บริการใหม่
             </Typography>
           </Grid2>
-          <Grid2 container spacing={2} padding={2} direction="column">
+          <Grid2 container spacing={1} margin={1}>
+            <Grid2 size={6}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  รหัสสาขา
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={branch1}
+                  label="รหัสสาขา"
+                  onChange={(e) => setBranch1(e.target.value)}
+                >
+                  {branchList && branchList.map((item) => {
+                      return (
+                        <MenuItem value={item.Code}>{item.Name}</MenuItem>
+                      )
+                    })}
+                </Select>
+              </FormControl>
+            </Grid2>
+            <Grid2 size={6}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  รหัสสาขา
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={branch2}
+                  label="รหัสสาขา"
+                  onChange={(e) => setBranch2(e.target.value)}
+                >
+                  {branchList && branchList.map((item) => {
+                      return (
+                        <MenuItem value={item.Code}>{item.Name}</MenuItem>
+                      )
+                    })}
+                </Select>
+              </FormControl>
+            </Grid2>
+          </Grid2>
+          <Grid2 container spacing={1} padding={1} direction="column">
             <DatePicker
               label="เลือกวันที่"
               format="DD/MM/YYYY"

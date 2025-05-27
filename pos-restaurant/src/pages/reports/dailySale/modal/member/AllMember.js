@@ -30,46 +30,24 @@ const modalStyle = {
 const AllMemberModal = ({ setOpen }) => {
   const navigate = useNavigate()
 
-  const [terminalList, setTerminalList] = useState([])
-  const [productGroupList, setProductGroupList] = useState([])
+  const [branchList, setBranchList] = useState([])
 
-  const [macno1, setMacno1] = useState("")
-  const [macno2, setMacno2] = useState("")
-
-  const [user1, setUser1] = useState("")
-  const [user2, setUser2] = useState("")
-
-  const [group1, setGroup1] = useState("")
-  const [group2, setGroup2] = useState("")
-
-  const [product, setProduct] = useState("")
+  const [branch1, setBranch1] = useState("")
+  const [branch2, setBranch2] = useState("")
 
   const handleConfirm = async () => {
-    if (macno1 || macno2 || user1 || user2 || group1 || group2 || product) {
-      const query = `/?macno1=${macno1}&macno2=${macno2}&cashier1=${user1}&cashier2=${user2}&group1=${group1}&group2=${group2}&pluCode=${product}`
-      navigate(`/reportDaily/plu-report${query}`)
+    if (branch1 || branch2) {
+      const query = `/?branch1=${branch1}&branch2=${branch2}`
+      navigate(`/reportDaily/all-member${query}`)
     }
   }
 
-  const loadTerminalList = () => {
+  const loadBranchList = () => {
     apiClient
-      .get(`/api/poshwsetup/all`)
+      .get(`/api/branch/all`)
       .then((response) => {
         if (response.status === 200) {
-          setTerminalList(response.data.data)
-        }
-      })
-      .catch((error) => {
-        alert(error.message)
-      })
-  }
-
-  const loadProductGroupList = () => {
-    apiClient
-      .get(`/api/pos-groupfile/all`)
-      .then((response) => {
-        if (response.status === 200) {
-          setProductGroupList(response.data.data)
+          setBranchList(response.data.data)
         }
       })
       .catch((error) => {
@@ -78,34 +56,32 @@ const AllMemberModal = ({ setOpen }) => {
   }
 
   useEffect(() => {
-    loadTerminalList()
-    loadProductGroupList()
+    loadBranchList()
   }, [])
 
   return (
     <Box sx={{ ...modalStyle, padding: "20px", width: "450px" }}>
       <Grid2 container spacing={2} padding={2} justifyContent="center">
         <Typography variant="p" sx={{ fontWeight: "bold", fontSize: "16px" }}>
-          รายงานการขายตามรหัสสินค้า
+          รายงานจำนวน All Member
         </Typography>
       </Grid2>
       <Grid2 container spacing={1} margin={1}>
         <Grid2 size={6}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">
-              หมายเลขเครื่อง
+              รหัสสาขา
             </InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={macno1}
-              label="หมายเลขเครื่อง"
-              onChange={(e) => setMacno1(e.target.value)}
+              value={branch1}
+              label="รหัสสาขา"
+              onChange={(e) => setBranch1(e.target.value)}
             >
-              {terminalList &&
-                terminalList.map((item) => {
+              {branchList && branchList.map((item) => {
                   return (
-                    <MenuItem value={item.Terminal}>{item.Terminal}</MenuItem>
+                    <MenuItem value={item.Code}>{item.Name}</MenuItem>
                   )
                 })}
             </Select>
@@ -114,96 +90,23 @@ const AllMemberModal = ({ setOpen }) => {
         <Grid2 size={6}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">
-              หมายเลขเครื่อง
+              รหัสสาขา
             </InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              value={macno2}
-              label="หมายเลขเครื่อง"
-              onChange={(e) => setMacno2(e.target.value)}
+              value={branch2}
+              label="รหัสสาขา"
+              onChange={(e) => setBranch2(e.target.value)}
             >
-              {terminalList &&
-                terminalList.map((item) => {
+              {branchList && branchList.map((item) => {
                   return (
-                    <MenuItem value={item.Terminal}>{item.Terminal}</MenuItem>
+                    <MenuItem value={item.Code}>{item.Name}</MenuItem>
                   )
                 })}
             </Select>
           </FormControl>
         </Grid2>
-      </Grid2>
-      <Grid2 container spacing={1} margin={1}>
-        <Grid2 size={6}>
-          <FormControl fullWidth>
-            <TextField
-              label="รหัสพนักงานขาย"
-              value={user1}
-              onChange={(e) => setUser1(e.target.value)}
-              fullWidth
-            />
-          </FormControl>
-        </Grid2>
-        <Grid2 size={6}>
-          <FormControl fullWidth>
-            <TextField
-              label="รหัสพนักงานขาย"
-              value={user2}
-              onChange={(e) => setUser2(e.target.value)}
-              fullWidth
-            />
-          </FormControl>
-        </Grid2>
-      </Grid2>
-      <Grid2 container spacing={1} margin={1}>
-        <Grid2 size={6}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">กลุ่มสินค้า</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={group1}
-              label="กลุ่มสินค้า"
-              onChange={(e) => setGroup1(e.target.value)}
-            >
-              {productGroupList &&
-                productGroupList.map((item) => {
-                  return (
-                    <MenuItem value={item.GroupCode}>{item.GroupName}</MenuItem>
-                  )
-                })}
-            </Select>
-          </FormControl>
-        </Grid2>
-        <Grid2 size={6}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">กลุ่มสินค้า</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={group2}
-              label="กลุ่มสินค้า"
-              onChange={(e) => setGroup2(e.target.value)}
-            >
-              {productGroupList &&
-                productGroupList.map((item) => {
-                  return (
-                    <MenuItem value={item.GroupCode}>{item.GroupName}</MenuItem>
-                  )
-                })}
-            </Select>
-          </FormControl>
-        </Grid2>
-      </Grid2>
-      <Grid2 container spacing={1} margin={1}>
-        <FormControl fullWidth>
-          <TextField
-            label="รหัสสินค้า"
-            value={product}
-            onChange={(e) => setProduct(e.target.value)}
-            fullWidth
-          />
-        </FormControl>
       </Grid2>
       <Box display="flex" justifyContent="center">
         <Grid2 container spacing={2} padding={2}>

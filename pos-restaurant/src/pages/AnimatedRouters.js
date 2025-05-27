@@ -48,6 +48,12 @@ import TopSaleReport from "./reports/dailySale/TopSaleReport"
 import PromotionDiscount from "./reports/dailySale/PromotionDiscount"
 import SpecialCuponDiscount from "./reports/dailySale/SpecialCuponDiscount"
 
+// for member all report
+import DisplayAllMember from "./reports/dailySale/modal/member/report/DisplayAllMember"
+import DisplayFirstCheckIn from "./reports/dailySale/modal/member/report/DisplayFirstCheckIn"
+import DisplayNewRegister from "./reports/dailySale/modal/member/report/DisplayNewRegister"
+import DisplayNotCome from "./reports/dailySale/modal/member/report/DisplayNotCome"
+
 // monthly report
 import MTerminalReport from "./reports/monthlySale/TerminalReport"
 import MDepartmentGroupReport from "./reports/monthlySale/DepartmentGroupReport"
@@ -129,6 +135,11 @@ const AnimatedRoutes = () => {
             <Route path="/reportDaily/top-sale-report" element={<TopSaleReport />} />
             <Route path="/reportDaily/promotion-discount" element={<PromotionDiscount />} />
             <Route path="/reportDaily/special-cupon-discount" element={<SpecialCuponDiscount />} />
+            
+            <Route path="/reportDaily/all-member" element={<DisplayAllMember />} />
+            <Route path="/reportDaily/first-check-in" element={<DisplayFirstCheckIn />} />
+            <Route path="/reportDaily/new-register" element={<DisplayNewRegister />} />
+            <Route path="/reportDaily/not-come" element={<DisplayNotCome />} />
 
             <Route path="/reportMonthly/terminal-report" element={<MTerminalReport />} />
             <Route path="/reportMonthly/department-group-report" element={<MDepartmentGroupReport />} />
@@ -138,6 +149,8 @@ const AnimatedRoutes = () => {
             <Route path="/reportMonthly/void-report" element={<MVoidReport />} />
             <Route path="/reportMonthly/credit-report" element={<MCreditReport />} />
             <Route path="/reportMonthly/top-sale-report" element={<MTopSaleReport />} />
+
+
             <Route path="/inventory/db" element={<TemplateReport />} />
           </Route>
         </Route>
