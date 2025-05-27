@@ -39,6 +39,12 @@ import TopSaleReport from "../reports/dailySale/modal/TopSaleReport"
 import VoidReport from "../reports/dailySale/modal/VoidReport"
 import { useNavigate } from "react-router-dom"
 
+// all member reports
+import AllMember from "../reports/dailySale/modal/member/AllMember"
+import NewRegister from "../reports/dailySale/modal/member/NewRegister"
+import FirstCheckIn from "../reports/dailySale/modal/member/FirstCheckIn"
+import NotCome from "../reports/dailySale/modal/member/NotCome"
+
 const modalStyle = {
   position: "absolute",
   top: "50%",
@@ -63,6 +69,12 @@ function DashboardLayout() {
   const [terminalReport, setTerminalReport] = useState(false)
   const [topSaleReport, setTopSaleReport] = useState(false)
   const [voidReport, setVoidReport] = useState(false)
+
+  // for all member report
+  const [openAllMember, setOpenAllMember] = useState(false)
+  const [openNewRegister, setOpenNewRegister] = useState(false)
+  const [openFirstCheckIn, setOpenFirstCheckIn] = useState(false)
+  const [openMemberNotCome, setOpenMemberNotCome] = useState(false)
 
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openOrders1, setOpenOrders1] = useState(false)
@@ -122,6 +134,14 @@ function DashboardLayout() {
       setPromotionDiscountReport(true)
     } else if (data === "special-cupon-discount") {
       setSpecialCuponDiscountReport(true)
+    } else if (data === "all-member") {
+      setOpenAllMember(true)
+    } else if (data === "new-register") {
+      setOpenNewRegister(true)
+    } else if (data === "first-check-in") {
+      setOpenFirstCheckIn(true)
+    } else if (data === "not-come") {
+      setOpenMemberNotCome(true)
     }
   }
 
@@ -228,19 +248,19 @@ function DashboardLayout() {
           <List component="div" disablePadding>
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemText primary="จำนวน All member" 
-                onClick={() => handleOpenMenu("table-on-action")} />
+                onClick={() => handleOpenMenu("all-member")} />
             </ListItemButton>
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemText primary="จำนวน new register" 
-                onClick={() => handleOpenMenu("table-on-action")} />
+                onClick={() => handleOpenMenu("new-register")} />
             </ListItemButton>
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemText primary="สมาชิก first check-in" 
-                onClick={() => handleOpenMenu("table-on-action")} />
+                onClick={() => handleOpenMenu("first-check-in")} />
             </ListItemButton>
             <ListItemButton sx={{ pl: 4 }}>
-              <ListItemText primary="ผู้ใช้ครั้งแรกวันนี้" 
-                onClick={() => handleOpenMenu("table-on-action")} />
+              <ListItemText primary="สมาชิกที่ยังไม่เคยใช้บริการ" 
+                onClick={() => handleOpenMenu("not-come")} />
             </ListItemButton>
           </List>
         </Collapse>
@@ -255,7 +275,7 @@ function DashboardLayout() {
   return (
     <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
       <CssBaseline />
-      <AppBar position="fixed">
+      <AppBar position="fixed" sx={{background: "radial-gradient(circle, lightblue, #123456)"}}>
         <Toolbar>
           {isMobile && (
             <IconButton
@@ -392,6 +412,28 @@ function DashboardLayout() {
           <VoidReport setOpen={setVoidReport} />
         </Box>
       </Modal>
+
+      <Modal open={openAllMember}>
+        <Box sx={{ ...modalStyle }}>
+          <AllMember setOpen={setOpenAllMember} />
+        </Box>
+      </Modal>
+      <Modal open={openNewRegister}>
+        <Box sx={{ ...modalStyle }}>
+          <NewRegister setOpen={setOpenNewRegister} />
+        </Box>
+      </Modal>
+      <Modal open={openFirstCheckIn}>
+        <Box sx={{ ...modalStyle }}>
+          <FirstCheckIn setOpen={setOpenFirstCheckIn} />
+        </Box>
+      </Modal>
+      <Modal open={openMemberNotCome}>
+        <Box sx={{ ...modalStyle }}>
+          <NotCome setOpen={setOpenMemberNotCome} />
+        </Box>
+      </Modal>
+
     </Box>
   )
 }
