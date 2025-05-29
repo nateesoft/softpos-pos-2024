@@ -1,35 +1,37 @@
 const pool = require('../config/database/MySqlConnect');
-const { getMoment } = require('../utils/MomentUtil');
-const { Unicode2ASCII, ASCII2Unicode } = require('../utils/StringUtil');
+const { mappingResultDataList } = require('../utils/ConvertThai');
+const { getMoment, getCurrentTime } = require('../utils/MomentUtil');
+const { Unicode2ASCII } = require('../utils/StringUtil');
 const { listIngredeint, getPSetByPCode, getPCategoryByRLinkIndex } = require('./ProductService');
 const { ProcessStockOut } = require('./STCardService');
 
 const getAllTSale = async () => {
     const sql = `select * from t_sale order by R_Index`
     const results = await pool.query(sql)
-    return results
+    
+    return mappingResultDataList(results)
 }
 
 const getAllTSaleByRefno = async (refno) => {
     const sql = `select * from t_sale where R_Refno='${refno}' order by R_Index`
     const results = await pool.query(sql)
-    const mappingResult = results.map((item, index) => {
-        return { 
-            ...item,
-            R_PName: ASCII2Unicode(item.R_PName) ,
-            R_Opt1: ASCII2Unicode(item.R_Opt1) ,
-            R_Opt2: ASCII2Unicode(item.R_Opt2) ,
-            R_Opt3: ASCII2Unicode(item.R_Opt3) ,
-            R_Opt4: ASCII2Unicode(item.R_Opt4) ,
-            R_Opt5: ASCII2Unicode(item.R_Opt5) ,
-            R_Opt6: ASCII2Unicode(item.R_Opt6) ,
-            R_Opt7: ASCII2Unicode(item.R_Opt7) ,
-            R_Opt8: ASCII2Unicode(item.R_Opt8) ,
-            R_Opt9: ASCII2Unicode(item.R_Opt9) ,
-            VoidMsg: ASCII2Unicode(item.VoidMsg)
-        }
-    })
-    return mappingResult
+
+    return mappingResultDataList(results)
+}
+
+const getAllTSaleByRefnoSummary = async (refno) => {
+    const sql = `select R_PluCode, R_Void, R_PName, 
+        sum(R_Quan) R_Quan, 
+        sum(R_Total) R_Total 
+        from t_sale ts 
+        where ts.R_Refno ='${refno}' 
+        and (R_LinkIndex ='' or R_LinkIndex is null or R_LinkIndex = 'null') 
+        and R_Void != 'V' 
+        group by R_PluCode, R_PName,R_Void 
+        order by R_PluCode`
+    const results = await pool.query(sql)
+
+    return mappingResultDataList(results)
 }
 
 const createNewTSale = async (balance, BillRefNo) => {
@@ -180,50 +182,65 @@ const processAllPIngredentReturnStock = async (S_No, PCode, R_Quan, Cashier) => 
 const processAllPSet = async (S_No, PCode, R_Quan, Cashier) => {
     let listPset = await getPSetByPCode(PCode);
     listPset && listPset.forEach(async psetBean => {
-        const S_SubNo = ""
-        const S_Que = 0
-        const S_PCode = psetBean.PSubCode
-        const S_In = 0
-        const S_Out = R_Quan * psetBean.PSubQty
-        const S_InCost = 0
-        const S_OutCost = 0
-        const S_ACost = 0
-        const S_Rem = "SAL"
-        const S_User = Cashier
-        const S_Link = ""
+        if('Y' === psetBean.PStock) {
+            const S_SubNo = ""
+            const S_Que = 0
+            const S_PCode = psetBean.PSubCode
+            const S_In = 0
+            const S_Out = R_Quan * psetBean.PSubQty
+            const S_InCost = 0
+            const S_OutCost = 0
+            const S_ACost = 0
+            const S_Rem = "SAL"
+            const S_User = Cashier
+            const S_Link = ""
+    
+            const PStock = psetBean.PStock || 'N'
+            const PSet = psetBean.PSet || 'N'
+            const r_index = ""
+            const SaleOrRefund = "SALE" // SALE or REFUND
+    
+            await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost,
+                S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
+        }
+        // ตัดสต็อกสินค้าที่มี Ingredent
+        await processAllPIngredent(S_No, psetBean.PSubCode, psetBean.PSubQty, Cashier)
 
-        const PStock = "N"
-        const PSet = "N"
-        const r_index = ""
-        const SaleOrRefund = "SALE" // SALE or REFUND
-
-        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost,
-            S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
+        // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
+        await processAllPSet(S_No, psetBean.PSubCode, psetBean.PSubQty, Cashier)
     })
 }
 
 const processAllPSetReturn = async (S_No, PCode, R_Quan, Cashier) => {
     let listPset = await getPSetByPCode(PCode);
     listPset.forEach(async psetBean => {
-        const S_SubNo = ""
-        const S_Que = 0
-        const S_PCode = psetBean.PSubCode
-        const S_In = R_Quan * psetBean.PSubQty
-        const S_Out = 0
-        const S_InCost = 0
-        const S_OutCost = 0
-        const S_ACost = 0
-        const S_Rem = "SAL"
-        const S_User = Cashier
-        const S_Link = ""
+        if('Y' === psetBean.PStock) {
+            const S_SubNo = ""
+            const S_Que = 0
+            const S_PCode = psetBean.PSubCode
+            const S_In = R_Quan * psetBean.PSubQty
+            const S_Out = 0
+            const S_InCost = 0
+            const S_OutCost = 0
+            const S_ACost = 0
+            const S_Rem = "SAL"
+            const S_User = Cashier
+            const S_Link = ""
+    
+            const PStock = psetBean.PStock
+            const PSet = psetBean.PSet || 'N'
+            const r_index = ""
+            const SaleOrRefund = "VOID" // SALE or REFUND
+    
+            await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost,
+                S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
+        }
 
-        const PStock = "N"
-        const PSet = "N"
-        const r_index = ""
-        const SaleOrRefund = "VOID" // SALE or REFUND
+        // ตัดสต็อกสินค้าที่มี Ingredent
+        await processAllPIngredentReturnStock(S_No, psetBean.PSubCode, psetBean.PSubQty, Cashier)
 
-        await ProcessStockOut(S_No, S_SubNo, S_Que, S_PCode, S_In, S_Out, S_InCost,
-            S_OutCost, S_ACost, S_Rem, S_User, S_Link, PStock, PSet, r_index, SaleOrRefund);
+        // ตัดสต็อกสินค้าที่เป็นชุด SET (PSET)
+        await processAllPSetReturn(S_No, psetBean.PSubCode, psetBean.PSubQty, Cashier)
     })
 }
 
@@ -265,7 +282,7 @@ const processAllGroupSetReturn = async (R_Index, R_Table, R_Quan, Cashier, empCo
                 cashier='${Cashier}',
                 r_emp='${empCode}',
                 r_voiduser='${Cashier}',
-                r_voidtime=curtime(),
+                r_voidtime='${getCurrentTime()}',
                 r_discbath='0',
                 macno='${macno}',
                 r_kicprint='',
@@ -293,5 +310,6 @@ module.exports = {
     processAllPSetReturn,
     getAllTSale,
     getAllTSaleByRefno,
-    processAllGroupSetReturn
+    processAllGroupSetReturn,
+    getAllTSaleByRefnoSummary
 }

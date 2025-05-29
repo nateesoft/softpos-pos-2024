@@ -28,6 +28,9 @@ const RecieptCopyPrint = ({ setOpen }) => {
   const [copyCount, setCopyCount] = useState(1)
 
   const handleConfirm = () => {
+    if(!receiptNo){
+      return
+    }
     apiClient
       .post(`/api/billno/billCopy`, {
         billNo: receiptNo,
@@ -38,7 +41,11 @@ const RecieptCopyPrint = ({ setOpen }) => {
       .then((response) => {
         if (response.status === 200) {
           const billNo = response.data.data
-          handleNotification(`พิมพ์สำเนาเอกสารเลขที่: ${billNo}`)
+          if(billNo==='Refund'){
+            handleNotification(`เอกสารเลขที่: ${receiptNo} ถูกยกเลิกไปแล้ว ไม่สามารถพิมพ์สำเนาได้ !!!`, "error")
+          }else{
+            handleNotification(`พิมพ์สำเนาเอกสารเลขที่: ${billNo}`, "info")
+          }
         } else {
           handleNotification("พบข้อผิดพลาดในการพิมพ์สำเนา!")
         }
@@ -61,6 +68,8 @@ const RecieptCopyPrint = ({ setOpen }) => {
             label="เลขที่บิล (Receipt No)"
             value={receiptNo}
             onChange={(e) => setReceiptNo(e.target.value)}
+            autoFocus
+            onFocus={e=>e.target.select()}
             fullWidth
           />
         </Grid2>

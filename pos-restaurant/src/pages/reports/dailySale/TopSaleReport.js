@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
+import { FONT_FAMILY } from "../../../AppConstants"
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("th-TH", {
@@ -50,24 +51,24 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานอันดับสินค้าขายดี</div>
-          <div align="center">(Top Sales Report)</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานอันดับสินค้าขายดี</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">(Top Sales Report)</font></div>
           <div style={{ margin: "20px" }}></div>
           <div>
-            หมายเลขเครื่อง : {filter.macno1} ... {filter.macno2}
+            <font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : {filter.macno1} ... {filter.macno2}</font>
           </div>
           <div>
-            รหัสพนักงานขาย : {filter.cashier1} ... {filter.cashier2}
+            <font face={FONT_FAMILY} size="4">รหัสพนักงานขาย : {filter.cashier1} ... {filter.cashier2}</font>
           </div>
           <div>
-            รหัสกลุ่มสินค้า (Dept/Group) : {filter.group1} ... {filter.group2}
+            <font face={FONT_FAMILY} size="4">รหัสกลุ่มสินค้า (Dept/Group) : {filter.group1} ... {filter.group2}</font>
           </div>
           <div style={{ margin: "20px" }}></div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
+            {macno}</font>
           </div>
           <table width="100%">
             <tbody
@@ -78,11 +79,11 @@ class ComponentToPrint extends Component {
               }}
             >
               <tr>
-                <td>กลุ่มสินค้า...</td>
-                <td align="center">ลำดับ</td>
-                <td align="left">รหัสสินค้า</td>
-                <td align="right">จำนวน</td>
-                <td align="right">จำนวนเงิน</td>
+                <td><font face={FONT_FAMILY} size="4">กลุ่มสินค้า...</font></td>
+                <td align="center"><font face={FONT_FAMILY} size="4">ลำดับ</font></td>
+                <td align="left"><font face={FONT_FAMILY} size="4">รหัสสินค้า</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวน</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวนเงิน</font></td>
               </tr>
             </tbody>
             <tbody
@@ -92,18 +93,17 @@ class ComponentToPrint extends Component {
                 borderStyle: "dashed"
               }}
             >
-              {reports &&
-                reports.map((item) => (
+              {reports && reports.map((item) => (
                   <tr>
                     <td>
-                      {item.GroupCode} {item.GroupName}
+                      <font face={FONT_FAMILY} size="4">{item.GroupCode} {item.GroupName}</font>
                     </td>
-                    <td align="center">{item.index}</td>
+                    <td align="center"><font face={FONT_FAMILY} size="4">{item.index}</font></td>
                     <td align="left">
-                      {item.R_PluCode} {item.R_PName.substr(0, 15)}
+                      <font face={FONT_FAMILY} size="4">{item.R_PluCode} {item.R_PName.substr(0, 15)}</font>
                     </td>
-                    <td align="right">{item.R_Quan}</td>
-                    <td align="right">{formatCurrency(item.R_Total)}</td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{item.R_Quan}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.R_Total)}</font></td>
                   </tr>
                 ))}
             </tbody>

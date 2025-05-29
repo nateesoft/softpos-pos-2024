@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
+import { FONT_FAMILY } from "../../../AppConstants"
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("th-TH", {
@@ -50,26 +51,24 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานการขายตามรหัสสินค้า</div>
-          <div align="center">(Plu-Code Report)</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานการขายตามรหัสสินค้า</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">(Plu-Code Report)</font></div>
           <div style={{ margin: "20px" }}></div>
           <div>
-            หมายเลขเครื่อง : {filter.macno1} ... {filter.macno2}
+            <font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : {filter.macno1} ... {filter.macno2}</font>
           </div>
           <div>
-            รหัสพนักงานขาย : {filter.cashier1} ... {filter.cashier2}
+            <font face={FONT_FAMILY} size="4">รหัสพนักงานขาย : {filter.cashier1} ... {filter.cashier2}</font>
           </div>
           <div>
-            รหัสกลุ่มสินค้า (Dept/Group) : {filter.groupCode1} ...{" "}
-            {filter.groupCode2}
+            <font face={FONT_FAMILY} size="4">รหัสกลุ่มสินค้า (Dept/Group) : {filter.groupCode1} ...{" "} {filter.groupCode2}</font>
           </div>
-          <div>รหัสสินค้า : {filter.pluCode}</div>
+          <div><font face={FONT_FAMILY} size="4">รหัสสินค้า : {filter.pluCode}</font></div>
           <div style={{ margin: "20px" }}></div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "} {macno}</font>
           </div>
           <table width="100%">
             <tbody
@@ -79,15 +78,14 @@ class ComponentToPrint extends Component {
                 borderStyle: "dashed"
               }}
             >
-              {reports &&
-                reports.map((item) => (
+              {reports && reports.map((item) => (
                   <tr>
-                    <td>{item.GroupName}</td>
+                    <td><font face={FONT_FAMILY} size="4">{item.GroupName}</font></td>
                     <td>
-                      {item.R_PluCode} {item.R_PName.substr(0, 15)}
+                      <font face={FONT_FAMILY} size="4">{item.R_PluCode} {item.R_PName.substr(0, 15)}</font>
                     </td>
-                    <td align="right">{item.R_Quan}</td>
-                    <td align="right">{formatCurrency(item.R_Total)}</td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{item.R_Quan}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.R_Total)}</font></td>
                   </tr>
                 ))}
             </tbody>
@@ -99,9 +97,9 @@ class ComponentToPrint extends Component {
               }}
             >
               <tr style={{ height: "50px" }}>
-                <td colSpan={2}>SUM-TOTAL.....</td>
-                <td align="right">{summary.qty}</td>
-                <td align="right">{formatCurrency(summary.netTotal)}</td>
+                <td colSpan={2}><font face={FONT_FAMILY} size="4">SUM-TOTAL.....</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{summary.qty}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(summary.netTotal)}</font></td>
               </tr>
             </tbody>
           </table>

@@ -251,12 +251,7 @@ function MainSalePage() {
             tableNo={tableNo}
             orderType={orderType}
             ProductList={ProductList}
-            ProductA={ProductA}
-            ProductB={ProductB}
-            ProductC={ProductC}
-            ProductD={ProductD}
-            ProductE={ProductE}
-            ProductF={ProductF}
+            ProductItem={{ProductA, ProductB, ProductC, ProductD, ProductE, ProductF}}
             OrderList={orderList}
             OrderEList={orderEList}
             OrderTList={orderTList}

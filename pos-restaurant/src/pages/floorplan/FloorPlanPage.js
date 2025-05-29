@@ -31,7 +31,6 @@ import LogoutIcon from "@mui/icons-material/LogoutOutlined"
 import { motion } from "framer-motion"
 import "@xyflow/react/dist/style.css"
 import StoreIcon from "@mui/icons-material/Store"
-import { useTranslation } from "react-i18next"
 import moment from "moment"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 
@@ -62,6 +61,7 @@ import LanguageSettings from "./LanguageSettings"
 import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
 import QuickSaleMenu from "./QuickSaleMenu"
+import { useTranslation } from "../../contexts/Translation"
 
 const modalPinStyle = {
   position: "absolute",
@@ -87,7 +87,7 @@ const nodeTypes = {
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 }
 
 const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
-  const { t } = useTranslation("global")
+  const { t } = useTranslation()
   const { handleNotification } = useAlert()
   const navigate = useNavigate()
 
@@ -134,34 +134,34 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
           localStorage.setItem("userLogin", "")
 
           // send to printer
-          socket.emit(
-            "printerMessage",
-            JSON.stringify({
-              id: 1,
-              printerType: "message",
-              printerName: "cashier",
-              message: `
-                <div>
-                  <font face="Angsana New" size="4">
-                    User: ${userLogin} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
-                  </font>
-                </div>
-                <hr />
-                <div align="center">
-                  <font face="Angsana New" size="4">ออกจากระบบเรียบร้อย</font>
-                </div>
-                <hr />
-                <div align="center">
-                (づ ᴗ _ᴗ)づ♡
-                </div>
-              `,
-              terminal: "",
-              tableNo: "",
-              billNo: "",
-              title: "",
-              billType: ""
-            })
-          )
+          // socket.emit(
+          //   "printerMessage",
+          //   JSON.stringify({
+          //     id: 1,
+          //     printerType: "message",
+          //     printerName: "cashier",
+          //     message: `
+          //       <div>
+          //         <font face="Angsana New" size="4">
+          //           User: ${userLogin} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
+          //         </font>
+          //       </div>
+          //       <hr />
+          //       <div align="center">
+          //         <font face="Angsana New" size="4">ออกจากระบบเรียบร้อย</font>
+          //       </div>
+          //       <hr />
+          //       <div align="center">
+          //       (づ ᴗ _ᴗ)づ♡
+          //       </div>
+          //     `,
+          //     terminal: "",
+          //     tableNo: "",
+          //     billNo: "",
+          //     title: "",
+          //     billType: ""
+          //   })
+          // )
 
           navigate("/")
         } else {

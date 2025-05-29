@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
+import { FONT_FAMILY } from "../../../AppConstants"
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("th-TH", {
@@ -50,16 +51,15 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานการพิมพ์ใบเสร็จรับเงิน</div>
-          <div align="center">(Receipt Report)</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานการพิมพ์ใบเสร็จรับเงิน</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">(Receipt Report)</font></div>
           <div align="center" style={{ margin: "10px" }}>
-            หมายเลขเครื่อง : {filter.macno1} .. {filter.macno2}
+            <font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : {filter.macno1} .. {filter.macno2}</font>
           </div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "} {macno}</font>
           </div>
           <table width="100%">
             <thead>
@@ -70,33 +70,32 @@ class ComponentToPrint extends Component {
                   borderStyle: "dashed"
                 }}
               >
-                <td align="center">ใบเสร็จ</td>
-                <td align="center">เวลาพิมพ์</td>
-                <td align="right">จำนวนเงิน</td>
-                <td align="right">ภาษี(Vat)</td>
+                <td align="center"><font face={FONT_FAMILY} size="4">ใบเสร็จ</font></td>
+                <td align="center"><font face={FONT_FAMILY} size="4">เวลาพิมพ์</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวนเงิน</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">ภาษี(Vat)</font></td>
               </tr>
             </thead>
             <tbody>
-              {reports &&
-                reports.map((item) => {
+              {reports && reports.map((item) => {
                   if (item.paymentType) {
                     return (
                       <tr>
-                        <td align="right">{item.paymentType}</td>
-                        <td align="right">{item.paymentTime}</td>
+                        <td align="right"><font face={FONT_FAMILY} size="4">{item.paymentType}</font></td>
+                        <td align="right"><font face={FONT_FAMILY} size="4">{item.paymentTime}</font></td>
                         <td align="right">
-                          {formatCurrency(item.paymentAmount)}
+                          <font face={FONT_FAMILY} size="4">{formatCurrency(item.paymentAmount)}</font>
                         </td>
-                        <td align="right">{formatCurrency(item.paymentVat)}</td>
+                        <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.paymentVat)}</font></td>
                       </tr>
                     )
                   } else {
                     return (
                       <tr>
-                        <td>{item.B_Refno}</td>
-                        <td align="right">{item.B_Ontime}</td>
-                        <td align="right">{formatCurrency(item.B_NetTotal)}</td>
-                        <td align="right">{formatCurrency(item.B_Vat)}</td>
+                        <td><font face={FONT_FAMILY} size="4">{item.B_Refno}</font></td>
+                        <td align="right"><font face={FONT_FAMILY} size="4">{item.B_Ontime}</font></td>
+                        <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.B_NetTotal)}</font></td>
+                        <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.B_Vat)}</font></td>
                       </tr>
                     )
                   }

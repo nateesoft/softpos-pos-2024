@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
+import { FONT_FAMILY } from '../../../AppConstants'
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("th-TH", {
@@ -51,15 +52,16 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานโต๊ะค้าง (ยังไม่ได้ชำระเงิน)</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานโต๊ะค้าง (ยังไม่ได้ชำระเงิน)</font></div>
           <div align="center" style={{ margin: "10px" }}>
-            Table Check
+            <font face={FONT_FAMILY} size="4">Table Check</font>
           </div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">
+              {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "} {macno}
+            </font>
           </div>
           <table width="100%" cellPadding={2} cellSpacing={2}>
             <thead>
@@ -70,24 +72,23 @@ class ComponentToPrint extends Component {
                   borderStyle: "dashed"
                 }}
               >
-                <td align="center">Date</td>
-                <td align="center">Table</td>
-                <td align="center">Open-Time</td>
-                <td align="right">Customer</td>
-                <td align="right">Amount</td>
+                <td align="center"><font face={FONT_FAMILY} size="4">Date</font></td>
+                <td align="center"><font face={FONT_FAMILY} size="4">Table</font></td>
+                <td align="center"><font face={FONT_FAMILY} size="4">Open-Time</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">Customer</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">Amount</font></td>
               </tr>
             </thead>
             <tbody>
-              {reports &&
-                reports.map((row) => (
+              {reports && reports.map((row) => (
                   <tr>
                     <td align="center">
-                      {moment(row.R_Date).format("DD/MM/YYYY")}
+                      <font face={FONT_FAMILY} size="4">{moment(row.R_Date).format("DD/MM/YYYY")}</font>
                     </td>
-                    <td align="center">{row.R_Table}</td>
-                    <td align="center">{row.TCurTime}</td>
-                    <td align="right">{row.TCustomer}</td>
-                    <td align="right">{formatCurrency(row.R_Total)}</td>
+                    <td align="center"><font face={FONT_FAMILY} size="4">{row.R_Table}</font></td>
+                    <td align="center"><font face={FONT_FAMILY} size="4">{row.TCurTime}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{row.TCustomer}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(row.R_Total)}</font></td>
                   </tr>
                 ))}
             </tbody>
@@ -102,8 +103,8 @@ class ComponentToPrint extends Component {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td align="right">Total</td>
-                <td align="right">{formatCurrency(total)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">Total</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(total)}</font></td>
               </tr>
             </tfoot>
           </table>

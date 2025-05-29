@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
+import { FONT_FAMILY } from "../../../AppConstants"
 
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat("th-TH", {
@@ -50,16 +51,15 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานการขายตามช่วงเวลา</div>
-          <div align="center">(Hourly Report)</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานการขายตามช่วงเวลา</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">(Hourly Report)</font></div>
           <div align="center" style={{ margin: "10px" }}>
-            หมายเลขเครื่อง : {filter.macno1} .. {filter.macno2}
+            <font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : {filter.macno1} .. {filter.macno2}</font>
           </div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "} {macno}</font>
           </div>
           <table width="100%">
             <thead>
@@ -70,20 +70,19 @@ class ComponentToPrint extends Component {
                   borderStyle: "dashed"
                 }}
               >
-                <td align="center">เวลา</td>
-                <td align="right">จำนวนบิล</td>
-                <td align="right">จำนวนลูกค้า</td>
-                <td align="right">จำนวนเงิน</td>
+                <td align="center"><font face={FONT_FAMILY} size="4">เวลา</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวนบิล</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวนลูกค้า</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">จำนวนเงิน</font></td>
               </tr>
             </thead>
             <tbody>
-              {reports &&
-                reports.map((item) => (
+              {reports && reports.map((item) => (
                   <tr>
-                    <td align="center">{item.time}</td>
-                    <td align="right">{item.countBill}</td>
-                    <td align="right">{item.countCust}</td>
-                    <td align="right">{formatCurrency(item.sumNetTotal)}</td>
+                    <td align="center"><font face={FONT_FAMILY} size="4">{item.time}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{item.countBill}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{item.countCust}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.sumNetTotal)}</font></td>
                   </tr>
                 ))}
             </tbody>
@@ -96,11 +95,11 @@ class ComponentToPrint extends Component {
             >
               <tr style={{ height: "50px" }}>
                 <td>
-                  <div style={{ marginLeft: "10px" }}>SUM...</div>
+                  <div style={{ marginLeft: "10px" }}><font face={FONT_FAMILY} size="4">SUM...</font></div>
                 </td>
-                <td align="right">{summary.countBill}</td>
-                <td align="right">{summary.countCust}</td>
-                <td align="right">{formatCurrency(summary.sumNetTotal)}</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{summary.countBill}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{summary.countCust}</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(summary.sumNetTotal)}</font></td>
               </tr>
             </tbody>
           </table>
