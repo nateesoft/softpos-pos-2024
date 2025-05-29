@@ -17,11 +17,16 @@ import apiClient from "../../../../../../httpRequest"
 import { POSContext } from "../../../../../../AppContext"
 import { FONT_FAMILY } from '../../../../../../AppConstants'
 
-const formatCurrency = (amount) => {
-  return new Intl.NumberFormat("th-TH", {
-    style: "currency",
-    currency: "THB"
-  }).format(amount)
+const formatPoint = (amount = 0) => {
+  if(amount){
+    return amount.toLocaleString()
+  }
+}
+
+const formatPrice = (amount = 0) => {
+  if(amount){
+    return amount.toLocaleString()
+  }
 }
 
 class ComponentToPrint extends Component {
@@ -30,7 +35,7 @@ class ComponentToPrint extends Component {
   }
 
   render() {
-    const { userLogin, branch1, branch2, macno, reports } = this.props
+    const { userLogin, branch1, branch2, date1, date2, macno, reports } = this.props
     const poshwSetup = this.props.poshwSetup
 
     let headers = [
@@ -58,6 +63,9 @@ class ComponentToPrint extends Component {
           <div align="center" style={{ margin: "10px" }}>
             <font face={FONT_FAMILY} size="4">สาขา {branch1} - สาขา {branch2}</font>
           </div>
+          <div align="center" style={{ margin: "10px" }}>
+            <font face={FONT_FAMILY} size="4">ช่วงวันที่ {date1} - สาขา {date2}</font>
+          </div>
           <div align="center">
             <font face={FONT_FAMILY} size="4">
               {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "} {macno}
@@ -72,23 +80,23 @@ class ComponentToPrint extends Component {
                   borderStyle: "dashed"
                 }}
               >
-                <td align="center"><font face={FONT_FAMILY} size="4">Date</font></td>
-                <td align="center"><font face={FONT_FAMILY} size="4">Table</font></td>
-                <td align="center"><font face={FONT_FAMILY} size="4">Open-Time</font></td>
-                <td align="right"><font face={FONT_FAMILY} size="4">Customer</font></td>
-                <td align="right"><font face={FONT_FAMILY} size="4">Amount</font></td>
+                <td align="center"><font face={FONT_FAMILY} size="4">Code</font></td>
+                <td align="left"><font face={FONT_FAMILY} size="4">Name</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">Purchase</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">Score</font></td>
+                <td align="center"><font face={FONT_FAMILY} size="4">Expired</font></td>
               </tr>
             </thead>
             <tbody>
               {reports && reports.map((row) => (
                   <tr>
                     <td align="center">
-                      <font face={FONT_FAMILY} size="4">{moment(row.R_Date).format("DD/MM/YYYY")}</font>
+                      <font face={FONT_FAMILY} size="4">{row.Member_Code}</font>
                     </td>
-                    <td align="center"><font face={FONT_FAMILY} size="4">{row.R_Table}</font></td>
-                    <td align="center"><font face={FONT_FAMILY} size="4">{row.TCurTime}</font></td>
-                    <td align="right"><font face={FONT_FAMILY} size="4">{row.TCustomer}</font></td>
-                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(row.R_Total)}</font></td>
+                    <td align="left"><font face={FONT_FAMILY} size="4">{row.Member_NameThai}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatPrice(row.Member_TotalPurchase)}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatPoint(row.Member_TotalScore)}</font></td>
+                    <td align="center"><font face={FONT_FAMILY} size="4">{moment(row.Member_PointExpiredDate).format('YYYY/MM/DD')}</font></td>
                   </tr>
                 ))}
             </tbody>
@@ -104,12 +112,13 @@ const DisplayNewRegister = () => {
   const [query] = useSearchParams()
   const branch1 = query.get('branch1')
   const branch2 = query.get('branch2')
+  const date1 = query.get('date1')
+  const date2 = query.get('date2')
 
   const contentRef = useRef(null)
   const { appData } = useContext(POSContext)
   const { macno, userLogin } = appData
   const [reports, setReports] = useState([])
-  const [total, setTotal] = useState(0)
   const [poshwSetup, setPosHwSetup] = useState({})
 
   const functionToPrint = useReactToPrint({
@@ -127,10 +136,12 @@ const DisplayNewRegister = () => {
 
   const loadReport = useCallback(() => {
     apiClient
-      .get(`/api/crm/member/report/new-register?branch1=${branch1}&branch2=${branch2}`)
+      .post(`/api/crm/member/report/new-register`, {
+        branch1, branch2, date1, date2
+      })
       .then((response) => {
         if (response.status === 200) {
-          setReports(response.data.data.data)
+          setReports(response.data.data)
         }
       })
       .catch((error) => {
@@ -161,8 +172,10 @@ const DisplayNewRegister = () => {
       <ComponentToPrint
         innerRef={contentRef}
         userLogin={userLogin}
-        branch1={"001"}
-        branch2={"999"}
+        branch1={branch1}
+        branch2={branch2}
+        date1={date1}
+        date2={date2}
         macno={macno}
         poshwSetup={poshwSetup}
         reports={reports}

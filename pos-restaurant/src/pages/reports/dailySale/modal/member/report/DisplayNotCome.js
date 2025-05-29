@@ -131,10 +131,12 @@ const DisplayNotCome = () => {
 
   const loadReport = useCallback(() => {
     apiClient
-      .get(`/api/crm/member/report/not-come?branch1=${branch1}&branch2=${branch2}`)
+      .post(`/api/crm/member/report/not-come`, {
+        branch1, branch2
+      })
       .then((response) => {
         if (response.status === 200) {
-          setReports(response.data.data.data)
+          setReports(response.data.data)
         }
       })
       .catch((error) => {
