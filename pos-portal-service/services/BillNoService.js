@@ -30,7 +30,7 @@ const {
   updateMemberData,
   getDataByMemberCode
 } = require("./member/crm/MemberMasterService")
-const { getMoment } = require("../utils/MomentUtil")
+const { getMoment, getCurrentTime } = require("../utils/MomentUtil")
 const { summaryBalance } = require("./CoreService")
 const { createListCredit, deleteListTempCredit } = require("./TCreditService")
 const { printReceiptHtml, printReviewReceiptHtml, printRefundBillHtml, printReceiptCopyHtml } = require('./SyncPrinterService')
@@ -39,7 +39,7 @@ const { addDataFromTemp } = require('./CuponService')
 const { getTempGiftList, deleteTempGiftAll, createListGiftFromTemp } = require('./TGiftService')
 
 const getAllBillNoToday = async () => {
-  const sql = `select * from billno where B_OnDate='${getMoment().format("YYYY-MM-DD")}'`
+  const sql = `select * from billno where B_OnDate='${getMoment().format("YYYY-MM-DD")}' order by B_Refno desc`
   const results = await pool.query(sql)
   return mappingResultDataList(results)
 }
@@ -106,12 +106,16 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
   const sql = `UPDATE billno 
     SET B_MacNo='${macno}',
     B_Cashier='${Cashier}',
-    B_BillCopy=B_BillCopy+${copy} WHERE B_Refno='${billNo}'`
+    B_BillCopy=B_BillCopy+${copy} WHERE B_Refno='${billNo}' and B_Void <> 'V'`
   await pool.query(sql)
 
   const billInfo = await getBillNoByRefno(billNo)
-  const tSaleInfo = await getAllTSaleByRefno(billNo)
 
+  if(billInfo.B_Void === 'V'){
+    return "Refund"
+  }
+
+  const tSaleInfo = await getAllTSaleByRefnoSummary(billNo)
   const printerInfo = await getCashierPrinterName(macno)
 
   // send to printer
@@ -134,8 +138,9 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
 }
 
 const updateRefundBill = async (billNoData) => {
+  const getVoidTime = getCurrentTime()
   const sql = `UPDATE billno SET B_Void='${billNoData.B_Void}', 
-    B_VoidTime=curtime(), 
+    B_VoidTime='${getVoidTime}', 
     B_VoidUser='${billNoData.B_VoidUser}' 
     WHERE B_Refno='${billNoData.B_Refno}'`
   const results = await pool.query(sql)
@@ -211,6 +216,7 @@ const addNewBill = async (payload) => {
     tableNo,
     billType,
     tonAmount,
+    netDiff,
     netTotal,
     memberInfo,
     cashInfo,
@@ -366,7 +372,7 @@ const addNewBill = async (payload) => {
   // const B_Entertain = 0;
   const B_VoucherDiscAmt = 0
   const B_VoucherOver = 0
-  const B_NetDiff = 0
+  const B_NetDiff = netDiff || 0
   const B_SumSetDiscAmt = 0
   const B_DetailFood = 0
   const B_DetailDrink = 0
@@ -436,9 +442,9 @@ const addNewBill = async (payload) => {
 
     if (giftVoucherAmt > 0) {
       // update tempgift
-      const resultTempGift = await getTempGiftList(macno)
+      const resultTempGift = await getTempGiftList(tableNo)
       await createListGiftFromTemp(resultTempGift, B_Refno)
-      await deleteTempGiftAll(macno)
+      await deleteTempGiftAll(macno, B_Table)
     }
 
     if (Object.keys(memberInfo).length > 0) {
@@ -706,7 +712,6 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
   newBalance.R_Serve = ""
   newBalance.R_PrintOK = ""
   newBalance.R_KicOK = ""
-  newBalance.R_QuanCanDisc = 0
   newBalance.R_Order = ""
   newBalance.R_MemSum = ""
   newBalance.R_VoidQuan = 0
@@ -778,13 +783,23 @@ const loadBillnoToBalance = async (billRefNo, tableNo) => {
 }
 
 const updateStatusPrintChkBill = async (tableNo, macno, depositAmt) => {
-  const sql = `update tablefile set PrintChkBill='Y' where Tcode='${tableNo}'`
+  // check gift amount
+  const giftTempList = await getTempGiftList(tableNo)
+  const giftVoucherAmt = giftTempList.reduce((n, { giftamt }) => n + parseFloat(giftamt),0)
+
+  const sql = `update tablefile 
+    set PrintChkBill='Y', DepositAmt='${depositAmt}', GiftVoucher_Amt='${giftVoucherAmt}' 
+    where Tcode='${tableNo}'`
   const results = await pool.query(sql)
 
-  const tableInfo = await getTableByCode(tableNo)
+  await summaryBalance(tableNo, macno)
+  
+  let tableInfo = await getTableByCode(tableNo)
   const balanceInfo = await getBalanceByTableNoSummary(tableNo)
 
   const printerInfo = await getCashierPrinterName(macno)
+
+  tableInfo = await getTableByCode(tableNo)
 
   // send to printer
   socket.emit(
@@ -793,7 +808,7 @@ const updateStatusPrintChkBill = async (tableNo, macno, depositAmt) => {
       id: 1,
       printerType: "message",
       printerName: printerInfo.receipt_printer || 'cashier',
-      message: await printReviewReceiptHtml({ macno, tableInfo: {...tableInfo, depositAmt}, balanceInfo, printerInfo }),
+      message: await printReviewReceiptHtml({ macno, tableInfo, balanceInfo, printerInfo }),
       terminal: "",
       tableNo: "",
       billNo: "",

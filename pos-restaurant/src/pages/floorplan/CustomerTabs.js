@@ -4,8 +4,9 @@ import Tabs from "@mui/material/Tabs"
 import Tab from "@mui/material/Tab"
 import Box from "@mui/material/Box"
 import CustomerGeneral from "./CustomerGeneral"
-import { useTranslation } from "react-i18next"
 import CustomerNational from "./CustomerNational"
+
+import { useTranslation } from "../../contexts/Translation"
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props
@@ -37,15 +38,7 @@ function a11yProps(index) {
 }
 
 const CustomerTabs = (props) => {
-  const {
-    thaiManCount,thaiWomanCount,thaiKidCount,thaiOldCount,
-    setThaiManCount,setThaiWomanCount,setThaiKidCount,setThaiOldCount,
-    nationManCount,nationWomanCount,nationKidCount,nationOldCount,
-    setNationManCount,setNationWomanCount,setNationKidCount,setNationOldCount,
-    nationCountry,customerNote,billNo,
-    setNationCountry,setCustomerNote,setBillNo
-  } = props
-  const { t } = useTranslation("global")
+  const { t } = useTranslation()
   const [value, setValue] = React.useState(0)
 
   const handleChange = (event, newValue) => {

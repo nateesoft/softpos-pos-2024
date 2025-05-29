@@ -29,7 +29,6 @@ import LogoutIcon from "@mui/icons-material/LogoutOutlined"
 import { motion } from "framer-motion"
 import "@xyflow/react/dist/style.css"
 import StoreIcon from "@mui/icons-material/Store"
-import { useTranslation } from "react-i18next"
 import moment from "moment"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 import SearchIcon from "@mui/icons-material/Search";
@@ -63,6 +62,7 @@ import LanguageSettings from "./LanguageSettings"
 import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
 import BalanceTable from "./BalanceTable"
+import { useTranslation } from "../../contexts/Translation"
 
 const modalPinStyle = {
   position: "absolute",
@@ -78,7 +78,7 @@ const modalStyle = {
 }
 
 const RetailSalePage = () => {
-  const { t } = useTranslation("global")
+  const { t } = useTranslation()
   const { handleNotification } = useAlert()
   const navigate = useNavigate()
 
@@ -161,23 +161,6 @@ const RetailSalePage = () => {
 
   const handleCloseModal = (func) => {
     func()
-  }
-
-  const loadFloorPlan = (floor) => {
-    apiClient
-      .get(`/api/floorplan-template/${floor}`)
-      .then((response) => {
-        const result = response.data
-        if (result.status === 2000) {
-          if (result.data != null) {
-            const flow = result.data.template
-            if (flow) {
-              setNodes(flow.nodes)
-            }
-          }
-        }
-      })
-      .catch((err) => handleNotification(err.message))
   }
 
   useEffect(() => {

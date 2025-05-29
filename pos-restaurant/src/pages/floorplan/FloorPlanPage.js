@@ -31,7 +31,6 @@ import LogoutIcon from "@mui/icons-material/LogoutOutlined"
 import { motion } from "framer-motion"
 import "@xyflow/react/dist/style.css"
 import StoreIcon from "@mui/icons-material/Store"
-import { useTranslation } from "react-i18next"
 import moment from "moment"
 import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive"
 
@@ -62,6 +61,7 @@ import LanguageSettings from "./LanguageSettings"
 import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
 import QuickSaleMenu from "./QuickSaleMenu"
+import { useTranslation } from "../../contexts/Translation"
 
 const modalPinStyle = {
   position: "absolute",
@@ -87,7 +87,7 @@ const nodeTypes = {
 const defaultViewport = { x: 400, y: 400, zoom: 0.5 }
 
 const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
-  const { t } = useTranslation("global")
+  const { t } = useTranslation()
   const { handleNotification } = useAlert()
   const navigate = useNavigate()
 

@@ -76,7 +76,7 @@ function PaymentForm({
 
   const { tableNo: tableNoRoute } = useParams();
 
-  const { serviceAmount, vatAmount, netTotalAmount } = tableFile
+  const { serviceAmount, vatAmount, netDiff, netTotalAmount } = tableFile
   const R_NetTotal = netTotalAmount
 
   const [paymentAmount, setPaymentAmount] = useState(0)
@@ -198,7 +198,7 @@ function PaymentForm({
     const discountAmt = 0
     let balanceAmt = parseFloat(paymentAmt - discountAmt - totalNetAmt)
     if (_depositAmount > totalNetAmt) {
-      setDepositAmount(totalNetAmt)
+      setDepositAmount(0)
       setCashAmount(0)
       setCreditAmount(0)
       setCreditChargeAmount(0)
@@ -234,9 +234,7 @@ function PaymentForm({
   }
 
   const handleFit = () => {
-    setCashAmount(R_NetTotal)
-    setDepositAmount(0)
-    setEntertainAmount(0)
+    setCashAmount(R_NetTotal-depositAmount-giftVoucherAmt)
   }
 
   const handleDepositAmountKeyIn = (depAmt) => {
@@ -249,6 +247,11 @@ function PaymentForm({
 
   const handleCashFocus = (evt) => {
     setComponentFocus("cash")
+    evt.target.select()
+  }
+
+  const handleDepositFocus = (evt) => {
+    setComponentFocus("deposit")
     evt.target.select()
   }
 
@@ -339,7 +342,8 @@ function PaymentForm({
         memberInfo,
         tonAmount: netTotalDisplay < 0 ? Math.abs(netTotalDisplay): 0,
         paymentAmount,
-        netTotal: R_NetTotal + creditChargeAmount,
+        netDiff,
+        netTotal: R_NetTotal + creditChargeAmount - depositAmount,
         empCode,
         B_Entertain: entertainAmount,
         B_UserEntertain: empCode,
@@ -397,6 +401,11 @@ function PaymentForm({
   }
 
   useEffect(() => {
+    setDepositAmount(tableFileDb.DepositAmt)
+    setGiftVoucherAmt(tableFileDb.GiftVoucher_Amt)
+  }, [tableFileDb])
+
+  useEffect(() => {
     totalAmount()
   }, [totalAmount])
 
@@ -406,7 +415,7 @@ function PaymentForm({
       spacing={2}
       display="flex"
       direction="column"
-      sx={{ padding: "10px" }}
+      sx={{ padding: "5px" }}
     >
       <Grid2 size={12}>
         <Box
@@ -445,7 +454,7 @@ function PaymentForm({
             >
               <Typography sx={{
                 marginRight: "20px",
-                fontSize: { xs: "32px", md: "72px" },
+                fontSize: { xs: "28px", md: "60px" },
                 textShadow: "3px 1px white",
                 fontWeight: "bold"
               }}>
@@ -455,7 +464,6 @@ function PaymentForm({
               </Typography>
           </motion.div>
           </AnimatePresence>
-          
         </Box>
       </Grid2>
       <Grid2 size={12}>
@@ -473,7 +481,7 @@ function PaymentForm({
                       size="small"
                       variant="filled"
                       value={depositAmount}
-                      onFocus={() => setComponentFocus("deposit")}
+                      onFocus={handleDepositFocus}
                       onChange={(e) => handleDepositAmountKeyIn(e.target.value)}
                       id="txtDepositAmount"
                       label="หักคืนเงินมัดจำ"
@@ -484,26 +492,6 @@ function PaymentForm({
                       inputProps={{ min: 0, style: { textAlign: "right" } }}
                     />
                   </Stack>
-                  {/* <Stack direction="row">
-                    <IconButton sx={{ display: { xs: "none", md: "flex" } }}>
-                      <VideogameAssetIcon fontSize="large" />
-                    </IconButton>
-                    <TextField
-                      type="number"
-                      size="small"
-                      variant="filled"
-                      value={entertainAmount}
-                      onFocus={() => setComponentFocus("entertain")}
-                      onChange={(e) => handleEntertainAmountKeyIn(e.target.value)}
-                      id="txtEntertainAmount"
-                      label="ชำระแบบ Entertain"
-                      sx={{
-                        backgroundColor:
-                          componentFocus === "entertain" ? "#f5fff3" : ""
-                      }}
-                      inputProps={{ min: 0, style: { textAlign: "right" } }}
-                    />
-                  </Stack> */}
                 </Grid2>
               </Grid2>
               <Grid2 container spacing={1}>
@@ -513,7 +501,7 @@ function PaymentForm({
                 <TextField
                   type="number"
                   size="small"
-                  value={NumFormat(giftVoucherAmt)}
+                  value={giftVoucherAmt}
                   id="txtGiftVoucherAmount"
                   label="บัตรกำนัล/บัตรของขวัญ"
                   disabled
@@ -897,7 +885,7 @@ function PaymentForm({
                 startIcon={<PrintCheckIcon />}
                 onClick={printBillCheck}
               >
-                ตรวจสอบรายการ
+                พิมพ์ใบตรวจสอบ
               </Button>
               <Button
                 variant="contained"
@@ -939,9 +927,7 @@ function PaymentForm({
             <MultipleCreditPayment
               tableNo={tableNo}
               balanceAmount={
-                R_NetTotal +
-                creditChargeAmount -
-                depositAmount
+                R_NetTotal + creditChargeAmount - depositAmount - cashAmount - giftVoucherAmt
               }
               setCreditAmt={setCreditAmount}
               setCreditChargeAmt={setCreditChargeAmount}
@@ -960,11 +946,7 @@ function PaymentForm({
           >
             <MultipleCreditPayment
               tableNo={tableNo}
-              balanceAmount={
-                R_NetTotal +
-                creditChargeAmount -
-                depositAmount
-              }
+              balanceAmount={R_NetTotal+creditChargeAmount-depositAmount - cashAmount - giftVoucherAmt}
               setCreditAmt={setCreditAmount}
               setCreditChargeAmt={setCreditChargeAmount}
               totalAmount={totalAmount}
@@ -1103,11 +1085,7 @@ function PaymentForm({
           >
             <GiftVoucherPayment
               tableNo={tableNo}
-              balanceAmount={
-                R_NetTotal +
-                creditChargeAmount -
-                depositAmount
-              }
+              balanceAmount={R_NetTotal+creditChargeAmount-depositAmount - cashAmount}
               setGiftVoucherAmt={setGiftVoucherAmt}
               totalAmount={totalAmount}
               onClose={() => setOpenGiftVoucherInfo(false)}

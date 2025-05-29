@@ -5,12 +5,12 @@ import {
   InputAdornment
 } from "@mui/material"
 import Grid2 from "@mui/material/Grid2"
-import { useTranslation } from "react-i18next"
-
 import ManIcon from '@mui/icons-material/Man';
 import WomanIcon from '@mui/icons-material/Woman';
 import ElderlyIcon from '@mui/icons-material/Elderly';
 import ChildFriendlyIcon from '@mui/icons-material/ChildFriendly';
+
+import { useTranslation } from "../../contexts/Translation";
 
 const min = 0
 const max = 10
@@ -56,7 +56,7 @@ const InputCustomer = ({ title, value, setValue, iconName }) => {
 }
 
 const CustomerGeneral = (props) => {
-  const { t } = useTranslation("global")
+  const { t } = useTranslation()
   const {
     thaiManCount,thaiWomanCount,thaiKidCount,thaiOldCount,
     setThaiManCount,setThaiWomanCount,setThaiKidCount,setThaiOldCount

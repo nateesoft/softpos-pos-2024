@@ -41,7 +41,11 @@ const RecieptCopyPrint = ({ setOpen }) => {
       .then((response) => {
         if (response.status === 200) {
           const billNo = response.data.data
-          handleNotification(`พิมพ์สำเนาเอกสารเลขที่: ${billNo}`, "info")
+          if(billNo==='Refund'){
+            handleNotification(`เอกสารเลขที่: ${receiptNo} ถูกยกเลิกไปแล้ว ไม่สามารถพิมพ์สำเนาได้ !!!`, "error")
+          }else{
+            handleNotification(`พิมพ์สำเนาเอกสารเลขที่: ${billNo}`, "info")
+          }
         } else {
           handleNotification("พบข้อผิดพลาดในการพิมพ์สำเนา!")
         }

@@ -3,6 +3,7 @@ import { Box, Button, Grid2, Modal, TextField, Typography } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import SaveIcon from "@mui/icons-material/Save"
 import CancelIcon from "@mui/icons-material/Cancel"
+import CalculateIcon from '@mui/icons-material/Calculate';
 
 import apiClient from "../../../httpRequest"
 import CuponListModal from './CuponListModal'
@@ -55,6 +56,13 @@ const DiscountFormModal = ({
   const [traineeAmt, setTraineeAmt] = useState(tableFile.TrainDiscAmt || 0)
   const [cuponAmt, setCuponAmt] = useState(tableFile.SubDiscAmt || 0)
 
+  // set config
+  const [fastDisc, setFastDisc] = useState("")
+  const [empDisc, setEmpDisc] = useState("")
+  const [memDisc, setMemDisc] = useState("")
+  const [trainDisc, setTrainDisc] = useState("")
+  const [subDisc, setSubDisc] = useState("")
+
   const [bahtAmt, setBahtAmt] = useState(tableFile.DiscBath || 0)
   const [specialCuponAmt, setSpecialCuponAmt] = useState(
     tableFile.CuponDiscAmt || 0
@@ -69,38 +77,6 @@ const DiscountFormModal = ({
     }
   }
 
-  const summaryDiscount = () => {
-    let netTotalAmount = tableFile.NetTotal
-    let formatFast = posConfigSetup.P_FastDisc.split("/")[0]
-    let formatEmp = posConfigSetup.P_EmpDisc.split("/")[0]
-    let formatMem = posConfigSetup.P_MemDisc.split("/")[0]
-    let formatTrain = posConfigSetup.P_TrainDisc.split("/")[0]
-    let formatSub = posConfigSetup.P_SubDisc.split("/")[0]
-
-    if (fastAmt > parseFloat(formatFast)) {
-      return
-    }
-    if (empAmt > parseFloat(formatEmp)) {
-      return
-    }
-    if (memAmt > parseFloat(formatMem)) {
-      return
-    }
-    if (traineeAmt > parseFloat(formatTrain)) {
-      return
-    }
-    if (cuponAmt > parseFloat(formatSub)) {
-      return
-    }
-    netTotalAmount -= (netTotalAmount * fastAmt) / 100
-    netTotalAmount -= (netTotalAmount * empAmt) / 100
-    netTotalAmount -= (netTotalAmount * memAmt) / 100
-    netTotalAmount -= (netTotalAmount * traineeAmt) / 100
-    netTotalAmount -= (netTotalAmount * cuponAmt) / 100
-    netTotalAmount -= bahtAmt
-    netTotalAmount -= specialCuponAmt
-  }
-
   const focusComponent = (index) => {
     arrayInputRef[index].current?.focus()
   }
@@ -113,6 +89,13 @@ const DiscountFormModal = ({
     setCuponAmt(0)
     setBahtAmt(0)
     setSpecialCuponAmt(0)
+
+    // clear format
+    setFastDisc(posConfigSetup.P_FastDisc)
+    setEmpDisc(posConfigSetup.P_EmpDisc)
+    setMemDisc(posConfigSetup.P_MemDisc)
+    setTrainDisc(posConfigSetup.P_TrainDisc)
+    setSubDisc(posConfigSetup.P_SubDisc)
 
     arrayInputRef[0].current?.focus()
   }
@@ -133,15 +116,15 @@ const DiscountFormModal = ({
   const updateDiscountInfo = () => {
     const updPayload = {
       tableFile: tableFile,
-      FastDisc: posConfigSetup.P_FastDisc,
+      FastDisc: fastDisc,
       FastDiscAmt: fastAmt,
-      EmpDisc: posConfigSetup.P_EmpDisc,
+      EmpDisc: empDisc,
       EmpDiscAmt: empAmt,
-      MemDisc: posConfigSetup.P_MemDisc,
+      MemDisc: memDisc,
       MemDiscAmt: memAmt,
-      TrainDisc: posConfigSetup.P_TrainDisc,
+      TrainDisc: trainDisc,
       TrainDiscAmt: traineeAmt,
-      SubDisc: posConfigSetup.P_SubDisc,
+      SubDisc: subDisc,
       SubDiscAmt: cuponAmt,
       DiscBath: bahtAmt,
       CuponDiscAmt: specialCuponAmt,
@@ -169,178 +152,230 @@ const DiscountFormModal = ({
   }
 
   const festDiscountCompute = () => {
-    let formatFast = posConfigSetup.P_FastDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_FastDiscChk.split("/")[0]
+    let netTotalFood = tableFile.Food
+    let netTotalDrink = tableFile.Drink
+    let netTotalProduct = tableFile.Product
 
-    let sumDisc = empAmt + memAmt + traineeAmt + cuponAmt
-    if (sumDisc > 0 && formatYYY === "Y") {
+    let totalAmountFood = 0
+    let totalAmountDrink = 0
+    let totalAmountProduct = 0
+
+    let summaryOtherDiscount = empAmt + memAmt + traineeAmt + cuponAmt
+
+    // FOOD DISCOUNT
+    let formatFastFood = fastDisc.split("/")[0]
+    let formatYYYFood = posConfigSetup.P_FastDiscChk.split("/")[0]
+    if (summaryOtherDiscount > 0 && formatYYYFood === "Y") {
       return 0
     }
-    let netTotal = tableFile.TAmount
-    let totalAmount = (netTotal * formatFast) / 100
-    setFastAmt(totalAmount)
+    totalAmountFood = (netTotalFood * formatFastFood) / 100
 
+    // DRINK DISCOUNT
+    let formatFastDrink = fastDisc.split("/")[1]
+    let formatYYYDrink = posConfigSetup.P_FastDiscChk.split("/")[1]
+    if (summaryOtherDiscount > 0 && formatYYYDrink === "Y") {
+      return 0
+    }
+    totalAmountDrink = (netTotalDrink * formatFastDrink) / 100
+
+    // PRODUCT DISCOUNT
+    let formatFastProduct = fastDisc.split("/")[2]
+    let formatYYYProduct = posConfigSetup.P_FastDiscChk.split("/")[2]
+    if (summaryOtherDiscount > 0 && formatYYYProduct === "Y") {
+      return 0
+    }
+    totalAmountProduct = (netTotalProduct * formatFastProduct) / 100
+
+    let totalAmount = totalAmountFood + totalAmountDrink + totalAmountProduct
+    setFastAmt(totalAmount)
     focusComponent(0)
   }
 
-  const handleFestManual = (value) => {
-    let formatFast = posConfigSetup.P_FastDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_FastDiscChk.split("/")[0]
-    if (posConfigSetup.P_FastDiscGet === "Y" && formatYYY === "Y") {
-      let sumDisc = empAmt + memAmt + traineeAmt + cuponAmt
-      if (sumDisc > 0) {
-        return 0
-      }
-      let totalAmount = (tableFile.TAmount * formatFast) / 100
-      if (value < 0 || value > totalAmount) {
-        setFastAmt(totalAmount)
-      } else {
-        setFastAmt(value)
-      }
-    }
-  }
-
   const empDiscountCompute = () => {
-    let formatEmp = posConfigSetup.P_EmpDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_EmpDiscChk.split("/")[0]
+    let netTotalFood = tableFile.Food
+    let netTotalDrink = tableFile.Drink
+    let netTotalProduct = tableFile.Product
 
-    let sumDisc = fastAmt + memAmt + traineeAmt + cuponAmt
-    if (sumDisc > 0 && formatYYY === "Y") {
+    let totalAmountFood = 0
+    let totalAmountDrink = 0
+    let totalAmountProduct = 0
+
+    let summaryOtherDiscount = fastAmt + memAmt + traineeAmt + cuponAmt
+    
+    // FOOD DISCOUNT
+    let formatEmpFood = empDisc.split("/")[0]
+    let formatYYYFood = posConfigSetup.P_EmpDiscChk.split("/")[0]
+    if (summaryOtherDiscount > 0 && formatYYYFood === "Y") {
       return 0
     }
-    let netTotal = tableFile.TAmount
-    let totalAmount = (netTotal * formatEmp) / 100
-    setEmpAmt(totalAmount)
+    totalAmountFood = (netTotalFood * formatEmpFood) / 100
 
+    // DRINK DISCOUNT
+    let formatEmpDrink = empDisc.split("/")[1]
+    let formatYYYDrink = posConfigSetup.P_EmpDiscChk.split("/")[1]
+    if (summaryOtherDiscount > 0 && formatYYYDrink === "Y") {
+      return 0
+    }
+    totalAmountDrink = (netTotalDrink * formatEmpDrink) / 100
+
+    // PRODUCT DISCOUNT
+    let formatEmpProduct = empDisc.split("/")[2]
+    let formatYYYProduct = posConfigSetup.P_EmpDiscChk.split("/")[2]
+    if (summaryOtherDiscount > 0 && formatYYYProduct === "Y") {
+      return 0
+    }
+    totalAmountProduct = (netTotalProduct * formatEmpProduct) / 100
+
+    let totalAmount = totalAmountFood + totalAmountDrink + totalAmountProduct
+    setEmpAmt(totalAmount)
     focusComponent(1)
   }
 
-  const handleEmpManual = (value) => {
-    let formatEmp = posConfigSetup.P_EmpDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_EmpDiscChk.split("/")[0]
-    if (posConfigSetup.P_EmpDiscGet === "Y" && formatYYY === "Y") {
-      let sumDisc = fastAmt + memAmt + traineeAmt + cuponAmt
-      if (sumDisc > 0) {
-        return 0
-      }
-      let totalAmount = (tableFile.TAmount * formatEmp) / 100
-      if (value < 0 || value > totalAmount) {
-        setEmpAmt(totalAmount)
-      } else {
-        setEmpAmt(value)
-      }
-    }
-  }
-
   const memeberDiscountCompute = () => {
-    let formatMem = posConfigSetup.P_MemDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_MemDiscChk.split("/")[0]
-    let sumDisc = fastAmt + empAmt + traineeAmt + cuponAmt
-    if (sumDisc > 0&&formatYYY==="Y") {
+    let netTotalFood = tableFile.Food
+    let netTotalDrink = tableFile.Drink
+    let netTotalProduct = tableFile.Product
+
+    let totalAmountFood = 0
+    let totalAmountDrink = 0
+    let totalAmountProduct = 0
+
+    let summaryOtherDiscount = fastAmt + empAmt + traineeAmt + cuponAmt
+
+    // FOOD DISCOUNT
+    let formatMemFood = memDisc.split("/")[0]
+    let formatYYYFood = posConfigSetup.P_MemDiscChk.split("/")[0]
+    if (summaryOtherDiscount > 0&&formatYYYFood==="Y") {
       return 0
     }
-    let netTotal = tableFile.TAmount
-    let totalAmount = (netTotal * formatMem) / 100
-    setMemAmt(totalAmount)
+    totalAmountFood = (netTotalFood * formatMemFood) / 100
 
+    // DRINK DISCOUNT
+    let formatMemDrink = memDisc.split("/")[1]
+    let formatYYYDrink = posConfigSetup.P_MemDiscChk.split("/")[1]
+    if (summaryOtherDiscount > 0&&formatYYYDrink==="Y") {
+      return 0
+    }
+    totalAmountDrink = (netTotalDrink * formatMemDrink) / 100
+
+    // PRODUCT DISCOUNT
+    let formatMemProduct = memDisc.split("/")[2]
+    let formatYYYProduct = posConfigSetup.P_MemDiscChk.split("/")[2]
+    if (summaryOtherDiscount > 0&&formatYYYProduct==="Y") {
+      return 0
+    }
+    totalAmountProduct = (netTotalProduct * formatMemProduct) / 100
+
+    let totalAmount = totalAmountFood + totalAmountDrink + totalAmountProduct
+    setMemAmt(totalAmount)
     focusComponent(2)
   }
 
-  const handleMemManual = (value) => {
-    let formatMem = posConfigSetup.P_MemDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_MemDiscChk.split("/")[0]
-    if (posConfigSetup.P_MemDiscGet === "Y" && formatYYY === "Y") {
-      let sumDisc = fastAmt + empAmt + traineeAmt + cuponAmt
-      if (sumDisc > 0) {
-        return 0
-      }
-      let totalAmount = (tableFile.TAmount * formatMem) / 100
-      if (value < 0 || value > totalAmount) {
-        setMemAmt(totalAmount)
-      } else {
-        setMemAmt(value)
-      }
-    }
-  }
-
   const traineeDiscountCompute = () => {
-    let formatTrain = posConfigSetup.P_TrainDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_TrainDiscChk.split("/")[0]
+    let netTotalFood = tableFile.Food
+    let netTotalDrink = tableFile.Drink
+    let netTotalProduct = tableFile.Product
 
-    let sumDisc = fastAmt + empAmt + memAmt + cuponAmt
-    if (sumDisc > 0&&formatYYY==="Y") {
+    let totalAmountFood = 0
+    let totalAmountDrink = 0
+    let totalAmountProduct = 0
+
+    let summaryOtherDiscount = fastAmt + empAmt + memAmt + cuponAmt
+
+    // FOOD DISCOUNT
+    let formatTrainFood = trainDisc.split("/")[0]
+    let formatYYYFood = posConfigSetup.P_TrainDiscChk.split("/")[0]
+    if (summaryOtherDiscount > 0&&formatYYYFood==="Y") {
       return 0
     }
-    let netTotal = tableFile.TAmount
-    let totalAmount = (netTotal * formatTrain) / 100
-    setTraineeAmt(totalAmount)
+    totalAmountFood = (netTotalFood * formatTrainFood) / 100
+    
+    // DRINK DISCOUNT
+    let formatTrainDrink = trainDisc.split("/")[1]
+    let formatYYYDrink = posConfigSetup.P_TrainDiscChk.split("/")[1]
+    if (summaryOtherDiscount > 0&&formatYYYDrink==="Y") {
+      return 0
+    }
+    totalAmountDrink = (netTotalDrink * formatTrainDrink) / 100
 
+    // PRODUCT DISCOUNT
+    let formatTrainProduct = trainDisc.split("/")[2]
+    let formatYYYProduct = posConfigSetup.P_TrainDiscChk.split("/")[2]
+    if (summaryOtherDiscount > 0&&formatYYYProduct==="Y") {
+      return 0
+    }
+    totalAmountProduct = (netTotalProduct * formatTrainProduct) / 100
+
+    let totalAmount = totalAmountFood + totalAmountDrink + totalAmountProduct
+    setTraineeAmt(totalAmount)
     focusComponent(3)
   }
 
-  const handleTraineeManual = (value) => {
-    let formatTrain = posConfigSetup.P_TrainDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_TrainDiscChk.split("/")[0]
-    if (posConfigSetup.P_TrainDiscGet === "Y" && formatYYY === "Y") {
-      let sumDisc = fastAmt + empAmt + memAmt + cuponAmt
-      if (sumDisc > 0) {
-        return 0
-      }
-      let totalAmount = (tableFile.TAmount * formatTrain) / 100
-      if (value < 0 || value > totalAmount) {
-        setTraineeAmt(totalAmount)
-      } else {
-        setTraineeAmt(value)
-      }
-    }
-  }
-
   const cuponDiscountCompute = () => {
-    let formatSub = posConfigSetup.P_SubDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_SubDiscChk.split("/")[0]
+    let netTotalFood = tableFile.Food
+    let netTotalDrink = tableFile.Drink
+    let netTotalProduct = tableFile.Product
 
-    let sumDisc = fastAmt + empAmt + memAmt + traineeAmt
-    if (sumDisc > 0&&formatYYY==="Y") {
+    let totalAmountFood = 0
+    let totalAmountDrink = 0
+    let totalAmountProduct = 0
+
+    let summaryOtherDiscount = fastAmt + empAmt + memAmt + traineeAmt
+
+    // FOOD DISCOUNT
+    let formatSubFood = subDisc.split("/")[0]
+    let formatYYYFood = posConfigSetup.P_SubDiscChk.split("/")[0]
+    if (summaryOtherDiscount > 0&&formatYYYFood==="Y") {
       return 0
     }
-    let netTotal = tableFile.TAmount
-    let totalAmount = (netTotal * formatSub) / 100
-    setCuponAmt(totalAmount)
+    totalAmountFood = (netTotalFood * formatSubFood) / 100
 
-    focusComponent(4)
-  }
-
-  const handleCuponManual = (value) => {
-    let formatSub = posConfigSetup.P_SubDisc.split("/")[0]
-    let formatYYY = posConfigSetup.P_SubDiscChk.split("/")[0]
-    if (posConfigSetup.P_SubDiscGet === "Y" && formatYYY === "Y") {
-      let sumDisc = fastAmt + empAmt + memAmt + traineeAmt
-      if (sumDisc > 0) {
-        return 0
-      }
-      let totalAmount = (tableFile.TAmount * formatSub) / 100
-      if (value < 0 || value > totalAmount) {
-        setCuponAmt(totalAmount)
-      } else {
-        setCuponAmt(value)
-      }
+    // DRINK DISCOUNT
+    let formatSubDrink = subDisc.split("/")[1]
+    let formatYYYDrink = posConfigSetup.P_SubDiscChk.split("/")[1]
+    if (summaryOtherDiscount > 0&&formatYYYDrink==="Y") {
+      return 0
     }
+    totalAmountDrink = (netTotalDrink * formatSubDrink) / 100
+
+    // PRODUCT DISCOUNT
+    let formatSubProduct = subDisc.split("/")[2]
+    let formatYYYProduct = posConfigSetup.P_SubDiscChk.split("/")[2]
+    if (summaryOtherDiscount > 0&&formatYYYProduct==="Y") {
+      return 0
+    }
+    totalAmountProduct = (netTotalProduct * formatSubProduct) / 100
+
+    let totalAmount = totalAmountFood + totalAmountDrink + totalAmountProduct
+    setCuponAmt(totalAmount)
+    focusComponent(4)
   }
 
   useEffect(() => {
     loadPosConfigSetup()
   }, [])
 
+  useEffect(()=> {
+    setFastDisc(tableFile.FastDisc || posConfigSetup.P_FastDisc)
+    setEmpDisc(tableFile.EmpDisc || posConfigSetup.P_EmpDisc)
+    setMemDisc(tableFile.MemDisc || posConfigSetup.P_MemDisc)
+    setTrainDisc(tableFile.TrainDisc || posConfigSetup.P_TrainDisc)
+    setSubDisc(tableFile.SubDisc || posConfigSetup.P_SubDisc)
+  }, [posConfigSetup])
+
   return (
     <Grid2 container>
       <Grid2 size={12} padding={1} container justifyContent="center">
-        <Typography sx={{color: "white"}} variant="h6">ให้ส่วนลดต่างๆ ในระบบ (NN/CC/SS)</Typography>
+        <Typography sx={{color: "white"}} variant="h6">ให้ส่วนลดต่างๆ ในระบบ (FF/DD/PP)</Typography>
       </Grid2>
       <Grid2 size={12} textAlign="center" padding={1} margin={1} sx={{
         background: "lightblue",
         color: "black",
         fontWeight: "bold"
       }}>
+        <Typography sx={{fontSize: "12px"}} color="primary">
+          Food: {NumberFormat(tableFile.Food)} | Drink: {NumberFormat(tableFile.Drink)} | Product: {NumberFormat(tableFile.Product)}
+        </Typography>
         <Typography sx={{fontWeight: "bold"}}>
           มูลค่าสินค้ารวม (Total Amount): {NumberFormat(tableFile.TAmount)}
         </Typography>
@@ -354,25 +389,28 @@ const DiscountFormModal = ({
           justifyContent="center"
         >
           <Grid2 container size={4}>
-            <Button
-              variant="contained"
-              color="success"
-              fullWidth
-              onClick={festDiscountCompute}
-            >
-              ส่วนลดเทศกาล
-            </Button>
-          </Grid2>
-          <Grid2 container size={4}>
             <MaskedInput
-              value={posConfigSetup.P_FastDisc}
-              label={posConfigSetup.P_FastDisc}
+              value={fastDisc}
+              label={fastDisc}
               disabled={posConfigSetup.P_FastDiscGet === 'N'}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setFastAmt}
+              setFormat={setFastDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(0)}
             />
+          </Grid2>
+          <Grid2 container size={4}>
+            <Button
+              variant="contained"
+              color="info"
+              fullWidth
+              onClick={festDiscountCompute}
+              endIcon={<CalculateIcon fontSize="large" />}
+              sx={{justifyContent: "flex-end"}}
+            >
+              ให้ส่วนลดเทศกาล
+            </Button>
           </Grid2>
           <Grid2 size={4}>
             <TextField
@@ -380,9 +418,7 @@ const DiscountFormModal = ({
               inputRef={inputRef0}
               value={fastAmt}
               setValue={setFastAmt}
-              onChange={(e) => handleFestManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 1)}
-              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -398,26 +434,29 @@ const DiscountFormModal = ({
           container
           justifyContent="center"
         >
-          <Grid2 container size={4}>
-            <Button
-              variant="contained"
-              color="success"
-              fullWidth
-              onClick={empDiscountCompute}
-            >
-              ส่วนลดพนักงาน
-            </Button>
-          </Grid2>
           <Grid2 size={4}>
             <MaskedInput
-              value={posConfigSetup.P_EmpDisc}
-              label={posConfigSetup.P_EmpDisc}
+              value={empDisc}
+              label={empDisc}
               disabled={posConfigSetup.P_EmpDiscGet === 'N'}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setEmpAmt}
+              setFormat={setEmpDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(1)}
             />
+          </Grid2>
+          <Grid2 container size={4}>
+            <Button
+              variant="contained"
+              color="info"
+              fullWidth
+              onClick={empDiscountCompute}
+              endIcon={<CalculateIcon fontSize="large" />}
+              sx={{justifyContent: "flex-end"}}
+            >
+              ให้ส่วนลดพนักงาน
+            </Button>
           </Grid2>
           <Grid2 size={4}>
             <TextField
@@ -426,9 +465,7 @@ const DiscountFormModal = ({
               value={empAmt}
               setValue={setEmpAmt}
               disabled={posConfigSetup.P_EmpDiscGet === "N"}
-              onChange={(e) => handleEmpManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 2)}
-              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -444,26 +481,29 @@ const DiscountFormModal = ({
           container
           justifyContent="center"
         >
-          <Grid2 container size={4}>
-            <Button
-              variant="contained"
-              color="success"
-              fullWidth
-              onClick={memeberDiscountCompute}
-            >
-              ส่วนลดสมาชิก (VIP)
-            </Button>
-          </Grid2>
           <Grid2 size={4}>
             <MaskedInput
-              value={posConfigSetup.P_MemDisc}
-              label={posConfigSetup.P_MemDisc}
+              value={memDisc}
+              label={memDisc}
               disabled={posConfigSetup.P_MemDiscGet === "N"}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setMemAmt}
+              setFormat={setMemDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(2)}
             />
+          </Grid2>
+          <Grid2 container size={4}>
+            <Button
+              variant="contained"
+              color="info"
+              fullWidth
+              onClick={memeberDiscountCompute}
+              endIcon={<CalculateIcon fontSize="large" />}
+              sx={{justifyContent: "flex-end"}}
+            >
+              ให้ส่วนลดสมาชิก
+            </Button>
           </Grid2>
           <Grid2 size={4}>
             <TextField
@@ -472,9 +512,7 @@ const DiscountFormModal = ({
               value={memAmt}
               setValue={setMemAmt}
               disabled={posConfigSetup.P_MemDiscGet === "N"}
-              onChange={(e) => handleMemManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 3)}
-              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -490,26 +528,29 @@ const DiscountFormModal = ({
           container
           justifyContent="center"
         >
-          <Grid2 container size={4}>
-            <Button
-              variant="contained"
-              color="success"
-              fullWidth
-              onClick={traineeDiscountCompute}
-            >
-              ส่วนลด Trainee
-            </Button>
-          </Grid2>
           <Grid2 size={4}>
             <MaskedInput
-              value={posConfigSetup.P_TrainDisc}
-              label={posConfigSetup.P_TrainDisc}
+              value={trainDisc}
+              label={trainDisc}
               disabled={posConfigSetup.P_TrainDiscGet === "N"}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setTraineeAmt}
+              setFormat={setTrainDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(3)}
             />
+          </Grid2>
+          <Grid2 container size={4}>
+            <Button
+              variant="contained"
+              color="info"
+              fullWidth
+              onClick={traineeDiscountCompute}
+              endIcon={<CalculateIcon fontSize="large" />}
+              sx={{justifyContent: "flex-end"}}
+            >
+              ให้ส่วนลด Trainee
+            </Button>
           </Grid2>
           <Grid2 size={4}>
             <TextField
@@ -518,9 +559,7 @@ const DiscountFormModal = ({
               value={traineeAmt}
               setValue={setTraineeAmt}
               disabled={posConfigSetup.P_TrainDiscGet === "N"}
-              onChange={(e) => handleTraineeManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 4)}
-              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -536,26 +575,29 @@ const DiscountFormModal = ({
           container
           justifyContent="center"
         >
-          <Grid2 container size={4}>
-            <Button
-              variant="contained"
-              color="success"
-              fullWidth
-              onClick={cuponDiscountCompute}
-            >
-              ส่วนลดคูปอง
-            </Button>
-          </Grid2>
           <Grid2 size={4}>
             <MaskedInput
-              value={posConfigSetup.P_SubDisc}
-              label={posConfigSetup.P_SubDisc}
+              value={subDisc}
+              label={subDisc}
               disabled={posConfigSetup.P_SubDiscGet === "N"}
               inputProps={{ min: 0, style: { textAlign: "center" } }}
               setValue={setCuponAmt}
+              setFormat={setSubDisc}
               netTotalAmount={tableFile.TAmount}
               focusComponent={()=>focusComponent(4)}
             />
+          </Grid2>
+          <Grid2 container size={4}>
+            <Button
+              variant="contained"
+              color="info"
+              fullWidth
+              onClick={cuponDiscountCompute}
+              endIcon={<CalculateIcon fontSize="large" />}
+              sx={{justifyContent: "flex-end"}}
+            >
+              ส่วนลดคูปอง
+            </Button>
           </Grid2>
           <Grid2 size={4}>
             <TextField
@@ -564,9 +606,7 @@ const DiscountFormModal = ({
               value={cuponAmt}
               setValue={setCuponAmt}
               disabled={posConfigSetup.P_SubDiscGet === "N"}
-              onChange={(e) => handleCuponManual(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 5)}
-              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -602,7 +642,6 @@ const DiscountFormModal = ({
               disabled={posConfigSetup.P_DiscBathChk === "N"}
               onChange={(e) => setBahtAmt(e.target.value)}
               onKeyDown={(e) => nextComponent(e, 6)}
-              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}
@@ -637,7 +676,6 @@ const DiscountFormModal = ({
               setValue={setSpecialCuponAmt}
               disabled={true}
               onChange={(e) => setSpecialCuponAmt(e.target.value)}
-              onKeyUp={summaryDiscount}
               onFocus={(event) => {
                 event.target.select()
               }}

@@ -20,6 +20,10 @@ import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
 import BlockIcon from "@mui/icons-material/Block"
 import GppGoodIcon from "@mui/icons-material/GppGood"
 
+import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
+import LocalBarIcon from '@mui/icons-material/LocalBar';
+import RiceBowlIcon from '@mui/icons-material/RiceBowl';
+
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
 import { CurrencyContext } from "../../../contexts/CurrencyContext"
@@ -32,6 +36,16 @@ const modalStyle = {
   transform: "translate(-50%, -50%)",
   border: "1px solid #eee",
   backgroundColor: "snow"
+}
+
+const getImgProductType = (pType) => {
+  if(pType==='1'){
+    return <DinnerDiningIcon color="success" />
+  }else if(pType==='2'){
+    return <LocalBarIcon color="warning" />
+  }else if(pType==='3'){
+    return <RiceBowlIcon color="info" />
+  }
 }
 
 const ProductCard = ({
@@ -198,7 +212,7 @@ const ProductCard = ({
           sx={{ backgroundColor: product.R_Void === "V" ? "#eee" : "snow" }}
         >
           <Grid2 margin={1}>
-            {product.R_PluCode}-{product.R_PName}
+            {getImgProductType(product.R_Type)} {product.R_PluCode}-{product.R_PName}
           </Grid2>
           {voidStatus && (
             <Typography sx={{ fontWeight: "bold", color: "red" }}>

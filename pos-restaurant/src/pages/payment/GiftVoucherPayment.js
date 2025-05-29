@@ -85,7 +85,7 @@ const GiftVoucherPayment = (props) => {
 
   const removeGiftVoucherRow = (giftno) => {
       apiClient
-        .post(`/api/giftvoucher/temp/${macno}/delete`, {macno,giftno})
+        .post(`/api/giftvoucher/temp/${tableNo}/delete`, {macno,giftno,tableNo})
         .then((response) => {
           if (response.status === 200) {
             loadGiftVoucherData()
@@ -113,6 +113,7 @@ const GiftVoucherPayment = (props) => {
     apiClient
       .post(`/api/giftvoucher/temp`, {
         MacNo: macno,
+        table_no: tableNo,
         giftno: giftNo,
         giftamt: giftAmount
       })
@@ -136,7 +137,7 @@ const GiftVoucherPayment = (props) => {
 
   const loadGiftVoucherData = () => {
     apiClient
-      .get(`/api/giftvoucher/temp/${macno}`)
+      .get(`/api/giftvoucher/temp/${tableNo}`)
       .then((response) => {
         if (response.status === 200) {
           setGiftTempList(response.data.data)
