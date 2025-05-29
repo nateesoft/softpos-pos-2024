@@ -73,8 +73,7 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                {columns &&
-                  columns.map((column) => (
+                {columns && columns.map((column) => (
                     <TableCell
                       key={column.id}
                       align={column.align}
@@ -87,43 +86,41 @@ const MemberInfoModal = ({ tableNo, setClose, setMemberInfo }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {memmasters &&
-                memmasters
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.CrCode}
-                      >
-                        {columns &&
-                          columns.map((column) => {
-                            const value = row[column.id]
-                            if (column.id === "action") {
-                              return (
-                                <TableCell>
-                                  <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => handleSelectMember(row)}
-                                    endIcon={<SelectIcon />}
-                                  >
-                                    เลือก
-                                  </Button>
-                                </TableCell>
-                              )
-                            }
+              {memmasters && memmasters
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.CrCode}
+                    >
+                      {columns && columns.map((column) => {
+                          const value = row[column.id]
+                          if (column.id === "action") {
                             return (
-                              <TableCell key={column.id} align={column.align}>
-                                {value}
+                              <TableCell>
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() => handleSelectMember(row)}
+                                  endIcon={<SelectIcon />}
+                                >
+                                  เลือก
+                                </Button>
                               </TableCell>
                             )
-                          })}
-                      </TableRow>
-                    )
-                  })}
+                          }
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {value}
+                            </TableCell>
+                          )
+                        })}
+                    </TableRow>
+                  )
+                })}
             </TableBody>
           </Table>
         </TableContainer>

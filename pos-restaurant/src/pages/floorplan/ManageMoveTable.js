@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useRef, useState } from "react"
 import { Alert, Box, Button, TextField, Typography } from "@mui/material"
 import Grid2 from "@mui/material/Grid2"
 import ConfirmIcon from "@mui/icons-material/CheckCircle"
@@ -28,6 +28,9 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
 
   const [showError, setShowError] = useState(false)
   const [msgError, setMsgError] = useState("")
+
+  const inputRef1 = useRef(null)
+  const inputRef2 = useRef(null)
 
   const handleConfirm = async () => {
     if (sourceTable === "" || targetTable === "") {
@@ -90,13 +93,19 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
             label="ย้ายข้อมูลจากโต๊ะ"
             value={sourceTable}
             onChange={(e) => setSourceTable(e.target.value)}
+            onKeyDown={e => e.key==='Enter' ? inputRef1.current?.focus(): ''}
+            autoFocus
+            onFocus={e=>e.target.select()}
             fullWidth
           />
           <TextField
             label="ไปยังโต๊ะ"
             value={targetTable}
             onChange={(e) => setTargetTable(e.target.value)}
+            onKeyDown={e => e.key==='Enter' ? inputRef2.current?.focus(): ''}
             fullWidth
+            onFocus={e=>e.target.select()}
+            inputRef={inputRef1}
             autoComplete="off"
           />
           <TextField
@@ -105,6 +114,8 @@ const ManageCustTable = ({ setOpen, onLoadFloorPlan }) => {
             value={admin}
             onChange={(e) => setAdmin(e.target.value)}
             autoComplete="new-password"
+            onFocus={e=>e.target.select()}
+            inputRef={inputRef2}
             fullWidth
           />
         </Grid2>

@@ -1,9 +1,8 @@
 import React, { useState } from "react"
 import Box from "@mui/material/Box"
 import MenuItem from "@mui/material/MenuItem"
-import { Button, Divider, Menu, Modal, Typography } from "@mui/material"
+import { Button, Divider, Grid2, Menu, Modal, Typography } from "@mui/material"
 import SummarizeIcon from "@mui/icons-material/ReceiptLong"
-import moment from "moment"
 
 // load all modal reports
 import TableOnAction from "../reports/dailySale/modal/TableOnAction"
@@ -93,9 +92,6 @@ const ReportDaily = (props) => {
       >
         <Typography variant="h6">เมนูรายงานการขาย</Typography>
       </Button>
-      <Typography variant="h6">
-        ( {moment().format("DD/MM/YYYY HH:mm:ss")} )
-      </Typography>
       <Menu
         id="basic-menu"
         anchorEl={anchorEl}
@@ -176,72 +172,17 @@ const ReportDaily = (props) => {
             <Typography variant="p">รายงานส่วนลดคูปองพิเศษ</Typography>
           </Box>
         </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => handleChange("all-member")}>
+          <Box display="flex" justifyContent="center">
+            <Grid2 container spacing={1}>
+              <Typography variant="p">รายงานข้อมูลสมาชิก</Typography>
+              <Typography variant="p" sx={{color: "green"}}>(New)</Typography>
+            </Grid2>
+          </Box>
+        </MenuItem>
       </Menu>
-      <Modal open={openTableOnAction}>
-        <Box sx={{ ...modalStyle }}>
-          <TableOnAction setOpen={setOpenTableOnAction} />
-        </Box>
-      </Modal>
-      <Modal open={cashierReport}>
-        <Box sx={{ ...modalStyle }}>
-          <CashierReport setOpen={setCashierReport} />
-        </Box>
-      </Modal>
-      <Modal open={creditReport}>
-        <Box sx={{ ...modalStyle }}>
-          <CreditReport setOpen={setCreditReport} />
-        </Box>
-      </Modal>
-      <Modal open={customerPerHourReport}>
-        <Box sx={{ ...modalStyle }}>
-          <CustomerPerHourReport setOpen={setCustomerPerHourReport} />
-        </Box>
-      </Modal>
-      <Modal open={departmentGroupReport}>
-        <Box sx={{ ...modalStyle }}>
-          <DepartmentGroupReport setOpen={setDepartmentGroupReport} />
-        </Box>
-      </Modal>
-      <Modal open={hourlyPluReport}>
-        <Box sx={{ ...modalStyle }}>
-          <HourlyPluReport setOpen={setHourlyPluReport} />
-        </Box>
-      </Modal>
-      <Modal open={pluReport}>
-        <Box sx={{ ...modalStyle }}>
-          <PLUReport setOpen={setPluReport} />
-        </Box>
-      </Modal>
-      <Modal open={promotionDiscountReport}>
-        <Box sx={{ ...modalStyle }}>
-          <PromotionDiscount setOpen={setPromotionDiscountReport} />
-        </Box>
-      </Modal>
-      <Modal open={receiptReport}>
-        <Box sx={{ ...modalStyle }}>
-          <RecieptReport setOpen={setReceiptReport} />
-        </Box>
-      </Modal>
-      <Modal open={specialCuponDiscountReport}>
-        <Box sx={{ ...modalStyle }}>
-          <SpecialCuponDiscount setOpen={setSpecialCuponDiscountReport} />
-        </Box>
-      </Modal>
-      <Modal open={terminalReport}>
-        <Box sx={{ ...modalStyle }}>
-          <TerminalReport setOpen={setTerminalReport} />
-        </Box>
-      </Modal>
-      <Modal open={topSaleReport}>
-        <Box sx={{ ...modalStyle }}>
-          <TopSaleReport setOpen={setTopSaleReport} />
-        </Box>
-      </Modal>
-      <Modal open={voidReport}>
-        <Box sx={{ ...modalStyle }}>
-          <VoidReport setOpen={setVoidReport} />
-        </Box>
-      </Modal>
+      
     </>
   )
 }

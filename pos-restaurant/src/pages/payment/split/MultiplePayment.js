@@ -34,10 +34,7 @@ const MultiplePayment = ({
   onClose,
   tableNo,
   orderList,
-  tableFile,
-  splitBillAction,
   macno,
-  initLoad
 }) => {
   const navigate = useNavigate()
   const [tables, setTables] = useState([
@@ -118,8 +115,6 @@ const MultiplePayment = ({
       .then((response) => {
         if (response.status === 200) {
           navigate(`/payment/${tableNo}-1`)
-          splitBillAction()
-          initLoad()
           onClose()
         }
       })

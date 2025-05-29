@@ -15,9 +15,14 @@ import {
   ImageListItem} from "@mui/material"
 import AddCircleIcon from "@mui/icons-material/AddCircle"
 import LocalPrintshopIcon from '@mui/icons-material/LocalPrintshop';
+import DiscountIcon from '@mui/icons-material/Discount';
 import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
 import BlockIcon from "@mui/icons-material/Block"
 import GppGoodIcon from "@mui/icons-material/GppGood"
+
+import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
+import LocalBarIcon from '@mui/icons-material/LocalBar';
+import RiceBowlIcon from '@mui/icons-material/RiceBowl';
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
@@ -31,6 +36,16 @@ const modalStyle = {
   transform: "translate(-50%, -50%)",
   border: "1px solid #eee",
   backgroundColor: "snow"
+}
+
+const getImgProductType = (pType) => {
+  if(pType==='1'){
+    return <DinnerDiningIcon color="success" />
+  }else if(pType==='2'){
+    return <LocalBarIcon color="warning" />
+  }else if(pType==='3'){
+    return <RiceBowlIcon color="info" />
+  }
 }
 
 const ProductCard = ({
@@ -187,7 +202,8 @@ const ProductCard = ({
                   *{opt},
                 </Typography>
               ))}
-          {product.R_Pause === "P" && <LocalPrintshopIcon sx={{color: "#aaa"}} />}
+          {product.R_Pause === "P" && <LocalPrintshopIcon sx={{color: "#bbb"}} />}
+          {product.R_PrType === "-I" && <DiscountIcon sx={{color: "red"}} />}
         </Grid2>
         <Grid2
           size={7}
@@ -196,7 +212,7 @@ const ProductCard = ({
           sx={{ backgroundColor: product.R_Void === "V" ? "#eee" : "snow" }}
         >
           <Grid2 margin={1}>
-            {product.R_PluCode}-{product.R_PName}
+            {getImgProductType(product.R_Type)} {product.R_PluCode}-{product.R_PName}
           </Grid2>
           {voidStatus && (
             <Typography sx={{ fontWeight: "bold", color: "red" }}>

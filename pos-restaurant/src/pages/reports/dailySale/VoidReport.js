@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 import apiClient from '../../../httpRequest'
 import { POSContext } from '../../../AppContext'
+import { FONT_FAMILY } from '../../../AppConstants'
 
 const formatCurrency = (amount) => {
     return new Intl.NumberFormat("th-TH", { style: "currency", currency: "THB" }).format(amount);
@@ -28,55 +29,55 @@ class ComponentToPrint extends Component {
                 justifyContent="center" 
                 sx={{ marginBottom: "100px", fontSize: 12, fontFamily: "Angsana New" }}>
                 <Paper elevation={0} sx={{ padding: "5px", marginRight: "22px" }} ref={this.props.innerRef}>
-                    {headers && headers.map((header) => <div>{header}</div>)}
+                    {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
                     <div style={{ marginTop: "30px" }}></div>
-                    <div align="center">รายงานการทำรายการ Void</div>
-                    <div align="center" style={{ marginBottom: "10px" }}>(Void Report)</div>
-                    <div align="center">หมายเลขเครื่อง : {filter.macno1} .. {filter.macno2}</div>
-                    <div align="center" style={{ marginBottom: "10px" }}>รหัสพนักงาน Cashier : {filter.cashier1} .. {filter.cashier2}</div>
-                    <div align="center">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</div>
+                    <div align="center"><font face={FONT_FAMILY} size="4">รายงานการทำรายการ Void</font></div>
+                    <div align="center" style={{ marginBottom: "10px" }}><font face={FONT_FAMILY} size="4">(Void Report)</font></div>
+                    <div align="center"><font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : {filter.macno1} .. {filter.macno2}</font></div>
+                    <div align="center" style={{ marginBottom: "10px" }}><font face={FONT_FAMILY} size="4">รหัสพนักงาน Cashier : {filter.cashier1} .. {filter.cashier2}</font></div>
+                    <div align="center"><font face={FONT_FAMILY} size="4">{moment().format('DD/MM/YYYY HH:mm:ss')} Cashier: {userLogin} Mac: {macno}</font></div>
                     <table width="100%">
                         <thead>
                             <tr style={{ borderTop: "1px solid", borderStyle: "dashed" }}>
-                                <td align='center'>Mac</td>
-                                <td align='center'>Cashier</td>
-                                <td align='center'>Table</td>
-                                <td align='center'>Time</td>
-                                <td align='center'>User_Void</td>
-                                <td align='center'>T_Void</td>
+                                <td align='center'><font face={FONT_FAMILY} size="4">Mac</font></td>
+                                <td align='center'><font face={FONT_FAMILY} size="4">Cashier</font></td>
+                                <td align='center'><font face={FONT_FAMILY} size="4">Table</font></td>
+                                <td align='center'><font face={FONT_FAMILY} size="4">Time</font></td>
+                                <td align='center'><font face={FONT_FAMILY} size="4">User_Void</font></td>
+                                <td align='center'><font face={FONT_FAMILY} size="4">T_Void</font></td>
                             </tr>
                             <tr style={{ borderBottom: "1px solid", borderStyle: "dashed" }}>
-                                <td align='center'>Ref_No</td>
-                                <td align='center'>Plu-Code</td>
-                                <td align='right'>Qty</td>
-                                <td align='right'>Amount</td>
+                                <td align='center'><font face={FONT_FAMILY} size="4">Ref_No</font></td>
+                                <td align='center'><font face={FONT_FAMILY} size="4">Plu-Code</font></td>
+                                <td align='right'><font face={FONT_FAMILY} size="4">Qty</font></td>
+                                <td align='right'><font face={FONT_FAMILY} size="4">Amount</font></td>
                             </tr>
                         </thead>
                         <tbody>
                             {reports && reports.map(item => <>
                                 <tr>
-                                    <td align='center'>{item.B_MacNo}</td>
-                                    <td align='center'>{item.B_Cashier}</td>
-                                    <td align='center'>{item.B_Table}</td>
-                                    <td align='center'>{item.B_Ontime}</td>
-                                    <td align='center'>{item.B_VoidUser}</td>
-                                    <td align='center'>{item.B_VoidTime}</td>
+                                    <td align='center'><font face={FONT_FAMILY} size="4">{item.B_MacNo}</font></td>
+                                    <td align='center'><font face={FONT_FAMILY} size="4">{item.B_Cashier}</font></td>
+                                    <td align='center'><font face={FONT_FAMILY} size="4">{item.B_Table}</font></td>
+                                    <td align='center'><font face={FONT_FAMILY} size="4">{item.B_Ontime}</font></td>
+                                    <td align='center'><font face={FONT_FAMILY} size="4">{item.B_VoidUser}</font></td>
+                                    <td align='center'><font face={FONT_FAMILY} size="4">{item.B_VoidTime}</font></td>
                                 </tr>
                                 <tr>
-                                    <td align='center'>{item.B_Refno}</td>
-                                    <td align='center'>{item.R_PluCode}</td>
-                                    <td align='right'>{item.R_Quan}</td>
-                                    <td align='right'>{formatCurrency(item.R_Total)}</td>
+                                    <td align='center'><font face={FONT_FAMILY} size="4">{item.B_Refno}</font></td>
+                                    <td align='center'><font face={FONT_FAMILY} size="4">{item.R_PluCode}</font></td>
+                                    <td align='right'><font face={FONT_FAMILY} size="4">{item.R_Quan}</font></td>
+                                    <td align='right'><font face={FONT_FAMILY} size="4">{formatCurrency(item.R_Total)}</font></td>
                                 </tr>
                             </>)}
                         </tbody>
                     </table>
                     <table width="100%" cellPadding={5} style={{ borderBottom: "1px solid", borderTop: "1px solid", marginTop: "10px" }}>
                         <tr>
-                            <td>จำนวน Void</td>
-                            <td align='rigth'>{summary.voidCount}</td>
-                            <td>จำนวนเงิน</td>
-                            <td align='right'>{formatCurrency(summary.voidAmount)}</td>
+                            <td><font face={FONT_FAMILY} size="4">จำนวน Void</font></td>
+                            <td align='rigth'><font face={FONT_FAMILY} size="4">{summary.voidCount}</font></td>
+                            <td><font face={FONT_FAMILY} size="4">จำนวนเงิน</font></td>
+                            <td align='right'><font face={FONT_FAMILY} size="4">{formatCurrency(summary.voidAmount)}</font></td>
                         </tr>
                     </table>
                 </Paper>

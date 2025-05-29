@@ -5,8 +5,9 @@ const socket = io(process.env.SOCKETIO_SERVER, {
   autoConnect: true
 })
 const pool = require("../config/database/MySqlConnect")
-const { PrefixZeroFormat, Unicode2ASCII, ASCII2Unicode } = require("../utils/StringUtil")
-const { emptyTableBalance, getBalanceByTableNo } = require("./BalanceService")
+const { PrefixZeroFormat, Unicode2ASCII } = require("../utils/StringUtil")
+const { emptyTableBalance, getBalanceByTableNo, getBalanceByTableNoSummary } = require("./BalanceService")
+const { getCashierPrinterName } = require("../services/management/TerminalService")
 
 const {
   getTableByCode,
@@ -17,7 +18,8 @@ const {
   addDataFromBalance,
   getAllTSaleByRefno,
   processAllPIngredentReturnStock,
-  processAllPSet
+  processAllPSet,
+  getAllTSaleByRefnoSummary
 } = require("./TSaleService")
 
 const { getBranch } = require("./BranchService")
@@ -28,17 +30,18 @@ const {
   updateMemberData,
   getDataByMemberCode
 } = require("./member/crm/MemberMasterService")
-const { getMoment } = require("../utils/MomentUtil")
+const { getMoment, getCurrentTime } = require("../utils/MomentUtil")
 const { summaryBalance } = require("./CoreService")
 const { createListCredit, deleteListTempCredit } = require("./TCreditService")
 const { printReceiptHtml, printReviewReceiptHtml, printRefundBillHtml, printReceiptCopyHtml } = require('./SyncPrinterService')
+const { mappingResultDataList, mappingResultData } = require('../utils/ConvertThai')
+const { addDataFromTemp } = require('./CuponService')
+const { getTempGiftList, deleteTempGiftAll, createListGiftFromTemp } = require('./TGiftService')
 
 const getAllBillNoToday = async () => {
-  const sql = `select * from billno where B_OnDate='${getMoment().format(
-    "YYYY-MM-DD"
-  )}'`
+  const sql = `select * from billno where B_OnDate='${getMoment().format("YYYY-MM-DD")}' order by B_Refno desc`
   const results = await pool.query(sql)
-  return results
+  return mappingResultDataList(results)
 }
 
 const searchBillNoCondition = async (billNo, postDate, macno) => {
@@ -53,32 +56,26 @@ const searchBillNoCondition = async (billNo, postDate, macno) => {
       ` where B_MacNo='${macno}' or B_Cashier='${macno}' order by B_PostDate`
   }
   const results = await pool.query(sql)
-  return results
+  return mappingResultDataList(results)
 }
 
 const getBillNoByTableNo = async (tableNo) => {
   const sql = `select * from billno where B_Table='${tableNo}'`
   const results = await pool.query(sql)
-  return results
+  return mappingResultDataList(results)
 }
 
 const getBillNoByRefno = async (billNo) => {
   const sql = `select * from billno where B_Refno='${billNo}'`
   const results = await pool.query(sql)
-  const mappingResult = results.map((item, index) => {
-      return { 
-          ...item, 
-          B_MemName: ASCII2Unicode(item.B_MemName)
-      }
-  })
-  return mappingResult[0]
+  return mappingResultData(results)
 }
 
 const getBillNoByRefnoExist = async (billNo) => {
   const sql = `select B_Refno from billno where B_Refno='${billNo}'`
   const results = await pool.query(sql)
   if (results.length > 0) {
-    return results[0]
+    return mappingResultData(results)
   }
   return null
 }
@@ -109,11 +106,17 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
   const sql = `UPDATE billno 
     SET B_MacNo='${macno}',
     B_Cashier='${Cashier}',
-    B_BillCopy=B_BillCopy+${copy} WHERE B_Refno='${billNo}'`
+    B_BillCopy=B_BillCopy+${copy} WHERE B_Refno='${billNo}' and B_Void <> 'V'`
   await pool.query(sql)
 
   const billInfo = await getBillNoByRefno(billNo)
-  const tSaleInfo = await getAllTSaleByRefno(billNo)
+
+  if(billInfo.B_Void === 'V'){
+    return "Refund"
+  }
+
+  const tSaleInfo = await getAllTSaleByRefnoSummary(billNo)
+  const printerInfo = await getCashierPrinterName(macno)
 
   // send to printer
   socket.emit(
@@ -121,8 +124,8 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
     JSON.stringify({
       id: 1,
       printerType: "message",
-      printerName: "cashier",
-      message: await printReceiptCopyHtml({macno, billInfo, tSaleInfo}),
+      printerName: printerInfo.receipt_printer || 'cashier',
+      message: await printReceiptCopyHtml({macno, billInfo, tSaleInfo, printerInfo}),
       terminal: "",
       tableNo: "",
       billNo: "",
@@ -135,8 +138,9 @@ const printCopyBill = async (billNo, Cashier, macno, copy) => {
 }
 
 const updateRefundBill = async (billNoData) => {
+  const getVoidTime = getCurrentTime()
   const sql = `UPDATE billno SET B_Void='${billNoData.B_Void}', 
-    B_VoidTime=curtime(), 
+    B_VoidTime='${getVoidTime}', 
     B_VoidUser='${billNoData.B_VoidUser}' 
     WHERE B_Refno='${billNoData.B_Refno}'`
   const results = await pool.query(sql)
@@ -186,8 +190,7 @@ const updateRefundMTran = async (billNo, macno) => {
 }
 
 const updateRefundMTranPlu = async (billNo, macno) => {
-  const sql =
-    "delete from mtranplu where m_billno='" + macno + "/" + billNo + "'"
+  const sql = "delete from mtranplu where m_billno='" + macno + "/" + billNo + "'"
   const results = await pool.query(sql)
   return results
 }
@@ -213,10 +216,12 @@ const addNewBill = async (payload) => {
     tableNo,
     billType,
     tonAmount,
+    netDiff,
     netTotal,
     memberInfo,
     cashInfo,
     creditInfo,
+    giftVoucherAmt,
     transferInfo,
     discountInfo,
     serviceInfo,
@@ -279,17 +284,29 @@ const addNewBill = async (payload) => {
   const B_Service = posConfigSetup.P_Service
   const B_ServiceAmt = serviceAmount
   const B_ItemDiscAmt = 0
-  const B_FastDisc = ""
-  const B_FastDiscAmt = 0
-  const B_EmpDisc = ""
-  const B_EmpDiscAmt = 0
-  const B_TrainDisc = ""
-  const B_TrainDiscAmt = 0
-  const B_MemDisc = ""
-  const B_MemDiscAmt = 0
-  const B_SubDisc = ""
-  const B_SubDiscAmt = 0
-  const B_SubDiscBath = 0
+  const B_FastDisc = posConfigSetup.P_FastDisc || ""
+  const B_FastDiscAmt = allBalance.reduce((sum, item) => {
+    return (item.R_PrSubType === '-F') ? sum + item.R_PrSubAmt: sum
+  }, 0)
+  const B_EmpDisc = posConfigSetup.P_EmpDisc || ""
+  const B_EmpDiscAmt = allBalance.reduce((sum, item) => {
+    return (item.R_PrSubType === '-E') ? sum + item.R_PrSubAmt: sum
+  }, 0)
+  const B_TrainDisc = posConfigSetup.P_TrainDisc || ""
+  const B_TrainDiscAmt = allBalance.reduce((sum, item) => {
+    return (item.R_PrSubType === '-T') ? sum + item.R_PrSubAmt: sum
+  }, 0)
+  const B_MemDisc = posConfigSetup.P_MemDisc || ""
+  const B_MemDiscAmt = allBalance.reduce((sum, item) => {
+    return (item.R_PrSubType === '-M') ? sum + item.R_PrSubAmt: sum
+  }, 0)
+  const B_SubDisc = posConfigSetup.P_SubDisc || ""
+  const B_SubDiscAmt = allBalance.reduce((sum, item) => {
+    return (item.R_PrSubType === '-S') ? sum + item.R_PrSubAmt: sum
+  }, 0)
+  const B_SubDiscBath = allBalance.reduce((sum, item) => {
+    return (item.R_DiscBath > 0) ? sum + item.R_DiscBath: sum
+  }, 0)
   const B_ProDiscAmt = 0
   const B_SpaDiscAmt = 0
   const B_AdjAmt = 0
@@ -301,9 +318,9 @@ const addNewBill = async (payload) => {
   const B_NetVat = netTotal - creditChargeAmount
   const B_NetNonVat = 0
   const B_Vat = vatAmount
-  const B_PayAmt = cashAmount + transferAmount
-  const B_Cash = cashAmount + transferAmount
-  const B_GiftVoucher = 0
+  const B_PayAmt = parseFloat(cashAmount) + transferAmount
+  const B_Cash = parseFloat(cashAmount) + transferAmount
+  const B_GiftVoucher = giftVoucherAmt
   // const B_Earnest = 0;
   const B_Ton = tonAmount
   const B_CrCode1 = crCode
@@ -355,7 +372,7 @@ const addNewBill = async (payload) => {
   // const B_Entertain = 0;
   const B_VoucherDiscAmt = 0
   const B_VoucherOver = 0
-  const B_NetDiff = 0
+  const B_NetDiff = netDiff || 0
   const B_SumSetDiscAmt = 0
   const B_DetailFood = 0
   const B_DetailDrink = 0
@@ -412,16 +429,23 @@ const addNewBill = async (payload) => {
     // save t_sale list
     await addDataFromBalance(B_Table, B_Refno, allBalance)
 
+    // move cupon temp
+    if(B_CuponDiscAmt>0){
+      await addDataFromTemp(B_Refno, B_Table)
+    }
+
     if (creditAmount > 0) {
       // update credit file
       await createListCredit(creditList, B_Refno, B_Cashier)
       await deleteListTempCredit(creditList, tableNo)
     }
 
-    // // update promotion
-    // await updateProSerTable(B_Table, allBalance);
-
-    // await ThermalPrinterConnect("192.168.1.209", "", B_Table)
+    if (giftVoucherAmt > 0) {
+      // update tempgift
+      const resultTempGift = await getTempGiftList(tableNo)
+      await createListGiftFromTemp(resultTempGift, B_Refno)
+      await deleteTempGiftAll(macno, B_Table)
+    }
 
     if (Object.keys(memberInfo).length > 0) {
       // update member memmaster
@@ -459,7 +483,9 @@ const addNewBill = async (payload) => {
     await updateTableAvailableStatus(B_Table)
 
     const billInfo = await getBillNoByRefno(B_Refno)
-    const tSaleInfo = await getAllTSaleByRefno(B_Refno)
+    const tSaleInfo = await getAllTSaleByRefnoSummary(B_Refno)
+
+    const printerInfo = await getCashierPrinterName(B_MacNo)
 
     // send to printer
     socket.emit(
@@ -467,8 +493,8 @@ const addNewBill = async (payload) => {
       JSON.stringify({
         id: 1,
         printerType: "receipt",
-        printerName: "cashier",
-        message: await printReceiptHtml({macno: B_MacNo, billInfo, tSaleInfo}),
+        printerName: printerInfo.receipt_printer || 'cashier',
+        message: await printReceiptHtml({macno: B_MacNo, billInfo, tSaleInfo, printerInfo}),
         terminal: "",
         tableNo: "",
         billNo: "",
@@ -571,7 +597,9 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
   await refundTSale(tSaleData, Cashier)
 
   const billInfo = await getBillNoByRefno(billNo)
-  const tSaleInfo = await getAllTSaleByRefno(billNo)
+  const tSaleInfo = await getAllTSaleByRefnoSummary(billNo)
+
+  const printerInfo = await getCashierPrinterName(macno)
 
   // send to printer
   socket.emit(
@@ -579,8 +607,8 @@ const billRefundStockIn = async (billNo, Cashier, macno) => {
     JSON.stringify({
       id: 1,
       printerType: "message",
-      printerName: "cashier",
-      message: await printRefundBillHtml({macno: macno, billInfo, tSaleInfo}),
+      printerName: printerInfo.receipt_printer || 'cashier',
+      message: await printRefundBillHtml({macno, billInfo, tSaleInfo, printerInfo}),
       terminal: "",
       tableNo: "",
       billNo: "",
@@ -684,7 +712,6 @@ const createNewBalanceFromTSale = async (tSale, tableNo) => {
   newBalance.R_Serve = ""
   newBalance.R_PrintOK = ""
   newBalance.R_KicOK = ""
-  newBalance.R_QuanCanDisc = 0
   newBalance.R_Order = ""
   newBalance.R_MemSum = ""
   newBalance.R_VoidQuan = 0
@@ -755,12 +782,24 @@ const loadBillnoToBalance = async (billRefNo, tableNo) => {
   }
 }
 
-const updateStatusPrintChkBill = async (tableNo, macno) => {
-  const sql = `update tablefile set PrintChkBill='Y' where Tcode='${tableNo}'`
+const updateStatusPrintChkBill = async (tableNo, macno, depositAmt) => {
+  // check gift amount
+  const giftTempList = await getTempGiftList(tableNo)
+  const giftVoucherAmt = giftTempList.reduce((n, { giftamt }) => n + parseFloat(giftamt),0)
+
+  const sql = `update tablefile 
+    set PrintChkBill='Y', DepositAmt='${depositAmt}', GiftVoucher_Amt='${giftVoucherAmt}' 
+    where Tcode='${tableNo}'`
   const results = await pool.query(sql)
 
-  const tableInfo = await getTableByCode(tableNo)
-  const balanceInfo = await getBalanceByTableNo(tableNo)
+  await summaryBalance(tableNo, macno)
+  
+  let tableInfo = await getTableByCode(tableNo)
+  const balanceInfo = await getBalanceByTableNoSummary(tableNo)
+
+  const printerInfo = await getCashierPrinterName(macno)
+
+  tableInfo = await getTableByCode(tableNo)
 
   // send to printer
   socket.emit(
@@ -768,8 +807,8 @@ const updateStatusPrintChkBill = async (tableNo, macno) => {
     JSON.stringify({
       id: 1,
       printerType: "message",
-      printerName: "cashier",
-      message: await printReviewReceiptHtml({ macno, tableInfo, balanceInfo }),
+      printerName: printerInfo.receipt_printer || 'cashier',
+      message: await printReviewReceiptHtml({ macno, tableInfo, balanceInfo, printerInfo }),
       terminal: "",
       tableNo: "",
       billNo: "",

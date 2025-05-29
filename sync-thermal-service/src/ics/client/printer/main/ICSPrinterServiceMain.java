@@ -31,7 +31,7 @@ public class ICSPrinterServiceMain {
 
         // สร้างไอคอนสำหรับ SystemTray
         Image trayIconImage = Toolkit.getDefaultToolkit().getImage("printer.png"); // ใส่ path ไฟล์รูปภาพ
-        TrayIcon trayIcon = new TrayIcon(trayIconImage, "ICS Service");
+        TrayIcon trayIcon = new TrayIcon(trayIconImage, "ICS Service V1.2");
         trayIcon.setImageAutoSize(true);
 
         // สร้าง PopupMenu สำหรับ SystemTray

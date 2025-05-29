@@ -4,3 +4,5 @@ export const PRINTER_TYPE = {
     REFUND: "refund",
     CHECK: "check"
 }
+
+export const FONT_FAMILY = `Angsana New`

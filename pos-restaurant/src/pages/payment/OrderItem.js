@@ -45,7 +45,7 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => 
         <TableContainer sx={{ overflow: "auto", height: "368px" }}>
           <Table aria-label="spanning table">
             <TableBody>
-              {orderList && orderList.map((order, index) => (
+              {orderList && orderList.filter(item => (item.R_Void !='V' && item.R_LinkIndex === '')).map((order, index) => (
                   <TableRow key={order.R_Index} sx={{background: order.R_Void==="V" ? "red": "snow"}}>
                     <TableCell align="center">{index+1}</TableCell>
                     <TableCell align="center">{order.R_Void}</TableCell>
@@ -80,24 +80,28 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => 
         </Grid2>
         <Divider sx={{background: "black"}} />
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Total Amt</Typography>
+          <Typography sx={{ fontSize: "14px" }}>Sub Total</Typography>
           <Typography>{NumFormat(tableFile.productNoneVat)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>VAT ({tableFile.vat}%)</Typography>
-          <Typography>{NumFormat(tableFile.vatAmount)}</Typography>
+          <Typography sx={{ fontSize: "14px" }}>Service Charge ({tableFile.service}%)</Typography>
+          <Typography>{NumFormat(tableFile.serviceAmount)}</Typography>
+        </Grid2>
+        <Grid2 display="flex" justifyContent="space-between">
+          <Typography sx={{ fontSize: "14px" }}>Before VAT</Typography>
+          <Typography>{NumFormat(tableFile.subTotalAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>Discount</Typography>
           <Typography>{NumFormat(tableFile.discountAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Service ({tableFile.service}%)</Typography>
-          <Typography>{NumFormat(tableFile.serviceAmount)}</Typography>
+          <Typography sx={{ fontSize: "14px" }}>VAT ({tableFile.vat}%)</Typography>
+          <Typography>{NumFormat(tableFile.vatAmount)}</Typography>
         </Grid2>
         <Divider sx={{background: "black"}} />
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography variant="h5">Amount Due</Typography>
+          <Typography variant="h5">Grand Total</Typography>
           <Typography variant="h5">
             {NumFormat(tableFile.netTotalAmount)}
           </Typography>

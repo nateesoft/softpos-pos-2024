@@ -10,7 +10,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { motion } from "framer-motion"
 import LoginIcon from "@mui/icons-material/Login"
 import { Divider, Grid2, Modal, useMediaQuery } from "@mui/material"
-import moment from "moment"
 
 import { useAlert } from "../../contexts/AlertContext"
 import apiClient from "../../httpRequest"
@@ -79,37 +78,37 @@ const Login = () => {
             localStorage.setItem("posuser", JSON.stringify(response.data.data))
 
             // send to printer
-            socket.emit(
-              "printerMessage",
-              JSON.stringify({
-                id: 1,
-                printerType: "message",
-                printerName: "cashier",
-                message: `
-                  <div>
-                    <font face="Angsana New" size="4">
-                      User: ${user} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
-                    </font>
-                  </div>
-                  <hr />
-                  <div align="center">
-                    <font face="Angsana New" size="4">*** เข้าสู่ระบบสำเร็จ ***</font>
-                  </div>
-                  <hr />
-                  <div align="right">
-                    <font face="Angsana New" size="4">
-                       ➲ สาขา ${branchInfo.Code} ${branchInfo.Name}
-                    </font>
-                  </div>
-                  <br />
-                `,
-                terminal: "",
-                tableNo: "",
-                billNo: "",
-                title: "",
-                billType: ""
-              })
-            )
+            // socket.emit(
+            //   "printerMessage",
+            //   JSON.stringify({
+            //     id: 1,
+            //     printerType: "message",
+            //     printerName: "cashier",
+            //     message: `
+            //       <div>
+            //         <font face="Angsana New" size="4">
+            //           User: ${user} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
+            //         </font>
+            //       </div>
+            //       <hr />
+            //       <div align="center">
+            //         <font face="Angsana New" size="4">*** เข้าสู่ระบบสำเร็จ ***</font>
+            //       </div>
+            //       <hr />
+            //       <div align="right">
+            //         <font face="Angsana New" size="4">
+            //            ➲ สาขา ${branchInfo.Code} ${branchInfo.Name}
+            //         </font>
+            //       </div>
+            //       <br />
+            //     `,
+            //     terminal: "",
+            //     tableNo: "",
+            //     billNo: "",
+            //     title: "",
+            //     billType: ""
+            //   })
+            // )
 
             setAppData({
               ...appData,
@@ -169,7 +168,7 @@ const Login = () => {
     socket.connect()
 
     // send to printer
-    socket.emit("message", "hello, world")
+    socket.emit("message", "Hello POS Restuarant !!!")
 
     // รับข้อความจาก server
     socket.on("message", (newMessage) => {

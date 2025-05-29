@@ -1,15 +1,16 @@
-import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 
+import { useTranslation } from "../contexts/Translation"
+
 const Header = () => {
-  const { t, i18n } = useTranslation("global")
+  const { t, setLang } = useTranslation()
 
   return (
     <header>
       <div style={{ paddingBottom: 10 }}>
         {t("header.chooseLanguage")}
-        <button onClick={() => i18n.changeLanguage("en")}>EN</button>
-        <button onClick={() => i18n.changeLanguage("th")}>TH</button>
+        <button onClick={() => setLang("en")}>EN</button>
+        <button onClick={() => setLang("th")}>TH</button>
       </div>
       <div>
         <Link to="/">Login</Link> |<Link to="/floorplan"> Floor Plan</Link> |

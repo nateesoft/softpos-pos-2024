@@ -18,12 +18,12 @@ import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch"
 import CheckIcon from "@mui/icons-material/Check"
 import SearchOffIcon from "@mui/icons-material/SearchOff"
 import moment from "moment"
-import { useTranslation } from "react-i18next"
 
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import CartItems from "../floorplan/modal/CartItems"
 import CustomerTabs from "./CustomerTabs"
+import { useTranslation } from "../../contexts/Translation"
 
 const modalStyle = {
   position: "absolute",
@@ -37,7 +37,7 @@ const modalStyle = {
 }
 
 const CustomerCheckin = (props) => {
-  const { t } = useTranslation("global")
+  const { t } = useTranslation()
   const { appData, setAppData } = useContext(POSContext)
   const { macno } = appData
   const { tableNo } = appData.tableInfo

@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react"
 import MenuItem from "@mui/material/MenuItem"
 import { Box, Grid2, IconButton, Menu, Typography } from "@mui/material"
-import { useTranslation } from "react-i18next"
 
 import { POSContext } from "../../AppContext"
+import { useTranslation } from "../../contexts/Translation"
 
 const LanguageSettings = () => {
   const { appData } = useContext(POSContext)
   const { baseName } = appData
 
-  const { i18n } = useTranslation("global")
+  const { setLang } = useTranslation()
   const [anchorEl, setAnchorEl] = useState(null)
   const [language, setLanguage] = useState(
     localStorage.getItem("language") || "en"
@@ -26,12 +26,12 @@ const LanguageSettings = () => {
   const handleChange = (data) => {
     setAnchorEl(false)
     setLanguage(data)
-    i18n.changeLanguage(data)
+    setLang(data)
     localStorage.setItem("language", data)
   }
 
   useEffect(() => {
-    i18n.changeLanguage(language)
+    setLang(language)
     localStorage.setItem("language", "en")
   }, [])
 

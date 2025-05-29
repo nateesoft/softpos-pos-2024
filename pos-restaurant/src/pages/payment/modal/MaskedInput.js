@@ -2,9 +2,24 @@ import React from "react"
 import InputMask from "react-input-mask"
 import TextField from "@mui/material/TextField"
 
-const MaskedInput = ({ label }) => {
+const MaskedInput = ({ label, setValue, focusComponent, netTotalAmount, setFormat }) => {
+  const handleChange = (e) => {
+    setFormat(e.target.value)
+    // if(e.key === "Enter"){
+    //   let formatAmt = e.target.value.split("/")[0]
+    //   if(formatAmt>0){
+    //     let totalAmount = netTotalAmount * parseInt(formatAmt) / 100
+    //     setValue(totalAmount)
+    //     focusComponent()
+    //   } else {
+    //     setValue(0)
+    //     focusComponent()
+    //   }
+    // }
+  };
+
   return (
-    <InputMask mask="99/99/99" maskChar="_">
+    <InputMask mask="99/99/99" maskChar="0" onKeyDown={handleChange}>
       {(inputProps) => (
         <TextField
           {...inputProps}

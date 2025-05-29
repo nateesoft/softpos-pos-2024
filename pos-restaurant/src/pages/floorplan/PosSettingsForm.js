@@ -2,8 +2,11 @@ import React, { useContext, useEffect, useState } from "react"
 import {
   Box,
   Button,
+  Checkbox,
   Divider,
   FormControl,
+  FormControlLabel,
+  FormGroup,
   Grid2,
   InputLabel,
   MenuItem,
@@ -149,7 +152,7 @@ const PosSettingsForm = ({ setOpen }, data) => {
         margin={1}
         justifyContent="space-evenly"
       >
-        {/* <FormControl fullWidth>
+        <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Language</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -165,8 +168,8 @@ const PosSettingsForm = ({ setOpen }, data) => {
                 </MenuItem>
               ))}
           </Select>
-        </FormControl> */}
-        {/* <FormControl fullWidth>
+        </FormControl>
+        <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Time Zone</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -180,7 +183,7 @@ const PosSettingsForm = ({ setOpen }, data) => {
                 <MenuItem value={item.value}>{item.title}</MenuItem>
               ))}
           </Select>
-        </FormControl> */}
+        </FormControl>
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Use Currency</InputLabel>
           <Select
@@ -214,6 +217,19 @@ const PosSettingsForm = ({ setOpen }, data) => {
             currency
           }).format(convertedTotal)}
         </Typography>
+      </Grid2>
+      <Divider />
+      <Grid2 container spacing={1} padding={1} sx={{background: "lightgreen"}}>
+        <Grid2 size={6}>
+          <FormGroup>
+            <FormControlLabel control={<Checkbox defaultChecked />} label="พิมพ์ข้อความเข้าออกระบบ" />
+          </FormGroup>
+        </Grid2>
+        <Grid2 size={6}>
+          <FormGroup>
+            < FormControlLabel control={<Checkbox defaultChecked />} label="บันทึกเอกสารเป็น pdf" />
+          </FormGroup>
+        </Grid2>
       </Grid2>
       <Grid2 container spacing={1} padding={2} justifyContent="center">
         <Button

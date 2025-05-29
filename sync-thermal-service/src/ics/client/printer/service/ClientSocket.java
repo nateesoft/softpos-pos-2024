@@ -8,7 +8,6 @@ import io.socket.client.IO;
 import io.socket.client.Socket;
 import java.awt.TrayIcon;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Properties;
@@ -20,7 +19,7 @@ import java.util.Properties;
 public class ClientSocket {
 
     private static final PrinterControlService printerService = new PrinterControlService();
-    private static String SOCKET_HOT;
+    private static String SOCKET_HOT = "";
 
     static {
         try (InputStream fis = new FileInputStream("socket_config.properties")) {
@@ -41,29 +40,10 @@ public class ClientSocket {
         return printerMessage;
     }
 
-    private static PrinterConfigBean loadPrinterConfig(String printerName) {
-        PrinterConfigBean printerConfig = new PrinterConfigBean();
-        if (null == printerName || printerName.equals("")) {
-            return printerConfig;
-        }
-        Properties properties = new Properties();
-        try (InputStream input = new FileInputStream(printerName + ".properties")) {
-            properties.load(input);
-            String pName = properties.getProperty("printer.name").replaceAll("\"", "");
-            int width = Integer.parseInt(properties.getProperty("printer.width"));
-            int height = Integer.parseInt(properties.getProperty("printer.height"));
-
-            printerConfig.setPrinterName(pName);
-            printerConfig.setWidth(width);
-            printerConfig.setHeight(height);
-        } catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
-
-        return printerConfig;
-    }
-
     public static void connection(TrayIcon trayIcon) {
+        if(SOCKET_HOT.equals("")){
+            return;
+        }
         try {
             // เชื่อมต่อกับเซิร์ฟเวอร์
             Socket socket = IO.socket(SOCKET_HOT);
@@ -83,33 +63,43 @@ public class ClientSocket {
             socket.on("createQRCode", (Object... args1) -> {
                 ClientPrinter printerMessage = mappingObject(args1[0].toString());
                 QRCodeGenerator.CreateQRCode(args1[0].toString());
-                
+
                 // load database config
                 PaperPrint paperPrint = new PaperPrint();
                 String htmlContent = paperPrint.getQrCodePrint();
 
                 //  load printer config
-                PrinterConfigBean printerConfigBean = loadPrinterConfig(printerMessage.getPrinterName());
+                PrinterConfigBean printerConfigBean = PrinterConfig.loadPrinterConfig(printerMessage.getPrinterName());
                 String prtName = printerConfigBean.getPrinterName();
                 String prtType = printerMessage.getPrinterType();
                 int prtWidth = printerConfigBean.getWidth();
                 int prtHeight = printerConfigBean.getHeight();
+                String version = printerConfigBean.getVersion();
 
                 // send to printer
-                printerService.printMessage(prtName, htmlContent, prtWidth, prtHeight, prtType);
+                if ("1.0".equals(version)) {
+                    printerService.printMessage(prtName, htmlContent, prtWidth, prtHeight, prtType);
+                } else if ("1.2".equals(version)) {
+                    printerService.printMessageV2(prtName, htmlContent, prtWidth, prtHeight, prtType);
+                }
             });
 
             socket.on("printerMessage", (Object... args1) -> {
                 ClientPrinter printerMessage = mappingObject(args1[0].toString());
 
                 //  load printer config
-                PrinterConfigBean bean = loadPrinterConfig(printerMessage.getPrinterName());
+                PrinterConfigBean bean = PrinterConfig.loadPrinterConfig(printerMessage.getPrinterName());
                 String prtName = bean.getPrinterName();
-                String prtType= printerMessage.getPrinterType();
+                String prtType = printerMessage.getPrinterType();
                 int prtWidth = bean.getWidth();
                 int prtHeight = bean.getHeight();
-                
-                printerService.printMessage(prtName, printerMessage.getMessage(), prtWidth, prtHeight, prtType);
+                String version = bean.getVersion();
+
+                if ("1.0".equals(version) || version == null) {
+                    printerService.printMessage(prtName, printerMessage.getMessage(), prtWidth, prtHeight, prtType);
+                } else if ("1.2".equals(version)) {
+                    printerService.printMessageV2(prtName, printerMessage.getMessage(), prtWidth, prtHeight, prtType);
+                }
             });
 
             // Event เมื่อการเชื่อมต่อถูกตัด

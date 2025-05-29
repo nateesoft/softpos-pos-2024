@@ -1,7 +1,4 @@
 {
     "SOCKET_HOST": "http://127.0.0.1:8888",
-    "MACNO": "001",
-    "bgImage": "/pos-restaurant/images/hengetsu/Gala_Logo_Episodic-01.jpg",
-    "bgLogin": "/pos-restaurant/images/hengetsu/Gala_Logo_Episodic-01.png",
-    "bgFloorPlan": "/pos-restaurant/images/hengetsu/Gala_Logo_Episodic-01.jpg"
+    "MACNO": "001"
 }

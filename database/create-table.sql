@@ -100,7 +100,23 @@ CREATE TABLE `menu_tabs` (
 -- posdb.pos_setting definition
 
 CREATE TABLE `pos_setting` (
-  `id` varchar(100) DEFAULT NULL
+  `id` varchar(100) DEFAULT NULL,
+  `language_main` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `language_main_title` varchar(100) DEFAULT NULL,
+  `language_use` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `language_use_title` varchar(100) DEFAULT NULL,
+  `timezone_main` varchar(100) DEFAULT NULL,
+  `timezone_use` varchar(100) DEFAULT NULL,
+  `currency_baht_rate` float(10,4) DEFAULT NULL,
+  `currency_baht` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `currency_use_rate` float(10,4) DEFAULT NULL,
+  `currency_use` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `receipt_printer_ip` varchar(100) DEFAULT NULL,
+  `kichen_printer_ip` varchar(100) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `user_update` varchar(50) DEFAULT NULL,
+  `terminal_id` varchar(20) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
@@ -120,26 +136,37 @@ CREATE TABLE `table_checkin` (
   `emp_code_last` varchar(20) DEFAULT '',
   `macno` varchar(5) DEFAULT '',
   `customer_count` int DEFAULT '0',
-  `cust_man_count` int DEFAULT '0',
-  `cust_woman_count` int DEFAULT '0',
-  `cust_kid_count` int DEFAULT '0',
-  `cust_old_count` int DEFAULT '0',
+  `thai_man_count` int DEFAULT '0',
+  `thai_woman_count` int DEFAULT '0',
+  `thai_kid_count` int DEFAULT '0',
+  `thai_old_count` int DEFAULT '0',
   `datetime_checkin` datetime DEFAULT NULL,
   `customer_name` varchar(200) DEFAULT '',
   `member_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '',
   `book_no` varchar(20) DEFAULT '',
   `table_order_type_start` char(1) DEFAULT 'E',
   `active` varchar(1) DEFAULT 'Y',
-  `cust_thai_count` int DEFAULT '0',
-  `cust_europe_count` int DEFAULT '0',
-  `cust_america_count` int DEFAULT '0',
-  `cust_asia_count` int DEFAULT '0',
+  `nation_man_count` int DEFAULT '0',
+  `nation_woman_count` int DEFAULT '0',
+  `nation_kid_count` int DEFAULT '0',
+  `nation_old_count` int DEFAULT '0',
+  `nation_country` varchar(300) DEFAULT NULL,
+  `customer_note` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `bill_no` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=176 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=495 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- posdb.terminal definition
 
 CREATE TABLE `terminal` (
-  `id` varchar(100) DEFAULT NULL
+  `id` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `branch_code` varchar(20) DEFAULT NULL,
+  `macno` varchar(5) DEFAULT NULL,
+  `receipt_printer` varchar(100) DEFAULT NULL,
+  `receipt_printer_active` varchar(1) DEFAULT 'Y',
+  `kitchen_printer` varchar(100) DEFAULT NULL,
+  `kitchen_printer_active` varchar(1) DEFAULT 'Y',
+  `kitchen_printer_use` varchar(20) DEFAULT 'product'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+

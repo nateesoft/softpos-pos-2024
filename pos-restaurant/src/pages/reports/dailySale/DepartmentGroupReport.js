@@ -15,8 +15,12 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 
 import apiClient from "../../../httpRequest"
 import { POSContext } from "../../../AppContext"
+import { FONT_FAMILY } from "../../../AppConstants"
 
 const formatCurrency = (amount) => {
+  if(amount===""){
+    return ""
+  }
   return new Intl.NumberFormat("th-TH", {
     style: "currency",
     currency: "THB"
@@ -51,25 +55,23 @@ class ComponentToPrint extends Component {
           sx={{ padding: "5px", marginRight: "22px" }}
           ref={this.props.innerRef}
         >
-          {headers && headers.map((header) => <div>{header}</div>)}
+          {headers && headers.map((header) => <div><font face={FONT_FAMILY} size="4">{header}</font></div>)}
           <div style={{ marginTop: "30px" }}></div>
-          <div align="center">รายงานการขายตามกลุ่มสินค้า</div>
-          <div align="center">(Dept/Group Report)</div>
+          <div align="center"><font face={FONT_FAMILY} size="4">รายงานการขายตามกลุ่มสินค้า</font></div>
+          <div align="center"><font face={FONT_FAMILY} size="4">(Dept/Group Report)</font></div>
           <div style={{ margin: "20px" }}></div>
           <div>
-            หมายเลขเครื่อง : {filter.macno1} ... {filter.macno2}
+            <font face={FONT_FAMILY} size="4">หมายเลขเครื่อง : {filter.macno1} ... {filter.macno2}</font>
           </div>
           <div>
-            รหัสพนักงานขาย : {filter.cashier1} ... {filter.cashier2}
+            <font face={FONT_FAMILY} size="4">รหัสพนักงานขาย : {filter.cashier1} ... {filter.cashier2}</font>
           </div>
           <div>
-            รหัสกลุ่มสินค้า (Dept/Group) : {filter.groupCode1} ...{" "}
-            {filter.groupCode2}
+            <font face={FONT_FAMILY} size="4">รหัสกลุ่มสินค้า (Dept/Group) : {filter.groupCode1} ...{" "} {filter.groupCode2}</font>
           </div>
           <div style={{ margin: "20px" }}></div>
           <div align="center">
-            {moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "}
-            {macno}
+            <font face={FONT_FAMILY} size="4">{moment().format("DD/MM/YYYY HH:mm:ss")} Cashier: {userLogin} Mac:{" "} {macno}</font>
           </div>
           <table width="100%">
             <tbody
@@ -80,13 +82,13 @@ class ComponentToPrint extends Component {
               }}
             >
               <tr>
-                <td colSpan={4}>รายละเอียด ...</td>
+                <td colSpan={4}><font face={FONT_FAMILY} size="4">รายละเอียด ...</font></td>
               </tr>
               <tr>
                 <td align="right"></td>
-                <td align="right">EAT IN</td>
-                <td align="right">TAKE AWAY</td>
-                <td align="right">DELIVERY</td>
+                <td align="right"><font face={FONT_FAMILY} size="4">EAT IN</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">TAKE AWAY</font></td>
+                <td align="right"><font face={FONT_FAMILY} size="4">DELIVERY</font></td>
               </tr>
             </tbody>
             <tbody
@@ -96,13 +98,12 @@ class ComponentToPrint extends Component {
                 borderStyle: "dashed"
               }}
             >
-              {reports &&
-                reports.map((item, index) => (
+              {reports && reports.map((item, index) => (
                   <tr>
-                    <td>{item.data1}</td>
-                    <td align="right">{formatCurrency(item.data2)}</td>
-                    <td align="right">{formatCurrency(item.data3)}</td>
-                    <td align="right">{formatCurrency(item.data4)}</td>
+                    <td><font face={FONT_FAMILY} size="4">{item.data1}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.data2)}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.data3)}</font></td>
+                    <td align="right"><font face={FONT_FAMILY} size="4">{formatCurrency(item.data4)}</font></td>
                   </tr>
                 ))}
             </tbody>
