@@ -5,10 +5,8 @@ import ConfirmIcon from "@mui/icons-material/CheckCircle"
 import CancelIcon from "@mui/icons-material/Cancel"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
-import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo"
 import { useNavigate } from "react-router-dom"
-import moment from "moment"
 
 import apiClient from "../../../../../httpRequest"
 
@@ -28,13 +26,11 @@ const NotComeModal = ({ setOpen }) => {
 
   const [branchList, setBranchList] = useState([])
   
-    const [date, setDate] = useState("")
     const [branch1, setBranch1] = useState("")
     const [branch2, setBranch2] = useState("")
 
   const handleConfirm = async () => {
-    const dateSelect = moment(date).format("YYYY-MM-DD")
-    navigate(`/reportDaily/not-come/?date=${dateSelect}&branch1=${branch1}&branch2=${branch2}`)
+    navigate(`/reportDaily/not-come/?branch1=${branch1}&branch2=${branch2}`)
   }
 
   const loadBranchList = () => {
@@ -107,18 +103,6 @@ const NotComeModal = ({ setOpen }) => {
                 </Select>
               </FormControl>
             </Grid2>
-          </Grid2>
-          <Grid2 container spacing={1} padding={1} direction="column">
-            <DatePicker
-              label="เลือกวันที่"
-              format="DD/MM/YYYY"
-              slotProps={{
-                textField: {
-                  helperText: "DD/MM/YYYY"
-                }
-              }}
-              onChange={(newValue) => setDate(newValue)}
-            />
           </Grid2>
           <Box display="flex" justifyContent="center">
             <Grid2 container spacing={2} padding={2}>

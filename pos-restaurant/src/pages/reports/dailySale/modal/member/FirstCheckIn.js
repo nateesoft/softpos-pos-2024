@@ -8,7 +8,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo"
 import { useNavigate } from "react-router-dom"
-import moment from "moment"
 
 import apiClient from "../../../../../httpRequest"
 
@@ -28,13 +27,15 @@ const FirstCheckInModal = ({ setOpen }) => {
 
   const [branchList, setBranchList] = useState([])
 
-  const [date, setDate] = useState("")
+  const [date1, setDate1] = useState(null)
+  const [date2, setDate2] = useState(null)
   const [branch1, setBranch1] = useState("")
   const [branch2, setBranch2] = useState("")
 
   const handleConfirm = async () => {
-    const dateSelect = moment(date).format("YYYY-MM-DD")
-    navigate(`/reportDaily/first-check-in/?date=${dateSelect}&branch1=${branch1}&branch2=${branch2}`)
+    const dateSelect1 = date1.format("YYYY-MM-DD")
+    const dateSelect2 = date2.format("YYYY-MM-DD")
+    navigate(`/reportDaily/first-check-in/?date1=${dateSelect1}&date2=${dateSelect2}&branch1=${branch1}&branch2=${branch2}`)
   }
 
   const loadBranchList = () => {
@@ -108,17 +109,33 @@ const FirstCheckInModal = ({ setOpen }) => {
               </FormControl>
             </Grid2>
           </Grid2>
-          <Grid2 container spacing={1} padding={1} direction="column">
-            <DatePicker
-              label="เลือกวันที่"
-              format="DD/MM/YYYY"
-              slotProps={{
-                textField: {
-                  helperText: "DD/MM/YYYY"
-                }
-              }}
-              onChange={(newValue) => setDate(newValue)}
-            />
+          <Grid2 container spacing={1} padding={1}>
+            <Grid2 size={6}>
+              <DatePicker
+                label="เลือกวันที่"
+                format="DD/MM/YYYY"
+                slotProps={{
+                  textField: {
+                    helperText: "DD/MM/YYYY"
+                  }
+                }}
+                value={date1}
+                onChange={(newValue) => setDate1(newValue)}
+              />
+            </Grid2>
+            <Grid2 size={6}>
+              <DatePicker
+                label="เลือกวันที่"
+                format="DD/MM/YYYY"
+                slotProps={{
+                  textField: {
+                    helperText: "DD/MM/YYYY"
+                  }
+                }}
+                value={date2}
+                onChange={(newValue) => setDate2(newValue)}
+              />
+            </Grid2>
           </Grid2>
           <Box display="flex" justifyContent="center">
             <Grid2 container spacing={2} padding={2}>
