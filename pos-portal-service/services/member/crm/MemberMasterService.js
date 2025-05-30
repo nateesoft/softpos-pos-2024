@@ -132,6 +132,7 @@ const checkDateExpired = (startDateStr, endDateStr) => {
 
     return currentDate.isBetween(startDate, endDate);
 }
+
 const checkTimeExpired = (startDateTimeStr, endDateTimeStr) => {
     const currentDateTime = getMoment().format('YYYY-MM-DD HH:mm:ss')
 
