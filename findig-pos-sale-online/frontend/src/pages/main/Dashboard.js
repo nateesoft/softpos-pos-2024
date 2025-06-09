@@ -5,7 +5,9 @@ import {
   TextField,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  Grid,
+  Grid2
 } from "@mui/material"
 import axios from "axios"
 
@@ -34,27 +36,33 @@ const Dashboard = () => {
   }
 
   return (
-    <Container>
-      <TextField
-        label="New Post"
-        fullWidth
-        value={newPost}
-        onChange={(e) => setNewPost(e.target.value)}
-      />
-      <Button variant="contained" onClick={addPost}>
-        Add
-      </Button>
-      <List>
-        {posts.map((post) => (
-          <ListItem key={post.id}>
-            <ListItemText primary={post.content} />
-            <Button variant="outlined" onClick={() => deletePost(post.id)}>
-              Delete
-            </Button>
-          </ListItem>
-        ))}
-      </List>
-    </Container>
+    <Grid spacing={1} padding={1} margin={1}>
+      <Grid xs={12}>
+        <TextField
+          label="New Post"
+          fullWidth
+          value={newPost}
+          onChange={(e) => setNewPost(e.target.value)}
+        />
+      </Grid>
+      <Grid xs={12}>
+        <Button variant="contained" onClick={addPost}>
+          Add
+        </Button>
+      </Grid>
+      <Grid xs={12}>
+        <List>
+          {posts.map((post) => (
+            <ListItem key={post.id}>
+              <ListItemText primary={post.content} />
+              <Button variant="outlined" onClick={() => deletePost(post.id)}>
+                Delete
+              </Button>
+            </ListItem>
+          ))}
+        </List>
+      </Grid>
+    </Grid>
   )
 }
 

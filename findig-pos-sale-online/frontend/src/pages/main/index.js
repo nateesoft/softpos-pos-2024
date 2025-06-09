@@ -1,19 +1,15 @@
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom"
-
-import LoginPage from "./pages/login"
-import SalePage from "./pages/sales"
+import { Outlet, useNavigate } from "react-router-dom"
 import { Box, Button, Divider, Grid2, Typography } from "@mui/material"
 
 import {
   Dropdown,
-  DropdownMenuItem} from "./components/menu/Dropdown"
+  DropdownMenuItem} from "../../components/menu/Dropdown"
 
-const App = () => {
-  const location = useLocation()
+const MainApp = () => {
   const navigate = useNavigate()
 
   return (
-    <div>
+    <div style={{marginTop: "8vh"}}>
       <Box
         display="flex"
         justifyContent="center"
@@ -40,7 +36,7 @@ const App = () => {
           menu={[
             <DropdownMenuItem
               onClick={() => {
-                navigate("/print-adjust-stock")
+                navigate("/dashboard/add-stkfile")
               }}
             >
               บันทึกข้อมูลการขาย (นอกเครื่อง POS)
@@ -48,14 +44,14 @@ const App = () => {
             <Divider />,
             <DropdownMenuItem
               onClick={() => {
-                navigate("/e-ordering")
+                navigate("/dashboard/user-group")
               }}
             >
               กำหนดรหัสกลุ่มผู้ใช้งาน (User Group Setting)
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                navigate("/e-ordering")
+                navigate("/dashboard/user-setting")
               }}
             >
               กำหนดรหัสผู้ใช้งาน (User Setting)
@@ -70,11 +66,11 @@ const App = () => {
             </Grid2>
           }
           menu={[
-            <DropdownMenuItem onClick={() => { navigate("/stock-card") }}>
+            <DropdownMenuItem onClick={() => { navigate("/dashboard/report-sale-branch") }}>
               รายงานการบันทึกข้อมูลการขาย แยกตามสาขา
             </DropdownMenuItem>,
             <Divider />,
-            <DropdownMenuItem onClick={() => { navigate("/stock-card") }}>
+            <DropdownMenuItem onClick={() => { navigate("/dashboard/report-stock-branch") }}>
               รายงานสต็อกสินค้าคงเหลือ แยกตามสาขา
             </DropdownMenuItem>
           ]}
@@ -89,14 +85,14 @@ const App = () => {
           menu={[
             <DropdownMenuItem
               onClick={() => {
-                navigate("/company-file")
+                navigate("/dashboard/shortcut")
               }}
             >
               กำหนดเมนูปุ่มลัด (Hot Key)
             </DropdownMenuItem>,
             <DropdownMenuItem
               onClick={() => {
-                navigate("/group-file")
+                navigate("/dashboard/option-config")
               }}
             >
               ปรับแต่งระบบ (Options...)
@@ -104,7 +100,7 @@ const App = () => {
             <Divider />,
             <DropdownMenuItem
               onClick={() => {
-                navigate("/stock-code")
+                navigate("/dashboard/branch-detail")
               }}
             >
               ข้อมูลรายละเอียดสาขา
@@ -115,14 +111,10 @@ const App = () => {
           ออกจากระบบ
         </Button>
       </Box>
-      <Routes location={location}>
-        <Route>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/sale" element={<SalePage />} />
-        </Route>
-      </Routes>
+
+      <Outlet />
     </div>
   )
 }
 
-export default App
+export default MainApp
