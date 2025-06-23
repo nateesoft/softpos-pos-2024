@@ -35,7 +35,7 @@ class ComponentToPrint extends Component {
   }
 
   render() {
-    const { userLogin, branch1, branch2, macno, reports } = this.props
+    const { userLogin, branch1, branch2, date1, date2, macno, reports } = this.props
     const poshwSetup = this.props.poshwSetup
 
     let headers = [
@@ -62,6 +62,9 @@ class ComponentToPrint extends Component {
           <div align="center"><font face={FONT_FAMILY} size="4">รายงานสมาชิก ที่ยังไม่เคยใช้บริการ</font></div>
           <div align="center" style={{ margin: "10px" }}>
             <font face={FONT_FAMILY} size="4">สาขา {branch1} - สาขา {branch2}</font>
+          </div>
+          <div align="center" style={{ margin: "10px" }}>
+            <font face={FONT_FAMILY} size="4">ช่วงวันที่ {date1} - สาขา {date2}</font>
           </div>
           <div align="center">
             <font face={FONT_FAMILY} size="4">
@@ -109,6 +112,8 @@ const DisplayNotCome = () => {
   const [query] = useSearchParams()
   const branch1 = query.get('branch1')
   const branch2 = query.get('branch2')
+  const date1 = query.get('date1')
+  const date2 = query.get('date2')
 
   const contentRef = useRef(null)
   const { appData } = useContext(POSContext)
@@ -132,7 +137,7 @@ const DisplayNotCome = () => {
   const loadReport = useCallback(() => {
     apiClient
       .post(`/api/crm/member/report/not-come`, {
-        branch1, branch2
+        branch1, branch2, date1, date2
       })
       .then((response) => {
         if (response.status === 200) {
@@ -167,8 +172,10 @@ const DisplayNotCome = () => {
       <ComponentToPrint
         innerRef={contentRef}
         userLogin={userLogin}
-        branch1={"001"}
-        branch2={"999"}
+        branch1={branch1}
+        branch2={branch2}
+        date1={date1}
+        date2={date2}
         macno={macno}
         poshwSetup={poshwSetup}
         reports={reports}

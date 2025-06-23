@@ -21,7 +21,10 @@ const getMemberByCode = async (memberCode) => {
     const sql = `select * from memmaster 
     where Member_Code='${memberCode}' order by Member_Code limit 0, 50`;
     const results = await pool.query(sql)
-    return results
+    const mappingResult = results.map((item, index) => {
+        return { ...item, Member_NameThai: ASCII2Unicode(item.Member_NameThai) }
+    })
+    return mappingResult
 }
 
 const getReportAll = async (branchCode1, branchCode2) => {
@@ -31,7 +34,10 @@ const getReportAll = async (branchCode1, branchCode2) => {
     WHERE member_branchcode between '${branchCode1}' and '${branchCode2}' 
     ORDER BY Member_Code`;
     const results = await pool.query(sql)
-    return results
+    const mappingResult = results.map((item, index) => {
+        return { ...item, Member_NameThai: ASCII2Unicode(item.Member_NameThai) }
+    })
+    return mappingResult
 }
 
 const getReportNewRegister = async (branchCode1, branchCode2, date1, date2) => {
@@ -42,7 +48,10 @@ const getReportNewRegister = async (branchCode1, branchCode2, date1, date2) => {
     AND Member_AppliedDate BETWEEN '${date1}' AND '${date2}' 
     ORDER BY Member_Code`;
     const results = await pool.query(sql)
-    return results
+    const mappingResult = results.map((item, index) => {
+        return { ...item, Member_NameThai: ASCII2Unicode(item.Member_NameThai) }
+    })
+    return mappingResult
 }
 
 const getReportFirstCheckIn = async (branchCode1, branchCode2, date1, date2) => {
@@ -53,18 +62,28 @@ const getReportFirstCheckIn = async (branchCode1, branchCode2, date1, date2) => 
     AND Member_LastDateService BETWEEN '${date1}' AND '${date2}' 
     ORDER BY Member_Code`;
     const results = await pool.query(sql)
+    const mappingResult = results.map((item, index) => {
+        return { ...item, Member_NameThai: ASCII2Unicode(item.Member_NameThai) }
+    })
+    return mappingResult
     return results
 }
 
-const getReportNotCome = async (branchCode1, branchCode2) => {
-    const sql = `SELECT Member_Code, Member_NameThai, Member_ExpiredDate, 
+const getReportNotCome = async (branchCode1, branchCode2, date1, date2) => {
+    const MyRestaurant = process.env.MYSQL5_DB_NAME
+    const sql = `SELECT Member_Code, Member_BranchCode , Member_NameThai, Member_ExpiredDate, 
     Member_PointExpiredDate, Member_TotalPurchase , Member_TotalScore 
-    FROM memmaster 
-    WHERE member_branchcode between '${branchCode1}' and '${branchCode2}' 
-    and Member_LastDateService is null 
+    FROM memmaster m 
+    LEFT JOIN ${MyRestaurant}.s_invoice s ON m.Member_Code = s.B_MemCode 
+    AND s.S_Date BETWEEN '${date1}' AND '${date2}' 
+    AND m.Member_BranchCode  BETWEEN '${branchCode1}' AND '${branchCode2}' 
+    WHERE s.B_MemCode IS NULL 
     ORDER BY Member_Code`;
     const results = await pool.query(sql)
-    return results
+    const mappingResult = results.map((item, index) => {
+        return { ...item, Member_NameThai: ASCII2Unicode(item.Member_NameThai) }
+    })
+    return mappingResult
 }
 
 const searchData = async (phone, code, name) => {
