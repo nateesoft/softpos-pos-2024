@@ -70,8 +70,8 @@ router.post('/report/first-check-in', function (req, res) {
 });
 
 router.post('/report/not-come', function (req, res) {
-  const { branch1, branch2 } = req.body
-  MemberMasterService.getReportNotCome(branch1, branch2)
+  const { branch1, branch2, date1, date2 } = req.body
+  MemberMasterService.getReportNotCome(branch1, branch2, date1, date2)
     .then(rows => {
       res.status(200).json({ status: 2000, data: rows })
     })
