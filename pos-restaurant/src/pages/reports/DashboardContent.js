@@ -38,6 +38,7 @@ const DashboardContent = () => {
 
   const [overviewReport, setOverviewReport] = useState(null)
   const [customers, setCustomers] = useState(null)
+  const [member, setMember] = useState(null)
   const [topSales, setTopSales] = useState([])
   const [saleByGroup, setSaleByGroup] = useState([])
   const [saleByType, setSaleByType] = useState([])
@@ -49,15 +50,14 @@ const DashboardContent = () => {
       .get(`/api/overview-report/all`)
       .then((response) => {
         setOverviewReport(response.data.data)
-
+        setMember(response.data.data.member.data)
         setCustomers(response.data.data.customers.data)
         setTopSales(response.data.data.topSales.data)
         setSaleByType(response.data.data.saleByType.data)
         setSaleByGroup(response.data.data.saleByGroup.data)
         setSaleByTime(response.data.data.saleByTime.data.overview)
         setSaleByAllTime(response.data.data.saleByTime.data.allTime)
-      })
-      .catch((err) => alert(err.message))
+      }).catch((err) => alert(err.message))
   }
 
   const backToFloorPlan = () => {
@@ -143,7 +143,7 @@ const DashboardContent = () => {
             >
               <Box display="flex" flexDirection="column">
                 <Typography sx={{ fontWeight: "bold" }}>
-                  <u>ข้อมูลสมาชิก</u>
+                  <u>ข้อมูลสมาชิกประจำเดือน</u>
                 </Typography>
                 <table width="100%">
                   <tr>
@@ -153,7 +153,7 @@ const DashboardContent = () => {
                     <td align="left">
                       <Typography>All member</Typography>
                     </td>
-                    <td>{customers.customer_man_count || 0} คน</td>
+                    <td>{member.all_member || 0} คน</td>
                   </tr>
                   <tr>
                     <td>
@@ -162,7 +162,7 @@ const DashboardContent = () => {
                     <td align="left">
                       <Typography>New Register</Typography>
                     </td>
-                    <td>{customers.customer_woman_count || 0} คน</td>
+                    <td>{member.new_register || 0} คน</td>
                   </tr>
                   <tr>
                     <td>
@@ -171,7 +171,7 @@ const DashboardContent = () => {
                     <td align="left">
                       <Typography>First Check-In</Typography>
                     </td>
-                    <td>{customers.customer_kid_count || 0} คน</td>
+                    <td>{member.first_check_in || 0} คน</td>
                   </tr>
                   <tr>
                     <td>
@@ -180,7 +180,7 @@ const DashboardContent = () => {
                     <td align="left">
                       <Typography>Registered Not Used</Typography>
                     </td>
-                    <td>{customers.customer_old_count || 0} คน</td>
+                    <td>{member.not_come || 0} คน</td>
                   </tr>
                 </table>
               </Box>

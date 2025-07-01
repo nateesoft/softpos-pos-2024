@@ -132,7 +132,9 @@ const DisplayAllMember = () => {
   const loadReport = useCallback(() => {
     
     apiClient
-      .get(`/api/crm/member/report/all-member?branch1=${branch1}&branch2=${branch2}`)
+      .post(`/api/crm/member/report/all-member`, {
+        branch1, branch2
+      })
       .then((response) => {
         if (response.status === 200) {
           setReports(response.data.data)
