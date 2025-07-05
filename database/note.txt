@@ -17,12 +17,12 @@ docker exec -i 89f97a5acdbc mysqldump -uroot -pnathee2024 posdb_SUSHI2 > posdb_S
 docker exec -i <mysql-container> mysql -u<username> -p<password> <database-name> < backup.sql
 
 ### EXAMPLE ###
-docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurant < MyRestaurant.sql
-docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurantJefferSakon < MyRestaurantJefferSakon.sql
-docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurant_Heng1 < MyRestaurant_Heng1.sql
-docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurant_SUSHI2 < MyRestaurant_SUSHI2.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurant < dump-MyRestaurant-202507011924.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurant_B002 < dump-MyRestaurant_B002-202507011924.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyRestaurant_B003 < dump-MyRestaurant_B003-202507011924.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 mycrmbranch < dump-mycrmbranch-202507011924.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 MyBorLocal < dump-MyBorLocal-202507011924.sql
 
-docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb < posdb.sql
-docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb_JefferSakon < posdb_JefferSakon.sql
-docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb_Heng1 < posdb_Heng1.sql
-docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb_SUSHI2 < posdb_SUSHI2.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb < dump-posdb-202507011929.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb_heng1 < dump-posdb_heng1-202507011930.sql
+docker exec -i 89f97a5acdbc mysql -uroot -pnathee2024 posdb_sushi2 < pdump-posdb_sushi2-202507011930.sql

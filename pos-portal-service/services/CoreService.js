@@ -440,6 +440,7 @@ const summaryBalance = async (tableNo, macno) => {
   tablefile.Food = responseData.Food
   tablefile.Drink = responseData.Drink
   tablefile.Product = responseData.Product
+  tablefile.SubDiscAmt = responseData.totalDiscountAmount
 
   tablefile.TItem = totalItem
 

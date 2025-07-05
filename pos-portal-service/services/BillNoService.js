@@ -265,7 +265,7 @@ const addNewBill = async (payload) => {
   const allBalance = await getBalanceByTableNo(tableNo)
 
   const B_CuponDiscAmt = allBalance.reduce((sum, item) => {
-    return (item.R_PrCuType === '-C') ? sum + item.R_PrCuAmt: sum
+    return (item.R_PrCuType === '-C' && item.R_Void !== 'V') ? sum + item.R_PrCuAmt: sum
   }, 0)
   const B_Ontime = curtime
   const B_LoginTime = curtime
@@ -286,26 +286,26 @@ const addNewBill = async (payload) => {
   const B_ItemDiscAmt = 0
   const B_FastDisc = posConfigSetup.P_FastDisc || ""
   const B_FastDiscAmt = allBalance.reduce((sum, item) => {
-    return (item.R_PrSubType === '-F') ? sum + item.R_PrSubAmt: sum
+    return (item.R_PrSubType === '-F' && item.R_Void !== 'V') ? sum + item.R_PrSubAmt: sum
   }, 0)
   const B_EmpDisc = posConfigSetup.P_EmpDisc || ""
   const B_EmpDiscAmt = allBalance.reduce((sum, item) => {
-    return (item.R_PrSubType === '-E') ? sum + item.R_PrSubAmt: sum
+    return (item.R_PrSubType === '-E' && item.R_Void !== 'V') ? sum + item.R_PrSubAmt: sum
   }, 0)
   const B_TrainDisc = posConfigSetup.P_TrainDisc || ""
   const B_TrainDiscAmt = allBalance.reduce((sum, item) => {
-    return (item.R_PrSubType === '-T') ? sum + item.R_PrSubAmt: sum
+    return (item.R_PrSubType === '-T' && item.R_Void !== 'V') ? sum + item.R_PrSubAmt: sum
   }, 0)
   const B_MemDisc = posConfigSetup.P_MemDisc || ""
   const B_MemDiscAmt = allBalance.reduce((sum, item) => {
-    return (item.R_PrSubType === '-M') ? sum + item.R_PrSubAmt: sum
+    return (item.R_PrSubType === '-M' && item.R_Void !== 'V') ? sum + item.R_PrSubAmt: sum
   }, 0)
   const B_SubDisc = posConfigSetup.P_SubDisc || ""
   const B_SubDiscAmt = allBalance.reduce((sum, item) => {
-    return (item.R_PrSubType === '-S') ? sum + item.R_PrSubAmt: sum
+    return (item.R_PrSubType === '-S' && item.R_Void !== 'V') ? sum + item.R_PrSubAmt: sum
   }, 0)
   const B_SubDiscBath = allBalance.reduce((sum, item) => {
-    return (item.R_DiscBath > 0) ? sum + item.R_DiscBath: sum
+    return (item.R_DiscBath > 0 && item.R_Void !== 'V') ? sum + item.R_DiscBath: sum
   }, 0)
   const B_ProDiscAmt = 0
   const B_SpaDiscAmt = 0
