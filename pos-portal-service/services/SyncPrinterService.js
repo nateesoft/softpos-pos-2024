@@ -33,7 +33,7 @@ const formatDate = data => {
 }
 
 const formatDateTime = data => {
-  return getMoment(data).format("HH:mm:ss")
+  return getMoment(data).format("DD/MM/YYYY HH:mm:ss")
 }
 
 const truncateWord = (text, maxLength = 25, mark="...") => {
