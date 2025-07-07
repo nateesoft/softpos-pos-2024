@@ -68,10 +68,10 @@ const CuponListModal = (props) => {
       apiClient
         .post(`/api/cupon/saveList`, { 
           cuponList: getCuponSelect, 
+          tableFile,
           cashier: tableFile.Cashier,
           tableNo: tableFile.Tcode,
-          macNo: tableFile.MacNo,
-          netTotalAmount: tableFile.TAmount
+          macNo: tableFile.MacNo
         })
         .then((response) => {
           if (response.status === 200) {

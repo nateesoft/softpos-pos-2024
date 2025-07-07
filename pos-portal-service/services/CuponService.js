@@ -18,18 +18,29 @@ const getDataCupon = async () => {
   return mappingResultDataList(results)
 }
 
-const saveData = async (payload, tableNo, macNo, cashier, netTotalAmount) => {
-  const { CuCode, CuDisc, CuDiscBath, qty } = payload
+const saveData = async (payload, tableNo, macNo, cashier, tableFile) => {
+  const { CuCode, CuDisc, CuDisc2, CuDisc3, CuDiscBath, qty } = payload
+  const { Food, Drink, Product} = tableFile
   const time = getMoment().format('HH:mm')
   const R_Index = tableNo+CuCode
   let CuTotal = 0
   let CuAmt = 0
-  if(CuDisc>0){
-    CuAmt = (CuDisc * netTotalAmount / 100) * qty
-  }else{
-    CuAmt = CuDiscBath * qty
+  if (CuDisc > 0) {
+    CuAmt += ((CuDisc * Food) / 100) * qty
   }
+  if (CuDisc2 > 0) {
+    CuAmt += ((CuDisc2 * Drink) / 100) * qty
+  }
+  if (CuDisc3 > 0) {
+    CuAmt += ((CuDisc3 * Product) / 100) * qty
+  }
+
+  if (CuDisc == 0 && CuDisc2 == 0 && CuDisc3 == 0){
+    CuAmt += CuDiscBath * qty
+  }
+
   CuTotal = CuAmt
+
   const sql = `INSERT INTO tempcupon
     (R_Index, R_Table, Terminal, Cashier, \`Time\`, 
     CuCode, CuQuan, CuAmt, CuTotal, CuDisc, 
@@ -38,21 +49,17 @@ const saveData = async (payload, tableNo, macNo, cashier, netTotalAmount) => {
     VALUES('${R_Index}', '${tableNo}', '${macNo}', '${cashier}', '${time}', 
     '${CuCode}', ${qty}, ${CuAmt}, ${CuTotal}, ${CuDisc}, 
     0, 0, '', '', '', '');`
-  await pool.query(sql)
-
-  // update tablefile for cuponAmt
-  const sql2 = `UPDATE tablefile set CuponDiscAmt='${CuAmt}' WHERE Tcode='${tableNo}'`
-  const result = await pool.query(sql2)
+  const result = await pool.query(sql)
   return result
 }
 
 const saveDataCupon = async (payload) => {
-  const { cuponList, cashier, tableNo, macNo, netTotalAmount } = payload
+  const { cuponList, cashier, tableNo, macNo, tableFile } = payload
   // clear tempcupon
   await pool.query(`delete from tempcupon where R_Table='${tableNo}'`)
 
   for (const cupon of cuponList) {
-    await saveData(cupon, tableNo, macNo, cashier, netTotalAmount)
+    await saveData(cupon, tableNo, macNo, cashier, tableFile)
   }
 
   const sql = `select sum(CuAmt) CuAmt from tempcupon where R_Table='${tableNo}'`;
