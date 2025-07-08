@@ -5,6 +5,7 @@
   "homepage": "pos-restaurant",
   "main": "electron.js",
   "dependencies": {
+    "@cypress/webpack-dev-server": "^4.1.0",
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
     "@mui/icons-material": "^6.1.6",
@@ -53,6 +54,7 @@
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
     "concurrently": "^9.1.2",
+    "cypress": "^14.5.1",
     "electron": "^33.4.2",
     "electron-builder": "^25.1.8",
     "electron-is-dev": "^3.0.1",

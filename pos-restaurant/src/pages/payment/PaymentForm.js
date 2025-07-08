@@ -1064,6 +1064,7 @@ function PaymentForm({
         >
           <DiscountFormModal
             tableFile={tableFileDb}
+            orderList={orderList}
             setOpenDiscountModal={setOpenDiscountModal} 
             setSpecialCuponInfo={setSpecialCuponInfo}
             initLoad={initLoad}

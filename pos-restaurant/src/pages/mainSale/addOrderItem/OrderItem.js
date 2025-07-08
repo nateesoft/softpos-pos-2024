@@ -28,7 +28,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails} from "@mui/material"
-import AddCircleIcon from "@mui/icons-material/AddCircle"
 import RemoveCircleIcon from "@mui/icons-material/DoNotDisturbOn"
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -117,8 +116,7 @@ const OrderItem = ({
   typePopup = false,
   handleNotification,
   initLoadBalanceProductGroup,
-  summaryTable,
-  summaryTableFileBalance
+  summaryTable
 }) => {
   const navigate = useNavigate()
   const { appData } = useContext(POSContext)
@@ -143,7 +141,6 @@ const OrderItem = ({
   const handleVoidGroupMenu = (pluCode) => {
     setCurrentMainMenuCode(pluCode)
     setOpenVoidGroup(true)
-    summaryTableFileBalance()
   }
 
   const handleClick = () => {
@@ -186,7 +183,6 @@ const OrderItem = ({
           setOpenVoidGroup(false)
           initLoadMenu()
           initLoadOrder()
-          summaryTableFileBalance()
         })
         .catch((err) => {
           handleNotification(err.message)

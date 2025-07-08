@@ -109,13 +109,13 @@ const computeUpdateSubTotal = async ({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, 
 
 const updateCuponSubTotalDiscount = ({
   R_PrCuType, R_PrCuCode, R_PrCuDisc, R_PrCuBath,
-  R_Table, R_Type
+  R_Table, R_Type, CuQuan
 }) => {
   return `UPDATE balance 
     set R_PrCuType='${R_PrCuType}',
     R_PrCuQuan=R_QuanCanDisc, R_PrCuCode='${R_PrCuCode}',
     R_PrCuDisc='${R_PrCuDisc}', R_PrCuBath='${R_PrCuBath}',
-    R_PrCuAmt=R_Total*${R_PrCuDisc}/100, R_QuanCanDisc='0' 
+    R_PrCuAmt=R_Total*${R_PrCuDisc*CuQuan}/100, R_QuanCanDisc='0' 
     WHERE R_Table='${R_Table}' 
     and R_Void <> 'V' and R_LinkIndex = '' 
     and R_Type='${R_Type}' and R_Discount='Y'`
@@ -126,6 +126,7 @@ const computeUpdateCuponSubTotal = async ({ cuponInfo, R_Table, FIX_SUB_TYPE }) 
   let discFood = cuponInfo.CuDisc
   if(parseInt(discFood)>0){
     await pool.query(updateCuponSubTotalDiscount({
+      CuQuan: cuponInfo.CuQuan,
       R_PrCuType: FIX_SUB_TYPE, R_PrCuCode: cuponInfo.CuCode, 
       R_PrCuDisc: discFood, R_PrCuBath: 0,
       R_Table: R_Table, R_Type: MENU_FOOD
@@ -136,6 +137,7 @@ const computeUpdateCuponSubTotal = async ({ cuponInfo, R_Table, FIX_SUB_TYPE }) 
   let discDrink = cuponInfo.CuDisc2
   if(parseInt(discDrink)>0){
     await pool.query(updateCuponSubTotalDiscount({
+      CuQuan: cuponInfo.CuQuan,
       R_PrCuType: FIX_SUB_TYPE, R_PrCuCode: cuponInfo.CuCode, 
       R_PrCuDisc: discDrink, R_PrCuBath: 0,
       R_Table: R_Table, R_Type: MENU_DRINK
@@ -146,11 +148,40 @@ const computeUpdateCuponSubTotal = async ({ cuponInfo, R_Table, FIX_SUB_TYPE }) 
   let discProduct = cuponInfo.CuDisc3
   if(parseInt(discProduct)>0){
     await pool.query(updateCuponSubTotalDiscount({
+      CuQuan: cuponInfo.CuQuan,
       R_PrCuType: FIX_SUB_TYPE, R_PrCuCode: cuponInfo.CuCode, 
       R_PrCuDisc: discProduct, R_PrCuBath: 0,
       R_Table: R_Table, R_Type: MENU_PRODUCT
     }))
   }
+}
+
+const clearAllDiscount = async (Tcode) => {
+  const sqlClearTempCupon = `delete from tempcupon where R_Table='${Tcode}'`
+  await pool.query(sqlClearTempCupon)
+
+  const sqlClearDiscounTable = `UPDATE tablefile set CuponDiscAmt=0 where Tcode='${Tcode}'`
+  await pool.query(sqlClearDiscounTable)
+
+  await clearAllDiscountWithoutItemDiscount(Tcode)
+}
+
+const clearAllDiscountWithoutItemDiscount = async (Tcode) => {
+  const sqlClearDiscounTable = `UPDATE tablefile set 
+    EmpDisc='',FastDisc='',TrainDisc='',MemDisc='',SubDisc='' 
+    where Tcode='${Tcode}'`
+  await pool.query(sqlClearDiscounTable)
+
+  const sqlClearBalance = `UPDATE balance 
+    SET R_QuanCanDisc=R_QuanCanDisc+R_PrSubQuan+R_PrCuQuan,
+    R_PrDisc='0', R_PrBath='0', R_PrAmt='0',
+    R_DiscBath='0', R_PrCuQuan='0', R_PrCuAmt='0',
+    R_Redule='0', R_PrSubQuan='0',
+    R_PrSubDisc='0', R_PrSubBath='0', R_PrSubAmt='0',
+    R_PrSubAdj='0', R_PrCuDisc='0', R_PrCuBath='0',
+    R_PrCuAdj='0', R_PrSubType='', R_PrSubCode='',R_PrCuType='' 
+    WHERE R_Table='${Tcode}' and R_LinkIndex = '' and R_PrType != '-I'`
+  await pool.query(sqlClearBalance)
 }
 
 const updateTableDiscount = async (payload) => {
@@ -166,6 +197,7 @@ const updateTableDiscount = async (payload) => {
     PrCuCode = ""
   } = payload
 
+  const { ItemDiscAmt = 0, Tcode } = tableFile
 
   let fastDisc = FastDiscAmt > 0 ? FastDisc : posConfigSetup.P_FastDisc
   let empDisc = EmpDiscAmt > 0 ? EmpDisc : posConfigSetup.P_EmpDisc
@@ -175,40 +207,26 @@ const updateTableDiscount = async (payload) => {
 
   // clear tempcupon
   if(CuponDiscAmt === 0){
-    const sqlClearTempCupon = `delete from tempcupon where R_Table='${tableFile.Tcode}'`
+    const sqlClearTempCupon = `delete from tempcupon where R_Table='${Tcode}'`
     await pool.query(sqlClearTempCupon)
   }
 
   // clear discount all balance
-  const sqlClearDiscounTable = `UPDATE tablefile set 
-    EmpDisc='',FastDisc='',TrainDisc='',MemDisc='',SubDisc='' 
-    where Tcode='${tableFile.Tcode}'`
-  await pool.query(sqlClearDiscounTable)
+  await clearAllDiscountWithoutItemDiscount(Tcode)
 
-  const sqlClearBalance = `UPDATE balance 
-    SET R_QuanCanDisc=R_QuanCanDisc+R_PrSubQuan+R_PrCuQuan,
-    R_PrDisc='0', R_PrBath='0', R_PrAmt='0',
-    R_DiscBath='0', R_PrCuQuan='0', R_PrCuAmt='0',
-    R_Redule='0', R_PrSubQuan='0',
-    R_PrSubDisc='0', R_PrSubBath='0', R_PrSubAmt='0',
-    R_PrSubAdj='0', R_PrCuDisc='0', R_PrCuBath='0',
-    R_PrCuAdj='0', R_PrSubType='', R_PrSubCode='',R_PrCuType='' 
-    WHERE R_Table='${tableFile.Tcode}' and R_LinkIndex = '' and R_Void != 'V'`
-  await pool.query(sqlClearBalance)
-
-  const totalForDiscBaht = await getSummaryItemNoCheckQuanCanDisc(tableFile.Tcode)
+  const totalForDiscBaht = await getSummaryItemNoCheckQuanCanDisc(Tcode)
   const discBath = parseFloat(DiscBath)
   if (discBath > 0 && totalForDiscBaht > 0) {
     const discBathPercent = parseFloat(discBath)/totalForDiscBaht*100
     const sqlBalance = `update balance 
         set R_DiscBath=R_Total*${discBathPercent}/100 
-        where R_Table='${tableFile.Tcode}' and R_Void <> 'V' and R_LinkIndex = ''`
+        where R_Table='${Tcode}' and R_Void <> 'V' and R_LinkIndex = ''`
     await pool.query(sqlBalance)
   } else if(CuponDiscAmt>0) {
     const FIX_SUB_TYPE = '-C'
-    const cuponInfo = await getTempCuponInfo(tableFile.Tcode)
+    const cuponInfo = await getTempCuponInfo(Tcode)
     if(cuponInfo.length>0){
-      await computeUpdateCuponSubTotal({ cuponInfo: cuponInfo[0], R_Table: tableFile.Tcode, FIX_SUB_TYPE })
+      await computeUpdateCuponSubTotal({ cuponInfo: cuponInfo[0], R_Table: Tcode, FIX_SUB_TYPE })
     }
 
   } else if(FastDiscAmt>0) {
@@ -216,31 +234,31 @@ const updateTableDiscount = async (payload) => {
     const FIX_SUB_CODE = 'FAS'
     const FORMAT_DISC = fastDisc
 
-    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: tableFile.Tcode })
+    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: Tcode })
   } else if(EmpDiscAmt>0) {
     const FIX_SUB_TYPE = '-E'
     const FIX_SUB_CODE = 'EMP'
     const FORMAT_DISC = empDisc
 
-    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: tableFile.Tcode })
+    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: Tcode })
   } else if(MemDiscAmt>0) {
     const FIX_SUB_TYPE = '-M'
     const FIX_SUB_CODE = 'MEM'
     const FORMAT_DISC = memDisc
 
-    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: tableFile.Tcode })
+    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: Tcode })
   } else if(TrainDiscAmt>0) {
     const FIX_SUB_TYPE = '-T'
     const FIX_SUB_CODE = 'TRA'
     const FORMAT_DISC = trainDisc
     
-    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: tableFile.Tcode })
+    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: Tcode })
   } else if(SubDiscAmt>0) {
     const FIX_SUB_TYPE = '-S'
     const FIX_SUB_CODE = 'SUB'
     const FORMAT_DISC = subDisc
     
-    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: tableFile.Tcode })
+    await computeUpdateSubTotal({ FIX_SUB_TYPE, FIX_SUB_CODE, FORMAT_DISC, tableNo: Tcode })
   }
 
   const sql = `update tablefile set 
@@ -251,13 +269,11 @@ const updateTableDiscount = async (payload) => {
         SubDisc='${subDisc}',SubDiscAmt='${SubDiscAmt}',
         DiscBath='${discBath}',CuponDiscAmt='${CuponDiscAmt}',
         SpaDiscAmt='${SpaDiscAmt}' 
-        where Tcode='${tableFile.Tcode}'`
+        where Tcode='${Tcode}'`
   await pool.query(sql)
 
-  await summaryBalance(tableFile.Tcode, tableFile.MacNo)
-
   const discountAmount = FastDiscAmt + EmpDiscAmt + MemDiscAmt + TrainDiscAmt + SubDiscAmt + 
-  discBath + CuponDiscAmt + SpaDiscAmt
+  discBath + CuponDiscAmt + SpaDiscAmt + ItemDiscAmt
   return {
     discountAmount: discountAmount
   }
@@ -607,5 +623,6 @@ module.exports = {
   getTableByCode,
   splitTableToPayment,
   updateTableDiscount,
-  getListTableByCode
+  getListTableByCode,
+  clearAllDiscount
 }

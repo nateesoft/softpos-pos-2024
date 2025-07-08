@@ -33,7 +33,10 @@ const CuponListModal = (props) => {
     tableFile,
     setPrCuCode,
     setPrCuDisc,
-    setPrCuBath
+    setPrCuBath,
+    netTotalFood,
+    netTotalDrink,
+    netTotalProduct,
   } = props
 
   const [page, setPage] = useState(0)
@@ -67,8 +70,10 @@ const CuponListModal = (props) => {
     if (getCuponSelect.length > 0) {
       apiClient
         .post(`/api/cupon/saveList`, { 
-          cuponList: getCuponSelect, 
-          tableFile,
+          cuponList: getCuponSelect,
+          netTotalFood,
+          netTotalDrink,
+          netTotalProduct,
           cashier: tableFile.Cashier,
           tableNo: tableFile.Tcode,
           macNo: tableFile.MacNo
@@ -112,8 +117,7 @@ const CuponListModal = (props) => {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  {columns &&
-                    columns.map((column) => (
+                  {columns && columns.map((column) => (
                       <TableCell
                         key={column.id}
                         align={column.align}
@@ -136,8 +140,7 @@ const CuponListModal = (props) => {
                         tabIndex={-1}
                         key={row.CrCode}
                       >
-                        {columns &&
-                          columns.map((column) => {
+                        {columns && columns.map((column) => {
                             const value = row[column.id]
                             if (column.id === "qty") {
                               return (

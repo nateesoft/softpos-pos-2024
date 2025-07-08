@@ -260,7 +260,6 @@ function MainSalePage() {
             initLoadOrder={initLoadOrder}
             handleNotification={handleNotification}
             initLoadBalanceProductGroup={initLoadBalanceProductGroup}
-            summaryTableFileBalance={summaryTableFileBalance}
           />
         </Grid2>
         <Grid2 size={4} sx={{
@@ -284,7 +283,6 @@ function MainSalePage() {
             handleNotification={handleNotification}
             initLoadBalanceProductGroup={initLoadBalanceProductGroup}
             summaryTable={summaryTable}
-            summaryTableFileBalance={summaryTableFileBalance}
           />
         </Grid2>
       </Grid2>

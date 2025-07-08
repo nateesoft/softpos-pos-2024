@@ -18,21 +18,20 @@ const getDataCupon = async () => {
   return mappingResultDataList(results)
 }
 
-const saveData = async (payload, tableNo, macNo, cashier, tableFile) => {
-  const { CuCode, CuDisc, CuDisc2, CuDisc3, CuDiscBath, qty } = payload
-  const { Food, Drink, Product} = tableFile
+const saveData = async ({cuponInfo, tableNo, macNo, cashier, netTotalFood, netTotalDrink, netTotalProduct}) => {
+  const { CuCode, CuDisc, CuDisc2, CuDisc3, CuDiscBath, qty } = cuponInfo
   const time = getMoment().format('HH:mm')
   const R_Index = tableNo+CuCode
   let CuTotal = 0
   let CuAmt = 0
   if (CuDisc > 0) {
-    CuAmt += ((CuDisc * Food) / 100) * qty
+    CuAmt += ((CuDisc * netTotalFood) / 100) * qty
   }
   if (CuDisc2 > 0) {
-    CuAmt += ((CuDisc2 * Drink) / 100) * qty
+    CuAmt += ((CuDisc2 * netTotalDrink) / 100) * qty
   }
   if (CuDisc3 > 0) {
-    CuAmt += ((CuDisc3 * Product) / 100) * qty
+    CuAmt += ((CuDisc3 * netTotalProduct) / 100) * qty
   }
 
   if (CuDisc == 0 && CuDisc2 == 0 && CuDisc3 == 0){
@@ -54,12 +53,12 @@ const saveData = async (payload, tableNo, macNo, cashier, tableFile) => {
 }
 
 const saveDataCupon = async (payload) => {
-  const { cuponList, cashier, tableNo, macNo, tableFile } = payload
+  const { cuponList, cashier, tableNo, macNo, netTotalFood, netTotalDrink, netTotalProduct } = payload
   // clear tempcupon
   await pool.query(`delete from tempcupon where R_Table='${tableNo}'`)
 
   for (const cupon of cuponList) {
-    await saveData(cupon, tableNo, macNo, cashier, tableFile)
+    await saveData({cuponInfo: cupon, tableNo, macNo, cashier, netTotalFood, netTotalDrink, netTotalProduct})
   }
 
   const sql = `select sum(CuAmt) CuAmt from tempcupon where R_Table='${tableNo}'`;

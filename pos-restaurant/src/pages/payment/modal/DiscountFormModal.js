@@ -25,7 +25,8 @@ const DiscountFormModal = ({
   setOpenDiscountModal,
   setSpecialCuponInfo,
   tableFile,
-  initLoad
+  initLoad,
+  orderList
 }) => {
   const [openCupon, setOpenCupon] = useState(false)
 
@@ -132,6 +133,13 @@ const DiscountFormModal = ({
       PrCuDisc,
       PrCuBath
     }
+
+    const validDiscount = fastAmt + empAmt + memAmt + traineeAmt + cuponAmt + bahtAmt + specialCuponAmt
+    if(validDiscount > (tableFile.TAmount - tableFile.ItemDiscAmt)) {
+      alert("ยอดส่วนลดเกินยอดชำระ !!!")
+      return;
+    }
+    
     apiClient
       .put(`/api/tablefile/discountInfo/${tableFile.Tcode}`, updPayload)
       .then((response) => {
@@ -151,10 +159,41 @@ const DiscountFormModal = ({
       })
   }
 
+  const getNetTotalFood = () => {
+    const netTotalFood = orderList.reduce((netTotal, b) => {
+      if(b.R_Discount === 'Y' && b.R_QuanCanDisc > 0 && b.R_Type === '1') {
+        return netTotal + b.R_Total
+      } else {
+        return 0
+      }
+    }, 0)
+    return netTotalFood
+  }
+  const getNetTotalDrink = () => {
+    const netTotalDrink = orderList.reduce((netTotal, b) => {
+      if(b.R_Discount === 'Y' && b.R_QuanCanDisc > 0 && b.R_Type === '2') {
+        return netTotal + b.R_Total
+      } else {
+        return 0
+      }
+    }, 0)
+    return netTotalDrink
+  }
+  const getNetTotalProduct = () => {
+    const netTotalProduct = orderList.reduce((netTotal, b) => {
+      if(b.R_Discount === 'Y' && b.R_QuanCanDisc > 0 && b.R_Type === '3') {
+        return netTotal + b.R_Total
+      } else {
+        return 0
+      }
+    }, 0)
+    return netTotalProduct
+  }
+
   const festDiscountCompute = () => {
-    let netTotalFood = tableFile.Food
-    let netTotalDrink = tableFile.Drink
-    let netTotalProduct = tableFile.Product
+    let netTotalFood = getNetTotalFood()
+    let netTotalDrink = getNetTotalDrink()
+    let netTotalProduct = getNetTotalProduct()
 
     let totalAmountFood = 0
     let totalAmountDrink = 0
@@ -192,9 +231,9 @@ const DiscountFormModal = ({
   }
 
   const empDiscountCompute = () => {
-    let netTotalFood = tableFile.Food
-    let netTotalDrink = tableFile.Drink
-    let netTotalProduct = tableFile.Product
+    let netTotalFood = getNetTotalFood()
+    let netTotalDrink = getNetTotalDrink()
+    let netTotalProduct = getNetTotalProduct()
 
     let totalAmountFood = 0
     let totalAmountDrink = 0
@@ -232,9 +271,9 @@ const DiscountFormModal = ({
   }
 
   const memeberDiscountCompute = () => {
-    let netTotalFood = tableFile.Food
-    let netTotalDrink = tableFile.Drink
-    let netTotalProduct = tableFile.Product
+    let netTotalFood = getNetTotalFood()
+    let netTotalDrink = getNetTotalDrink()
+    let netTotalProduct = getNetTotalProduct()
 
     let totalAmountFood = 0
     let totalAmountDrink = 0
@@ -272,9 +311,9 @@ const DiscountFormModal = ({
   }
 
   const traineeDiscountCompute = () => {
-    let netTotalFood = tableFile.Food
-    let netTotalDrink = tableFile.Drink
-    let netTotalProduct = tableFile.Product
+    let netTotalFood = getNetTotalFood()
+    let netTotalDrink = getNetTotalDrink()
+    let netTotalProduct = getNetTotalProduct()
 
     let totalAmountFood = 0
     let totalAmountDrink = 0
@@ -312,9 +351,9 @@ const DiscountFormModal = ({
   }
 
   const cuponDiscountCompute = () => {
-    let netTotalFood = tableFile.Food
-    let netTotalDrink = tableFile.Drink
-    let netTotalProduct = tableFile.Product
+    let netTotalFood = getNetTotalFood()
+    let netTotalDrink = getNetTotalDrink()
+    let netTotalProduct = getNetTotalProduct()
 
     let totalAmountFood = 0
     let totalAmountDrink = 0
@@ -373,11 +412,17 @@ const DiscountFormModal = ({
         color: "black",
         fontWeight: "bold"
       }}>
+        <Typography sx={{fontSize: "12px"}} color="warning">
+          เมนูแต่ละประเภทที่สามารถลดได้
+        </Typography>
         <Typography sx={{fontSize: "12px"}} color="primary">
-          Food: {NumberFormat(tableFile.Food)} | Drink: {NumberFormat(tableFile.Drink)} | Product: {NumberFormat(tableFile.Product)}
+          Food: {NumberFormat(getNetTotalFood())} | Drink: {NumberFormat(getNetTotalDrink())} | Product: {NumberFormat(getNetTotalProduct())}
+        </Typography>
+        <Typography sx={{fontSize: "12px"}} color="error">
+          ( Item Discount: {NumberFormat(tableFile.ItemDiscAmt)} )
         </Typography>
         <Typography sx={{fontWeight: "bold"}}>
-          มูลค่าสินค้ารวม (Total Amount): {NumberFormat(tableFile.TAmount)}
+          มูลค่าสินค้ารวม (Total Amount): {NumberFormat(tableFile.TAmount - tableFile.ItemDiscAmt)}
         </Typography>
       </Grid2>
       <Box component="form">
@@ -725,6 +770,9 @@ const DiscountFormModal = ({
             setPrCuCode={setPrCuCode} 
             setPrCuDisc={setPrCuDisc} 
             setPrCuBath={setPrCuBath} 
+            netTotalFood={getNetTotalFood()}
+            netTotalDrink={getNetTotalDrink()}
+            netTotalProduct={getNetTotalProduct()}
             tableFile={tableFile} />
         </Box>
       </Modal>

@@ -5,8 +5,9 @@ const { getProductByPCode } = require('./ProductService');
 const { ProcessStockOut } = require('./STCardService');
 const { processAllPIngredent, processAllPSet, processAllPIngredentReturnStock, processAllPSetReturn, processAllGroupSetReturn } = require('./TSaleService');
 const { getMoment, getCurrentTime } = require('../utils/MomentUtil');
-const { getBalanceByRIndex, getBalanceMaxIndex, summaryBalance } = require('./CoreService');
+const { getBalanceByRIndex, getBalanceMaxIndex } = require('./CoreService');
 const { mappingResultDataList } = require('../utils/ConvertThai');
+const { clearAllDiscount } = require('./TableFileService');
 
 const getTotalBalance = async (tableNo) => {
     const sql = `select sum(R_Total) R_Total from balance where R_Table='${tableNo}'`;
@@ -42,6 +43,10 @@ const voidListMenuBalanceAll = async ({ menu_code, void_message, Cachier, empCod
 const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) => {
     // Update  Balance File For Void
     const balance = await getBalanceByRIndex(R_Index);
+
+    // clear all discount in tablefile
+    await clearAllDiscount(balance.R_Table)
+
     if (balance && balance.R_Void !== 'V') {
         // process return stock
         await returnStockIn(balance.R_Index, balance, empCode, voidMsg, macno)
@@ -61,9 +66,6 @@ const voidMenuBalance = async ({ R_Index, Cachier, empCode, voidMsg, macno }) =>
         const results = await pool.query(updBalance)
 
         if (results.affectedRows > 0) {
-            // summary table
-            summaryBalance(balance.R_Table, macno)
-
             return `${R_Index} Updated.`
         }
     }
@@ -189,9 +191,6 @@ const addListBalance = async (payload) => {
             R_ETD: etdType
         })
 
-        // summary tablefile
-        await summaryBalance(tableNo, macno)
-
         // process stock out
         await orderStockOut(reponseR_Index)
     });
@@ -208,6 +207,10 @@ const addBalance = async payload => {
     if (!posProduct) {
         throw new Error('Not found product !!!')
     }
+
+    // clear all discount in tablefile
+    await clearAllDiscount(tableNo)
+
     const reponseR_Index = await addNewBalance({
         tableNo,
         menuInfo,
@@ -222,9 +225,6 @@ const addBalance = async payload => {
         posProduct,
         R_ETD: etdType
     })
-
-    // summary tablefile
-    await summaryBalance(tableNo, macno)
 
     // process stock out
     await orderStockOut(reponseR_Index)
@@ -381,9 +381,6 @@ const updateChangeTypeMenu = async (R_Table, R_ETD, macno, R_Index) => {
     subLinkIndex.forEach(async item => {
         await pool.query(`update balance set R_ETD='${R_ETD}' where R_Index='${item.R_Index}'`)
     })
-
-    // summary table
-    summaryBalance(R_Table, macno)
 }
 
 const updateBalanceDetail = async payload => {
@@ -476,9 +473,6 @@ const updateBalanceDetail = async payload => {
         R_ServiceAmt='${R_ServiceAmt}',R_PEName='${R_PEName}',R_Indulgent='${R_Indulgent}' 
         WHERE R_Index='${R_Index}'`
     await pool.query(sql)
-
-    // summary table
-    summaryBalance(R_Table, macno)
 
     return R_Index
 }

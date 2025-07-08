@@ -25,8 +25,7 @@ const ProductDetailCard = memo(
     closeModal,
     initLoadOrder,
     initLoadMenu,
-    initLoadBalanceProductGroup,
-    summaryTableFileBalance
+    initLoadBalanceProductGroup
   }) => {
     const { appData } = useContext(POSContext)
     const { empCode, macno, userLogin, baseName } = appData
@@ -53,7 +52,6 @@ const ProductDetailCard = memo(
           initLoadMenu()
           initLoadOrder()
           initLoadBalanceProductGroup()
-          summaryTableFileBalance()
 
           closeModal()
         })
