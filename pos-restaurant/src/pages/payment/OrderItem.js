@@ -80,8 +80,12 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => 
         </Grid2>
         <Divider sx={{background: "black"}} />
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Sub Total</Typography>
-          <Typography>{NumFormat(tableFile.productNoneVat)}</Typography>
+          <Typography sx={{ fontSize: "14px", fontWeight: "bold" }}>Sub Total</Typography>
+          <Typography sx={{ fontSize: "14px", fontWeight: "bold" }}>{NumFormat(tableFile.productNoneVat)}</Typography>
+        </Grid2>
+        <Grid2 display="flex" justifyContent="space-between">
+          <Typography sx={{ fontSize: "14px" }}>Discount</Typography>
+          <Typography>{NumFormat(tableFile.discountAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>Service Charge ({tableFile.service}%)</Typography>
@@ -92,15 +96,11 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => 
           <Typography>{NumFormat(tableFile.subTotalAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Discount</Typography>
-          <Typography>{NumFormat(tableFile.discountAmount)}</Typography>
-        </Grid2>
-        <Grid2 display="flex" justifyContent="space-between">
           <Typography sx={{ fontSize: "14px" }}>VAT ({tableFile.vat}%)</Typography>
           <Typography>{NumFormat(tableFile.vatAmount)}</Typography>
         </Grid2>
         <Divider sx={{background: "black"}} />
-        <Grid2 display="flex" justifyContent="space-between">
+        <Grid2 display="flex" justifyContent="space-between" sx={{background: "pink"}}>
           <Typography variant="h5">Grand Total</Typography>
           <Typography variant="h5">
             {NumFormat(tableFile.netTotalAmount)}

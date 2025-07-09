@@ -405,6 +405,11 @@ function PaymentForm({
     setGiftVoucherAmt(tableFileDb.GiftVoucher_Amt)
   }, [tableFileDb])
 
+  const initLoadDiscountModal = () => {
+    initLoad()
+    setOpenDiscountModal(true)
+  }
+
   useEffect(() => {
     totalAmount()
   }, [totalAmount])
@@ -620,7 +625,7 @@ function PaymentForm({
                   variant="contained"
                   fullWidth
                   startIcon={<DiscountIcon />}
-                  onClick={() => setOpenDiscountModal(true)}
+                  onClick={initLoadDiscountModal}
                 >
                   ให้ส่วนลดเพิ่ม
                 </Button>

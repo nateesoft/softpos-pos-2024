@@ -132,7 +132,7 @@ router.put('/discountInfo/:tableNo', function (req, res) {
       return res.status(200).json({
         status: 2000,
         data: { 
-          discounAmount: rows.discountAmount
+          discountAmount: rows.discountAmount
          }
       })
     })
@@ -160,9 +160,14 @@ router.put('/:id', function (req, res) {
       MemCurAmt, Food, Drink, Product, NetTotal, PrintTotal, PrintChkBill, PrintCnt, ChkBill, ChkBillTime,
       StkCode1, StkCode2, TDesk, id],
     (err, results) => {
-      if (err) throw err
+      if (err) {
+        return res.status(500).json({
+          status: 2000,
+          data: null
+        })
+      }
 
-      res.status(200).json({ status: "update success" })
+      res.status(200).json({ status: "update success", data: results })
     }
   )
 })

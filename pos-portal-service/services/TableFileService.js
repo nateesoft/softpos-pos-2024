@@ -160,7 +160,10 @@ const clearAllDiscount = async (Tcode) => {
   const sqlClearTempCupon = `delete from tempcupon where R_Table='${Tcode}'`
   await pool.query(sqlClearTempCupon)
 
-  const sqlClearDiscounTable = `UPDATE tablefile set CuponDiscAmt=0 where Tcode='${Tcode}'`
+  const sqlClearDiscounTable = `UPDATE tablefile set 
+  CuponDiscAmt=0, EmpDiscAmt=0, FastDiscAmt=0, TrainDiscAmt=0,
+  MemDiscAmt=0, SubDiscAmt=0, DiscBath=0, SpaDiscAmt=0 
+  where Tcode='${Tcode}'`
   await pool.query(sqlClearDiscounTable)
 
   await clearAllDiscountWithoutItemDiscount(Tcode)
