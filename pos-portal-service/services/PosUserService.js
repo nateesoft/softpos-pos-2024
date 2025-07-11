@@ -1,61 +1,70 @@
-const pool = require('../config/database/MySqlConnect')
-const { decryptData } = require('../utils/StringUtil')
-const { mappingResultData } = require('../utils/ConvertThai')
+const { decryptData } = require("../utils/StringUtil")
+const { mappingResultData } = require("../utils/ConvertThai")
 
-const checkLogin = async (username, password, macno) => {
-    const sql = `select * from posuser 
-        where username='${username}' and password='${decryptData(password)}' `
-    const results = await pool.query(sql)
-    if (results.length > 0) {
-        const sqlUpdate = `update posuser 
-        set onact='Y', macno='${macno}' where username='${username}'`
-        await pool.query(sqlUpdate)
+const checkLogin = async (username, password, macno, { repository }) => {
+  const results = await repository.findUsernameAndPassword(
+    username,
+    decryptData(password)
+  )
+  if (results.length === 0) {
+    const err = new Error("User or Password invalid !")
+    err.statusCode = 404
+    throw err
+  }
 
-        const newResult = mappingResultData(results)
-        return {...newResult, Password: ""}
-    }
-    return null
+  await repository.updateUserLogin(username, macno)
+
+  const newResult = mappingResultData(results)
+  return { ...newResult, Password: "" }
 }
 
-const getLoginAuthen = async (username, password) => {
-    const sql = `select * from posuser 
-        where username='${username}' and password='${decryptData(password)}' `
-    const results = await pool.query(sql)
-    if (results.length > 0) {
-        const newResult = mappingResultData(results)
-        return {...newResult, Password: ""}
-    }
-    return null
+const getLoginAuthen = async (username, password, { repository }) => {
+  const results = await repository.findUsernameAndPassword(
+    username,
+    decryptData(password)
+  )
+  if (results.length === 0) {
+    const err = new Error("User not found")
+    err.statusCode = 404
+    throw err
+  }
+  
+  const newResult = mappingResultData(results)
+  return { ...newResult, Password: "" }
 }
 
-const processLogout = async (username) => {
-    const sqlUpdate = `update posuser set onact='N' where username='${username}'`
-    const result = await pool.query(sqlUpdate)
-
-    return result
+const processLogout = async (username, { repository }) => {
+  const result = await repository.updateUserLogout(username)
+  return result.affectedRows > 0
 }
 
-const getAllData = async () => {
-    const sql = `select * from posuser limit 1`;
-    const results = await pool.query(sql)
-
-    return mappingResultData(results)
+const getAllData = async ({ repository }) => {
+  const results = await repository.findAllData()
+  return mappingResultData(results)
 }
 
-const getDataByUserName = async (username) => {
-    const sql = `select * from posuser where username='${username}'`
-    const results = await pool.query(sql)
-    if (results.length > 0) {
-        const newResult = mappingResultData(results)
-        return {...newResult, Password: ""}
-    }
-    return null
+const getUserByOne = async ({ repository }) => {
+  const results = await repository.findOneData()
+  return mappingResultData(results)
+}
+
+const getDataByUserName = async (username, { repository }) => {
+  const results = await repository.findUsername(username)
+  if (results.length === 0) {
+    const err = new Error("User not found")
+    err.statusCode = 404
+    throw err
+  }
+
+  const newResult = mappingResultData(results)
+  return { ...newResult, Password: "" }
 }
 
 module.exports = {
-    getAllData,
-    getDataByUserName,
-    checkLogin,
-    processLogout,
-    getLoginAuthen
+  getAllData,
+  getDataByUserName,
+  checkLogin,
+  processLogout,
+  getLoginAuthen,
+  getUserByOne
 }

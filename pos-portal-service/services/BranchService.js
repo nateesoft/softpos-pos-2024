@@ -1,19 +1,25 @@
-const pool = require('../config/database/MySqlConnect')
-const { mappingResultData, mappingResultDataList } = require('../utils/ConvertThai');
+const {
+  mappingResultData,
+  mappingResultDataList
+} = require("../utils/ConvertThai")
 
-const getBranch = async () => {
-    const sql = `select * from branch limit 1`;
-    const results = await pool.query(sql)
-    return mappingResultData(results)
+const getBranchByOne = async ({ repository }) => {
+  const results = await repository.getBranchByOne()
+  if (results.length === 0) {
+    const err = new Error("Branch not found")
+    err.statusCode = 404
+    throw err
+  }
+
+  return mappingResultData(results)
 }
 
-const getAllBranch = async () => {
-    const sql = `select * from branch`;
-    const results = await pool.query(sql)
-    return mappingResultDataList(results)
+const getAllBranch = async ({ repository }) => {
+  const results = await repository.getAllBranch()
+  return mappingResultDataList(results)
 }
 
 module.exports = {
-    getBranch,
-    getAllBranch
+  getBranchByOne,
+  getAllBranch
 }
