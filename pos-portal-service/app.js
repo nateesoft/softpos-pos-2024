@@ -7,6 +7,8 @@ const logger = require('morgan');
 const basicAuth = require('express-basic-auth')
 const compression = require("compression");
 const helmet = require("helmet");
+const swaggerUi = require('swagger-ui-express')
+const YAML = require('yamljs')
 
 const cors = require('cors')
 
@@ -70,7 +72,10 @@ const paidInOutRouter = require('./routes/pos_restaurant/padinout')
 const bookingRouter = require('./routes/api_integration')
 
 // utility router
-const approveRouter = require('./routes/pos_restaurant/approveCode')
+const approveRouter = require('./routes/pos_restaurant/approveCode');
+const { errorHandler } = require('./middlewares/errorHandler');
+const requestLogger = require('./middlewares/requestLogger');
+const { correlationId } = require('./middlewares/correlationId');
 
 const app = express()
 app.use(cors())
@@ -93,11 +98,17 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(logger('dev'));
+app.use(correlationId)
+app.use(requestLogger);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// swagger docs
+const swaggerDocument = YAML.load('./docs/swagger.yaml');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/api/version', (req, res) => {
   res.json({
@@ -159,6 +170,8 @@ app.use('/api/report', reportRouter)
 
 // booking integration
 app.use('/api/integration', bookingRouter)
+
+app.use(errorHandler);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -5,6 +5,7 @@ import LoginIcon from "@mui/icons-material/Login"
 import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import { useAlert } from "../../contexts/AlertContext"
+import { loginAuth } from "../../api/userLoginApi"
 
 const UserAuthen = ({ setAuthenUser, handleShowConfirm, onClose }) => {
   const { appData } = useContext(POSContext)
@@ -22,32 +23,23 @@ const UserAuthen = ({ setAuthenUser, handleShowConfirm, onClose }) => {
 
   const handleConfirm = () => {
     if (username && password) {
-      apiClient
-        .post(`/api/posuser/loginAuth`, {
-          username,
-          password: encryptData(password)
-        })
-        .then((response) => {
-          if (response.status === 200 && response.data.status === 2000) {
-            const posUser = response.data.data
-            if (posUser.Sale2 === "Y") {
-              setAuthenUser(response.data.data)
-              handleShowConfirm()
-              onClose()
-            } else {
-              setUsername("")
-              setPassword("")
-              handleNotification(
-                `Username: ${posUser.UserName} ไม่มีสิทธิ์ทำรายการ !`
-              )
-            }
-          } else {
-            handleNotification("ข้อมูล Authentication Login ไม่ถูกต้อง!")
-          }
-        })
-        .catch((err) => {
-          handleNotification(err.message)
-        })
+      const { data: posUser, error } = loginAuth({
+        username,
+        password: encryptData(password)
+      })
+      if(posUser) {
+        if (posUser.Sale2 === "Y") {
+          setAuthenUser(posUser)
+          handleShowConfirm()
+          onClose()
+        } else {
+          handleNotification("ข้อมูล Authentication Login ไม่ถูกต้อง!")
+        }
+      } else {
+        setUsername("")
+        setPassword("")
+        handleNotification(error)
+      }
     }
   }
 

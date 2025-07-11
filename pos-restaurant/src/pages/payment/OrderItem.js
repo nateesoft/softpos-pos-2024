@@ -75,28 +75,30 @@ const OrderItem = ({ tableNo, orderList, tableFile, tableFileDb, initLoad }) => 
       <Divider />
       <Box padding={2} sx={{background: "lightpink", color: "black"}}>
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Item</Typography>
+          <Typography>Item</Typography>
           <Typography>{tableFileDb.TItem||0}</Typography>
         </Grid2>
         <Divider sx={{background: "black"}} />
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px", fontWeight: "bold" }}>Sub Total</Typography>
-          <Typography sx={{ fontSize: "14px", fontWeight: "bold" }}>{NumFormat(tableFile.productNoneVat)}</Typography>
-        </Grid2>
-        <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Discount</Typography>
+          <Typography>Discount</Typography>
           <Typography>{NumFormat(tableFile.discountAmount)}</Typography>
         </Grid2>
+        <Divider sx={{background: "black"}} />
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Service Charge ({tableFile.service}%)</Typography>
+          <Typography sx={{ fontWeight: "bold" }}>Sub Total</Typography>
+          <Typography sx={{ fontWeight: "bold" }}>{NumFormat(tableFile.productNoneVat-tableFile.discountAmount)}</Typography>
+        </Grid2>
+        <Divider sx={{background: "black"}} />
+        <Grid2 display="flex" justifyContent="space-between">
+          <Typography>Service Charge ({tableFile.service}%)</Typography>
           <Typography>{NumFormat(tableFile.serviceAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>Before VAT</Typography>
-          <Typography>{NumFormat(tableFile.subTotalAmount)}</Typography>
+          <Typography>Before VAT</Typography>
+          <Typography>{NumFormat(tableFile.productNoneVat-tableFile.discountAmount+tableFile.serviceAmount)}</Typography>
         </Grid2>
         <Grid2 display="flex" justifyContent="space-between">
-          <Typography sx={{ fontSize: "14px" }}>VAT ({tableFile.vat}%)</Typography>
+          <Typography>VAT ({tableFile.vat}%)</Typography>
           <Typography>{NumFormat(tableFile.vatAmount)}</Typography>
         </Grid2>
         <Divider sx={{background: "black"}} />

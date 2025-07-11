@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Box from "@mui/material/Box"
 import Grid from "@mui/material/Grid"
@@ -12,11 +12,13 @@ import LoginIcon from "@mui/icons-material/Login"
 import { Divider, Grid2, Modal, useMediaQuery } from "@mui/material"
 
 import { useAlert } from "../../contexts/AlertContext"
-import apiClient from "../../httpRequest"
 import { POSContext } from "../../AppContext"
 import { handleEnter } from "../ui-utils/EventLisener"
 import Footer from "../Footer"
 import DashboardApps from "../dashboard"
+import { validateLogin } from "../../api/userLoginApi"
+import { getBranchInfo } from "../../api/branchApi"
+import { getCompanyInfo } from "../../api/companyApi"
 
 const darkTheme = createTheme({
   palette: {
@@ -45,6 +47,7 @@ const Login = () => {
   const { handleNotification } = useAlert()
 
   const [branchInfo, setBranchInfo] = useState({})
+  const [companyInfo, setCompanyInfo] = useState({})
   const navigate = useNavigate()
 
   const iphonePro14max = useMediaQuery("(max-width:430px)")
@@ -55,122 +58,60 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    apiClient
-      .post("/api/posuser/login", {
+
+    const payload = {
         username: user,
         password: encryptData(password),
         macno: macno,
         timeout: 3000
-      })
-      .then(async (response) => {
-        if (response.data.status === 2000) {
-          const responseLogin = response.data.data
-          if (responseLogin) {
-            // get branch info
-            const responseBranch = await apiClient.get(`/api/branch`)
-            const branchInfo = responseBranch.data.data
+      }
+    const { data: userInfo, error } = await validateLogin(payload)
+    if (userInfo) {
+        localStorage.setItem("userLogin", user)
+        localStorage.setItem("posuser", JSON.stringify(userInfo))
 
-            // get company info
-            const responseCompany = await apiClient.get(`/api/company`)
-            const companyInfo = responseCompany.data.data
-
-            localStorage.setItem("userLogin", user)
-            localStorage.setItem("posuser", JSON.stringify(response.data.data))
-
-            // send to printer
-            // socket.emit(
-            //   "printerMessage",
-            //   JSON.stringify({
-            //     id: 1,
-            //     printerType: "message",
-            //     printerName: "cashier",
-            //     message: `
-            //       <div>
-            //         <font face="Angsana New" size="4">
-            //           User: ${user} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
-            //         </font>
-            //       </div>
-            //       <hr />
-            //       <div align="center">
-            //         <font face="Angsana New" size="4">*** เข้าสู่ระบบสำเร็จ ***</font>
-            //       </div>
-            //       <hr />
-            //       <div align="right">
-            //         <font face="Angsana New" size="4">
-            //            ➲ สาขา ${branchInfo.Code} ${branchInfo.Name}
-            //         </font>
-            //       </div>
-            //       <br />
-            //     `,
-            //     terminal: "",
-            //     tableNo: "",
-            //     billNo: "",
-            //     title: "",
-            //     billType: ""
-            //   })
-            // )
-
-            setAppData({
-              ...appData,
-              userLogin: user,
-              posuser: JSON.stringify(response.data.data),
-              branchInfo,
-              companyInfo
-            })
-            const backLink = localStorage.getItem("backLink")
-            if (backLink) {
-              localStorage.removeItem("backLink")
-              navigate(backLink)
-            } else {
-              if(user === "9999"){
-                setOpenDashboard(true)
-              }else{
-                navigate("/floorplan")
-              }
-            }
-          } else {
-            handleNotification(
-              "ข้อมูลผู้ใช้งาน Username/ Pasword ไม่ถูกต้อง !!!",
-              "warning"
-            )
-          }
+        setAppData({
+          ...appData,
+          userLogin: user,
+          posuser: JSON.stringify(userInfo),
+          branchInfo,
+          companyInfo
+        })
+        const backLink = localStorage.getItem("backLink")
+        if (backLink) {
+          localStorage.removeItem("backLink")
+          navigate(backLink)
         } else {
-          handleNotification("ไม่สามารถ Login เข้าระบบได้ !", "error")
+          if(user === "9999"){
+            setOpenDashboard(true)
+          }else{
+            navigate("/floorplan")
+          }
         }
-      })
-      .catch((error) => {
-        handleNotification(error.message)
-      })
+    } else {
+      handleNotification(error)
+    }
   }
 
-  const getBranch = useCallback(() => {
-    apiClient
-      .get("/api/branch")
-      .then((response) => {
-        if (response.data.status === 2000) {
-          const newData = response.data.data
-          setBranchInfo((prevState) => ({
-            ...prevState,
-            ...newData
-          }))
-        }
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
+  const getBranch = useCallback(async () => {
+    const {data, error} = await getBranchInfo()
+    setBranchInfo(data)
+  }, [])
+
+  const getCompany = useCallback(async () => {
+    const {data, error} = await getCompanyInfo()
+    setCompanyInfo(data)
   }, [])
 
   useEffect(() => {
     getBranch()
-  }, [getBranch])
+    getCompany()
+  }, [getBranch, getCompany])
 
   useEffect(() => {
     socket.connect()
 
-    // send to printer
     socket.emit("message", "Hello POS Restuarant !!!")
-
-    // รับข้อความจาก server
     socket.on("message", (newMessage) => {
       console.log(newMessage)
     })
@@ -179,7 +120,6 @@ const Login = () => {
       console.log(newMessage)
     })
 
-    // ทำความสะอาดการเชื่อมต่อเมื่อ component ถูกทำลาย
     return () => {
       socket.disconnect()
     }
@@ -310,7 +250,6 @@ const Login = () => {
                         >
                           Login
                         </Button>
-                        {/* <Button>Test Open Modal</Button> */}
                       </Grid2>
                     </Box>
                   </Container>

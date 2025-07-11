@@ -62,6 +62,7 @@ import Footer from "../Footer"
 import { useAlert } from "../../contexts/AlertContext"
 import QuickSaleMenu from "./QuickSaleMenu"
 import { useTranslation } from "../../contexts/Translation"
+import { sendToLogout } from "../../api/userLoginApi"
 
 const modalPinStyle = {
   position: "absolute",
@@ -125,52 +126,17 @@ const FloorPlanPage = ({ setOpenPin, onNodeClick }) => {
 
   const timeRef = useRef(null)
 
-  const confirmLogoutAlert = useCallback(() => {
-    apiClient
-      .patch("/api/posuser/logout", { username: userLogin })
-      .then((response) => {
-        if (response.data.status === 2000) {
-          setAppData({ ...appData, userLogin: "", posuser: null })
-          localStorage.setItem("userLogin", "")
+  const confirmLogoutAlert = useCallback(async () => {
+    const { data, error } = await sendToLogout({ username: userLogin })
+    if(data) {
+        setAppData({ ...appData, userLogin: "", posuser: null })
+        localStorage.setItem("userLogin", "")
+        navigate("/")
+    } else {
+      handleNotification(error)
+      setOpenLogout(false)
+    }
 
-          // send to printer
-          // socket.emit(
-          //   "printerMessage",
-          //   JSON.stringify({
-          //     id: 1,
-          //     printerType: "message",
-          //     printerName: "cashier",
-          //     message: `
-          //       <div>
-          //         <font face="Angsana New" size="4">
-          //           User: ${userLogin} Time: ${moment().format("DD/MM/YYYY HH:mm:ss")} Mac: ${macno}
-          //         </font>
-          //       </div>
-          //       <hr />
-          //       <div align="center">
-          //         <font face="Angsana New" size="4">ออกจากระบบเรียบร้อย</font>
-          //       </div>
-          //       <hr />
-          //       <div align="center">
-          //       (づ ᴗ _ᴗ)づ♡
-          //       </div>
-          //     `,
-          //     terminal: "",
-          //     tableNo: "",
-          //     billNo: "",
-          //     title: "",
-          //     billType: ""
-          //   })
-          // )
-
-          navigate("/")
-        } else {
-          setOpenLogout(false)
-        }
-      })
-      .catch((error) => {
-        handleNotification(error.message)
-      })
   }, [setOpenLogout, navigate, appData, setAppData])
 
   const handleSelect = (floor) => {

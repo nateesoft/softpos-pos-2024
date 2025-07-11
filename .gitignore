@@ -2,3 +2,6 @@ lib
 sync-thermal-service/build*
 sync-thermal-service/dist/lib
 printer_*
+
+# React Component Preview
+previewConfig.json
