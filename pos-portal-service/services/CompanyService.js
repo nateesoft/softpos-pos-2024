@@ -1,5 +1,6 @@
 const cache = require('../utils/cache')
 const { mappingResultData } = require('../utils/ConvertThai')
+const { withTimeout } = require('../utils/promiseTimeout')
 
 const getDataCompanyByOne = async ({ repository }) => {
     const cacheKey = 'company_one'

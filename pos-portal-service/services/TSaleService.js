@@ -43,14 +43,13 @@ const createNewTSale = async (balance, BillRefNo) => {
         R_PrSubBath, R_PrSubAmt, R_PrSubAdj, R_PrCuDisc, R_PrCuBath, R_PrCuAdj, R_PItemNo, R_PKicQue,
         R_PrVcType="", R_PrVcCode, R_PrVcAmt, R_PrVcAdj, R_MoveFlag, R_Pause, R_SPIndex,
         R_LinkIndex, R_VoidPause, R_MoveItem, R_MoveFrom, R_MoveUser, VoidMsg, R_PrintItemBill, R_CountTime,
-        R_Earn, R_EarnNo } = balance
+        R_Earn, R_EarnNo, R_Time } = balance
 
     const R_Refno = BillRefNo;
     const R_Index = BillRefNo + "/" + balance.R_Index
     const Cashier = balance.Cashier; // can change
     const R_Emp = balance.R_Emp; // can change
     const R_Date = getMoment().format('YYYY-MM-DD');
-    const R_Time = getMoment().format('HH:mm:ss');
     const MacNo = Macno;
     const R_PrAdj = 0;
     const R_PreDisAmt = 0;
